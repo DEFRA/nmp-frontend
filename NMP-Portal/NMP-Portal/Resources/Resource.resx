@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1334,7 +1334,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Area and quantity</value>
   </data>
   <data name="lblEnterTheAreaAndQuantity" xml:space="preserve">
-    <value>Enter the area and quantity</value>
+    <value>What is the area and quantity you are applying?</value>
   </data>
   <data name="lblhectar" xml:space="preserve">
     <value>hectares</value>
@@ -1352,10 +1352,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Enter an application rate before continuing.</value>
   </data>
   <data name="MsgEnterAValidArea" xml:space="preserve">
-    <value>Enter a valid area</value>
+    <value>Enter a valid area spread</value>
   </data>
   <data name="MsgEnterAValidQuantity" xml:space="preserve">
-    <value>Enter a valid quantity</value>
+    <value>Enter a valid quantity applied</value>
   </data>
   <data name="lblDiscs" xml:space="preserve">
     <value>Discs</value>
@@ -1391,7 +1391,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>B</value>
   </data>
   <data name="lblConditionsAffectingTheLossOfNutrients" xml:space="preserve">
-    <value>Conditions affecting the loss of nutrients from your organic materials</value>
+    <value>Climate conditions affecting nitrogen losses from this application​</value>
   </data>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
     <value>How long is there between application and incorporation for your {0}?</value>
@@ -1562,7 +1562,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Date when soil drainage ends and the soil begins to dry out</value>
   </data>
   <data name="lblEffectiveRainfallAfterApplication" xml:space="preserve">
-    <value>Effective rainfall after application</value>
+    <value>Rainfall between application date and end of soil drainage ​</value>
   </data>
   <data name="lblHowMoistTheTopsoilIs" xml:space="preserve">
     <value>How moist the topsoil is when the material is applied</value>
@@ -1598,7 +1598,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Area must be greater than zero</value>
   </data>
   <data name="lblForExample" xml:space="preserve">
-    <value>For example, 27 3 2023</value>
+    <value>For example, 27 03 2023</value>
   </data>
   <data name="lblKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
@@ -1607,7 +1607,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the autumn crop nitrogen (N) uptake?</value>
   </data>
   <data name="lblWhatIsTheEndOfDrainageDate" xml:space="preserve">
-    <value>What is the end of drainage date?</value>
+    <value>What is the date when soil drainage ends?</value>
   </data>
   <data name="MsgEnterAValueBeforeContinue" xml:space="preserve">
     <value>Enter a value before continuing</value>
@@ -1733,7 +1733,7 @@ cubic metres per hectare  not set</value>
     <value>When are you applying your {0} not set?</value>
   </data>
   <data name="MsgAreaNotSet" xml:space="preserve">
-    <value>Area not set</value>
+    <value>Area spread not set</value>
   </data>
   <data name="MsgAutumnCropNitrogenUptakeNotSet" xml:space="preserve">
     <value>Autumn crop nitrogen (N) uptake not set</value>
@@ -1754,7 +1754,7 @@ cubic metres per hectare  not set</value>
     <value>What type of organic material are you using in this application not set?</value>
   </data>
   <data name="MsgQuantityNotSet" xml:space="preserve">
-    <value>Quantity not set</value>
+    <value>Quantity applied not set</value>
   </data>
   <data name="MsgRainfallWithinSixHoursOfApplicationNotSet" xml:space="preserve">
     <value>Rainfall within 6 hours of application not set</value>
@@ -2387,10 +2387,10 @@ cubic metres per hectare  not set</value>
     <value>Do you want to add a recent soil analysis for {0}?</value>
   </data>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
-    <value>You will get better recommendations if you have a recent soil analysis. You should sample the soil from your fields every 3 to 4 years and get it tested for pH, phosphorus, potassium and magnesium.</value>
+    <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
   <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>You must follow the appropriate soil analysis regulations for your region.</value>
   </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S) not set?</value>
@@ -2540,7 +2540,7 @@ cubic metres per hectare  not set</value>
     <value>This will remove all the data about this field, including any soil analysis. It will also remove this field from your plans and records. You will not be able to get it back.</value>
   </data>
   <data name="lblTheseValuesAreUsedToCalculateHowEffective" xml:space="preserve">
-    <value>These values are used to calculate how effective this organic material application is.</value>
+    <value>This information is used to estimate nitrogen losses and crop available nitrogen (N) supply from this application.​</value>
   </data>
   <data name="lblPlanningAndRecording" xml:space="preserve">
     <value>Planning and recording</value>
@@ -2612,7 +2612,7 @@ cubic metres per hectare  not set</value>
     <value>sort by application date</value>
   </data>
   <data name="lblSortByFieldName" xml:space="preserve">
-    <value>Sort by field name</value>
+    <value>sort by field name</value>
   </data>
   <data name="lblTypeOfManure" xml:space="preserve">
     <value>Type of manure</value>
@@ -2879,7 +2879,7 @@ cubic metres per hectare  not set</value>
     <value>Which fields would you like to create a {0} crop and field management report for?</value>
   </data>
   <data name="lblCropAndFieldManagementReport" xml:space="preserve">
-    <value>{0} crop and field management report for {1}</value>
+    <value>Crop and field management report for {0}</value>
   </data>
   <data name="lblAnnualRainfall" xml:space="preserve">
     <value>Annual rainfall</value>
@@ -3269,7 +3269,7 @@ cubic metres per hectare  not set</value>
     <value>You have updated a soil analysis for {0}.</value>
   </data>
   <data name="lblContentIfSoilAnalysisNotApplied" xml:space="preserve">
-    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the RB209 default values instead.</value>
+    <value>You have not entered a soil analysis for {0}. Without this, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="MsgTheDateMustInclude" xml:space="preserve">
     <value>The date must include the day/month/year.</value>
@@ -3743,8 +3743,8 @@ live</value>
   <data name="lblInorganicFertiliser" xml:space="preserve">
     <value>inorganic fertiliser</value>
   </data>
-  <data name="MsgDeleteOrganicAndFertiliserContent1" xml:space="preserve">
-    <value>This will remove the information about this {0} application from {1} and change the {2} nutrient recommendations.</value>
+  <data name="MsgDeleteOrganicContent1" xml:space="preserve">
+    <value>This will remove the information about this organic manure application from {0} and update the {1} fertiliser recommendations.</value>
   </data>
   <data name="MsgDeletePlanOrganicAndFertiliserContent2" xml:space="preserve">
     <value>Which fields would you like to remove this application from?</value>
@@ -3906,7 +3906,7 @@ live</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P205) and Potash (K20) balance.</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
@@ -4836,7 +4836,7 @@ live</value>
     <value>Includes details about your fields, crops and recommendations.</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Includes N-max, livestock manure nitrogen(N) farm limit, and organic material storage</value>
+    <value>Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -4986,7 +4986,7 @@ live</value>
     <value>Derogation for {0} must be completed</value>
   </data>
   <data name="MsgEnterTotalAreaInNVZ" xml:space="preserve">
-    <value>Enter total area in NVZ</value>
+    <value>Enter total area in an NVZ</value>
   </data>
   <data name="MsgEnterTotalFarmArea" xml:space="preserve">
     <value>Enter total farm area</value>
@@ -5004,7 +5004,7 @@ live</value>
     <value>Total area in NVZ should not be less than 0</value>
   </data>
   <data name="MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea" xml:space="preserve">
-    <value>Total area in NVZ should not be more than total farm area</value>
+    <value>The total area in an NVZ should not be more than the total farm area</value>
   </data>
   <data name="MsgTotalFarmAreaShouldBeGreaterThanZero" xml:space="preserve">
     <value>Total farm area should be greater than 0</value>
@@ -5019,7 +5019,7 @@ live</value>
     <value>Which fields would you like to plan {0} for?</value>
   </data>
   <data name="lblDidYouHaveAnyImportsAndExports" xml:space="preserve">
-    <value>Did you have any imports and exports of livestock manure at {0} in {1}?</value>
+    <value>Did you have any imports or exports of livestock manure at {0} in {1}?</value>
   </data>
   <data name="MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure" xml:space="preserve">
     <value>Select yes if you had any imports or exports of livestock manure</value>
@@ -5232,7 +5232,7 @@ live</value>
     <value>{0} kg per cubic metre {1}</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
-    <value>How would you like to enter your livestock numbers?</value>
+    <value>How would you like to enter the number of {0} in {1}?</value>
   </data>
   <data name="lblEnterANumberForEachMonth" xml:space="preserve">
     <value>Enter a number for each month</value>
@@ -5267,8 +5267,8 @@ live</value>
   <data name="lblEnterHowManyOfThis" xml:space="preserve">
     <value>Enter how many of this {0} type did you have in {1} {2}.</value>
   </data>
-  <data name="lblHowManyOfThisTypeDidYouHaveIn" xml:space="preserve">
-    <value>How many of {0} did you have in {1} {2}?</value>
+  <data name="lbNumberInMonthYear" xml:space="preserve">
+    <value>Number in {0} {1}?</value>
   </data>
   <data name="lblMonthlyTotalsForThis" xml:space="preserve">
     <value>Monthly totals for {0} in {1}</value>
@@ -5282,17 +5282,14 @@ live</value>
   <data name="lblYouHaveRemovedImportExport" xml:space="preserve">
     <value>You have removed organic material {0}</value>
   </data>
-  <data name="lblAboutOccupancyAndNitrogenStandard" xml:space="preserve">
-    <value>About occupancy and nitrogen (N) standard</value>
-  </data>
   <data name="lblForExampleFor10000PlacesEnter10" xml:space="preserve">
     <value>For example, for 10,000 places enter 10</value>
   </data>
   <data name="lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere" xml:space="preserve">
-    <value>If the occupancy on your farm is different to the value shown here, you can change it.</value>
+    <value>For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%. If the occupancy on your farm is different to the value shown here, you can change it.</value>
   </data>
-  <data name="lblIfYouChangeThisValueYouMustKeepTheOccupancy" xml:space="preserve">
-    <value>If you change this value, you must keep the occupancy value the same.</value>
+  <data name="lblThisFigureAccountsForOccupancyAlready" xml:space="preserve">
+    <value>This figure accounts for occupancy already, so if you change it, you must keep the occupancy value the same. You can only change one of these values.</value>
   </data>
   <data name="lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm" xml:space="preserve">
     <value>Length of time you have these animals on the farm.</value>
@@ -5313,13 +5310,10 @@ live</value>
     <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal.</value>
   </data>
   <data name="lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem" xml:space="preserve">
-    <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals. For example, if your production cycle lasts 42 days, and the empty period is 7 days (total 49 days), then your occupancy is 86%.</value>
+    <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals.</value>
   </data>
   <data name="lblThousandPlaces" xml:space="preserve">
     <value>thousand places</value>
-  </data>
-  <data name="lblWhatIsTheAverageNumberOfPlacesForThisLivestockTypeIn" xml:space="preserve">
-    <value>What is the average number of places for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheAverageOccupancy" xml:space="preserve">
     <value>What is the average occupancy?</value>
@@ -5327,8 +5321,8 @@ live</value>
   <data name="lblWhatIsTheNitrogenNStandardPerAnimalPerYear" xml:space="preserve">
     <value>What is the Nitrogen (N) standard per animal, per year?</value>
   </data>
-  <data name="MsgEnterTheAverageNumberOfPlaces" xml:space="preserve">
-    <value>Enter the average number of places for this livestock type in {0}.</value>
+  <data name="MsgEnterTheAverageTotalNumberOfThis" xml:space="preserve">
+    <value>Enter the average total number of this {0} type for {1}.</value>
   </data>
   <data name="MsgEnterTheAverageOccupancy" xml:space="preserve">
     <value>Enter the average occupancy.</value>
@@ -5361,7 +5355,7 @@ live</value>
     <value>Add more livestock</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
-    <value>Average for the year</value>
+    <value>Average number for the year</value>
   </data>
   <data name="lblCattle" xml:space="preserve">
     <value>Cattle</value>
@@ -5376,7 +5370,7 @@ live</value>
     <value>Goats, Deer and Horses</value>
   </data>
   <data name="lblLivestockDetailsYear" xml:space="preserve">
-    <value>Livestock details {0}</value>
+    <value>Livestock details for {0}</value>
   </data>
   <data name="lblPigs" xml:space="preserve">
     <value>Pigs</value>
@@ -5432,8 +5426,8 @@ live</value>
   <data name="lblWhatPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
     <value>What percentage of the land is farmed as grass?</value>
   </data>
-  <data name="MsgEnterPercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
-    <value>Enter percentage of the land is farmed as grass?</value>
+  <data name="MsgEnterThePercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
+    <value>Enter the percentage of land that is farmed as grass?</value>
   </data>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
@@ -5751,10 +5745,12 @@ live</value>
     <value>If there's no typical answer, select what you did the last year that the field was grass.</value>
   </data>
   <data name="lblThereAreNoGrazingOfLivestockManure" xml:space="preserve">
-    <value>There are no grazing of livestock manure</value>
+    <value>There is no grazing
+livestock manure.</value>
   </data>
   <data name="lblThereAreNoNonGrazingOfLivestockManure" xml:space="preserve">
-    <value>There are no non-grazing of livestock manure</value>
+    <value>There is no non-grazing
+livestock manure.</value>
   </data>
   <data name="lblDoNotCompliance" xml:space="preserve">
     <value>do not compliance</value>
@@ -5890,5 +5886,176 @@ live</value>
   </data>
   <data name="lblLoadingOverlayContentOne" xml:space="preserve">
     <value>Loading...</value>
+  </data>
+  <data name="lblEnterYearInformation" xml:space="preserve">
+    <value>Enter {0} information</value>
+  </data>
+  <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
+    <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
+  </data>
+  <data name="lblYouCannotAddTheCropTypeSelectedAsASecondCrop" xml:space="preserve">
+    <value>You cannot add the crop type selected as a second crop. You have already allocated crops to all of your fields in {0}. </value>
+  </data>
+  <data name="lblSelectADifferentCrop" xml:space="preserve">
+    <value> or select a different crop</value>
+  </data>
+  <data name="lblAddMoreField" xml:space="preserve">
+    <value>Add more fields</value>
+  </data>
+  <data name="lblIncorrectSecondCropType" xml:space="preserve">
+    <value>Incorrect second crop type</value>
+  </data>
+  <data name="lblWhatIsTheWeightCapacityOf" xml:space="preserve">
+    <value>What is the weight capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheWeightCapacityBeforeContinuing" xml:space="preserve">
+    <value>Enter the weight capacity before continuing.</value>
+  </data>
+  <data name="lblThisIsCalculatedFromTheDimentionsYouEntered" xml:space="preserve">
+    <value>This is calculated from the dimensions you entered and the standard bulk density of the manure. You can change it if you need to.</value>
+  </data>
+  <data name="lblVolumeCapacity" xml:space="preserve">
+    <value>Volume capacity</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOf" xml:space="preserve">
+    <value>What is the total capacity of {0}?</value>
+  </data>
+  <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
+    <value>Enter the total capacity of your storage</value>
+  </data>
+  <data name="lblDoesStoreHaveSlopedEdges" xml:space="preserve">
+    <value>Does {0} have sloped edges?</value>
+  </data>
+  <data name="lblSlopeQuestion" xml:space="preserve">
+    <value>Slope question</value>
+  </data>
+  <data name="lblBankSlopeAngle" xml:space="preserve">
+    <value>Bank slope angle</value>
+  </data>
+  <data name="lblWhatIsTheEstimatedAngleOfTheBankSlope" xml:space="preserve">
+    <value>What is the estimated angle of the bank slope?</value>
+  </data>
+  <data name="lblAddThisManureStorage" xml:space="preserve">
+    <value>Add this manure storage</value>
+  </data>
+  <data name="lblTotalCapacityMinusTheFreeBoard" xml:space="preserve">
+    <value>Total capacity (minus the freeboard)</value>
+  </data>
+  <data name="lblSurfaceArea" xml:space="preserve">
+    <value>Surface area</value>
+  </data>
+  <data name="lblMetresSquared" xml:space="preserve">
+    <value>Metres squared</value>
+  </data>
+  <data name="lblAddStorageFor" xml:space="preserve">
+    <value>Add storage for {0}</value>
+  </data>
+  <data name="lblSortByCropType" xml:space="preserve">
+    <value>sort by crop</value>
+  </data>
+  <data name="lblTotalNitrogenProduced" xml:space="preserve">
+    <value>Total nitrogen (N) produced</value>
+  </data>
+  <data name="lblTotalPhosphateProduced" xml:space="preserve">
+    <value>Total phosphate (P2O5) produced</value>
+  </data>
+  <data name="lblNutrientKgPerYear" xml:space="preserve">
+    <value>{0}kg/yr</value>
+  </data>
+  <data name="lblWhatIsTheAverageTotalNumberOfThis" xml:space="preserve">
+    <value>What is the average total number of this {0} type for {1}?</value>
+  </data>
+  <data name="lblOccupancyAndStandard" xml:space="preserve">
+    <value>Occupancy and standard</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseValuesForThis" xml:space="preserve">
+    <value>Do you want to use these values for this {0} type?</value>
+  </data>
+  <data name="lblThePhosphateP205StandardCanNotBeChanged" xml:space="preserve">
+    <value>The Phosphate (P205) standard can not be changed.</value>
+  </data>
+  <data name="lblNoChangeTheOccupancyValue" xml:space="preserve">
+    <value>No, change the occupancy value</value>
+  </data>
+  <data name="lblNoChangeTheNitrogenNStandardValue" xml:space="preserve">
+    <value>No, change the nitrogen (N) standard value</value>
+  </data>
+  <data name="lblPercentOfTheYear" xml:space="preserve">
+    <value>{0}% of the year</value>
+  </data>
+  <data name="lblKgPer1000PlacesPerYear" xml:space="preserve">
+    <value>{0}kg per 1000 places, per year</value>
+  </data>
+  <data name="lblKgPerPlacesPerYear" xml:space="preserve">
+    <value>{0}kg per places, per year</value>
+  </data>
+  <data name="lblOccupancyAndNitrogenStandard" xml:space="preserve">
+    <value>Occupancy and nitrogen (N) standard</value>
+  </data>
+  <data name="lblHelpWithOccupancyAndNitrogenNStandard" xml:space="preserve">
+    <value>Help with occupancy and nitrogen (N) standard</value>
+  </data>
+  <data name="lblNitrogenStandards" xml:space="preserve">
+    <value>Nitrogen standards</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisLivestock" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this livestock type in {0}?</value>
+  </data>
+  <data name="lblKgOfNitrogenNPer1000Places" xml:space="preserve">
+    <value>kg of nitrogen (N) per 1000 places</value>
+  </data>
+  <data name="lblKgOfNitrogenNPerPlace" xml:space="preserve">
+    <value>kg of nitrogen (N) per place</value>
+  </data>
+  <data name="lblHelpWithNitrogenNStandard" xml:space="preserve">
+    <value>Help with nitrogen (N) standard</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeIn" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}?</value>
+  </data>
+  <data name="lblHelpWithOccupancy" xml:space="preserve">
+    <value>Help with occupancy</value>
+  </data>
+  <data name="lblNoChangeTheseValues" xml:space="preserve">
+    <value>No, change these values</value>
+  </data>
+  <data name="MsgDeleteFertiliserContent1" xml:space="preserve">
+    <value>This will remove the information about this inorganic fertiliser application from {0}.</value>
+  </data>
+  <data name="lblAreaSpread" xml:space="preserve">
+    <value>Area spread​</value>
+  </data>
+  <data name="lblQuantityApplied" xml:space="preserve">
+    <value>​Quantity applied</value>
+  </data>
+  <data name="MsgSoilAnalysisHint3" xml:space="preserve">
+    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+  </data>
+  <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
+    <value>This value is from the NVZ regulation and takes into account livestock occupancy.</value>
+  </data>
+  <data name="lblTheMonthsOf" xml:space="preserve">
+    <value>the months of {0}</value>
+  </data>
+  <data name="lblLivestockNumbersMonthly" xml:space="preserve">
+    <value>Livestock numbers monthly</value>
+  </data>
+  <data name="lblLivestockGroup" xml:space="preserve">
+    <value>Livestock group</value>
+  </data>
+  <data name="lblYouHaveAddedManureStorage" xml:space="preserve">
+    <value>You have added manure storage</value>
+  </data>
+  <data name="MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe" xml:space="preserve">
+    <value>To create an existing manure storage capacity report, enter all the manure storage on {0} in {1}.</value>
+  </data>
+  <data name="lblAddMoreManureStorage" xml:space="preserve">
+    <value>Add more manure storage</value>
+  </data>
+  <data name="lblCreateAnExistingManureStorageCapacityReport" xml:space="preserve">
+    <value>Create an existing manure storage capacity report</value>
+  </data>
+  <data name="lblManureStorage" xml:space="preserve">
+    <value>Manure storage</value>
   </data>
 </root>

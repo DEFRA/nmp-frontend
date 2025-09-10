@@ -205,5 +205,8 @@ namespace NMP.Portal.Helpers
         public const string FetchStorageTypeByIdAsyncAPI = "storage-types/{0}";
         public const string FetchSolidManureTypeAsyncAPI = "solid-manure-types";
         public const string FetchSolidManureTypeByIdAsyncAPI = "solid-manure-types/{0}";
+        public const string FetchBankSlopeAnglesAsyncAPI = "bank-slope-angles";
+        public const string FetchBankSlopeAngleByIdAsyncAPI = "bank-slope-angles/{0}";
+        public const string AddStoreCapacityAsyncAPI = "store-capacities";
     }
 }

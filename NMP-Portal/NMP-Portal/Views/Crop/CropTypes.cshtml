@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"CropGroups")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsCropGroupChange) ? "CheckAnswer" :"CropGroups")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropTypes" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -100,7 +100,30 @@
             @if (TempData["CropTypeError"] != null)
             {
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["CropTypeError"]</govuk-error-summary-item>
+
+                    @if (TempData["CropTypeError"]?.ToString() == Resource.lblNoFieldsAreAvailable)
+                    {
+                        <govuk-error-summary-item>                            
+                            <h4 class="govuk-heading-s">@Resource.lblIncorrectSecondCropType</h4>
+                            <p class="govuk-body-m">
+                                @string.Format(Resource.lblYouCannotAddTheCropTypeSelectedAsASecondCrop,Model.Year)
+                            </p>
+                            <p class="govuk-body-s">
+                                <a asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedHarvestYear">
+                                    @Resource.lblAddMoreField
+                                </a>
+                                <span> @Resource.lblSelectADifferentCrop </span>
+                            </p>
+                        </govuk-error-summary-item>
+
+                    }
+                    else 
+                    {
+                        <govuk-error-summary-item href="#">
+                            @TempData["CropTypeError"]
+                        </govuk-error-summary-item>
+
+                    }
                 </govuk-error-summary>
             }
 
@@ -119,16 +142,19 @@
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @(Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoForCropType : Resource.lblCropTypeForPlan)
-                        </govuk-radios-fieldset-legend>                        
-                        
+                        </govuk-radios-fieldset-legend>
+
                         <govuk-radios-hint>
-                            @string.Format(Resource.lblTheseOptionsComeFromRB209, Model.CropGroupId == PotatoGroupId? Resource.lblPotatoGroups: Resource.lblCroupTypes)
+                            @string.Format(Resource.lblTheseOptionsComeFromRB209, Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoGroups : Resource.lblCroupTypes)
                             @if (Model.CropGroupId == PotatoGroupId)
                             {
-                                <br/><a href="@Resource.UrlAHDBPotatoVarietyGroup" target="_blank">@Resource.lblHelpMeFindMyPotatoVarietyGroup</a> @Resource.lblOpensInANewTab
+                                <br/>
+                                <a href="@Resource.UrlAHDBPotatoVarietyGroup" target="_blank">@Resource.lblHelpMeFindMyPotatoVarietyGroup</a>
+
+                                @Resource.lblOpensInANewTab
                             }
                         </govuk-radios-hint>
-                        
+
                         @if (ViewBag.CropTypeList != null)
                         {
                             @foreach (var item in ViewBag.CropTypeList)

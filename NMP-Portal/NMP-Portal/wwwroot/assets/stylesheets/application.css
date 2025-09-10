@@ -752,4 +752,6 @@ hr.seperator_thirty {
         transform: rotate(360deg);
     }
 }
-
+.margin-bottom-ten {
+    margin-bottom: 10px !important;
+}

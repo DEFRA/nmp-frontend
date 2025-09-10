@@ -237,11 +237,11 @@
                 <div class="govuk-body">
                     @if (!string.IsNullOrWhiteSpace(Model.FieldName))
                     {
-                        @string.Format(Resource.MsgDeleteOrganicAndFertiliserContent1, Resource.lblOrganicManure, Model.FieldName, Model.HarvestYear)
+                        @string.Format(Resource.MsgDeleteOrganicContent1, Model.FieldName, Model.HarvestYear)
                     }
                     else
                     {
-                        @string.Format(Resource.MsgDeleteOrganicContent2, Resource.lblOrganicManure, Model.HarvestYear)
+                        @string.Format(Resource.MsgDeleteOrganicContent1, Resource.lblTheseFields, Model.HarvestYear)
                     }
                 </div>
                 @if (ViewBag.SelectedFields != null)

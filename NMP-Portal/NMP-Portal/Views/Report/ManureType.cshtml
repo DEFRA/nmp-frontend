@@ -132,8 +132,10 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInDecember"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandardPer1000Places"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -163,7 +165,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="false">
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>
-                            @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblManureTypes)
+                            @Resource.lblSelectOneOption
                         </govuk-radios-hint>
                         @if (ViewBag.ManureTypeList != null)
                         {

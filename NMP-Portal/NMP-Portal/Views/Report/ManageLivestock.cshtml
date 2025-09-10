@@ -113,9 +113,12 @@
                                 <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
+                                    <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                }
                                 <th scope="col" class="govuk-table__header"></th>
                             </tr>
                         </thead>
@@ -125,10 +128,15 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@cattle.Units</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.NByUnit, Resource.lblkg)</td>
+                        <td class="govuk-table__cell">
+                            @string.Format(Resource.lblNutrientKgPerYear, Math.Round(cattle.NByUnit,0))</td>
                                     <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.TotalNProduced, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.PByUnit, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
+                                    @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                    {
+                        <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(cattle.PByUnit),0)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
+                                    }
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
@@ -140,8 +148,11 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenCattle, Resource.lblkg)</td>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphateCattle, Resource.lblkg) </td>
+                                }
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -159,9 +170,12 @@
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
+                                    <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                }
                                 <th scope="col" class="govuk-table__header"></th>
                             </tr>
                         </thead>
@@ -172,10 +186,16 @@
                                     <td class="govuk-table__cell">@pig.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@pig.Units</td>
                                     <td class="govuk-table__cell">@string.Format("{0}{1}", pig.Occupancy, Resource.lblPercentage)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalNProduced, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.PByUnit, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalPProduced, Resource.lblkg)</td>
+                        <td class="govuk-table__cell">
+                            @string.Format(Resource.lblNutrientKgPerYear, Math.Round(pig.NByUnit),0)</td>
+                                    @* <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg)</td> *@
+                                    <td class="govuk-table__cell"> @string.Format("{0}{1}",pig.TotalNProduced, Resource.lblkg)</td>
+                                    @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                    {
+                        <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(pig.PByUnit),0)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalPProduced, Resource.lblkg)</td>
+                                    }
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -188,8 +208,11 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPigs, Resource.lblkg)</td>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphatePigs, Resource.lblkg)</td>
+                                }
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -207,9 +230,12 @@
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
+                                    <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                }
                                 <th scope="col" class="govuk-table__header"></th>
                             </tr>
                         </thead>
@@ -220,10 +246,16 @@
                                     <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@poultry.Units</td>
                                     <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td>
+                        <td class="govuk-table__cell">
+                            @string.Format(Resource.lblNutrientKgPerYear, Math.Round(poultry.NByUnit),0)</td>
+                                    @* <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.TotalNProduced, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.PByUnit, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
+                                    @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                    {
+                        <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(poultry.PByUnit),0)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
+                                    }
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -236,8 +268,11 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPoultry, Resource.lblkg)</td>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphatePoultry, Resource.lblkg) </td>
+                                }
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -255,8 +290,12 @@
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
+                                    <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                }
                                 <th scope="col" class="govuk-table__header"></th>
                             </tr>
                         </thead>
@@ -266,10 +305,17 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@sheep.Units</td>
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td>
+                        <td class="govuk-table__cell">
+                            @string.Format(Resource.lblNutrientKgPerYear, Math.Round(sheep.NByUnit),0)</td>
+                                    @* <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.TotalNProduced, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.PByUnit, Resource.lblkg) </td>
-                                    <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
+
+                                    @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                    {
+                        <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear,Math.Round( sheep.PByUnit),0)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
+                                    }
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -281,8 +327,11 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenSheep, Resource.lblkg)</td>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
                                 <td class="govuk-table__cell">-</td>
-                                <td class= "govuk-table__cell strong" > @string.Format("{0}{1}", totalPhosphateSheep, Resource.lblkg)</td>
+                                <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphateSheep, Resource.lblkg)</td>
+                                }
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -299,9 +348,12 @@
                                 <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
+                                    <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                }
                                 <th scope="col" class="govuk-table__header"></th>
                             </tr>
                         </thead>
@@ -311,10 +363,16 @@
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.Units</td>
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td>
+                        <td class="govuk-table__cell">
+                            @string.Format(Resource.lblNutrientKgPerYear, Math.Round(goatsDeerAndHorse.NByUnit),0)</td>
+                                    @* <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalNProduced, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.PByUnit, Resource.lblkg)</td>
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
+                                    @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                    {
+                        <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear,Math.Round(goatsDeerAndHorse.PByUnit),0)</td>
+                                        <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
+                                    }
                                     <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
@@ -326,8 +384,11 @@
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenGoatsDeerAndHorses, Resource.lblkg)</td>
+                                @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                {
                                 <td class="govuk-table__cell">-</td>
                                 <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphateGoatsDeerAndHorses, Resource.lblkg)</td>
+                                }
                                 <td class="govuk-table__cell">-</td>
                             </tr>
                         </tbody>
@@ -351,9 +412,12 @@
                                         <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        }
                                         <th scope="col" class="govuk-table__header"></th>
                                     </tr>
                                 </thead>
@@ -363,10 +427,16 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@cattle.Units</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.NByUnit, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">
+                                    @string.Format(Resource.lblNutrientKgPerYear, Math.Round(cattle.NByUnit),0)</td>
+                                            @* <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.TotalNProduced, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.PByUnit, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
+                                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                            {
+                                <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(cattle.PByUnit),0)</td>
+                                                <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
+                                            }
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
@@ -378,8 +448,11 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenCattle, Resource.lblkg)</td>
+        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+        {
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong"> @string.Format("{0}{1}", totalPhosphateCattle, Resource.lblkg)</td>
+        }
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -399,9 +472,12 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        }
                                         <th scope="col" class="govuk-table__header"></th>
                                     </tr>
                                 </thead>
@@ -412,10 +488,16 @@
                                             <td class="govuk-table__cell">@pig.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@pig.Units</td>
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", pig.Occupancy, Resource.lblPercentage)</td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg) </td>
+                                <td class="govuk-table__cell">
+                                    @string.Format(Resource.lblNutrientKgPerYear,Math.Round(pig.NByUnit),0)</td>
+                                            @* <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg) </td> *@
                                             <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalNProduced, Resource.lblkg) </td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.PByUnit, Resource.lblkg) </td>
-                                            <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalPProduced, Resource.lblkg) </td>
+                                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                            {
+                                <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear,Math.Round(pig.PByUnit),0)</td>
+                                                <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.TotalPProduced, Resource.lblkg) </td>
+                                            }
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -428,8 +510,11 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPigs, Resource.lblkg)</td>
+        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+        {
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphatePigs, Resource.lblkg) </td>
+        }
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -449,9 +534,12 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblOccupancy</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        }
                                         <th scope="col" class="govuk-table__header"></th>
                                     </tr>
                                 </thead>
@@ -462,10 +550,16 @@
                                             <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@poultry.Units</td>
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">
+                                    @string.Format(Resource.lblNutrientKgPerYear, Math.Round(poultry.NByUnit),0)</td>
+                                            @* <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.TotalNProduced, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.PByUnit, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
+                                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                            {
+                                <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(poultry.PByUnit),0)</td>
+                                                <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
+                                            }
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -478,8 +572,11 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenPoultry, Resource.lblkg)</td>
+        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+        {
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphatePoultry, Resource.lblkg)</td>
+        }
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -498,9 +595,12 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        }
                                         <th scope="col" class="govuk-table__header"></th>
                                     </tr>
                                 </thead>
@@ -510,10 +610,16 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@sheep.Units</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">
+                                    @string.Format(Resource.lblNutrientKgPerYear, Math.Round(sheep.NByUnit),0)</td>
+                                            @* <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.TotalNProduced, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.PByUnit, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
+                                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                            {
+                                <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(sheep.PByUnit),0)</td>
+                                                <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
+                                            }
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -525,8 +631,11 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenSheep, Resource.lblkg)</td>
+        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+        {
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphateSheep, Resource.lblkg)</td>
+        }
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>
@@ -545,9 +654,12 @@
                                         <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                         <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
+                                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                        {
+                                            <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                        }
                                         <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                     </tr>
                                 </thead>
@@ -557,10 +669,16 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.Units</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">
+                                    @string.Format(Resource.lblNutrientKgPerYear, Math.Round(goatsDeerAndHorse.NByUnit),0)</td>
+                                            @* <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalNProduced, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.PByUnit, Resource.lblkg)</td>
-                                            <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
+                                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+                                            {
+                                <td class="govuk-table__cell">
+@string.Format(Resource.lblNutrientKgPerYear, Math.Round(goatsDeerAndHorse.PByUnit),0)</td>
+                                                <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
+                                            }
                                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
@@ -572,8 +690,11 @@
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalNitrogenGoatsDeerAndHorses, Resource.lblkg)</td>
+        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
+        {
                                         <td class="govuk-table__cell">-</td>
                                         <td class="govuk-table__cell strong">@string.Format("{0}{1}", totalPhosphateGoatsDeerAndHorses, Resource.lblkg)</td>
+        }
                                         <td class="govuk-table__cell">-</td>
                                     </tr>
                                 </tbody>

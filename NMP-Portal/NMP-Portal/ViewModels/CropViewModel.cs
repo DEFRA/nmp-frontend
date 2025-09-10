@@ -24,5 +24,6 @@ namespace NMP.Portal.ViewModels
             get; set;
         }
         public string? GrowthClass { get; set; }
+        public int? CropGroupID { get; set; }
     }
 }

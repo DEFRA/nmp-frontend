@@ -147,12 +147,14 @@ namespace NMP.Portal.ViewModels
         public int? AverageOccupancy { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
-        public decimal? NitrogenStandardPer1000Places { get; set; }
+        public decimal? NitrogenStandard { get; set; }
+        public decimal? PhosphateStandard { get; set; }
         public bool IsManageLivestock { get; set; } = false;
         public bool IsLivestockCheckAnswer { get; set; } = false;
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
         [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
+        public int? OccupancyAndNitrogenOptions { get; set; }
     }
 }

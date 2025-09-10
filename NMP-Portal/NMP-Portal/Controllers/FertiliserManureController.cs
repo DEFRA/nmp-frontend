@@ -1749,97 +1749,68 @@ namespace NMP.Portal.Controllers
                             List<RecommendationHeader> recommendationsHeader = null;
 
                             (recommendationsHeader, error) = await _cropService.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
-                            if (error == null)
+                            if (error == null&& recommendationsHeader.Count>0)
                             {
-                                if (recommendationViewModel.Crops == null)
+                                int manId = model.FertiliserManures.FirstOrDefault().ManagementPeriodID;
+
+                                var matchedHeader = recommendationsHeader?
+                                .FirstOrDefault(header => header.RecommendationData != null &&
+                                header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
+                                                                   rd.ManagementPeriod.ID == manId));
+
+
+                                if (matchedHeader != null)
                                 {
-                                    recommendationViewModel.Crops = new List<CropViewModel>();
-                                }
-                                if (recommendationViewModel.ManagementPeriods == null)
-                                {
-                                    recommendationViewModel.ManagementPeriods = new List<ManagementPeriodViewModel>();
-                                }
-                                if (recommendationViewModel.Recommendations == null)
-                                {
-                                    recommendationViewModel.Recommendations = new List<Recommendation>();
-                                }
-                                foreach (var recommendation in recommendationsHeader)
-                                {
-                                    var crop = new CropViewModel
+                                    if (matchedHeader.RecommendationData != null)
                                     {
-                                        ID = recommendation.Crops.ID,
-                                        Year = recommendation.Crops.Year,
-                                        CropTypeID = recommendation.Crops.CropTypeID,
-                                        FieldID = recommendation.Crops.FieldID,
-                                        Variety = recommendation.Crops.Variety,
-                                        CropInfo1 = recommendation.Crops.CropInfo1,
-                                        CropInfo2 = recommendation.Crops.CropInfo2,
-                                        Yield = recommendation.Crops.Yield,
-                                        SowingDate = recommendation.Crops.SowingDate,
-                                    };
-                                    recommendationViewModel.Crops.Add(crop);
-                                    if (recommendation.Crops.CropOrder == 1)
-                                    {
-                                        if (recommendation.RecommendationData.Count > 0)
+                                        matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
+                                        foreach (var recData in matchedHeader.RecommendationData)
                                         {
-                                            foreach (var recData in recommendation.RecommendationData)
+                                            model.Recommendation = new Recommendation
                                             {
-                                                var ManagementPeriods = new ManagementPeriodViewModel
-                                                {
-                                                    ID = recData.ManagementPeriod.ID,
-                                                    CropID = recData.ManagementPeriod.CropID,
-                                                    Defoliation = recData.ManagementPeriod.Defoliation,
-                                                    Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
-                                                    Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
-                                                    PloughedDown = recData.ManagementPeriod.PloughedDown
-                                                };
-                                                recommendationViewModel.ManagementPeriods.Add(ManagementPeriods);
-                                                var rec = new Recommendation
-                                                {
-                                                    ID = recData.Recommendation.ID,
-                                                    ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
-                                                    CropN = recData.Recommendation.CropN,
-                                                    CropP2O5 = recData.Recommendation.CropP2O5,
-                                                    CropK2O = recData.Recommendation.CropK2O,
-                                                    CropSO3 = recData.Recommendation.CropSO3,
-                                                    CropMgO = recData.Recommendation.CropMgO,
-                                                    CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
-                                                    ManureN = recData.Recommendation.ManureN,
-                                                    ManureP2O5 = recData.Recommendation.ManureP2O5,
-                                                    ManureK2O = recData.Recommendation.ManureK2O,
-                                                    ManureSO3 = recData.Recommendation.ManureSO3,
-                                                    ManureMgO = recData.Recommendation.ManureMgO,
-                                                    ManureLime = recData.Recommendation.ManureLime,
-                                                    FertilizerN = recData.Recommendation.FertilizerN,
-                                                    FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                                    FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                                    FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                                    FertilizerMgO = recData.Recommendation.FertilizerMgO,
-                                                    FertilizerLime = recData.Recommendation.FertilizerLime,
-                                                    SNSIndex = recData.Recommendation.SNSIndex,
-                                                    NIndex = recData.Recommendation.NIndex,
-                                                    SIndex = recData.Recommendation.SIndex,
-                                                    LimeIndex = recData.Recommendation.PH,
-                                                    KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
-                                                    MgIndex = recData.Recommendation.MgIndex,
-                                                    PIndex = recData.Recommendation.PIndex,
-                                                    NaIndex = recData.Recommendation.NaIndex,
-                                                    FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
-                                                    FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
-                                                    FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
-                                                    FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
-                                                    FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
-                                                    FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
-                                                    FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
-                                                    FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
-                                                    FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
-                                                };
-                                                recommendationViewModel.Recommendations.Add(rec);
-                                            }
-                                            model.RecommendationViewModel = recommendationViewModel;
+                                                ID = recData.Recommendation.ID,
+                                                ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
+                                                CropN = recData.Recommendation.CropN,
+                                                CropP2O5 = recData.Recommendation.CropP2O5,
+                                                CropK2O = recData.Recommendation.CropK2O,
+                                                CropSO3 = recData.Recommendation.CropSO3,
+                                                CropMgO = recData.Recommendation.CropMgO,
+                                                CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
+                                                ManureN = recData.Recommendation.ManureN,
+                                                ManureP2O5 = recData.Recommendation.ManureP2O5,
+                                                ManureK2O = recData.Recommendation.ManureK2O,
+                                                ManureSO3 = recData.Recommendation.ManureSO3,
+                                                ManureMgO = recData.Recommendation.ManureMgO,
+                                                ManureLime = recData.Recommendation.ManureLime,
+                                                FertilizerN = recData.Recommendation.FertilizerN,
+                                                FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+                                                FertilizerK2O = recData.Recommendation.FertilizerK2O,
+                                                FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                                FertilizerMgO = recData.Recommendation.FertilizerMgO,
+                                                FertilizerLime = recData.Recommendation.FertilizerLime,
+                                                SNSIndex = recData.Recommendation.SNSIndex,
+                                                NIndex = recData.Recommendation.NIndex,
+                                                SIndex = recData.Recommendation.SIndex,
+                                                LimeIndex = recData.Recommendation.PH,
+                                                KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
+                                                MgIndex = recData.Recommendation.MgIndex,
+                                                PIndex = recData.Recommendation.PIndex,
+                                                NaIndex = recData.Recommendation.NaIndex,
+                                                FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
+                                                FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
+                                                FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
+                                                FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
+                                                FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
+                                                FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
+                                                FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
+                                                FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
+                                                FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
+                                            };
+
+                                            //model.Recommendations = rec;
                                         }
                                     }
-
+                                    
                                 }
                             }
 
@@ -1958,17 +1929,19 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                if (ModelState.IsValid)
-                {
-                    decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
-                         (model.K2O ?? 0) + (model.SO3 ?? 0) + (model.MgO ?? 0) +
-                         (model.Lime ?? 0);
-                    if (totalNutrientValue == 0)
-                    {
-                        ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                    }
-                }
-
+                //if (ModelState.IsValid)
+                //{
+                //    if(model.N!=0)
+                //    {
+                //        decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
+                //         (model.K2O ?? 0) + (model.SO3 ?? 0) + (model.MgO ?? 0) +
+                //         (model.Lime ?? 0);
+                //        if (totalNutrientValue == 0)
+                //        {
+                //            ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                //        }
+                //    }                   
+                //}
                 if (model.N != null)
                 {
                     if (model.N < 0 || model.N > 9999)
@@ -2017,7 +1990,6 @@ namespace NMP.Portal.Controllers
                     if (model.FieldList.Count == 1)
                     {
                         RecommendationViewModel recommendationViewModel = new RecommendationViewModel();
-
                         int fieldId;
                         try
                         {
@@ -2027,97 +1999,65 @@ namespace NMP.Portal.Controllers
                                 List<RecommendationHeader> recommendationsHeader = null;
 
                                 (recommendationsHeader, error) = await _cropService.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
-                                if (error == null)
+                                if (error == null && recommendationsHeader.Count > 0)
                                 {
-                                    if (recommendationViewModel.Crops == null)
+                                    int manId = model.FertiliserManures.FirstOrDefault().ManagementPeriodID;
+
+                                    var matchedHeader = recommendationsHeader?
+                                    .FirstOrDefault(header => header.RecommendationData != null &&
+                                    header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
+                                                                       rd.ManagementPeriod.ID == manId));
+
+
+                                    if (matchedHeader != null)
                                     {
-                                        recommendationViewModel.Crops = new List<CropViewModel>();
-                                    }
-                                    if (recommendationViewModel.ManagementPeriods == null)
-                                    {
-                                        recommendationViewModel.ManagementPeriods = new List<ManagementPeriodViewModel>();
-                                    }
-                                    if (recommendationViewModel.Recommendations == null)
-                                    {
-                                        recommendationViewModel.Recommendations = new List<Recommendation>();
-                                    }
-                                    foreach (var recommendation in recommendationsHeader)
-                                    {
-                                        var crop = new CropViewModel
+                                        if (matchedHeader.RecommendationData != null)
                                         {
-                                            ID = recommendation.Crops.ID,
-                                            Year = recommendation.Crops.Year,
-                                            CropTypeID = recommendation.Crops.CropTypeID,
-                                            FieldID = recommendation.Crops.FieldID,
-                                            Variety = recommendation.Crops.Variety,
-                                            CropInfo1 = recommendation.Crops.CropInfo1,
-                                            CropInfo2 = recommendation.Crops.CropInfo2,
-                                            Yield = recommendation.Crops.Yield,
-                                            SowingDate = recommendation.Crops.SowingDate,
-                                        };
-                                        recommendationViewModel.Crops.Add(crop);
-                                        if (recommendation.Crops.CropOrder == 1)
-                                        {
-                                            if (recommendation.RecommendationData.Count > 0)
+                                            matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
+                                            foreach (var recData in matchedHeader.RecommendationData)
                                             {
-                                                foreach (var recData in recommendation.RecommendationData)
+                                                model.Recommendation = new Recommendation
                                                 {
-                                                    var ManagementPeriods = new ManagementPeriodViewModel
-                                                    {
-                                                        ID = recData.ManagementPeriod.ID,
-                                                        CropID = recData.ManagementPeriod.CropID,
-                                                        Defoliation = recData.ManagementPeriod.Defoliation,
-                                                        Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
-                                                        Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
-                                                        PloughedDown = recData.ManagementPeriod.PloughedDown
-                                                    };
-                                                    recommendationViewModel.ManagementPeriods.Add(ManagementPeriods);
-                                                    var rec = new Recommendation
-                                                    {
-                                                        ID = recData.Recommendation.ID,
-                                                        ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
-                                                        CropN = recData.Recommendation.CropN,
-                                                        CropP2O5 = recData.Recommendation.CropP2O5,
-                                                        CropK2O = recData.Recommendation.CropK2O,
-                                                        CropSO3 = recData.Recommendation.CropSO3,
-                                                        CropMgO = recData.Recommendation.CropMgO,
-                                                        CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
-                                                        ManureN = recData.Recommendation.ManureN,
-                                                        ManureP2O5 = recData.Recommendation.ManureP2O5,
-                                                        ManureK2O = recData.Recommendation.ManureK2O,
-                                                        ManureSO3 = recData.Recommendation.ManureSO3,
-                                                        ManureMgO = recData.Recommendation.ManureMgO,
-                                                        ManureLime = recData.Recommendation.ManureLime,
-                                                        FertilizerN = recData.Recommendation.FertilizerN,
-                                                        FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                                        FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                                        FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                                        FertilizerMgO = recData.Recommendation.FertilizerMgO,
-                                                        FertilizerLime = recData.Recommendation.FertilizerLime,
-                                                        SNSIndex = recData.Recommendation.SNSIndex,
-                                                        NIndex = recData.Recommendation.NIndex,
-                                                        SIndex = recData.Recommendation.SIndex,
-                                                        LimeIndex = recData.Recommendation.PH,
-                                                        KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
-                                                        MgIndex = recData.Recommendation.MgIndex,
-                                                        PIndex = recData.Recommendation.PIndex,
-                                                        NaIndex = recData.Recommendation.NaIndex,
-                                                        FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
-                                                        FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
-                                                        FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
-                                                        FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
-                                                        FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
-                                                        FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
-                                                        FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
-                                                        FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
-                                                        FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
-                                                    };
-                                                    recommendationViewModel.Recommendations.Add(rec);
-                                                }
-                                                model.RecommendationViewModel = recommendationViewModel;
+                                                    ID = recData.Recommendation.ID,
+                                                    ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
+                                                    CropN = recData.Recommendation.CropN,
+                                                    CropP2O5 = recData.Recommendation.CropP2O5,
+                                                    CropK2O = recData.Recommendation.CropK2O,
+                                                    CropSO3 = recData.Recommendation.CropSO3,
+                                                    CropMgO = recData.Recommendation.CropMgO,
+                                                    CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
+                                                    ManureN = recData.Recommendation.ManureN,
+                                                    ManureP2O5 = recData.Recommendation.ManureP2O5,
+                                                    ManureK2O = recData.Recommendation.ManureK2O,
+                                                    ManureSO3 = recData.Recommendation.ManureSO3,
+                                                    ManureMgO = recData.Recommendation.ManureMgO,
+                                                    ManureLime = recData.Recommendation.ManureLime,
+                                                    FertilizerN = recData.Recommendation.FertilizerN,
+                                                    FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+                                                    FertilizerK2O = recData.Recommendation.FertilizerK2O,
+                                                    FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+                                                    FertilizerMgO = recData.Recommendation.FertilizerMgO,
+                                                    FertilizerLime = recData.Recommendation.FertilizerLime,
+                                                    SNSIndex = recData.Recommendation.SNSIndex,
+                                                    NIndex = recData.Recommendation.NIndex,
+                                                    SIndex = recData.Recommendation.SIndex,
+                                                    LimeIndex = recData.Recommendation.PH,
+                                                    KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
+                                                    MgIndex = recData.Recommendation.MgIndex,
+                                                    PIndex = recData.Recommendation.PIndex,
+                                                    NaIndex = recData.Recommendation.NaIndex,
+                                                    FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
+                                                    FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
+                                                    FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
+                                                    FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
+                                                    FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
+                                                    FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
+                                                    FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
+                                                    FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
+                                                    FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
+                                                };
                                             }
                                         }
-
                                     }
                                 }
 
@@ -2134,26 +2074,26 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                if (model.Lime == null)
-                {
-                    model.Lime = 0;
-                }
-                if (model.N == null)
-                {
-                    model.N = 0;
-                }
-                if (model.P2O5 == null)
-                {
-                    model.P2O5 = 0;
-                }
-                if (model.K2O == null)
-                {
-                    model.K2O = 0;
-                }
-                if (model.SO3 == null)
-                {
-                    model.SO3 = 0;
-                }
+                //if (model.Lime == null)
+                //{
+                //    model.Lime = 0;
+                //}
+                //if (model.N == null)
+                //{
+                //    model.N = 0;
+                //}
+                //if (model.P2O5 == null)
+                //{
+                //    model.P2O5 = 0;
+                //}
+                //if (model.K2O == null)
+                //{
+                //    model.K2O = 0;
+                //}
+                //if (model.SO3 == null)
+                //{
+                //    model.SO3 = 0;
+                //}
 
                 model.IsNitrogenExceedWarning = false;
 
@@ -2581,7 +2521,7 @@ namespace NMP.Portal.Controllers
                             (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
                         }
                         //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                        if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                        if (cropTypeLinkingResponse!=null&& cropTypeLinkingResponse.NMaxLimitEngland != 0)
                         {
                             (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
                         }
@@ -3147,12 +3087,12 @@ namespace NMP.Portal.Controllers
                     {
                         fertiliserManure.ManagementPeriodID = fertiliserManure.ManagementPeriodID;
                         fertiliserManure.ApplicationDate = model.Date.Value;
-                        fertiliserManure.N = model.N;
-                        fertiliserManure.P2O5 = model.P2O5;
-                        fertiliserManure.K2O = model.K2O;
-                        fertiliserManure.SO3 = model.SO3;
-                        fertiliserManure.Lime = model.Lime;
-                        fertiliserManure.MgO = model.MgO;
+                        fertiliserManure.N = model.N ?? 0;
+                        fertiliserManure.P2O5 = model.P2O5 ?? 0;
+                        fertiliserManure.K2O = model.K2O ?? 0;
+                        fertiliserManure.SO3 = model.SO3 ?? 0;
+                        fertiliserManure.Lime = model.Lime ?? 0;
+                        fertiliserManure.MgO = model.MgO ?? 0;
                         fertiliserManure.ApplicationRate = 1;
                     }
                 }
@@ -4181,12 +4121,12 @@ namespace NMP.Portal.Controllers
                                     EncryptedCounter = fertiliserManure.EncryptedCounter,
                                     ApplicationRate = 1,
                                     Confirm = fertiliserManure.Confirm,
-                                    N = model.N,
-                                    P2O5 = model.P2O5,
-                                    K2O = model.K2O,
-                                    SO3 = model.SO3,
-                                    Lime = model.Lime,
-                                    MgO = model.MgO,
+                                    N = model.N ?? 0,
+                                    P2O5 = model.P2O5 ?? 0,
+                                    K2O = model.K2O ?? 0,
+                                    SO3 = model.SO3 ?? 0,
+                                    Lime = model.Lime ?? 0,
+                                    MgO = model.MgO ?? 0,
                                     Na2O = fertiliserManure.Na2O ?? 0,
                                     NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
                                     P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,
@@ -4462,14 +4402,14 @@ namespace NMP.Portal.Controllers
                                     string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
                                     if (!string.IsNullOrWhiteSpace(encryptedFieldId))
                                     {
-                                        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), u = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated) });
+                                        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved) });
                                         //return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear });
                                     }
                                 }
                             }
                             else
                             {
-                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
+                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
 
                             }
                         }
