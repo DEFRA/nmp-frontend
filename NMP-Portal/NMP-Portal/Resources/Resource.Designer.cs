@@ -2374,11 +2374,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CPH.
+        ///   Looks up a localized string similar to CPH number.
         /// </summary>
-        public static string lblCPHnumber {
+        public static string lblCPHNumber {
             get {
-                return ResourceManager.GetString("lblCPHnumber", resourceCulture);
+                return ResourceManager.GetString("lblCPHNumber", resourceCulture);
             }
         }
         
@@ -8145,6 +8145,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Dirty water stores recorded.
+        /// </summary>
+        public static string lblNoDirtyWaterStores {
+            get {
+                return ResourceManager.GetString("lblNoDirtyWaterStores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
         /// </summary>
         public static string lblNoEnterADifferentTargetYieldForEachFields {
@@ -8222,6 +8231,24 @@ namespace NMP.Portal.Resources {
         public static string lblNoneOfTheFieldsAreInAnNVZ {
             get {
                 return ResourceManager.GetString("lblNoneOfTheFieldsAreInAnNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  No slurry stores recorded.
+        /// </summary>
+        public static string lblNoSlurryStoresRecorded {
+            get {
+                return ResourceManager.GetString("lblNoSlurryStoresRecorded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No solid manure stores recorded.
+        /// </summary>
+        public static string lblNoSolidManureStores {
+            get {
+                return ResourceManager.GetString("lblNoSolidManureStores", resourceCulture);
             }
         }
         
@@ -11292,6 +11319,15 @@ namespace NMP.Portal.Resources {
         public static string lblStorageCapacity {
             get {
                 return ResourceManager.GetString("lblStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure storage on {0} in {1}.
+        /// </summary>
+        public static string lblStorageCapacityReportContentFour {
+            get {
+                return ResourceManager.GetString("lblStorageCapacityReportContentFour", resourceCulture);
             }
         }
         

@@ -174,8 +174,8 @@
   <data name="lblCounty" xml:space="preserve">
     <value>County</value>
   </data>
-  <data name="lblCPHnumber" xml:space="preserve">
-    <value>CPH</value>
+  <data name="lblCPHNumber" xml:space="preserve">
+    <value>CPH number</value>
   </data>
   <data name="lblEnglishRules" xml:space="preserve">
     <value>English rules</value>
@@ -6111,5 +6111,17 @@ livestock manure.</value>
   </data>
   <data name="lblTotalSurfaceArea" xml:space="preserve">
     <value>Total surface area</value>
+  </data>
+  <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
+    <value>To create an existing manure storage capacity report, enter the manure storage on {0} in {1}</value>
+  </data>
+  <data name="lblNoSlurryStoresRecorded" xml:space="preserve">
+    <value> No slurry stores recorded</value>
+  </data>
+  <data name="lblNoDirtyWaterStores" xml:space="preserve">
+    <value>No Dirty water stores recorded</value>
+  </data>
+  <data name="lblNoSolidManureStores" xml:space="preserve">
+    <value>No solid manure stores recorded</value>
   </data>
 </root>

@@ -3,11 +3,13 @@
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = Resource.lblStorageCapacity;
+    decimal totalSlurryCapacityVolume = 0;
+    decimal totalSlurrySurfaceArea = 0;
 }
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@(string.IsNullOrWhiteSpace(Model.FarmName)?string.Empty:Model.FarmName)</govuk-back-link>
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@(string.IsNullOrWhiteSpace(Model.FarmName) ? string.Empty : Model.FarmName)</govuk-back-link>
 
     </div>
 
@@ -34,7 +36,7 @@
             <hr>
         </div>
     </div>
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row margin-bottom-thirty">
         <div class="govuk-grid-column-full">
             <span class="name govuk-caption-l">@Model.Farm.Name</span>
             <h1 class="govuk-heading-xl margin-bottom-twenty">
@@ -43,7 +45,7 @@
             <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
         </div>
     </div>
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row margin-bottom-twenty">
         <div class="govuk-grid-column-one-third">
             <p class="govuk-body">
                 @Model.Farm.Name, <br>
@@ -70,36 +72,77 @@
                 @Model.Farm.Postcode
             </p>
         </div>
+        <div class="govuk-grid-column-two-third">
+            @*  <p class="govuk-body">
+            @(string.Format("{0} : {1}", Resource.lblCPHNumber, string.IsNullOrWhiteSpace(Model.Farm.CPH) ?
+                Resource.lblNotEntered : Model.Farm.CPH))
+            <br />
+
+            @(string.Format("{0} : {1}", Resource.lblSingleBusinessIdentifier, string.IsNullOrWhiteSpace(Model.Farm.SBI) ?
+                Resource.lblNotEntered : Model.Farm.SBI))
+
+            <br />
+        </p> *@
+        </div>
     </div>
+}
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">@Resource.lblSlurryStores</h2>
-        <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
-        <table class="govuk-table margin-bottom-forty data-table">
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
-                    <th scope="col" class="govuk-table__header">@Resource.lblTotalCapacity</th>
-                    <th scope="col" class="govuk-table__header">@Resource.lblSurfaceArea</th>
-                    <th scope="col" class="govuk-table__header">@Resource.lblCovered</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Tin tank</td>
-                    <td class="govuk-table__cell">200 cubic metres</td>
-                    <td class="govuk-table__cell">8 cubic metres</td>
-                    <td class="govuk-table__cell">Yes</td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">@Resource.lblStoreCapacityReportContentTwo</th>
-                    <th scope="col" class="govuk-table__header"></th>
-                    <th scope="col" class="govuk-table__header"></th>
-                    <td class="govuk-table__cell"></td>
-                </tr>
-            </tbody>
-        </table>
+        @if (ViewBag.SlurryStoreCapacities != null)
+        {            
+            <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
+            <table class="govuk-table margin-bottom-forty data-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblTotalCapacity</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblSurfaceArea</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblCovered</th>
+                    </tr>
+                </thead>
 
+                <tbody class="govuk-table__body">
+                    @foreach (var slurryStorage in ViewBag.SlurryStoreCapacities)
+                    {
+                        totalSlurryCapacityVolume += slurryStorage.CapacityVolume;
+                        totalSlurrySurfaceArea += slurryStorage.SurfaceArea;
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@slurryStorage.StoreName</td>
+                            <td class="govuk-table__cell">
+                                @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblCubicMeters)
+                            </td>
+                            <td class="govuk-table__cell">
+                                @string.Format("{0} {1}", slurryStorage.SurfaceArea, Resource.lblCubicMeters)
+                            </td>
+                            <td class="govuk-table__cell">@(slurryStorage.IsCovered != null ? slurryStorage.IsCovered == Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True)?Resource.lblYes:Resource.lblNo : Resource.lblNotEntered)</td>
+                        </tr>
+
+                    }
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblStoreCapacityReportContentTwo</th>
+                        <th scope="col" class="govuk-table__header">
+                            @string.Format("{0} {1}", totalSlurryCapacityVolume, Resource.lblCubicMeters)
+                        </th>
+                        <th scope="col" class="govuk-table__header"> @string.Format("{0} {1}", totalSlurrySurfaceArea, Resource.lblCubicMeters) </th>
+                        <td class="govuk-table__cell"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full margin-bottom-ten">
+                    <h3 class="govuk-heading-s">
+                        @Resource.lblNoSlurryStoresRecorded
+                    </h3>
+                </div>
+            </div>
+        }
         <h2 class="govuk-heading-m">@Resource.lblDirtyWaterStores</h2>
+        @if (ViewBag.DirtyWaterStoreCapacities != null)
+        {
         <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
         <table class="govuk-table margin-bottom-forty data-table">
             <thead class="govuk-table__head">
@@ -126,8 +169,20 @@
                 </tr>
             </tbody>
         </table>
-
+        }
+        else
+        {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full margin-bottom-ten">
+                <h3 class="govuk-heading-s">
+                        @Resource.lblNoDirtyWaterStores
+                </h3>
+            </div>
+        </div>
+        }
         <h2 class="govuk-heading-m">@Resource.lblSolidManureStores</h2>
+        @if (ViewBag.SolidStoreCapacities!=null)
+        {
         <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentFour</p>
         <table class="govuk-table margin-bottom-forty data-table">
             <thead class="govuk-table__head">
@@ -154,7 +209,17 @@
                 </tr>
             </tbody>
         </table>
-
+        }
+        else
+        {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full margin-bottom-ten">
+                <h3 class="govuk-heading-s">
+                        @Resource.lblNoSolidManureStores
+                </h3>
+            </div>
+        </div>
+        }
         <!-- <p>None entered</p>
          <hr class="separator_thirty"> -->
 
@@ -163,7 +228,7 @@
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblTotaLiquidCapacity</th>
-                    <th scope="row" class="govuk-table__header"></th>
+                    <th scope="row" class="govuk-table__header">@string.Format("{0} {1}", totalSlurryCapacityVolume, Resource.lblCubicMeters)</th>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblTotalSolidCapacity</th>
@@ -175,12 +240,14 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
-                    <th scope="row" class="govuk-table__header"></th>
+                    <th scope="row" class="govuk-table__header">@string.Format("{0} {1}", totalSlurrySurfaceArea, Resource.lblCubicMeters)</th>
                 </tr>
             </tbody>
         </table>
     </div>
-    <hr class="seperator_five">
+</div>
+<div class="govuk-grid-row">
+    @* <hr class="seperator_five"> *@
     <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
     <p class="govuk-body">
         @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
@@ -191,4 +258,4 @@
     <p class="govuk-body">
         @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
     </p>
-}
+</div>

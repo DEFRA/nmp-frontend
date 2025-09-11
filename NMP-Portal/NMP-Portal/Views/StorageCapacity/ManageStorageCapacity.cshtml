@@ -78,19 +78,25 @@
 
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <a class="govuk-button" asp-action="StorageCapacityReport" asp-controller="Report">
-            "Report"
-        </a>
-        <span class="name govuk-caption-l">@Model.FarmName</span>
-        <h1 class="govuk-heading-l margin-bottom-ten" id="header">@Resource.lblManureStorage</h1>
-        <h2 class="govuk-heading-m">@Model.Year</h2>
-        <p class="govuk-body">
-            <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
-                @Resource.lblAddOrganicMaterialStorage
-            </a>
-        </p>
+    <div class="govuk-grid-column-two-thirds">
+        <div class="margin-bottom-thirty">
+            <span class="name govuk-caption-l">@Model.FarmName</span>
+            <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
 
+            <h2 class="govuk-heading-m">@Model.Year</h2>
+
+        </div>
+        <div class="govuk-inset-text margin-bottom-forty">
+            <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
+            <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="Report">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
+        </div>
+        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
+            @Resource.lblAddOrganicMaterialStorage
+        </a>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         @if (nonEmptyLists.Count == 1)
         {
             @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
