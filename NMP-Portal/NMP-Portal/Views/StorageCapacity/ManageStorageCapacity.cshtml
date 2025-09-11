@@ -86,10 +86,14 @@
             <h2 class="govuk-heading-m">@Model.Year</h2>
 
         </div>
-        <div class="govuk-inset-text margin-bottom-forty">
-            <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
-            <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="Report">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
-        </div>
+        @if (TempData["succesMsgContent1"] == null)
+        {
+            <div class="govuk-inset-text margin-bottom-forty">
+                <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
+                <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="Report">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
+            </div>
+        }
+        
         <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
             @Resource.lblAddOrganicMaterialStorage
         </a>
