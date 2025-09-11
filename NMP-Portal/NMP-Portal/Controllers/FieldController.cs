@@ -1766,6 +1766,7 @@ namespace NMP.Portal.Controllers
                             FieldType = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ? (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable,
                             CropOrder=1,
                             CropGroupName=model.CropGroupName,
+                            IsBasePlan=true,
                             CreatedOn =DateTime.Now,
                             CreatedByID=userId
                         },
