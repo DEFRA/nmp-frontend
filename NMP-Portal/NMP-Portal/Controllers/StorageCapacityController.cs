@@ -1294,14 +1294,14 @@ namespace NMP.Portal.Controllers
             catch(Exception ex)
             {
                 TempData["ErrorOnManageStorageCapacity"] = ex.Message;
-                _logger.LogTrace("Report Controller : StorageCapacityReport() post action called");
+                _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() post action called");
                 return RedirectToAction("ManageStorageCapacity", new
                 {
                     q = model.EncryptedFarmID,
                     y = model.EncryptedHarvestYear
                 });
             }
-            _logger.LogTrace("Report Controller : StorageCapacityReport() post action called");
+            _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() post action called");
             return View(model);
         }
 
