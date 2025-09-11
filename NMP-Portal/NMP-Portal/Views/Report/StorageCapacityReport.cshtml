@@ -14,10 +14,10 @@
     </div>
 
 }
-@if (TempData["ErrorOnCropReport"] != null)
+@if (TempData["ErrorOnStorageCapacityReport"] != null)
 {
     <govuk-error-summary>
-        <govuk-error-summary-item href="#">@TempData["ErrorOnCropReport"]</govuk-error-summary-item>
+        <govuk-error-summary-item href="#">@TempData["ErrorOnStorageCapacityReport"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
 @if (Model != null && Model.Farm != null)
