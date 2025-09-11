@@ -6139,4 +6139,31 @@ livestock manure.</value>
   <data name="MsgStoreAlreadyExists" xml:space="preserve">
     <value>A store with that name and year has already been added. You or someone else who works on the farm may have already added it.</value>
   </data>
+  <data name="lblManureStorageTotals" xml:space="preserve">
+    <value>Manure storage totals</value>
+  </data>
+  <data name="lblTotalLiquidCapacity" xml:space="preserve">
+    <value>Total liquid capacity</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
+    <value>You have not added any Solid material storage</value>
+  </data>
+  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
+    <value>Add solid material storage</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
+    <value>You have not added any dirty water storage</value>
+  </data>
+  <data name="lblAddDirtyWaterStorage" xml:space="preserve">
+    <value>Add dirty water storage</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnySlurryStorage" xml:space="preserve">
+    <value>You have not added any slurry storage</value>
+  </data>
+  <data name="lblWhatIsTheCircumference" xml:space="preserve">
+    <value>What is the circumference?</value>
+  </data>
+  <data name="lblWhatIsTheDiameter" xml:space="preserve">
+    <value>What is the diameter?</value>
+  </data>
 </root>

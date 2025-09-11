@@ -10,6 +10,7 @@ namespace NMP.Portal.Models
         public int? Year { get; set; }
         public string? StoreName { get; set; }
         public int? MaterialStateID { get; set; }
+        public string? EncryptedMaterialStateID { get; set; }
         public int? StorageTypeID { get; set; }
         public int? SolidManureTypeID { get; set; }  //not in view model
 
