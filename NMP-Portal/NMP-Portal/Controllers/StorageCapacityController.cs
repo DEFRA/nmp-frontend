@@ -1272,6 +1272,7 @@ namespace NMP.Portal.Controllers
                     (model.Farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmID.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && model.Farm != null)
                     {
+                        model.FarmName = model.Farm.Name;
                         List<StoreCapacity> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).ToList();
                         if (solidStoreCapacities.Count > 0)
                         {
@@ -1287,7 +1288,6 @@ namespace NMP.Portal.Controllers
                         {
                             ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
                         }
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
                     }
                 }
             }
