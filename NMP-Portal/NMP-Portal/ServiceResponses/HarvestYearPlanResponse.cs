@@ -54,6 +54,8 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("totalFertiliserManures")]
         public int TotalFertiliserManures { get; set; }
+        [JsonProperty("IsBasePlan")]
+        public bool? IsBasePlan { get; set; }
 
     }
 }
