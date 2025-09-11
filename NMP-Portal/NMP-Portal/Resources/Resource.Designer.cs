@@ -15989,6 +15989,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 99..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And99 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And99", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 999..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And999 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 9999..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And9999 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And9999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 9,99,99,99,999.
+        /// </summary>
+        public static string MsgEnterAValueBetween0And9999999999 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And9999999999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a value of no more than 5 digits.
         /// </summary>
         public static string MsgEnterAValueOfNoMoreThan5Digits {
@@ -17542,6 +17578,15 @@ namespace NMP.Portal.Resources {
         public static string MsgStartClosedPeriodEndFebWarningPara2Wales {
             get {
                 return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara2Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A store with that name and year has already been added. You or someone else who works on the farm may have already added it..
+        /// </summary>
+        public static string MsgStoreAlreadyExists {
+            get {
+                return ResourceManager.GetString("MsgStoreAlreadyExists", resourceCulture);
             }
         }
         
