@@ -174,8 +174,8 @@
   <data name="lblCounty" xml:space="preserve">
     <value>County</value>
   </data>
-  <data name="lblCPHnumber" xml:space="preserve">
-    <value>CPH</value>
+  <data name="lblCPHNumber" xml:space="preserve">
+    <value>CPH number</value>
   </data>
   <data name="lblEnglishRules" xml:space="preserve">
     <value>English rules</value>
@@ -6057,5 +6057,71 @@ livestock manure.</value>
   </data>
   <data name="lblManureStorage" xml:space="preserve">
     <value>Manure storage</value>
+  </data>
+  <data name="lblStorageCapacity" xml:space="preserve">
+    <value>Storage capacity report</value>
+  </data>
+  <data name="lblExistingManureStorageCapacityYear" xml:space="preserve">
+    <value>Existing manure storage capacity {0}</value>
+  </data>
+  <data name="lblSlurryStores" xml:space="preserve">
+    <value>Slurry stores</value>
+  </data>
+  <data name="lblStoreCapacityReportContentOne" xml:space="preserve">
+    <value>Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm.</value>
+  </data>
+  <data name="lblTotalCapacity" xml:space="preserve">
+    <value> Total capacity</value>
+  </data>
+  <data name="lblCovered" xml:space="preserve">
+    <value>Covered</value>
+  </data>
+  <data name="lblStoreCapacityReportContentTwo" xml:space="preserve">
+    <value>Slurry storage totals</value>
+  </data>
+  <data name="lblDirtyWaterStores" xml:space="preserve">
+    <value>Dirty water stores</value>
+  </data>
+  <data name="lblStoreCapacityReportContentThree" xml:space="preserve">
+    <value>Dirty water total</value>
+  </data>
+  <data name="lblStoreCapacityReportContentFour" xml:space="preserve">
+    <value>On a concrete base or in poultry houses.</value>
+  </data>
+  <data name="lblSolidManureStores" xml:space="preserve">
+    <value>Solid manure stores</value>
+  </data>
+  <data name="lblSolidCapacity" xml:space="preserve">
+    <value>Solid capacity</value>
+  </data>
+  <data name="lnlFreshWeightCapacity" xml:space="preserve">
+    <value>Fresh weight capacity</value>
+  </data>
+  <data name="lblSolidManureTotal" xml:space="preserve">
+    <value>Solid manure total</value>
+  </data>
+  <data name="lblTotaLiquidCapacity" xml:space="preserve">
+    <value>Total liquid capacity</value>
+  </data>
+  <data name="lblTotalSolidCapacity" xml:space="preserve">
+    <value>Total solid capacity</value>
+  </data>
+  <data name="lblTotalSolidCapacityFreshWeight" xml:space="preserve">
+    <value>Total solid capacity (fresh weight)</value>
+  </data>
+  <data name="lblTotalSurfaceArea" xml:space="preserve">
+    <value>Total surface area</value>
+  </data>
+  <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
+    <value>To create an existing manure storage capacity report, enter the manure storage on {0} in {1}</value>
+  </data>
+  <data name="lblNoSlurryStoresRecorded" xml:space="preserve">
+    <value> No slurry stores recorded</value>
+  </data>
+  <data name="lblNoDirtyWaterStores" xml:space="preserve">
+    <value>No Dirty water stores recorded</value>
+  </data>
+  <data name="lblNoSolidManureStores" xml:space="preserve">
+    <value>No solid manure stores recorded</value>
   </data>
 </root>
