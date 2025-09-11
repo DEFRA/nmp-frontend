@@ -6801,7 +6801,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
                 }
             }
-            _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
+            _logger.LogTrace("Report Controller : StorageCapacityReport() post action called");
             return View(model);
         }
 
