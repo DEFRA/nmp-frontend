@@ -1609,12 +1609,13 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("Year");
                     }
                 }
+                string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
                 {
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
-                        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear, isPlan= isComingFromPlan });
                     }
                     else
                     {
@@ -1720,8 +1721,10 @@ namespace NMP.Portal.Controllers
 
                     //if (string.IsNullOrWhiteSpace(error.Message) && storeCapacityList.Count > 0)
                     //{
-                       model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear });
+                    string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
+
+                    model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear,isPlan= isComingFromPlan});
                     //}
                     //return RedirectToAction("OrganicMaterialStorageNotAvailable");
                 }
