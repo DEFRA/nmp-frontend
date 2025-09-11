@@ -66,7 +66,7 @@
                 @if (TempData["succesMsgContent3"] != null)
                 {
                     <p class="govuk-body">
-                        <a class="govuk-notification-banner__link" asp-action="" asp-controller="StorageCapacity" asp-route-q="@ViewBag.isComingFromSuccessMsg">
+                        <a class="govuk-notification-banner__link" asp-action="StorageCapacityReport" asp-controller="StorageCapacity">
                             @TempData["succesMsgContent3"]
                         </a>
                     </p>
@@ -90,7 +90,7 @@
         {
             <div class="govuk-inset-text margin-bottom-forty">
                 <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
-                <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="Report">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
+                <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
             </div>
         }
         
