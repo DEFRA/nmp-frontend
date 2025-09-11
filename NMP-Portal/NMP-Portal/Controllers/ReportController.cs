@@ -258,6 +258,7 @@ namespace NMP.Portal.Controllers
 
                                     if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                     {
+                                        ViewBag.Years = GetReportYearsList();
                                         TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
                                         return View("Year", model);
                                     }
@@ -417,6 +418,7 @@ namespace NMP.Portal.Controllers
 
                                 if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                 {
+                                    ViewBag.Years = GetReportYearsList();
                                     TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
                                     return View("Year", model);
                                 }
@@ -1703,10 +1705,9 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("Year", string.Format(Resource.lblSelectAOptionBeforeContinuing, Resource.lblYear.ToLower()));
                 }
+                ViewBag.Years = GetReportYearsList();
                 if (!ModelState.IsValid)
                 {
-
-                    ViewBag.Years = GetReportYearsList();
                     return View(model);
                 }
                 model.IsCheckList = false;
