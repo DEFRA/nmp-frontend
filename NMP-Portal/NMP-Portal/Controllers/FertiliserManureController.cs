@@ -194,7 +194,7 @@ namespace NMP.Portal.Controllers
                         }
                         if (!model.IsDoubleCropAvailable)
                         {
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID == null)))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.IsBasePlan)))
                             {
                                 fieldsToRemove.Add(fieldId);
                             }
@@ -264,7 +264,7 @@ namespace NMP.Portal.Controllers
                                 (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                                 if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
                                 {
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass&&crop.DefoliationSequenceID!=null)
                                     {
                                         model.IsAnyCropIsGrass = true;
                                     }
@@ -542,7 +542,7 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID == null)))
+                                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.IsBasePlan)))
                                                 {
                                                     fieldsToRemove.Add(field);
                                                 }
@@ -752,7 +752,7 @@ namespace NMP.Portal.Controllers
                                     (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                                     if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
                                     {
-                                        if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass&&crop.DefoliationSequenceID!=null)
                                         {
                                             model.IsAnyCropIsGrass = true;
                                             break;
@@ -1055,7 +1055,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID == null)))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass || (x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.IsBasePlan)))
                             {
                                 fieldsToRemove.Add(field);
                             }
@@ -1157,7 +1157,7 @@ namespace NMP.Portal.Controllers
                                 (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                                 if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
                                 {
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.DefoliationSequenceID != null)
                                     {
                                         model.IsAnyCropIsGrass = true;
                                         break;
@@ -6111,7 +6111,7 @@ namespace NMP.Portal.Controllers
                         (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                         if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
                         {
-                            if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                            if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.DefoliationSequenceID != null)
                             {
                                 model.IsAnyCropIsGrass = true;
                                 break;
