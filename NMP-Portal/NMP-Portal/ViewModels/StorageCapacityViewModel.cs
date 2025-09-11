@@ -30,5 +30,6 @@ namespace NMP.Portal.ViewModels
         public decimal? Slope { get; set; }
         public decimal? FreeBoardHeight { get; set; }
         public bool IsStoreCapacityExist { get; set; } = false;
+        public Farm? Farm { get; set; }
     }
 }

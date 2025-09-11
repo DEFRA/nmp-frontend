@@ -1272,5 +1272,58 @@ namespace NMP.Portal.Controllers
             return (capacity, surfaceArea);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> StorageCapacityReport()
+        {
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            try
+            {
+                (List<StoreCapacity> storeCapacities, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year.Value);
+                if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0)
+                {
+                    (model.Farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmID.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message) && model.Farm != null)
+                    {
+                        model.FarmName = model.Farm.Name;
+                        List<StoreCapacity> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).ToList();
+                        if (solidStoreCapacities.Count > 0)
+                        {
+                            ViewBag.SolidStoreCapacities = solidStoreCapacities;
+                        }
+                        List<StoreCapacity> dirtyWaterStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage).ToList();
+                        if (dirtyWaterStoreCapacities.Count > 0)
+                        {
+                            ViewBag.DirtyWaterStoreCapacities = dirtyWaterStoreCapacities;
+                        }
+                        List<StoreCapacity> slurryStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage).ToList();
+                        if (slurryStoreCapacities.Count > 0)
+                        {
+                            ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                TempData["ErrorOnManageStorageCapacity"] = ex.Message;
+                _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() get action called");
+                return RedirectToAction("ManageStorageCapacity", new
+                {
+                    q = model.EncryptedFarmID,
+                    y = model.EncryptedHarvestYear
+                });
+            }
+            _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() get action called");
+            return View(model);
+        }
+
     }
 }
