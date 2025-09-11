@@ -29,5 +29,6 @@ namespace NMP.Portal.ViewModels
         public bool IsCheckAnswer { get; set; } = false;
         public decimal? Slope { get; set; }
         public decimal? FreeBoardHeight { get; set; }
+        public Farm? Farm { get; set; }
     }
 }

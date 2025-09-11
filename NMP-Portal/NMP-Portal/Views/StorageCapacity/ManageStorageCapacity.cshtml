@@ -88,7 +88,7 @@
         </div>
         <div class="govuk-inset-text margin-bottom-forty">
             <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
-            <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="Report">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
+            <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
         </div>
         <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
             @Resource.lblAddOrganicMaterialStorage
