@@ -277,6 +277,20 @@
                         }
                         else
                         {
+                            @if (Model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                            {
+                                <govuk-summary-list-row class=@(Model.CapacityWeight == null ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @(string.Format(Resource.lblWhatIsTheWeightCapacityOf, Model.Year))
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.CapacityWeight != null ? string.Format("{0} {1}", Model.CapacityWeight.Value, Resource.lblCubicMeters) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="WeightCapacity" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
                             <govuk-summary-list-row class=@(Model.CapacityVolume == null ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblTotalCapacityMinusTheFreeBoard
