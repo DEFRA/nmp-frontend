@@ -10,20 +10,27 @@
     }
     else
     {
-        if (ViewBag.StoreCapacityList != null && ViewBag.StoreCapacityList.Count > 0)
+        if (!string.IsNullOrWhiteSpace(Model.IsComingFromMaterialToHubPage))
         {
-            backAction = "ManageStorageCapacity";
+            backAction = "StorageCapacityManagement";
         }
         else
         {
-            backAction = "OrganicMaterialStorageNotAvailable";
+            if (ViewBag.StoreCapacityList != null && ViewBag.StoreCapacityList.Count > 0)
+            {
+                backAction = "ManageStorageCapacity";
+            }
+            else
+            {
+                backAction = "OrganicMaterialStorageNotAvailable";
+            }
         }
     }
 }
 
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnMaterialStates"] != null)
 {
@@ -73,6 +80,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">

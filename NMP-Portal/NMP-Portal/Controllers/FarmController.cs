@@ -1065,7 +1065,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    (List<StoreCapacity> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID,null);
+                    (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID,null);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;

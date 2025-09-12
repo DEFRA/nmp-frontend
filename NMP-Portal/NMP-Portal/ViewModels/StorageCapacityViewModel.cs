@@ -32,5 +32,7 @@ namespace NMP.Portal.ViewModels
         public bool IsStoreCapacityExist { get; set; } = false;
         public Farm? Farm { get; set; }
         public string? EncryptedMaterialStateID { get; set; }
+        public string? IsComingFromManageToHubPage { get; set; }
+        public string? IsComingFromMaterialToHubPage { get; set; }
     }
 }
