@@ -14,7 +14,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">@(string.IsNullOrWhiteSpace(Model.FarmName) ? string.Empty : Model.FarmName)</govuk-back-link>
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@(string.IsNullOrWhiteSpace(Model.Farm.Name) ? string.Empty : Model.Farm.Name)</govuk-back-link>
 
     </div>
 
@@ -25,7 +25,7 @@
         <govuk-error-summary-item href="#">@TempData["ErrorOnStorageCapacityReport"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
-@if (Model != null && Model.Farm != null)
+@if(Model.Farm!=null)
 {
     <div class="govuk-grid-row noprint margin-bottom-forty">
         <div class="govuk-grid-column-two-thirds">
@@ -90,7 +90,8 @@
         </p> *@
         </div>
     </div>
-}
+    }
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">@Resource.lblSlurryStores</h2>
@@ -118,7 +119,7 @@
                                 @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblCubicMeters)
                             </td>
                             <td class="govuk-table__cell">
-                                @(slurryStorage.SurfaceArea!=null?string.Format("{0} {1}", slurryStorage.SurfaceArea, Resource.lblCubicMeters):Resource.lblHyphen)
+                                @(slurryStorage.SurfaceArea!=null?string.Format("{0} {1}", slurryStorage.SurfaceArea, Resource.lblMetresSquared):Resource.lblHyphen)
                             </td>
                             <td class="govuk-table__cell">@(slurryStorage.IsCovered != null ? slurryStorage.IsCovered == Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True)?Resource.lblYes:Resource.lblNo : Resource.lblHyphen)</td>
                         </tr>
@@ -129,7 +130,7 @@
                         <th scope="col" class="govuk-table__header">
                             @string.Format("{0} {1}", totalSlurryCapacityVolume, Resource.lblCubicMeters)
                         </th>
-                        <th scope="col" class="govuk-table__header"> @string.Format("{0} {1}", totalSlurrySurfaceArea, Resource.lblCubicMeters) </th>
+                        <th scope="col" class="govuk-table__header"> @string.Format("{0} {1}", totalSlurrySurfaceArea, Resource.lblMetresSquared) </th>
                         <td class="govuk-table__cell"></td>
                     </tr>
                 </tbody>
@@ -170,7 +171,7 @@
                                 @string.Format("{0} {1}", dirtyWaterStore.CapacityVolume, Resource.lblCubicMeters)
                             </td>
                             <td class="govuk-table__cell">
-                                @(dirtyWaterStore.SurfaceArea!=null?string.Format("{0} {1}", dirtyWaterStore.SurfaceArea, Resource.lblCubicMeters):Resource.lblHyphen)
+                                @(dirtyWaterStore.SurfaceArea!=null?string.Format("{0} {1}", dirtyWaterStore.SurfaceArea, Resource.lblMetresSquared):Resource.lblHyphen)
                             </td>
                             <td class="govuk-table__cell">@(dirtyWaterStore.IsCovered != null ? dirtyWaterStore.IsCovered == Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True) ? Resource.lblYes : Resource.lblNo : Resource.lblHyphen)</td>
                         </tr>
@@ -182,7 +183,7 @@
                             @string.Format("{0} {1}", totalDirtyCapacityVolume, Resource.lblCubicMeters)
                     </th>
                     <th scope="col" class="govuk-table__header">
-                            @string.Format("{0} {1}", totalDirtySurfaceArea, Resource.lblCubicMeters)
+                            @string.Format("{0} {1}", totalDirtySurfaceArea, Resource.lblMetresSquared)
                     </th>
                     <td class="govuk-table__cell"></td>
                 </tr>
@@ -228,7 +229,7 @@
                                 @string.Format("{0} {1}", solidStoreCapacities.CapacityWeight, Resource.lbltonnes)
                             </td>
                             <td class="govuk-table__cell">
-                                @string.Format("{0} {1}", solidStoreCapacities.SurfaceArea, Resource.lblCubicMeters)
+                                @string.Format("{0} {1}", solidStoreCapacities.SurfaceArea, Resource.lblMetresSquared)
                             </td>
                         </tr>
 
@@ -242,7 +243,7 @@
                             @string.Format("{0} {1}", totalSolidWeight, Resource.lbltonnes)
                     </th>
                     <th scope="col" class="govuk-table__header">
-                            @string.Format("{0} {1}", totalSolidSurfaceArea, Resource.lblCubicMeters)
+                            @string.Format("{0} {1}", totalSolidSurfaceArea, Resource.lblMetresSquared)
                     </th>
                 </tr>
             </tbody>
@@ -278,22 +279,24 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
-                    <th scope="row" class="govuk-table__header">@string.Format("{0} {1}", totalSlurrySurfaceArea+totalDirtySurfaceArea+totalSolidSurfaceArea, Resource.lblCubicMeters)</th>
+                    <th scope="row" class="govuk-table__header">@string.Format("{0} {1}", totalSlurrySurfaceArea+totalDirtySurfaceArea+totalSolidSurfaceArea, Resource.lblMetresSquared)</th>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
     @* <hr class="seperator_five"> *@
     <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
     <p class="govuk-body">
-        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
+        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
     </p>
     <p class="govuk-body">
-        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
+        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblService)
     </p>
     <p class="govuk-body">
-        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
+        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
     </p>
+    </div>
 </div>

@@ -761,3 +761,7 @@ hr.seperator_thirty {
 .manure_store_totals th:first-child {
     width: 35%;
 }
+
+#all-plans-table {
+    margin-top: 10px;
+}
