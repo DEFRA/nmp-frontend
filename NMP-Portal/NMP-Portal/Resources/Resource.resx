@@ -6166,4 +6166,7 @@ livestock manure.</value>
   <data name="lblWhatIsTheDiameter" xml:space="preserve">
     <value>What is the diameter?</value>
   </data>
+  <data name="lblStoreCapacity" xml:space="preserve">
+    <value>Store Capacity</value>
+  </data>
 </root>

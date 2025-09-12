@@ -11377,6 +11377,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Store Capacity.
+        /// </summary>
+        public static string lblStoreCapacity {
+            get {
+                return ResourceManager.GetString("lblStoreCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On a concrete base or in poultry houses..
         /// </summary>
         public static string lblStoreCapacityReportContentFour {
