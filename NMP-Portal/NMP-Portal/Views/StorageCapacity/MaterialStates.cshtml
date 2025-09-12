@@ -16,7 +16,7 @@
         }
         else
         {
-            if (ViewBag.StoreCapacityList != null && ViewBag.StoreCapacityList.Count > 0)
+            if (Model.IsStoreCapacityExist == true)
             {
                 backAction = "ManageStorageCapacity";
             }
