@@ -1873,7 +1873,9 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
                     }
-
+                }
+                if (model.Crops[model.YieldCurrentCounter].Yield != null)
+                {
                     if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
                     {
                         ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);

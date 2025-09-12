@@ -1168,6 +1168,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add {0} storage.
+        /// </summary>
+        public static string lblAddYearStorage {
+            get {
+                return ResourceManager.GetString("lblAddYearStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add your fields.
         /// </summary>
         public static string lblAddYourFields {
@@ -1776,6 +1785,15 @@ namespace NMP.Portal.Resources {
         public static string lblBack {
             get {
                 return ResourceManager.GetString("lblBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to {0}.
+        /// </summary>
+        public static string lblBackToFarmName {
+            get {
+                return ResourceManager.GetString("lblBackToFarmName", resourceCulture);
             }
         }
         
@@ -4431,6 +4449,15 @@ namespace NMP.Portal.Resources {
         public static string lblFarmSummaryContent11 {
             get {
                 return ResourceManager.GetString("lblFarmSummaryContent11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update manure storage.
+        /// </summary>
+        public static string lblFarmSummaryContent12 {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent12", resourceCulture);
             }
         }
         
@@ -12959,6 +12986,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateYearImportsOrExports {
             get {
                 return ResourceManager.GetString("lblUpdateYearImportsOrExports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update {0} storage.
+        /// </summary>
+        public static string lblUpdateYearStorage {
+            get {
+                return ResourceManager.GetString("lblUpdateYearStorage", resourceCulture);
             }
         }
         
