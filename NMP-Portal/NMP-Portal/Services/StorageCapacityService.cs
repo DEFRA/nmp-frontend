@@ -60,10 +60,10 @@ namespace NMP.Portal.Services
             }
             return (storageTypeList, error);
         }
-        public async Task<(List<StoreCapacity>, Error)> FetchStoreCapacityByFarmIdAndYear(int farmId, int year)
+        public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmIdAndYear(int farmId, int year)
         {
             Error error = new Error();
-            List<StoreCapacity> storeCapacityList = new List<StoreCapacity>();
+            List<StoreCapacityResponse> storeCapacityList = new List<StoreCapacityResponse>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -75,7 +75,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var storeCapacity = responseWrapper.Data.ToObject<List<StoreCapacity>>();
+                        var storeCapacity = responseWrapper.Data.ToObject<List<StoreCapacityResponse>>();
                         if (storeCapacity != null)
                         {
                             storeCapacityList = storeCapacity;

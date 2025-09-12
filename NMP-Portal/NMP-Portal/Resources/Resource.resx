@@ -5945,7 +5945,7 @@ livestock manure.</value>
     <value>Surface area</value>
   </data>
   <data name="lblMetresSquared" xml:space="preserve">
-    <value>Metres squared</value>
+    <value>metres squared</value>
   </data>
   <data name="lblAddStorageFor" xml:space="preserve">
     <value>Add storage for {0}</value>

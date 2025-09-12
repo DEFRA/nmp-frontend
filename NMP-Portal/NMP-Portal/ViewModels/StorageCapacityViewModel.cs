@@ -31,5 +31,6 @@ namespace NMP.Portal.ViewModels
         public decimal? FreeBoardHeight { get; set; }
         public bool IsStoreCapacityExist { get; set; } = false;
         public Farm? Farm { get; set; }
+        public string? EncryptedMaterialStateID { get; set; }
     }
 }
