@@ -2,10 +2,40 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblStorageName;
+    var backAction = "";
+    if (Model.IsCheckAnswer == true)
+    {
+        backAction = "CheckAnswer";
+    }
+    else
+    {
+        if(!string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
+        {
+            backAction = "ManageStorageCapacity";
+        }
+        else
+        {
+            backAction = "MaterialStates";
+        }
+    }
+
+    var tabId = "";
+    if(Model.MaterialStateID==(int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+    {
+        tabId = "slurryStorageList";
+    }
+    else if (Model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)
+    {
+        tabId = "dirtyWaterList";
+    }
+    else if (Model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+    {
+        tabId = "solidManureStorageList";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-fragment="@tabId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnStoreName"] != null)
 {
@@ -53,6 +83,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
@@ -67,17 +100,26 @@
 
 
                 <p class="govuk-body cancel-link">
-                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    @if (Model.IsStoreCapacityExist == true)
                     {
-                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                        <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel
                         </a>
                     }
                     else
                     {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-                            @Resource.lblCancel
-                        </a>
+                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                        {
+                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                                @Resource.lblCancel
+                            </a>
+                        }
                     }
                 </p>
 

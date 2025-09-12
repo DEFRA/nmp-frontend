@@ -887,8 +887,8 @@ namespace NMP.Portal.Controllers
                             model.Crops[i].CropTypeID = model.CropTypeID.Value;
                             model.Crops[i].CropInfo1 = null;
                             model.Crops[i].CropInfo2 = null;
-                        }                        
-                        ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();                        
+                        }
+                        ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                         //ViewBag.FieldOptions = fieldList;
                         //if (model.IsCropTypeChange)
@@ -2275,6 +2275,7 @@ namespace NMP.Portal.Controllers
                             model.FieldList = new List<string>();
                             int counter = 1;
                             decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID);
+                            List<decimal?> yields = new List<decimal?>();
                             for (int i = 0; i < harvestYearPlanResponse.Count; i++)
                             {
                                 var crop = new Crop();
@@ -2304,30 +2305,41 @@ namespace NMP.Portal.Controllers
                                 {
                                     crop.Yield = yield;
                                     model.Yield = yield;
-                                    yieldQuestion = yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
-
-                                    if (string.IsNullOrWhiteSpace(yieldQuestion) || harvestYearPlanResponse.Count > 1)
-                                    {
-                                        if (firstYield == null)
-                                        {
-                                            firstYield = crop.Yield;
-                                        }
-                                        else if (firstYield != crop.Yield)
-                                        {
-                                            model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
-                                            allYieldsAreSame = false;
-                                        }
-                                    }
-                                    if (yieldQuestion == string.Format(Resource.lblUseTheStandardFigure, defaultYield))
-                                    {
-                                        model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields;
-                                    }
+                                    yields.Add(yield);
                                 }
                                 else
                                 {
                                     crop.Yield = null;
-                                    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                                    yields.Add(null);
                                 }
+                                //if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
+                                //{
+                                //    crop.Yield = yield;
+                                //    model.Yield = yield;
+                                //    yieldQuestion = yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
+
+                                //    if (string.IsNullOrWhiteSpace(yieldQuestion) || harvestYearPlanResponse.Count > 1)
+                                //    {
+                                //        if (firstYield == null)
+                                //        {
+                                //            firstYield = crop.Yield;
+                                //        }
+                                //        else if (firstYield != crop.Yield)
+                                //        {
+                                //            model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
+                                //            allYieldsAreSame = false;
+                                //        }
+                                //    }
+                                //    if (yieldQuestion == string.Format(Resource.lblUseTheStandardFigure, defaultYield))
+                                //    {
+                                //        model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields;
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //    crop.Yield = null;
+                                //    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                                //}
                                 if (harvestYearPlanResponse[i].IsBasePlan != null && (harvestYearPlanResponse[i].IsBasePlan.Value))
                                 {
                                     isBasePlan = true;
@@ -2376,12 +2388,26 @@ namespace NMP.Portal.Controllers
                                 model.Crops.Add(crop);
                             }
 
+                            bool allAreDefault = yields.All(y => y.HasValue && y.Value == defaultYield);
+                            bool allSame = yields.Distinct().Count() == 1;
 
-                            if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
+                            if (allAreDefault)
+                            {
+                                model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields;
+                            }
+                            else if (!allSame && harvestYearPlanResponse.Count > 1)
+                            {
+                                model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
+                            }
+                            else
                             {
                                 model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-
                             }
+                            //if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
+                            //{
+                            //    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+
+                            //}
                             if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && model.SowingDateQuestion == null && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
                             {
                                 model.SowingDateQuestion = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
@@ -2872,7 +2898,7 @@ namespace NMP.Portal.Controllers
                             i++;
                         }
                     }
-                        i = 0;
+                    i = 0;
                     if (model.Crops != null)
                     {
                         foreach (var crop in model.Crops)

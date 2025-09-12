@@ -64,9 +64,12 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
 
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityVolume" value="@Model.CapacityVolume"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SurfaceArea" value="@Model.SurfaceArea"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"></govuk-input>
+                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"></govuk-input>
                 </div>
 
                 <div class="check-answers">
@@ -149,51 +152,48 @@
                         }
                         @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
                         {
-                            @if (Model.IsCircumference != null)
+
+                            <govuk-summary-list-row class=@(Model.IsCircumference == null ? "govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.IsCircumference != null ? (Model.IsCircumference == true ? Resource.lblCircumference : Resource.lblDiameter) : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+
+
+                            if (Model.IsCircumference == true)
                             {
-                                <govuk-summary-list-row class=@(Model.IsCircumference == null ? "govuk-error-message":"")>
+                                <govuk-summary-list-row class=@(Model.Circumference == null ? "govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter
+                                        @Resource.lblWhatIsTheCircumference
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.IsCircumference != null ? (Model.IsCircumference == true ? Resource.lblCircumference : Resource.lblDiameter) : Resource.lblNotSet)
+                                        @(Model.Circumference != null ? string.Format("{0} {1}", Model.Circumference.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-
-                                if (Model.IsCircumference == true)
-                                {
-                                    <govuk-summary-list-row class=@(Model.Circumference == null ? "govuk-error-message":"")>
-                                        <govuk-summary-list-row-key>
-                                            @Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter
-                                        </govuk-summary-list-row-key>
-                                        <govuk-summary-list-row-value>
-                                            @(Model.Circumference != null ? string.Format("{0} {1}", Model.Circumference.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
-                                        </govuk-summary-list-row-value>
-                                        <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
-                                        </govuk-summary-list-row-actions>
-                                    </govuk-summary-list-row>
-                                }
-                                else
-                                {
-                                    <govuk-summary-list-row class=@(Model.Diameter == null ? "govuk-error-message":"")>
-                                        <govuk-summary-list-row-key>
-                                            @Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter
-                                        </govuk-summary-list-row-key>
-                                        <govuk-summary-list-row-value>
-                                            @(Model.Diameter != null ? string.Format("{0} {1}", Model.Diameter.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
-                                        </govuk-summary-list-row-value>
-                                        <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
-                                        </govuk-summary-list-row-actions>
-                                    </govuk-summary-list-row>
-                                }
-
                             }
-
+                            if (Model.IsCircumference == false)
+                            {
+                                <govuk-summary-list-row class=@(Model.Diameter == null ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @Resource.lblWhatIsTheDiameter
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.Diameter != null ? string.Format("{0} {1}", Model.Diameter.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
 
 
                         }
@@ -282,7 +282,7 @@
                                     @Resource.lblTotalCapacityMinusTheFreeBoard
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.CapacityVolume != null ? string.Format("{0} {1}", Model.CapacityVolume.Value.ToString("#.#"), Resource.lblCubicMeters) : Resource.lblNotSet)
+                                    @(Model.CapacityVolume != null ? string.Format("{0} {1}", Model.CapacityVolume.Value, Resource.lblCubicMeters) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     @* <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action> *@
@@ -296,7 +296,7 @@
                                     @Resource.lblSurfaceArea
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.SurfaceArea != null ? string.Format("{0} {1}", Model.SurfaceArea.Value.ToString("#.#"), Resource.lblMetresSquared) : Resource.lblNotSet)
+                                    @(Model.SurfaceArea != null ? string.Format("{0} {1}", Model.SurfaceArea.Value, Resource.lblMetresSquared) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     @* <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action> *@
@@ -311,17 +311,26 @@
                     @Resource.lblAddThisManureStorage
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    @if (Model.IsStoreCapacityExist == true)
                     {
-                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                        <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel
                         </a>
                     }
                     else
                     {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-                            @Resource.lblCancel
-                        </a>
+                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                        {
+                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                                @Resource.lblCancel
+                            </a>
+                        }
                     }
                 </p>
 

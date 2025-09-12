@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="StorageTypes" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer==true ? "CheckAnswer" : "StorageTypes")" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnDimensions"] != null)
 {
@@ -48,6 +48,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
@@ -117,7 +120,7 @@
                                 @Resource.lblCircumference
                                 <govuk-radios-item-conditional>
                                     <govuk-input asp-for="@Model.Circumference" type="number" autocomplete="false">
-                                        <govuk-input-label>What is the circumference?</govuk-input-label>
+                                        <govuk-input-label>@Resource.lblWhatIsTheCircumference</govuk-input-label>
                                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                                     </govuk-input>
                                 </govuk-radios-item-conditional>
@@ -126,7 +129,7 @@
                                 @Resource.lblDiameter
                                 <govuk-radios-item-conditional>
                                     <govuk-input asp-for="@Model.Diameter" type="number" autocomplete="false">
-                                        <govuk-input-label>What is the diameter?</govuk-input-label>
+                                        <govuk-input-label>@Resource.lblWhatIsTheDiameter</govuk-input-label>
                                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                                     </govuk-input>
                                 </govuk-radios-item-conditional>
@@ -166,17 +169,26 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    @if (Model.IsStoreCapacityExist == true)
                     {
-                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                        <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel
                         </a>
                     }
                     else
                     {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-                            @Resource.lblCancel
-                        </a>
+                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                        {
+                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                                @Resource.lblCancel
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                                @Resource.lblCancel
+                            </a>
+                        }
                     }
                 </p>
 

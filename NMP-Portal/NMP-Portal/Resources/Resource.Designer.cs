@@ -862,6 +862,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add dirty water storage.
+        /// </summary>
+        public static string lblAddDirtyWaterStorage {
+            get {
+                return ResourceManager.GetString("lblAddDirtyWaterStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} addresses found.
         /// </summary>
         public static string lblAdddressFound {
@@ -1065,6 +1074,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddSoilNutrientValue {
             get {
                 return ResourceManager.GetString("lblAddSoilNutrientValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add solid material storage.
+        /// </summary>
+        public static string lblAddSolidMaterialStorage {
+            get {
+                return ResourceManager.GetString("lblAddSolidMaterialStorage", resourceCulture);
             }
         }
         
@@ -2365,11 +2383,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CPH.
+        ///   Looks up a localized string similar to Covered.
         /// </summary>
-        public static string lblCPHnumber {
+        public static string lblCovered {
             get {
-                return ResourceManager.GetString("lblCPHnumber", resourceCulture);
+                return ResourceManager.GetString("lblCovered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPH number.
+        /// </summary>
+        public static string lblCPHNumber {
+            get {
+                return ResourceManager.GetString("lblCPHNumber", resourceCulture);
             }
         }
         
@@ -3216,6 +3243,15 @@ namespace NMP.Portal.Resources {
         public static string lblDirtyWater {
             get {
                 return ResourceManager.GetString("lblDirtyWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirty water stores.
+        /// </summary>
+        public static string lblDirtyWaterStores {
+            get {
+                return ResourceManager.GetString("lblDirtyWaterStores", resourceCulture);
             }
         }
         
@@ -4080,6 +4116,15 @@ namespace NMP.Portal.Resources {
         public static string lblExistingManureStorageCapacityReport {
             get {
                 return ResourceManager.GetString("lblExistingManureStorageCapacityReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing manure storage capacity {0}.
+        /// </summary>
+        public static string lblExistingManureStorageCapacityYear {
+            get {
+                return ResourceManager.GetString("lblExistingManureStorageCapacityYear", resourceCulture);
             }
         }
         
@@ -7434,6 +7479,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manure storage totals.
+        /// </summary>
+        public static string lblManureStorageTotals {
+            get {
+                return ResourceManager.GetString("lblManureStorageTotals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure Type.
         /// </summary>
         public static string lblManureType {
@@ -8118,6 +8172,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Dirty water stores recorded.
+        /// </summary>
+        public static string lblNoDirtyWaterStores {
+            get {
+                return ResourceManager.GetString("lblNoDirtyWaterStores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
         /// </summary>
         public static string lblNoEnterADifferentTargetYieldForEachFields {
@@ -8195,6 +8258,24 @@ namespace NMP.Portal.Resources {
         public static string lblNoneOfTheFieldsAreInAnNVZ {
             get {
                 return ResourceManager.GetString("lblNoneOfTheFieldsAreInAnNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  No slurry stores recorded.
+        /// </summary>
+        public static string lblNoSlurryStoresRecorded {
+            get {
+                return ResourceManager.GetString("lblNoSlurryStoresRecorded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No solid manure stores recorded.
+        /// </summary>
+        public static string lblNoSolidManureStores {
+            get {
+                return ResourceManager.GetString("lblNoSolidManureStores", resourceCulture);
             }
         }
         
@@ -10540,6 +10621,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slurry stores.
+        /// </summary>
+        public static string lblSlurryStores {
+            get {
+                return ResourceManager.GetString("lblSlurryStores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SNS.
         /// </summary>
         public static string lblSNS {
@@ -10999,11 +11089,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solid capacity.
+        /// </summary>
+        public static string lblSolidCapacity {
+            get {
+                return ResourceManager.GetString("lblSolidCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Solid manure storage.
         /// </summary>
         public static string lblSolidManureStorage {
             get {
                 return ResourceManager.GetString("lblSolidManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solid manure stores.
+        /// </summary>
+        public static string lblSolidManureStores {
+            get {
+                return ResourceManager.GetString("lblSolidManureStores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solid manure total.
+        /// </summary>
+        public static string lblSolidManureTotal {
+            get {
+                return ResourceManager.GetString("lblSolidManureTotal", resourceCulture);
             }
         }
         
@@ -11224,6 +11341,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Storage capacity report.
+        /// </summary>
+        public static string lblStorageCapacity {
+            get {
+                return ResourceManager.GetString("lblStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure storage on {0} in {1}.
+        /// </summary>
+        public static string lblStorageCapacityReportContentFour {
+            get {
+                return ResourceManager.GetString("lblStorageCapacityReportContentFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Storage name.
         /// </summary>
         public static string lblStorageName {
@@ -11238,6 +11373,42 @@ namespace NMP.Portal.Resources {
         public static string lblStorageType {
             get {
                 return ResourceManager.GetString("lblStorageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On a concrete base or in poultry houses..
+        /// </summary>
+        public static string lblStoreCapacityReportContentFour {
+            get {
+                return ResourceManager.GetString("lblStoreCapacityReportContentFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm..
+        /// </summary>
+        public static string lblStoreCapacityReportContentOne {
+            get {
+                return ResourceManager.GetString("lblStoreCapacityReportContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirty water total.
+        /// </summary>
+        public static string lblStoreCapacityReportContentThree {
+            get {
+                return ResourceManager.GetString("lblStoreCapacityReportContentThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slurry storage totals.
+        /// </summary>
+        public static string lblStoreCapacityReportContentTwo {
+            get {
+                return ResourceManager.GetString("lblStoreCapacityReportContentTwo", resourceCulture);
             }
         }
         
@@ -12144,6 +12315,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Total capacity.
+        /// </summary>
+        public static string lblTotalCapacity {
+            get {
+                return ResourceManager.GetString("lblTotalCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total capacity (minus the freeboard).
         /// </summary>
         public static string lblTotalCapacityMinusTheFreeBoard {
@@ -12230,6 +12410,24 @@ namespace NMP.Portal.Resources {
         public static string lblTotalImportsAndExportsForYear {
             get {
                 return ResourceManager.GetString("lblTotalImportsAndExportsForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total liquid capacity.
+        /// </summary>
+        public static string lblTotaLiquidCapacity {
+            get {
+                return ResourceManager.GetString("lblTotaLiquidCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total liquid capacity.
+        /// </summary>
+        public static string lblTotalLiquidCapacity {
+            get {
+                return ResourceManager.GetString("lblTotalLiquidCapacity", resourceCulture);
             }
         }
         
@@ -12423,11 +12621,38 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total solid capacity.
+        /// </summary>
+        public static string lblTotalSolidCapacity {
+            get {
+                return ResourceManager.GetString("lblTotalSolidCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total solid capacity (fresh weight).
+        /// </summary>
+        public static string lblTotalSolidCapacityFreshWeight {
+            get {
+                return ResourceManager.GetString("lblTotalSolidCapacityFreshWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Sulphur (SO3).
         /// </summary>
         public static string lblTotalSulphur {
             get {
                 return ResourceManager.GetString("lblTotalSulphur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total surface area.
+        /// </summary>
+        public static string lblTotalSurfaceArea {
+            get {
+                return ResourceManager.GetString("lblTotalSurfaceArea", resourceCulture);
             }
         }
         
@@ -13215,6 +13440,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the circumference?.
+        /// </summary>
+        public static string lblWhatIsTheCircumference {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheCircumference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the crop height?.
         /// </summary>
         public static string lblWhatIsTheCropHeight {
@@ -13274,6 +13508,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhatIsTheDepth {
             get {
                 return ResourceManager.GetString("lblWhatIsTheDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the diameter?.
+        /// </summary>
+        public static string lblWhatIsTheDiameter {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheDiameter", resourceCulture);
             }
         }
         
@@ -14637,6 +14880,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have not added any dirty water storage.
+        /// </summary>
+        public static string lblYouHaveNotAddedAnyDirtyWaterStorage {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotAddedAnyDirtyWaterStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have not added any exports..
         /// </summary>
         public static string lblYouHaveNotAddedAnyExports {
@@ -14660,6 +14912,24 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotAddedAnyImports {
             get {
                 return ResourceManager.GetString("lblYouHaveNotAddedAnyImports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not added any slurry storage.
+        /// </summary>
+        public static string lblYouHaveNotAddedAnySlurryStorage {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotAddedAnySlurryStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not added any Solid material storage.
+        /// </summary>
+        public static string lblYouHaveNotAddedAnySolidMaterialStorage {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotAddedAnySolidMaterialStorage", resourceCulture);
             }
         }
         
@@ -14894,6 +15164,15 @@ namespace NMP.Portal.Resources {
         public static string lnkToRb209NutrientManagementGuide {
             get {
                 return ResourceManager.GetString("lnkToRb209NutrientManagementGuide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fresh weight capacity.
+        /// </summary>
+        public static string lnlFreshWeightCapacity {
+            get {
+                return ResourceManager.GetString("lnlFreshWeightCapacity", resourceCulture);
             }
         }
         
@@ -15985,6 +16264,42 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAValueBeforeContinue {
             get {
                 return ResourceManager.GetString("MsgEnterAValueBeforeContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 99..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And99 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And99", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 999..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And999 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 9999..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And9999 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And9999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 9,99,99,99,999.
+        /// </summary>
+        public static string MsgEnterAValueBetween0And9999999999 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And9999999999", resourceCulture);
             }
         }
         
@@ -17542,6 +17857,15 @@ namespace NMP.Portal.Resources {
         public static string MsgStartClosedPeriodEndFebWarningPara2Wales {
             get {
                 return ResourceManager.GetString("MsgStartClosedPeriodEndFebWarningPara2Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A store with that name and year has already been added. You or someone else who works on the farm may have already added it..
+        /// </summary>
+        public static string MsgStoreAlreadyExists {
+            get {
+                return ResourceManager.GetString("MsgStoreAlreadyExists", resourceCulture);
             }
         }
         
