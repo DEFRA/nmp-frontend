@@ -7623,7 +7623,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Metres squared.
+        ///   Looks up a localized string similar to metres squared.
         /// </summary>
         public static string lblMetresSquared {
             get {
