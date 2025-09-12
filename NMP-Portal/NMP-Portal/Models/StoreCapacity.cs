@@ -35,5 +35,9 @@ namespace NMP.Portal.Models
         [Range(0, 9999999999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And9999999999))]
         public decimal? CapacityWeight { get; set; }
         public decimal? SurfaceArea { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedByID { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public int? ModifiedByID { get; set; }
     }
 }

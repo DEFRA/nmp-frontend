@@ -40,9 +40,10 @@ namespace NMP.Portal.Controllers
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
         private readonly IReportService _reportService;
+        private readonly IStorageCapacityService _storageCapacityService;
         public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService, ICropService cropService, IReportService reportService)
+            IFieldService fieldService, ICropService cropService, IReportService reportService, IStorageCapacityService storageCapacityService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -52,6 +53,7 @@ namespace NMP.Portal.Controllers
             _fieldService = fieldService;
             _cropService = cropService;
             _reportService = reportService;
+            _storageCapacityService = storageCapacityService;
         }
         public IActionResult Index()
         {
@@ -1062,6 +1064,21 @@ namespace NMP.Portal.Controllers
                             ViewBag.LiveStockHaveImportExportData = true;
                         }
                     }
+
+                    (List<StoreCapacity> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID,null);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["Error"] = error.Message;
+                        return RedirectToAction("FarmList");
+                    }
+                    else
+                    {
+                        if (storeCapacityList.Count > 0)
+                        {
+                            ViewBag.StoreCapacityList = true;
+                        }
+                    }
+
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();

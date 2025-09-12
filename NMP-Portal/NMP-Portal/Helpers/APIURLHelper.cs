@@ -198,7 +198,7 @@ namespace NMP.Portal.Helpers
         public const string AddNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
         public const string FetchNutrientsLoadingLivestockByFarmIdAndYearAsyncAPI = "nutrients-loading-live-stocks/{0}?year={1}";
         public const string FetchLivestockTypesAsyncAPI = "livestock-types";
-        public const string FetchStoreCapacityAsyncAPI = "store-capacities/{0}/{1}";
+        public const string FetchStoreCapacityAsyncAPI = "store-capacities/{0}";
         public const string FetchMaterialStatesListAsyncAPI = "material-states";
         public const string FetchMaterialStatesListByIDAsyncAPI = "material-states/{0}";
         public const string FetchStorageTypesAsyncAPI = "storage-types";
