@@ -15,8 +15,14 @@
 }
 
 @section BeforeContent {
-    
-    <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    @if (string.IsNullOrWhiteSpace(Model.IsComingFromManageToHubPage))
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+    }
 }
 @if (TempData["ErrorOnManageStorageCapacity"] != null)
 {
@@ -47,7 +53,7 @@
                 @if (TempData["succesMsgContent2"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" class="govuk-notification-banner__link">
+                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" class="govuk-notification-banner__link">
                             @TempData["succesMsgContent2"]
                         </a>
                     </p>
@@ -55,7 +61,7 @@
                 @if (TempData["succesMsgContent3"] != null)
                 {
                     <p class="govuk-body">
-                        <a class="govuk-notification-banner__link" asp-action="StorageCapacityReport" asp-controller="StorageCapacity">
+                        <a class="govuk-notification-banner__link" asp-action="StorageCapacityReport" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-v="@ViewBag.IsPlan">
                             @TempData["succesMsgContent3"]
                         </a>
                     </p>
@@ -79,11 +85,11 @@
         {
             <div class="govuk-inset-text margin-bottom-forty">
                 <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
-                <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
+                <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-v="@ViewBag.IsPlan">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
             </div>
         }
          
-        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan">
+        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage">
             @Resource.lblAddOrganicMaterialStorage
         </a>
     </div>
@@ -125,7 +131,7 @@
                     {
                         <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
                         <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId">@Resource.lblAddDirtyWaterStorage</a>
+                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
                         </p>
                     }
                 </govuk-tabs-item>
@@ -160,7 +166,7 @@
                     {
                         <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyDirtyWaterStorage</p>
                         <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId">@Resource.lblAddDirtyWaterStorage</a>
+                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
                         </p>
                     }
                 </govuk-tabs-item>
@@ -195,7 +201,7 @@
                     {
                         <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
                         <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId">@Resource.lblAddSolidMaterialStorage</a>
+                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddSolidMaterialStorage</a>
                         </p>
                     }
                 </govuk-tabs-item>
