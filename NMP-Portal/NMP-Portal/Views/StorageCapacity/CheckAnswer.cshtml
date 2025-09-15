@@ -87,17 +87,20 @@
 
                 <div class="check-answers">
                     <govuk-summary-list>
-                        <govuk-summary-list-row class=@(Model.MaterialStateID == null ? "govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.MaterialStateID != null ? Model.MaterialStateName : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        @if (string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
+                        {
+                            <govuk-summary-list-row class=@(Model.MaterialStateID == null ? "govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.MaterialStateID != null ? Model.MaterialStateName : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
 
                         <govuk-summary-list-row class=@(Model.StoreName == null ? "govuk-error-message":"")>
                             <govuk-summary-list-row-key>

@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@( Model.IsCheckAnswer==true ? "CheckAnswer" : "Dimensions" )" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer==true && !Model.IsMaterialTypeChange && !Model.IsStorageTypeChange) ? "CheckAnswer" : "Dimensions" )" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnDimensions"] != null)
 {

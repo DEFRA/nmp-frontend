@@ -506,16 +506,19 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("StoreName", Resource.lblEnterANameForYourOrganicMaterialStore);
                 }
-
-                (bool isStoreNameExists, Error error) = await _storageCapacityService.IsStoreNameExistAsync(model.FarmID ?? 0, model.Year ?? 0, model.StoreName);
-
-                if (error == null)
+                if(!string.IsNullOrWhiteSpace(model.StoreName))
                 {
-                    if (isStoreNameExists)
+                    (bool isStoreNameExists, Error error) = await _storageCapacityService.IsStoreNameExistAsync(model.FarmID ?? 0, model.Year ?? 0, model.StoreName);
+
+                    if (error == null)
                     {
-                        ModelState.AddModelError("StoreName", Resource.MsgStoreAlreadyExists);
+                        if (isStoreNameExists)
+                        {
+                            ModelState.AddModelError("StoreName", Resource.MsgStoreAlreadyExists);
+                        }
                     }
                 }
+                
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -679,6 +682,9 @@ namespace NMP.Portal.Controllers
                     model.Circumference = null;
                     model.Diameter = null;
                     model.IsCircumference = null;
+                    model.BankSlopeAngleID = null;
+                    model.BankSlopeAngleName = null;
+                    model.IsSlopeEdge = null;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                     return RedirectToAction("StorageBagCapacity");
                 }
