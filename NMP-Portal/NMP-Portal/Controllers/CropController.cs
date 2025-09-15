@@ -253,7 +253,10 @@ namespace NMP.Portal.Controllers
                         model.CropInfo2Name = null;
                         model.IsCropGroupChange = true;
                     }
-                    else if (CropData.CropGroupId == model.CropGroupId && model.IsCheckAnswer && (!model.IsCropGroupChange))
+                    else
+                    if ((CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass||
+                        CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                        && model.IsCheckAnswer && (!model.IsCropGroupChange))
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -793,26 +796,28 @@ namespace NMP.Portal.Controllers
 
                     //}
                 }
-                int harvestYearPlanCount = 0;
-                int cropPlanCounter = 0;
-                if (harvestYearPlanResponse.Count() > 0)
+                if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
-                    harvestYearPlanCount = harvestYearPlanResponse.Count();
-                    foreach (var harvestYearPlan in harvestYearPlanResponse)
+                    int harvestYearPlanCount = 0;
+                    int cropPlanCounter = 0;
+                    if (harvestYearPlanResponse.Count() > 0)
                     {
-                        if (harvestYearPlan.IsBasePlan.Value)
+                        harvestYearPlanCount = harvestYearPlanResponse.Count();
+                        foreach (var harvestYearPlan in harvestYearPlanResponse)
                         {
-                            cropPlanCounter++;
+                            if (harvestYearPlan.IsBasePlan.Value)
+                            {
+                                cropPlanCounter++;
+                            }
                         }
                     }
-                }
-                if (harvestYearPlanCount > 0 && cropPlanCounter > 0 && harvestYearPlanCount == cropPlanCounter)
-                {
-                    TempData["CropTypeError"] = Resource.MsgIfUserCreateSecondCropInBasicPlan;
-                    ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-
-                    //ViewBag.FieldOptions = fieldList;
-                    return RedirectToAction("CropTypes");
+                    if (harvestYearPlanCount > 0 && cropPlanCounter > 0 && harvestYearPlanCount == cropPlanCounter)
+                    {
+                        TempData["CropTypeError"] = Resource.MsgIfUserCreateSecondCropInBasicPlan;
+                        ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
+                        //ViewBag.FieldOptions = fieldList;
+                        return RedirectToAction("CropTypes");
+                    }
                 }
                 if (model.CropTypeID != null)
                 {
@@ -1708,13 +1713,17 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                if (defaultYield > 0)
+                {
+                    ViewBag.DefaultYield = defaultYield;
+                }
                 if (model.IsQuestionChange)
                 {
                     model.IsQuestionChange = false;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 }
-                if (model.Crops.Count == 1 && (ViewBag.DefaultYield == null || ViewBag.DefaultYield == 0))
+                if (model.Crops.Count == 1 && (defaultYield == 0))
                 {
                     model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
@@ -1821,17 +1830,18 @@ namespace NMP.Portal.Controllers
                     model.FieldName = (await _fieldService.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
                     model.YieldCurrentCounter = index;
                     model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
-
-                    ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    if (defaultYieldForCropType > 0)
+                    {
+                        ViewBag.DefaultYield = defaultYieldForCropType;
+                    }
                     return View(model);
                 }
                 if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
-                {
-                    decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                {                    
                     model.YieldCurrentCounter = 1;
                     for (int i = 0; i < model.Crops.Count; i++)
                     {
-                        model.Crops[i].Yield = defaultYield;
+                        model.Crops[i].Yield = defaultYieldForCropType;
                     }
                     model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
@@ -1849,7 +1859,11 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("CropInfoOne");
                     }
                 }
-                ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                if (defaultYield > 0)
+                {
+                    ViewBag.DefaultYield = defaultYield;
+                }
             }
             catch (Exception ex)
             {
@@ -2402,7 +2416,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                                    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                             }
                             //if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                             //{
@@ -2640,7 +2654,10 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 model.IsCheckAnswer = true;
-                ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                if (defaultYieldForCropType > 0)
+                {
+                    ViewBag.DefaultYield = defaultYieldForCropType;
+                }
                 if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
                 {
                     string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
@@ -2965,7 +2982,11 @@ namespace NMP.Portal.Controllers
                     }
                     if (model.CropTypeID != null)
                     {
-                        ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                        decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                        if (defaultYield > 0)
+                        {
+                            ViewBag.DefaultYield = defaultYield;
+                        }
                     }
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
@@ -5348,7 +5369,11 @@ namespace NMP.Portal.Controllers
                     List<Field> fieldList = await _fieldService.FetchFieldsByFarmId(farmID);
                     if (model.CropTypeID != null)
                     {
-                        ViewBag.DefaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                        decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                        if (defaultYield > 0)
+                        {
+                            ViewBag.DefaultYield = defaultYield;
+                        }
                     }
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                     if (string.IsNullOrWhiteSpace(harvestYearError.Message))
