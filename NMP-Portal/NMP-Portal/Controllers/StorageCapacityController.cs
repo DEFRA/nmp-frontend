@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -348,7 +349,8 @@ namespace NMP.Portal.Controllers
                 {
                     if (storeCapacityList.Count > 0)
                     {
-                        ViewBag.StoreCapacityList = storeCapacityList;
+                        //ViewBag.StoreCapacityList = storeCapacityList;
+                        model.IsStoreCapacityExist = true;
                     }
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
@@ -395,6 +397,10 @@ namespace NMP.Portal.Controllers
                     if (model.MaterialStateID == storageModel.MaterialStateID)
                     {
                         return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        model.IsMaterialTypeChange = true;
                     }
                 }
 
@@ -461,6 +467,7 @@ namespace NMP.Portal.Controllers
                             if (storeCapacityList.Count > 0)
                             {
                                 ViewBag.StoreCapacityList = storeCapacityList;
+                                model.IsStoreCapacityExist = true;
                             }
                         }
                     }
@@ -521,7 +528,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.StoreName == storageModel.StoreName)
+                    if (model.StoreName == storageModel.StoreName && !model.IsMaterialTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -634,9 +641,13 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.StorageTypeID == storageModel.StorageTypeID)
+                    if (model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        model.IsStorageTypeChange = true;
                     }
                 }
 
@@ -811,7 +822,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsCheckAnswer)
                     {
-                        if (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth)
+                        if (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                         {
                             return RedirectToAction("CheckAnswer");
                         }
@@ -824,7 +835,7 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.IsCheckAnswer)
                         {
-                            if (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered)
+                            if (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                             {
                                 return RedirectToAction("CheckAnswer");
                             }
@@ -893,12 +904,12 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                if (model.CapacityWeight != Math.Round((model.Length * model.Width * model.Depth) * (model.SolidManureDensity) ?? 0))
-                {
-                    model.Length = null;
-                    model.Width = null;
-                    model.Depth = null;
-                }
+                //if (model.CapacityWeight != Math.Round((model.Length * model.Width * model.Depth) * (model.SolidManureDensity) ?? 0))
+                //{
+                //    model.Length = null;
+                //    model.Width = null;
+                //    model.Depth = null;
+                //}
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
                 {
@@ -906,7 +917,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.CapacityWeight == storageModel.CapacityWeight)
+                    if (model.CapacityWeight == storageModel.CapacityWeight && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -972,7 +983,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.StorageBagCapacity == storageModel.StorageBagCapacity)
+                    if (model.StorageBagCapacity == storageModel.StorageBagCapacity && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -1028,7 +1039,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.IsSlopeEdge == storageModel.IsSlopeEdge)
+                    if (model.IsSlopeEdge == storageModel.IsSlopeEdge && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -1161,6 +1172,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 model.IsCheckAnswer = true;
+                model.IsMaterialTypeChange = false;
+                model.IsStorageTypeChange = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
 
             }
@@ -1227,15 +1240,44 @@ namespace NMP.Portal.Controllers
                     HttpContext?.Session.Remove("StorageCapacityData");
                     bool success = true;
                     string successMsg = Resource.lblYouHaveAddedManureStorage;
-                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
+                    //return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
+                    //{
+                    //    q = model.EncryptedFarmID,
+                    //    y = model.EncryptedHarvestYear,
+                    //    r = _reportDataProtector.Protect(successMsg),
+                    //    s = _reportDataProtector.Protect(success.ToString()),
+                    //    isPlan=_reportDataProtector.Protect(model.IsComingFromPlan.ToString())
+                    //});
+
+                    var tabId = "";
+                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
                     {
-                        q = model.EncryptedFarmID,
-                        y = model.EncryptedHarvestYear,
-                        r = _reportDataProtector.Protect(successMsg),
-                        s = _reportDataProtector.Protect(success.ToString()),
-                        isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
-                        t = model.IsComingFromManageToHubPage
-                    });
+                        tabId = "slurryStorageList";
+                    }
+                    else if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)
+                    {
+                        tabId = "dirtyWaterList";
+                    }
+                    else if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    {
+                        tabId = "solidManureStorageList";
+                    }
+
+                    return RedirectToAction(
+                           actionName: "ManageStorageCapacity",
+                           controllerName: "StorageCapacity",
+                           routeValues: new
+                           {
+                               q = model.EncryptedFarmID,
+                               y = model.EncryptedHarvestYear,
+                               r = _reportDataProtector.Protect(successMsg),
+                               s = _reportDataProtector.Protect(success.ToString()),
+                               isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
+                               t = model.IsComingFromManageToHubPage
+                           },
+                           fragment: tabId
+                       );
+
                 }
 
             }
@@ -1411,6 +1453,33 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() get action called");
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            _logger.LogTrace("StorageCapacity Controller : Cancel() action called");
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"StorageCapacity Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnCheckAnswer"] = ex.Message;
+                return RedirectToAction("CheckAnswer");
+            }
+
+            return View(model);
+        }
         [HttpGet]
         public async Task<IActionResult> StorageCapacityManagement(string q)
         {
@@ -1521,6 +1590,59 @@ namespace NMP.Portal.Controllers
             }
 
             return years;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(StorageCapacityViewModel model)
+        {
+            _logger.LogTrace("StorageCapacity Controller : Cancel() post action called");
+            if (model.IsCancel == null)
+            {
+                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Cancel", model);
+            }
+
+            if (!model.IsCancel.Value)
+            {
+                return RedirectToAction("CheckAnswer");
+            }
+            else
+            {
+
+                if (model.IsStoreCapacityExist == true)
+                {
+
+                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
+                    {
+                        q = model.EncryptedFarmID,
+                        y = model.EncryptedHarvestYear
+                    });
+                }
+                else
+                {
+                    if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
+                    {
+
+                        return RedirectToAction("HarvestYearOverview", "Crop", new
+                        {
+                            id = model.EncryptedFarmID,
+                            year = model.EncryptedHarvestYear
+                        });
+                    }
+                    else
+                    {
+                        return RedirectToAction("FarmSummary", "Farm", new
+                        {
+                            id = model.EncryptedFarmID,
+                        });
+                    }
+                }
+                
+            }
         }
 
     }

@@ -6178,4 +6178,7 @@ livestock manure.</value>
   <data name="lblBackToFarmName" xml:space="preserve">
     <value>Back to {0}</value>
   </data>
+  <data name="lblStoreCapacity" xml:space="preserve">
+    <value>Store Capacity</value>
+  </data>
 </root>
