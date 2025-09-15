@@ -13,7 +13,6 @@
 
     var weightCapacity = Math.Round((Model.Length * Model.Width * Model.Depth) * (Model.SolidManureDensity) ?? 0);
 }
-}
 
 @section BeforeContent {
     <govuk-back-link asp-action="BackStoreCapacityCheckAnswer" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
