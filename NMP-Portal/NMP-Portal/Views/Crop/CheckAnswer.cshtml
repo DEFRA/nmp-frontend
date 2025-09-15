@@ -27,10 +27,10 @@
     switch (Model.YieldQuestion)
     {
         case (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields:
-            yieldQuestion = Model.Crops.Count > 1 ? string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield) : string.Format(Resource.lblUseTheStandardFigureForThisField, ViewBag.DefaultYield);
+            yieldQuestion = Model.Crops.Count > 1 ? string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield??0) : string.Format(Resource.lblUseTheStandardFigureForThisField, ViewBag.DefaultYield??0);
             break;
         case (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields:
-            if (Model.Crops.Count == 1 && (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0))
+            if (Model.Crops.Count == 1 && (ViewBag.DefaultYield == null||(ViewBag.DefaultYield!= null&&ViewBag.DefaultYield>0)))
             {
                 yieldQuestion = Resource.lblEnterAFigure;
             }

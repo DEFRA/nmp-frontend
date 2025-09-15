@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = Resource.lblStorageName;
     var backAction = "";
-    if (Model.IsCheckAnswer == true)
+    if (Model.IsCheckAnswer == true && !Model.IsMaterialTypeChange)
     {
         backAction = "CheckAnswer";
     }
