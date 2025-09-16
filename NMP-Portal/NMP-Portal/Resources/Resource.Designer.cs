@@ -18275,6 +18275,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one {0} type. You can add more {0} types later..
+        /// </summary>
+        public static string SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater {
+            get {
+                return ResourceManager.GetString("SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil Nitrogen Supply Index.
         /// </summary>
         public static string String1 {
