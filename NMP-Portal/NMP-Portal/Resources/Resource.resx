@@ -6181,4 +6181,13 @@ livestock manure.</value>
   <data name="lblStoreCapacity" xml:space="preserve">
     <value>Store Capacity</value>
   </data>
+  <data name="lblCopyExistingManureStorage" xml:space="preserve">
+    <value>Copy existing manure storage</value>
+  </data>
+  <data name="lblCopyExistingStorageManureContentOne" xml:space="preserve">
+    <value>Would you like to start with a copy of another existing manure storage capacity report?</value>
+  </data>
+  <data name="lblStorageCapacityForControllerName" xml:space="preserve">
+    <value>StorageCapacity</value>
+  </data>
 </root>

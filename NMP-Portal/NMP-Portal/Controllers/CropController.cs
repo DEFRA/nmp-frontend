@@ -1852,6 +1852,10 @@ namespace NMP.Portal.Controllers
                             model.IsAnyChangeInField = false;
                         }
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                        if (model.IsCropTypeChange)
+                        {
+                            return RedirectToAction("CropInfoOne");
+                        }
                         return RedirectToAction("CheckAnswer");
                     }
                     else

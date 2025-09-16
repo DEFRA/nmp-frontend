@@ -2347,11 +2347,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy existing manure storage.
+        /// </summary>
+        public static string lblCopyExistingManureStorage {
+            get {
+                return ResourceManager.GetString("lblCopyExistingManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy existing plan.
         /// </summary>
         public static string lblCopyExistingPlan {
             get {
                 return ResourceManager.GetString("lblCopyExistingPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to start with a copy of another existing manure storage capacity report?.
+        /// </summary>
+        public static string lblCopyExistingStorageManureContentOne {
+            get {
+                return ResourceManager.GetString("lblCopyExistingStorageManureContentOne", resourceCulture);
             }
         }
         
@@ -11373,6 +11391,15 @@ namespace NMP.Portal.Resources {
         public static string lblStorageCapacity {
             get {
                 return ResourceManager.GetString("lblStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StorageCapacity.
+        /// </summary>
+        public static string lblStorageCapacityForControllerName {
+            get {
+                return ResourceManager.GetString("lblStorageCapacityForControllerName", resourceCulture);
             }
         }
         

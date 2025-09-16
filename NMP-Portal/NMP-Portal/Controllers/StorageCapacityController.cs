@@ -216,7 +216,15 @@ namespace NMP.Portal.Controllers
                                 ViewBag.EncryptedDirtyWaterStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage));
 
                             }
-
+                        }
+                    }
+                    (List<StoreCapacityResponse> currentStorageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
+                    if (string.IsNullOrWhiteSpace(error.Message) && currentStorageCapacityList.Count == 0)
+                    {
+                        (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                        if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                        {
+                            return RedirectToAction("CopyExistingManureStorage", new { q = q, r = y, isPlan = isPlan });
                         }
                     }
                     //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
@@ -518,7 +526,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-                
+
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1493,6 +1501,10 @@ namespace NMP.Portal.Controllers
             {
                 try
                 {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                    {
+                        HttpContext?.Session.Remove("StorageCapacityData");
+                    }
                     ViewBag.EncryptedFarmId = q;
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     List<int> fixedYearList = GetReportYearsList();
@@ -1563,7 +1575,7 @@ namespace NMP.Portal.Controllers
 
                             ViewBag.FinalYearList = finalYearList;
                         }
-                    }
+                    }                  
                 }
                 catch (Exception ex)
                 {
@@ -1647,8 +1659,115 @@ namespace NMP.Portal.Controllers
                         });
                     }
                 }
-                
+
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CopyExistingManureStorage(string q, string r, string? isPlan, string? x, string? v)
+        {
+            _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorage() action called");
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+            }
+            else
+            {
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+            }
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    model.FarmID = decryptedFarmId;
+                    model.EncryptedFarmID = q;
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                        model.EncryptedHarvestYear = r;
+                    }
+                    if (!string.IsNullOrWhiteSpace(isPlan))
+                    {
+                        model.IsComingFromPlan = Convert.ToBoolean(_reportDataProtector.Unprotect(isPlan));
+                    }
+                    if (!string.IsNullOrWhiteSpace(v))
+                    {
+                        model.IsComingFromMaterialToHubPage = v;
+                        model.IsComingFromManageToHubPage = v;
+                    }
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                }
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CopyExistingManureStorage(StorageCapacityViewModel model)
+        {
+            _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorage() action called");
+
+            try
+            {
+                if (model.IsCopyExistingManureStorage == null)
+                {
+                    ModelState.AddModelError("IsCopyExistingManureStorage", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                if (!model.IsCopyExistingManureStorage.Value)
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                    return RedirectToAction("MaterialStates");
+                }
+                else
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                    (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                    if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                    {
+                        //if (storageCapacityList.Count == 1)
+                        //{
+
+                        //}
+                        //else
+                        //{
+                        //    return RedirectToAction("CopyExistingManureStorageYearList");
+                        //}
+                        return RedirectToAction("CopyExistingManureStorageYearList");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorage() action : {ex.Message}, {ex.StackTrace}");
+
+                TempData["ErrorOnYear"] = ex.Message;
+                return RedirectToAction("Year", "Report");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult CopyExistingManureStorageYearList()
+        {
+            _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorageYearList() action called");
+            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            {
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+            return View(model);
         }
 
     }
