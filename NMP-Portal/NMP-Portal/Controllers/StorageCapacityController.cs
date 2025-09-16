@@ -1501,6 +1501,10 @@ namespace NMP.Portal.Controllers
             {
                 try
                 {
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                    {
+                        HttpContext?.Session.Remove("StorageCapacityData");
+                    }
                     ViewBag.EncryptedFarmId = q;
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     List<int> fixedYearList = GetReportYearsList();
