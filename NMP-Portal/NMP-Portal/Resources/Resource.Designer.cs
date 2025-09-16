@@ -14511,6 +14511,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to copy?.
+        /// </summary>
+        public static string lblWhichYearWouldYouLikeToCopy {
+            get {
+                return ResourceManager.GetString("lblWhichYearWouldYouLikeToCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which year would you like to create a Livestock manure nitrogen (N) farm limit report for?.
         /// </summary>
         public static string lblWhichYearWouldYouLikeToCreateALivestockReport {

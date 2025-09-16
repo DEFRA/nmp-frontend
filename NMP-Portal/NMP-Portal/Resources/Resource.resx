@@ -6190,4 +6190,7 @@ livestock manure.</value>
   <data name="lblStorageCapacityForControllerName" xml:space="preserve">
     <value>StorageCapacity</value>
   </data>
+  <data name="lblWhichYearWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which year would you like to copy?</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Newtonsoft.Json;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
@@ -367,8 +368,42 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"StorageCapacity Controller : Exception in MaterialStates() action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = ex.Message;
-                return RedirectToAction("OrganicMaterialStorageNotAvailable");
+                if (model != null)
+                {
+                    if (model.IsStoreCapacityExist)
+                    {
+                        (List<StoreCapacityResponse> currentStorageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
+                        if (string.IsNullOrWhiteSpace(error.Message) && currentStorageCapacityList.Count == 0)
+                        {
+                            (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                            if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                            {
+                                TempData["ErrorOnCopyExistingManureStorage"] =ex.Message;
+                                return RedirectToAction("CopyExistingManureStorage");
+                            }
+                        }
+                        TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = ex.Message;
+                        return RedirectToAction("OrganicMaterialStorageNotAvailable");
+                    }
+                    else if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
+                    {
+                        TempData["ErrorOnStorageCapacityManagement"] =ex.Message;
+                        return RedirectToAction("StorageCapacityManagement", new { q = model.EncryptedFarmID });
+
+                    }
+                    else
+                    {
+                        TempData["ErrorOnYear"] = ex.Message;
+                        return RedirectToAction("Year", "Report");
+
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = ex.Message;
+                    return RedirectToAction("FarmSummary", "Farm", new { q = f });
+
+                }
 
             }
             return View(model);
@@ -1575,7 +1610,7 @@ namespace NMP.Portal.Controllers
 
                             ViewBag.FinalYearList = finalYearList;
                         }
-                    }                  
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1676,36 +1711,70 @@ namespace NMP.Portal.Controllers
             {
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
             }
-            if (!string.IsNullOrWhiteSpace(q))
+            try
             {
-                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                if (!string.IsNullOrWhiteSpace(q))
                 {
-                    model.FarmName = farm.Name;
-                    model.FarmID = decryptedFarmId;
-                    model.EncryptedFarmID = q;
-                    if (!string.IsNullOrWhiteSpace(r))
+                    int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(decryptedFarmId);
+                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
-                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
-                        model.EncryptedHarvestYear = r;
+                        model.FarmName = farm.Name;
+                        model.FarmID = decryptedFarmId;
+                        model.EncryptedFarmID = q;
+                        if (!string.IsNullOrWhiteSpace(r))
+                        {
+                            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                            model.EncryptedHarvestYear = r;
+                        }
+                        if (!string.IsNullOrWhiteSpace(isPlan))
+                        {
+                            model.IsComingFromPlan = Convert.ToBoolean(_reportDataProtector.Unprotect(isPlan));
+                        }
+                        if (!string.IsNullOrWhiteSpace(v))
+                        {
+                            model.IsComingFromMaterialToHubPage = v;
+                            model.IsComingFromManageToHubPage = v;
+                        }
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
                     }
-                    if (!string.IsNullOrWhiteSpace(isPlan))
+                }
+            }
+            catch (Exception ex)
+            {
+                if (model != null)
+                {
+                    if (model.IsComingFromPlan.HasValue && (model.IsComingFromPlan.Value))
                     {
-                        model.IsComingFromPlan = Convert.ToBoolean(_reportDataProtector.Unprotect(isPlan));
+                        TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                        return RedirectToAction("HarvestYearOverview", "Crop", new
+                        {
+                            id = model.EncryptedFarmID,
+                            year = model.EncryptedHarvestYear
+                        });
                     }
-                    if (!string.IsNullOrWhiteSpace(v))
+                    else if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
                     {
-                        model.IsComingFromMaterialToHubPage = v;
-                        model.IsComingFromManageToHubPage = v;
+                        TempData["ErrorOnStorageCapacityManagement"] = ex.Message;
+                        return RedirectToAction("StorageCapacityManagement", new { q = model.EncryptedFarmID });
                     }
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                    else
+                    {
+                        TempData["ErrorOnYear"] = ex.Message;
+                        return RedirectToAction("Year", "Report");
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = ex.Message;
+                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
+
                 }
             }
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> CopyExistingManureStorage(StorageCapacityViewModel model)
+        public IActionResult CopyExistingManureStorage(StorageCapacityViewModel model)
         {
             _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorage() action called");
 
@@ -1720,42 +1789,28 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
                 if (!model.IsCopyExistingManureStorage.Value)
                 {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
                     return RedirectToAction("MaterialStates");
                 }
                 else
                 {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
-                    (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                    if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
-                    {
-                        //if (storageCapacityList.Count == 1)
-                        //{
-
-                        //}
-                        //else
-                        //{
-                        //    return RedirectToAction("CopyExistingManureStorageYearList");
-                        //}
-                        return RedirectToAction("CopyExistingManureStorageYearList");
-                    }
+                    return RedirectToAction("CopyExistingManureStorageYearList");
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorage() action : {ex.Message}, {ex.StackTrace}");
-
-                TempData["ErrorOnYear"] = ex.Message;
-                return RedirectToAction("Year", "Report");
+                TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
+                return View(model);
             }
-            return View(model);
+            //return View(model);
         }
 
         [HttpGet]
-        public IActionResult CopyExistingManureStorageYearList()
+        public async Task<IActionResult> CopyExistingManureStorageYearList()
         {
             _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorageYearList() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -1767,7 +1822,95 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+            try
+            {
+                (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                {
+                    ViewBag.YearList = storageCapacityList.Select(x => x.Year).Distinct().OrderByDescending(x => x.Value).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorage() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
+                return RedirectToAction("CopyExistingManureStorage");
+            }
             return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CopyExistingManureStorageYearList(StorageCapacityViewModel model)
+        {
+            _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorageYearList() action called");
+
+            try
+            {
+                if (model.YearToCopyFrom == null)
+                {
+                    ModelState.AddModelError("YearToCopyFrom", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+                (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                {
+                    ViewBag.YearList = storageCapacityList.Select(x => x.Year).Distinct().OrderByDescending(x => x.Value).ToList();
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                var data = new
+                {
+                    FarmID = model.FarmID.Value,
+                    Year = model.Year.Value,
+                    CopyYear = model.YearToCopyFrom.Value
+                };
+
+                string jsonData = JsonConvert.SerializeObject(data);
+                storageCapacityList=storageCapacityList.Where(x => x.Year == model.YearToCopyFrom).ToList();
+                (List<StoreCapacityResponse> storeCapacities, error) = await _storageCapacityService.CopyExistingStorageCapacity(jsonData);
+                if (string.IsNullOrWhiteSpace(error.Message)&& storeCapacities.Count>0)
+                {
+                    string successMsgContent = Resource.lblYouHaveAddedManureStorage;
+                    var tabId = "slurryStorageList";
+                    if (storageCapacityList != null && storageCapacityList.Count == 1)
+                    {
+                        if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)
+                        {
+                            tabId = "dirtyWaterList";
+                        }
+                        else if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                        {
+                            tabId = "solidManureStorageList";
+                        }
+                    }
+
+                    model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", routeValues: new
+                    {
+                        q = model.EncryptedFarmID,
+                        y = model.EncryptedHarvestYear,
+                        r = _reportDataProtector.Protect(successMsgContent.ToString()),
+                        s = _reportDataProtector.Protect(Resource.lblTrue),
+                        isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
+                        t = model.IsComingFromManageToHubPage
+                    }, fragment: tabId);
+                }
+                else
+                {
+                    TempData["ErrorOnCopyExistingManureStorageYearList"] = error.Message;
+                    return View(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorageYearList() action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnCopyExistingManureStorageYearList"] = ex.Message;
+                return View(model);
+            }
+            //return View(model);
         }
 
     }
