@@ -38,6 +38,7 @@ namespace NMP.Portal.ViewModels
         public bool IsStorageTypeChange { get; set; } = false;
         public bool? IsCancel { get; set; }
         public bool? IsCopyExistingManureStorage { get; set; }
+        public string? EncryptedStoreCapacityId { get; set; } = string.Empty;
         public int? YearToCopyFrom { get; set; }
     }
 }
