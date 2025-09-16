@@ -2068,6 +2068,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changes here will be applied to this manure store storage across {0}..
+        /// </summary>
+        public static string lblChangesHereWillBeAppliedToThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblChangesHereWillBeAppliedToThisManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change soil analysis.
         /// </summary>
         public static string lblChangeSoilAnalysis {
@@ -10207,6 +10216,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove this manure storage.
+        /// </summary>
+        public static string lblRemoveThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblRemoveThisManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this soil analysis..
         /// </summary>
         public static string lblRemoveThisSoilAnalysis {
@@ -12936,6 +12954,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update manure storage.
+        /// </summary>
+        public static string lblUpdateManureStorage {
+            get {
+                return ResourceManager.GetString("lblUpdateManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall categories are estimated from the average annual rainfall, or excess winter rainfall when entered..
         /// </summary>
         public static string lblUpdateRainfallContentOne {
@@ -12986,6 +13013,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateThisGroup {
             get {
                 return ResourceManager.GetString("lblUpdateThisGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update this manure storage.
+        /// </summary>
+        public static string lblUpdateThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblUpdateThisManureStorage", resourceCulture);
             }
         }
         
