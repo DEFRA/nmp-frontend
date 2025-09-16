@@ -6190,4 +6190,16 @@ livestock manure.</value>
   <data name="lblStorageCapacityForControllerName" xml:space="preserve">
     <value>StorageCapacity</value>
   </data>
+  <data name="lblUpdateManureStorage" xml:space="preserve">
+    <value>Update manure storage</value>
+  </data>
+  <data name="lblChangesHereWillBeAppliedToThisManureStorage" xml:space="preserve">
+    <value>Changes here will be applied to this manure store storage across {0}.</value>
+  </data>
+  <data name="lblUpdateThisManureStorage" xml:space="preserve">
+    <value>Update this manure storage</value>
+  </data>
+  <data name="lblRemoveThisManureStorage" xml:space="preserve">
+    <value>Remove this manure storage</value>
+  </data>
 </root>
