@@ -4426,7 +4426,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -4463,7 +4463,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -4533,7 +4533,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -4582,7 +4582,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -4687,7 +4687,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -4726,7 +4726,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
 
-                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                         if (!string.IsNullOrWhiteSpace(groupName))
                         {
                             if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -5194,7 +5194,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
                         if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
@@ -5427,7 +5427,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
 
-                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                        string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                         if (!string.IsNullOrWhiteSpace(groupName))
                         {
                             if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
