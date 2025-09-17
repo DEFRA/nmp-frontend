@@ -10054,7 +10054,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This action will remove all the data about this crop group from your plans. You will not be able to get it back..
+        ///   Looks up a localized string similar to This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​.
         /// </summary>
         public static string lblRemoveCropGroupContent1 {
             get {
@@ -10063,7 +10063,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans..
+        ///   Looks up a localized string similar to Your fields will remain, and you&apos;ll be able to use them again in your plans.​.
         /// </summary>
         public static string lblRemoveCropGroupContent2 {
             get {
@@ -10072,7 +10072,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove {0} ({1}).
+        ///   Looks up a localized string similar to Are you sure you want to remove {0}?.
         /// </summary>
         public static string lblRemoveCropGroupWithCropType {
             get {

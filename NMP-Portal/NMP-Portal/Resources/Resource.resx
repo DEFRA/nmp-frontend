@@ -3675,7 +3675,7 @@ live</value>
     <value>{0} plan {1}</value>
   </data>
   <data name="lblRemoveCropGroupWithCropType" xml:space="preserve">
-    <value>Remove {0} ({1})</value>
+    <value>Are you sure you want to remove {0}?</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodWales" xml:space="preserve">
     <value>The application date you entered is inside your closed spreading period for applying manure with a high readily available nitrogen content</value>
@@ -3717,10 +3717,10 @@ live</value>
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
-    <value>This action will remove all the data about this crop group from your plans. You will not be able to get it back.</value>
+    <value>This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​</value>
   </data>
   <data name="lblRemoveCropGroupContent2" xml:space="preserve">
-    <value>It will not remove the fields from your farm and you will be able to use them in your plans.</value>
+    <value>Your fields will remain, and you'll be able to use them again in your plans.​</value>
   </data>
   <data name="lblRemoveCropTypeFromFieldName" xml:space="preserve">
     <value>Remove {0} from {1}</value>
