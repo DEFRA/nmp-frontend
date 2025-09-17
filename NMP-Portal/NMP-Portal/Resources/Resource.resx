@@ -5202,7 +5202,7 @@ live</value>
     <value>Did you have any livestock on {0} in {1}?</value>
   </data>
   <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
-    <value>Include cattle, sheep, pigs, goats, horses, poultry and deer. </value>
+    <value>Include cattle, sheep, goats, deer, horses, pigs and poultry.</value>
   </data>
   <data name="lblIsAnyLivestock" xml:space="preserve">
     <value>Is any livestock</value>
@@ -5346,13 +5346,13 @@ live</value>
     <value>Nitrogen (N) standard per animal, per year</value>
   </data>
   <data name="lblTotalNumberOfThisTypePerMonth" xml:space="preserve">
-    <value>Total number of this {0}, per month</value>
+    <value>Total number of this type of {0}, per month</value>
   </data>
   <data name="lblAddALivestockType" xml:space="preserve">
     <value>Add a livestock type</value>
   </data>
   <data name="lblAddMoreLivestock" xml:space="preserve">
-    <value>Add more livestock</value>
+    <value>Add another livestock category</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
     <value>Average number for the year</value>

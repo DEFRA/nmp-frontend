@@ -952,7 +952,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add more livestock.
+        ///   Looks up a localized string similar to Add another livestock category.
         /// </summary>
         public static string lblAddMoreLivestock {
             get {
@@ -5921,7 +5921,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and deer. .
+        ///   Looks up a localized string similar to Include cattle, sheep, goats, deer, horses, pigs and poultry..
         /// </summary>
         public static string lblIncludeCattleSheepPigsGoats {
             get {
@@ -12594,7 +12594,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total number of this {0}, per month.
+        ///   Looks up a localized string similar to Total number of this type of {0}, per month.
         /// </summary>
         public static string lblTotalNumberOfThisTypePerMonth {
             get {
