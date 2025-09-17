@@ -6205,4 +6205,7 @@ livestock manure.</value>
   <data name="SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater" xml:space="preserve">
     <value>Select one {0} type. You can add more {0} types later.</value>
   </data>
+  <data name="lblWhichYearWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which year would you like to copy?</value>
+  </data>
 </root>
