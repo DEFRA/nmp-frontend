@@ -2,7 +2,7 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblStorageCapacity;
+    ViewData["Title"] = string.Format(Resource.ReportTitle,Resource.lblExistingManureStorageCapacityReport,Model.Farm?.Name,Model.Year);
     decimal totalSlurryCapacityVolume = 0;
     decimal totalSlurrySurfaceArea = 0;
     decimal totalDirtyCapacityVolume = 0;

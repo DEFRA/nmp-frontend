@@ -18284,6 +18284,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} for {1} {2}.
+        /// </summary>
+        public static string ReportTitle {
+            get {
+                return ResourceManager.GetString("ReportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one {0} type. You can add more {0} types later..
         /// </summary>
         public static string SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater {

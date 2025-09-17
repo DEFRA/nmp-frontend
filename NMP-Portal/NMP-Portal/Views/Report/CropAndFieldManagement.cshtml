@@ -2,7 +2,8 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblFieldRecordsAndNutrientManagementPlanning, Model.Farm?.Name, Model.Year);
+    
     int totalCount = ViewBag.TotalCount;
     int managementTableIndex = 1;
 }
