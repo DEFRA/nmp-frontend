@@ -5112,7 +5112,7 @@ live</value>
     <value>Comments about this {0} (optional)</value>
   </data>
   <data name="lblLivestockCommentContent2" xml:space="preserve">
-    <value>Comments will be viewable on some reports. Do not include personal or financial information.</value>
+    <value>You can use this space to record any other comments or details about this manure import. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information.</value>
   </data>
   <data name="lblOptional" xml:space="preserve">
     <value>(optional)</value>
@@ -6180,5 +6180,32 @@ livestock manure.</value>
   </data>
   <data name="lblStoreCapacity" xml:space="preserve">
     <value>Store Capacity</value>
+  </data>
+  <data name="lblCopyExistingManureStorage" xml:space="preserve">
+    <value>Copy existing manure storage</value>
+  </data>
+  <data name="lblCopyExistingStorageManureContentOne" xml:space="preserve">
+    <value>Would you like to start with a copy of another existing manure storage capacity report?</value>
+  </data>
+  <data name="lblStorageCapacityForControllerName" xml:space="preserve">
+    <value>StorageCapacity</value>
+  </data>
+  <data name="lblUpdateManureStorage" xml:space="preserve">
+    <value>Update manure storage</value>
+  </data>
+  <data name="lblChangesHereWillBeAppliedToThisManureStorage" xml:space="preserve">
+    <value>Changes here will be applied to this manure store storage across {0}.</value>
+  </data>
+  <data name="lblUpdateThisManureStorage" xml:space="preserve">
+    <value>Update this manure storage</value>
+  </data>
+  <data name="lblRemoveThisManureStorage" xml:space="preserve">
+    <value>Remove this manure storage</value>
+  </data>
+  <data name="SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater" xml:space="preserve">
+    <value>Select one {0} type. You can add more {0} types later.</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which year would you like to copy?</value>
   </data>
 </root>

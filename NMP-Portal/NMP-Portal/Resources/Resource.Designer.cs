@@ -2068,6 +2068,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changes here will be applied to this manure store storage across {0}..
+        /// </summary>
+        public static string lblChangesHereWillBeAppliedToThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblChangesHereWillBeAppliedToThisManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change soil analysis.
         /// </summary>
         public static string lblChangeSoilAnalysis {
@@ -2347,11 +2356,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy existing manure storage.
+        /// </summary>
+        public static string lblCopyExistingManureStorage {
+            get {
+                return ResourceManager.GetString("lblCopyExistingManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy existing plan.
         /// </summary>
         public static string lblCopyExistingPlan {
             get {
                 return ResourceManager.GetString("lblCopyExistingPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to start with a copy of another existing manure storage capacity report?.
+        /// </summary>
+        public static string lblCopyExistingStorageManureContentOne {
+            get {
+                return ResourceManager.GetString("lblCopyExistingStorageManureContentOne", resourceCulture);
             }
         }
         
@@ -6714,7 +6741,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments will be viewable on some reports. Do not include personal or financial information..
+        ///   Looks up a localized string similar to You can use this space to record any other comments or details about this manure import. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information..
         /// </summary>
         public static string lblLivestockCommentContent2 {
             get {
@@ -10189,6 +10216,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove this manure storage.
+        /// </summary>
+        public static string lblRemoveThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblRemoveThisManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove this soil analysis..
         /// </summary>
         public static string lblRemoveThisSoilAnalysis {
@@ -11373,6 +11409,15 @@ namespace NMP.Portal.Resources {
         public static string lblStorageCapacity {
             get {
                 return ResourceManager.GetString("lblStorageCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StorageCapacity.
+        /// </summary>
+        public static string lblStorageCapacityForControllerName {
+            get {
+                return ResourceManager.GetString("lblStorageCapacityForControllerName", resourceCulture);
             }
         }
         
@@ -12909,6 +12954,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update manure storage.
+        /// </summary>
+        public static string lblUpdateManureStorage {
+            get {
+                return ResourceManager.GetString("lblUpdateManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall categories are estimated from the average annual rainfall, or excess winter rainfall when entered..
         /// </summary>
         public static string lblUpdateRainfallContentOne {
@@ -12959,6 +13013,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateThisGroup {
             get {
                 return ResourceManager.GetString("lblUpdateThisGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update this manure storage.
+        /// </summary>
+        public static string lblUpdateThisManureStorage {
+            get {
+                return ResourceManager.GetString("lblUpdateThisManureStorage", resourceCulture);
             }
         }
         
@@ -14480,6 +14543,15 @@ namespace NMP.Portal.Resources {
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichVarietyNameWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to copy?.
+        /// </summary>
+        public static string lblWhichYearWouldYouLikeToCopy {
+            get {
+                return ResourceManager.GetString("lblWhichYearWouldYouLikeToCopy", resourceCulture);
             }
         }
         
@@ -18208,6 +18280,15 @@ namespace NMP.Portal.Resources {
         public static string RemoveAnOrganicMaterialApplication {
             get {
                 return ResourceManager.GetString("RemoveAnOrganicMaterialApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one {0} type. You can add more {0} types later..
+        /// </summary>
+        public static string SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater {
+            get {
+                return ResourceManager.GetString("SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater", resourceCulture);
             }
         }
         
