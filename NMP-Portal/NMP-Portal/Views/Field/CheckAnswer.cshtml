@@ -200,7 +200,7 @@
                             @Resource.lblTotalFieldArea
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.TotalArea == null ? Resource.lblNotEntered : (Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0} {1}", Model.TotalArea, Resource.lblhectar))
+                            @(Model.TotalArea == null ? Resource.lblNotEntered : (Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0} {1}", string.Format("{0:N2}", Model.TotalArea), Resource.lblhectar))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>
@@ -211,7 +211,7 @@
                             @Resource.lblCroppedAreaForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.CroppedArea == null ? Resource.lblNotEntered : (Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0} {1}", Model.CroppedArea, Resource.lblhectar))
+                            @(Model.CroppedArea == null ? Resource.lblNotEntered : (Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0} {1}", string.Format("{0:N2}", Model.CroppedArea), Resource.lblhectar))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field">@Resource.lblChange</govuk-summary-list-row-action>

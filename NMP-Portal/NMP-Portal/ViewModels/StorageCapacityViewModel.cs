@@ -40,5 +40,6 @@ namespace NMP.Portal.ViewModels
         public bool? IsCopyExistingManureStorage { get; set; }
         public string? EncryptedStoreCapacityId { get; set; } = string.Empty;
         public int? YearToCopyFrom { get; set; }
+        public bool? IsDelete { get; set; }
     }
 }

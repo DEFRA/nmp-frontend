@@ -211,5 +211,6 @@ namespace NMP.Portal.Helpers
         public const string IsStoreNameExistByFarmIdYearAndNameAsyncAPI = "store-capacities/{0}/{1}/{2}";
         public const string FetchStoreCapacityByIdAsyncAPI = "storage-capacities/{0}";
         public const string CopyStoreManureCapacityAsyncAPI = "storage-capacities/copystoragecapacities";
+        public const string DeleteStorageCapacityByIdAPI = "storage-capacities/{0}";
     }
 }
