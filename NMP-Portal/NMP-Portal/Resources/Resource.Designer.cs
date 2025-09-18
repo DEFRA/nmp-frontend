@@ -15609,6 +15609,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have updated manure storage.
+        /// </summary>
+        public static string lblYouHaveUpdatedManureStorage {
+            get {
+                return ResourceManager.GetString("lblYouHaveUpdatedManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must allow at least 3 weeks between applications..
         /// </summary>
         public static string lblYouMustAllowAtLeast3WeeksBetweenApplications {

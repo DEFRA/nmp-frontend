@@ -208,9 +208,10 @@ namespace NMP.Portal.Helpers
         public const string FetchBankSlopeAnglesAsyncAPI = "bank-slope-angles";
         public const string FetchBankSlopeAngleByIdAsyncAPI = "bank-slope-angles/{0}";
         public const string AddStoreCapacityAsyncAPI = "store-capacities";
-        public const string IsStoreNameExistByFarmIdYearAndNameAsyncAPI = "store-capacities/{0}/{1}/{2}";
+        public const string IsStoreNameExistByFarmIdYearAndNameAsyncAPI = "store-capacities/{0}/{1}/{2}?ID={3}";
         public const string FetchStoreCapacityByIdAsyncAPI = "storage-capacities/{0}";
         public const string CopyStoreManureCapacityAsyncAPI = "storage-capacities/copystoragecapacities";
         public const string DeleteStorageCapacityByIdAPI = "store-capacities/{0}";
+        public const string UpdateStoreCapacityAsyncAPI = "store-capacities";
     }
 }

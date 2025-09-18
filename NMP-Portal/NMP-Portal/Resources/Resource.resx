@@ -6367,4 +6367,7 @@ livestock manure.</value>
   <data name="lblWhatWeAreDoingTtoImproveAccessibility" xml:space="preserve">
     <value>What we’re doing to improve accessibility</value>
   </data>
+  <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
+    <value>You have updated manure storage</value>
+  </data>
 </root>
