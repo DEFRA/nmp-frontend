@@ -2171,22 +2171,7 @@ namespace NMP.Portal.Controllers
             //return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateStoreCapacity(StorageCapacityViewModel model)
-        {
-            _logger.LogTrace("StorageCapacity Controller : UpdateStoreCapacity() post action called");
-            try
-            {
-                return RedirectToAction("CheckAnswer");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in UpdateStoreCapacity() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnUpdateStoreCapacity"] = ex.Message;
-                return View(model);
-            }
-        }
+        
         [HttpGet]
         public IActionResult RemoveStorageCapacity()
         {
