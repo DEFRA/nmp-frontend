@@ -108,9 +108,13 @@ namespace NMP.Portal.Controllers
                         string succesMsg = _reportDataProtector.Unprotect(r);
                         if (succesMsg == Resource.lblRemove)
                         {
+                            TempData["succesMsgContent1"] = string.Format(Resource.lblYouHaveRemovedJourneyName, Resource.lblManureStorage.ToLower());
                             TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
                         }
-                        TempData["succesMsgContent1"] = succesMsg;
+                        else
+                        {
+                            TempData["succesMsgContent1"] = succesMsg;
+                        }
                         if (!string.IsNullOrWhiteSpace(s))
                         {
                             ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
@@ -1207,7 +1211,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer(string? id)
+        public async Task<IActionResult> CheckAnswer(string? id, string? q, string? r)
         {
             _logger.LogTrace("StorageCapacity Controller : CheckAnswer() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -1268,6 +1272,14 @@ namespace NMP.Portal.Controllers
                         ModifiedByID = storeCapacity.ModifiedByID,
                     };
 
+                    if (!string.IsNullOrWhiteSpace(q))
+                    {
+                        model.IsComingFromManageToHubPage = q;
+                    }
+                    if (!string.IsNullOrWhiteSpace(r))
+                    {
+                        model.IsComingFromPlan = Convert.ToBoolean(_reportDataProtector.Unprotect(r));
+                    }
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
@@ -2115,21 +2127,25 @@ namespace NMP.Portal.Controllers
                             {
                                 if (model.IsComingFromPlan.HasValue && (model.IsComingFromPlan.Value))
                                 {
-                                    return RedirectToAction("HarvestYearOverview", "Crop", new
+                                    return RedirectToAction("NVZComplianceReports", "Report", new
                                     {
-                                        id = model.EncryptedFarmID,
-                                        year = model.EncryptedHarvestYear,
-                                        q = _cropProtector.Protect(Resource.lblTrue),
-                                        r = _cropProtector.Protect(successMsg)
+                                        q = _reportDataProtector.Protect(successMsg)
                                     });
                                 }
-                                else
+                                else if (storeCapacityList.Count == 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
                                 {
                                     return RedirectToAction("FarmSummary", "Farm", new
                                     {
                                         id = model.EncryptedFarmID,
                                         q = _farmDataProtector.Protect(Resource.lblTrue),
                                         r = _farmDataProtector.Protect(successMsg)
+                                    });
+                                }
+                                else
+                                {
+                                    return RedirectToAction("Year", "Report", new
+                                    {
+                                        q = _reportDataProtector.Protect(successMsg)
                                     });
                                 }
                             }
