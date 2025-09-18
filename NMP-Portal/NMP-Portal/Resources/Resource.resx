@@ -6208,4 +6208,7 @@ livestock manure.</value>
   <data name="lblWhichYearWouldYouLikeToCopy" xml:space="preserve">
     <value>Which year would you like to copy?</value>
   </data>
+  <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
+    <value>You have updated manure storage</value>
+  </data>
 </root>
