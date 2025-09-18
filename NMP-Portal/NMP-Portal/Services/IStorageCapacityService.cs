@@ -18,6 +18,7 @@ namespace NMP.Portal.Services
         Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName, int? ID);
         Task<(StoreCapacity, Error)> FetchStoreCapacityByIdAsync(int id);
         Task<(List<StoreCapacityResponse>, Error)> CopyExistingStorageCapacity(string copyStorageManureCapacityData);
+        Task<(string, Error)> RemoveStorageCapacity(int id);
         Task<(StoreCapacity, Error)> UpdateStoreCapacityAsync(StoreCapacity storeCapacityData);
     }
 }

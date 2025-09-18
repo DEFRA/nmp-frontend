@@ -366,7 +366,7 @@
                 {
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
-                        <a href="#">@Resource.lblRemoveThisManureStorage</a>
+                        <a asp-action="RemoveStorageCapacity" asp-controller="StorageCapacity">@Resource.lblRemoveThisManureStorage</a>
                     </p>
                     <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                         @Resource.lblUpdateThisManureStorage
