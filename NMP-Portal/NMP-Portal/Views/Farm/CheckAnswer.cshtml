@@ -150,7 +150,7 @@
                         @Resource.lblAverageAnnualRainfall
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>
-                            @string.Format("{0}{1}",string.Format("{0:N0}",Model.Rainfall), Resource.lblmm)
+                            @string.Format("{0}{1}",Model.Rainfall, Resource.lblmm)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange</govuk-summary-list-row-action>
