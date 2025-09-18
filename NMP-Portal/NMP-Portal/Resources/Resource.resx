@@ -6211,4 +6211,13 @@ livestock manure.</value>
   <data name="ReportTitle" xml:space="preserve">
     <value>{0} for {1} {2}</value>
   </data>
+  <data name="lblRemoveStoreName" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="lblRemoveContent" xml:space="preserve">
+    <value>This will remove {0} from {1}. You will not be able to get it back.</value>
+  </data>
+  <data name="lblYouHaveRemovedJourneyName" xml:space="preserve">
+    <value>You have removed {0}</value>
+  </data>
 </root>

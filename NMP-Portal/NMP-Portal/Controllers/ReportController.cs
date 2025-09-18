@@ -1542,7 +1542,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult NVZComplianceReports()
+        public IActionResult NVZComplianceReports(string? q)//success Msg
         {
             _logger.LogTrace("Report Controller : NVZComplianceReports() action called");
             ReportViewModel model = null;
@@ -1556,6 +1556,11 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
+                }
+
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(q);
                 }
             }
             catch (Exception ex)
@@ -1632,7 +1637,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Year()
+        public IActionResult Year(string? q)//success Msg
         {
             _logger.LogTrace("Report Controller : Year() action called");
             ReportViewModel model = new ReportViewModel();
@@ -1673,8 +1678,12 @@ namespace NMP.Portal.Controllers
                         model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
                     }
                 }
-
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(q);
+                }
                 ViewBag.Years = GetReportYearsList();
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
