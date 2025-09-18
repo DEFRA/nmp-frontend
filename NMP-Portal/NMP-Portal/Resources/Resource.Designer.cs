@@ -10477,6 +10477,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will remove {0} from {1}. You will not be able to get it back..
+        /// </summary>
+        public static string lblRemoveContent {
+            get {
+                return ResourceManager.GetString("lblRemoveContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​.
         /// </summary>
         public static string lblRemoveCropGroupContent1 {
@@ -10572,6 +10581,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveSoilAnalysisFromFieldName {
             get {
                 return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove {0}.
+        /// </summary>
+        public static string lblRemoveStoreName {
+            get {
+                return ResourceManager.GetString("lblRemoveStoreName", resourceCulture);
             }
         }
         
@@ -15560,6 +15578,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveRemovedImportExport {
             get {
                 return ResourceManager.GetString("lblYouHaveRemovedImportExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have removed {0}.
+        /// </summary>
+        public static string lblYouHaveRemovedJourneyName {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedJourneyName", resourceCulture);
             }
         }
         
