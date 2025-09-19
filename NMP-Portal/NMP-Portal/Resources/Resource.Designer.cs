@@ -457,6 +457,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AbilityNet.
+        /// </summary>
+        public static string lblAbilityNet {
+            get {
+                return ResourceManager.GetString("lblAbilityNet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About this tool.
         /// </summary>
         public static string lblAbout_this_service {
@@ -660,6 +669,330 @@ namespace NMP.Portal.Resources {
         public static string lblAbove300SeaLevel {
             get {
                 return ResourceManager.GetString("lblAbove300SeaLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessibility statement.
+        /// </summary>
+        public static string lblAccessibilityStatement {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessibility statement for the Nutrient Management Planning Tool GB (NMPT-GB).
+        /// </summary>
+        public static string lblAccessibilityStatementHeading {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementHeading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This accessibility statement applies to this tool, the Nutrient Management Planning Tool GB (NMPT-GB)..
+        /// </summary>
+        public static string lblAccessibilityStatementLine1 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’)..
+        /// </summary>
+        public static string lblAccessibilityStatementLine10 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you’re not happy with how we respond to your complaint,.
+        /// </summary>
+        public static string lblAccessibilityStatementLine11 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to contact the Equality Advisory and Support Service (EASS).
+        /// </summary>
+        public static string lblAccessibilityStatementLine11LinkText {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine11LinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defra is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018..
+        /// </summary>
+        public static string lblAccessibilityStatementLine12 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website is fully compliant with the &lt;a href=&quot;https://www.w3.org/TR/WCAG21/&quot; target=&quot;_blank&quot;&gt; Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard..
+        /// </summary>
+        public static string lblAccessibilityStatementLine13 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine13", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website is partially compliant with the &lt;a href=&quot;https://www.w3.org/TR/WCAG21/&quot; target=&quot;_blank&quot;&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard, due to [insert one of the following: ‘the non-compliances’, ‘the exemptions’ or ‘the non-compliances and exemptions’] listed below..
+        /// </summary>
+        public static string lblAccessibilityStatementLine14 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website is not compliant with the &lt;a href=&quot;https://www.w3.org/TR/WCAG21/&quot; target=&quot;_blank&quot;&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard. The [insert one of the following: ‘non-compliances’, ‘exemptions’ or ‘non-compliances and exemptions’] are listed below..
+        /// </summary>
+        public static string lblAccessibilityStatementLine15 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine15", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *compliance status TBD based on accessibility audit.
+        /// </summary>
+        public static string lblAccessibilityStatementLine16 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The content listed below is non-accessible for the following reasons..
+        /// </summary>
+        public static string lblAccessibilityStatementLine17 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine17", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *TBD based on accessibility audit.
+        /// </summary>
+        public static string lblAccessibilityStatementLine18 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine18", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our accessibility roadmap shows how and when we plan to improve accessibility on this website..
+        /// </summary>
+        public static string lblAccessibilityStatementLine19 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine19", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool is run by the Department for the Environment, Food and Rural Affairs (Defra)..
+        /// </summary>
+        public static string lblAccessibilityStatementLine2 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *roadmap TBD based on accessibility audit.
+        /// </summary>
+        public static string lblAccessibilityStatementLine20 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This statement was prepared on 1 August 2025..
+        /// </summary>
+        public static string lblAccessibilityStatementLine21 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine21", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It was last reviewed on 21 August 2025..
+        /// </summary>
+        public static string lblAccessibilityStatementLine22 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine22", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website was last tested on 18 August 2025..
+        /// </summary>
+        public static string lblAccessibilityStatementLine23 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine23", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The test was carried out by internal teams, as part of the development process..
+        /// </summary>
+        public static string lblAccessibilityStatementLine24 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine24", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can read the full accessibility test report..
+        /// </summary>
+        public static string lblAccessibilityStatementLine25 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine25", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *report to follow.
+        /// </summary>
+        public static string lblAccessibilityStatementLine26 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine26", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We want as many people as possible to be able to use this tool..
+        /// </summary>
+        public static string lblAccessibilityStatementLine3 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For example, that means you should be able to:.
+        /// </summary>
+        public static string lblAccessibilityStatementLine4 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to use browser settings or plugins to change colours, contrast levels and fonts.
+        /// </summary>
+        public static string lblAccessibilityStatementLine4Bullet1 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine4Bullet1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to use browser settings or other software to zoom in up to 300% without the text spilling off the screen.
+        /// </summary>
+        public static string lblAccessibilityStatementLine4Bullet2 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine4Bullet2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to navigate most of the website using just a keyboard.
+        /// </summary>
+        public static string lblAccessibilityStatementLine4Bullet3 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine4Bullet3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to navigate most of the website using speech recognition software.
+        /// </summary>
+        public static string lblAccessibilityStatementLine4Bullet4 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine4Bullet4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver).
+        /// </summary>
+        public static string lblAccessibilityStatementLine4Bullet5 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine4Bullet5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We’ve also made the website text as simple as possible to understand..
+        /// </summary>
+        public static string lblAccessibilityStatementLine5 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to has advice on making your device easier to use if you have a disability..
+        /// </summary>
+        public static string lblAccessibilityStatementLine6 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We know some parts of this website are not fully accessible:.
+        /// </summary>
+        public static string lblAccessibilityStatementLine8 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to you cannot modify the line height or spacing of text.
+        /// </summary>
+        public static string lblAccessibilityStatementLine8Bullet1 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine8Bullet1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to some of our online forms are difficult to navigate using just a keyboard.
+        /// </summary>
+        public static string lblAccessibilityStatementLine8Bullet2 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine8Bullet2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to you cannot skip to the main content when using a screen reader.
+        /// </summary>
+        public static string lblAccessibilityStatementLine8Bullet3 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine8Bullet3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements:.
+        /// </summary>
+        public static string lblAccessibilityStatementLine9 {
+            get {
+                return ResourceManager.GetString("lblAccessibilityStatementLine9", resourceCulture);
             }
         }
         
@@ -952,7 +1285,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add more livestock.
+        ///   Looks up a localized string similar to Add another livestock category.
         /// </summary>
         public static string lblAddMoreLivestock {
             get {
@@ -2284,6 +2617,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compliance status.
+        /// </summary>
+        public static string lblComplianceStatus {
+            get {
+                return ResourceManager.GetString("lblComplianceStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit..
         /// </summary>
         public static string lblComplianceWithNVZLivestockManureNitrogenFarmLimit {
@@ -2325,6 +2667,15 @@ namespace NMP.Portal.Resources {
         public static string lblContentIfSoilAnalysisNotApplied {
             get {
                 return ResourceManager.GetString("lblContentIfSoilAnalysisNotApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content that’s not within the scope of the accessibility regulations.
+        /// </summary>
+        public static string lblContentThatsNotWithinTheScopeOfTheAccessibilityRegulations {
+            get {
+                return ResourceManager.GetString("lblContentThatsNotWithinTheScopeOfTheAccessibilityRegulations", resourceCulture);
             }
         }
         
@@ -3310,6 +3661,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disproportionate burden.
+        /// </summary>
+        public static string lblDisproportionateBurden {
+            get {
+                return ResourceManager.GetString("lblDisproportionateBurden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not show this information again.
         /// </summary>
         public static string lblDo_not_show_this_information_again {
@@ -3670,6 +4030,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to email.
+        /// </summary>
+        public static string lblemail {
+            get {
+                return ResourceManager.GetString("lblemail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The NVZ Action Programme states that, between {0} and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure..
         /// </summary>
         public static string lblEndClosederiodAndEndFebYouMustAllow3WeeksGap {
@@ -3711,6 +4080,15 @@ namespace NMP.Portal.Resources {
         public static string lblEndOfSoilDrainage {
             get {
                 return ResourceManager.GetString("lblEndOfSoilDrainage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enforcement procedure.
+        /// </summary>
+        public static string lblEnforcementProcedure {
+            get {
+                return ResourceManager.GetString("lblEnforcementProcedure", resourceCulture);
             }
         }
         
@@ -4575,6 +4953,15 @@ namespace NMP.Portal.Resources {
         public static string lblFebruary {
             get {
                 return ResourceManager.GetString("lblFebruary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feedback and reporting accessibility problems with this website.
+        /// </summary>
+        public static string lblFeedbackAndReportingAccessibilitySubheading {
+            get {
+                return ResourceManager.GetString("lblFeedbackAndReportingAccessibilitySubheading", resourceCulture);
             }
         }
         
@@ -5497,6 +5884,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How accessible this website is.
+        /// </summary>
+        public static string lblHowAccessibleThisWebsiteIs {
+            get {
+                return ResourceManager.GetString("lblHowAccessibleThisWebsiteIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How are you going to apply the {0}?.
         /// </summary>
         public static string lblHowAreYouGoingToApplyTheManure {
@@ -5921,7 +6317,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats, horses, poultry and deer. .
+        ///   Looks up a localized string similar to Include cattle, sheep, goats, deer, horses, pigs and poultry..
         /// </summary>
         public static string lblIncludeCattleSheepPigsGoats {
             get {
@@ -8271,11 +8667,29 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Non-accessible content.
+        /// </summary>
+        public static string lblNonAccessibleContent {
+            get {
+                return ResourceManager.GetString("lblNonAccessibleContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Non-Compliance.
         /// </summary>
         public static string lblNonCompliance {
             get {
                 return ResourceManager.GetString("lblNonCompliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-compliance with the accessibility regulations.
+        /// </summary>
+        public static string lblNonComplianceWithTheAccessibilityRegulations {
+            get {
+                return ResourceManager.GetString("lblNonComplianceWithTheAccessibilityRegulations", resourceCulture);
             }
         }
         
@@ -9640,6 +10054,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preparation of this accessibility statement.
+        /// </summary>
+        public static string lblPreparationOfThisAccessibilityStatement {
+            get {
+                return ResourceManager.GetString("lblPreparationOfThisAccessibilityStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous crop.
         /// </summary>
         public static string lblPreviousCrop {
@@ -10054,7 +10477,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This action will remove all the data about this crop group from your plans. You will not be able to get it back..
+        ///   Looks up a localized string similar to This will remove {0} from {1}. You will not be able to get it back..
+        /// </summary>
+        public static string lblRemoveContent {
+            get {
+                return ResourceManager.GetString("lblRemoveContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​.
         /// </summary>
         public static string lblRemoveCropGroupContent1 {
             get {
@@ -10063,7 +10495,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It will not remove the fields from your farm and you will be able to use them in your plans..
+        ///   Looks up a localized string similar to Your fields will remain, and you&apos;ll be able to use them again in your plans.​.
         /// </summary>
         public static string lblRemoveCropGroupContent2 {
             get {
@@ -10072,7 +10504,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove {0} ({1}).
+        ///   Looks up a localized string similar to Are you sure you want to remove {0}?.
         /// </summary>
         public static string lblRemoveCropGroupWithCropType {
             get {
@@ -10149,6 +10581,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveSoilAnalysisFromFieldName {
             get {
                 return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove {0}.
+        /// </summary>
+        public static string lblRemoveStoreName {
+            get {
+                return ResourceManager.GetString("lblRemoveStoreName", resourceCulture);
             }
         }
         
@@ -11674,6 +12115,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Technical information about this website’s accessibility.
+        /// </summary>
+        public static string lblTechnicalInformationAboutThisWebsiteAccessibility {
+            get {
+                return ResourceManager.GetString("lblTechnicalInformationAboutThisWebsiteAccessibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terms of use.
         /// </summary>
         public static string lblTermsOfUse {
@@ -12594,7 +13044,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total number of this {0}, per month.
+        ///   Looks up a localized string similar to Total number of this type of {0}, per month.
         /// </summary>
         public static string lblTotalNumberOfThisTypePerMonth {
             get {
@@ -14178,6 +14628,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What we’re doing to improve accessibility.
+        /// </summary>
+        public static string lblWhatWeAreDoingTtoImproveAccessibility {
+            get {
+                return ResourceManager.GetString("lblWhatWeAreDoingTtoImproveAccessibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What would you like to call this crop group (optional)?.
         /// </summary>
         public static string lblWhatWouldYouLikeToCallThisCropGroup {
@@ -15123,6 +15582,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have removed {0}.
+        /// </summary>
+        public static string lblYouHaveRemovedJourneyName {
+            get {
+                return ResourceManager.GetString("lblYouHaveRemovedJourneyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have updated {0}.
         /// </summary>
         public static string lblYouHaveUpdated {
@@ -15137,6 +15605,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveUpdatedASoilAnalysisForFieldName {
             get {
                 return ResourceManager.GetString("lblYouHaveUpdatedASoilAnalysisForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have updated manure storage.
+        /// </summary>
+        public static string lblYouHaveUpdatedManureStorage {
+            get {
+                return ResourceManager.GetString("lblYouHaveUpdatedManureStorage", resourceCulture);
             }
         }
         
@@ -18280,6 +18757,15 @@ namespace NMP.Portal.Resources {
         public static string RemoveAnOrganicMaterialApplication {
             get {
                 return ResourceManager.GetString("RemoveAnOrganicMaterialApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} for {1} {2}.
+        /// </summary>
+        public static string ReportTitle {
+            get {
+                return ResourceManager.GetString("ReportTitle", resourceCulture);
             }
         }
         

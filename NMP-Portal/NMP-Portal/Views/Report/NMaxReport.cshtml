@@ -2,7 +2,7 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblNMax;
+    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblNMaxReport, Model.Farm?.Name, Model.Year);
     int nMaxLimitCounter = 1;
     int totalCount = Model.NMaxLimitReport.Count;
 }

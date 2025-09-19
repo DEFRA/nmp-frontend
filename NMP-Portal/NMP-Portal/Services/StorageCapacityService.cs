@@ -427,7 +427,7 @@ namespace NMP.Portal.Services
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                 {
 
-                    JObject storeCapacityJObject = responseWrapper.Data["StoreCapacity"] as JObject;
+                    JObject storeCapacityJObject = responseWrapper.Data as JObject;
                     if (storeCapacityJObject != null)
                     {
                         storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>();
@@ -459,14 +459,15 @@ namespace NMP.Portal.Services
             return (storeCapacity, error);
         }
 
-        public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName)
+        public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName, int? ID)
         {
             bool isExist = false;
             Error error = null;
+
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,year,storeName));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,year,storeName,ID??0));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -584,6 +585,92 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (storeCapacities, error);
+        }
+
+        public async Task<(string, Error)> RemoveStorageCapacity(int id)
+        {
+            Error error = new Error();
+            string message = string.Empty;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteStorageCapacityByIdAPI, id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    message = responseWrapper.Data["message"].Value;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (message, error);
+        }
+
+        public async Task<(StoreCapacity, Error)> UpdateStoreCapacityAsync(StoreCapacity storeCapacityData)
+        {
+            string jsonData = JsonConvert.SerializeObject(storeCapacityData);
+            StoreCapacity storeCapacity = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PutAsync(APIURLHelper.UpdateStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject storeCapacityJObject = responseWrapper.Data as JObject;
+                    if (storeCapacityJObject != null)
+                    {
+                        storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (storeCapacity, error);
         }
     }
 }
