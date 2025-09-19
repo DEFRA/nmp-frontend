@@ -299,7 +299,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblEffectiveRainfallAfterApplication</td>
-                        <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, Model.TotalRainfall)</td>
+                        <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, string.Format("{0:N0}", Model.TotalRainfall))</td>
                         <td class="govuk-table__cell"><a asp-action="EffectiveRainfall" asp-controller="OrganicManure">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">

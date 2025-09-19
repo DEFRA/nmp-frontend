@@ -234,8 +234,8 @@
 
                                         <table class="nutrient_values">
                                             <tbody>
-                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Concat((Model.NumbersInJanuary ?? 0).ToString("0.##"), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Concat((Model.NumbersInFebruary ?? 0).ToString("0.##"), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Concat((string.Format("{0:N2}", Model.NumbersInJanuary ?? 0)), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Concat((string.Format("{0:N2}", Model.NumbersInFebruary ?? 0)), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblMarch:</td>     <td>@(string.Concat((Model.NumbersInMarch ?? 0).ToString("0.##"), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblApril:</td>     <td>@(string.Concat((Model.NumbersInApril ?? 0).ToString("0.##"), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblMay:</td>       <td>@(string.Concat((Model.NumbersInMay ?? 0).ToString("0.##"), " " + ViewBag.LivestockCategory?.ToLower()))</td></tr>

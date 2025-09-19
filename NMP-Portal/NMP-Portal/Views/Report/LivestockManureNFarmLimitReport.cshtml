@@ -471,10 +471,10 @@
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@nutrientsLoadingLiveStock.LiveStockType</td>
                             <td class="govuk-table__cell">@nutrientsLoadingLiveStock.Units</td>
-                            <td class="govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStock.TotalNProduced, Resource.lblkg)</td>
+                            <td class="govuk-table__cell">@string.Format("{0}{1}",string.Format("{0:N2}", nutrientsLoadingLiveStock.TotalNProduced), Resource.lblkg)</td>
                             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                             {
-                                <td class="govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStock.TotalPProduced, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}",nutrientsLoadingLiveStock.TotalPProduced), Resource.lblkg)</td>
                             }
                         </tr>
                         nutrientsLoadingLiveStockListGrazingCount++;
@@ -563,18 +563,19 @@ else{
                             <td class="col_2 govuk-table__cell">@(nutrientsLoadingLiveStockNonGrazing.Occupancy != null ? string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.Occupancy, Resource.lblPercentage) : Resource.lblHyphen)</td>                            
                             @if (nutrientsLoadingLiveStockNonGrazing.LiveStockTypeID!=(int)NMP.Portal.Enums.Livestock.VealCalf)
                             {
-                                <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NitrogenStandard * 10) / 10).ToString("0.0"), Resource.lblkg)</td>
+                                <td class="col_2 govuk-table__cell">
+            @string.Format("{0}{1}",string.Format("{0:N1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NitrogenStandard * 10) / 10).ToString("0.0")), Resource.lblkg)</td>
                                 @* <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", Math.Round((nutrientsLoadingLiveStockNonGrazing.TotalNProduced / nutrientsLoadingLiveStockNonGrazing.Units), 2), Resource.lblkg)</td> *@
                             }
                             else
                             {
                                 <td class="col_2 govuk-table__cell">@Resource.lblHyphen</td>
                             }
-                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NByUnit * 10) / 10).ToString("0.0"), Resource.lblkg)</td>
-                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.TotalNProduced, Resource.lblkg)</td>
+                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NByUnit * 10) / 10).ToString("0.0")), Resource.lblkg)</td>
+                            <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}", nutrientsLoadingLiveStockNonGrazing.TotalNProduced), Resource.lblkg)</td>
                             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                             {
-                                <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", nutrientsLoadingLiveStockNonGrazing.TotalPProduced, Resource.lblkg)</td>
+                                <td class="col_2 govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}", nutrientsLoadingLiveStockNonGrazing.TotalPProduced), Resource.lblkg)</td>
                             }
                         </tr>
                         nutrientsLoadingLiveStockListNonGrazingCount++;
@@ -649,13 +650,13 @@ else
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureDate.Date.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
                                 <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureType </td>
-                                <td class="govuk-table__cell">@string.Format("{0} {1}", importOfLivestockManure.Manure.Quantity, importOfLivestockManure.Unit) </td>
-                                <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.Manure.NContent, importOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
-                                <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.Manure.NTotal, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">@string.Format("{0} {1}", string.Format("{0:N0}", importOfLivestockManure.Manure.Quantity), importOfLivestockManure.Unit)</td>
+                                <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}", importOfLivestockManure.Manure.NContent), importOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
+                                <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N0}", importOfLivestockManure.Manure.NTotal), Resource.lblkg)</td>
                                 @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
                                 {
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.Manure.PContent, importOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", importOfLivestockManure.Manure.PTotal, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}", importOfLivestockManure.Manure.PContent), importOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N0}", importOfLivestockManure.Manure.PTotal), Resource.lblkg)</td>
                                 }
                                 <td class="manure_supplier_receiver govuk-table__cell">
                                     @{
@@ -730,13 +731,13 @@ else
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureDate.Date.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
                                 <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureType </td>
-                                <td class="govuk-table__cell">@string.Format("{0} {1}", exportOfLivestockManure.Manure.Quantity, exportOfLivestockManure.Unit) </td>
-                                <td class="govuk-table__cell">@string.Format("{0}{1}", exportOfLivestockManure.Manure.NContent, exportOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
-                                <td class="govuk-table__cell">@string.Format("{0}{1}", exportOfLivestockManure.Manure.NTotal, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">@string.Format("{0} {1}", string.Format("{0:N0}", exportOfLivestockManure.Manure.Quantity), exportOfLivestockManure.Unit)</td>
+                                <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}", exportOfLivestockManure.Manure.NContent), exportOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
+                                <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N0}", exportOfLivestockManure.Manure.NTotal), Resource.lblkg)</td>
                                 @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
                                 {
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", exportOfLivestockManure.Manure.PContent, exportOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
-                                    <td class="govuk-table__cell">@string.Format("{0}{1}", exportOfLivestockManure.Manure.PTotal, Resource.lblkg)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N2}", exportOfLivestockManure.Manure.PContent), exportOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0}{1}", string.Format("{0:N0}", exportOfLivestockManure.Manure.PTotal), Resource.lblkg)</td>
                                 }
                                 <td class="manure_supplier_receiver govuk-table__cell">
                                     @{

@@ -19,7 +19,8 @@
             <p class="govuk-body">@Resource.lblYourAverageAnualRainfall</p>
             <div class="text-group margin-bottom-forty">
                 <h3 class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</h3>
-                <p class="govuk-body">@string.Concat(Model.Rainfall,Resource.lblmm)</p>
+                <p class="govuk-body">
+                    @string.Concat(string.Format("{0:N0}",Model.Rainfall),Resource.lblmm)</p>
                 <p class="govuk-body margin-bottom-forty">
                     <a class="govuk-link" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange</a>
                 </p>
