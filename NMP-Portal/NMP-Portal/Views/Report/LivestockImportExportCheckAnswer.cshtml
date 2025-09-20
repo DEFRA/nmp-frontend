@@ -263,7 +263,7 @@
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!Model.LivestockQuantity.HasValue) ? Resource.lblNotSet : string.Format("{0} {1}", Model.LivestockQuantity.Value, unit))
+                            @((!Model.LivestockQuantity.HasValue) ? Resource.lblNotSet : string.Format("{0:N0} {1}", Model.LivestockQuantity.Value, unit))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
@@ -655,7 +655,7 @@
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(string.Format("{0}{1}", Math.Round(totalN * Model.LivestockQuantity.Value, 0), Resource.lblkg))
+                            @(string.Format("{0:N0}{1}", Math.Round(totalN * Model.LivestockQuantity.Value, 0), Resource.lblkg))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>
@@ -668,7 +668,7 @@
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(string.Format("{0}{1}", Math.Round(totalP2O5 * Model.LivestockQuantity.Value, 0), Resource.lblkg))
+                            @(string.Format("{0:N0} {1}", Math.Round(totalP2O5 * Model.LivestockQuantity.Value, 0), Resource.lblkg))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>

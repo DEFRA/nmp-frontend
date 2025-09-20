@@ -536,7 +536,7 @@
                                                 @Resource.lblNotEntered
                                             }
                                             else{
-                                            @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : string.Format("{0:N1}",crop.Yield.Value.ToString("#.#")) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
+                                            @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : string.Format("{0:N1}",crop.Yield.Value) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
                                             }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
@@ -575,7 +575,7 @@
                                                 @Resource.lblNotEntered
                                             }
                                             else{
-                                        @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : string.Format("{0:N1}",crop.Yield.Value.ToString("#.#")) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
+                                        @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : string.Format("{0:N1}",crop.Yield.Value) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
                                             }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
@@ -601,7 +601,7 @@
                                                 @Resource.lblNotEntered
                                             }
                                             else{
-                                            @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
+                                            @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 :string.Format("{0:N1}", crop.Yield.Value) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
                                             }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
@@ -765,7 +765,7 @@
                                             @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(crop.Yield == null ? Resource.lblNotEntered : (string.Concat(string.Format("{0:N0}",Convert.ToInt32(crop.Yield).ToString()), " ", Resource.lblTonnesPerHectare)))
+                                            @(crop.Yield == null ? Resource.lblNotEntered : (string.Format("{0:N0} {1}",Convert.ToInt32(crop.Yield), Resource.lblTonnesPerHectare)))
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange</govuk-summary-list-row-action>

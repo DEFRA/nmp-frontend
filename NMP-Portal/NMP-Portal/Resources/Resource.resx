@@ -3335,7 +3335,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 4-year period on any single hectare of orchard land must not exceed 1000kg.</value>
   </data>
   <data name="MsgNmaxWarningPara1GreaterThan1000Wales" xml:space="preserve">
-    <value>The Water Resource Regulations apply a limit of 1000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
+    <value>The Water Resource Regulations apply a limit of 1,000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
   </data>
   <data name="MsgNmaxWarningPara1Wales" xml:space="preserve">
     <value>The Water Resources Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
@@ -5984,7 +5984,7 @@ livestock manure.</value>
     <value>{0}% of the year</value>
   </data>
   <data name="lblKgPer1000PlacesPerYear" xml:space="preserve">
-    <value>{0}kg per 1000 places, per year</value>
+    <value>{0}kg per 1,000 places, per year</value>
   </data>
   <data name="lblKgPerPlacesPerYear" xml:space="preserve">
     <value>{0}kg per places, per year</value>
@@ -6002,7 +6002,7 @@ livestock manure.</value>
     <value>What is the nitrogen (N) standard for this livestock type in {0}?</value>
   </data>
   <data name="lblKgOfNitrogenNPer1000Places" xml:space="preserve">
-    <value>kg of nitrogen (N) per 1000 places</value>
+    <value>kg of nitrogen (N) per 1,000 places</value>
   </data>
   <data name="lblKgOfNitrogenNPerPlace" xml:space="preserve">
     <value>kg of nitrogen (N) per place</value>
