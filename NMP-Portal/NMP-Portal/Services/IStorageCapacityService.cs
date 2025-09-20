@@ -15,9 +15,10 @@ namespace NMP.Portal.Services
         Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles();
         Task<(BankSlopeAnglesResponse, Error)> FetchBankSlopeAngleById(int id);
         Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData);
-        Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName);
+        Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName, int? ID);
         Task<(StoreCapacity, Error)> FetchStoreCapacityByIdAsync(int id);
         Task<(List<StoreCapacityResponse>, Error)> CopyExistingStorageCapacity(string copyStorageManureCapacityData);
         Task<(string, Error)> RemoveStorageCapacity(int id);
+        Task<(StoreCapacity, Error)> UpdateStoreCapacityAsync(StoreCapacity storeCapacityData);
     }
 }
