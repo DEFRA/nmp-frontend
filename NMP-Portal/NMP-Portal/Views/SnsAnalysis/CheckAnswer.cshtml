@@ -106,7 +106,7 @@
                                 @Resource.lblKilogramsOfSoilMineralNitrogenAt030CM
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.SoilMineralNitrogenAt030CM.HasValue ? string.Concat(Model.SoilMineralNitrogenAt030CM, Resource.lblkg) : Resource.lblNotSet)
+                                    @(Model.SoilMineralNitrogenAt030CM.HasValue ? string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt030CM, Resource.lblkg) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
@@ -117,7 +117,7 @@
                                 @Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.SoilMineralNitrogenAt3060CM.HasValue ? string.Concat(Model.SoilMineralNitrogenAt3060CM, Resource.lblkg) : Resource.lblNotSet)
+                                    @(Model.SoilMineralNitrogenAt3060CM.HasValue ? string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt3060CM, Resource.lblkg) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
@@ -130,7 +130,7 @@
                                     @Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @string.Concat(Model.SoilMineralNitrogenAt6090CM, Resource.lblkg)
+                                        @string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt6090CM, Resource.lblkg)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
@@ -187,7 +187,7 @@
                                         @Resource.lblWhatIsTheNumberOfShootsPerSquareMetre
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.NumberOfShoots.HasValue ? string.Format(Resource.lblShootsPerSquareMetre, Model.NumberOfShoots) : Resource.lblNotSet)
+                                        @(Model.NumberOfShoots.HasValue ? string.Format(Resource.lblShootsPerSquareMetre, string.Format("{0:N0}",Model.NumberOfShoots)) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis">@Resource.lblChange</govuk-summary-list-row-action>
@@ -327,7 +327,7 @@
                             @string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @string.Format(Resource.lblSnsDetail, Model.SnsIndex, Model.SnsValue)
+@string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}",Model.SnsValue))
                         </govuk-summary-list-row-value>
 
                     </govuk-summary-list-row>

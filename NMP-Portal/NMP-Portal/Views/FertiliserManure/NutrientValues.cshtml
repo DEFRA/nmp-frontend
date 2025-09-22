@@ -180,40 +180,40 @@
                                         <td class="govuk-table__cell">
                                             @(Model.Recommendation.NIndex == null ? Resource.lblHyphen : Model.Recommendation.NIndex)
                                         </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropN == null ? Resource.lblHyphen : Model.Recommendation.CropN == 0 ? Model.Recommendation.CropN : string.Concat(Model.Recommendation.CropN, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureN == null ? Resource.lblHyphen : Model.Recommendation.ManureN == 0 ? Model.Recommendation.ManureN : string.Concat(Model.Recommendation.ManureN, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerN == null ? Resource.lblHyphen : Model.Recommendation.FertilizerN < 0 ? 0 : Model.Recommendation.FertilizerN == 0 ? Model.Recommendation.FertilizerN : string.Concat(Model.Recommendation.FertilizerN, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedN == null ? 0 : Model.Recommendation.FertiliserAppliedN == 0 ? Model.Recommendation.FertiliserAppliedN : string.Concat(Model.Recommendation.FertiliserAppliedN, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.CropN == null ? Resource.lblHyphen : Model.Recommendation.CropN == 0 ? Model.Recommendation.CropN : string.Format("{0:N0}{1}", Model.Recommendation.CropN, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureN == null ? Resource.lblHyphen : Model.Recommendation.ManureN == 0 ? Model.Recommendation.ManureN : string.Format("{0:N0}{1}",Model.Recommendation.ManureN, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerN == null ? Resource.lblHyphen : Model.Recommendation.FertilizerN < 0 ? 0 : Model.Recommendation.FertilizerN == 0 ? Model.Recommendation.FertilizerN : string.Format("{0:N0}{1}",Model.Recommendation.FertilizerN, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedN == null ? 0 : Model.Recommendation.FertiliserAppliedN == 0 ? Model.Recommendation.FertiliserAppliedN : string.Format("{0:N0}{1}",Model.Recommendation.FertiliserAppliedN, Resource.lblkg))</td>
                                     </tr>
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
                                         <td class="govuk-table__cell">
                                             @(Model.Recommendation.PIndex == null ? Resource.lblHyphen : Model.Recommendation.PIndex)
                                         </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropP2O5 == null ? Resource.lblHyphen : Model.Recommendation.CropP2O5 == 0 ? Model.Recommendation.CropP2O5 : string.Concat(Model.Recommendation.CropP2O5, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureP2O5 == null ? Resource.lblHyphen : Model.Recommendation.ManureP2O5 == 0 ? Model.Recommendation.ManureP2O5 : string.Concat(Model.Recommendation.ManureP2O5, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerP2O5 < 0 ? 0 : Model.Recommendation.FertilizerP2O5 == 0 ? Model.Recommendation.FertilizerP2O5 : string.Concat(Model.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedP2O5 == null ? 0 : Model.Recommendation.FertiliserAppliedP2O5 == 0 ? Model.Recommendation.FertiliserAppliedP2O5 : string.Concat(Model.Recommendation.FertiliserAppliedP2O5, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.CropP2O5 == null ? Resource.lblHyphen : Model.Recommendation.CropP2O5 == 0 ? Model.Recommendation.CropP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.CropP2O5, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureP2O5 == null ? Resource.lblHyphen : Model.Recommendation.ManureP2O5 == 0 ? Model.Recommendation.ManureP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.ManureP2O5, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerP2O5 < 0 ? 0 : Model.Recommendation.FertilizerP2O5 == 0 ? Model.Recommendation.FertilizerP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedP2O5 == null ? 0 : Model.Recommendation.FertiliserAppliedP2O5 == 0 ? Model.Recommendation.FertiliserAppliedP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.FertiliserAppliedP2O5, Resource.lblkg))</td>
                                     </tr>
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
                                         <td class="govuk-table__cell">
                                             @(Model.Recommendation.KIndex == null ? Resource.lblHyphen : Model.Recommendation.KIndex)
                                         </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropK2O == null ? Resource.lblHyphen : Model.Recommendation.CropK2O == 0 ? Model.Recommendation.CropK2O : string.Concat(Model.Recommendation.CropK2O, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureK2O == null ? Resource.lblHyphen : Model.Recommendation.ManureK2O == 0 ? Model.Recommendation.ManureK2O : string.Concat(Model.Recommendation.ManureK2O, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerK2O < 0 ? 0 : Model.Recommendation.FertilizerK2O == 0 ? Model.Recommendation.FertilizerK2O : string.Concat(Model.Recommendation.FertilizerK2O, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedK2O == null ? 0 : Model.Recommendation.FertiliserAppliedK2O == 0 ? Model.Recommendation.FertiliserAppliedK2O : string.Concat(Model.Recommendation.FertiliserAppliedK2O, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.CropK2O == null ? Resource.lblHyphen : Model.Recommendation.CropK2O == 0 ? Model.Recommendation.CropK2O : string.Format("{0:N0}{1}", Model.Recommendation.CropK2O, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureK2O == null ? Resource.lblHyphen : Model.Recommendation.ManureK2O == 0 ? Model.Recommendation.ManureK2O : string.Format("{0:N0}{1}", Model.Recommendation.ManureK2O, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerK2O < 0 ? 0 : Model.Recommendation.FertilizerK2O == 0 ? Model.Recommendation.FertilizerK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerK2O, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedK2O == null ? 0 : Model.Recommendation.FertiliserAppliedK2O == 0 ? Model.Recommendation.FertiliserAppliedK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedK2O, Resource.lblkg))</td>
                                     </tr>
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
                                         <td class="govuk-table__cell">
                                             @(Model.Recommendation.SIndex == null ? Resource.lblHyphen : Model.Recommendation.SIndex)
                                         </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropSO3 == null ? Resource.lblHyphen : Model.Recommendation.CropSO3 == 0 ? Model.Recommendation.CropSO3 : string.Concat(Model.Recommendation.CropSO3, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureSO3 == null ? Resource.lblHyphen : Model.Recommendation.ManureSO3 == 0 ? Model.Recommendation.ManureSO3 : string.Concat(Model.Recommendation.ManureSO3, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerSO3 < 0 ? 0 : Model.Recommendation.FertilizerSO3 == 0 ? Model.Recommendation.FertilizerSO3 : string.Concat(Model.Recommendation.FertilizerSO3, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedSO3 == null ? 0 : Model.Recommendation.FertiliserAppliedSO3 == 0 ? Model.Recommendation.FertiliserAppliedSO3 : string.Concat(Model.Recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.CropSO3 == null ? Resource.lblHyphen : Model.Recommendation.CropSO3 == 0 ? Model.Recommendation.CropSO3 : string.Format("{0:N0}{1}",Model.Recommendation.CropSO3, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureSO3 == null ? Resource.lblHyphen : Model.Recommendation.ManureSO3 == 0 ? Model.Recommendation.ManureSO3 : string.Format("{0:N0}{1}", Model.Recommendation.ManureSO3, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerSO3 < 0 ? 0 : Model.Recommendation.FertilizerSO3 == 0 ? Model.Recommendation.FertilizerSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerSO3, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedSO3 == null ? 0 : Model.Recommendation.FertiliserAppliedSO3 == 0 ? Model.Recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
                                     </tr>
                                     @* <tr class="govuk-table__row">
                             <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
@@ -230,10 +230,10 @@
                                         <td class="govuk-table__cell">
                                             @(Model.Recommendation.MgIndex == null ? Resource.lblHyphen : Model.Recommendation.MgIndex)
                                         </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropMgO == null ? Resource.lblHyphen : Model.Recommendation.CropMgO == 0 ? Model.Recommendation.CropMgO : string.Concat(Model.Recommendation.CropMgO, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureMgO == null ? Resource.lblHyphen : Model.Recommendation.ManureMgO == 0 ? Model.Recommendation.ManureMgO : string.Concat(Model.Recommendation.ManureMgO, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : Model.Recommendation.FertilizerMgO < 0 ? 0 : Model.Recommendation.FertilizerMgO == 0 ? Model.Recommendation.FertilizerMgO : string.Concat(Model.Recommendation.FertilizerMgO, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedMgO == null ? 0 : Model.Recommendation.FertiliserAppliedMgO == 0 ? Model.Recommendation.FertiliserAppliedMgO : string.Concat(Model.Recommendation.FertiliserAppliedMgO, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.CropMgO == null ? Resource.lblHyphen : Model.Recommendation.CropMgO == 0 ? Model.Recommendation.CropMgO : string.Format("{0:N0}{1}", Model.Recommendation.CropMgO, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureMgO == null ? Resource.lblHyphen : Model.Recommendation.ManureMgO == 0 ? Model.Recommendation.ManureMgO : string.Format("{0:N0}{1}", Model.Recommendation.ManureMgO, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : Model.Recommendation.FertilizerMgO < 0 ? 0 : Model.Recommendation.FertilizerMgO == 0 ? Model.Recommendation.FertilizerMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerMgO, Resource.lblkg))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedMgO == null ? 0 : Model.Recommendation.FertiliserAppliedMgO == 0 ? Model.Recommendation.FertiliserAppliedMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedMgO, Resource.lblkg))</td>
                                     </tr>
 
                                     <tr class="govuk-table__row">
@@ -241,10 +241,10 @@
                                         <td class="govuk-table__cell">
                                             @(Model.Recommendation.LimeIndex == null ? Resource.lblHyphen : Model.Recommendation.LimeIndex)
                                         </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropLime == null ? Resource.lblHyphen : Model.Recommendation.CropLime == 0 ? Model.Recommendation.CropLime : string.Concat(Model.Recommendation.CropLime, " ", Resource.lbltonnes))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureLime == null ? Resource.lblHyphen : Model.Recommendation.ManureLime == 0 ? Model.Recommendation.ManureLime : string.Concat(Model.Recommendation.ManureLime, " ", Resource.lbltonnes))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerLime == null ? Resource.lblHyphen : Model.Recommendation.FertilizerLime < 0 ? 0 : Model.Recommendation.FertilizerLime == 0 ? Model.Recommendation.FertilizerLime : string.Concat(Model.Recommendation.FertilizerLime, " ", Resource.lbltonnes))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedLime == null ? 0 : Model.Recommendation.FertiliserAppliedLime == 0 ? Model.Recommendation.FertiliserAppliedLime : string.Concat(Model.Recommendation.FertiliserAppliedLime, " ", Resource.lbltonnes))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.CropLime == null ? Resource.lblHyphen : Model.Recommendation.CropLime == 0 ? Model.Recommendation.CropLime : string.Format("{0:N0}{1}", Model.Recommendation.CropLime, " ", Resource.lbltonnes))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureLime == null ? Resource.lblHyphen : Model.Recommendation.ManureLime == 0 ? Model.Recommendation.ManureLime : string.Format("{0:N0}{1}", Model.Recommendation.ManureLime, " ", Resource.lbltonnes))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerLime == null ? Resource.lblHyphen : Model.Recommendation.FertilizerLime < 0 ? 0 : Model.Recommendation.FertilizerLime == 0 ? Model.Recommendation.FertilizerLime : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerLime, " ", Resource.lbltonnes))</td>
+                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedLime == null ? 0 : Model.Recommendation.FertiliserAppliedLime == 0 ? Model.Recommendation.FertiliserAppliedLime : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedLime, " ", Resource.lbltonnes))</td>
                                     </tr>
                                 </tbody>
                             </table>

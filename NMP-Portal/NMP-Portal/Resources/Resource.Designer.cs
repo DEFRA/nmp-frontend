@@ -6785,7 +6785,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to kg of nitrogen (N) per 1000 places.
+        ///   Looks up a localized string similar to kg of nitrogen (N) per 1,000 places.
         /// </summary>
         public static string lblKgOfNitrogenNPer1000Places {
             get {
@@ -6803,7 +6803,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}kg per 1000 places, per year.
+        ///   Looks up a localized string similar to {0}kg per 1,000 places, per year.
         /// </summary>
         public static string lblKgPer1000PlacesPerYear {
             get {
@@ -17852,7 +17852,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 1000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period..
+        ///   Looks up a localized string similar to The Water Resource Regulations apply a limit of 1,000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period..
         /// </summary>
         public static string MsgNmaxWarningPara1GreaterThan1000Wales {
             get {

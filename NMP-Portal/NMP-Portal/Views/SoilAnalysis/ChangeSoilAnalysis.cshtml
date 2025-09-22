@@ -245,7 +245,7 @@
                                     @Resource.lblPhosphorusPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : @Model.Phosphorus)
+                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}",Model.Phosphorus))
                                     @* @Model.PhosphorusIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -257,7 +257,7 @@
                                     @Resource.lblPotassiumPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Potassium.HasValue) ? Resource.lblNotEntered : @Model.Potassium)
+                                    @((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}",Model.Potassium))
                                     @* @Model.PotassiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -269,7 +269,7 @@
                                     @Resource.lblMagnesiumPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : @Model.Magnesium)
+                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}",Model.Magnesium))
                                     @* @Model.MagnesiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -295,7 +295,7 @@
                                     @Resource.lblPhosphorusPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : @Model.Phosphorus)
+                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}",Model.Phosphorus))
                                     @* @Model.PhosphorusIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -307,7 +307,7 @@
                                     @Resource.lblPotassiumPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Potassium.HasValue) ? Resource.lblNotSet : @Model.Potassium)
+                                    @((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}",Model.Potassium))
                                     @* @Model.PotassiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -319,7 +319,7 @@
                                     @Resource.lblMagnesiumPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotSet : @Model.Magnesium)
+                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}",Model.Magnesium))
                                     @* @Model.MagnesiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>

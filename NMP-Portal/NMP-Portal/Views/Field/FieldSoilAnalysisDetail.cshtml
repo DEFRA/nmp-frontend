@@ -89,15 +89,15 @@
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblFieldArea</td>
-                        <td class="govuk-table__cell">@(Model.TotalArea == null ? Resource.lblNotEntered : ((Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0} {1}",  Model.TotalArea, Resource.lblhectar)))</td>
+                        <td class="govuk-table__cell">@(Model.TotalArea == null ? Resource.lblNotEntered : ((Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0:N2} {1}", Model.TotalArea, Resource.lblhectar)))</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblCropedArea</td>
-                        <td class="govuk-table__cell">@(Model.CroppedArea == null ? Resource.lblNotEntered : ((Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0} {1}",Model.CroppedArea, Resource.lblhectar)))</td>
+                        <td class="govuk-table__cell">@(Model.CroppedArea == null ? Resource.lblNotEntered : ((Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0:N2} {1}", Model.CroppedArea, Resource.lblhectar)))</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblManureNonSpreadArea</td>
-                        <td class="govuk-table__cell">@(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : ((Model.ManureNonSpreadingArea == 0) ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar)))</td>
+                        <td class="govuk-table__cell">@(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : ((Model.ManureNonSpreadingArea == 0) ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0:N2} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar)))</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblSoilType</td>
