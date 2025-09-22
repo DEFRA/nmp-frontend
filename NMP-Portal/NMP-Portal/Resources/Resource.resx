@@ -6370,7 +6370,4 @@ livestock manure.</value>
   <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
     <value>You have updated manure storage</value>
   </data>
-  <data name="lblForTheseVarietyName" xml:space="preserve">
-    <value> for these {0} ?</value>
-  </data>
 </root>
