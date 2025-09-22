@@ -5299,6 +5299,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  for these {0} ?.
+        /// </summary>
+        public static string lblForTheseVarietyName {
+            get {
+                return ResourceManager.GetString("lblForTheseVarietyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which year would you like to create a {0} report for?.
         /// </summary>
         public static string lblForYearForReport {

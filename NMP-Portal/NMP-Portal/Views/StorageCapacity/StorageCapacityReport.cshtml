@@ -112,7 +112,7 @@
                     @foreach (var slurryStorage in ViewBag.SlurryStoreCapacities)
                     {
                         totalSlurryCapacityVolume += slurryStorage.CapacityVolume;
-                        totalSlurrySurfaceArea += slurryStorage.SurfaceArea;
+                        totalSlurrySurfaceArea += slurryStorage.SurfaceArea??0;
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                             <td class="govuk-table__cell">
@@ -166,7 +166,7 @@
                     @foreach (var dirtyWaterStore in ViewBag.DirtyWaterStoreCapacities)
                     {
                         totalDirtyCapacityVolume += dirtyWaterStore.CapacityVolume;
-                        totalDirtySurfaceArea += dirtyWaterStore.SurfaceArea;
+                        totalDirtySurfaceArea += dirtyWaterStore.SurfaceArea??0;
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@dirtyWaterStore.StoreName</td>
                             <td class="govuk-table__cell">
