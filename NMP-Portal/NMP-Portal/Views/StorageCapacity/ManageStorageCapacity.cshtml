@@ -119,7 +119,7 @@
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                         <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
-                                        <td class="govuk-table__cell"> @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
                                         <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
                                     </tr>
 
@@ -155,7 +155,7 @@
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@dirtyWater.StoreName</td>
                                         <td class="govuk-table__cell">@dirtyWater.StorageTypeName</td>
-                                        <td class="govuk-table__cell"> @string.Format("{0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
                                         <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@dirtyWater.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
                                     </tr>
                                 }
@@ -190,7 +190,7 @@
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@solidManureStorage.StoreName</td>
                                         <td class="govuk-table__cell">@solidManureStorage.SolidManureTypeName</td>
-                                        <td class="govuk-table__cell"> @string.Format("{0} {1}", solidManureStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidManureStorage.CapacityVolume, Resource.lblMetresCubed)</td>
                                         <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
                                     </tr>
                                 }
@@ -214,19 +214,19 @@
                             <tbody>
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalLiquidCapacity</th>
-                                    <td class="govuk-table__cell">@string.Format("{0} {1}", ViewBag.TotalLiquidCapacity, Resource.lblCubicMeters)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalLiquidCapacity, Resource.lblCubicMeters)</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalSolidCapacity</th>
-                                    <td class="govuk-table__cell">@string.Format("{0} {1}", ViewBag.TotalSolidCapacity, Resource.lblCubicMeters)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSolidCapacity, Resource.lblCubicMeters)</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalSolidCapacityFreshWeight</th>
-                                    <td class="govuk-table__cell">@string.Format("{0} {1}", ViewBag.TotalSolidWeightCapacity, Resource.lbltonnes)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSolidWeightCapacity, Resource.lbltonnes)</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
-                                    <td class="govuk-table__cell">@string.Format("{0} {1}", ViewBag.TotalSurfaceCapacity, Resource.lblMetresSquared)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSurfaceCapacity, Resource.lblMetresSquared)</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -304,7 +304,7 @@
                                     @string.Format(Resource.lblWhatIsTheTotalCapacityOf, Model.StoreName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.StorageBagCapacity != null ? string.Format("{0} {1}", Model.StorageBagCapacity.Value.ToString("#.#"), Resource.lblCubicMeters) : Resource.lblNotSet)
+                                    @(Model.StorageBagCapacity != null ? string.Format("{0} {1}", Model.StorageBagCapacity.Value.ToString("#,0.0"), Resource.lblCubicMeters) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="StorageBagCapacity" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
@@ -320,7 +320,7 @@
                                         @(string.Format(Resource.lblWhatIsTheWeightCapacityOf, Model.Year))
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.CapacityWeight != null ? string.Format("{0} {1}", Model.CapacityWeight.Value, Resource.lblCubicMeters) : Resource.lblNotSet)
+                                        @(Model.CapacityWeight != null ? string.Format("{0} {1}", Model.CapacityWeight.Value.ToString("#,0.0"), Resource.lblCubicMeters) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="WeightCapacity" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
@@ -329,10 +329,10 @@
                             }
                             <govuk-summary-list-row class=@(Model.CapacityVolume == null ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblTotalCapacityMinusTheFreeBoard
+                                    @Resource.lblTotalCapacityMinusTheFreeBoard 
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.CapacityVolume != null ? string.Format("{0} {1}", Model.CapacityVolume.Value, Resource.lblCubicMeters) : Resource.lblNotSet)
+                                    @(Model.CapacityVolume != null ? string.Format("{0} {1}", Model.CapacityVolume.Value.ToString("#,0"), Resource.lblCubicMeters) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     @* <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action> *@
@@ -346,7 +346,7 @@
                                     @Resource.lblSurfaceArea
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.SurfaceArea != null ? string.Format("{0} {1}", Model.SurfaceArea.Value, Resource.lblMetresSquared) : Resource.lblNotSet)
+                                    @(Model.SurfaceArea != null ? string.Format("{0} {1}", Model.SurfaceArea.Value.ToString("#,0"), Resource.lblMetresSquared) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     @* <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action> *@
