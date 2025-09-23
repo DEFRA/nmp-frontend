@@ -6370,4 +6370,43 @@ livestock manure.</value>
   <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
     <value>You have updated manure storage</value>
   </data>
+  <data name="MsgWhatIsTheWeightCapacityOfNotSet" xml:space="preserve">
+    <value>What is the weight capacity of {0} not set.</value>
+  </data>
+  <data name="MsgDoesHaveSlopedEdgesNotSet" xml:space="preserve">
+    <value>Does {0} have sloped edges not set.</value>
+  </data>
+  <data name="MsgWhatIsTheEstimatedAngleOfTheBankNotSet" xml:space="preserve">
+    <value>What is the estimated angle of the bank slope not set.</value>
+  </data>
+  <data name="MsgWhatIsTheTotalCapacityOfNotSet" xml:space="preserve">
+    <value>What is the total capacity of {0} not set.</value>
+  </data>
+  <data name="MsgDoYouWantToEnterTheCircumferenceOrDiameterNotSet" xml:space="preserve">
+    <value>Do you want to enter the circumference or the diameter not set.</value>
+  </data>
+  <data name="MsgWhatIsTheCircumferenceNotSet" xml:space="preserve">
+    <value>What is the circumference not set.</value>
+  </data>
+  <data name="MsgWhatIsTheDiameterNotSet" xml:space="preserve">
+    <value>What is the diameter not set.</value>
+  </data>
+  <data name="MsgWhatIsTheDepthNotSet" xml:space="preserve">
+    <value>What is the depth not set.</value>
+  </data>
+  <data name="MsgIsCoveredNotSet" xml:space="preserve">
+    <value>Is {0} covered not set</value>
+  </data>
+  <data name="MsgWhatIsTheWidthNotSet" xml:space="preserve">
+    <value>What is the width not set.</value>
+  </data>
+  <data name="MsgWhatIsTheLengthNotSet" xml:space="preserve">
+    <value>What is the length not set.</value>
+  </data>
+  <data name="MsgWhatKindOFManureStorageDoYouWantToAddNotSet" xml:space="preserve">
+    <value>What kind of manure storage do you want to add not set.</value>
+  </data>
+  <data name="MsgWhatDoYouWantToCallThisManureStoreNotSet" xml:space="preserve">
+    <value>What do you want to call this manure store not set.</value>
+  </data>
 </root>
