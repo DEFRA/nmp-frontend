@@ -3886,7 +3886,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to enter the expected yield {0} in {1}?.
+        ///   Looks up a localized string similar to Do you want to enter the expected yield for {0} in {1}?.
         /// </summary>
         public static string lblDoYouWantToEnterTheExpectedYieldInFieldName {
             get {
