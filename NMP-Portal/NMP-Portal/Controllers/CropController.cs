@@ -1774,6 +1774,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                ViewBag.DefaultYield = defaultYield;
                 if (defaultYield == 0 && model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield)
                 {
                     model.Yield = null;
