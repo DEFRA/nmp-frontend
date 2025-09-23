@@ -1714,21 +1714,20 @@ namespace NMP.Portal.Controllers
             try
             {
                 decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
-                if (defaultYield > 0)
-                {
-                    ViewBag.DefaultYield = defaultYield;
-                }
+                ViewBag.DefaultYield = defaultYield;
                 if (model.IsQuestionChange)
                 {
                     model.IsQuestionChange = false;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 }
-                if (model.Crops.Count == 1 && (defaultYield == 0))
-                {
-                    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                    return RedirectToAction("Yield");
-                }
+
+
+                //if (model.Crops.Count == 1 && (defaultYield == 0))
+                //{
+                //    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                //    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                //    return RedirectToAction("Yield");
+                //}
             }
             catch (Exception ex)
             {
@@ -1740,7 +1739,7 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult YieldQuestion(PlanViewModel model)
+        public async Task<IActionResult> YieldQuestion(PlanViewModel model)
         {
             _logger.LogTrace("Crop Controller : YieldQuestion() post action called");
             if (model.YieldQuestion == null)
@@ -1773,6 +1772,17 @@ namespace NMP.Portal.Controllers
                         model.IsQuestionChange = true;
                         model.YieldCurrentCounter = 0;
                     }
+                }
+                decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                if (defaultYield == 0 && model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield)
+                {
+                    model.Yield = null;
+                    if (model.Crops != null && model.Crops.Any(x => x.Yield != null))
+                    {
+                        model.Crops.ForEach(c => c.Yield = null);
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
+                    return RedirectToAction("CropInfoOne");
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 return RedirectToAction("Yield");
@@ -1837,7 +1847,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 if (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
-                {                    
+                {
                     model.YieldCurrentCounter = 1;
                     for (int i = 0; i < model.Crops.Count; i++)
                     {
@@ -1887,7 +1897,7 @@ namespace NMP.Portal.Controllers
                 decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
                 if (defaultYield == 0)
                 {
-                    if (model.Crops[model.YieldCurrentCounter].Yield == null)
+                    if (model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield && model.Crops[model.YieldCurrentCounter].Yield == null)
                     {
                         ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
                     }
@@ -2409,6 +2419,7 @@ namespace NMP.Portal.Controllers
 
                             bool allAreDefault = yields.All(y => y.HasValue && y.Value == defaultYield);
                             bool allSame = yields.Distinct().Count() == 1;
+                            bool allAreNull = yields.All(y => !y.HasValue);
 
                             if (allAreDefault)
                             {
@@ -2420,7 +2431,11 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                                model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                            }
+                            if (allAreNull && defaultYield == 0)
+                            {
+                                model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield;
                             }
                             //if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
                             //{
