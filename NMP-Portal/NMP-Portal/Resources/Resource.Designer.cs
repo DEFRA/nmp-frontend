@@ -16529,6 +16529,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does {0} have sloped edges not set..
+        /// </summary>
+        public static string MsgDoesHaveSlopedEdgesNotSet {
+            get {
+                return ResourceManager.GetString("MsgDoesHaveSlopedEdgesNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter the circumference or the diameter not set..
+        /// </summary>
+        public static string MsgDoYouWantToEnterTheCircumferenceOrDiameterNotSet {
+            get {
+                return ResourceManager.GetString("MsgDoYouWantToEnterTheCircumferenceOrDiameterNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End of soil drainage not set.
         /// </summary>
         public static string MsgEndOfSoilDrainageNotSet {
@@ -17654,6 +17672,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is {0} covered not set.
+        /// </summary>
+        public static string MsgIsCoveredNotSet {
+            get {
+                return ResourceManager.GetString("MsgIsCoveredNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a Land Parcel ID that is no more than 14 characters long.
         /// </summary>
         public static string MsgLandParcelIdMinMaxValidation {
@@ -18703,6 +18730,96 @@ namespace NMP.Portal.Resources {
         public static string MsgWeCounldNotAddOrganicManure {
             get {
                 return ResourceManager.GetString("MsgWeCounldNotAddOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What do you want to call this manure store not set..
+        /// </summary>
+        public static string MsgWhatDoYouWantToCallThisManureStoreNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatDoYouWantToCallThisManureStoreNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the circumference not set..
+        /// </summary>
+        public static string MsgWhatIsTheCircumferenceNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheCircumferenceNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the depth not set..
+        /// </summary>
+        public static string MsgWhatIsTheDepthNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheDepthNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the diameter not set..
+        /// </summary>
+        public static string MsgWhatIsTheDiameterNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheDiameterNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the estimated angle of the bank slope not set..
+        /// </summary>
+        public static string MsgWhatIsTheEstimatedAngleOfTheBankNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheEstimatedAngleOfTheBankNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the length not set..
+        /// </summary>
+        public static string MsgWhatIsTheLengthNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheLengthNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the total capacity of {0} not set..
+        /// </summary>
+        public static string MsgWhatIsTheTotalCapacityOfNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheTotalCapacityOfNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the weight capacity of {0} not set..
+        /// </summary>
+        public static string MsgWhatIsTheWeightCapacityOfNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheWeightCapacityOfNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the width not set..
+        /// </summary>
+        public static string MsgWhatIsTheWidthNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatIsTheWidthNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What kind of manure storage do you want to add not set..
+        /// </summary>
+        public static string MsgWhatKindOFManureStorageDoYouWantToAddNotSet {
+            get {
+                return ResourceManager.GetString("MsgWhatKindOFManureStorageDoYouWantToAddNotSet", resourceCulture);
             }
         }
         

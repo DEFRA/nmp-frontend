@@ -114,26 +114,33 @@
                 </govuk-button>
 
                 <p class="govuk-body cancel-link">
-                    @if (Model.IsStoreCapacityExist == true)
+                    @if (!Model.IsCheckAnswer)
                     {
-                        <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                    else
-                    {
-                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                        @if (Model.IsStoreCapacityExist == true)
                         {
-                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
                                 @Resource.lblCancel
                             </a>
                         }
                         else
                         {
-                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-                                @Resource.lblCancel
-                            </a>
+                            @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                            {
+                                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                                    @Resource.lblCancel
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                                    @Resource.lblCancel
+                                </a>
+                            }
                         }
+                    }
+                    else
+                    {
+                        <a asp-action="CheckAnswer" asp-controller="StorageCapacity">@Resource.lblCancel</a>
                     }
                     
                 </p>
