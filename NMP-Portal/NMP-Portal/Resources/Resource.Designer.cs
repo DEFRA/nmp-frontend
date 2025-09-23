@@ -8649,7 +8649,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, do not enter a Yield.
+        ///   Looks up a localized string similar to No, do not enter a yield.
         /// </summary>
         public static string lblNoDoNotEnterAYield {
             get {

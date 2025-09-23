@@ -1268,6 +1268,10 @@ namespace NMP.Portal.Controllers
                             }
 
                             model.Crops.Add(crop);
+                            if (model.FieldList.Count == 1)
+                            {
+                                model.FieldName = (await _fieldService.FetchFieldByFieldId(fieldId)).Name;
+                            }
                         }
                     }
                 }
@@ -1898,7 +1902,7 @@ namespace NMP.Portal.Controllers
                 decimal defaultYield = await _cropService.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
                 if (defaultYield == 0)
                 {
-                    if (model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield && model.Crops[model.YieldCurrentCounter].Yield == null)
+                    if (model.Crops[model.YieldCurrentCounter].Yield == null)
                     {
                         ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
                     }
@@ -2822,8 +2826,9 @@ namespace NMP.Portal.Controllers
                 action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
                    "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                    || cropInfoOneList.Count == 1) ?
-                   ((model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
-               "Yield" : "YieldQuestion") : "CropInfoOne");
+                   ((model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields||
+                   model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield) ?
+               "YieldQuestion" : "Yield") : "CropInfoOne");
 
 
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
@@ -2867,9 +2872,10 @@ namespace NMP.Portal.Controllers
                 }
                 else if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other || cropInfoOneList.Count == 1)
                 {
-                    action = model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields
-                        ? "Yield"
-                        : "YieldQuestion";
+                    action = (model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
+                   model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield)
+                        ? "YieldQuestion"
+                        : "Yield";
                 }
                 else
                 {
