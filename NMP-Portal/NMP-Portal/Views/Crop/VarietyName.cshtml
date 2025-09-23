@@ -117,7 +117,7 @@
             </div>
             <div class="govuk-form-group">
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
-                @if (Model.CropGroupId == potatoGroupId ||
+                @* @if (Model.CropGroupId == potatoGroupId ||
                 ((!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)) &&
                 (Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
                 Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
@@ -129,11 +129,11 @@
                     </govuk-input>
                 }
                 else
-                {
+                { *@
                     <govuk-input asp-for="@Model.Variety">
                         <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblVarietyNameWithOptional</govuk-input-label>
                     </govuk-input>
-                }
+               @*  } *@
             </div>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
