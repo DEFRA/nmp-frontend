@@ -13,7 +13,8 @@
     }
     else
     {
-        if (Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
+        if (Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
+        Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield)
         {
             <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"YieldQuestion")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
         }

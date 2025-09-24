@@ -33,6 +33,10 @@
             if (Model.Crops.Count == 1 && (ViewBag.DefaultYield == null||(ViewBag.DefaultYield!= null&&ViewBag.DefaultYield>0)))
             {
                 yieldQuestion = Resource.lblEnterAFigure;
+                if(ViewBag.DefaultYield==null)
+                {
+                yieldQuestion = Resource.lblYes;    
+                }
             }
             else
             {
@@ -42,6 +46,9 @@
             break;
         case (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField:
             yieldQuestion = Resource.lblEnterDifferentFiguresForEachField;
+            break;
+             case (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield:
+            yieldQuestion =(Model.Crops.Count>1? Resource.lblNoDoNotEnterAYield:Resource.lblNo);
             break;
 
     }
@@ -342,8 +349,8 @@
 
                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
-                        @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Potatoes)
-                        {
+                        @* @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Potatoes)
+                        { *@
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblVarietyNameForCheckAnswer
@@ -355,9 +362,9 @@
                                     <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                        }
+                        @* }
                         else
-                        {
+                        { 
                             <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.Variety))?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblVarietyNameForCheckAnswer
@@ -369,7 +376,7 @@
                                     <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                        }
+                        } *@
                     }
                     @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
@@ -492,7 +499,22 @@
                         {
                             <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(yieldQuestion))?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                                      @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
+                        {
+                            @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                        }
+                        else
+                        {
+                            @if (Model.Crops.Count > 1)
+                            {
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                            }
+                            else
+                            {
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType),Model.FieldName)
+                            }
+                        }
+                                    @* @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)) *@
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(string.IsNullOrWhiteSpace(yieldQuestion) ? Resource.lblNotSet : yieldQuestion)

@@ -5908,22 +5908,25 @@ namespace NMP.Portal.Controllers
                         }
                         //    model.DoubleCropCurrentCounter = counter;
                     }
+                    if (model.DoubleCrop != null && model.DoubleCrop.Count > 0&&
+                    model.DoubleCrop.Any(dc => !model.FieldList.Contains(dc.FieldID.ToString())))
+                    {
+                        model.DoubleCrop?.RemoveAll(dc => !model.FieldList.Contains(dc.FieldID.ToString()));
+                    }
                     cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID));
                     cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
 
                     if (cropList != null && cropList.Count == 2)
                     {
                         var cropOptions = new List<SelectListItem>();
-                        int counter = 1;
-                        foreach (var crop in cropList)
+                        foreach (var crop in cropList.OrderBy(x=>x.CropOrder))
                         {
                             cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
                             cropOptions.Add(new SelectListItem
                             {
-                                Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
                                 Value = crop.ID.ToString()
                             });
-                            counter++;
                         }
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
@@ -5997,16 +6000,14 @@ namespace NMP.Portal.Controllers
                         if (cropList != null && cropList.Count == 2)
                         {
                             var cropOptions = new List<SelectListItem>();
-                            int counter = 1;
-                            foreach (var crop in cropList)
+                            foreach (var crop in cropList.OrderBy(x => x.CropOrder))
                             {
                                 string cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
                                 cropOptions.Add(new SelectListItem
                                 {
-                                    Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                    Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
                                     Value = crop.ID.ToString()
                                 });
-                                counter++;
                             }
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
                             ViewBag.DoubleCropOptions = cropOptions;
@@ -6354,16 +6355,14 @@ namespace NMP.Portal.Controllers
                     if (cropList != null && cropList.Count == 2)
                     {
                         var cropOptions = new List<SelectListItem>();
-                        int counter = 1;
-                        foreach (var crop in cropList)
+                        foreach (var crop in cropList.OrderBy(x => x.CropOrder))
                         {
                             string cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
                             cropOptions.Add(new SelectListItem
                             {
-                                Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
                                 Value = crop.ID.ToString()
                             });
-                            counter++;
                         }
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
