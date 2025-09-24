@@ -6409,4 +6409,16 @@ livestock manure.</value>
   <data name="MsgWhatDoYouWantToCallThisManureStoreNotSet" xml:space="preserve">
     <value>What do you want to call this manure store not set.</value>
   </data>
+  <data name="lblNoDoNotEnterAYield" xml:space="preserve">
+    <value>No, do not enter a yield</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheExpectedYieldInTheseFields" xml:space="preserve">
+    <value>Do you want to enter the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheExpectedYieldInFieldName" xml:space="preserve">
+    <value>Do you want to enter the expected yield for {0} in {1}?</value>
+  </data>
+  <data name="lblYouCanEnterAYieldLater" xml:space="preserve">
+    <value>you can enter a yield later.</value>
+  </data>
 </root>

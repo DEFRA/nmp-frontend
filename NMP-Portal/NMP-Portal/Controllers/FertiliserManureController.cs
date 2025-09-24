@@ -5908,6 +5908,11 @@ namespace NMP.Portal.Controllers
                         }
                         //    model.DoubleCropCurrentCounter = counter;
                     }
+                    if (model.DoubleCrop != null && model.DoubleCrop.Count > 0&&
+                    model.DoubleCrop.Any(dc => !model.FieldList.Contains(dc.FieldID.ToString())))
+                    {
+                        model.DoubleCrop?.RemoveAll(dc => !model.FieldList.Contains(dc.FieldID.ToString()));
+                    }
                     cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID));
                     cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
 
@@ -5927,7 +5932,7 @@ namespace NMP.Portal.Controllers
                         }
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
-                        ViewBag.DoubleCropOptions = cropOptions;
+                        ViewBag.DoubleCropOptions = cropOptions.OrderBy(x=>x.Value);
                     }
                     if (model.DoubleCropCurrentCounter == 0)
                     {
@@ -6009,7 +6014,7 @@ namespace NMP.Portal.Controllers
                                 counter++;
                             }
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
-                            ViewBag.DoubleCropOptions = cropOptions;
+                            ViewBag.DoubleCropOptions = cropOptions.OrderBy(x => x.Value);
                         }
                     }
                     return View(model);
