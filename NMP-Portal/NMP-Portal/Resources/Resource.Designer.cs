@@ -14853,7 +14853,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
+        ///   Looks up a localized string similar to Which fields would you like to plan {0} for?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
             get {

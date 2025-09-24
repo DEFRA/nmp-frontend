@@ -342,8 +342,8 @@
 
                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
-                        @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Potatoes)
-                        {
+                        @* @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Potatoes)
+                        { *@
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblVarietyNameForCheckAnswer
@@ -355,9 +355,9 @@
                                     <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                        }
+                        @* }
                         else
-                        {
+                        { 
                             <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.Variety))?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblVarietyNameForCheckAnswer
@@ -369,7 +369,7 @@
                                     <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                        }
+                        } *@
                     }
                     @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                     {

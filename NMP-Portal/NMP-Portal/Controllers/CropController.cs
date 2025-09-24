@@ -953,23 +953,23 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : VarietyName() post action called");
             try
             {
-                if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && string.IsNullOrWhiteSpace(model.Variety))
-                {
-                    if (model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
-                        model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
-                        model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
-                        model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4)
-                    {
-                        ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
-                    }
-                }
-                else
-                {
-                    if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
-                    {
-                        ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
-                    }
-                }
+                //if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && string.IsNullOrWhiteSpace(model.Variety))
+                //{
+                //    if (model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
+                //        model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
+                //        model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
+                //        model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4)
+                //    {
+                //        ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
+                //    }
+                //}
+                //else
+                //{
+                    //if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
+                    //{
+                    //    ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
+                    //}
+                //}
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -2957,10 +2957,10 @@ namespace NMP.Portal.Controllers
                             i++;
                         }
                     }
-                    if (string.IsNullOrWhiteSpace(model.Variety) && model.CropGroupId == potatoesGroupId)
-                    {
-                        ModelState.AddModelError("Variety", Resource.MsgVarietyNameNotSet);
-                    }
+                    //if (string.IsNullOrWhiteSpace(model.Variety) && model.CropGroupId == potatoesGroupId)
+                    //{
+                    //    ModelState.AddModelError("Variety", Resource.MsgVarietyNameNotSet);
+                    //}
                     if (model.CropTypeID == null)
                     {
                         ModelState.AddModelError("CropTypeID", Resource.MsgMainCropTypeNotSet);
@@ -5326,10 +5326,10 @@ namespace NMP.Portal.Controllers
                     }
                     i++;
                 }
-                if (string.IsNullOrWhiteSpace(model.Variety) && model.CropGroupId == potatoesGroupId)
-                {
-                    ModelState.AddModelError("Variety", Resource.MsgVarietyNameNotSet);
-                }
+                //if (string.IsNullOrWhiteSpace(model.Variety) && model.CropGroupId == potatoesGroupId)
+                //{
+                //    ModelState.AddModelError("Variety", Resource.MsgVarietyNameNotSet);
+                //}
                 if (model.CropTypeID == null)
                 {
                     ModelState.AddModelError("CropTypeID", Resource.MsgMainCropTypeNotSet);
