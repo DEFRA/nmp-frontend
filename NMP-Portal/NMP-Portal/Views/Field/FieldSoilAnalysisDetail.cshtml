@@ -63,7 +63,7 @@
                                     @string.Format(ViewBag.SuccessMsgAdditionalContent)
                                     @if (ViewBag.SuccessMsgAdditionalContentSecondForAdd != null)
                                     {
-                                        <a class="govuk-link" asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@ViewBag.CropYear">@ViewBag.SuccessMsgAdditionalContentSecondForAdd</a>
+                                        <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgAdditionalContentSecondForAdd</a>
                                     }
                                     else @if (ViewBag.SuccessMsgAdditionalContentSecondForUpdate != null)
                                     {

@@ -1120,12 +1120,17 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsSlopeEdge == storageModel.IsSlopeEdge && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                         return RedirectToAction("CheckAnswer");
                     }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                 if (model.IsSlopeEdge == false)
                 {
+                    model.BankSlopeAngleID = null;
+                    model.Slope = null;
+                    model.BankSlopeAngleName = null;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                     return RedirectToAction("CheckAnswer");
                 }
                 return RedirectToAction("BankSlopeAngle");
@@ -1344,12 +1349,16 @@ namespace NMP.Portal.Controllers
                 if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
                 {
                     model.IsSlopeEdge = model.BankSlopeAngleID != null?true:false;
-                    (BankSlopeAnglesResponse bankSlopeAngle, error) = await _storageCapacityService.FetchBankSlopeAngleById(model.BankSlopeAngleID ?? 0);
-                    if (error == null)
+                    if(model.BankSlopeAngleID != null)
                     {
-                        model.BankSlopeAngleName = bankSlopeAngle.Name;
-                        model.Slope = bankSlopeAngle.Slope;
+                        (BankSlopeAnglesResponse bankSlopeAngle, error) = await _storageCapacityService.FetchBankSlopeAngleById(model.BankSlopeAngleID ?? 0);
+                        if (error == null)
+                        {
+                            model.BankSlopeAngleName = bankSlopeAngle.Name;
+                            model.Slope = bankSlopeAngle.Slope;
+                        }
                     }
+                    
                 }
                 else if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
                 {
@@ -1498,7 +1507,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("IsSlopeEdge", string.Format(Resource.MsgDoesHaveSlopedEdgesNotSet, model.StoreName));
                     }
-                    if (model.BankSlopeAngleID == null)
+                    if (model.BankSlopeAngleID == null && model.IsSlopeEdge==true)
                     {
                         ModelState.AddModelError("BankSlopeAngleId", Resource.MsgWhatIsTheEstimatedAngleOfTheBankNotSet);
                     }
