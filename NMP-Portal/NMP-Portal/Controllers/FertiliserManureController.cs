@@ -5919,20 +5919,18 @@ namespace NMP.Portal.Controllers
                     if (cropList != null && cropList.Count == 2)
                     {
                         var cropOptions = new List<SelectListItem>();
-                        int counter = 1;
-                        foreach (var crop in cropList)
+                        foreach (var crop in cropList.OrderBy(x=>x.CropOrder))
                         {
                             cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
                             cropOptions.Add(new SelectListItem
                             {
-                                Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
                                 Value = crop.ID.ToString()
                             });
-                            counter++;
                         }
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
-                        ViewBag.DoubleCropOptions = cropOptions.OrderBy(x=>x.Value);
+                        ViewBag.DoubleCropOptions = cropOptions;
                     }
                     if (model.DoubleCropCurrentCounter == 0)
                     {
@@ -6002,19 +6000,17 @@ namespace NMP.Portal.Controllers
                         if (cropList != null && cropList.Count == 2)
                         {
                             var cropOptions = new List<SelectListItem>();
-                            int counter = 1;
-                            foreach (var crop in cropList)
+                            foreach (var crop in cropList.OrderBy(x => x.CropOrder))
                             {
                                 string cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
                                 cropOptions.Add(new SelectListItem
                                 {
-                                    Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                    Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
                                     Value = crop.ID.ToString()
                                 });
-                                counter++;
                             }
                             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
-                            ViewBag.DoubleCropOptions = cropOptions.OrderBy(x => x.Value);
+                            ViewBag.DoubleCropOptions = cropOptions;
                         }
                     }
                     return View(model);
@@ -6359,16 +6355,14 @@ namespace NMP.Portal.Controllers
                     if (cropList != null && cropList.Count == 2)
                     {
                         var cropOptions = new List<SelectListItem>();
-                        int counter = 1;
-                        foreach (var crop in cropList)
+                        foreach (var crop in cropList.OrderBy(x => x.CropOrder))
                         {
                             string cropTypeName = await _fieldService.FetchCropTypeById(crop.CropTypeID.Value);
                             cropOptions.Add(new SelectListItem
                             {
-                                Text = string.Format("{0} {1} {2} {3}", Resource.lblCrop, counter, ":", cropTypeName),
+                                Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
                                 Value = crop.ID.ToString()
                             });
-                            counter++;
                         }
 
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
