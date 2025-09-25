@@ -120,17 +120,17 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
                         {
-                            @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                            @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         }
                         else
                         {
                             @if (Model.Crops.Count > 1)
                             {
-                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
                             }
                             else
                             {
-                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType), Model.FieldName)
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType), Model.FieldName)
                             }
                         }
                         @* : Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName *@
