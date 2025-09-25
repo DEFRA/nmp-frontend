@@ -174,8 +174,8 @@
   <data name="lblCounty" xml:space="preserve">
     <value>County</value>
   </data>
-  <data name="lblCPHnumber" xml:space="preserve">
-    <value>CPH</value>
+  <data name="lblCPHNumber" xml:space="preserve">
+    <value>CPH number</value>
   </data>
   <data name="lblEnglishRules" xml:space="preserve">
     <value>English rules</value>
@@ -845,7 +845,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Select all that apply.</value>
   </data>
   <data name="lblWhichFieldsDoYouPlanToGrow" xml:space="preserve">
-    <value>Which fields do you plan to grow {0} in?</value>
+    <value>Which fields would you like to plan {0} for?</value>
   </data>
   <data name="lblField" xml:space="preserve">
     <value>Field</value>
@@ -3335,7 +3335,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all green and green/food compost you apply in any 4-year period on any single hectare of orchard land must not exceed 1000kg.</value>
   </data>
   <data name="MsgNmaxWarningPara1GreaterThan1000Wales" xml:space="preserve">
-    <value>The Water Resource Regulations apply a limit of 1000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
+    <value>The Water Resource Regulations apply a limit of 1,000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
   </data>
   <data name="MsgNmaxWarningPara1Wales" xml:space="preserve">
     <value>The Water Resources Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
@@ -3675,7 +3675,7 @@ live</value>
     <value>{0} plan {1}</value>
   </data>
   <data name="lblRemoveCropGroupWithCropType" xml:space="preserve">
-    <value>Remove {0} ({1})</value>
+    <value>Are you sure you want to remove {0}?</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodWales" xml:space="preserve">
     <value>The application date you entered is inside your closed spreading period for applying manure with a high readily available nitrogen content</value>
@@ -3717,10 +3717,10 @@ live</value>
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
-    <value>This action will remove all the data about this crop group from your plans. You will not be able to get it back.</value>
+    <value>This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​</value>
   </data>
   <data name="lblRemoveCropGroupContent2" xml:space="preserve">
-    <value>It will not remove the fields from your farm and you will be able to use them in your plans.</value>
+    <value>Your fields will remain, and you'll be able to use them again in your plans.​</value>
   </data>
   <data name="lblRemoveCropTypeFromFieldName" xml:space="preserve">
     <value>Remove {0} from {1}</value>
@@ -5112,7 +5112,7 @@ live</value>
     <value>Comments about this {0} (optional)</value>
   </data>
   <data name="lblLivestockCommentContent2" xml:space="preserve">
-    <value>Comments will be viewable on some reports. Do not include personal or financial information.</value>
+    <value>You can use this space to record any other comments or details about this manure import. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information.</value>
   </data>
   <data name="lblOptional" xml:space="preserve">
     <value>(optional)</value>
@@ -5202,7 +5202,7 @@ live</value>
     <value>Did you have any livestock on {0} in {1}?</value>
   </data>
   <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
-    <value>Include cattle, sheep, pigs, goats, horses, poultry and deer. </value>
+    <value>Include cattle, sheep, goats, deer, horses, pigs and poultry.</value>
   </data>
   <data name="lblIsAnyLivestock" xml:space="preserve">
     <value>Is any livestock</value>
@@ -5346,13 +5346,13 @@ live</value>
     <value>Nitrogen (N) standard per animal, per year</value>
   </data>
   <data name="lblTotalNumberOfThisTypePerMonth" xml:space="preserve">
-    <value>Total number of this {0}, per month</value>
+    <value>Total number of this type of {0}, per month</value>
   </data>
   <data name="lblAddALivestockType" xml:space="preserve">
     <value>Add a livestock type</value>
   </data>
   <data name="lblAddMoreLivestock" xml:space="preserve">
-    <value>Add more livestock</value>
+    <value>Add another livestock category</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
     <value>Average number for the year</value>
@@ -5691,7 +5691,7 @@ live</value>
     <value>Use the typical figure of {0} tonnes per hectare for this field</value>
   </data>
   <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
-    <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
+    <value>Current nutrient recommendations are based on the most up-to-date soil analysis entered.</value>
   </data>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
@@ -5945,7 +5945,7 @@ livestock manure.</value>
     <value>Surface area</value>
   </data>
   <data name="lblMetresSquared" xml:space="preserve">
-    <value>Metres squared</value>
+    <value>metres squared</value>
   </data>
   <data name="lblAddStorageFor" xml:space="preserve">
     <value>Add storage for {0}</value>
@@ -5984,7 +5984,7 @@ livestock manure.</value>
     <value>{0}% of the year</value>
   </data>
   <data name="lblKgPer1000PlacesPerYear" xml:space="preserve">
-    <value>{0}kg per 1000 places, per year</value>
+    <value>{0}kg per 1,000 places, per year</value>
   </data>
   <data name="lblKgPerPlacesPerYear" xml:space="preserve">
     <value>{0}kg per places, per year</value>
@@ -6002,7 +6002,7 @@ livestock manure.</value>
     <value>What is the nitrogen (N) standard for this livestock type in {0}?</value>
   </data>
   <data name="lblKgOfNitrogenNPer1000Places" xml:space="preserve">
-    <value>kg of nitrogen (N) per 1000 places</value>
+    <value>kg of nitrogen (N) per 1,000 places</value>
   </data>
   <data name="lblKgOfNitrogenNPerPlace" xml:space="preserve">
     <value>kg of nitrogen (N) per place</value>
@@ -6057,5 +6057,374 @@ livestock manure.</value>
   </data>
   <data name="lblManureStorage" xml:space="preserve">
     <value>Manure storage</value>
+  </data>
+  <data name="lblStorageCapacity" xml:space="preserve">
+    <value>Storage capacity report</value>
+  </data>
+  <data name="lblExistingManureStorageCapacityYear" xml:space="preserve">
+    <value>Existing manure storage capacity {0}</value>
+  </data>
+  <data name="lblSlurryStores" xml:space="preserve">
+    <value>Slurry stores</value>
+  </data>
+  <data name="lblStoreCapacityReportContentOne" xml:space="preserve">
+    <value>Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm.</value>
+  </data>
+  <data name="lblTotalCapacity" xml:space="preserve">
+    <value> Total capacity</value>
+  </data>
+  <data name="lblCovered" xml:space="preserve">
+    <value>Covered</value>
+  </data>
+  <data name="lblStoreCapacityReportContentTwo" xml:space="preserve">
+    <value>Slurry storage totals</value>
+  </data>
+  <data name="lblDirtyWaterStores" xml:space="preserve">
+    <value>Dirty water stores</value>
+  </data>
+  <data name="lblStoreCapacityReportContentThree" xml:space="preserve">
+    <value>Dirty water total</value>
+  </data>
+  <data name="lblStoreCapacityReportContentFour" xml:space="preserve">
+    <value>On a concrete base or in poultry houses.</value>
+  </data>
+  <data name="lblSolidManureStores" xml:space="preserve">
+    <value>Solid manure stores</value>
+  </data>
+  <data name="lblSolidCapacity" xml:space="preserve">
+    <value>Solid capacity</value>
+  </data>
+  <data name="lnlFreshWeightCapacity" xml:space="preserve">
+    <value>Fresh weight capacity</value>
+  </data>
+  <data name="lblSolidManureTotal" xml:space="preserve">
+    <value>Solid manure total</value>
+  </data>
+  <data name="lblTotaLiquidCapacity" xml:space="preserve">
+    <value>Total liquid capacity</value>
+  </data>
+  <data name="lblTotalSolidCapacity" xml:space="preserve">
+    <value>Total solid capacity</value>
+  </data>
+  <data name="lblTotalSolidCapacityFreshWeight" xml:space="preserve">
+    <value>Total solid capacity (fresh weight)</value>
+  </data>
+  <data name="lblTotalSurfaceArea" xml:space="preserve">
+    <value>Total surface area</value>
+  </data>
+  <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
+    <value>To create an existing manure storage capacity report, enter the manure storage on {0} in {1}</value>
+  </data>
+  <data name="lblNoSlurryStoresRecorded" xml:space="preserve">
+    <value> No slurry stores recorded</value>
+  </data>
+  <data name="lblNoDirtyWaterStores" xml:space="preserve">
+    <value>No Dirty water stores recorded</value>
+  </data>
+  <data name="lblNoSolidManureStores" xml:space="preserve">
+    <value>No solid manure stores recorded</value>
+  </data>
+  <data name="MsgEnterAValueBetween0And999" xml:space="preserve">
+    <value>Enter a value between 0 and 999.</value>
+  </data>
+  <data name="MsgEnterAValueBetween0And99" xml:space="preserve">
+    <value>Enter a value between 0 and 99.</value>
+  </data>
+  <data name="MsgEnterAValueBetween0And9999999999" xml:space="preserve">
+    <value>Enter a value between 0 and 9,99,99,99,999</value>
+  </data>
+  <data name="MsgEnterAValueBetween0And9999" xml:space="preserve">
+    <value>Enter a value between 0 and 9999.</value>
+  </data>
+  <data name="MsgStoreAlreadyExists" xml:space="preserve">
+    <value>A store with that name and year has already been added. You or someone else who works on the farm may have already added it.</value>
+  </data>
+  <data name="lblManureStorageTotals" xml:space="preserve">
+    <value>Manure storage totals</value>
+  </data>
+  <data name="lblTotalLiquidCapacity" xml:space="preserve">
+    <value>Total liquid capacity</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
+    <value>You have not added any Solid material storage</value>
+  </data>
+  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
+    <value>Add solid material storage</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
+    <value>You have not added any dirty water storage</value>
+  </data>
+  <data name="lblAddDirtyWaterStorage" xml:space="preserve">
+    <value>Add dirty water storage</value>
+  </data>
+  <data name="lblYouHaveNotAddedAnySlurryStorage" xml:space="preserve">
+    <value>You have not added any slurry storage</value>
+  </data>
+  <data name="lblWhatIsTheCircumference" xml:space="preserve">
+    <value>What is the circumference?</value>
+  </data>
+  <data name="lblWhatIsTheDiameter" xml:space="preserve">
+    <value>What is the diameter?</value>
+  </data>
+  <data name="lblFarmSummaryContent12" xml:space="preserve">
+    <value>Update manure storage</value>
+  </data>
+  <data name="lblUpdateYearStorage" xml:space="preserve">
+    <value>Update {0} storage</value>
+  </data>
+  <data name="lblAddYearStorage" xml:space="preserve">
+    <value>Add {0} storage</value>
+  </data>
+  <data name="lblBackToFarmName" xml:space="preserve">
+    <value>Back to {0}</value>
+  </data>
+  <data name="lblStoreCapacity" xml:space="preserve">
+    <value>Store Capacity</value>
+  </data>
+  <data name="lblCopyExistingManureStorage" xml:space="preserve">
+    <value>Copy existing manure storage</value>
+  </data>
+  <data name="lblCopyExistingStorageManureContentOne" xml:space="preserve">
+    <value>Would you like to start with a copy of another existing manure storage capacity report?</value>
+  </data>
+  <data name="lblStorageCapacityForControllerName" xml:space="preserve">
+    <value>StorageCapacity</value>
+  </data>
+  <data name="lblUpdateManureStorage" xml:space="preserve">
+    <value>Update manure storage</value>
+  </data>
+  <data name="lblChangesHereWillBeAppliedToThisManureStorage" xml:space="preserve">
+    <value>Changes here will be applied to this manure store storage across {0}.</value>
+  </data>
+  <data name="lblUpdateThisManureStorage" xml:space="preserve">
+    <value>Update this manure storage</value>
+  </data>
+  <data name="lblRemoveThisManureStorage" xml:space="preserve">
+    <value>Remove this manure storage</value>
+  </data>
+  <data name="SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater" xml:space="preserve">
+    <value>Select one {0} type. You can add more {0} types later.</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which year would you like to copy?</value>
+  </data>
+  <data name="ReportTitle" xml:space="preserve">
+    <value>{0} for {1} {2}</value>
+  </data>
+  <data name="lblRemoveStoreName" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="lblRemoveContent" xml:space="preserve">
+    <value>This will remove {0} from {1}. You will not be able to get it back.</value>
+  </data>
+  <data name="lblYouHaveRemovedJourneyName" xml:space="preserve">
+    <value>You have removed {0}</value>
+  </data>
+  <data name="lblAbilityNet" xml:space="preserve">
+    <value>AbilityNet</value>
+  </data>
+  <data name="lblAccessibilityStatement" xml:space="preserve">
+    <value>Accessibility statement</value>
+  </data>
+  <data name="lblAccessibilityStatementHeading" xml:space="preserve">
+    <value>Accessibility statement for the Nutrient Management Planning Tool GB (NMPT-GB)</value>
+  </data>
+  <data name="lblAccessibilityStatementLine1" xml:space="preserve">
+    <value>This accessibility statement applies to this tool, the Nutrient Management Planning Tool GB (NMPT-GB).</value>
+  </data>
+  <data name="lblAccessibilityStatementLine10" xml:space="preserve">
+    <value>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).</value>
+  </data>
+  <data name="lblAccessibilityStatementLine11" xml:space="preserve">
+    <value>If you’re not happy with how we respond to your complaint,</value>
+  </data>
+  <data name="lblAccessibilityStatementLine11LinkText" xml:space="preserve">
+    <value>contact the Equality Advisory and Support Service (EASS)</value>
+  </data>
+  <data name="lblAccessibilityStatementLine12" xml:space="preserve">
+    <value>Defra is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine13" xml:space="preserve">
+    <value>This website is fully compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt; Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine14" xml:space="preserve">
+    <value>This website is partially compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard, due to [insert one of the following: ‘the non-compliances’, ‘the exemptions’ or ‘the non-compliances and exemptions’] listed below.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine15" xml:space="preserve">
+    <value>This website is not compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard. The [insert one of the following: ‘non-compliances’, ‘exemptions’ or ‘non-compliances and exemptions’] are listed below.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine16" xml:space="preserve">
+    <value>*compliance status TBD based on accessibility audit</value>
+  </data>
+  <data name="lblAccessibilityStatementLine17" xml:space="preserve">
+    <value>The content listed below is non-accessible for the following reasons.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine18" xml:space="preserve">
+    <value>*TBD based on accessibility audit</value>
+  </data>
+  <data name="lblAccessibilityStatementLine19" xml:space="preserve">
+    <value>Our accessibility roadmap shows how and when we plan to improve accessibility on this website.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine2" xml:space="preserve">
+    <value>This tool is run by the Department for the Environment, Food and Rural Affairs (Defra).</value>
+  </data>
+  <data name="lblAccessibilityStatementLine20" xml:space="preserve">
+    <value>*roadmap TBD based on accessibility audit</value>
+  </data>
+  <data name="lblAccessibilityStatementLine21" xml:space="preserve">
+    <value>This statement was prepared on 1 August 2025.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine22" xml:space="preserve">
+    <value>It was last reviewed on 21 August 2025.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine23" xml:space="preserve">
+    <value>This website was last tested on 18 August 2025.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine24" xml:space="preserve">
+    <value>The test was carried out by internal teams, as part of the development process.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine25" xml:space="preserve">
+    <value>You can read the full accessibility test report.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine26" xml:space="preserve">
+    <value>*report to follow</value>
+  </data>
+  <data name="lblAccessibilityStatementLine3" xml:space="preserve">
+    <value>We want as many people as possible to be able to use this tool.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine4" xml:space="preserve">
+    <value>For example, that means you should be able to:</value>
+  </data>
+  <data name="lblAccessibilityStatementLine4Bullet1" xml:space="preserve">
+    <value>use browser settings or plugins to change colours, contrast levels and fonts</value>
+  </data>
+  <data name="lblAccessibilityStatementLine4Bullet2" xml:space="preserve">
+    <value>use browser settings or other software to zoom in up to 300% without the text spilling off the screen</value>
+  </data>
+  <data name="lblAccessibilityStatementLine4Bullet3" xml:space="preserve">
+    <value>navigate most of the website using just a keyboard</value>
+  </data>
+  <data name="lblAccessibilityStatementLine4Bullet4" xml:space="preserve">
+    <value>navigate most of the website using speech recognition software</value>
+  </data>
+  <data name="lblAccessibilityStatementLine4Bullet5" xml:space="preserve">
+    <value>listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</value>
+  </data>
+  <data name="lblAccessibilityStatementLine5" xml:space="preserve">
+    <value>We’ve also made the website text as simple as possible to understand.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine6" xml:space="preserve">
+    <value>has advice on making your device easier to use if you have a disability.</value>
+  </data>
+  <data name="lblAccessibilityStatementLine8" xml:space="preserve">
+    <value>We know some parts of this website are not fully accessible:</value>
+  </data>
+  <data name="lblAccessibilityStatementLine8Bullet1" xml:space="preserve">
+    <value>you cannot modify the line height or spacing of text</value>
+  </data>
+  <data name="lblAccessibilityStatementLine8Bullet2" xml:space="preserve">
+    <value>some of our online forms are difficult to navigate using just a keyboard</value>
+  </data>
+  <data name="lblAccessibilityStatementLine8Bullet3" xml:space="preserve">
+    <value>you cannot skip to the main content when using a screen reader</value>
+  </data>
+  <data name="lblAccessibilityStatementLine9" xml:space="preserve">
+    <value>We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements:</value>
+  </data>
+  <data name="lblComplianceStatus" xml:space="preserve">
+    <value>Compliance status</value>
+  </data>
+  <data name="lblContentThatsNotWithinTheScopeOfTheAccessibilityRegulations" xml:space="preserve">
+    <value>Content that’s not within the scope of the accessibility regulations</value>
+  </data>
+  <data name="lblDisproportionateBurden" xml:space="preserve">
+    <value>Disproportionate burden</value>
+  </data>
+  <data name="lblemail" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="lblEnforcementProcedure" xml:space="preserve">
+    <value>Enforcement procedure</value>
+  </data>
+  <data name="lblFeedbackAndReportingAccessibilitySubheading" xml:space="preserve">
+    <value>Feedback and reporting accessibility problems with this website</value>
+  </data>
+  <data name="lblHowAccessibleThisWebsiteIs" xml:space="preserve">
+    <value>How accessible this website is</value>
+  </data>
+  <data name="lblNonAccessibleContent" xml:space="preserve">
+    <value>Non-accessible content</value>
+  </data>
+  <data name="lblNonComplianceWithTheAccessibilityRegulations" xml:space="preserve">
+    <value>Non-compliance with the accessibility regulations</value>
+  </data>
+  <data name="lblPreparationOfThisAccessibilityStatement" xml:space="preserve">
+    <value>Preparation of this accessibility statement</value>
+  </data>
+  <data name="lblTechnicalInformationAboutThisWebsiteAccessibility" xml:space="preserve">
+    <value>Technical information about this website’s accessibility</value>
+  </data>
+  <data name="lblWhatWeAreDoingTtoImproveAccessibility" xml:space="preserve">
+    <value>What we’re doing to improve accessibility</value>
+  </data>
+  <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
+    <value>You have updated manure storage</value>
+  </data>
+  <data name="MsgWhatIsTheWeightCapacityOfNotSet" xml:space="preserve">
+    <value>What is the weight capacity of {0} not set.</value>
+  </data>
+  <data name="MsgDoesHaveSlopedEdgesNotSet" xml:space="preserve">
+    <value>Does {0} have sloped edges not set.</value>
+  </data>
+  <data name="MsgWhatIsTheEstimatedAngleOfTheBankNotSet" xml:space="preserve">
+    <value>What is the estimated angle of the bank slope not set.</value>
+  </data>
+  <data name="MsgWhatIsTheTotalCapacityOfNotSet" xml:space="preserve">
+    <value>What is the total capacity of {0} not set.</value>
+  </data>
+  <data name="MsgDoYouWantToEnterTheCircumferenceOrDiameterNotSet" xml:space="preserve">
+    <value>Do you want to enter the circumference or the diameter not set.</value>
+  </data>
+  <data name="MsgWhatIsTheCircumferenceNotSet" xml:space="preserve">
+    <value>What is the circumference not set.</value>
+  </data>
+  <data name="MsgWhatIsTheDiameterNotSet" xml:space="preserve">
+    <value>What is the diameter not set.</value>
+  </data>
+  <data name="MsgWhatIsTheDepthNotSet" xml:space="preserve">
+    <value>What is the depth not set.</value>
+  </data>
+  <data name="MsgIsCoveredNotSet" xml:space="preserve">
+    <value>Is {0} covered not set</value>
+  </data>
+  <data name="MsgWhatIsTheWidthNotSet" xml:space="preserve">
+    <value>What is the width not set.</value>
+  </data>
+  <data name="MsgWhatIsTheLengthNotSet" xml:space="preserve">
+    <value>What is the length not set.</value>
+  </data>
+  <data name="MsgWhatKindOFManureStorageDoYouWantToAddNotSet" xml:space="preserve">
+    <value>What kind of manure storage do you want to add not set.</value>
+  </data>
+  <data name="MsgWhatDoYouWantToCallThisManureStoreNotSet" xml:space="preserve">
+    <value>What do you want to call this manure store not set.</value>
+  </data>
+  <data name="lblNoDoNotEnterAYield" xml:space="preserve">
+    <value>No, do not enter a yield</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheExpectedYieldInTheseFields" xml:space="preserve">
+    <value>Do you want to enter the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheExpectedYieldInFieldName" xml:space="preserve">
+    <value>Do you want to enter the expected yield for {0} in {1}?</value>
+  </data>
+  <data name="lblYouCanEnterAYieldLater" xml:space="preserve">
+    <value>you can enter a yield later.</value>
+  </data>
+  <data name="lblCheckYourCropPlans" xml:space="preserve">
+    <value> Check your crop plans</value>
+  </data>
+  <data name="lblToSeeYourRecommendations" xml:space="preserve">
+    <value> to see your recommendations.</value>
   </data>
 </root>

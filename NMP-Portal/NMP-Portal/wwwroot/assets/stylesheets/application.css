@@ -755,3 +755,13 @@ hr.seperator_thirty {
 .margin-bottom-ten {
     margin-bottom: 10px !important;
 }
+.storage_name {
+    width: 35%;
+}
+.manure_store_totals th:first-child {
+    width: 35%;
+}
+
+#all-plans-table {
+    margin-top: 10px;
+}

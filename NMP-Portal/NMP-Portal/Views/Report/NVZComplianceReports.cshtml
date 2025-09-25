@@ -22,6 +22,22 @@
     </div>
 }
 
+@if (TempData["succesMsgContent1"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="margin-bottom-thirty">
+
+                <govuk-notification-banner type="Success">
+                    <p class="govuk-notification-banner__heading">
+                        @TempData["succesMsgContent1"]
+                    </p>
+                </govuk-notification-banner>
+            </div>
+        </div>
+    </div>
+}
+
 @if (Model != null)
 {
     <form asp-action="NVZComplianceReports" asp-controller="Report" method="post" autocomplete="off">
@@ -128,6 +144,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
                 }
             }
+
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
@@ -148,7 +165,7 @@
                                 @Resource.lblDemonstrateComplianceWithTheNMaxLimitForEachCrop
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
-                        <govuk-radios-item value="@livestockManureNFarmLimitReport" disabled="true">
+                        <govuk-radios-item value="@livestockManureNFarmLimitReport">
                             @Resource.lblLivestockManureNitrogenFarmLimit
                             <govuk-radios-item-hint>
                                 @Resource.lblDemonstrateComplianceWithTheLivestockManure

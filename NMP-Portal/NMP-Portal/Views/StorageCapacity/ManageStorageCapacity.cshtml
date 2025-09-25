@@ -15,19 +15,14 @@
 }
 
 @section BeforeContent {
-    @*  <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @string.Format(Resource.lblLivestockDetailsYear, Model.Year)
-        </govuk-breadcrumbs-item>
-
-    </govuk-breadcrumbs> *@
-    <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    @if (string.IsNullOrWhiteSpace(Model.IsComingFromManageToHubPage))
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+    }
 }
 @if (TempData["ErrorOnManageStorageCapacity"] != null)
 {
@@ -58,7 +53,7 @@
                 @if (TempData["succesMsgContent2"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" class="govuk-notification-banner__link">
+                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" class="govuk-notification-banner__link">
                             @TempData["succesMsgContent2"]
                         </a>
                     </p>
@@ -66,7 +61,7 @@
                 @if (TempData["succesMsgContent3"] != null)
                 {
                     <p class="govuk-body">
-                        <a class="govuk-notification-banner__link" asp-action="" asp-controller="StorageCapacity" asp-route-q="@ViewBag.isComingFromSuccessMsg">
+                        <a class="govuk-notification-banner__link" asp-action="StorageCapacityReport" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-v="@ViewBag.IsPlan">
                             @TempData["succesMsgContent3"]
                         </a>
                     </p>
@@ -78,240 +73,168 @@
 
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="margin-bottom-thirty">
+            <span class="name govuk-caption-l">@Model.FarmName</span>
+            <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
 
-        <span class="name govuk-caption-l">@Model.FarmName</span>
-        <h1 class="govuk-heading-l margin-bottom-ten" id="header">@Resource.lblManureStorage</h1>
-        <h2 class="govuk-heading-m">@Model.Year</h2>
-        <p class="govuk-body">
-            <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity">
-                @Resource.lblAddOrganicMaterialStorage
-            </a>
-        </p>
+            <h2 class="govuk-heading-m">@Model.Year</h2>
 
-        @if (nonEmptyLists.Count == 1)
+        </div>
+        @if (TempData["succesMsgContent1"] == null)
         {
-            @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
-            {
-                <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table data-table">
-                        <thead class="govuk-table__head">
-                            <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblLength</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblWidth</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblDepth</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblCircumference</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                <th scope="col" class="govuk-table__header"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                            @foreach (var dirtyWater in ViewBag.DirtyWaterList)
-                            {
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@dirtyWater.StoreName</td>
-                                    <td class="govuk-table__cell"> @(dirtyWater.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Length, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(dirtyWater.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Width, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(dirtyWater.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Depth, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(dirtyWater.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Circumference, Resource.lblMetres))</td>
-                                    @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
-                                    <td class="govuk-table__cell"> @string.Format("{0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                    @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
-                </div>
-            }
-            @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
-            {
-                <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table data-table">
-                        <thead class="govuk-table__head">
-                            <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblLength</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblWidth</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblDepth</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblCircumference</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                <th scope="col" class="govuk-table__header"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                            @foreach (var slurryStorage in ViewBag.SlurryStorageList)
-                            {
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@slurryStorage.StoreName</td>
-                                    <td class="govuk-table__cell"> @(slurryStorage.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Length, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(slurryStorage.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Width, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(slurryStorage.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Depth, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(slurryStorage.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Circumference, Resource.lblMetres))</td>
-                                    @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
-                                    <td class="govuk-table__cell"> @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                    @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
-                                </tr>
-
-                            }
-                    </table>
-                </div>
-            }
-            @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
-            {
-                <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table data-table">
-                        <thead class="govuk-table__head">
-                            <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblLength</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblWidth</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblDepth</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblCircumference</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                <th scope="col" class="govuk-table__header"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                            @foreach (var solidManureStorageList in ViewBag.SolidManureStorageList)
-                            {
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@solidManureStorageList.StoreName</td>
-                                    <td class="govuk-table__cell"> @(solidManureStorageList.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Length, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(solidManureStorageList.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Width, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(solidManureStorageList.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Depth, Resource.lblMetres))</td>
-                                    <td class="govuk-table__cell"> @(solidManureStorageList.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Circumference, Resource.lblMetres))</td>
-                                    @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
-                                    <td class="govuk-table__cell"> @string.Format("{0} {1}", solidManureStorageList.CapacityVolume, Resource.lblMetresCubed)</td>
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                    @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
-                                </tr>
-                            }
-                    </table>
-                </div>
-            }
+            <div class="govuk-inset-text margin-bottom-forty">
+                <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
+                <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-v="@ViewBag.IsPlan">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
+            </div>
         }
-        else if (nonEmptyLists.Count > 1)
+         
+        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage">
+            @Resource.lblAddOrganicMaterialStorage
+        </a>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+       
+        @if (nonEmptyLists.Count > 0)
         {
             <govuk-tabs>
-                @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
-                {
-                    <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
-                        <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table data-table">
-                                <thead class="govuk-table__head">
+                <govuk-tabs-item id="slurryStorageList" label=@Resource.lblSlurryStorage>
+                    <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
+                    @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
+                    {
+                        <table class="govuk-table data-table">
+                            <thead class="govuk-table__head">
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
+                                    <th scope="col" class="govuk-table__header"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                                @foreach (var slurryStorage in ViewBag.SlurryStorageList)
+                                {
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblLength</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblWidth</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblDepth</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCircumference</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                        <th scope="col" class="govuk-table__header"></th>
+                                        <td class="govuk-table__cell">@slurryStorage.StoreName</td>
+                                        <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
                                     </tr>
-                                </thead>
-                                <tbody class="govuk-table__body">
-                                    @foreach (var dirtyWater in ViewBag.DirtyWaterList)
-                                    {
-                                        <tr class="govuk-table__row">
-                                            <td class="govuk-table__cell">@dirtyWater.StoreName</td>
-                                            <td class="govuk-table__cell"> @(dirtyWater.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Length, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(dirtyWater.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Width, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(dirtyWater.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Depth, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(dirtyWater.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Circumference, Resource.lblMetres))</td>
-                                            @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
-                                            <td class="govuk-table__cell"> @string.Format("{0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </govuk-tabs-item>
-                }
-                @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
-                {
-                    <govuk-tabs-item id="slurryStorageList" label=@Resource.lblSlurryStorage>
-                        <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table data-table">
-                                <thead class="govuk-table__head">
-                                    <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblLength</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblWidth</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblDepth</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCircumference</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                        <th scope="col" class="govuk-table__header"></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="govuk-table__body">
-                                    @foreach (var slurryStorage in ViewBag.SlurryStorageList)
-                                    {
-                                        <tr class="govuk-table__row">
-                                            <td class="govuk-table__cell">@slurryStorage.StoreName</td>
-                                            <td class="govuk-table__cell"> @(slurryStorage.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Length, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(slurryStorage.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Width, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(slurryStorage.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Depth, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(slurryStorage.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", slurryStorage.Circumference, Resource.lblMetres))</td>
-                                            @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
-                                            <td class="govuk-table__cell"> @string.Format("{0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
-                                        </tr>
 
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </govuk-tabs-item>
-                }
-                @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
-                {
-                    <govuk-tabs-item id="solidManureStorageList" label=@Resource.lblSolidManureStorage>
-                        <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table data-table">
-                                <thead class="govuk-table__head">
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
+                        <p class="govuk-body">
+                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
+                        </p>
+                    }
+                </govuk-tabs-item>
+
+                <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
+                    <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
+                    @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
+                    {
+                        <table class="govuk-table data-table">
+                            <thead class="govuk-table__head">
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
+                                    <th scope="col" class="govuk-table__header"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                                @foreach (var dirtyWater in ViewBag.DirtyWaterList)
+                                {
                                     <tr class="govuk-table__row">
-                                        <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblLength</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblWidth</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblDepth</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCircumference</th>
-                                        <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                        <th scope="col" class="govuk-table__header"></th>
+                                        <td class="govuk-table__cell">@dirtyWater.StoreName</td>
+                                        <td class="govuk-table__cell">@dirtyWater.StorageTypeName</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@dirtyWater.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
                                     </tr>
-                                </thead>
-                                <tbody class="govuk-table__body">
-                                    @foreach (var solidManureStorageList in ViewBag.SolidManureStorageList)
-                                    {
-                                        <tr class="govuk-table__row">
-                                            <td class="govuk-table__cell">@solidManureStorageList.StoreName</td>
-                                            <td class="govuk-table__cell"> @(solidManureStorageList.Length == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Length, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(solidManureStorageList.Width == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Width, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(solidManureStorageList.Depth == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Depth, Resource.lblMetres))</td>
-                                            <td class="govuk-table__cell"> @(solidManureStorageList.Circumference == null ? Resource.lblHyphen : string.Format("{0} {1}", solidManureStorageList.Circumference, Resource.lblMetres))</td>
-                                            @* <td class="govuk-table__cell"> @(dirtyWater.Diameter == null ? Resource.lblHyphen : string.Format("{0} {1}", dirtyWater.Diameter, Resource.lblMetres))</td> *@
-                                            <td class="govuk-table__cell"> @string.Format("{0} {1}", solidManureStorageList.CapacityVolume, Resource.lblMetresCubed)</td>
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
-                                            @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </govuk-tabs-item>
-                }
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyDirtyWaterStorage</p>
+                        <p class="govuk-body">
+                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
+                        </p>
+                    }
+                </govuk-tabs-item>
+
+                <govuk-tabs-item id="solidManureStorageList" label=@Resource.lblSolidManureStorage>
+                    <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
+                    @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
+                    {
+                        <table class="govuk-table data-table">
+                            <thead class="govuk-table__head">
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
+                                    <th scope="col" class="govuk-table__header"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                                @foreach (var solidManureStorage in ViewBag.SolidManureStorageList)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@solidManureStorage.StoreName</td>
+                                        <td class="govuk-table__cell">@solidManureStorage.SolidManureTypeName</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidManureStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
+                        <p class="govuk-body">
+                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddSolidMaterialStorage</a>
+                        </p>
+                    }
+                </govuk-tabs-item>
+
+                <govuk-tabs-item id="totals" label=@Resource.lblManureStorageTotals>
+                    <h2 class="govuk-heading-m non-standard">@Resource.lblManureStorageTotals</h2>
+                    @if (ViewBag.TotalLiquidCapacity != null && ViewBag.TotalSolidCapacity != null)
+                    {
+                        <table class="govuk-table data-table">
+                            <tbody>
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalLiquidCapacity</th>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalLiquidCapacity, Resource.lblCubicMeters)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSolidCapacity</th>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSolidCapacity, Resource.lblCubicMeters)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSolidCapacityFreshWeight</th>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSolidWeightCapacity, Resource.lbltonnes)</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
+                                    <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSurfaceCapacity, Resource.lblMetresSquared)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    }
+                    
+                </govuk-tabs-item>
+
             </govuk-tabs>
         }
 

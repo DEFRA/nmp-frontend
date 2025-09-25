@@ -5,13 +5,14 @@
     var EnterDifferentFiguresForEachField = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
     var EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     var UseTheStandardFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields;
+    var NoDoNotEnterAYield = (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield;
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SowingDate";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange)&& (!Model.IsCropTypeChange) ? "CheckAnswer" :bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange) ? "CheckAnswer" : bachAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="YieldQuestion" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -115,17 +116,43 @@
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios asp-for="@Model.YieldQuestion">
                 <govuk-radios-fieldset>
+                    <govuk-radios-hint>@Resource.lblYouCanEnterAYieldLater</govuk-radios-hint>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                        @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
+                        {
+                            @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                        }
+                        else
+                        {
+                            @if (Model.Crops.Count > 1)
+                            {
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                            }
+                            else
+                            {
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType), Model.FieldName)
+                            }
+                        }
+                        @* : Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName *@
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item>
-                    @if (Model.Crops.Count > 1)
-                    {
-                        <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
-                    }
+                    @* <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item> *@
                     @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
                     {
+                        <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item>
+                        @if (Model.Crops.Count > 1)
+                        {
+                            <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
+                        }
                         <govuk-radios-item value="@UseTheStandardFigureForAllTheseFields">@(Model.Crops.Count > 1 ? string.Format(Resource.lblUseTheStandardFigure, ViewBag.DefaultYield) : string.Format(Resource.lblUseTheStandardFigureForThisField, ViewBag.DefaultYield))</govuk-radios-item>
+                    }
+                    else
+                    {
+                        <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblYes)</govuk-radios-item>
+                        @if (Model.Crops.Count > 1)
+                        {
+                            <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblEnterDifferentFiguresForEachField</govuk-radios-item>
+                        }
+                        <govuk-radios-item value="@NoDoNotEnterAYield">@(Model.Crops.Count > 1 ?Resource.lblNoDoNotEnterAYield:Resource.lblNo)</govuk-radios-item>
                     }
                 </govuk-radios-fieldset>
             </govuk-radios>
