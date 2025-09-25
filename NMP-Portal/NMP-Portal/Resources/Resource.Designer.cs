@@ -2491,6 +2491,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Check your crop plans.
+        /// </summary>
+        public static string lblCheckYourCropPlans {
+            get {
+                return ResourceManager.GetString("lblCheckYourCropPlans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check your {0} plan.
         /// </summary>
         public static string lblCheckYourPlan {
@@ -3882,6 +3891,24 @@ namespace NMP.Portal.Resources {
         public static string lblDoYouWantToEnterTheCircumferenceOrTheDiameter {
             get {
                 return ResourceManager.GetString("lblDoYouWantToEnterTheCircumferenceOrTheDiameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter the expected yield for {0} in {1}?.
+        /// </summary>
+        public static string lblDoYouWantToEnterTheExpectedYieldInFieldName {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToEnterTheExpectedYieldInFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter the expected yield for {0} in these fields?.
+        /// </summary>
+        public static string lblDoYouWantToEnterTheExpectedYieldInTheseFields {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToEnterTheExpectedYieldInTheseFields", resourceCulture);
             }
         }
         
@@ -8631,6 +8658,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No, do not enter a yield.
+        /// </summary>
+        public static string lblNoDoNotEnterAYield {
+            get {
+                return ResourceManager.GetString("lblNoDoNotEnterAYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
         /// </summary>
         public static string lblNoEnterADifferentTargetYieldForEachFields {
@@ -8929,7 +8965,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nutrient recommendations will be based on the latest soil analysis entered. .
+        ///   Looks up a localized string similar to Current nutrient recommendations are based on the most up-to-date soil analysis entered..
         /// </summary>
         public static string lblNutrientRecommendationsWillBeBasedOnTheLatest {
             get {
@@ -12792,6 +12828,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  to see your recommendations..
+        /// </summary>
+        public static string lblToSeeYourRecommendations {
+            get {
+                return ResourceManager.GetString("lblToSeeYourRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To start creating plans and records,.
         /// </summary>
         public static string lblToStartCreatingPlanAndRecords {
@@ -14853,7 +14898,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which fields do you plan to grow {0} in?.
+        ///   Looks up a localized string similar to Which fields would you like to plan {0} for?.
         /// </summary>
         public static string lblWhichFieldsDoYouPlanToGrow {
             get {
@@ -15371,6 +15416,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouCanContinueButYouShouldConsiderAdjustingYour {
             get {
                 return ResourceManager.GetString("lblYouCanContinueButYouShouldConsiderAdjustingYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to you can enter a yield later..
+        /// </summary>
+        public static string lblYouCanEnterAYieldLater {
+            get {
+                return ResourceManager.GetString("lblYouCanEnterAYieldLater", resourceCulture);
             }
         }
         

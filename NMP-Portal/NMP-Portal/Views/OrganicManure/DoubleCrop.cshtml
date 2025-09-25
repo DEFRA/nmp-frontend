@@ -208,7 +208,7 @@
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @string.Format(Resource.lblWhichCropIsThisManureApplication, Model.FieldName)
                                 </govuk-radios-fieldset-legend>
-                                @if (ViewBag.DoubleCropOptions != null && ViewBag.DoubleCropOptions.Count > 0)
+                                @if (ViewBag.DoubleCropOptions != null)
                                 {
                                     @foreach (var item in ViewBag.DoubleCropOptions)
                                     {

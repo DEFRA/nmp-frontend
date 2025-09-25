@@ -845,7 +845,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Select all that apply.</value>
   </data>
   <data name="lblWhichFieldsDoYouPlanToGrow" xml:space="preserve">
-    <value>Which fields do you plan to grow {0} in?</value>
+    <value>Which fields would you like to plan {0} for?</value>
   </data>
   <data name="lblField" xml:space="preserve">
     <value>Field</value>
@@ -5691,7 +5691,7 @@ live</value>
     <value>Use the typical figure of {0} tonnes per hectare for this field</value>
   </data>
   <data name="lblNutrientRecommendationsWillBeBasedOnTheLatest" xml:space="preserve">
-    <value>Nutrient recommendations will be based on the latest soil analysis entered. </value>
+    <value>Current nutrient recommendations are based on the most up-to-date soil analysis entered.</value>
   </data>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
@@ -6408,5 +6408,23 @@ livestock manure.</value>
   </data>
   <data name="MsgWhatDoYouWantToCallThisManureStoreNotSet" xml:space="preserve">
     <value>What do you want to call this manure store not set.</value>
+  </data>
+  <data name="lblNoDoNotEnterAYield" xml:space="preserve">
+    <value>No, do not enter a yield</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheExpectedYieldInTheseFields" xml:space="preserve">
+    <value>Do you want to enter the expected yield for {0} in these fields?</value>
+  </data>
+  <data name="lblDoYouWantToEnterTheExpectedYieldInFieldName" xml:space="preserve">
+    <value>Do you want to enter the expected yield for {0} in {1}?</value>
+  </data>
+  <data name="lblYouCanEnterAYieldLater" xml:space="preserve">
+    <value>you can enter a yield later.</value>
+  </data>
+  <data name="lblCheckYourCropPlans" xml:space="preserve">
+    <value> Check your crop plans</value>
+  </data>
+  <data name="lblToSeeYourRecommendations" xml:space="preserve">
+    <value> to see your recommendations.</value>
   </data>
 </root>
