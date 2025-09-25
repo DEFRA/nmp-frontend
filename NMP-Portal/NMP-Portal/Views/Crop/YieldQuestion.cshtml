@@ -1,7 +1,6 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblYieldQuestion;
     var EnterDifferentFiguresForEachField = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
     var EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     var UseTheStandardFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields;
@@ -9,6 +8,25 @@
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SowingDate";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+
+    var pageHeading = "";
+    if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
+    {
+        pageHeading = (string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
+    }
+    else
+    {
+        if (Model.Crops.Count > 1)
+        {
+            pageHeading = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+        }
+        else
+        {
+            pageHeading = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType), Model.FieldName);
+        }
+    }
+    ViewData["Title"] = pageHeading;
+
 }
 
 @section BeforeContent {
@@ -118,22 +136,7 @@
                 <govuk-radios-fieldset>
                     <govuk-radios-hint>@Resource.lblYouCanEnterAYieldLater</govuk-radios-hint>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
-                        {
-                            @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
-                        }
-                        else
-                        {
-                            @if (Model.Crops.Count > 1)
-                            {
-                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
-                            }
-                            else
-                            {
-                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType), Model.FieldName)
-                            }
-                        }
-                        @* : Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName *@
+                        @pageHeading
                     </govuk-radios-fieldset-legend>
                     @* <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item> *@
                     @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)

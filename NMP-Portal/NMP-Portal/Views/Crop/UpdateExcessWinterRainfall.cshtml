@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblRainfall;
+    ViewData["Title"] = string.Format(Resource.lblRainfallCategoryForFarmName, Model.FarmName);
 }
 
 @section BeforeContent {
