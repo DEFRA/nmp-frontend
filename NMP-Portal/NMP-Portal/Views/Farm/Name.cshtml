@@ -14,8 +14,8 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">        
-        <h1 class="govuk-heading-l">@Resource.lblWhatIsTheFarmName</h1>
-        <p class="govuk-body">@Resource.lblIfYouhaveMoreThanOneHolding</p>
+       @*  <h1 class="govuk-heading-l">@Resource.lblWhatIsTheFarmName</h1>
+        <p class="govuk-body">@Resource.lblIfYouhaveMoreThanOneHolding</p> *@
 
         <form asp-action="Name" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
@@ -44,13 +44,12 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
             </div>
-            <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Name">
-                    <govuk-input-label is-page-heading="false"></govuk-input-label>
+            @* <div class="govuk-form-group"> *@
+                <govuk-input  asp-for="@Model.Name">                    
+                    <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
+                    <govuk-input-hint>@Resource.lblIfYouhaveMoreThanOneHolding</govuk-input-hint>                    
                 </govuk-input>
-            </div>
-
-        
+            @* </div>  *@       
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

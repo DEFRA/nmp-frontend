@@ -136,7 +136,22 @@
                 <govuk-radios-fieldset>
                     <govuk-radios-hint>@Resource.lblYouCanEnterAYieldLater</govuk-radios-hint>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @pageHeading
+                        @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
+                        {
+                            @(string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
+                        }
+                        else
+                        {
+                            @if (Model.Crops.Count > 1)
+                            {
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                            }
+                            else
+                            {
+                                @string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType), Model.FieldName)
+                            }
+                        }
+                        @* : Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName *@
                     </govuk-radios-fieldset-legend>
                     @* <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@(Model.Crops.Count > 1 ? Resource.lblEnterASingleFigureForAllTheseFields : Resource.lblEnterAFigure)</govuk-radios-item> *@
                     @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)

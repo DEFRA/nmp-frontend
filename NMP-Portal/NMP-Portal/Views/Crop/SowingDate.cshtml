@@ -127,8 +127,8 @@
                                 <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                                     {
-                                        @(Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields ? string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)) :
-                                                                string.Format(Resource.lblWhatIsThePlantingDate, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType), Model.Crops[i].FieldName))
+                                        @(Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields ? string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
+                                                                string.Format(Resource.lblWhatIsThePlantingDate, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
                                     }
                                     else
                                     {

@@ -151,11 +151,11 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @if(Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
-                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)))
+                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         }
                         else
                         {
-                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         }
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>

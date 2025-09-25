@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+    ViewData["Title"] = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
     var backAction = ((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value)) ? "Year" :
         ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
         ? "FieldAndPlanReports" : "NVZComplianceReports");
