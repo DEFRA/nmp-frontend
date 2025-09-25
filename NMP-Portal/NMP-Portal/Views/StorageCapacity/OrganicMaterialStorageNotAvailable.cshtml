@@ -2,12 +2,13 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblNotEnteredStorage;
-
+    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" :
+       "NVZComplianceReports");
 
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="Year" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnOrganicMaterialStorageNotAvailable"] != null)
 {
