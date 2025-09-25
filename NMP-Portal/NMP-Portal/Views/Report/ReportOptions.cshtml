@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+    ViewData["Title"] = Resource.lblWhatTypeOfReportDoYouWantToCreate;
     var fieldRecordsAndPlan = (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan;
     var farmAndFieldDetailsForNVZRecord = (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord;
 }
@@ -152,6 +152,7 @@
                     }
                     else
                     {
+                        ViewData["Title"] = string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year);
                         @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
                     }
                 </h1>
