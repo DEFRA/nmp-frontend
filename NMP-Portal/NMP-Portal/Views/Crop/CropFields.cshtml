@@ -126,7 +126,7 @@
                     else
                     {
                         <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @(string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == potatoGroupId ? Model.Variety : Model.CropType))
+                            @(string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName  : Model.CropType))
                         </govuk-checkboxes-fieldset-legend>
                     }
 

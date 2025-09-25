@@ -127,6 +127,12 @@
                             <a class="govuk-link" asp-controller="Report" asp-action="UpdateLivestockImportExport" asp-route-q="@Model.EncryptedFarmId">@Resource.lblFarmSummaryContent10</a>
                         </li>
                     }
+                    @if (ViewBag.StoreCapacityList != null)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-controller="StorageCapacity" asp-action="StorageCapacityManagement" asp-route-q="@Model.EncryptedFarmId">@Resource.lblFarmSummaryContent12</a>
+                        </li>
+                    }
                     @*  <li>
                 <a class="govuk-link" href="#">@Resource.lblFarmSummaryContent11</a>
                 </li> *@

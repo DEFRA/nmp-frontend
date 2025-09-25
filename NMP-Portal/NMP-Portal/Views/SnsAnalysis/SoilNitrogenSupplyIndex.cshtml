@@ -82,7 +82,8 @@
             <h3 class="govuk-heading-s">@Resource.lblSnsIndex</h3>
             @if (Model.SnsIndex != null)
             {
-                <p class="govuk-body">@string.Format(Resource.lblSnsDetail, Model.SnsIndex, Model.SnsValue)</p>
+                <p class="govuk-body">
+    @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}",Model.SnsValue))</p>
             }
 
             <govuk-button type="submit" class="margin-bottom-forty">

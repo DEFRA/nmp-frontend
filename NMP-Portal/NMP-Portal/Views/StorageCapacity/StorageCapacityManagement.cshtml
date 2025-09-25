@@ -1,0 +1,106 @@
+﻿@using NMP.Portal.Resources
+@{
+    ViewData["Title"] = Resource.lblManagement;
+    bool hasUpdate = false;
+    @if (ViewBag.FinalYearList != null)
+    {
+        foreach (var item in ViewBag.FinalYearList)
+        {
+            if (item.Label == Resource.lblUpdate)
+            {
+                hasUpdate = true;
+                break;
+            }
+        }
+    }
+}
+
+@section BeforeContent {
+    @* <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@ViewBag.EncryptedFarmId">@Resource.lblBack</govuk-back-link> *@
+    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@ViewBag.EncryptedFarmId">
+            @ViewBag.FarmName
+        </govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+            @Resource.lblManureStorage
+        </govuk-breadcrumbs-item>
+    </govuk-breadcrumbs>
+}
+@if (TempData["ErrorOnStorageCapacityManagement"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnStorageCapacityManagement"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (TempData["succesMsgContent1"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="margin-bottom-thirty">
+
+                <govuk-notification-banner type="Success">
+                    <p class="govuk-notification-banner__heading">
+                        @TempData["succesMsgContent1"]
+                    </p>
+                </govuk-notification-banner>
+            </div>
+        </div>
+    </div>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="margin-bottom-thirty">
+            <span class="name govuk-caption-l">@ViewBag.FarmName</span>
+            <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
+        </div>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+        @if (ViewBag.FinalYearList != null)
+        {
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblCalendarYear</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblLastModified</th>
+                        <th scope="col" class="govuk-table__header"> </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @foreach (var yearList in ViewBag.FinalYearList)
+                    {
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">
+                                @yearList.Year
+                            </th>
+                            <td class="govuk-table__cell">@yearList.LastModifyDate</td>
+                            @if (yearList.Label == Resource.lblAdd)
+                            {
+                                @if (hasUpdate)
+                                {
+                                    <td class="govuk-table__cell"><a asp-action="CopyExistingManureStorage" asp-controller="StorageCapacity" asp-route-q="@ViewBag.EncryptedFarmId" asp-route-r="@yearList.EncryptedYear" asp-route-v="@ViewBag.EncryptedFarmId"> @string.Format(Resource.lblAddYearStorage, yearList.Year)</a></td>
+                                }
+                                else
+                                {
+                                    <td class="govuk-table__cell"><a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@ViewBag.EncryptedFarmId" asp-route-y="@yearList.EncryptedYear" asp-route-v="@ViewBag.EncryptedFarmId">@string.Format(Resource.lblAddYearStorage, yearList.Year)</a></td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="govuk-table__cell"><a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@ViewBag.EncryptedFarmId" asp-route-y="@yearList.EncryptedYear" asp-route-t="@ViewBag.EncryptedFarmId">@string.Format(Resource.lblUpdateYearStorage, yearList.Year)</a></td>
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+
+    </div>
+</div>

@@ -1996,13 +1996,15 @@ namespace NMP.Portal.Controllers
                                             ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
                                             if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                             {
-                                                ViewBag.SuccessMsgAdditionalContentSecondForAdd = string.Format(Resource.lblYearCropPlan, cropYear);
+                                                ViewBag.SuccessMsgAdditionalContentSecondForAdd = Resource.lblCheckYourCropPlans;
+                                                ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeYourRecommendations;
                                             }
                                             else
                                             {
                                                 ViewBag.SuccessMsgAdditionalContentSecondForUpdate = string.Format(Resource.lblCropPlan);
+                                                ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
                                             }
-                                            ViewBag.SuccessMsgAdditionalContentThird = Resource.lblToSeeItsRecommendations;
+
                                         }
                                     }
                                     else if (!string.IsNullOrWhiteSpace(s) && (_soilAnalysisDataProtector.Unprotect(s) == Resource.lblUpdate || _soilAnalysisDataProtector.Unprotect(s) == Resource.lblRemove))
