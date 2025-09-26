@@ -1,6 +1,9 @@
 ﻿﻿@using NMP.Portal.Resources
 @using System.Globalization
 @model NMP.Portal.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year);
+}
 @section BeforeContent {
     <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }

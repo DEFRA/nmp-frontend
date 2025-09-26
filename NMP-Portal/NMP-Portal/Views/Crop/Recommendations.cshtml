@@ -2,7 +2,7 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.RecommendationViewModel
 @{
-    ViewData["Title"] = Resource.lblRecommendations;
+    ViewData["Title"] = string.Format(Resource.lblFieldPlanYear, Model.FieldName, Model.Crops[0].Year);
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int CerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
     var lastUpdate = string.Empty;

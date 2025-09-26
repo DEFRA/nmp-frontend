@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblGrassManagement;
+    ViewData["Title"] = string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
 
     var bachAction = "SwardType";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;

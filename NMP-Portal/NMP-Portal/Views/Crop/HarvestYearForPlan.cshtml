@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"FarmSummary")" asp-controller="@(Model.IsCheckAnswer ? "Crop" :"Farm")" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmSummary")" asp-controller="@(Model.IsCheckAnswer ? "Crop" : "Farm")" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -99,17 +99,15 @@
 
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-radios class="govuk-radios" asp-for="@Model.Year">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblWhichHarvestWouldYouLikeToPlanFor
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value=@DateTime.Now.Year>@DateTime.Now.Year</govuk-radios-item>
-                        <govuk-radios-item value=@previousYear>@previousYear</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-            </div>
+            <govuk-radios class="govuk-radios" asp-for="@Model.Year">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblWhichHarvestWouldYouLikeToPlanFor
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value=@DateTime.Now.Year>@DateTime.Now.Year</govuk-radios-item>
+                    <govuk-radios-item value=@previousYear>@previousYear</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

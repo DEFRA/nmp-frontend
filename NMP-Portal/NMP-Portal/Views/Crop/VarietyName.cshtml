@@ -1,14 +1,14 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblVarietyName;
+    ViewData["Title"] = Resource.lblVarietyNameWithOptional;
     int potatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
 }
 
 @section BeforeContent {
     @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-        <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&& (!Model.IsCropTypeChange)&& (!Model.IsAnyChangeInField) ? "CheckAnswer" :"CropGroupName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange) && (!Model.IsAnyChangeInField) ? "CheckAnswer" : "CropGroupName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
     @* }
     else
     {
@@ -54,7 +54,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate" value="@Model.EncryptedIsCropUpdate"></govuk-input>
                 <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDate"></govuk-date-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCropGroupName"></govuk-input>
-                                
+
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount"></govuk-input>
@@ -115,9 +115,8 @@
 
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
-                @* @if (Model.CropGroupId == potatoGroupId ||
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"></govuk-input>
+            @* @if (Model.CropGroupId == potatoGroupId ||
                 ((!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)) &&
                 (Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
                 Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
@@ -130,27 +129,26 @@
                 }
                 else
                 { *@
-                    <govuk-input asp-for="@Model.Variety">
-                        <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblVarietyNameWithOptional</govuk-input-label>
-                    </govuk-input>
-               @*  } *@
-            </div>
+            <govuk-input asp-for="@Model.Variety">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblVarietyNameWithOptional</govuk-input-label>
+            </govuk-input>
+            @*  } *@
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
-      @*   @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+        @*   @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
         { *@
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
-                }
-            </p>
+        <p class="govuk-body cancel-link">
+            @if (!Model.IsCheckAnswer)
+            {
+                <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+            }
+        </p>
         @* }
         else
         {

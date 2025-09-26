@@ -2,13 +2,22 @@
 @using NMP.Portal.ServiceResponses
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblGrassGrowthClass;
 
 
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 
     var EnterDifferentFiguresForEachField = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
     var EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+    var pageHeading = "";
+    if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+    {
+        pageHeading = Resource.lblAnnualDryMatterYield;
+    }
+    @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+    {
+        pageHeading = string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName);
+    }
+    ViewData["Title"] = pageHeading;
 
 }
 

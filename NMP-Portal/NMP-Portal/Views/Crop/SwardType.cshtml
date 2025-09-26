@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblSwardType;
+    ViewData["Title"] = string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year);
 
     var backAction = "";
     if(Model.CurrentSward==(int)NMP.Portal.Enums.CurrentSward.ExistingSward)

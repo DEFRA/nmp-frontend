@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropInfoTwo;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    ViewData["Title"] = string.Format(Resource.lblHowDoYouPlanToUseTheStrawFromYourCropType, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType);
 }
 
 @section BeforeContent {

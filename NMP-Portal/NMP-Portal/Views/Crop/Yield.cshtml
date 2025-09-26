@@ -1,10 +1,19 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblYield;
     int EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     var backAction = "";
+    var pageHeading = "";
+    @if (ViewBag.IsYieldOptional != null)
+    {
+        pageHeading = string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+    }
+    else
+    {
+        pageHeading = string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+    }
+    ViewData["Title"] = pageHeading;
     if (Model.Crops.Count > 1)
     {
         backAction = "Yield";
