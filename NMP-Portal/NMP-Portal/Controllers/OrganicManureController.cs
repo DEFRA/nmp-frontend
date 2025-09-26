@@ -3278,17 +3278,21 @@ namespace NMP.Portal.Controllers
             try
             {
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
-                if (error == null && manureTypeList.Count > 0)
+                if(model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    model.ManureTypeName = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name;
-                    model.ApplicationRateArable = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.ApplicationRateArable;
+                    (List<ManureType> manureTypeList, Error error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
+                    if (error == null && manureTypeList.Count > 0)
+                    {
+                        model.ManureTypeName = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name;
+                        model.ApplicationRateArable = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.ApplicationRateArable;
+                    }
+                    else
+                    {
+                        model.ManureTypeName = string.Empty;
+                        ViewBag.Error = error.Message;
+                    }
                 }
-                else
-                {
-                    model.ManureTypeName = string.Empty;
-                    ViewBag.Error = error.Message;
-                }
+                
 
                 (List<CommonResponse> manureGroupList, Error error1) = await _organicManureService.FetchManureGroupList();
                 model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
