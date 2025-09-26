@@ -49,9 +49,7 @@ namespace NMP.Portal.Security
                         //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // "/signin-oidc";
                         //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
-                        options.ErrorPath = "/Error/Index";
-                        
-                        
+                        options.ErrorPath = "/Error/Index"; 
                     })                    
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
                     .AddInMemoryTokenCaches();
@@ -75,8 +73,8 @@ namespace NMP.Portal.Security
             });
             services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20); // Set cookie expiration time
-                options.SlidingExpiration = true; // Enable sliding expiration
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
+                options.SlidingExpiration = true; // Enable sliding expiration                
             });
             services.AddTokenAcquisition();
             services.AddInMemoryTokenCaches();
@@ -152,7 +150,9 @@ namespace NMP.Portal.Security
 
         private static async Task OnTokenValidated(TokenValidatedContext context)
         {
-
+            var exp = await context.HttpContext.GetTokenAsync("expires_at");
+            var oldrefreshToken = await context.HttpContext.GetTokenAsync("refresh_token");
+            var oldaccessToken = await context.HttpContext.GetTokenAsync("access_token");
             var accessToken = context?.TokenEndpointResponse?.AccessToken;
             var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
             var identity = context?.Principal?.Identity as ClaimsIdentity;

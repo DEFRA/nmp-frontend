@@ -2,7 +2,7 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{    
-    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblLivestockManureNitrogenFarmLimit, Model.Farm?.Name, Model.Year);
+    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblLivestockManureNitrogenFarmLimit, Model.FarmName, Model.Year);
     int nutrientsLoadingLiveStockListGrazingCount = 0;
     int nutrientsLoadingLiveStockListNonGrazingCount = 0;
     decimal TotalArea =

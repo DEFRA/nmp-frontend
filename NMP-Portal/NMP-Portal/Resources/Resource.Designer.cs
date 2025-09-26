@@ -2959,6 +2959,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop and field management report.
+        /// </summary>
+        public static string lblCropAndFieldManagementReportName {
+            get {
+                return ResourceManager.GetString("lblCropAndFieldManagementReportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop area.
         /// </summary>
         public static string lblCropArea {
@@ -9456,6 +9465,15 @@ namespace NMP.Portal.Resources {
         public static string lblPageNotFoundPage {
             get {
                 return ResourceManager.GetString("lblPageNotFoundPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - NMPTGB - GOV.UK.
+        /// </summary>
+        public static string lblPageTitleTemplate {
+            get {
+                return ResourceManager.GetString("lblPageTitleTemplate", resourceCulture);
             }
         }
         
@@ -18946,15 +18964,6 @@ namespace NMP.Portal.Resources {
         public static string SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater {
             get {
                 return ResourceManager.GetString("SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Soil Nitrogen Supply Index.
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         
