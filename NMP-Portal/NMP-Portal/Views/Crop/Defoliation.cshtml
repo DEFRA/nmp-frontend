@@ -1,12 +1,34 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblDefoliation;
 
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SwardType";
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int potentialCutId = 0;
+
+    var pageHeading = "";
+    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
+    {
+        pageHeading = string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
+    }
+    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
+    {
+        pageHeading = string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
+    }
+    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
+    {
+        pageHeading = string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
+    }
+    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
+    {
+        pageHeading = string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
+    }
+    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
+    {
+        pageHeading = string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
+    }
+    ViewData["Title"] = pageHeading;
 }
 
 @section BeforeContent {
@@ -118,28 +140,7 @@
             <govuk-radios asp-for="@Model.PotentialCut">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
-                        {
-                            @string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
-                        }
-                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
-                        {
-                            @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName  : Resource.lblTheseFields))
-                        }
-                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
-                        {
-                            @string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
-                        }
-                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
-                        {
-                            @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
-                        }
-                        @if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
-                        {
-                            @string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
-                        }
-
-
+                        @pageHeading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblPotentialCuts)</govuk-radios-hint>
                     @if (ViewBag.PotentialCuts != null)

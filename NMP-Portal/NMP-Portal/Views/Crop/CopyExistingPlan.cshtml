@@ -2,7 +2,7 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCopyExistingPlan;
+    ViewData["Title"] = Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);

@@ -1,6 +1,9 @@
 ﻿﻿@using NMP.Portal.Resources
 @using System.Globalization
 @model NMP.Portal.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year);
+}
 @section BeforeContent {
     <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
@@ -168,7 +171,7 @@
                         {
                             <govuk-summary-list-row class=@((!crop.SowingDate.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblSowingSingleDateForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                    @string.Format(Resource.lblSowingSingleDateForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(crop.SowingDate.HasValue ? crop.SowingDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
@@ -187,7 +190,7 @@
                     {
                         <govuk-summary-list-row class=@((!crop.SowingDate.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblSowingDiffrentDateForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType, crop.FieldName)
+                                @string.Format(Resource.lblSowingDiffrentDateForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType, crop.FieldName)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(crop.SowingDate.HasValue ? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
@@ -218,7 +221,7 @@
 
                             <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                    @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
@@ -237,7 +240,7 @@
                     {
                         <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType, crop.FieldName)
+                                @string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, crop.FieldName)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
@@ -257,7 +260,7 @@
                         {
                             <govuk-summary-list-row class=@((!crop.Yield.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)
+                                    @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)

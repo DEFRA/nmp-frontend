@@ -4,7 +4,18 @@
 
 @model PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblRemoveThisGroup;
+    var pageHeading = "";
+    if (Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)
+    {
+        pageHeading = string.Format(Resource.lblRemoveCropTypeFromFieldName, Model.CropType, Model.FieldName);
+    }
+    else
+    {
+        pageHeading = string.Format(Resource.lblRemoveCropGroupWithCropType, Model.CropGroupName);
+    }
+
+    ViewData["Title"] = pageHeading;
+
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 

@@ -1,12 +1,20 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblSowingDateQuestion;
     var YesIHaveASingleDateForAllTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
     var NoIWillEnterTheDateLater = (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
     var YesIHaveDifferentDatesForEachOfTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields;
     // int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+
+    @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+    {
+        ViewData["Title"] = string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
+    }
+    else
+    {
+        ViewData["Title"] = string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+    }
 
     var action = "";
     if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange))
@@ -143,11 +151,11 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @if(Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
-                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType)))
+                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         }
                         else
                         {
-                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType))
+                            @(string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         }
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>

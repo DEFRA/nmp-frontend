@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropInfoTwo;
+    ViewData["Title"] = string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year);
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 }
 

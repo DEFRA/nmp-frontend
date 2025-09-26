@@ -2,11 +2,11 @@
 @using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblOrganicInorganicCopy;
+    ViewData["Title"] = Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CopyCheckAnswer" :"CopyPlanYears")" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CopyCheckAnswer" : "CopyPlanYears")" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -102,35 +102,33 @@
 
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-checkboxes name="OrganicInorganicCopy" asp-for="@Model.OrganicInorganicCopy">
-                    <govuk-checkboxes-fieldset>
-                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications
-                        </govuk-checkboxes-fieldset-legend>
-                        <govuk-checkboxes-hint>
-                            @string.Format(Resource.lblSelectAllThatApplyApplicationDateWillBeUpdated,Model.Year)
-                        </govuk-checkboxes-hint>
-                        <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.OrganicMaterial)"
-                                               checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopy.OrganicMaterial) == true)">
-                            @Resource.lblIncludeOrganicMaterialApplications
-                        </govuk-checkboxes-item>
+            <govuk-checkboxes name="OrganicInorganicCopy" asp-for="@Model.OrganicInorganicCopy">
+                <govuk-checkboxes-fieldset>
+                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications
+                    </govuk-checkboxes-fieldset-legend>
+                    <govuk-checkboxes-hint>
+                        @string.Format(Resource.lblSelectAllThatApplyApplicationDateWillBeUpdated, Model.Year)
+                    </govuk-checkboxes-hint>
+                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.OrganicMaterial)"
+                                           checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopy.OrganicMaterial) == true)">
+                        @Resource.lblIncludeOrganicMaterialApplications
+                    </govuk-checkboxes-item>
 
-                        <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.InorganicFertiliser)"
-                                               checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopy.InorganicFertiliser) == true)">
-                            @Resource.lblIncludeInorganicFertiliserApplications
-                        </govuk-checkboxes-item>
+                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.InorganicFertiliser)"
+                                           checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopy.InorganicFertiliser) == true)">
+                        @Resource.lblIncludeInorganicFertiliserApplications
+                    </govuk-checkboxes-item>
 
-                        <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
 
-                        <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.None)"
-                                               behavior="Exclusive"
-                                               checked="@(Model.OrganicInorganicCopy == OrganicInorganicCopy.None)">
-                            @Resource.lblIncludeNoneOfThese
-                        </govuk-checkboxes-item>
-                    </govuk-checkboxes-fieldset>
-                </govuk-checkboxes>
-            </div>
+                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.None)"
+                                           behavior="Exclusive"
+                                           checked="@(Model.OrganicInorganicCopy == OrganicInorganicCopy.None)">
+                        @Resource.lblIncludeNoneOfThese
+                    </govuk-checkboxes-item>
+                </govuk-checkboxes-fieldset>
+            </govuk-checkboxes>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
