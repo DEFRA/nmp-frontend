@@ -4,7 +4,7 @@
 @using System.Globalization
 @model PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblHarvestYearOverview;
+    ViewData["Title"] = string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year);
 }
 
 @if (TempData["ErrorOnHarvestYearOverview"] != null)

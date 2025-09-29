@@ -202,12 +202,9 @@
                     }
                 }
             </div>
-            <div class="govuk-form-group">
                 <govuk-input asp-for="@Model.OtherMaterialName">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
                 </govuk-input>
-
-            </div>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="OtherMaterialName">
                 @Resource.lblContinue
             </govuk-button>

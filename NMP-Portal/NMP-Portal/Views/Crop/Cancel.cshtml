@@ -4,12 +4,13 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 
 @{
+    ViewData["Title"] = Resource.lblCancel;
 
     var cancelViewModel = new CancelViewModel
-            {
-                IsCancel = Model.IsCancel,
-                LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblCrop.ToLower())
-            };
+    {
+        IsCancel = Model.IsCancel,
+        LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblCrop.ToLower())
+    };
 }
 @section BeforeContent {
     @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))

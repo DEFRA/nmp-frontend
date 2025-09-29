@@ -1,5 +1,6 @@
 ﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.Extensions.Options
+@using NMP.Portal.Resources
 @inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
@@ -15,7 +16,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title lang="@ViewBag.TitleLang">@ViewBag.Title</title>
+    <title lang="@ViewBag.TitleLang">@string.Format(Resource.lblPageTitleTemplate,ViewBag.Title)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="@themeColor">
 

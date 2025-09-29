@@ -98,7 +98,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
-                
+
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"></govuk-input>
@@ -190,18 +190,14 @@
                     }
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-input asp-for=@Model.TotalRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l"> @Resource.lblEnterRainfallAmount</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
-                </govuk-input>
-            </div>
-            <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
-                    <br>
-                    <govuk-button type="submit">@Resource.lblContinue</govuk-button>
-                </fieldset>
-            </div>
+            <govuk-input asp-for=@Model.TotalRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l"> @Resource.lblEnterRainfallAmount</govuk-input-label>
+                <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
+            </govuk-input>
+            <fieldset class="govuk-fieldset">
+                <br>
+                <govuk-button type="submit">@Resource.lblContinue</govuk-button>
+            </fieldset>
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {

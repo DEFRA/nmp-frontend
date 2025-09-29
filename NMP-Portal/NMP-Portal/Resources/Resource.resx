@@ -4112,9 +4112,6 @@ live</value>
   <data name="lblSoilNitrogenSupplyAnalysisForField" xml:space="preserve">
     <value>Soil Nitrogen Supply (SNS) analysis for {0}</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>Soil Nitrogen Supply Index</value>
-  </data>
   <data name="lblSeason" xml:space="preserve">
     <value>Season</value>
   </data>
@@ -6426,6 +6423,12 @@ livestock manure.</value>
   </data>
   <data name="lblToSeeYourRecommendations" xml:space="preserve">
     <value> to see your recommendations.</value>
+  </data>
+  <data name="lblCropAndFieldManagementReportName" xml:space="preserve">
+    <value>Crop and field management report</value>
+  </data>
+  <data name="lblPageTitleTemplate" xml:space="preserve">
+    <value>{0} - NMPTGB - GOV.UK</value>
   </data>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>

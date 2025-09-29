@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropInfoTwo;
+    ViewData["Title"] = Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields);
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 
     var valueNewSward = (int)NMP.Portal.Enums.CurrentSward.NewSward;

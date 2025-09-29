@@ -1,7 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropInfoOne;
+    if (ViewBag.CropInfoOneQuestion != null)
+    {
+        ViewData["Title"] = ViewBag.CropInfoOneQuestion;
+    }
     int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int LessThan60days = (int)NMP.Portal.Enums.PotatoCropInfo1.LessThan60days;

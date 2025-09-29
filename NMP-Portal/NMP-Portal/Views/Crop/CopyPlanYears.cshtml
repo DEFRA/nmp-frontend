@@ -1,11 +1,11 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCopyPlanYears;
+    ViewData["Title"] = string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year);
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CopyExistingPlan")" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingPlan")" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -100,24 +100,22 @@
 
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-radios class="govuk-radios" asp-for="@Model.CopyYear">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor,Model.Year)
-                        </govuk-radios-fieldset-legend>
-                        @foreach(var year in Model.HarvestYear)
+            <govuk-radios class="govuk-radios" asp-for="@Model.CopyYear">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)
+                    </govuk-radios-fieldset-legend>
+                    @foreach (var year in Model.HarvestYear)
+                    {
+                        if (year.IsAnyPlan)
                         {
-                            if (year.IsAnyPlan)
-                            {
-                                <govuk-radios-item value=@year.Year>@year.Year</govuk-radios-item>
-
-                            }
+                            <govuk-radios-item value=@year.Year>@year.Year</govuk-radios-item>
 
                         }
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-            </div>
+
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

@@ -1,9 +1,19 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropType;
     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    var title = "";
+    if (Model.CropGroupId == otherGroupId)
+    {
+        title = Resource.lblWhatIsTheNameOfTheCrop;
+    }
+    else
+    {
+        title = (Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoForCropType : Resource.lblCropTypeForPlan);
+    }
+    ViewData["Title"] = title;
+
 }
 
 @section BeforeContent {

@@ -16,7 +16,7 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange) &&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsManureTypeChange) && (!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ApplicationRateMethod") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="AreaQuantity" asp-controller="OrganicManure" method="post" autocomplete="off">
@@ -340,20 +340,18 @@
                 </govuk-notification-banner>
             }
 
-            <div class="govuk-form-group">
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@Resource.lblEnterTheAreaAndQuantity</h1>
-                </legand>
-                <govuk-input asp-for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
-                </govuk-input>
-                <govuk-input asp-for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied</govuk-input-label>
-                    <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-                </govuk-input>
+            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">@Resource.lblEnterTheAreaAndQuantity</h1>
+            </legand>
+            <govuk-input asp-for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread</govuk-input-label>
+                <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
+            </govuk-input>
+            <govuk-input asp-for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied</govuk-input-label>
+                <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+            </govuk-input>
 
-            </div>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="AreaQuantity">
                 @Resource.lblContinue
             </govuk-button>

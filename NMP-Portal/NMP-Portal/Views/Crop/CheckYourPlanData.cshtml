@@ -3,7 +3,7 @@
 
 @model PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourPlanData;
+    ViewData["Title"] = string.Format(Resource.lblCheckYourYearData, Model.Year - 1);
 
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
 
