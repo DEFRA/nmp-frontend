@@ -70,7 +70,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string q, string y, string? r, string? s, string? isPlan, string? t)
+        public async Task<IActionResult> ManageStorageCapacity(string q, string y, string? r, string? s, string? isPlan, string? t, string? u)
         {
             _logger.LogTrace($"StorageCapacity Controller : ManageStorageCapacity() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -238,18 +238,22 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-                    (List<StoreCapacityResponse> currentStorageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
-                    if (string.IsNullOrWhiteSpace(error.Message) && currentStorageCapacityList.Count == 0)
+                    (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                    if (string.IsNullOrWhiteSpace(u))
                     {
-                        (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                        if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
-                        {
-                            return RedirectToAction("CopyExistingManureStorage", new { q = q, r = y, isPlan = isPlan });
+                        (List<StoreCapacityResponse> currentStorageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
+                        if (string.IsNullOrWhiteSpace(error.Message) && currentStorageCapacityList.Count == 0)
+                        {                            
+                            if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                            {
+                                return RedirectToAction("CopyExistingManureStorage", new { q = q, r = y, isPlan = isPlan });
+                            }
                         }
                     }
                     //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
-                    if (storeCapacityList.Count > 0)
+                    if (storeCapacityList.Count > 0 || !string.IsNullOrWhiteSpace(u))
                     {
+                        ViewBag.StorageCapacityList = storageCapacityList.Count > 0 ? storageCapacityList : null;
                         return View(model);
                     }
                     return RedirectToAction("OrganicMaterialStorageNotAvailable", "StorageCapacity", new { f = q, y = y, isPlan = isPlan });
@@ -470,7 +474,7 @@ namespace NMP.Portal.Controllers
                             model.StorageTypeID = null;
                             model.StorageTypeName = null;
                         }
-                        if((model.MaterialStateID == dirtyWater || model.MaterialStateID == slurry) &&  storageModel.MaterialStateID == solid)
+                        if ((model.MaterialStateID == dirtyWater || model.MaterialStateID == slurry) && storageModel.MaterialStateID == solid)
                         {
                             model.StorageTypeID = null;
                             model.StorageTypeName = null;
@@ -583,7 +587,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(model.StoreName))
                 {
-                    int? Id= !string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Convert.ToInt32(_storageCapacityProtector.Unprotect(model.EncryptedStoreCapacityId)) : null;
+                    int? Id = !string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Convert.ToInt32(_storageCapacityProtector.Unprotect(model.EncryptedStoreCapacityId)) : null;
 
                     (bool isStoreNameExists, Error error) = await _storageCapacityService.IsStoreNameExistAsync(model.FarmID ?? 0, model.Year ?? 0, model.StoreName, Id);
 
@@ -1278,7 +1282,7 @@ namespace NMP.Portal.Controllers
                         Circumference = storeCapacity.Circumference,
                         Diameter = storeCapacity.Diameter,
                         BankSlopeAngleID = storeCapacity.BankSlopeAngleID,
-                        IsSlopeEdge= storeCapacity.BankSlopeAngleID != null?true:null,
+                        IsSlopeEdge = storeCapacity.BankSlopeAngleID != null ? true : null,
                         IsCovered = storeCapacity.IsCovered,
                         CapacityVolume = storeCapacity.CapacityVolume,
                         CapacityWeight = storeCapacity.CapacityWeight,
@@ -1348,8 +1352,8 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
                 {
-                    model.IsSlopeEdge = model.BankSlopeAngleID != null?true:false;
-                    if(model.BankSlopeAngleID != null)
+                    model.IsSlopeEdge = model.BankSlopeAngleID != null ? true : false;
+                    if (model.BankSlopeAngleID != null)
                     {
                         (BankSlopeAnglesResponse bankSlopeAngle, error) = await _storageCapacityService.FetchBankSlopeAngleById(model.BankSlopeAngleID ?? 0);
                         if (error == null)
@@ -1358,7 +1362,7 @@ namespace NMP.Portal.Controllers
                             model.Slope = bankSlopeAngle.Slope;
                         }
                     }
-                    
+
                 }
                 else if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
                 {
@@ -1437,7 +1441,7 @@ namespace NMP.Portal.Controllers
                         {
                             if (model.Length == null)
                             {
-                                ModelState.AddModelError("Length",Resource.MsgWhatIsTheLengthNotSet);
+                                ModelState.AddModelError("Length", Resource.MsgWhatIsTheLengthNotSet);
                             }
                             if (model.Width == null)
                             {
@@ -1507,7 +1511,7 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("IsSlopeEdge", string.Format(Resource.MsgDoesHaveSlopedEdgesNotSet, model.StoreName));
                     }
-                    if (model.BankSlopeAngleID == null && model.IsSlopeEdge==true)
+                    if (model.BankSlopeAngleID == null && model.IsSlopeEdge == true)
                     {
                         ModelState.AddModelError("BankSlopeAngleId", Resource.MsgWhatIsTheEstimatedAngleOfTheBankNotSet);
                     }
@@ -2204,7 +2208,7 @@ namespace NMP.Portal.Controllers
             //return View(model);
         }
 
-        
+
         [HttpGet]
         public IActionResult RemoveStorageCapacity()
         {
@@ -2255,58 +2259,67 @@ namespace NMP.Portal.Controllers
                     (string message, Error error) = await _storageCapacityService.RemoveStorageCapacity(model.ID.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
-                        (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                        if (string.IsNullOrWhiteSpace(error.Message))
+                        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
                         {
-                            string successMsg = string.Format(Resource.lblYouHaveRemovedJourneyName, Resource.lblManureStorage.ToLower());
-                            bool isHaveData = storeCapacityList.Any(x => x.Year == model.Year);
-                            if (isHaveData)
-                            {
-                                return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
-                                {
-                                    q = model.EncryptedFarmID,
-                                    y = model.EncryptedHarvestYear,
-                                    r = _reportDataProtector.Protect(Resource.lblRemove),
-                                    isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
-                                    t = model.IsComingFromManageToHubPage
-                                });
-                            }
-                            else if (storeCapacityList.Count > 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
-                            {
-                                return RedirectToAction("StorageCapacityManagement", "StorageCapacity",
-                                    new
-                                    {
-                                        q = model.EncryptedFarmID,
-                                        r = _storageCapacityProtector.Protect(successMsg)
-                                    });
-                            }
-                            else
-                            {
-                                if (model.IsComingFromPlan.HasValue && (model.IsComingFromPlan.Value))
-                                {
-                                    return RedirectToAction("NVZComplianceReports", "Report", new
-                                    {
-                                        q = _reportDataProtector.Protect(successMsg)
-                                    });
-                                }
-                                else if (storeCapacityList.Count == 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
-                                {
-                                    return RedirectToAction("FarmSummary", "Farm", new
-                                    {
-                                        id = model.EncryptedFarmID,
-                                        q = _farmDataProtector.Protect(Resource.lblTrue),
-                                        r = _farmDataProtector.Protect(successMsg)
-                                    });
-                                }
-                                else
-                                {
-                                    return RedirectToAction("Year", "Report", new
-                                    {
-                                        q = _reportDataProtector.Protect(successMsg)
-                                    });
-                                }
-                            }
-                        }
+                            q = model.EncryptedFarmID,
+                            y = model.EncryptedHarvestYear,
+                            r = _reportDataProtector.Protect(Resource.lblRemove),
+                            isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
+                            t = model.IsComingFromManageToHubPage,
+                            u = _reportDataProtector.Protect(Resource.lblTrue)
+                        });
+                        //(List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                        //if (string.IsNullOrWhiteSpace(error.Message))
+                        //{
+                        //    string successMsg = string.Format(Resource.lblYouHaveRemovedJourneyName, Resource.lblManureStorage.ToLower());
+                        //    bool isHaveData = storeCapacityList.Any(x => x.Year == model.Year);
+                        //    if (isHaveData)
+                        //    {
+                        //        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
+                        //        {
+                        //            q = model.EncryptedFarmID,
+                        //            y = model.EncryptedHarvestYear,
+                        //            r = _reportDataProtector.Protect(Resource.lblRemove),
+                        //            isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
+                        //            t = model.IsComingFromManageToHubPage
+                        //        });
+                        //    }
+                        //    else if (storeCapacityList.Count > 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
+                        //    {
+                        //        return RedirectToAction("StorageCapacityManagement", "StorageCapacity",
+                        //            new
+                        //            {
+                        //                q = model.EncryptedFarmID,
+                        //                r = _storageCapacityProtector.Protect(successMsg)
+                        //            });
+                        //    }
+                        //    else
+                        //    {
+                        //        if (model.IsComingFromPlan.HasValue && (model.IsComingFromPlan.Value))
+                        //        {
+                        //            return RedirectToAction("NVZComplianceReports", "Report", new
+                        //            {
+                        //                q = _reportDataProtector.Protect(successMsg)
+                        //            });
+                        //        }
+                        //        else if (storeCapacityList.Count == 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
+                        //        {
+                        //            return RedirectToAction("FarmSummary", "Farm", new
+                        //            {
+                        //                id = model.EncryptedFarmID,
+                        //                q = _farmDataProtector.Protect(Resource.lblTrue),
+                        //                r = _farmDataProtector.Protect(successMsg)
+                        //            });
+                        //        }
+                        //        else
+                        //        {
+                        //            return RedirectToAction("Year", "Report", new
+                        //            {
+                        //                q = _reportDataProtector.Protect(successMsg)
+                        //            });
+                        //        }
+                        //    }
+                        //}
                     }
                     else
                     {
@@ -2315,7 +2328,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorOnRemove"] = ex.Message;
                 return View("RemoveStorageCapacity", model);

@@ -21,7 +21,14 @@
     }
     else
     {
-        <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+        if (ViewBag.StorageCapacityList!=null)
+        {
+            <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+        }
+        else
+        {
+            <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+        }
     }
 }
 @if (TempData["ErrorOnManageStorageCapacity"] != null)
