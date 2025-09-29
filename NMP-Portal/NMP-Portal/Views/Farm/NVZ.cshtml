@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FarmViewModel
 @{
-    ViewData["Title"] = Resource.lblNVZ;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)} {Resource.lblHyphen} {title}";
     var AllFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
     var SomeFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ;
     var NoFieldsInNVZ = (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ;

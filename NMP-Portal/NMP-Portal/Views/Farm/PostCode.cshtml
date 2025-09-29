@@ -3,7 +3,8 @@
 @model FarmViewModel
 
 @{
-    ViewData["Title"] = Resource.lblPostCode;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.Name)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {

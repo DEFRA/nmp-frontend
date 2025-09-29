@@ -6427,4 +6427,7 @@ livestock manure.</value>
   <data name="lblToSeeYourRecommendations" xml:space="preserve">
     <value> to see your recommendations.</value>
   </data>
+  <data name="lblDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
 </root>

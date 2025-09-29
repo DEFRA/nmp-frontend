@@ -3598,6 +3598,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string lblDetails {
+            get {
+                return ResourceManager.GetString("lblDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can develop a nutrient application plan during the season. This tool will keep detailed records of cropping, soil analyses, and each fertiliser and manure application..
         /// </summary>
         public static string lblDevelopNutrientApplicationPlan {

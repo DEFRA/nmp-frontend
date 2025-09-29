@@ -3,7 +3,8 @@
 @model FarmViewModel
 
 @{
-    ViewData["Title"] = Resource.lblFarmingRulesForWater;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{Resource.lblFarmingRulesForWater} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
@@ -46,7 +47,7 @@
             @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
             {
                 <h1 class="govuk-heading-l">@Resource.lblRegulations_for_England</h1>
-                <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
+                <p class="govuk-heading-m">@Resource.lblFarmingRulesForWater</p>
                 <p class="govuk-body">
                     @Resource.lblFarmingRuleOfWaterFirstForEngland
                 </p>
@@ -62,7 +63,7 @@
                     @Resource.lblOpenInANewWindow
                 </p>
                 <br />
-                <h2 class="govuk-heading-m">@Resource.lblNitrateVulnerableZones</h2>
+                <p class="govuk-heading-m">@Resource.lblNitrateVulnerableZones</p>
                 <p class="govuk-body">
                     @Resource.lblFirstRuleOfNVZForEngland
                 </p>

@@ -3,7 +3,8 @@
 @model FarmViewModel
 
 @{
-            // ViewData["Title"] = Resource.lblAddAFarm;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent{
@@ -18,7 +19,7 @@
             <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChangeThisPostcode</a>
         </div>
         <div class="govuk-body">
-            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually</a>
+            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually<sapn>@($"{Resource.lblEnterAddressManually}")</sapn></a>
         </div>
         <br />
         <p class="govuk-body cancel-link">
