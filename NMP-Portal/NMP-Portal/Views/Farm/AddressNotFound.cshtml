@@ -19,7 +19,7 @@
             <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChangeThisPostcode</a>
         </div>
         <div class="govuk-body">
-            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually<sapn>@($"{Resource.lblEnterAddressManually}")</sapn></a>
+            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually <span class ="govuk-visually-hidden">@($"{Resource.lblEnterAddressManually}")</span></a>
         </div>
         <br />
         <p class="govuk-body cancel-link">

@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FarmFieldsViewModel
 @{
-    ViewData["Title"] = Resource.lblManageFarmFields;
+    ViewData["Title"] = $"{string.Format(Resource.lblFarmFields, Model.FarmName)} {Resource.lblHyphen} {Resource.lblDetails}";
 }
 
 @if (ViewBag.Error != null)

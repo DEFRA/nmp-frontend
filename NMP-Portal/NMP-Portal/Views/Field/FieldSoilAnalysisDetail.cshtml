@@ -4,8 +4,7 @@
 
 @model FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblFieldSoilAnalysisDetail;
-
+    ViewData["Title"] = $"{Model.Name} {Resource.lblHyphen} {Resource.lblDetails}";
 }
 
 @if (ViewBag.Error != null)

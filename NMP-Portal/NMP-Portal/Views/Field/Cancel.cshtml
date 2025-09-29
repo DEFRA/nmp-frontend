@@ -3,7 +3,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 
 @{
-
+    ViewData["Title"] = ((Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate))) ? $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblAddField}";
     var cancelViewModel = new CancelViewModel
             {
                 IsCancel = Model.IsCancel,

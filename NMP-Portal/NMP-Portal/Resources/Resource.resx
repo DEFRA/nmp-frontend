@@ -6433,4 +6433,10 @@ livestock manure.</value>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="lblAddASoilAnalysis" xml:space="preserve">
+    <value>Add a soil analysis</value>
+  </data>
+  <data name="lblUpdateSoilAnalysis" xml:space="preserve">
+    <value>Update soil analysis</value>
+  </data>
 </root>

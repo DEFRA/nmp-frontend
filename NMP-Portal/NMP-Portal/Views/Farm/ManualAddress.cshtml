@@ -36,27 +36,21 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
             </div>
-            <div class="govuk-form-group">
+            
                 <govuk-input asp-for="@Model.Address1"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
+            
                 <govuk-input asp-for="@Model.Address2"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
+            
                 <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3"></govuk-input>
-            </div>
+            
 
-            <div class="govuk-form-group">
                 <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4"></govuk-input>
-            </div>
 
-            <div class="govuk-form-group">
+
                 <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
                     <govuk-input-label>@Resource.lblPostCode</govuk-input-label>
                 </govuk-input>
-            </div>
+
 
             <div class="govuk-form-group">
                 <govuk-button type="submit" asp-action="ManualAddress">@Resource.lblContinue</govuk-button>

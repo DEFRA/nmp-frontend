@@ -3,7 +3,8 @@
 @model FieldViewModel
 
 @{
-    ViewData["Title"] = Resource.lblAddField;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {string.Format(Resource.lblUpdateXField, Model.Name)}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
+    ViewData["Title"] = title;
     var backAction = "";
     // if (Model.IsCheckAnswer)
     // {
@@ -25,7 +26,6 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@Resource.lblAddField</h1>
         @if (TempData["AddFieldError"] != null)
         {
             <govuk-error-summary>
@@ -82,7 +82,7 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
-                    
+
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.LayDuration"></govuk-input>
@@ -99,28 +99,21 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
             </div>
-            <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.Name"></govuk-input>
-            </div>
 
-            @*  <div class="govuk-form-group margin-bottom-forty">
-            <govuk-input class="input-width-15" asp-for="@Model.NationalGridReference"></govuk-input>
-            </div>
-            <div class="govuk-form-group margin-bottom-forty">
-            <govuk-input class="input-width-15" asp-for="@Model.OtherReference"></govuk-input>
-            </div> *@
+            <govuk-input asp-for="@Model.Name">
+                <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblAddField</govuk-input-label>
+            </govuk-input>
+
             @if (Model.isEnglishRules != null && (!Model.isEnglishRules))
             {
-                <div class="govuk-form-group margin-bottom-forty">
-                    <govuk-input class="input-width-15" asp-for="@Model.LPIDNumber"></govuk-input>
-                </div>
+                <govuk-input class="input-width-15 margin-bottom-forty" asp-for="@Model.LPIDNumber"></govuk-input>
             }
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            
+
             @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
             {
                 <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>

@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblLayDuration;
+    //ViewData["Title"] = Resource.lblLayDuration;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])} {Resource.lblHyphen} {Resource.lblAddField}";
     var oneToTwoYears = (int)NMP.Portal.Enums.LayDuration.OneToTwoYears;
     var threeYearsOrMore = (int)NMP.Portal.Enums.LayDuration.ThreeYearsOrMore;
     var backAction = "";

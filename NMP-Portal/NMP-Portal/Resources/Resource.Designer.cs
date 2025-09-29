@@ -1168,6 +1168,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a soil analysis.
+        /// </summary>
+        public static string lblAddASoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblAddASoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a soil mineral nitrogen analysis result for {0}.
         /// </summary>
         public static string lblAddASoilMineralNitrogenAnalysisResultForCrop {
@@ -13490,6 +13499,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateRainfallContentOne {
             get {
                 return ResourceManager.GetString("lblUpdateRainfallContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update soil analysis.
+        /// </summary>
+        public static string lblUpdateSoilAnalysis {
+            get {
+                return ResourceManager.GetString("lblUpdateSoilAnalysis", resourceCulture);
             }
         }
         

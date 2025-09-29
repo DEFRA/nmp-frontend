@@ -2,9 +2,9 @@
 @model NMP.Portal.ViewModels.FarmViewModel
 
 @{
-    ViewData["Title"] = Resource.lblCheckAnswer;
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
-    ViewData["Title"] = $"{Resource.lblCheckAnswer} {Resource.lblHyphen} {title}";
+    //ViewData["Title"] = Resource.lblCheckAnswer;
+    ViewData["Title"] = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblUpdateFarm, Model.Name)} {Resource.lblHyphen} {Resource.lblDetails}" : $"{Resource.lblCheckAnswer} {Resource.lblHyphen} {Resource.lblAddAFarm}";
+    //ViewData["Title"] ={title}";
     var organicProducer = "";
     var fieldsAbove300m = "";
     var fieldsInNVZ = "";
@@ -97,7 +97,7 @@
                         @Model.Name
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblFarmName}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -108,7 +108,7 @@
                         @Model.Country
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Country" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblCountry}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Country" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblCountry)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -119,7 +119,7 @@
                         @Model.Postcode
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="PostCode" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblPostCode}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -130,7 +130,7 @@
                         @Model.FullAddress
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblFarmAddress}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmAddress)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode)&& Model.ClimateDataPostCode != Model.Postcode)
@@ -143,7 +143,7 @@
                             @Model.ClimateDataPostCode
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblClimatePostcode}")</sapn></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblClimatePostcode)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -155,7 +155,7 @@
                             @string.Format("{0:N0}{1}",Model.Rainfall, Resource.lblmm)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblAnnualRainfall}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblAnnualRainfall)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -170,7 +170,7 @@
                         </govuk-summary-list-row-value>
 
                         <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)}")</sapn></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -183,7 +183,7 @@
                         @fieldsAbove300m
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name))</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -194,7 +194,7 @@
                         @organicProducer
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblRegisteredOrganicProducer}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducer)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -206,7 +206,7 @@
                         @Model.LastHarvestYear
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="LastHarvestYear" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblLastHarvestYear}")</sapn></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="LastHarvestYear" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblLastHarvestYear)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
             </govuk-summary-list>

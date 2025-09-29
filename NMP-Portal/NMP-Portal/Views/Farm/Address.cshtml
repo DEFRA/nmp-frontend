@@ -42,12 +42,12 @@
             </h1>
 
             <div class="text-group">
-                <h3 class="govuk-heading-s">@Resource.lblPostCode</h3>
+                <p class="govuk-heading-s">@Resource.lblPostCode</p>
                 <p class="govuk-body">
                     @Model.Postcode
                 </p>
                 <p class="govuk-body">
-                    <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChange<sapn>@($"{Resource.lblChange} {Resource.lblPostCode}")</sapn></a>
+                    <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@($"{Resource.lblChange} {Resource.lblPostCode}")</span></a>
                 </p>
             </div>
             <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" asp-for="FullAddress">

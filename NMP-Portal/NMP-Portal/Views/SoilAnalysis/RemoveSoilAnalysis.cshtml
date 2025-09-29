@@ -4,7 +4,7 @@
 
 @model SoilAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblRemoveThisSoilAnalysis;
+    ViewData["Title"] =$"{string.Format(Resource.lblRemoveSoilAnalysisFromFieldName, Model.FieldName)} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 
