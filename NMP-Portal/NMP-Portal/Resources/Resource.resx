@@ -6430,6 +6430,21 @@ livestock manure.</value>
   <data name="lblPageTitleTemplate" xml:space="preserve">
     <value>{0} - NMPTGB - GOV.UK</value>
   </data>
+  <data name="lblSessionTimeoutBoxContent" xml:space="preserve">
+    <value>For your security, you’ll be signed out in</value>
+  </data>
+  <data name="lblSessionTimeoutBoxHeading" xml:space="preserve">
+    <value>You’re about to be signed out</value>
+  </data>
+  <data name="lblStaySignedIn" xml:space="preserve">
+    <value>Stay signed in</value>
+  </data>
+  <data name="lblSectionAddFarm" xml:space="preserve">
+    <value>Add Farm</value>
+  </data>
+  <data name="lblAddSlurryStorage" xml:space="preserve">
+    <value>Add slurry storage</value>
+  </data>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>
   </data>

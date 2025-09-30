@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = Resource.lblNotEnteredStorage;
-    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" :
+    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
 
 }
@@ -35,7 +35,7 @@
                 </a>
             </p>
             <p class="govuk-body cancel-link">
-                @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                 {
                     <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                         @Resource.lblCancel
