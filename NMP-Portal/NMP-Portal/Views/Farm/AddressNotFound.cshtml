@@ -1,9 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @using NMP.Portal.ViewModels
 @model FarmViewModel
-
 @{
-            // ViewData["Title"] = Resource.lblAddAFarm;
+    ViewData["Title"] = string.Format("{0} - {1}", string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode), Resource.lblSectionAddFarm );
 }
 
 @section BeforeContent{

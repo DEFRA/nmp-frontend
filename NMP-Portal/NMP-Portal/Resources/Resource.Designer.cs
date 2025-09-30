@@ -10882,6 +10882,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Farm.
+        /// </summary>
+        public static string lblSectionAddFarm {
+            get {
+                return ResourceManager.GetString("lblSectionAddFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  or select a different crop.
         /// </summary>
         public static string lblSelectADifferentCrop {
@@ -11058,6 +11067,24 @@ namespace NMP.Portal.Resources {
         public static string lblServiceReleaseSchedule {
             get {
                 return ResourceManager.GetString("lblServiceReleaseSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For your security, you’ll be signed out in.
+        /// </summary>
+        public static string lblSessionTimeoutBoxContent {
+            get {
+                return ResourceManager.GetString("lblSessionTimeoutBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You’re about to be signed out.
+        /// </summary>
+        public static string lblSessionTimeoutBoxHeading {
+            get {
+                return ResourceManager.GetString("lblSessionTimeoutBoxHeading", resourceCulture);
             }
         }
         
@@ -11895,6 +11922,15 @@ namespace NMP.Portal.Resources {
         public static string lblStartingPBalance {
             get {
                 return ResourceManager.GetString("lblStartingPBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stay signed in.
+        /// </summary>
+        public static string lblStaySignedIn {
+            get {
+                return ResourceManager.GetString("lblStaySignedIn", resourceCulture);
             }
         }
         
