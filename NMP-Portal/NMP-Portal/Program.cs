@@ -83,7 +83,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;  // Prevent JavaScript access
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
     options.Cookie.SameSite = SameSiteMode.Strict;  // Prevent CSRF    
-    options.IdleTimeout = TimeSpan.FromMinutes(60);  // Session timeout 
+    options.IdleTimeout = TimeSpan.FromMinutes(20);  // Session timeout 
 });
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();

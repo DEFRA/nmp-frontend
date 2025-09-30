@@ -765,3 +765,33 @@ hr.seperator_thirty {
 #all-plans-table {
     margin-top: 10px;
 }
+
+#session-timeout-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.9);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.govuk-!-display-none {
+    display: none !important;
+}
+
+.session-timeout-box {
+    max-width: 700px;
+    margin: auto;
+}
+
+.session-timeout-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}

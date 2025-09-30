@@ -43,7 +43,7 @@ namespace NMP.Portal.Security
             if (expClaim != null && long.TryParse(expClaim.Value, out long exp))
             {
                 expiration = DateTimeOffset.FromUnixTimeSeconds(exp).DateTime;
-                return expiration > DateTime.UtcNow.AddMinutes(20); // Check if token is valid for at least another 5 minutes
+                return expiration > DateTime.UtcNow.AddMinutes(20); // Check if token is valid for at least another 20 minutes
             }
 
             expiration = DateTime.MinValue;

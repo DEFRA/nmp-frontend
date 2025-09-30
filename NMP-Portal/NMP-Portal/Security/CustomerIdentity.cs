@@ -55,8 +55,7 @@ namespace NMP.Portal.Security
                     .AddInMemoryTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {
-                //options.ResponseType = OpenIdConnectResponseType.CodeToken;
+            {                               
                 options.ResponseType = OpenIdConnectResponseType.Code;                
                 options.SaveTokens = true;  // Save tokens in the authentication session
                 options.Scope.Add("openid profile offline_access");
@@ -73,8 +72,9 @@ namespace NMP.Portal.Security
             });
             services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
-                options.SlidingExpiration = true; // Enable sliding expiration                
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20); // Set cookie expiration time
+                options.SlidingExpiration = true; // Enable sliding expiration               
+                
             });
             services.AddTokenAcquisition();
             services.AddInMemoryTokenCaches();
@@ -149,10 +149,7 @@ namespace NMP.Portal.Security
         }
 
         private static async Task OnTokenValidated(TokenValidatedContext context)
-        {
-            var exp = await context.HttpContext.GetTokenAsync("expires_at");
-            var oldrefreshToken = await context.HttpContext.GetTokenAsync("refresh_token");
-            var oldaccessToken = await context.HttpContext.GetTokenAsync("access_token");
+        {            
             var accessToken = context?.TokenEndpointResponse?.AccessToken;
             var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
             var identity = context?.Principal?.Identity as ClaimsIdentity;
