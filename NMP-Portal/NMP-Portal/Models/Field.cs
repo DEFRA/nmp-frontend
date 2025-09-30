@@ -25,7 +25,7 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
         public string? OtherReference { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTotalFieldArea))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTotalFieldArea))]
         public decimal? TotalArea { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCroppedArea))]

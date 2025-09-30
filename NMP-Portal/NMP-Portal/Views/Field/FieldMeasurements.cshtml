@@ -93,7 +93,9 @@
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
             </legand>
-            <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">               
+                <govuk-input-label>@Resource.lblTotalFieldArea<span class="govuk-visually-hidden"> </span> </govuk-input-label>   
+                @* $"{@Resource.lblTotalFieldArea},in {@Resource.lblHectares}"  *@
                 <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
             </govuk-input>
             <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
