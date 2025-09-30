@@ -1375,6 +1375,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add slurry storage.
+        /// </summary>
+        public static string lblAddSlurryStorage {
+            get {
+                return ResourceManager.GetString("lblAddSlurryStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis for {0}.
         /// </summary>
         public static string lblAddSoilAnalysis {

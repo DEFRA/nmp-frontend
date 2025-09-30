@@ -6442,4 +6442,7 @@ livestock manure.</value>
   <data name="lblSectionAddFarm" xml:space="preserve">
     <value>Add Farm</value>
   </data>
+  <data name="lblAddSlurryStorage" xml:space="preserve">
+    <value>Add slurry storage</value>
+  </data>
 </root>
