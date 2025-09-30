@@ -10,7 +10,7 @@
     };
 
     var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
-    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" :
+    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
 }
 
@@ -21,7 +21,7 @@
     }
     else
     {
-        if (ViewBag.StorageCapacityList!=null)
+        if (!string.IsNullOrWhiteSpace(Model.IsComingFromManageToHubPage))
         {
             <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
         }
@@ -60,7 +60,7 @@
                 @if (TempData["succesMsgContent2"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" class="govuk-notification-banner__link">
+                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently" class="govuk-notification-banner__link">
                             @TempData["succesMsgContent2"]
                         </a>
                     </p>
@@ -88,7 +88,7 @@
             <h2 class="govuk-heading-m">@Model.Year</h2>
 
         </div>
-        @if (TempData["succesMsgContent1"] == null)
+        @if (TempData["succesMsgContent1"] == null&& string.IsNullOrWhiteSpace(Model.IsRemovedRecently))
         {
             <div class="govuk-inset-text margin-bottom-forty">
                 <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
@@ -96,7 +96,7 @@
             </div>
         }
          
-        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage">
+        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">
             @Resource.lblAddOrganicMaterialStorage
         </a>
     </div>
@@ -104,8 +104,8 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
        
-        @if (nonEmptyLists.Count > 0)
-        {
+        @* @if (nonEmptyLists.Count > 0)
+        { *@
             <govuk-tabs>
                 <govuk-tabs-item id="slurryStorageList" label=@Resource.lblSlurryStorage>
                     <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
@@ -138,7 +138,7 @@
                     {
                         <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
                         <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSlurryStorage</a>
                         </p>
                     }
                 </govuk-tabs-item>
@@ -173,7 +173,7 @@
                     {
                         <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyDirtyWaterStorage</p>
                         <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddDirtyWaterStorage</a>
                         </p>
                     }
                 </govuk-tabs-item>
@@ -208,7 +208,7 @@
                     {
                         <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
                         <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddSolidMaterialStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSolidMaterialStorage</a>
                         </p>
                     }
                 </govuk-tabs-item>
@@ -243,7 +243,7 @@
                 </govuk-tabs-item>
 
             </govuk-tabs>
-        }
+        @* } *@
 
 
 

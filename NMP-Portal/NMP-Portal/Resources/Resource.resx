@@ -6430,4 +6430,7 @@ livestock manure.</value>
   <data name="lblPageTitleTemplate" xml:space="preserve">
     <value>{0} - NMPTGB - GOV.UK</value>
   </data>
+  <data name="lblAddSlurryStorage" xml:space="preserve">
+    <value>Add slurry storage</value>
+  </data>
 </root>
