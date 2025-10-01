@@ -1,3 +1,4 @@
+using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
@@ -41,13 +42,38 @@ namespace NMP.Portal.Controllers
                     ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
                     ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
                 }
+
+               
             }
             catch (Exception ex)
             {
                 ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
                 ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
             }
-
+            try
+            {
+                HttpClient nmptServiceClient = _httpClientFactory.CreateClient("NMPApi");
+                var serviceresponse = await nmptServiceClient.GetAsync(new Uri($"{_configuration["NMPApiUrl"]}"));
+                if (serviceresponse != null && serviceresponse.IsSuccessStatusCode)
+                {
+                    ViewBag.IsNmptServiceWorking = serviceresponse.IsSuccessStatusCode;
+                }
+                else if (serviceresponse != null && serviceresponse.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    ViewBag.IsNmptServiceWorking = false;
+                    ViewBag.ServiceError = Resource.MsgNmptApiServiceBlockedAccess;
+                }
+                else
+                {
+                    ViewBag.IsNmptServiceWorking = false;
+                    ViewBag.ServiceError = Resource.MsgNmptServiceNotAvailable;
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.IsNmptServiceWorking = false;
+                ViewBag.ServiceError = Resource.MsgNmptServiceNotAvailable;
+            }
             return View();
         }                
     }

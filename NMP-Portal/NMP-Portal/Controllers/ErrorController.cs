@@ -65,6 +65,7 @@ namespace NMP.Portal.Controllers
                 error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");                
             }
 
+            Console.WriteLine("Error: " + error?.Message?? "Unknown error");
             return View("Error", error);
         }
     }
