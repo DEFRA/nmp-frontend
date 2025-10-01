@@ -37,31 +37,32 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
             </div>
-            <h1 class="govuk-heading-l">
-                @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
-            </h1>
+            <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                    @string.Format(Resource.lblSelectTheAddressFor, Model.Name)
+                </govuk-fieldset-legend>
 
-            <div class="text-group">
-                <p class="govuk-heading-s">@Resource.lblPostCode</p>
-                <p class="govuk-body">
-                    @Model.Postcode
+                <div class="text-group">
+                    <p class="govuk-heading-s">@Resource.lblPostCode</p>
+                    <p class="govuk-body">
+                        @Model.Postcode
+                    </p>
+                    <p class="govuk-body">
+                        <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@($"{Resource.lblChange} {Resource.lblPostCode}")</span></a>
+                    </p>
+                </div>
+                <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" asp-for="FullAddress">
+                    <govuk-select-item value="">@ViewBag.AddressCount</govuk-select-item>
+                    @foreach (var item in ViewBag.AddressList as List<SelectListItem>)
+                    {
+                        <govuk-select-item value="@item.Value">@item.Text</govuk-select-item>
+                    }
+                </govuk-select>
+
+                <p class="govuk-body margin-bottom-forty">
+                    <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</a>
                 </p>
-                <p class="govuk-body">
-                    <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@($"{Resource.lblChange} {Resource.lblPostCode}")</span></a>
-                </p>
-            </div>
-            <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" asp-for="FullAddress">
-                <govuk-select-item value="">@ViewBag.AddressCount</govuk-select-item>
-                @foreach (var item in ViewBag.AddressList as List<SelectListItem>)
-                {
-                    <govuk-select-item value="@item.Value">@item.Text</govuk-select-item>
-                }
-            </govuk-select>
-
-            <p class="govuk-body margin-bottom-forty">
-                <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</a>
-            </p>
-
+            </govuk-fieldset>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

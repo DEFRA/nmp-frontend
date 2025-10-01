@@ -28,10 +28,10 @@ namespace NMP.Portal.Models
         //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTotalFieldArea))]
         public decimal? TotalArea { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCroppedArea))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCroppedArea))]
         public decimal? CroppedArea { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblManureNonSpreadingArea))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblManureNonSpreadingArea))]
         public decimal? ManureNonSpreadingArea { get; set; }
         public bool? SoilReleasingClay { get; set; }
         public bool? SoilOverChalk { get; set; }

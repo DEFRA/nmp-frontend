@@ -6454,4 +6454,10 @@ livestock manure.</value>
   <data name="lblUpdateSoilAnalysis" xml:space="preserve">
     <value>Update soil analysis</value>
   </data>
+  <data name="MsgForPhPhosphorusPotassiumMagnesium" xml:space="preserve">
+    <value>Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg).</value>
+  </data>
+  <data name="lblChangeRainfallAmount" xml:space="preserve">
+    <value>Change rainfall amount</value>
+  </data>
 </root>

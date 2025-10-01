@@ -98,14 +98,20 @@
                 <govuk-error-summary>
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
-            }
-            <govuk-radios name="SoilAnasysis">
+            } 
+            <govuk-fieldset>
+                        <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                    @* <h1 class="govuk-fieldset__heading"> *@
+                        @string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)
+                        @* </h1> *@
+                        </govuk-fieldset-legend>
+           @*  <govuk-radios name="SoilAnasysis">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)
                     </govuk-radios-fieldset-legend>
                 </govuk-radios-fieldset>
-            </govuk-radios>
+            </govuk-radios> *@
             <p class="govuk-hint">
                 @Resource.MsgSoilAnalysisHint1
             </p>           
@@ -124,6 +130,7 @@
                 </govuk-radios-fieldset>
             </govuk-radios>
 
+            </govuk-fieldset>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

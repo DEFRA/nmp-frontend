@@ -24,7 +24,7 @@
                     @string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm)
                     @* @string.Format("{0:N0}{1}",Model.Rainfall),Resource.lblmm) *@</p>
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
+                    <a class="govuk-link" asp-action="RainfallManual" asp-controller="farm" aria-label="@Resource.lblChangeRainfallAmount">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
                 </p>
                 @* <p class="govuk-body">
 

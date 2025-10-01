@@ -2419,6 +2419,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change rainfall amount.
+        /// </summary>
+        public static string lblChangeRainfallAmount {
+            get {
+                return ResourceManager.GetString("lblChangeRainfallAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes here will be applied to this manure store storage across {0}..
         /// </summary>
         public static string lblChangesHereWillBeAppliedToThisManureStorage {
@@ -17587,6 +17596,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForMaxNitrogenForFertiliserTitle {
             get {
                 return ResourceManager.GetString("MsgForMaxNitrogenForFertiliserTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg)..
+        /// </summary>
+        public static string MsgForPhPhosphorusPotassiumMagnesium {
+            get {
+                return ResourceManager.GetString("MsgForPhPhosphorusPotassiumMagnesium", resourceCulture);
             }
         }
         

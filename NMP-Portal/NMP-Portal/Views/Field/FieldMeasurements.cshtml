@@ -93,15 +93,19 @@
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
             </legand>
-            <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">               
-                <govuk-input-label>@Resource.lblTotalFieldArea<span class="govuk-visually-hidden"> </span> </govuk-input-label>   
-                @* $"{@Resource.lblTotalFieldArea},in {@Resource.lblHectares}"  *@
+            <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label>@Resource.lblTotalFieldArea<span class="govuk-visually-hidden"> @($"{@Resource.lblTotalFieldArea},in {@Resource.lblHectares}")</span> </govuk-input-label>
+                
                 <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
             </govuk-input>
             <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label>@Resource.lblCroppedArea<span class="govuk-visually-hidden">@($"{@Resource.lblCroppedAreaForCheckAnswere},in {@Resource.lblHectares} {Resource.lblOptional}") </span> </govuk-input-label>
+                
                 <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
             </govuk-input>
             <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label>@Resource.lblManureNonSpreadingArea<span class="govuk-visually-hidden">@($"{@Resource.lblManureNonSpreadArea},in {@Resource.lblHectares} {Resource.lblOptional}") </span> </govuk-input-label>
+                
                 <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
