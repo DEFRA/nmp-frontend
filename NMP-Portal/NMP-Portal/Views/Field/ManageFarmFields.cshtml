@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FarmFieldsViewModel
 @{
-    ViewData["Title"] = Resource.lblManageFarmFields;
+    ViewData["Title"] = $"{string.Format(Resource.lblFarmFields, Model.FarmName)} {Resource.lblHyphen} {Resource.lblDetails}";
 }
 
 @if (ViewBag.Error != null)
@@ -14,17 +14,17 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Resource.lblManageFieldDetailsAndSoilAnalysis
-        </govuk-breadcrumbs-item>
-    </govuk-breadcrumbs>
+        <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+                @Resource.lblAllFarm
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                @Model.FarmName
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+                @Resource.lblManageFieldDetailsAndSoilAnalysis
+            </govuk-breadcrumbs-item>
+        </govuk-breadcrumbs>
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -66,18 +66,22 @@
                 }
                 else
                 {
-                <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
+                    <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
                 }
             </p>
             <h2 class="govuk-heading-m">
                 @Resource.lblCurrentFields
             </h2>
+
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblFieldName</th>
-                        <th scope="col" class="govuk-table__header"> </th>
-                        <th scope="col" class="govuk-table__header"> </th>
+                        <th scope="col" class="govuk-table__header">
+                            <span class="govuk-visually-hidden">
+                                @Resource.lblAction
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">

@@ -3,7 +3,7 @@
 @model NMP.Portal.ViewModels.SoilAnalysisViewModel
 
 @{
-
+    ViewData["Title"] = ((Model != null && !string.IsNullOrEmpty(Model.EncryptedSoilAnalysisId))) ? $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" : $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
     var cancelViewModel = new CancelViewModel
             {
                 IsCancel = Model.IsCancel,

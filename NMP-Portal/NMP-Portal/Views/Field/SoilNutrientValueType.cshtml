@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilNutrientValueType;
+    ViewData["Title"] = $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddField}";
     var AsAnIndex = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }

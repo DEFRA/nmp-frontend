@@ -9,7 +9,7 @@
     }
     else
     {
-        if(!string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
+        if (!string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
         {
             backAction = "ManageStorageCapacity";
         }
@@ -20,7 +20,7 @@
     }
 
     var tabId = "";
-    if(Model.MaterialStateID==(int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+    if (Model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
     {
         tabId = "slurryStorageList";
     }
@@ -35,7 +35,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-fragment="@tabId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently" asp-fragment="@tabId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnStoreName"] != null)
 {
@@ -92,6 +92,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStorageTypeChange" value="@Model.IsStorageTypeChange"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCopyExistingManureStorage"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedStoreCapacityId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRemovedRecently"></govuk-input>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
@@ -110,13 +111,13 @@
                     {
                         @if (Model.IsStoreCapacityExist == true)
                         {
-                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
+                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel
                             </a>
                         }
                         else
                         {
-                            @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                            @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                             {
                                 <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                                     @Resource.lblCancel

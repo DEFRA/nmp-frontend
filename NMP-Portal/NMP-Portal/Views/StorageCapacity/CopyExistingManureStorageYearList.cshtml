@@ -59,7 +59,7 @@
                 </govuk-button>
 
                 <p class="govuk-body cancel-link">
-                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                         {
                             <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                                 @Resource.lblCancel

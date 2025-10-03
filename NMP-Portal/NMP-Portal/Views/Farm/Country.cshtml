@@ -3,7 +3,8 @@
 @model FarmViewModel
 
 @{
-    ViewData["Title"] = Resource.lblCountry;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.Name)} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Name")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
@@ -39,30 +40,28 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-radios asp-for="@Model.CountryID">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhichCountryIsIn, Model.Name)
-                        </govuk-radios-fieldset-legend>
-                        @if (ViewBag.CountryList != null)
+            <govuk-radios asp-for="@Model.CountryID">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhichCountryIsIn, Model.Name)
+                    </govuk-radios-fieldset-legend>
+                    @if (ViewBag.CountryList != null)
+                    {
+                        @foreach (var item in ViewBag.CountryList)
                         {
-                            @foreach (var item in ViewBag.CountryList)
-                            {
-                                <govuk-radios-item disabled="@item.ID == 2" value="@item.ID">@item.Name</govuk-radios-item>
+                            <govuk-radios-item disabled="@item.ID == 2" value="@item.ID">@item.Name</govuk-radios-item>
 
-                            }
                         }
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-            </div>
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
 
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-             @if (!Model.IsCheckAnswer)
+            @if (!Model.IsCheckAnswer)
             {
                 <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
             }
