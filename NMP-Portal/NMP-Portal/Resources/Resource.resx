@@ -6445,4 +6445,19 @@ livestock manure.</value>
   <data name="lblAddSlurryStorage" xml:space="preserve">
     <value>Add slurry storage</value>
   </data>
+  <data name="lblDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="lblAddASoilAnalysis" xml:space="preserve">
+    <value>Add a soil analysis</value>
+  </data>
+  <data name="lblUpdateSoilAnalysis" xml:space="preserve">
+    <value>Update soil analysis</value>
+  </data>
+  <data name="MsgForPhPhosphorusPotassiumMagnesium" xml:space="preserve">
+    <value>Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg).</value>
+  </data>
+  <data name="lblChangeRainfallAmount" xml:space="preserve">
+    <value>Change rainfall amount</value>
+  </data>
 </root>

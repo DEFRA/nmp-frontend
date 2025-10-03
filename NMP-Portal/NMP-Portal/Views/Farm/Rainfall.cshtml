@@ -2,7 +2,8 @@
 @model NMP.Portal.ViewModels.FarmViewModel;
 
 @{
-    ViewData["Title"] = string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)} {Resource.lblHyphen} {title}";
     var backAction = (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode)) ? "ClimatePostCode" :(Model.IsManualAddress == true ? "ManualAddress" : "Address");
 }
 
@@ -18,12 +19,12 @@
             <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</h1>
             <p class="govuk-body">@Resource.lblYourAverageAnualRainfall</p>
             <div class="text-group margin-bottom-forty">
-                <h3 class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</h3>
+                <p class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</p>
                 <p class="govuk-body">
                     @string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm)
                     @* @string.Format("{0:N0}{1}",Model.Rainfall),Resource.lblmm) *@</p>
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link" asp-action="RainfallManual" asp-controller="farm">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
+                    <a class="govuk-link" asp-action="RainfallManual" asp-controller="farm" aria-label="@Resource.lblChangeRainfallAmount">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
                 </p>
                 @* <p class="govuk-body">
 

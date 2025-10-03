@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 
 @{
-    ViewData["Title"] = Resource.lblUpdateField;
+    ViewData["Title"] = $"{string.Format(Resource.lblUpdateXField, Model.Name)} {Resource.lblHyphen} {Resource.lblDetails}";
     var isWithinNVZ = "";
     var isAbove300SeaLevel = "";
     var soilReleasingClay = "";
@@ -44,7 +44,7 @@
                 </govuk-error-summary>
             }
             <h1 class="govuk-heading-l">
-                @string.Format( Resource.lblUpdateXField,Model.Name)
+                @string.Format(Resource.lblUpdateXField,Model.Name)
             </h1>
             <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
@@ -72,7 +72,7 @@
                         @Model.Name
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblFieldName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
               @*   <govuk-summary-list-row>
@@ -107,7 +107,7 @@
                             @Model.LPIDNumber
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblLandParcelIDForCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -119,7 +119,7 @@
                         @(Model.TotalArea == null ? Resource.lblNotEntered : (Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0:N2} {1}", Model.TotalArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblTotalFieldArea)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -130,7 +130,7 @@
                         @(Model.CroppedArea == null ? Resource.lblNotEntered : (Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0:N2} {1}", Model.CroppedArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblCroppedAreaForCheckAnswere)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -141,7 +141,7 @@
                         @(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : Model.ManureNonSpreadingArea == 0 ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0:N2} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="FieldMeasurements" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblManureNonSpreadingAreaForCheckAnswere)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (Model.IsWithinNVZForFarm == true)
@@ -154,7 +154,7 @@
                             @isWithinNVZ
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="NVZField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="NVZField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblNVZFieldForFieldCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -168,7 +168,7 @@
                             @isAbove300SeaLevel
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ElevationField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="ElevationField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblIsThisFieldAboveForFieldCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -180,7 +180,7 @@
                         @Model.SoilType
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblSoilTypeForCheckAnswer)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (Model.SoilReleasingClay != null)
@@ -193,7 +193,7 @@
                             @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : (Model.SoilReleasingClay.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDoesPotashClayForCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
@@ -208,7 +208,7 @@
                             @((!Model.SoilOverChalk.HasValue) ? @Resource.lblNotSet : (Model.SoilOverChalk.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilOverChalk" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilOverChalk" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblIsTheSoilOverChalk)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 

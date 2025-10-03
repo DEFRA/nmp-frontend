@@ -2,7 +2,8 @@
 @using NMP.Portal.ViewModels;
 @model FarmViewModel
 @{
-    ViewData["Title"] = Resource.lblManualAddress;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblEnterTheAddressFor, Model.Name)} {Resource.lblHyphen} {title}";
 }
 
 
@@ -14,9 +15,6 @@
     <div class="govuk-grid-column-two-thirds">
         <form method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
-            <h1 class="govuk-heading-l">
-                @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
-            </h1>
 
             <div hidden="true">
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
@@ -35,27 +33,25 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
             </div>
-            <div class="govuk-form-group">
+            <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                    @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
+                </govuk-fieldset-legend>
                 <govuk-input asp-for="@Model.Address1"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
+            
                 <govuk-input asp-for="@Model.Address2"></govuk-input>
-            </div>
-
-            <div class="govuk-form-group">
+            
                 <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3"></govuk-input>
-            </div>
+            
 
-            <div class="govuk-form-group">
                 <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4"></govuk-input>
-            </div>
 
-            <div class="govuk-form-group">
+
                 <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
                     <govuk-input-label>@Resource.lblPostCode</govuk-input-label>
                 </govuk-input>
-            </div>
+
+            </govuk-fieldset>
 
             <div class="govuk-form-group">
                 <govuk-button type="submit" asp-action="ManualAddress">@Resource.lblContinue</govuk-button>
