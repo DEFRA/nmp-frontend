@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FarmViewModel
 @{
-    ViewData["Title"] = Resource.lblFarmDetails;
+    ViewData["Title"] = $"{Model.Name} {Resource.lblHyphen} {Resource.lblDetails}";
 
     var fieldsAbove300m = "";
     var fieldsInNVZ = "";

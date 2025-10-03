@@ -4,7 +4,9 @@
 
 @model SoilAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilAnalysis;
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
 
 }
 

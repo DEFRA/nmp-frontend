@@ -3,7 +3,8 @@
 @model FarmViewModel
 
 @{
-    ViewData["Title"] = Resource.lblPostCode;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{Resource.lblFindWeatherDataBasedOnPostcode} {Resource.lblHyphen} {title}";
     var backAction = Model.IsManualAddress == true ? "ManualAddress" : "Address";
 }
 
@@ -50,11 +51,10 @@
                 <a target="_blank" href="https://www.royalmail.com/find-a-postcode">@Resource.lblClimateParagraphThird</a>
                 @Resource.lblClimateParagraphFourth
             </p>
-            <div class="govuk-form-group">
+            
                 <govuk-input input-class="govuk-input--width-5" asp-for="@Model.ClimateDataPostCode">
                     @* <govuk-input-label is-page-heading="true"></govuk-input-label> *@
                 </govuk-input>
-            </div>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

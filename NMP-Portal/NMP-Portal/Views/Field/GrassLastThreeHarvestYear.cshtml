@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblHasGrassInLastThreeYear;
+    //ViewData["Title"] = Resource.lblHasGrassInLastThreeYear;
+    ViewData["Title"] = $"{string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)} {Resource.lblHyphen} {Resource.lblAddField}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
@@ -70,7 +71,7 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
         @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input> *@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
-        
+
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.LayDuration"></govuk-input>
@@ -84,28 +85,28 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-checkboxes name="PreviousGrassYears" asp-for="PreviousGrassYears">
-                <govuk-checkboxes-fieldset>
-                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
-                    </govuk-checkboxes-fieldset-legend>
+                <govuk-checkboxes name="PreviousGrassYears" asp-for="PreviousGrassYears">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
+                        </govuk-checkboxes-fieldset-legend>
 
-                    <govuk-checkboxes-hint>
-                        @Resource.lblSelectAllThatApply
-                    </govuk-checkboxes-hint>
-                    @if (ViewBag.PreviousGrassesYear != null)
-                    {
-                        @foreach (var item in ViewBag.PreviousGrassesYear)
+                        <govuk-checkboxes-hint>
+                            @Resource.lblSelectAllThatApply
+                        </govuk-checkboxes-hint>
+                        @if (ViewBag.PreviousGrassesYear != null)
                         {
-                            <govuk-checkboxes-item value="@item">@item</govuk-checkboxes-item>
+                            @foreach (var item in ViewBag.PreviousGrassesYear)
+                            {
+                                <govuk-checkboxes-item value="@item">@item</govuk-checkboxes-item>
+                            }
                         }
-                    }
 
-                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                    <govuk-checkboxes-item value="0" behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
-                </govuk-checkboxes-fieldset>
-            </govuk-checkboxes>
-
+                        <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                        <govuk-checkboxes-item value="0" behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                    </govuk-checkboxes-fieldset>
+                </govuk-checkboxes>
+            
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

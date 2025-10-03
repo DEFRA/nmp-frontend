@@ -1,9 +1,8 @@
 ﻿@using NMP.Portal.Resources;
 @using NMP.Portal.ViewModels;
 @model FarmsViewModel
-
 @{
-    ViewData["Title"] = Resource.lblFarmList;
+    ViewData["Title"] = Resource.lblYourFarms;
 }
 
 @if (TempData["Error"] != null)
@@ -39,9 +38,9 @@ else
                 }
                 <hr class="seperator_five" />
                 <div>
-                    <h2 class="govuk-heading-m">
+                    <p class="govuk-heading-m">
                         @Resource.lblAddANewFarm
-                    </h2>                    
+                    </p>                    
                     <p class="govuk-body">
                         <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
                     </p>

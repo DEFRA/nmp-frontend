@@ -4,7 +4,7 @@
     ViewData["Title"] = Resource.lblCopyExistingManureStorage;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
-    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" :
+    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
     var backController = "Report";
     if (!string.IsNullOrWhiteSpace(Model.IsComingFromMaterialToHubPage))
@@ -25,7 +25,7 @@
 @section BeforeContent {
     @if (backController == Resource.lblStorageCapacityForControllerName)
     {
-    <govuk-back-link asp-action=@backAction asp-controller=@backController  asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@backAction asp-controller=@backController asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan">@Resource.lblBack</govuk-back-link>
     }
     else
     {
@@ -77,7 +77,7 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                        @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                         {
                             <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                                 @Resource.lblCancel

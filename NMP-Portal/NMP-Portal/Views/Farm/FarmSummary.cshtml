@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FarmViewModel
 @{
-    ViewData["Title"] = Resource.lblFarmSummary;
+    ViewData["Title"] = Model != null ? Model.Name : Resource.lblFarmSummary;
 }
 
 @if (TempData["Error"] != null)
@@ -14,14 +14,14 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Model.Name
-        </govuk-breadcrumbs-item>
-    </govuk-breadcrumbs>
+        <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+                @Resource.lblAllFarm
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+                @Model.Name
+            </govuk-breadcrumbs-item>
+        </govuk-breadcrumbs>
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -45,6 +45,7 @@
                     }
                 </govuk-notification-banner>
             }
+    
             <div id="farm-title">
                 <h1 class="govuk-heading-xl">@Model.Name</h1>
                 <p class="govuk-body address">@Model.FullAddress</p>
@@ -68,7 +69,7 @@
             <div>
                 <hr class="seperator_thirty">
 
-                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent1</h2>
+                <p class="govuk-heading-m">@Resource.lblFarmSummaryContent1</p>
 
                 <p class="govuk-hint">@Resource.lblFarmSummaryContent2</p>
                 <ul class="menu-list govuk-list govuk-list--spaced">
@@ -95,7 +96,7 @@
             </div>
             <div>
                 <hr class="seperator_thirty">
-                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent4</h2>
+                <p class="govuk-heading-m">@Resource.lblFarmSummaryContent4</p>
                 <p class="govuk-hint">@Resource.lblFarmSummaryContent5</p>
                 <ul class="menu-list govuk-list govuk-list--spaced">
                     <li>
@@ -106,7 +107,7 @@
             @* <hr class="seperator_five" /> *@
             <div>
                 <hr class="seperator_thirty">
-                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent7</h2>
+                <p class="govuk-heading-m">@Resource.lblFarmSummaryContent7</p>
                 <p class="govuk-hint">@Resource.lblFarmSummaryContent7</p>
                 <ul class="menu-list govuk-list">
                     <li>

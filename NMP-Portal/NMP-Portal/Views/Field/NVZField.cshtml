@@ -1,7 +1,9 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblNVZField;
+    //ViewData["Title"] = Resource.lblNVZField;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {string.Format(Resource.lblUpdateXField, Model.Name)}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
+    ViewData["Title"] = $"{string.Format(Resource.lblIsNVZField, Model.Name)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";

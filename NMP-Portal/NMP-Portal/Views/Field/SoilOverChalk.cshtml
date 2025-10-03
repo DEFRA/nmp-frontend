@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilOverChalk;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateXField, Model.Name) : Resource.lblAddField;
+    ViewData["Title"] = $"{Resource.lblIsTheSoilOverChalk} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = (Model.IsCheckAnswer ? "CheckAnswer" : "SoilType");

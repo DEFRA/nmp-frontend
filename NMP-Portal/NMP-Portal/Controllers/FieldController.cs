@@ -1042,7 +1042,8 @@ namespace NMP.Portal.Controllers
                     if (model.SoilAnalyses.PH == null && (string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) &&
                     model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
                     {
-                        ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
+                        ViewData["IsPostRequest"] = true;
+                        ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
                     if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.PhosphorusIndex"))
                     {
@@ -1108,7 +1109,8 @@ namespace NMP.Portal.Controllers
                     if (model.SoilAnalyses.PH == null && model.SoilAnalyses.Potassium == null &&
                         model.SoilAnalyses.Phosphorus == null && model.SoilAnalyses.Magnesium == null)
                     {
-                        ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
+                        ViewData["IsPostRequest"] = true;
+                        ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
 
                 }

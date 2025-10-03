@@ -3,7 +3,8 @@
 @model FieldViewModel
 
 @{
-    ViewData["Title"] = Resource.lblCopyExistingField;
+    //ViewData["Title"] = Resource.lblCopyExistingField;
+    ViewData["Title"] = $"{Resource.lblDoYouWantToCopyAnExistingField} {Resource.lblHyphen} {Resource.lblAddField}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);   
 }
@@ -21,6 +22,7 @@
                 <govuk-error-summary-item>@TempData["CopyExistingFieldError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
+     
         <form asp-action="CopyExistingField" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             <div hidden="true">
