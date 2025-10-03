@@ -11,7 +11,7 @@ namespace NMP.Portal.Services
     public class UserFarmService : Service, IUserFarmService
     {
         private readonly ILogger<UserFarmService> _logger;
-        public UserFarmService(ILogger<UserFarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public UserFarmService(ILogger<UserFarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

@@ -15,8 +15,7 @@ namespace NMP.Portal.Services
     public class ReportService : Service, IReportService
     {
         private readonly ILogger<FarmService> _logger;
-        public ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
-        (httpContextAccessor, clientFactory)
+        public ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }
