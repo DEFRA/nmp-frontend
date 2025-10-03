@@ -6430,4 +6430,52 @@ livestock manure.</value>
   <data name="lblPageTitleTemplate" xml:space="preserve">
     <value>{0} - NMPTGB - GOV.UK</value>
   </data>
+  <data name="lblMaxApplicationRateForBrasicas" xml:space="preserve">
+    <value>Max application rate for brassicas</value>
+  </data>
+  <data name="lblMaxApplicationRateEverythingExceptWosr" xml:space="preserve">
+    <value>Max application rate (everything except WOSR, Brassicas &amp; Grass)</value>
+  </data>
+  <data name="lblMaxApplicationRateForWinterOilseedRape" xml:space="preserve">
+    <value>Max application rate for winter oilseed rape</value>
+  </data>
+  <data name="MsgApplicationToGrassAtRateOfMoreThan" xml:space="preserve">
+    <value>Application to grass at a rate of more than 40kg n/ha in one go</value>
+  </data>
+  <data name="MsgThisApplicationMayTakeYouOverTheMaximumNitrogenRate" xml:space="preserve">
+    <value>This application may take you over the maximum nitrogen rate limit (N-max) for this crop</value>
+  </data>
+  <data name="MsgClosedSpreadingPeriod" xml:space="preserve">
+    <value>Closed spreading period</value>
+  </data>
+  <data name="MsgOrganicManureNfieldLimit" xml:space="preserve">
+    <value>Organic manure N field limit</value>
+  </data>
+  <data name="MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil" xml:space="preserve">
+    <value>Organic manure N field limit for compost worked into the soil </value>
+  </data>
+  <data name="MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch" xml:space="preserve">
+    <value>Organic manure N field limit for compost applied as a mulch</value>
+  </data>
+  <data name="MsgNMaxLimitMessage" xml:space="preserve">
+    <value>N max limit message</value>
+  </data>
+  <data name="MsgSlurryMaxApplicationRate" xml:space="preserve">
+    <value>Slurry max application rate</value>
+  </data>
+  <data name="MsgPoultryManureMaxApplicationRate" xml:space="preserve">
+    <value>Poultry manure max application rate</value>
+  </data>
+  <data name="MsgClosedPeriodForTheApplicationOfHighNOrganicManureMessage" xml:space="preserve">
+    <value>Closed period for the application of high N organic manure message</value>
+  </data>
+  <data name="MsgClosedSpreadingPeriodApplicationAfter31October" xml:space="preserve">
+    <value>Closed spreading period - application after 31 October</value>
+  </data>
+  <data name="Msg3WeeksBetweenApplications" xml:space="preserve">
+    <value>3 weeks between applications</value>
+  </data>
+  <data name="MsgClosedPeriodAndMaximumApplicationRateForHighN" xml:space="preserve">
+    <value>Closed period and maximum application rate for high N organic manure on a registered organic farm message</value>
+  </data>
 </root>

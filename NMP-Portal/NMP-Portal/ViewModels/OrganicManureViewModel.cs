@@ -154,5 +154,30 @@ namespace NMP.Portal.ViewModels
         public int? GrassCropCount { get; set; }
         public bool NeedToShowSameDefoliationForAll { get; set; } = true;
         public bool IsDefaultValueChange { get; set; } = false;
+
+
+        public string? NmaxWarningHeader { get; set; }
+        public int NmaxWarningCodeID { get; set; }
+        public int NmaxWarningLevelID { get; set; }
+
+        public string? CropNmaxLimitWarningHeader { get; set; }
+        public int CropNmaxLimitWarningCodeID { get; set; }
+        public int CropNmaxLimitWarningLevelID { get; set; }
+
+        public string? EndClosedPeriodEndFebWarningHeader { get; set; } = string.Empty;
+        public int EndClosedPeriodEndFebWarningCodeID { get; set; }
+        public int EndClosedPeriodEndFebWarningLevelID { get; set; }
+
+        public string? ClosedPeriodWarningHeader { get; set; } = string.Empty;
+        public int ClosedPeriodWarningCodeID { get; set; }
+        public int ClosedPeriodWarningLevelID { get; set; }
+
+        public string? EndClosedPeriodFebruaryExistWithinThreeWeeksHeader { get; set; } = string.Empty;
+        public int EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID { get; set; }
+        public int EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID { get; set; }
+
+        public string? StartClosedPeriodEndFebWarningHeader { get; set; } = string.Empty;
+        public int StartClosedPeriodEndFebWarningCodeID { get; set; }
+        public int StartClosedPeriodEndFebWarningLevelID { get; set; }
     }
 }
