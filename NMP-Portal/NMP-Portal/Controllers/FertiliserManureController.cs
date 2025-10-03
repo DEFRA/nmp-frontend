@@ -1023,9 +1023,9 @@ namespace NMP.Portal.Controllers
                     {
                         return View(model);
                     }
-                    if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
+                    if (model.FieldList.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
                     {
-                        model.FieldList = selectListItem.Select(item => item.Value).ToList();
+                        model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
                     }
                     FertiliserManureViewModel fertiliserManureViewModel = null;
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
