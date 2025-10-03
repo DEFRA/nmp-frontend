@@ -1190,10 +1190,6 @@ namespace NMP.Portal.Controllers
                     ViewBag.fieldList = selectListItem;
                     return View(model);
                 }
-                //if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
-                //{
-                //    model.FieldList = selectListItem.Select(item => item.Value).ToList();
-                //}
                 if (model.FieldList.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
                 {
                     model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();

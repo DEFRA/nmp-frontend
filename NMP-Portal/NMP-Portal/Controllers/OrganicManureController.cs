@@ -764,10 +764,6 @@ namespace NMP.Portal.Controllers
                         return View(model);
 
                     }
-                    //if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
-                    //{
-                    //    model.FieldList = selectListItem.Select(item => item.Value).ToList();
-                    //}
 
                     if (model.FieldList.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
                     {

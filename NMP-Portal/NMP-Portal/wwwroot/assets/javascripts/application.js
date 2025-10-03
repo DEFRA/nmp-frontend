@@ -37,22 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    //const selectAllCheckbox = document.getElementById("select-all");
-
-    //if (selectAllCheckbox) {
-    //    selectAllCheckbox.addEventListener("change", function () {
-    //        var checkboxes = document.querySelectorAll('input[name="FieldList"]');
-
-    //        checkboxes.forEach(function (checkbox) {
-    //            checkbox.checked = document.getElementById("select-all").checked;
-    //        });
-    //    });
-    //}
-
     const selectAllCheckbox = document.getElementById("select-all");
 
     if (selectAllCheckbox) {
-        
+
         const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([name="select-all"])');
 
         // Update "Select All" checkbox when page loads or when returning

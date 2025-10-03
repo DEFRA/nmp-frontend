@@ -334,10 +334,6 @@ namespace NMP.Portal.Controllers
                             ViewBag.fieldList = selectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                             return View(model);
                         }
-                        //if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
-                        //{
-                        //    model.FieldList = selectListItem.Select(item => item.Value).ToList();
-                        //}
                         if (model.FieldList.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
                         {
                             model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
@@ -402,10 +398,6 @@ namespace NMP.Portal.Controllers
                                         ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                         return View(model);
                                     }
-                                    //if (model.CropTypeList?.Count == 1 && model.CropTypeList[0] == Resource.lblSelectAll)
-                                    //{
-                                    //    model.CropTypeList = SelectListItem.Select(item => item.Value).ToList();
-                                    //}
                                     if (model.CropTypeList.Count > 0 && model.CropTypeList.Contains(Resource.lblSelectAll))
                                     {
                                         model.CropTypeList = SelectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
