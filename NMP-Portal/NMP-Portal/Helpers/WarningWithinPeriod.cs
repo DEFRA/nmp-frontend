@@ -10,7 +10,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Helpers
 {
-    public class WarningMessage
+    public class WarningWithinPeriod
     {
         public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
         {

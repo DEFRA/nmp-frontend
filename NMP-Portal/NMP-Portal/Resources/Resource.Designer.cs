@@ -8046,6 +8046,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max application rate (everything except WOSR, Brassicas &amp; Grass).
+        /// </summary>
+        public static string lblMaxApplicationRateEverythingExceptWosr {
+            get {
+                return ResourceManager.GetString("lblMaxApplicationRateEverythingExceptWosr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max application rate for brassicas.
+        /// </summary>
+        public static string lblMaxApplicationRateForBrasicas {
+            get {
+                return ResourceManager.GetString("lblMaxApplicationRateForBrasicas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max application rate for winter oilseed rape.
+        /// </summary>
+        public static string lblMaxApplicationRateForWinterOilseedRape {
+            get {
+                return ResourceManager.GetString("lblMaxApplicationRateForWinterOilseedRape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum limit for N applied.
         /// </summary>
         public static string lblMaximumLimitForNApplied {
@@ -15942,6 +15969,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 3 weeks between applications.
+        /// </summary>
+        public static string Msg3WeeksBetweenApplications {
+            get {
+                return ResourceManager.GetString("Msg3WeeksBetweenApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please accept the Terms of Use.
         /// </summary>
         public static string msgAcceptTermsOfUse {
@@ -16088,6 +16124,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application to grass at a rate of more than 40kg n/ha in one go.
+        /// </summary>
+        public static string MsgApplicationToGrassAtRateOfMoreThan {
+            get {
+                return ResourceManager.GetString("MsgApplicationToGrassAtRateOfMoreThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When are you applying your {0} not set?.
         /// </summary>
         public static string MsgApplyingDateNotSet {
@@ -16160,6 +16205,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Closed period and maximum application rate for high N organic manure on a registered organic farm message.
+        /// </summary>
+        public static string MsgClosedPeriodAndMaximumApplicationRateForHighN {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodAndMaximumApplicationRateForHighN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The application date you entered is inside your closed spreading period for applying inorganic nitrogen fertiliser.
         /// </summary>
         public static string MsgClosedPeriodFertiliserWarningHeading {
@@ -16201,6 +16255,15 @@ namespace NMP.Portal.Resources {
         public static string MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle {
             get {
                 return ResourceManager.GetString("MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed period for the application of high N organic manure message.
+        /// </summary>
+        public static string MsgClosedPeriodForTheApplicationOfHighNOrganicManureMessage {
+            get {
+                return ResourceManager.GetString("MsgClosedPeriodForTheApplicationOfHighNOrganicManureMessage", resourceCulture);
             }
         }
         
@@ -16327,6 +16390,24 @@ namespace NMP.Portal.Resources {
         public static string MsgClosedPeriodWarningPara2Wales {
             get {
                 return ResourceManager.GetString("MsgClosedPeriodWarningPara2Wales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed spreading period.
+        /// </summary>
+        public static string MsgClosedSpreadingPeriod {
+            get {
+                return ResourceManager.GetString("MsgClosedSpreadingPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed spreading period - application after 31 October.
+        /// </summary>
+        public static string MsgClosedSpreadingPeriodApplicationAfter31October {
+            get {
+                return ResourceManager.GetString("MsgClosedSpreadingPeriodApplicationAfter31October", resourceCulture);
             }
         }
         
@@ -17987,6 +18068,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N max limit message.
+        /// </summary>
+        public static string MsgNMaxLimitMessage {
+            get {
+                return ResourceManager.GetString("MsgNMaxLimitMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application will take you over the organic manure nitrogen field limit for compost.
         /// </summary>
         public static string MsgNmaxWarningHeadingEngland {
@@ -18113,6 +18203,33 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic manure N field limit.
+        /// </summary>
+        public static string MsgOrganicManureNfieldLimit {
+            get {
+                return ResourceManager.GetString("MsgOrganicManureNfieldLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic manure N field limit for compost applied as a mulch.
+        /// </summary>
+        public static string MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch {
+            get {
+                return ResourceManager.GetString("MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic manure N field limit for compost worked into the soil .
+        /// </summary>
+        public static string MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil {
+            get {
+                return ResourceManager.GetString("MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organic material application updated..
         /// </summary>
         public static string MsgOrganicMaterialApplicationUpdated {
@@ -18235,6 +18352,15 @@ namespace NMP.Portal.Resources {
         public static string MsgPotassiumPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("MsgPotassiumPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poultry manure max application rate.
+        /// </summary>
+        public static string MsgPoultryManureMaxApplicationRate {
+            get {
+                return ResourceManager.GetString("MsgPoultryManureMaxApplicationRate", resourceCulture);
             }
         }
         
@@ -18473,6 +18599,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slurry max application rate.
+        /// </summary>
+        public static string MsgSlurryMaxApplicationRate {
+            get {
+                return ResourceManager.GetString("MsgSlurryMaxApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil mineral nitrogen analysis results added to {0}..
         /// </summary>
         public static string MsgSnsSuccess {
@@ -18685,6 +18820,15 @@ namespace NMP.Portal.Resources {
         public static string MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine {
             get {
                 return ResourceManager.GetString("MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application may take you over the maximum nitrogen rate limit (N-max) for this crop.
+        /// </summary>
+        public static string MsgThisApplicationMayTakeYouOverTheMaximumNitrogenRate {
+            get {
+                return ResourceManager.GetString("MsgThisApplicationMayTakeYouOverTheMaximumNitrogenRate", resourceCulture);
             }
         }
         
