@@ -70,5 +70,15 @@ namespace NMP.Portal.ViewModels
         public string? DoubleCropEncryptedCounter { get; set; }
         public bool IsDoubleCropAvailable { get; set; } = false;
         public bool NeedToShowSameDefoliationForAll { get; set; } = true;
+
+        public string? ClosedPeriodWarningHeader { get; set; } = string.Empty;
+        public int ClosedPeriodWarningCodeID { get; set; }
+        public int ClosedPeriodWarningLevelID { get; set; }
+
+        public string? ClosedPeriodNitrogenExceedWarningHeader { get; set; } = string.Empty;
+        public int ClosedPeriodNitrogenExceedWarningCodeID { get; set; }
+        public int ClosedPeriodNitrogenExceedWarningLevelID { get; set; }
+
+
     }
 }

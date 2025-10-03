@@ -5,7 +5,7 @@ namespace NMP.Portal.Models
 {
     public class OrganicManure
     {
-        public int ID { get; set; }
+        public int? ID { get; set; }
         public int ManagementPeriodID { get; set; }
         public int ManureTypeID { get; set; }
         public string? ManureTypeName { get; set; }

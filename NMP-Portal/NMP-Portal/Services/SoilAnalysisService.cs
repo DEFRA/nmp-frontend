@@ -11,8 +11,7 @@ namespace NMP.Portal.Services
     public class SoilAnalysisService : Service, ISoilAnalysisService
     {
         private readonly ILogger<SoilAnalysisService> _logger;
-        public SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
-        (httpContextAccessor, clientFactory)
+        public SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

@@ -82,8 +82,10 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = "NMP-Portal.Session";
     options.Cookie.HttpOnly = true;  // Prevent JavaScript access
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
-    options.Cookie.SameSite = SameSiteMode.Strict;  // Prevent CSRF    
-    options.IdleTimeout = TimeSpan.FromMinutes(60);  // Session timeout 
+    options.Cookie.SameSite = SameSiteMode.Strict;// Prevent CSRF
+    options.Cookie.IsEssential = true;
+    //options.IdleTimeout = TimeSpan.FromMinutes(60);  // Session timeout 
+    options.IdleTimeout = TimeSpan.FromHours(2);  // 2-hour idle session 
 });
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
@@ -141,7 +143,7 @@ builder.Services.AddAntiforgery(options =>
         HttpOnly = true,        
         Path = "/",       
         SecurePolicy = CookieSecurePolicy.Always,
-        SameSite = SameSiteMode.Strict
+        SameSite = SameSiteMode.Strict 
     };
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
@@ -243,7 +245,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 // Add the reauthentication middleware
-app.UseMiddleware<ReauthenticationMiddleware>();
+//app.UseMiddleware<ReauthenticationMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

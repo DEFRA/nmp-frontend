@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-    
+
     public class ErrorController : Controller
     {
         //private readonly ILogger<ErrorController> _logger;
@@ -22,23 +22,23 @@ namespace NMP.Portal.Controllers
         //    _logger = logger;
         //}
 
-        [Route("Error/{statusCode}")]        
+        [Route("Error/{statusCode}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
             string viewName = "Error";
             //var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             switch (statusCode)
             {
-                case 404:                    
+                case 404:
                     string originalPath = "unknown";
                     if (HttpContext.Items.ContainsKey("originalPath"))
                     {
                         originalPath = HttpContext.Items["originalPath"] as string;
                     }
-                    
+
                     ViewBag.Path = originalPath;
                     viewName = "PageNotFound";
-                    
+
                     break;
                 case 500:
                     //var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
@@ -48,7 +48,7 @@ namespace NMP.Portal.Controllers
                     //    ["originalPath"] = exceptionHandlerPathFeature.Path,
                     //    ["error"] = exceptionHandlerPathFeature.Error.Message
                     //});
-                   // ViewBag.Path = exceptionHandlerPathFeature.Path;
+                    // ViewBag.Path = exceptionHandlerPathFeature.Path;
                     viewName = "Error";
                     break;
             }
@@ -56,15 +56,16 @@ namespace NMP.Portal.Controllers
 
             return View(viewName, new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-          
+
         public IActionResult Index()
         {
             var error = new ErrorViewModel();
             if (HttpContext.Session.Keys.Contains("Error"))
             {
-                error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");                
+                error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");
             }
 
+            Console.WriteLine("Error: " + error?.Message ?? "Unknown error");
             return View("Error", error);
         }
     }

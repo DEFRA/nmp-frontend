@@ -13,7 +13,7 @@ namespace NMP.Portal.Services
     public class OrganicManureService : Service, IOrganicManureService
     {
         private readonly ILogger<OrganicManureService> _logger;
-        public OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }
