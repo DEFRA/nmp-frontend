@@ -764,9 +764,14 @@ namespace NMP.Portal.Controllers
                         return View(model);
 
                     }
-                    if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
+                    //if (model.FieldList.Count == 1 && model.FieldList[0] == Resource.lblSelectAll)
+                    //{
+                    //    model.FieldList = selectListItem.Select(item => item.Value).ToList();
+                    //}
+
+                    if (model.FieldList.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
                     {
-                        model.FieldList = selectListItem.Select(item => item.Value).ToList();
+                        model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
                     }
                     string fieldIds = string.Join(",", model.FieldList);
                     //(List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(model.HarvestYear.Value, fieldIds, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup, model.CropOrder);
