@@ -1733,7 +1733,7 @@ namespace NMP.Portal.Controllers
                     string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
 
                     model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear, isPlan = isComingFromPlan });
+                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear, isPlan = string.Empty });
                     //}
                     //return RedirectToAction("OrganicMaterialStorageNotAvailable");
                 }

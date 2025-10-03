@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilType;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateXField, Model.Name) : Resource.lblAddField;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsSoilType, Model.Name)} {Resource.lblHyphen} {title}";
 
     var backAction = "";
     if (Model.IsCheckAnswer)

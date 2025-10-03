@@ -450,7 +450,8 @@ namespace NMP.Portal.Controllers
                     if (model.PH == null && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
                         model.PhosphorusIndex == null && model.MagnesiumIndex == null)
                     {
-                        ModelState.AddModelError("Date", Resource.MsgEnterAtLeastOneValue);
+                        ViewData["IsPostRequest"] = true;
+                        ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
                     if ((!ModelState.IsValid) && ModelState.ContainsKey("PhosphorusIndex"))
                     {
@@ -516,7 +517,8 @@ namespace NMP.Portal.Controllers
                     if (model.PH == null && model.Potassium == null &&
                         model.Phosphorus == null && model.Magnesium == null)
                     {
-                        ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
+                        ViewData["IsPostRequest"] = true;
+                        ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
 
                 }

@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblFarmRemove;
+    ViewData["Title"] = $"{string.Format(Resource.lblRemoveField, Model.Name)} {Resource.lblHyphen} {Resource.lblDetails}";
     var yesRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var noRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }

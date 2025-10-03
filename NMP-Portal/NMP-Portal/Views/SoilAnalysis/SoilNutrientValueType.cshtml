@@ -1,7 +1,9 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.SoilAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilNutrientValueType;
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
     var AsAnIndex = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
@@ -10,7 +12,7 @@
     @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
         <govuk-back-link asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
-     
+
     }
     else
     {
@@ -20,27 +22,27 @@
 <form asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div hidden="true">
-    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
-    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
     </div>
     <div class="govuk-grid-row">
-      
+
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios class="govuk-radios" asp-for="@Model.IsSoilNutrientValueTypeIndex">
                 <govuk-radios-fieldset>
@@ -51,10 +53,10 @@
                     <govuk-radios-item value=@InMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-          
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
 
 
             @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))

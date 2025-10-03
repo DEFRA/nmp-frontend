@@ -1,7 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.SoilAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblSulpherDeficient;
+
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{string.Format(Resource.lblDoYouExpectSulphurDeficiency, Model.FieldName)} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{string.Format(Resource.lblDoYouExpectSulphurDeficiency, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }

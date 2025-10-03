@@ -4,8 +4,7 @@
 
 @model FieldViewModel
 @{
-    ViewData["Title"] = Resource.lblFieldSoilAnalysisDetail;
-
+    ViewData["Title"] = $"{Model.Name} {Resource.lblHyphen} {Resource.lblDetails}";
 }
 
 @if (ViewBag.Error != null)
@@ -147,7 +146,7 @@
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblDateSample</th>
-                            <th scope="col" class="govuk-table__header"> </th>
+                            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span> </th>
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
