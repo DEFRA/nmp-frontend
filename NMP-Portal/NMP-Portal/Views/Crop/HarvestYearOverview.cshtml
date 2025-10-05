@@ -4,7 +4,7 @@
 @using System.Globalization
 @model PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year);
+    ViewData["Title"] = $"{string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblDetails}";
 }
 
 @if (TempData["ErrorOnHarvestYearOverview"] != null)

@@ -1,10 +1,11 @@
-﻿namespace NMP.Portal.Services
+﻿using NMP.Portal.Security;
+
+namespace NMP.Portal.Services
 {
     public class MannerService:Service,IMannerService
     {
         private readonly ILogger<MannerService> _logger;
-        public MannerService(ILogger<MannerService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
-        (httpContextAccessor, clientFactory)
+        public MannerService(ILogger<MannerService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

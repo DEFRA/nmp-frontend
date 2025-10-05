@@ -57,8 +57,6 @@ namespace NMP.Portal.Security
                             throw new MsalUiRequiredException("401", "Token expired, need to re login");
                         }
                     }
-
-
                 }
                 catch (MsalUiRequiredException)
                 {

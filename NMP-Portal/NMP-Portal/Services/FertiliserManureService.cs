@@ -4,6 +4,7 @@ using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace NMP.Portal.Services
     public class FertiliserManureService : Service, IFertiliserManureService
     {
         private readonly ILogger<FertiliserManureService> _logger;
-        public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

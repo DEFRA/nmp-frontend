@@ -10,7 +10,7 @@ namespace NMP.Portal.Services;
 public class UserExtensionService : Service, IUserExtensionService
 {
     private readonly ILogger<UserExtensionService> _logger;
-    public UserExtensionService(ILogger<UserExtensionService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+    public UserExtensionService(ILogger<UserExtensionService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
     {
         _logger = logger;
     }
