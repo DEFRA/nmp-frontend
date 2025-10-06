@@ -2581,7 +2581,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check your {0} data.
+        ///   Looks up a localized string similar to Before you start a {0} plan, check your {1} data.
         /// </summary>
         public static string lblCheckYourYearData {
             get {
@@ -15978,7 +15978,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your {0} recommendations will be based on your {1} data, so it is important that it is up to date..
+        ///   Looks up a localized string similar to Your {0} recommendations will be based on your {1} plan. But plans change depending on factors like the weather, so it&apos;s important to keep the information in this tool accurate to what you actually did on the farm..
         /// </summary>
         public static string lblYourRecommWillbeBasedOnYourYearData {
             get {
