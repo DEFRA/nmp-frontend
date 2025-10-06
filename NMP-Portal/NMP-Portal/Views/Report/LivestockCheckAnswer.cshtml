@@ -12,7 +12,7 @@
     var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
 
     var occupancyNitrogenOption = "";
-    if(Model.OccupancyAndNitrogenOptions==(int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
+    if (Model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
     {
         occupancyNitrogenOption = Resource.lblYesUseTheseValues;
     }
@@ -218,7 +218,7 @@
                                     @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.LivestockNumberQuestion.HasValue ? (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear):Resource.lblNotSet)
+                                    @(Model.LivestockNumberQuestion.HasValue ? (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)</span></govuk-summary-list-row-action>
@@ -234,17 +234,17 @@
 
                                         <table class="nutrient_values">
                                             <tbody>
-                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJanuary ?? 0),ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJanuary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInFebruary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblMarch:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMarch ?? 0),  ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblApril:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInApril ?? 0),ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblMarch:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMarch ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblApril:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInApril ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblMay:</td>       <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMay ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblJune:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJune ?? 0),  ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblJuly:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJuly ?? 0),  ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblAugust:</td>    <td>@(string.Format("{0:N0} {1}", (Model.NumbersInAugust ?? 0),  ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJune:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJune ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblJuly:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJuly ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblAugust:</td>    <td>@(string.Format("{0:N0} {1}", (Model.NumbersInAugust ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblSeptember:</td> <td>@(string.Format("{0:N0} {1}", (Model.NumbersInSeptember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblOctober:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInOctober ?? 0),ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblNovember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInNovember ?? 0),ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblOctober:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInOctober ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                <tr><td>@Resource.lblNovember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInNovember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                 <tr><td>@Resource.lblDecember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInDecember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                             </tbody>
                                         </table>
@@ -261,7 +261,7 @@
                                         @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.AverageNumber.HasValue ? (string.Concat(string.Format("{0:N1}",Model.AverageNumber), " " + ViewBag.LivestockCategory?.ToLower())) : Resource.lblNotSet)
+                                        @(Model.AverageNumber.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumber), " " + ViewBag.LivestockCategory?.ToLower())) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="AverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)</span></govuk-summary-list-row-action>
@@ -317,15 +317,15 @@
                                     <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblNitrogenStandardPerAnimalPerYear</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                            
+
                         }
-                        
+
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @Resource.lblTotalNitrogenProduced
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                            @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", ViewBag.TotalNProduced)))
+                                @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", ViewBag.TotalNProduced)))
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
 

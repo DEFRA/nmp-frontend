@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    
+
     ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
