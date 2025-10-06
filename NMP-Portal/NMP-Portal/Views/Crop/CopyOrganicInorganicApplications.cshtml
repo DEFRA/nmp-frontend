@@ -2,7 +2,8 @@
 @using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {

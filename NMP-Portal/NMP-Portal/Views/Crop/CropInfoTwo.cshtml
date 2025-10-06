@@ -2,7 +2,8 @@
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    ViewData["Title"] = string.Format(Resource.lblHowDoYouPlanToUseTheStrawFromYourCropType, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{string.Format(Resource.lblHowDoYouPlanToUseTheStrawFromYourCropType, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {

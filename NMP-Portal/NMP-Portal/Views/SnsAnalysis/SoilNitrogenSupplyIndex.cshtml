@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.SnsAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblEstimateOfNitrogenMineralisationQuestion;
+    ViewData["Title"] = $"{string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
     var actionMethod = "";
     if (Model.IsCheckAnswer)
     {

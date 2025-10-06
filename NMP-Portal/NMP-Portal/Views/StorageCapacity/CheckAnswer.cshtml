@@ -1,7 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckAnswer;
+    var heading = (!string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId) ? Resource.lblUpdateManureStorage : string.Format(Resource.lblAddStorageFor, Model.Year));
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     int squareOrRectangularTank = (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank;
     int circularTank = (int)NMP.Portal.Enums.StorageTypes.CircularTank;
     int earthBankedLagoon = (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon;
@@ -112,7 +115,7 @@
                                     @(Model.MaterialStateID != null ? Model.MaterialStateName : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatKindOfManureStorageDoYouWantToAdd</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
@@ -125,7 +128,7 @@
                                 @(Model.StoreName != null ? Model.StoreName : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="StoreName" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="StoreName" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatDoYouWantToCallThisManureStore</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -137,7 +140,7 @@
                                 @(Model.StorageTypeID != null ? Model.StorageTypeName : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="StorageTypes" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="StorageTypes" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.WhatKindOfStorageIsStoreName, Model.StoreName)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         @if (Model.StorageTypeID != circularTank && Model.StorageTypeID != storageBag)
@@ -159,7 +162,7 @@
                                     @(Model.Length != null ? string.Format("{0} {1}", Model.Length.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.StorageTypeID == earthBankedLagoon ? Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon : Resource.lblWhatIsTheLength)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -178,7 +181,7 @@
                                     @(Model.Width != null ? string.Format("{0} {1}", Model.Width.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.StorageTypeID == earthBankedLagoon ? Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon : Resource.lblWhatIsTheWidth)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                             //}
@@ -195,7 +198,7 @@
                                     @(Model.IsCircumference != null ? (Model.IsCircumference == true ? Resource.lblCircumference : Resource.lblDiameter) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToEnterTheCircumferenceOrTheDiameter</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -210,7 +213,7 @@
                                         @(Model.Circumference != null ? string.Format("{0} {1}", Model.Circumference.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheCircumference</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -224,7 +227,7 @@
                                         @(Model.Diameter != null ? string.Format("{0} {1}", Model.Diameter.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheDiameter</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -250,7 +253,11 @@
                                     @(Model.Depth != null ? string.Format("{0} {1}", Model.Depth.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">
+                                        @Resource.lblChange<span class="govuk-visually-hidden">
+                                            @((Model.StorageTypeID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage) ? Resource.lblWhatIsTheDepth : Resource.lblWhatIsTheTotalDepth)
+                                        </span>
+                                    </govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                             //}
@@ -265,7 +272,7 @@
                                         @(Model.IsCovered != null ? (Model.IsCovered == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblIsThisCovered, Model.StoreName)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -281,7 +288,7 @@
                                     @(Model.IsSlopeEdge != null ? (Model.IsSlopeEdge == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDoesStoreHaveSlopedEdges, Model.StoreName)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                             @if (Model.IsSlopeEdge == true)
@@ -294,7 +301,7 @@
                                         @(Model.BankSlopeAngleID != null ? Model.BankSlopeAngleName : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="BankSlopeAngle" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="BankSlopeAngle" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheEstimatedAngleOfTheBankSlope</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -309,7 +316,7 @@
                                     @(Model.StorageBagCapacity != null ? string.Format("{0} {1}", Model.StorageBagCapacity.Value.ToString("#,0.0"), Resource.lblCubicMeters) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="StorageBagCapacity" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="StorageBagCapacity" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheTotalCapacityOf, Model.StoreName)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
@@ -325,13 +332,13 @@
                                         @(Model.CapacityWeight != null ? string.Format("{0} {1}", Model.CapacityWeight.Value.ToString("#,0.0"), Resource.lblCubicMeters) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="WeightCapacity" asp-controller="StorageCapacity">@Resource.lblChange</govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="WeightCapacity" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheWeightCapacityOf, Model.Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
                             <govuk-summary-list-row class=@(Model.CapacityVolume == null ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblTotalCapacityMinusTheFreeBoard 
+                                    @Resource.lblTotalCapacityMinusTheFreeBoard
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(Model.CapacityVolume != null ? string.Format("{0} {1}", Model.CapacityVolume.Value.ToString("#,0"), Resource.lblCubicMeters) : Resource.lblNotSet)

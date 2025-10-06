@@ -28,7 +28,10 @@
     {
         pageHeading = string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
     }
-    ViewData["Title"] = pageHeading;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
+
 }
 
 @section BeforeContent {

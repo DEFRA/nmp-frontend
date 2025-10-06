@@ -1,7 +1,11 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCropGroupForPlan;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{Resource.lblCropGroupForPlan} {Resource.lblHyphen} {title}";
+
+
     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 

@@ -143,7 +143,8 @@
                 </h1>
                     <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="false" class="govuk-label--l">
-                    </govuk-input-label>
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, unit)</span>
+                </govuk-input-label>
                     <govuk-input-suffix>@unit</govuk-input-suffix>
                     </govuk-input>
                 

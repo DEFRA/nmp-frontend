@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblTopsoilMoister;
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblHowWetWasTheTopsoil} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>

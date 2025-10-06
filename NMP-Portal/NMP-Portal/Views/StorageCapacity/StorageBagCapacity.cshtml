@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblVolumeCapacity;
-    
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheTotalCapacityOf, Model.StoreName)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
@@ -68,7 +68,9 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-input asp-for=@Model.StorageBagCapacity type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheTotalCapacityOf, Model.StoreName)</govuk-input-label>
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheTotalCapacityOf, Model.StoreName)
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblCubicMeters)</span>
+                    </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblCubicMeters</govuk-input-suffix>
                 </govuk-input>
 

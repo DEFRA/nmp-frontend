@@ -1925,7 +1925,8 @@ namespace NMP.Portal.Controllers
                     && model.K2O == null && model.SO3 == null && model.MgO == null
                     && model.Lime == null)
                 {
-                    ModelState.AddModelError("CropTypeName", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
+                    ModelState.AddModelError("N", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
+                    ViewData["IsPostRequest"] = true;
                     //return View(model);
                 }
 
@@ -2200,7 +2201,10 @@ namespace NMP.Portal.Controllers
                                                     if (managementIds.Count > 0)
                                                     {
                                                         //(model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType);
-                                                        (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
+                                                        if(model.N != null)
+                                                        {
+                                                            (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
+                                                        }
 
                                                     }
                                                 }
@@ -2616,7 +2620,10 @@ namespace NMP.Portal.Controllers
                                                 if (managementIds.Count > 0)
                                                 {
                                                     //(model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType);
-                                                    (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
+                                                    if(model.N != null)
+                                                    {
+                                                        (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
+                                                    }
 
                                                 }
                                             }
@@ -3135,7 +3142,7 @@ namespace NMP.Portal.Controllers
                         FertiliserManure.Add(new
                         {
                             FertiliserManure = fertManure,
-                            WarningMessages = warningMessageList,
+                            WarningMessages = warningMessageList.Count > 0 ? warningMessageList:null,
                         });
                     }
 

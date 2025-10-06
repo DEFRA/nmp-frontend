@@ -4,7 +4,27 @@
 
 @model OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblPlansAndRecordsOverview;
+    var heading = "";
+    if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+    {
+        heading = string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName);
+    }
+    if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
+    {
+        if (Model.DefaultFarmManureValueDate.HasValue)
+        {
+            heading = string.Format(Resource.lblStandardNutrientValuesWhwnWeHaveValues, Model.ManureTypeName, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")));
+        }
+    }
+    else
+    {
+        heading = string.Format(Resource.lblStandardNutrientValues, Model.ManureTypeName);
+    }
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+
     var DefaultNutrientValues = true;
     var NotDefaultNutrientValues = false;
     var backAction = (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange) ? "CheckAnswer" : Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
@@ -230,7 +250,8 @@
             {
                 <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)</h1>
             }
-            else  @if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
+            else
+  @if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
             {
                 @if (Model.DefaultFarmManureValueDate.HasValue)
                 {
@@ -301,7 +322,8 @@
                         <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
                         <govuk-radios-item value="@Resource.lblYesUseTheseStandardNutrientValues">@Resource.lblUseValuesFromRB209</govuk-radios-item>
                     }
-                    else @if (ViewBag.RB209ApiOption != null && ViewBag.RB209ApiOption == Resource.lblTrue)
+                    else
+ @if (ViewBag.RB209ApiOption != null && ViewBag.RB209ApiOption == Resource.lblTrue)
                     {
                         <govuk-radios-item value="@Resource.lblYesUseTheseStandardNutrientValues">@Resource.lblYesUseTheseStandardNutrientValues</govuk-radios-item>
                         <govuk-radios-item value="@Resource.lblYesUseTheseValues">@string.Format(Resource.lblNoIWantToUseTheUpdatedValuesFromDate, Model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))) </govuk-radios-item>

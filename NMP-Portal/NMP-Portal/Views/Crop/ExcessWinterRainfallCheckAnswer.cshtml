@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourAnswers;
+    string title = string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName);
+    ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
@@ -16,18 +17,20 @@
     }
     <form class="form-with-overlay" asp-action="ExcessWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
         @Html.AntiForgeryToken()
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallCheckAnswer"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"></govuk-input>
+        <div hidden="true">
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallCheckAnswer"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"></govuk-input>
+        </div>
         <div class="govuk-grid-column-two-thirds-from-desktop">
-            
+
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
@@ -43,7 +46,7 @@
                         <dd class="govuk-summary-list__value">
                             @Model.ExcessWinterRainfallName
                         </dd>
-                        <dd class="govuk-summary-list__actions"><a class="govuk-link" asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblChange</a></dd>
+                        <dd class="govuk-summary-list__actions"><a class="govuk-link" asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</span></a></dd>
                     </div>
                 </dl>
             </div>

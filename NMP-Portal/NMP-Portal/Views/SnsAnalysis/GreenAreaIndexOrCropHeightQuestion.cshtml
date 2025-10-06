@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.SnsAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblGreenAreaIndexOrCropHeight;
+    ViewData["Title"] = $"{Resource.lblDoYouWantToEnterGAIOrCropHeight} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
     var greenAreaIndex = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI;
     var cropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight;
 }

@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblDoubleCrop;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichCropIsThisFertiliserApplication, Model.FieldName)} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     @if(Model.IsCheckAnswer&&(!Model.IsAnyChangeInField))

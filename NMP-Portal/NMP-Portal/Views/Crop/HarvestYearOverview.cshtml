@@ -4,7 +4,9 @@
 @using System.Globalization
 @model PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year);
+    string title = Resource.lblHarvestYearOverview;
+    ViewData["Title"] = $"{string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year)} {Resource.lblHyphen} {title}";
+
 }
 
 @if (TempData["ErrorOnHarvestYearOverview"] != null)
@@ -345,7 +347,7 @@
                                                 @* <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a>
                                                 <br /> *@
 
-                                                <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange</a>
+                                                <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</span></a>
 
                                             </td>
                                         </tr>
@@ -355,7 +357,7 @@
                             @if (Model.HarvestYearPlans.InorganicFertiliserList.Count > 10)
                             {
                                 <p>&nbsp;</p>
-                                <p class="govuk-body"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
+                                <p class="govuk-body"><a class="govuk-link" href="#tab_InorganicFertiliserApplications">@Resource.lblBackToTheTop</a></p>
                             }
 
                         }

@@ -3,7 +3,8 @@
 
 @model PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblPlaningndRecording;
+    string title = Resource.lblPlansAndRecordsList;
+    ViewData["Title"] = $"{Resource.lblPlaningndRecording} {Resource.lblHyphen} {title}";
 
 }
 

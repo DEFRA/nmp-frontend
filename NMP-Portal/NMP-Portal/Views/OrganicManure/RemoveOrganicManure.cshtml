@@ -4,7 +4,18 @@
 
 @model OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblRemove;
+    var heading="";
+    if (!string.IsNullOrWhiteSpace(Model.FieldName))
+    {
+        heading = (string.Format(Resource.lblRemoveAnOrganicMaterialApplicationFromField, Model.FieldName));
+    }
+    else
+    {
+        heading = Resource.RemoveAnOrganicMaterialApplication;
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
