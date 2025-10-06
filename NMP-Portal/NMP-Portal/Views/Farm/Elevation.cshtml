@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FarmViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)} {Resource.lblHyphen} {title}";
     var AllFieldsAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m;
     var SomeFieldsAbove300m = (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m;

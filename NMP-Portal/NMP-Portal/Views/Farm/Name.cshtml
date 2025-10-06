@@ -3,7 +3,7 @@
 @model FarmViewModel
 
 @{
-    string title = (Model!=null&&!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
 }
 
@@ -45,12 +45,10 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             }
             </div>
-            @* <div class="govuk-form-group"> *@
                 <govuk-input  asp-for="@Model.Name">                    
                     <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
                     <govuk-input-hint>@Resource.lblIfYouhaveMoreThanOneHolding</govuk-input-hint>                    
                 </govuk-input>
-            @* </div>  *@       
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

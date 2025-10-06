@@ -1294,6 +1294,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add livestock number.
+        /// </summary>
+        public static string lblAddLivestockNumber {
+            get {
+                return ResourceManager.GetString("lblAddLivestockNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add manures to this {0} plan.
         /// </summary>
         public static string lblAddManuresToThisPlan {
@@ -10851,6 +10860,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveThisSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblRemoveThisSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        public static string lblReport {
+            get {
+                return ResourceManager.GetString("lblReport", resourceCulture);
             }
         }
         

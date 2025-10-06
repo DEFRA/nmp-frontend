@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblNitrogenStandards;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisLivestock, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var backAction = "";
     if (Model.IsLivestockCheckAnswer)
     {

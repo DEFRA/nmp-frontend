@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockNumbers;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 
 }
 

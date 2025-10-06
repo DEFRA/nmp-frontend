@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockManureNitrogenChecklist;
+    ViewData["Title"] = $"{string.Format(Resource.lblLivestockManureNitrogenFarmLimitReport, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
 
 }
 

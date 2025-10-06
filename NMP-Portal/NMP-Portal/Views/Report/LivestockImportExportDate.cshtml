@@ -1,7 +1,12 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblDate;
+    string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
+   
+
+    string heading = (string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var backAction = "";
     if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
     {
@@ -148,18 +153,43 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+             <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                    @heading
+                </govuk-fieldset-legend>
+            <govuk-date-input asp-for="@Model.LivestockImportExportDate">
+                <govuk-date-input-fieldset>
+                    <govuk-date-input-fieldset-legend is-page-heading="false">
+                    </govuk-date-input-fieldset-legend>
+                    <govuk-date-input-hint>
+                                @Resource.lblSampleDate
+                    </govuk-date-input-hint>
 
-                <govuk-date-input asp-for="@Model.LivestockImportExportDate" pattern="[0-9]*">
-                    <govuk-date-input-fieldset>
+                    <govuk-date-input-day maxlength="2"
+                                          oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                          aria-label="Day" />
+
+                    <govuk-date-input-month maxlength="2"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                            aria-label="Month" />
+
+                    <govuk-date-input-year maxlength="4"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                           aria-label="Year" />
+                </govuk-date-input-fieldset>
+            </govuk-date-input>
+            </govuk-fieldset>
+           @*  <govuk-date-input asp-for="@Model.LivestockImportExportDate" pattern="[0-9]*">
+                <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
                                                 Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-                        </govuk-date-input-fieldset-legend>
-                        <govuk-date-input-hint>
-                            <p>@Resource.lblSampleDate</p>
-                        </govuk-date-input-hint>
-                    </govuk-date-input-fieldset>
-                </govuk-date-input>
+                    </govuk-date-input-fieldset-legend>
+                    <govuk-date-input-hint>
+                        <p>@Resource.lblSampleDate</p>
+                    </govuk-date-input-hint>
+                </govuk-date-input-fieldset>
+            </govuk-date-input> *@
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
@@ -180,7 +210,7 @@
                             </a>
                         }
                         else
- @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {
