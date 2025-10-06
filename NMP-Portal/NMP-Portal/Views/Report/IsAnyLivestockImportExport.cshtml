@@ -2,7 +2,7 @@
 
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblImportsExports;
+    ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
@@ -132,11 +132,10 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
-                </h1>
-
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
+                    </govuk-fieldset-legend>
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestockImportExport">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
@@ -146,6 +145,7 @@
                         <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                     </govuk-radios-fieldset>
                 </govuk-radios>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

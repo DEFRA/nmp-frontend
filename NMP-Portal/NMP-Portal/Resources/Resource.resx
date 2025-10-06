@@ -6550,4 +6550,10 @@ livestock manure.</value>
   <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
     <value>Total area should not more than 2 decimal</value>
   </data>
+  <data name="lblReport" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="lblAddLivestockNumber" xml:space="preserve">
+    <value>Add livestock number</value>
+  </data>
 </root>

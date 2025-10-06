@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FarmViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblAddAFarm;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblSelectTheAddressFor, Model.Name)} {Resource.lblHyphen} {title}";
 
 }

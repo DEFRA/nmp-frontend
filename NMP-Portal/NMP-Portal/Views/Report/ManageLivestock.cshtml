@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblManageLivestock;
+    ViewData["Title"] = $"{string.Format(Resource.lblLivestockDetailsYear, Model.Year)} {Resource.lblHyphen} {Resource.lblLivestockNumbers} ";
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("Cattle", ViewBag.CattleList),

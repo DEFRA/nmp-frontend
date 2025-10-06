@@ -1,12 +1,16 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockComment;
+    string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
+    string heading = string.Format(Resource.lblLivestockCommentContent1,
+                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower());
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen}  {action} {Resource.lblImportsExportsOfLivestockManure}";
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                 "LivestockImportExportCheckAnswer": "LivestockReceiver") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+                                      "LivestockImportExportCheckAnswer" : "LivestockReceiver") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockComment"] != null)
 {
@@ -131,28 +135,21 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-
-                <div class="govuk-form-group">
-                    <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">
-                            @string.Format(Resource.lblLivestockCommentContent1,
-                                     Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                     Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
-                        </h1>
-                    </legand>
-                    <div class="govuk-hint">
-                        @Resource.lblLivestockCommentContent2
-                    </div>
-                    <div class="govuk-form-group" rows="5">
-                        <govuk-textarea asp-for="@Model.Comment"></govuk-textarea>
-                    </div>                 
-
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblLivestockCommentContent1,
+                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+                </govuk-fieldset-legend>
+                <div class="govuk-hint">
+                    @Resource.lblLivestockCommentContent2
                 </div>
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
-                @* <p class="govuk-body cancel-link">
+                <govuk-textarea asp-for="@Model.Comment" rows="5"></govuk-textarea>
+            </govuk-fieldset>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            @* <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckList)
                     {
                         <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
@@ -167,8 +164,8 @@
                     }
                 </p> *@
 
-            </div>
-
         </div>
-    </form>
+
+    </div>
+</form>
 }
