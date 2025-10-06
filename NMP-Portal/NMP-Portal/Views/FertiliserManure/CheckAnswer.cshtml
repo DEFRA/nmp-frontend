@@ -9,7 +9,7 @@
     }
     else
     {
-        heading = string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear.Value);
+        heading = string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0);
     }
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
@@ -188,7 +188,7 @@
                 }
                 else
                 {
-                    @string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear.Value)
+                    @string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0)
                 }
 
             </h1>
@@ -450,12 +450,12 @@
                                 }
                                 else
                                 {
-                                    @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
+                                    @(Model.FieldList?.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
                                 }
                             }
                             else
                             {
-                                @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
+                                @(Model.FieldList?.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
                             }
                             @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
                         </govuk-summary-list-row-key>
@@ -473,12 +473,12 @@
                                         }
                                         else
                                         {
-                                            @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
+                                            @(Model.FieldList?.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
                                         }
                                     }
                                     else
                                     {
-                                        @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
+                                        @(Model.FieldList?.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
                                     }
                                 </span>
                             </govuk-summary-list-row-action>
