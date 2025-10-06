@@ -23,7 +23,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="ExportFieldsOrCropType" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="ExportFieldsOrCropType" class="form-with-overlay" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
 
