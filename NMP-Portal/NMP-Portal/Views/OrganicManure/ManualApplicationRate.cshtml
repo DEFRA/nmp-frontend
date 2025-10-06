@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblManualApplicationRate;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblEnterTheApplicationRate} {Resource.lblHyphen} {title}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -345,7 +346,9 @@
             }
 
                 <govuk-input asp-for="@Model.ApplicationRate" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblEnterTheApplicationRate</govuk-input-label>
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblEnterTheApplicationRate
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
+                </govuk-input-label>
                     <govuk-input-hint>@Resource.lblEnterANumberFrom0To250</govuk-input-hint>
 
                     <govuk-input-suffix>@suffixUnit</govuk-input-suffix>

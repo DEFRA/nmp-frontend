@@ -42,5 +42,6 @@ namespace NMP.Portal.ViewModels
         public int? YearToCopyFrom { get; set; }
         public bool? IsDelete { get; set; }
         public string? IsRemovedRecently { get; set; }
+        public string? EncryptedIsStoreCapacityUpdate { get; set; }
     }
 }

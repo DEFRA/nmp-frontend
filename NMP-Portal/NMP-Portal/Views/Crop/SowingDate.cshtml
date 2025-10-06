@@ -1,20 +1,25 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    
+
     int SingleDateForAllTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
 
     var pageHeading = "";
     if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
     {
-        pageHeading = string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
+        pageHeading = (Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields ? string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
+                                                                string.Format(Resource.lblWhatIsThePlantingDate, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.SowingDateCurrentCounter].FieldName));
     }
     else
     {
-        pageHeading = string.Format(Resource.lblWhatIsTheSowingDateForCrop, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType);
+        pageHeading = (Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields ? string.Format(Resource.lblWhatIsTheSowingDateForCrop, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
+                                                                string.Format(Resource.lblWhatIsTheSowingDateForCropInField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.SowingDateCurrentCounter].FieldName));
     }
-    ViewData["Title"] = pageHeading;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
+
 }
 
 @section BeforeContent {
@@ -139,6 +144,17 @@
                                 <govuk-date-input-hint>
                                     @Resource.MsgDateExample
                                 </govuk-date-input-hint>
+                                <govuk-date-input-day maxlength="2"
+                                                      oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                      aria-label="Day" />
+
+                                <govuk-date-input-month maxlength="2"
+                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                        aria-label="Month" />
+
+                                <govuk-date-input-year maxlength="4"
+                                                       oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                       aria-label="Year" />
                             </govuk-date-input-fieldset>
                         </govuk-date-input>
                     }

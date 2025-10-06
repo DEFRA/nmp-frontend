@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblRainfallCategoryForFarmName, Model.FarmName);
+    string title = Resource.lblUpdateExcessWinterRainfall;
+    ViewData["Title"] = $"{string.Format(Resource.lblRainfallCategoryForFarmName, Model.FarmName)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {

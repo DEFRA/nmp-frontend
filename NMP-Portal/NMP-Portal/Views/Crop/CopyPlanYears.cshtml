@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {

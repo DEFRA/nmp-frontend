@@ -1,7 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblDoubleCrop;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichCropIsThisManureApplication, Model.FieldName)} {Resource.lblHyphen} {title}";
+
 }
 @section BeforeContent {
     @if(Model.IsCheckAnswer&&(!Model.IsAnyChangeInField)&&(!Model.IsManureTypeChange))

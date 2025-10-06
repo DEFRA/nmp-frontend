@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblManureApplyingDate;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblEnterTheDateInCorrectFormat} {Resource.lblHyphen} {title}";
     var backAction = "";
     // if (Model.IsDoubleCropAvailable)
     // {
@@ -25,7 +26,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "backFromManureApplyingDate") asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsManureTypeChange) && (!Model.IsFieldGroupChange)) ? "CheckAnswer" : "backFromManureApplyingDate") asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -129,7 +130,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
-                
+
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"></govuk-input>
@@ -261,40 +262,48 @@
                 </govuk-notification-banner>
 
             }
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            @* <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@(Model.FieldList.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName))</h1>
-            </legand>
-            <div class="govuk-form-group">
-                <govuk-date-input asp-for="@Model.ApplicationDate" pattern="[0-9]*">
+            </legand> *@
+            <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@(Model.FieldList.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName))</h1>
+                </govuk-fieldset-legend>
+                <govuk-date-input asp-for="ApplicationDate">
                     <govuk-date-input-fieldset>
                         <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset">
-                            @if (Model.HighReadilyAvailableNitrogen != null && Model.HighReadilyAvailableNitrogen == true)
+                            @if (Model.HighReadilyAvailableNitrogen == true && Model.ClosedPeriodForUI != null && Model.IsWithinNVZ == true)
                             {
-                                @if (Model.ClosedPeriodForUI != null && Model.IsWithinNVZ == true)
-                                {
-                                    <p>
-                                        @Resource.lblYourClosedPeriodForSpreadingOrganicMaterials
-                                    </p>
-
-                                    <p>
-                                        <b>@Model.ClosedPeriodForUI </b> <br />
-                                        @Resource.lblBasedOnYourCropSoilTypeFarmDetails
-                                    </p>
-
-                                }
+                                <p>@Resource.lblYourClosedPeriodForSpreadingOrganicMaterials</p>
+                                <p>
+                                    <b>@Model.ClosedPeriodForUI</b><br />
+                                    @Resource.lblBasedOnYourCropSoilTypeFarmDetails
+                                </p>
                             }
                             @Resource.MsgManureApplyingDateDontHaveExactDate
                         </govuk-date-input-fieldset-legend>
 
-
                         <govuk-date-input-hint>
                             <p>@Resource.lblSampleDate</p>
-
                         </govuk-date-input-hint>
 
+                        <govuk-date-input-day maxlength="2"
+                                              oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                              aria-label="Day" />
+
+                        <govuk-date-input-month maxlength="2"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                aria-label="Month" />
+
+                        <govuk-date-input-year maxlength="4"
+                                               oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                               aria-label="Year" />
                     </govuk-date-input-fieldset>
+
+
                 </govuk-date-input>
-            </div>
+
+            </govuk-fieldset>
 
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue

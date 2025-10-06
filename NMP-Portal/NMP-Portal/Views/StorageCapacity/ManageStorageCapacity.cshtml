@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblManageStoreCapacity;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {title}";
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("DirtyWater", ViewBag.DirtyWaterList),
@@ -127,7 +128,7 @@
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                         <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@slurryStorage.StoreName</span></a></td>
                                     </tr>
 
                                 }
@@ -163,7 +164,7 @@
                                         <td class="govuk-table__cell">@dirtyWater.StoreName</td>
                                         <td class="govuk-table__cell">@dirtyWater.StorageTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@dirtyWater.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@dirtyWater.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@dirtyWater.StoreName</span></a></td>
                                     </tr>
                                 }
                             </tbody>
@@ -198,7 +199,7 @@
                                         <td class="govuk-table__cell">@solidManureStorage.StoreName</td>
                                         <td class="govuk-table__cell">@solidManureStorage.SolidManureTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidManureStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@solidManureStorage.StoreName</span></a></td>
                                     </tr>
                                 }
                             </tbody>

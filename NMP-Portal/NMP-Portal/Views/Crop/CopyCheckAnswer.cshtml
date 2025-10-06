@@ -2,7 +2,9 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourAnswers;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {title}";
+
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var organicInorganicCopy = "";
@@ -148,7 +150,7 @@
                             @(Model.CopyExistingPlan.HasValue ? (Model.CopyExistingPlan == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CopyExistingPlan" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CopyExistingPlan" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row class=@((!Model.CopyYear.HasValue)?"govuk-error-message":"")>
@@ -159,7 +161,7 @@
                             @(Model.CopyYear.HasValue ? Model.CopyYear : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CopyPlanYears" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CopyPlanYears" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row class=@((!Model.OrganicInorganicCopy.HasValue)?"govuk-error-message":"")>
@@ -171,7 +173,7 @@
                                 Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CopyOrganicInorganicApplications" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CopyOrganicInorganicApplications" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>

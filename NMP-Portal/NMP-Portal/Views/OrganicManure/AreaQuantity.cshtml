@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblAreaAndQuantity;
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {title}";
     int trueWarningCount = 0;
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
     if (Model.IsNMaxLimitWarning) trueWarningCount++;
@@ -344,11 +344,15 @@
                 <h1 class="govuk-fieldset__heading">@Resource.lblEnterTheAreaAndQuantity</h1>
             </legand>
             <govuk-input asp-for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
+                </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
             </govuk-input>
             <govuk-input asp-for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
+                </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
 

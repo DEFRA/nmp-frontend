@@ -3324,7 +3324,7 @@ namespace NMP.Portal.Controllers
                 Error error = null;
                 if (model.ApplicationRateMethod == null)
                 {
-                    ModelState.AddModelError("ApplicationRate", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 (List<ManureType> manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
@@ -6207,7 +6207,7 @@ namespace NMP.Portal.Controllers
                     OrganicManures.Add(new
                     {
                         OrganicManure = orgManure,
-                        WarningMessages = warningMessageList,
+                        WarningMessages = warningMessageList.Count > 0 ? warningMessageList : null,
                         FarmID = model.FarmId,
                         FieldTypeID = fieldTypeId,
                         SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture

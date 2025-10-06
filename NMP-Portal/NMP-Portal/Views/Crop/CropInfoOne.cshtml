@@ -1,10 +1,14 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
+    var heading = "";
     if (ViewBag.CropInfoOneQuestion != null)
     {
-        ViewData["Title"] = ViewBag.CropInfoOneQuestion;
+        heading = ViewBag.CropInfoOneQuestion;
     }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
     int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int LessThan60days = (int)NMP.Portal.Enums.PotatoCropInfo1.LessThan60days;

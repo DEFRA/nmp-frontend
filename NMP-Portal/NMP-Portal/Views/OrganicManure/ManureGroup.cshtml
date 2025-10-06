@@ -1,7 +1,9 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblManureGroup;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication} {Resource.lblHyphen} {title}";
+
     var backAction = (Model.FieldGroup == Resource.lblSelectSpecificFields && Model.IsComingFromRecommendation) ? "HarvestYearOverview" :
     (Model.FieldGroup == Resource.lblSelectSpecificFields && (!Model.IsComingFromRecommendation)) ? "Fields" : "FieldGroup";
 }

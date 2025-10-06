@@ -1,7 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblWhichHarvestWouldYouLikeToPlanFor;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{Resource.lblWhichHarvestWouldYouLikeToPlanFor} {Resource.lblHyphen} {title}";
+
     int previousYear = (DateTime.Now.Year) - 1;
 }
 
