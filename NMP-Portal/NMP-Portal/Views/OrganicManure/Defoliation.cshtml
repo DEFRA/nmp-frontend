@@ -2,6 +2,20 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     ViewData["Title"] = Resource.lblDefoliation;
+    var heading = "";
+    if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value)
+    {
+
+        heading = ((Model.GrassCropCount != null && Model.GrassCropCount == 1) ? string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName) : Resource.lblWhichCutOrGrazingInThisApplicationForAllField);
+    }
+    else
+    {
+        heading = string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName);
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+
     string defoliation = string.Empty;
 }
 @section BeforeContent {

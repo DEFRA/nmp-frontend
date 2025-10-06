@@ -2,7 +2,8 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblExistingManureStorageCapacityReport, Model.Farm?.Name, Model.Year);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{Resource.lblHowtosaveyourplanasaPDF} {Resource.lblHyphen} {title}";
     decimal totalSlurryCapacityVolume = 0;
     decimal totalSlurrySurfaceArea = 0;
     decimal totalDirtyCapacityVolume = 0;

@@ -1,13 +1,13 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year);
-
-
+    var heading = (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[Model.DryMatterYieldCounter].FieldName, Model.Crops[Model.DryMatterYieldCounter].Year));
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsAnyChangeInField)&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"DryMatterYield") asp-controller="Crop" asp-route-q="@Model.DryMatterYieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) ? "CheckAnswer" : "DryMatterYield") asp-controller="Crop" asp-route-q="@Model.DryMatterYieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="DryMatterYield" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -114,53 +114,29 @@
             {
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
-                        <h1 class="govuk-heading-l">
-                            @* @if (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
-                            { *@
 
-                                <govuk-radios asp-for="@Model.Crops[i].Yield">
-                                    <govuk-radios-fieldset>
-                                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">
-                                            @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year))
-                                        </govuk-radios-fieldset-legend>
-                                        <govuk-radios-hint>@Resource.lblThisShouldBeWithinTheFollowingRange</govuk-radios-hint>
-                                        @if (ViewBag.YieldRanges != null)
-                                        {
-                                            @foreach (var yieldRanges in ViewBag.YieldRanges)
-                                            {
-                                                var modelYieldInt = (int)Math.Floor(Convert.ToDecimal(Model.Crops[i].Yield));
-                                                bool isSelected = modelYieldInt == yieldRanges.YieldId;
+                        <govuk-radios asp-for="@Model.Crops[i].Yield">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                    @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year))
+                                </govuk-radios-fieldset-legend>
+                                <govuk-radios-hint>@Resource.lblThisShouldBeWithinTheFollowingRange</govuk-radios-hint>
+                                @if (ViewBag.YieldRanges != null)
+                                {
+                                    @foreach (var yieldRanges in ViewBag.YieldRanges)
+                                    {
+                                        var modelYieldInt = (int)Math.Floor(Convert.ToDecimal(Model.Crops[i].Yield));
+                                        bool isSelected = modelYieldInt == yieldRanges.YieldId;
 
-                                                <govuk-radios-item value="@yieldRanges.YieldId" checked="@(isSelected)">
-                                                    @(string.Concat(yieldRanges.YieldId.ToString(), " ", Resource.lblTonnesPerHectare))
-                                                </govuk-radios-item>
-                                            }
-                                            
-                                        }
-                                    </govuk-radios-fieldset>
-                                </govuk-radios>
+                                        <govuk-radios-item value="@yieldRanges.YieldId" checked="@(isSelected)">
+                                            @(string.Concat(yieldRanges.YieldId.ToString(), " ", Resource.lblTonnesPerHectare))
+                                        </govuk-radios-item>
+                                    }
 
-                            @* } *@
-                            @* else
-                            {
-                                <govuk-radios asp-for="@Model.Crops[i].Yield">
-                                    <govuk-radios-fieldset>
-                                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">
-                                            @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year)
-                                        </govuk-radios-fieldset-legend>
-                                        <govuk-radios-hint>@Resource.lblThisShouldBeWithinTheFollowingRange</govuk-radios-hint>
-                                        @if (ViewBag.YieldRanges != null)
-                                        {
-                                            @foreach (var yieldRanges in ViewBag.YieldRanges)
-                                            {
-                                                <govuk-radios-item value="@yieldRanges.Yield">@(string.Concat(yieldRanges.Yield.ToString(), " " + Resource.lblTonnesPerHectare))</govuk-radios-item>
-                                            }
-                                        }
-                                    </govuk-radios-fieldset>
-                                </govuk-radios>
-                                
-                            } *@
-                        </h1>
+                                }
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+
                     </div>
                 </div>
             }

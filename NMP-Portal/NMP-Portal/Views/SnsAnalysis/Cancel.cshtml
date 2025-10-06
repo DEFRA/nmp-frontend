@@ -3,7 +3,8 @@
 @model SnsAnalysisViewModel
 
 @{
-    ViewData["Title"] = Resource.lblCancel;
+    ViewData["Title"] = $"{string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblSoilNitrogenSupplyAnalysis.ToLower())} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
+
     var cancelViewModel = new CancelViewModel
             {
                 IsCancel = Model.IsCancel,

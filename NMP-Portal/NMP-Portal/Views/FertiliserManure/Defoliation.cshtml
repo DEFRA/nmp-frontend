@@ -1,7 +1,17 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblDefoliation;
+    var heading = "";
+    if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value && Model.GrassCropCount > 1)
+    {
+        heading = ((Model.GrassCropCount != null && Model.GrassCropCount == 1) ? string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName) : Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField);
+    }
+    else
+    {
+        heading = string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName);
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     string defoliation = string.Empty;
 }
 @section BeforeContent {

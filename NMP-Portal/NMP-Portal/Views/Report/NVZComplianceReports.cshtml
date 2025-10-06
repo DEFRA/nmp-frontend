@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+
+    ViewData["Title"] = $"{Resource.lblWhichNVZComplianceReport} {Resource.lblHyphen} {Resource.lblCreateReport}";
 
     var nmaxReport = (int)NMP.Portal.Enums.NVZReportOption.NmaxReport;
     var livestockManureNFarmLimitReport = (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport;

@@ -6508,6 +6508,36 @@ livestock manure.</value>
   <data name="MsgClosedPeriodAndMaximumApplicationRateForHighN" xml:space="preserve">
     <value>Closed period and maximum application rate for high N organic manure on a registered organic farm message</value>
   </data>
+  <data name="lblUpdatePlan" xml:space="preserve">
+    <value>Update plan</value>
+  </data>
+  <data name="lblPlansAndRecordsList" xml:space="preserve">
+    <value>Plans and records list</value>
+  </data>
+  <data name="lblRemoveCropPlan" xml:space="preserve">
+    <value>Remove crop plan</value>
+  </data>
+  <data name="lblUpdateOrganicManure" xml:space="preserve">
+    <value>Update organic manure</value>
+  </data>
+  <data name="lblAddOrganicManure" xml:space="preserve">
+    <value>Add organic manure</value>
+  </data>
+  <data name="lblAddInorganicFeriliser" xml:space="preserve">
+    <value>Add inorganic fertiliser</value>
+  </data>
+  <data name="lblUpdateInorganicFeriliser" xml:space="preserve">
+    <value>Update inorganic fertiliser</value>
+  </data>
+  <data name="lblInUnit" xml:space="preserve">
+    <value>, in {0}</value>
+  </data>
+  <data name="lblUpdateOrganicMaterialStorage" xml:space="preserve">
+    <value>Update organic material storage</value>
+  </data>
+  <data name="AddASoilMineralNitrogenAnalysisResult" xml:space="preserve">
+    <value>Add a soil mineral nitrogen analysis result</value>
+  </data>
   <data name="lblAvailableSulphur" xml:space="preserve">
     <value>Available Sulphur (SO3)</value>
   </data>

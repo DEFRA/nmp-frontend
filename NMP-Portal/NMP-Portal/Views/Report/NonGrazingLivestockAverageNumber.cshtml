@@ -127,63 +127,25 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces))</span>
+                    </govuk-fieldset-legend>
+                    <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
 
-                 <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)</h1>
-                </legand>
-                <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
-             @*    <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, Model.PhosphateStandard)</p> *@
-                @* <govuk-details>
-                    <govuk-details-summary>
-                        @Resource.lblAboutOccupancyAndNitrogenStandard
-                    </govuk-details-summary>
-                    <govuk-details-text class="explanations">
+                    <govuk-input asp-for=@Model.AverageNumberOfPlaces type="number" step="any" spellcheck="false">
+                        <govuk-input-label is-page-heading="false"></govuk-input-label>
 
-                        <strong>
-                            @Resource.lblOccupancy
-                        </strong>
-                        <p class="govuk-body">
-                            @Resource.lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem
-                        </p>
-                        <p class="govuk-body">
-                            @Resource.lblIfTheOccupancyOnYourFarmIsDifferentToTheValueShownHere
-                        </p>
-                        <strong>
-                            @Resource.lblNitrogenNStandard
-                        </strong>
-                        <p class="govuk-body">
-                            @Resource.lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced
-                        </p>
-                        <p class="govuk-body margin-bottom-forty">
-                            @Resource.lblIfYouChangeThisValueYouMustKeepTheOccupancy
-                        </p>
-                    </govuk-details-text>
-                </govuk-details> *@
+                        @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Poultry &&
+                                            Model.LivestockTypeId != (int)NMP.Portal.Enums.Livestock.OneOstrich)
+                        {
+                            <govuk-input-hint>@Resource.lblForExampleFor10000PlacesEnter10</govuk-input-hint>
+                        }
 
-                <govuk-input asp-for=@Model.AverageNumberOfPlaces type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false"></govuk-input-label>
-                    
-                    @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Poultry &&
-                                    Model.LivestockTypeId != (int)NMP.Portal.Enums.Livestock.OneOstrich)
-                    {
-                        <govuk-input-hint>@Resource.lblForExampleFor10000PlacesEnter10</govuk-input-hint>
-                    }
-
-                    <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
-                </govuk-input>
-
-                @* <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
-                    @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
-                    {
-                        <govuk-input-hint>@Resource.lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm</govuk-input-hint>
-                    }
-                    <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
-                </govuk-input>
-
-                <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheNitrogenNStandardPerAnimalPerYear</govuk-input-label>
-                    <govuk-input-suffix>@Resource.lblkg</govuk-input-suffix>
-                </govuk-input> *@
+                        <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
+                    </govuk-input>
+                </govuk-fieldset>
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
