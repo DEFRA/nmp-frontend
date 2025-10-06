@@ -110,14 +110,18 @@
                     <govuk-input asp-for=@Model.Width type="number" step="any" spellcheck="false">
                         @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
                         {
-                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon
+                            <govuk-input-label is-page-heading="false">
+                                @Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoonSuffix
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                                @Resource.lblQuestionMark
                             </govuk-input-label>
                         }
                         else
                         {
-                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidth
+                            <govuk-input-label is-page-heading="false">
+                                @Resource.lblWhatIsTheWidthSuffix
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                                @Resource.lblQuestionMark
                             </govuk-input-label>
                         }
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
@@ -136,8 +140,10 @@
                                 @Resource.lblCircumference
                                 <govuk-radios-item-conditional>
                                     <govuk-input asp-for="@Model.Circumference" type="number" autocomplete="false">
-                                        <govuk-input-label>@Resource.lblWhatIsTheCircumference
+                                        <govuk-input-label>
+                                            @Resource.lblWhatIsTheCircumferenceSuffix
                                             <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                                            @Resource.lblQuestionMark
                                         </govuk-input-label>
                                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                                     </govuk-input>
@@ -147,8 +153,10 @@
                                 @Resource.lblDiameter
                                 <govuk-radios-item-conditional>
                                     <govuk-input asp-for="@Model.Diameter" type="number" autocomplete="false">
-                                        <govuk-input-label>@Resource.lblWhatIsTheDiameter
+                                        <govuk-input-label>
+                                            @Resource.lblWhatIsTheDiameterSuffix
                                             <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                                            @Resource.lblQuestionMark
                                         </govuk-input-label>
                                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                                     </govuk-input>
@@ -162,11 +170,19 @@
                     
                     @if (Model.StorageTypeID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
                     {
-                        <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheDepth</govuk-input-label>
+                        <govuk-input-label is-page-heading="false">
+                            @Resource.lblWhatIsTheDepthSuffix
+                            <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                            @Resource.lblQuestionMark
+                        </govuk-input-label>
                     }
                     else
                     {
-                        <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheTotalDepth</govuk-input-label>
+                        <govuk-input-label is-page-heading="false">
+                            @Resource.lblWhatIsTheTotalDepthSuffix
+                            <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                            @Resource.lblQuestionMark
+                        </govuk-input-label>
                         <govuk-input-hint>@Resource.lblDoNotDeductTheFreeboard</govuk-input-hint>
                     }
                     <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>

@@ -6550,4 +6550,91 @@ livestock manure.</value>
   <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
     <value>Total area should not more than 2 decimal</value>
   </data>
+  <data name="lblWhatIsTheExpectedYieldWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields </value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForFieldInWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} </value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForTheseFieldWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForFieldInSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1}</value>
+  </data>
+  <data name="lblQuestionMark" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="lblOptionalQues" xml:space="preserve">
+    <value>(optional)?</value>
+  </data>
+  <data name="lblPhosphorusPPerLitreOfSoil" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffix" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1}</value>
+  </data>
+  <data name="lblWhatWasTheTotalRainfallSinceApplicationSuffix" xml:space="preserve">
+    <value>What was the total rainfall since application</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfSuffix" xml:space="preserve">
+    <value>What is the average number of {0} in {1}</value>
+  </data>
+  <data name="lblWhatIsTheTotalFarmAreaSuffix" xml:space="preserve">
+    <value>What is the total farm area</value>
+  </data>
+  <data name="lblWhatIsTheTotalAreaInAnNVZSuffix" xml:space="preserve">
+    <value>What is the total area in an NVZ</value>
+  </data>
+  <data name="lblWhatPercentageOfTheLandIsFarmedAsGrassSuffix" xml:space="preserve">
+    <value>What percentage of the land is farmed as grass</value>
+  </data>
+  <data name="lblNumberInMonthSuffix" xml:space="preserve">
+    <value>Number in {0} {1}</value>
+  </data>
+  <data name="lblHowMuchDidYouSuffix" xml:space="preserve">
+    <value>How much did you {0}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenStandardForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
+    <value>What is the average total number of this {0} type for {1}</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheAdjustmentValuePerPectareSuffix" xml:space="preserve">
+    <value>What is the adjustment value per hectare</value>
+  </data>
+  <data name="lblWhatIsThePercentageOfOrganicMatterInTheSoilSuffix" xml:space="preserve">
+    <value>What is the percentage of organic matter in the soil</value>
+  </data>
+  <data name="lblPhValueSuffix" xml:space="preserve">
+    <value>pH value </value>
+  </data>
+  <data name="lblWhatIsTheWidthAtTheTopEdgeOfTheLagoonSuffix" xml:space="preserve">
+    <value>What is the width at the top edge of the lagoon</value>
+  </data>
+  <data name="lblWhatIsTheWidthSuffix" xml:space="preserve">
+    <value>What is the width</value>
+  </data>
+  <data name="lblWhatIsTheCircumferenceSuffix" xml:space="preserve">
+    <value>What is the circumference</value>
+  </data>
+  <data name="lblWhatIsTheDiameterSuffix" xml:space="preserve">
+    <value>What is the diameter</value>
+  </data>
+  <data name="lblWhatIsTheDepthSuffix" xml:space="preserve">
+    <value>What is the depth</value>
+  </data>
+  <data name="lblWhatIsTheTotalDepthSuffix" xml:space="preserve">
+    <value>What is the total depth</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOfSuffix" xml:space="preserve">
+    <value>What is the total capacity of {0}</value>
+  </data>
+  <data name="lblWhatIsTheWeightCapacityOfSuffix" xml:space="preserve">
+    <value>What is the weight capacity of {0}</value>
+  </data>
 </root>

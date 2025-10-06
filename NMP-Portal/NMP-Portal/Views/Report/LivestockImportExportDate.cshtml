@@ -149,17 +149,20 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-                <govuk-date-input asp-for="@Model.LivestockImportExportDate" pattern="[0-9]*">
-                    <govuk-date-input-fieldset>
+            <govuk-date-input asp-for="@Model.LivestockImportExportDate">
+                <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
                                                 Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-                        </govuk-date-input-fieldset-legend>
-                        <govuk-date-input-hint>
-                            <p>@Resource.lblSampleDate</p>
-                        </govuk-date-input-hint>
-                    </govuk-date-input-fieldset>
-                </govuk-date-input>
+                    </govuk-date-input-fieldset-legend>
+                    <govuk-date-input-hint>
+                        <p>@Resource.lblSampleDate</p>
+                    </govuk-date-input-hint>
+                    <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                    <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                    <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
+                </govuk-date-input-fieldset>
+            </govuk-date-input>
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
@@ -179,8 +182,8 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else
- @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+
+                        @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

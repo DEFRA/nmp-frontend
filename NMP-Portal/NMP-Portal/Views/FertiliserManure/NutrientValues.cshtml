@@ -124,6 +124,12 @@
                 }
             }
         </div>
+        @if (isFieldsEmpty)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#N">@Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <div class="govuk-form-group @(isFieldsEmpty ? "govuk-form-group--error" : "")">
             <div class="govuk-grid-column-two-thirds">
                 @if (Model.IsWarningMsgNeedToShow)

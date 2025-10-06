@@ -147,8 +147,9 @@
                 
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisLivestock, Model.Year)
+                        @string.Format(Resource.lblWhatIsTheNitrogenStandardForThisLivestockTypeInSuffix, Model.Year)
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places))</span>
+                        @Resource.lblQuestionMark
                     </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                     <govuk-details>
