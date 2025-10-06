@@ -2095,6 +2095,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available Sulphur (SO3).
+        /// </summary>
+        public static string lblAvailableSulphur {
+            get {
+                return ResourceManager.GetString("lblAvailableSulphur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall.
         /// </summary>
         public static string lblAverageAnnualRainfall {
@@ -16610,6 +16619,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cropped area should not more than 2 decimal.
+        /// </summary>
+        public static string MsgCroppedAreaShouldNotMoreThanTwoDecimal {
+            get {
+                return ResourceManager.GetString("MsgCroppedAreaShouldNotMoreThanTwoDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} added for {1}.
         /// </summary>
         public static string MsgCropsAddedForYear {
@@ -18113,6 +18131,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manure non - spreading area should not more than 2 decimal.
+        /// </summary>
+        public static string MsgManureNonSpreadingAreaNotMoreThanTwoDecimal {
+            get {
+                return ResourceManager.GetString("MsgManureNonSpreadingAreaNotMoreThanTwoDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of organic material are you using in this application not set?.
         /// </summary>
         public static string MsgManureTypeNotSet {
@@ -18973,6 +19000,15 @@ namespace NMP.Portal.Resources {
         public static string MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea {
             get {
                 return ResourceManager.GetString("MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total area should not more than 2 decimal.
+        /// </summary>
+        public static string MsgTotalAreaShouldNotMoreThanTwoDecimal {
+            get {
+                return ResourceManager.GetString("MsgTotalAreaShouldNotMoreThanTwoDecimal", resourceCulture);
             }
         }
         

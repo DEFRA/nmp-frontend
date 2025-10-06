@@ -501,7 +501,7 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenWithNutrient</th>
-                                                            <td class="govuk-table__cell">@(orgManure.N != null ? (orgManure.N > 0 ? string.Format("{0:N2}{1}", orgManure.N * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.N * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.N != null ? (orgManure.N > 0 ? string.Format("{0:N1}{1}", orgManure.N * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.N * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -512,25 +512,32 @@
                                                     <tbody class="govuk-table__body">
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailableNitrogen</th>
-                                                            <td class="govuk-table__cell">@(orgManure.AvailableN != null ? (orgManure.AvailableN > 0 ? string.Format(Resource.lblValueKg, string.Format("{0:N0}",orgManure.AvailableN)) : orgManure.AvailableN) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.AvailableN != null ? (orgManure.AvailableN > 0 ? string.Format("{0:N1}{1}", orgManure.AvailableN, Resource.lblKgPerHectare) : orgManure.AvailableN) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphateOnly</th>
-                                                            <td class="govuk-table__cell">@(orgManure.P2O5 != null ? (orgManure.P2O5 > 0 ? string.Format("{0:N2}{1}", orgManure.P2O5 * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.P2O5 * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.P2O5 != null ? (orgManure.P2O5 > 0 ? string.Format("{0:N1}{1}", orgManure.P2O5 * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.P2O5 * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailablePhosphate</th>
-                                                            <td class="govuk-table__cell">@(orgManure.AvailableP2O5 != null ? (orgManure.AvailableP2O5 > 0 ? string.Format(Resource.lblValueKg, string.Format("{0:N0}",orgManure.AvailableP2O5)) : orgManure.AvailableP2O5) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.AvailableP2O5 != null ? (orgManure.AvailableP2O5 > 0 ? string.Format("{0:N1}{1}", orgManure.AvailableP2O5, Resource.lblKgPerHectare) : orgManure.AvailableP2O5) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPotashWithNutrient</th>
-                                                            <td class="govuk-table__cell">@(orgManure.K2O != null ? (orgManure.K2O > 0 ? string.Format("{0:N2}{1}", orgManure.K2O * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.K2O * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.K2O != null ? (orgManure.K2O > 0 ? string.Format("{0:N1}{1}", orgManure.K2O * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.K2O * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailablePotash</th>
-                                                            <td class="govuk-table__cell">@(orgManure.AvailableK2O != null ? (orgManure.AvailableK2O > 0 ? string.Format(Resource.lblValueKg, string.Format("{0:N0}",orgManure.AvailableK2O)) : orgManure.AvailableK2O) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.AvailableK2O != null ? (orgManure.AvailableK2O > 0 ? string.Format("{0:N1}{1}", orgManure.AvailableK2O, Resource.lblKgPerHectare) : orgManure.AvailableK2O) : Resource.lblNotEntered)</td>
                                                         </tr>
-
+                                                        <tr class="govuk-table__row">
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalSulphur</th>
+                                                            <td class="govuk-table__cell">@(orgManure.SO3 != null ? (orgManure.SO3 > 0 ? string.Format("{0:N1}{1}", orgManure.SO3 * orgManure.ApplicationRate, Resource.lblKgPerHectare) : (orgManure.SO3 * orgManure.ApplicationRate)) : Resource.lblNotEntered)</td>
+                                                        </tr>
+                                                        <tr class="govuk-table__row">
+                                                            <th scope="col" class="govuk-table__header">@Resource.lblAvailableSulphur</th>
+                                                            <td class="govuk-table__cell">@(orgManure.AvailableSO3 != null ? (orgManure.AvailableSO3 > 0 ? string.Format("{0:N1}{1}", orgManure.AvailableSO3, Resource.lblKgPerHectare) : orgManure.AvailableSO3) : Resource.lblNotEntered)</td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
