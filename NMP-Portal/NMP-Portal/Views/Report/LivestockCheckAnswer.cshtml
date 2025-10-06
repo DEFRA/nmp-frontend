@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    ViewData["Title"] = $"{string.Format(Resource.lblAddLivestockDetailsFor, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 
@@ -157,9 +157,9 @@
                 <h1 class="govuk-heading-l">
                     @(string.Format(Resource.lblAddLivestockDetailsFor, Model.Year))
                 </h1>
-                <h2 class="govuk-heading-m">
+                <p class="govuk-heading-m">
                     @Resource.lblCheckYourAnswers
-                </h2>
+                </p>
 
                 <div class="check-answers">
                     <govuk-summary-list>

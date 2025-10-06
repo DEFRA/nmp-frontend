@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblFarmArea;
+    ViewData["Title"] = $"{Resource.lblFarmArea} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
 
 }
 
@@ -141,10 +141,10 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                    <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">@Resource.lblFarmArea</h1>
-                    </legand>
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @Resource.lblFarmArea
+                    </govuk-fieldset-legend>
                     <p class="govuk-hint">
                         @Resource.lblDoNotIncludeSurfaceWaterBuildingYards
                     </p>
@@ -165,7 +165,7 @@
                     </govuk-input-label>
                         <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
                     </govuk-input>
-                    @if(Model.IsGrasslandDerogation==true)
+                    @if (Model.IsGrasslandDerogation == true)
                     {
                         <govuk-input asp-for=@Model.GrassPercentage type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-label>
@@ -176,12 +176,12 @@
                             <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
                         </govuk-input>
                     }
-                    
+                </govuk-fieldset>
                 <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
 
-                
+
                 <p class="govuk-body cancel-link">
                     <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
                         @Resource.lblCancel

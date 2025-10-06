@@ -17,8 +17,8 @@
     var isFieldsEmpty = false;
     if (ViewData["IsPostRequest"] != null)
     {
-        isFieldsEmpty = Model.SoilAnalyses.PH == null && ((Model.SoilAnalyses.PhosphorusIndex == null && Model.SoilAnalyses.PotassiumIndex == null && Model.SoilAnalyses.MagnesiumIndex == null)
-       || (Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Potassium == null && Model.SoilAnalyses.Magnesium == null));
+        isFieldsEmpty = Model.SoilAnalyses.PH == null && ((Model.SoilAnalyses.PhosphorusIndex == null && string.IsNullOrWhiteSpace(Model.PotassiumIndexValue) && Model.SoilAnalyses.MagnesiumIndex == null)
+        || (Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Potassium == null && Model.SoilAnalyses.Magnesium == null));
     }
 
 }
@@ -140,7 +140,7 @@
                             <govuk-input-label is-page-heading="true" class="govuk-label govuk-input__wrapper">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
                         </govuk-input>
 
-                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.SoilAnalyses.PotassiumIndex">
+                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="true" class="govuk-label govuk-input__wrapper">@Resource.lblPotassiumIndexOptional</govuk-input-label>
                         </govuk-input>
 

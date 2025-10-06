@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblOccupancyAndStandard;
+    ViewData["Title"] = $"{Resource.lblOccupancyAndNitrogenStandard}  {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 
 }
 
@@ -128,14 +128,15 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@Resource.lblOccupancyAndNitrogenStandard</h1>
-                </legand>
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @Resource.lblOccupancyAndNitrogenStandard
+                    </govuk-fieldset-legend>
+                </govuk-fieldset>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                 <govuk-details>
                     <govuk-details-summary>
-                        @Resource.lblHelpWithOccupancyAndNitrogenNStandard 
+                        @Resource.lblHelpWithOccupancyAndNitrogenNStandard
                     </govuk-details-summary>
                     <govuk-details-text class="explanations">
 
@@ -176,10 +177,10 @@
                                 else
                                 {
                                     @string.Format(Resource.lblKgPer1000PlacesPerYear, ViewBag.NitrogenStandard)
-                                }   
+                                }
                             </td>
                         </tr>
-                        @if(Model.IsGrasslandDerogation==true)
+                        @if (Model.IsGrasslandDerogation == true)
                         {
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
@@ -196,10 +197,12 @@
                                 </td>
                             </tr>
                         }
-                        
+
                     </tbody>
                 </table>
-
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">                        
+                    </govuk-fieldset-legend>
                 <govuk-radios asp-for="@Model.OccupancyAndNitrogenOptions">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false">
@@ -213,7 +216,7 @@
                         }
 
                         <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)">@Resource.lblYesUseTheseValues</govuk-radios-item>
-                        @if(Model.IsGrasslandDerogation==false)
+                        @if (Model.IsGrasslandDerogation == false)
                         {
                             <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)">@Resource.lblNoChangeTheOccupancyValue</govuk-radios-item>
                             <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)">@Resource.lblNoChangeTheNitrogenNStandardValue</govuk-radios-item>
@@ -222,10 +225,11 @@
                         {
                             <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)">@Resource.lblNoChangeTheseValues</govuk-radios-item>
                         }
-                        
+
                     </govuk-radios-fieldset>
                 </govuk-radios>
 
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

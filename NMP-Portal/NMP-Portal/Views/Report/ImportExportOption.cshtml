@@ -1,7 +1,18 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblImportsExports;
+    string heading = string.Empty;
+    string action = string.Empty;
+    action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
+    @if (Model.IsManageImportExport || !string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+    {
+        heading = Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial;
+    }
+    else
+    {
+        heading = Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure;
+    }
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var import = (int)NMP.Portal.Enums.ImportExport.Import;
     var export = (int)NMP.Portal.Enums.ImportExport.Export;
     var backAction = "";
@@ -13,11 +24,11 @@
     {
         backAction = "ManageImportExport";
     }
-    else   if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+    else if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
     {
         backAction = "UpdateLivestockImportExport";
     }
-   
+
     else if (Model.IsCheckList)
     {
         backAction = "IsAnyLivestockImportExport";
@@ -155,26 +166,21 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <h1 class="govuk-heading-l">
-                    @if (Model.IsManageImportExport || !string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
-                    {
-                        @Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial
-                    }
-                    else
-                    {
-                        @Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure
-                    }
-                </h1>
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-fieldset-legend>
 
-                <govuk-radios class="govuk-radios" asp-for="@Model.ImportExport">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@import>@Resource.lblImport</govuk-radios-item>
-                        <govuk-radios-item value=@export>@Resource.lblExport</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                    <govuk-radios class="govuk-radios" asp-for="@Model.ImportExport">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                            <govuk-radios-item value=@import>@Resource.lblImport</govuk-radios-item>
+                            <govuk-radios-item value=@export>@Resource.lblExport</govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
@@ -193,7 +199,8 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else
+                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

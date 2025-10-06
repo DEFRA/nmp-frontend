@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblGrasslandDerogation;
+    ViewData["Title"] = $"{string.Format(Resource.lblDoesFarmHaveAGrasslandDerogation, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }

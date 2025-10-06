@@ -1,22 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.SoilAnalysisViewModel
 @{
-    string title = string.Empty;
-    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
-    {
-        title = string.Format(Resource.lblWhenWasTheSoilAnalysisForTaken, Model.FieldName);
-    }
-    else
-    {
-        title = string.Format(Resource.lblAddSoilAnalysis, Model.FieldName);
-    }
-    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
-    ? $"{title} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
-    $"{title} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     string heading = string.Empty;
-    @if (Model != null && Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
+    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
     {
         heading = string.Format(Resource.lblWhenWasTheSoilAnalysisForTaken, Model.FieldName);
     }
@@ -24,6 +10,11 @@
     {
         heading = string.Format(Resource.lblAddSoilAnalysis, Model.FieldName);
     }
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{heading} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {

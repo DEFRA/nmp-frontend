@@ -1294,6 +1294,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add livestock number.
+        /// </summary>
+        public static string lblAddLivestockNumber {
+            get {
+                return ResourceManager.GetString("lblAddLivestockNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add manures to this {0} plan.
         /// </summary>
         public static string lblAddManuresToThisPlan {
@@ -2581,7 +2590,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check your {0} data.
+        ///   Looks up a localized string similar to Before you start a {0} plan, check your {1} data.
         /// </summary>
         public static string lblCheckYourYearData {
             get {
@@ -10909,6 +10918,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        public static string lblReport {
+            get {
+                return ResourceManager.GetString("lblReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please report this error to &lt;a href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; include what you were trying to do and the status code : {0}.
         /// </summary>
         public static string lblReportError {
@@ -16239,7 +16257,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your {0} recommendations will be based on your {1} data, so it is important that it is up to date..
+        ///   Looks up a localized string similar to Your {0} recommendations will be based on your {1} plan. But plans change depending on factors like the weather, so it&apos;s important to keep the information in this tool accurate to what you actually did on the farm..
         /// </summary>
         public static string lblYourRecommWillbeBasedOnYourYearData {
             get {

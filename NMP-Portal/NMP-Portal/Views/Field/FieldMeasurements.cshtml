@@ -3,7 +3,7 @@
 
 @{
     //ViewData["Title"] = string.Format(Resource.lblFieldMeasurements, Model.Name);
-    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateXField, Model.Name) : Resource.lblAddField;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
     ViewData["Title"] = $"{string.Format(Resource.lblFieldMeasurements, Model.Name)} {Resource.lblHyphen} {title}";
     var backAction = "";
     if (Model.IsCheckAnswer)

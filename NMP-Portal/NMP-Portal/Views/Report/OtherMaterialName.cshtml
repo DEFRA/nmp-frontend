@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblManureType;
+    string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Resource.lblAdd;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {action}";
 
 }
 @section BeforeContent {
@@ -118,12 +119,9 @@
                     }
                 }
             </div>
-            <div class="govuk-form-group">
-                <govuk-input asp-for="@Model.OtherMaterialName">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
-                </govuk-input>
-
-            </div>
+            <govuk-input asp-for="@Model.OtherMaterialName">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
+            </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="OtherMaterialName">
                 @Resource.lblContinue
             </govuk-button>
@@ -143,7 +141,7 @@
                         </a>
                     }
                     else
- @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                     {
                         @if (!Model.IsCheckList)
                         {

@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
+    ViewData["Title"] = $" {string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
     var backAction = ((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value)) ? "Year" :
         ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
         ? "FieldAndPlanReports" : "NVZComplianceReports");
@@ -26,7 +26,6 @@
     <form asp-action="ExportFieldsOrCropType" class="form-with-overlay" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>

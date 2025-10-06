@@ -19,7 +19,7 @@
     var isFieldsEmpty = false;
     if (ViewData["IsPostRequest"] != null)
     {
-         isFieldsEmpty = Model.PH == null && ((Model.PhosphorusIndex == null && Model.PotassiumIndex == null && Model.MagnesiumIndex == null)
+        isFieldsEmpty = Model.PH == null && ((Model.PhosphorusIndex == null && string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)&& Model.MagnesiumIndex == null)
         || (Model.Phosphorus == null && Model.Potassium == null && Model.Magnesium == null));
     }
 }
@@ -105,7 +105,7 @@
                             <govuk-input-label is-page-heading="true" class="govuk-label govuk-input__wrapper">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
                         </govuk-input>
 
-                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.PotassiumIndex">
+                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="true" class="govuk-label govuk-input__wrapper">@Resource.lblPotassiumIndexOptional</govuk-input-label>
                         </govuk-input>
 
