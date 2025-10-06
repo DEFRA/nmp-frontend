@@ -6508,4 +6508,16 @@ livestock manure.</value>
   <data name="MsgClosedPeriodAndMaximumApplicationRateForHighN" xml:space="preserve">
     <value>Closed period and maximum application rate for high N organic manure on a registered organic farm message</value>
   </data>
+  <data name="lblAvailableSulphur" xml:space="preserve">
+    <value>Available Sulphur (SO3)</value>
+  </data>
+  <data name="MsgCroppedAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
+    <value>Cropped area should not more than 2 decimal</value>
+  </data>
+  <data name="MsgManureNonSpreadingAreaNotMoreThanTwoDecimal" xml:space="preserve">
+    <value>Manure non - spreading area should not more than 2 decimal</value>
+  </data>
+  <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
+    <value>Total area should not more than 2 decimal</value>
+  </data>
 </root>
