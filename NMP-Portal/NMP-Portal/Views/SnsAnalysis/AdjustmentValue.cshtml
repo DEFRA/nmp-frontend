@@ -3,7 +3,7 @@
 @model SnsAnalysisViewModel
 
 @{
-    ViewData["Title"] = Resource.lblAdjustmentValue;
+    ViewData["Title"] = $"{Resource.lblWhatIsTheAdjustmentValuePerHectare} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
 }
 
 @section BeforeContent {
@@ -57,7 +57,9 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
             </div>
             <govuk-input asp-for=@Model.AdjustmentValue inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsTheAdjustmentValuePerHectare</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsTheAdjustmentValuePerHectare
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
+                </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>
 

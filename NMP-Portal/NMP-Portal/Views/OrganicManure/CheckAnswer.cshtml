@@ -3,7 +3,19 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 
 @{
-    ViewData["Title"] = Resource.lblCheckAnswer;
+    var heading="";
+    if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
+    {
+        heading = Resource.lblCheckYourAnswers;
+    }
+    else
+    {
+        heading = string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear);
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+
     var DefaultNutrientValue = "";
     var howWouldYouEnterApplicationRate = "";
     int counter = 1;

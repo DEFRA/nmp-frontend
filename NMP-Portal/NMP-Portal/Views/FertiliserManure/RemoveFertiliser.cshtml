@@ -4,7 +4,10 @@
 
 @model FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblRemove;
+    var heading = (!string.IsNullOrWhiteSpace(Model.FieldName)) ? (string.Format(Resource.lblRemoveAnInorganicFertiliserApplicationFromField, Model.FieldName)) : Resource.lblRemoveAnInorganicFertiliserApplication;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 

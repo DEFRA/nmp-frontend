@@ -3,7 +3,8 @@
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 
 @{
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblFertiliserApplication.ToLower())} {Resource.lblHyphen} {title}";
     var cancelViewModel = new CancelViewModel
             {
                 IsCancel = Model.IsCancel,

@@ -2,7 +2,17 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourAnswers;
+    var heading="";
+    if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+    {
+        heading = Resource.lblCheckYourAnswers;
+    }
+    else
+    {
+        heading = string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear.Value);
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     int counter = 1;
 }
 

@@ -3,12 +3,14 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 
 @{
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblOrganicManureApplications.ToLower())} {Resource.lblHyphen} {title}";
 
     var cancelViewModel = new CancelViewModel
-            {
-                IsCancel = Model.IsCancel,
-                LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblOrganicManureApplications.ToLower())
-            };
+    {
+        IsCancel = Model.IsCancel,
+        LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblOrganicManureApplications.ToLower())
+    };
 }
 @section BeforeContent {
     <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>

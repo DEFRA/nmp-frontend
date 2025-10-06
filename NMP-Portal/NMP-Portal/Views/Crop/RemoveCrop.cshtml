@@ -14,7 +14,9 @@
         pageHeading = string.Format(Resource.lblRemoveCropGroupWithCropType, Model.CropGroupName);
     }
 
-    ViewData["Title"] = pageHeading;
+    string title = Resource.lblRemoveCropPlan;
+    ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
+
 
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);

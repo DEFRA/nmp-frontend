@@ -3,16 +3,17 @@
 @{
     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
-    var title = "";
+    var heading = "";
     if (Model.CropGroupId == otherGroupId)
     {
-        title = Resource.lblWhatIsTheNameOfTheCrop;
+        heading = Resource.lblWhatIsTheNameOfTheCrop;
     }
     else
     {
-        title = (Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoForCropType : Resource.lblCropTypeForPlan);
+        heading = (Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoForCropType : Resource.lblCropTypeForPlan);
     }
-    ViewData["Title"] = title;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
 }
 
