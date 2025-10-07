@@ -12133,6 +12133,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Storage capacity.
+        /// </summary>
+        public static string lblStorageCapacityForTitle {
+            get {
+                return ResourceManager.GetString("lblStorageCapacityForTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure storage on {0} in {1}.
         /// </summary>
         public static string lblStorageCapacityReportContentFour {
