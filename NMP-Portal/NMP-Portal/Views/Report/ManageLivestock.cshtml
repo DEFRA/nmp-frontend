@@ -145,7 +145,7 @@
                                         </td>
                                     }
                                     <td class="govuk-table__cell">
-                                        <a href="#">
+                                        <a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@cattle.EncryptedID">
                                             @Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span>
                                         </a>
                                     </td>
@@ -219,7 +219,7 @@
                                             @string.Format("{0:N0}{1}", pig.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@pig.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenPigs = totalNitrogenPigs + pig.TotalNProduced;
@@ -285,7 +285,7 @@
                                         </td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@poultry.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenPoultry = totalNitrogenPoultry + poultry.TotalNProduced;
@@ -351,7 +351,7 @@
                                             @string.Format("{0:N0}{1}", sheep.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@sheep.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenSheep = totalNitrogenSheep + sheep.TotalNProduced;
@@ -414,7 +414,7 @@
                                             @string.Format("{0:N0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenGoatsDeerAndHorses = totalNitrogenGoatsDeerAndHorses + goatsDeerAndHorse.TotalNProduced;
@@ -480,7 +480,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@cattle.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
                                         totalNitrogenCattle = totalNitrogenCattle + cattle.TotalNProduced;
@@ -545,7 +545,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell"> @string.Format("{0:N0}{1}", pig.TotalPProduced, Resource.lblkg) </td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@pig.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenPigs = totalNitrogenPigs + pig.TotalNProduced;
@@ -609,7 +609,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@poultry.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenPoultry = totalNitrogenPoultry + poultry.TotalNProduced;
@@ -671,7 +671,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@sheep.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenSheep = totalNitrogenSheep + sheep.TotalNProduced;
@@ -732,7 +732,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenGoatsDeerAndHorses = totalNitrogenGoatsDeerAndHorses + goatsDeerAndHorse.TotalNProduced;

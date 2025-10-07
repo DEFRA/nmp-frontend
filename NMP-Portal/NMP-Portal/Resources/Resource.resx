@@ -6643,6 +6643,15 @@ livestock manure.</value>
   <data name="lblAddLivestockNumber" xml:space="preserve">
     <value>Add livestock number</value>
   </data>
+  <data name="lblUpdateALivestockType" xml:space="preserve">
+    <value>Update a livestock type</value>
+  </data>
+  <data name="lblUpdateThisLivestockType" xml:space="preserve">
+    <value>Update this livestock type</value>
+  </data>
+  <data name="lblAddThisLivestock" xml:space="preserve">
+    <value>Add this livestock type</value>
+  </data>
   <data name="OrganicMaterialInventoryStorageRequirementReport" xml:space="preserve">
     <value>Organic material inventory and storage requirement report</value>
   </data>
