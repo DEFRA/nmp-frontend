@@ -1,7 +1,10 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblLivestockQuantity;
+    string heading = (string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
+    string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     string unit = "";
     @if (Model.IsManureTypeLiquid != null)
     {
@@ -11,7 +14,7 @@
 
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                 "LivestockImportExportCheckAnswer": "LivestockImportExportDate") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+                                      "LivestockImportExportCheckAnswer" : "LivestockImportExportDate") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockQuantity"] != null)
 {
@@ -134,26 +137,29 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
                 }
             }
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l">
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                     @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-                </h1>
-                    <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
+                </govuk-fieldset-legend>
+                <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="false" class="govuk-label--l">
-                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, unit)</span>
-                </govuk-input-label>
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, unit)</span>
+                        @Resource.lblQuestionMark
+                    </govuk-input-label>
                     <govuk-input-suffix>@unit</govuk-input-suffix>
-                    </govuk-input>
-                
+                </govuk-input>
+            </govuk-fieldset>
+
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    @if (Model.IsCheckAnswer)
+                @if (Model.IsCheckAnswer)
                     {
                         <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">
                             @Resource.lblCancel
@@ -167,7 +173,8 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else
+                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

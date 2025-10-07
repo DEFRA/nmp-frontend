@@ -127,7 +127,7 @@
                     </div>
                     @if (Model.SowingDateCurrentCounter == i)
                     {
-                        <govuk-date-input asp-for="@Model.Crops[i].SowingDate" pattern="[0-9]*">
+                        <govuk-date-input asp-for="@Model.Crops[i].SowingDate">
                             <govuk-date-input-fieldset>
                                 <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
@@ -144,17 +144,9 @@
                                 <govuk-date-input-hint>
                                     @Resource.MsgDateExample
                                 </govuk-date-input-hint>
-                                <govuk-date-input-day maxlength="2"
-                                                      oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                      aria-label="Day" />
-
-                                <govuk-date-input-month maxlength="2"
-                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                        aria-label="Month" />
-
-                                <govuk-date-input-year maxlength="4"
-                                                       oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                       aria-label="Year" />
+                                <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                                <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                                <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
                             </govuk-date-input-fieldset>
                         </govuk-date-input>
                     }

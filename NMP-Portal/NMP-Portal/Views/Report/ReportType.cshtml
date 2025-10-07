@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
 
     var cropAndFieldManagementReport = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
     var nMaxReport = (int)NMP.Portal.Enums.ReportType.NMaxReport;
@@ -129,34 +129,34 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year)
+                    </govuk-fieldset-legend>
 
-                <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year)
-                </h1>
+                    <p class="govuk-hint">
+                        @Resource.lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear
+                    </p>
+                    <govuk-radios asp-for="@Model.ReportType">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false">
 
-                <p class="govuk-hint">
-                    @Resource.lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear
-                </p>
-                <govuk-radios asp-for="@Model.ReportType">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false">
-
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@cropAndFieldManagementReport">
-                            @Resource.lblCropAndFieldManagementForReport
-                            <govuk-radios-item-hint>
-                                @Resource.lblCropFieldAndNutrientApplicationsForOneOrMoreFields
-                            </govuk-radios-item-hint>
-                        </govuk-radios-item>
-                        <govuk-radios-item value="@nMaxReport">
-                            @Resource.lblNMaxReport
-                            <govuk-radios-item-hint>
-                                @Resource.lblDemonstrateComplianceWithTheNMaxLimitForEachCrop
-                            </govuk-radios-item-hint>
-                        </govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-item value="@cropAndFieldManagementReport">
+                                @Resource.lblCropAndFieldManagementForReport
+                                <govuk-radios-item-hint>
+                                    @Resource.lblCropFieldAndNutrientApplicationsForOneOrMoreFields
+                                </govuk-radios-item-hint>
+                            </govuk-radios-item>
+                            <govuk-radios-item value="@nMaxReport">
+                                @Resource.lblNMaxReport
+                                <govuk-radios-item-hint>
+                                    @Resource.NMaxReportHint
+                                </govuk-radios-item-hint>
+                            </govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

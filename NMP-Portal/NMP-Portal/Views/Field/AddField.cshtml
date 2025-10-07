@@ -3,7 +3,7 @@
 @model FieldViewModel
 
 @{
-    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {string.Format(Resource.lblUpdateXField, Model.Name)}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
     ViewData["Title"] = title;
     var backAction = "";
     // if (Model.IsCheckAnswer)
@@ -100,7 +100,6 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
             </div>
 
-            <div class="govuk-form-group">
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                         @Resource.lblAddField
@@ -111,7 +110,6 @@
                         <govuk-input class="input-width-15 margin-bottom-forty" asp-for="@Model.LPIDNumber"></govuk-input>
                     }
                 </govuk-fieldset>
-            </div>
 
 
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">

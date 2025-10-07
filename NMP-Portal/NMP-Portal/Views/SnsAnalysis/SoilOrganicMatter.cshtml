@@ -58,8 +58,10 @@
         <div class="govuk-grid-column-two-thirds">
 
             <govuk-input asp-for=@Model.SoilOrganicMatter is-page-heading="false" inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsThePercentageOfOrganicMatter
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @Resource.lblWhatIsThePercentageOfOrganicMatterInTheSoilSuffix
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>
+                    @Resource.lblQuestionMark
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
             </govuk-input>

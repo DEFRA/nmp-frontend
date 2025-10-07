@@ -4,6 +4,7 @@
     {
         NmaxReport=1,
         LivestockManureNFarmLimitReport=2,
-        ExistingManureStorageCapacityReport=3
+        ExistingManureStorageCapacityReport=3,
+        OrganicMaterialInventoryAndStorageRequirementReport =4
     }
 }

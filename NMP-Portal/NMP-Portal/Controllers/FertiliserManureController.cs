@@ -1925,7 +1925,7 @@ namespace NMP.Portal.Controllers
                     && model.K2O == null && model.SO3 == null && model.MgO == null
                     && model.Lime == null)
                 {
-                    ModelState.AddModelError("N", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
+                    ModelState.AddModelError("AllNutrientNull", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
                     ViewData["IsPostRequest"] = true;
                     //return View(model);
                 }
@@ -4172,11 +4172,15 @@ namespace NMP.Portal.Controllers
                         if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                         {
                             List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
+                            List<WarningMessage> warningMessageList = new List<WarningMessage>();
+                            var FertiliserManure = new List<object>();
                             foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
                             {
-                                FertiliserManure FertiliserManure = new FertiliserManure
+                                int? fertID = model.UpdatedFertiliserIds != null ? (model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault()) : 0;
+
+                                FertiliserManure fertManure = new FertiliserManure
                                 {
-                                    ID = model.UpdatedFertiliserIds != null ? (model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault()) : 0,
+                                    ID = fertID,
                                     ManagementPeriodID = fertiliserManure.ManagementPeriodID,
                                     ApplicationDate = model.Date,
                                     Defoliation = fertiliserManure.Defoliation,
@@ -4202,13 +4206,22 @@ namespace NMP.Portal.Controllers
                                     NH4N = fertiliserManure.NH4N ?? 0,
                                     NO3N = fertiliserManure.NO3N ?? 0,
                                 };
-                                fertiliserList.Add(FertiliserManure);
+                                fertiliserList.Add(fertManure);
+
+                                warningMessageList = new List<WarningMessage>();
+                                warningMessageList = await GetWarningMessages(model);
+                                warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Portal.Enums.WarningCode.NMaxLimit ? fertID : fertiliserManure.FieldID);
+                                FertiliserManure.Add(new
+                                {
+                                    FertiliserManure = fertManure,
+                                    WarningMessages = warningMessageList.Count > 0 ? warningMessageList : null,
+                                });
                             }
-                            var result = new
+                            var jsonData = new
                             {
-                                FertiliserManure = fertiliserList
+                                FertiliserManure
                             };
-                            string jsonString = JsonConvert.SerializeObject(result);
+                            string jsonString = JsonConvert.SerializeObject(jsonData);
                             (List<FertiliserManure> fertiliser, error) = await _fertiliserManureService.UpdateFertiliser(jsonString);
                             if (string.IsNullOrWhiteSpace(error.Message) && fertiliser.Count > 0)
                             {

@@ -9445,8 +9445,10 @@ namespace NMP.Portal.Controllers
                                 if (organicManureList != null && organicManureList.Count > 0)
                                 {
                                     var OrganicManures = new List<object>();
+                                    List<WarningMessage> warningMessageList = new List<WarningMessage>();
                                     foreach (var orgManure in organicManureList)
                                     {
+                                        int? fieldID = null;
                                         int fieldTypeId = (int)NMP.Portal.Enums.FieldType.Arable;
                                         (ManagementPeriod ManData, error) = await _cropService.FetchManagementperiodById(orgManure.ManagementPeriodID);
                                         if (ManData != null)
@@ -9457,13 +9459,16 @@ namespace NMP.Portal.Controllers
                                             {
                                                 fieldTypeId = (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass) ?
                                                  (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
-
+                                                fieldID= crop.FieldID;
                                             }
                                         }
-
+                                        warningMessageList = new List<WarningMessage>();
+                                        warningMessageList = await GetWarningMessages(model);
+                                        warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Portal.Enums.WarningCode.NMaxLimit ? orgManure.ID : fieldID);
                                         OrganicManures.Add(new
                                         {
                                             OrganicManure = orgManure,
+                                            WarningMessages = warningMessageList.Count > 0 ? warningMessageList : null,
                                             FarmID = model.FarmId,
                                             FieldTypeID = fieldTypeId,
                                             SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
