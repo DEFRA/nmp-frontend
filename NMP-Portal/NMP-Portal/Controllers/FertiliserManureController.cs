@@ -1925,7 +1925,7 @@ namespace NMP.Portal.Controllers
                     && model.K2O == null && model.SO3 == null && model.MgO == null
                     && model.Lime == null)
                 {
-                    ModelState.AddModelError("N", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
+                    ModelState.AddModelError("AllNutrientNull", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
                     ViewData["IsPostRequest"] = true;
                     //return View(model);
                 }

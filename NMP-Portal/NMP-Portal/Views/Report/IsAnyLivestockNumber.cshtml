@@ -11,7 +11,7 @@
     }
     else
     {
-        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count>0)
+        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count > 0)
         {
             action = "ManageLivestock";
         }
@@ -165,7 +165,7 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                
+
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
                     {
@@ -189,7 +189,7 @@
                         </a>
                     }
                 </p>
-                
+
 
             </div>
 

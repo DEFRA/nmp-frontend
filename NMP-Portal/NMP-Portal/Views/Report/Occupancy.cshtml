@@ -129,8 +129,9 @@
             <div class="govuk-grid-column-two-thirds">
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheOccupancyForThisLivestockTypeIn, Model.Year)
+                        @string.Format(Resource.lblWhatIsTheOccupancyForThisLivestockTypeInSuffix, Model.Year)
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>
+                        @Resource.lblQuestionMark
                     </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                     <govuk-details>

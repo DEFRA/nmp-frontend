@@ -126,6 +126,7 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)
@@ -138,8 +139,9 @@
                     }
                     <govuk-input asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
-                            @string.Format(Resource.lblWhatIsTheAverageNumberOfThisLivestockType, ViewBag.LivestockCategory, Model.Year)
+                            @string.Format(Resource.lblWhatIsTheAverageNumberOfSuffix, ViewBag.LivestockCategory, Model.Year)
                             <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>
+                            @Resource.lblQuestionMark
                         </govuk-input-label>
                         <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
                     </govuk-input>

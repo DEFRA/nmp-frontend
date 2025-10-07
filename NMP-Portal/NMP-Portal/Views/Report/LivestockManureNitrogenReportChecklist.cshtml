@@ -220,18 +220,18 @@
                                 </a>
                             </div>
                             <div class="govuk-task-list__status" id="TotalFarmArea">
-                                
-                                    @if ((Model.IsGrasslandDerogation == false && Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null)
-                                                                || (Model.IsGrasslandDerogation == true && Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null && Model.GrassPercentage != null))
-                                    {
-                                        @Resource.lblCompleted
-                                    }
-                                    else
-                                    {
-                                        <strong class="govuk-tag govuk-tag--blue">
-                                            @Resource.lblIncomplete
-                                        </strong>
-                                    }
+
+                                @if ((Model.IsGrasslandDerogation == false && Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null)
+                                                            || (Model.IsGrasslandDerogation == true && Model.TotalFarmArea != null && Model.TotalAreaInNVZ != null && Model.GrassPercentage != null))
+                                {
+                                    @Resource.lblCompleted
+                                }
+                                else
+                                {
+                                    <strong class="govuk-tag govuk-tag--blue">
+                                        @Resource.lblIncomplete
+                                    </strong>
+                                }
                             </div>
                         </li>
 
@@ -318,7 +318,7 @@
                             </div>
                             <div class="govuk-task-list__status" id="ImportsExportsOfLivestockManure">
                                 @if (Model.IsAnyLivestockImportExport.HasValue || ViewBag.IsAnyLivestockImportExportFromFarmDetail != null ||
-                                                            (ViewBag.NutrientsLoadingManuresData!=null && ViewBag.NutrientsLoadingManuresData.Count > 0))
+                                                            (ViewBag.NutrientsLoadingManuresData != null && ViewBag.NutrientsLoadingManuresData.Count > 0))
                                 {
                                     @Resource.lblCompleted
                                 }
