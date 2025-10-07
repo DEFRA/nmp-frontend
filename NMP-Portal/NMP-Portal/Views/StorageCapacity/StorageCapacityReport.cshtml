@@ -2,7 +2,7 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{Resource.lblHowtosaveyourplanasaPDF} {Resource.lblHyphen} {title}";
     decimal totalSlurryCapacityVolume = 0;
     decimal totalSlurrySurfaceArea = 0;

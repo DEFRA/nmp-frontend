@@ -3,7 +3,7 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblStoreCapacity.ToLower())} {Resource.lblHyphen} {title}";
     var cancelViewModel = new CancelViewModel
     {

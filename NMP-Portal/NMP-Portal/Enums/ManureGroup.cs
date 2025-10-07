@@ -2,6 +2,7 @@
 {
     public enum ManureGroup
     {
-        LivestockManure=1
+        LivestockManure=1,
+        AnotherTypeOfOrganicMaterial=3
     }
 }

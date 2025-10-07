@@ -1,6 +1,6 @@
 ﻿@using NMP.Portal.Resources
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {title}";
     bool hasUpdate = false;
     @if (ViewBag.FinalYearList != null)
