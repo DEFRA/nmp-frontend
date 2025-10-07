@@ -4343,8 +4343,8 @@ live</value>
   <data name="lblCropFieldAndNutrientApplicationsForOneOrMoreFields" xml:space="preserve">
     <value>Crop, field and nutrient applications, for one or more fields.</value>
   </data>
-  <data name="lblDemonstrateComplianceWithTheNMaxLimitForEachCrop" xml:space="preserve">
-    <value>Demonstrate compliance with the N-max limit for each crop.</value>
+  <data name="NMaxReportHint" xml:space="preserve">
+    <value>Assess compliance with the N-max limit for each crop in your fields.</value>
   </data>
   <data name="lblNMaxReport" xml:space="preserve">
     <value>N-max report</value>
@@ -4865,8 +4865,8 @@ live</value>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
   </data>
-  <data name="lblDemonstrateComplianceWithTheLivestockManure" xml:space="preserve">
-    <value>Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm</value>
+  <data name="LivestockManureNitrogenFarmLimitReportHint" xml:space="preserve">
+    <value>Assess compliance with the livestock manure nitrogen (N) limit for the whole farm.</value>
   </data>
   <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit report</value>
@@ -5693,8 +5693,8 @@ live</value>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
   </data>
-  <data name="lblDemonstrateComplianceWithRulesForOrganicMaterialStorage" xml:space="preserve">
-    <value>Demonstrate compliance with rules for organic material storage.</value>
+  <data name="ExistingManureStorageCapacityReportHint" xml:space="preserve">
+    <value>Assess compliance with rules for organic manure storage for your farm.</value>
   </data>
   <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
     <value>Which year would you like to create an Existing manure storage capacity report for?</value>
@@ -6642,5 +6642,11 @@ livestock manure.</value>
   </data>
   <data name="lblAddLivestockNumber" xml:space="preserve">
     <value>Add livestock number</value>
+  </data>
+  <data name="OrganicMaterialInventoryStorageRequirementReport" xml:space="preserve">
+    <value>Organic material inventory and storage requirement report</value>
+  </data>
+  <data name="OrganicMaterialInventoryStorageRequirementReportHint" xml:space="preserve">
+    <value>Assess compliance with rules for manure inventory and storage requirements for your farm.</value>
   </data>
 </root>

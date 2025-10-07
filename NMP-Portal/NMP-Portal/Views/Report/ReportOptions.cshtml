@@ -150,11 +150,9 @@
                         @if (Model.Year == null)
                         {
                             @Resource.lblWhatTypeOfReportDoYouWantToCreate
-
                         }
                         else
-                        {
-                            @* ViewData["Title"] = string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year); *@
+                        {                           
                             @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
                         }
                     </govuk-fieldset-legend>

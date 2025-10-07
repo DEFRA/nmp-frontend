@@ -196,6 +196,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assess compliance with rules for organic manure storage for your farm..
+        /// </summary>
+        public static string ExistingManureStorageCapacityReportHint {
+            get {
+                return ResourceManager.GetString("ExistingManureStorageCapacityReportHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 20.
         /// </summary>
         public static string FieldGreaterThanX {
@@ -3603,33 +3612,6 @@ namespace NMP.Portal.Resources {
         public static string lblDeletLivestockImportExportContentOne {
             get {
                 return ResourceManager.GetString("lblDeletLivestockImportExportContentOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Demonstrate compliance with rules for organic material storage..
-        /// </summary>
-        public static string lblDemonstrateComplianceWithRulesForOrganicMaterialStorage {
-            get {
-                return ResourceManager.GetString("lblDemonstrateComplianceWithRulesForOrganicMaterialStorage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm.
-        /// </summary>
-        public static string lblDemonstrateComplianceWithTheLivestockManure {
-            get {
-                return ResourceManager.GetString("lblDemonstrateComplianceWithTheLivestockManure", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Demonstrate compliance with the N-max limit for each crop..
-        /// </summary>
-        public static string lblDemonstrateComplianceWithTheNMaxLimitForEachCrop {
-            get {
-                return ResourceManager.GetString("lblDemonstrateComplianceWithTheNMaxLimitForEachCrop", resourceCulture);
             }
         }
         
@@ -16302,6 +16284,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assess compliance with the livestock manure nitrogen (N) limit for the whole farm..
+        /// </summary>
+        public static string LivestockManureNitrogenFarmLimitReportHint {
+            get {
+                return ResourceManager.GetString("LivestockManureNitrogenFarmLimitReportHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://www.gov.uk/government/organisations/rural-payments-agency.
         /// </summary>
         public static string lnkRpa {
@@ -19576,6 +19567,33 @@ namespace NMP.Portal.Resources {
         public static string MsgYourDataSuccessfullyRemoved {
             get {
                 return ResourceManager.GetString("MsgYourDataSuccessfullyRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assess compliance with the N-max limit for each crop in your fields..
+        /// </summary>
+        public static string NMaxReportHint {
+            get {
+                return ResourceManager.GetString("NMaxReportHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material inventory and storage requirement report.
+        /// </summary>
+        public static string OrganicMaterialInventoryStorageRequirementReport {
+            get {
+                return ResourceManager.GetString("OrganicMaterialInventoryStorageRequirementReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assess compliance with rules for manure inventory and storage requirements for your farm..
+        /// </summary>
+        public static string OrganicMaterialInventoryStorageRequirementReportHint {
+            get {
+                return ResourceManager.GetString("OrganicMaterialInventoryStorageRequirementReportHint", resourceCulture);
             }
         }
         
