@@ -254,7 +254,7 @@
                         @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
                     </govuk-fieldset-legend>
                 }
-                @if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
+               else @if (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue)
                 {
                     @if (Model.DefaultFarmManureValueDate.HasValue)
                     {
