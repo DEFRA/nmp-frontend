@@ -3996,14 +3996,14 @@ namespace NMP.Portal.Controllers
             {
                 int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-            if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
-            {
-                (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
-            }
-            else
-            {
-                (manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupIdForFilter.Value, countryId);
-            }
+                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                {
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                }
+                else
+                {
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupIdForFilter.Value, countryId);
+                }
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -4065,7 +4065,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    
+
                     //(manureTypeList, error) = await _organicManureService.FetchManureTypeList(model.ManureGroupId.Value, countryId);
                     bool isLiquid = false;
                     if (error == null && manureTypeList.Count > 0)
@@ -4098,11 +4098,11 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsIncorporationMethodChange = true;
                 }
-                
+
                 if (model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
                 {
                     //int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                   
+
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
@@ -4163,7 +4163,7 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["IncorporationMethodError"] = error.Message;
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                      bool isLiquid = manureType.IsLiquid.Value;
+                        bool isLiquid = manureType.IsLiquid.Value;
                         string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
                         List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                         var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
@@ -4425,7 +4425,7 @@ namespace NMP.Portal.Controllers
                                 });
                             }
 
-                        }                        
+                        }
                         else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                         {
                             if (model.IsApplicationMethodChange)
@@ -4992,6 +4992,10 @@ namespace NMP.Portal.Controllers
                             model.ApplicationMethod = organicManure.ApplicationMethodID;
                             (model.ApplicationMethodName, error) = await _organicManureService.FetchApplicationMethodById(model.ApplicationMethod.Value);
 
+                            if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                            {
+                                model.OtherMaterialName = model.ManureTypeName;
+                            }
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
@@ -5603,6 +5607,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
             }
             catch (Exception ex)
@@ -6130,7 +6135,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-
+                   
                     //foreach (string field in model.FieldList)
                     //{
                     (Farm farmData, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -6166,7 +6171,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 var mannerOutput = new
                                                 {
-                                                    runType = farmData.EnglishRules ? 3 : 4,
+                                                    runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
                                                     postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                     countryID = farmData.CountryID,
                                                     field = new
@@ -8194,7 +8199,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             var mannerOutput = new
                                             {
-                                                runType = farmData.EnglishRules ? 3 : 4,
+                                                runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
                                                 postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                 countryID = farmData.CountryID,
                                                 field = new
@@ -9308,7 +9313,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         var mannerOutput = new
                                                         {
-                                                            runType = farmData.EnglishRules ? 3 : 4,
+                                                            runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
                                                             postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                             countryID = farmData.CountryID,
                                                             field = new
