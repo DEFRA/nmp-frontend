@@ -62,11 +62,11 @@
                 <p class="govuk-notification-banner__heading">
                     @TempData["succesMsgContent1"]
                 </p>
-                @if (TempData["succesMsgContent2"] != null)
+                @if (TempData["succesMsgContent2"] != null || TempData["RemoveSuccessMsg"] != null)
                 {
                     <p class="govuk-body">
                         <a asp-action="LivestockGroup" asp-controller="Report" class="govuk-notification-banner__link">
-                            @TempData["succesMsgContent2"]
+                            @(TempData["succesMsgContent2"] != null ? TempData["succesMsgContent2"] : TempData["RemoveSuccessMsg"])
                         </a>
                     </p>
                 }
