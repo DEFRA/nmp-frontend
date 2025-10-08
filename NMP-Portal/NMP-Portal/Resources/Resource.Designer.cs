@@ -1528,6 +1528,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add this livestock type.
+        /// </summary>
+        public static string lblAddThisLivestock {
+            get {
+                return ResourceManager.GetString("lblAddThisLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add this manure storage.
         /// </summary>
         public static string lblAddThisManureStorage {
@@ -13566,6 +13575,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update a livestock type.
+        /// </summary>
+        public static string lblUpdateALivestockType {
+            get {
+                return ResourceManager.GetString("lblUpdateALivestockType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update all these fields.
         /// </summary>
         public static string lblUpdateAllTheseFields {
@@ -13796,6 +13814,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateThisGroup {
             get {
                 return ResourceManager.GetString("lblUpdateThisGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update this livestock type.
+        /// </summary>
+        public static string lblUpdateThisLivestockType {
+            get {
+                return ResourceManager.GetString("lblUpdateThisLivestockType", resourceCulture);
             }
         }
         

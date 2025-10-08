@@ -156,5 +156,7 @@ namespace NMP.Portal.ViewModels
         [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
         public int? OccupancyAndNitrogenOptions { get; set; }
+
+        public string EncryptedNLLivestockID { get; set; } = string.Empty;
     }
 }

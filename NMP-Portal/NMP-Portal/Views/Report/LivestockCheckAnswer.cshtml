@@ -154,212 +154,224 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l">
-                    @(string.Format(Resource.lblAddLivestockDetailsFor, Model.Year))
-                </h1>
-                <p class="govuk-heading-m">
-                    @Resource.lblCheckYourAnswers
-                </p>
-
-                <div class="check-answers">
-                    <govuk-summary-list>
-                        @*  <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @(string.Format(Resource.lblDoesFarmHaveDerogationFor, Model.FarmName, Model.Year))
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.IsGrasslandDerogation==true ? Resource.lblYes : Resource.lblNo)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="IsGrasslandDerogation" asp-controller="Report">@Resource.lblChange</govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row> *@
-                        @if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count == 0)
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @if (string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
                         {
-                            <govuk-summary-list-row class=@(!Model.IsAnyLivestockNumber.HasValue ? "govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @* @(Model.IsAnyLivestockNumber == true ? Resource.lblYes : Resource.lblNo) *@
-                                    @((Model.IsAnyLivestockNumber.HasValue) ? (Model.IsAnyLivestockNumber == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="IsAnyLivestockNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                        }
-                        <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.LivestockGroupName) ? "govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(!string.IsNullOrWhiteSpace(Model.LivestockGroupName) ? Model.LivestockGroupName : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="LivestockGroup" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.LivestockTypeName) ? "govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(!string.IsNullOrWhiteSpace(Model.LivestockTypeName) ? Model.LivestockTypeName : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="LivestockType" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        @if (Model.LivestockGroupId == cattle || Model.LivestockGroupId == sheep || Model.LivestockGroupId == goatsDeerOrHorses)
-                        {
-                            <govuk-summary-list-row class=@(!Model.LivestockNumberQuestion.HasValue ? "govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.LivestockNumberQuestion.HasValue ? (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                            @if (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
-                            {
-                                <govuk-summary-list-row>
-                                    <govuk-summary-list-row-key>
-                                        @(string.Format(Resource.lblTotalNumberOfThisTypePerMonth, ViewBag.LivestockCategory))
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-
-                                        <table class="nutrient_values">
-                                            <tbody>
-                                                <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJanuary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInFebruary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblMarch:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMarch ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblApril:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInApril ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblMay:</td>       <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMay ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblJune:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJune ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblJuly:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJuly ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblAugust:</td>    <td>@(string.Format("{0:N0} {1}", (Model.NumbersInAugust ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblSeptember:</td> <td>@(string.Format("{0:N0} {1}", (Model.NumbersInSeptember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblOctober:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInOctober ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblNovember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInNovember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                                <tr><td>@Resource.lblDecember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInDecember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
-                                            </tbody>
-                                        </table>
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="LivestockNumbersMonthly" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblTotalNumberOfThisTypePerMonth, ViewBag.LivestockCategory))</span></govuk-summary-list-row-action>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                            }
-                            else
-                            {
-                                <govuk-summary-list-row class=@(!Model.AverageNumber.HasValue ? "govuk-error-message":"")>
-                                    <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                        @(Model.AverageNumber.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumber), " " + ViewBag.LivestockCategory?.ToLower())) : Resource.lblNotSet)
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="AverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)</span></govuk-summary-list-row-action>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                            }
+                            @(string.Format(Resource.lblAddLivestockDetailsFor, Model.Year))
                         }
                         else
                         {
-                            <govuk-summary-list-row class=@(!Model.AverageNumberOfPlaces.HasValue ? "govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.AverageNumberOfPlaces.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumberOfPlaces), Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces))) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                            <govuk-summary-list-row class=@(!Model.OccupancyAndNitrogenOptions.HasValue ? "govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.OccupancyAndNitrogenOptions.HasValue? occupancyNitrogenOption:Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="OccupancyAndStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-
-                            <govuk-summary-list-row class=@(!Model.AverageOccupancy.HasValue ? "govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblWhatIsTheAverageOccupancy
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.AverageOccupancy.HasValue ? (string.Concat(Model.AverageOccupancy, Resource.lblPercentage)) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Occupancy" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAverageOccupancy</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-
-                            <govuk-summary-list-row class=@(!Model.NitrogenStandard.HasValue ? "govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblNitrogenStandardPerAnimalPerYear
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblNitrogenStandardPerAnimalPerYear</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-
+                            @Resource.lblUpdateALivestockType
                         }
+                    </govuk-fieldset-legend>
 
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblTotalNitrogenProduced
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", ViewBag.TotalNProduced)))
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
+                   @*  <h1 class="govuk-heading-l">
+                        @(string.Format(Resource.lblAddLivestockDetailsFor, Model.Year))
+                    </h1> *@
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
+                    {
+                        <p class="govuk-heading-m">
+                            @Resource.lblCheckYourAnswers
+                        </p>
+                    }
 
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
 
-                        @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation == true)
-                        {
+                    <div class="check-answers">
+                        <govuk-summary-list>
+                            @if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count == 0)
+                            {
+                                <govuk-summary-list-row class=@(!Model.IsAnyLivestockNumber.HasValue ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @((Model.IsAnyLivestockNumber.HasValue) ? (Model.IsAnyLivestockNumber == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                            <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.LivestockGroupName) ? "govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(!string.IsNullOrWhiteSpace(Model.LivestockGroupName) ? Model.LivestockGroupName : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="LivestockGroup" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.LivestockTypeName) ? "govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(!string.IsNullOrWhiteSpace(Model.LivestockTypeName) ? Model.LivestockTypeName : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="LivestockType" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                            @if (Model.LivestockGroupId == cattle || Model.LivestockGroupId == sheep || Model.LivestockGroupId == goatsDeerOrHorses)
+                            {
+                                <govuk-summary-list-row class=@(!Model.LivestockNumberQuestion.HasValue ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.LivestockNumberQuestion.HasValue ? (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                                @if (Model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                                {
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            @(string.Format(Resource.lblTotalNumberOfThisTypePerMonth, ViewBag.LivestockCategory))
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+
+                                            <table class="nutrient_values">
+                                                <tbody>
+                                                    <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJanuary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInFebruary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblMarch:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMarch ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblApril:</td>     <td>@(string.Format("{0:N0} {1}", (Model.NumbersInApril ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblMay:</td>       <td>@(string.Format("{0:N0} {1}", (Model.NumbersInMay ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblJune:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJune ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblJuly:</td>      <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJuly ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblAugust:</td>    <td>@(string.Format("{0:N0} {1}", (Model.NumbersInAugust ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblSeptember:</td> <td>@(string.Format("{0:N0} {1}", (Model.NumbersInSeptember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblOctober:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInOctober ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblNovember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInNovember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                    <tr><td>@Resource.lblDecember:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInDecember ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                            <govuk-summary-list-row-action asp-action="LivestockNumbersMonthly" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblTotalNumberOfThisTypePerMonth, ViewBag.LivestockCategory))</span></govuk-summary-list-row-action>
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
+                                }
+                                else
+                                {
+                                    <govuk-summary-list-row class=@(!Model.AverageNumber.HasValue ? "govuk-error-message":"")>
+                                        <govuk-summary-list-row-key>
+                                            @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @(Model.AverageNumber.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumber), " " + ViewBag.LivestockCategory?.ToLower())) : Resource.lblNotSet)
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                            <govuk-summary-list-row-action asp-action="AverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)</span></govuk-summary-list-row-action>
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
+                                }
+                            }
+                            else
+                            {
+                                <govuk-summary-list-row class=@(!Model.AverageNumberOfPlaces.HasValue ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.AverageNumberOfPlaces.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumberOfPlaces), Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces))) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                                <govuk-summary-list-row class=@(!Model.OccupancyAndNitrogenOptions.HasValue ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.OccupancyAndNitrogenOptions.HasValue? occupancyNitrogenOption:Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="OccupancyAndStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row class=@(!Model.AverageOccupancy.HasValue ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @Resource.lblWhatIsTheAverageOccupancy
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.AverageOccupancy.HasValue ? (string.Concat(Model.AverageOccupancy, Resource.lblPercentage)) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="Occupancy" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAverageOccupancy</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row class=@(!Model.NitrogenStandard.HasValue ? "govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @Resource.lblNitrogenStandardPerAnimalPerYear
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblNitrogenStandardPerAnimalPerYear</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+
+                            }
+
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblPhosphateStandardPerAnimalPerYear
+                                    @Resource.lblTotalNitrogenProduced
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.PhosphateStandard.Value, 0))))
+                                    @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", ViewBag.TotalNProduced)))
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                            <govuk-summary-list-row>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblTotalPhosphateProduced
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", ViewBag.TotalPProduced)))
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                        }
-                    </govuk-summary-list>
-                </div>
 
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+
+                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation == true)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        @Resource.lblPhosphateStandardPerAnimalPerYear
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.PhosphateStandard.Value, 0))))
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        @Resource.lblTotalPhosphateProduced
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", ViewBag.TotalPProduced)))
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                        </govuk-summary-list>
+                    </div>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
+                    {
+                        @Resource.lblAddThisLivestock
+                    }
+                    else
+                    {
+                        @Resource.lblUpdateThisLivestockType
+                    }
+                    
                 </govuk-button>
 
                 <p class="govuk-body cancel-link">
