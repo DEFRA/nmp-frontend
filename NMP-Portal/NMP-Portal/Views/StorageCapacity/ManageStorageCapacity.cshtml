@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedIsStoreCapacityUpdate)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
-    ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {title}";
+    // string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("DirtyWater", ViewBag.DirtyWaterList),

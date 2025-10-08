@@ -140,7 +140,7 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
-                
+
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"></govuk-input>
@@ -245,8 +245,8 @@
                     @* @Resource.lblTheEffectivenessOfYourOrganicMaterialApp *@
                     @if (!isAutumnNUptakeZero)
                     {
-                    <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
-                    <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
+                        <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
+                        <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
                     }
                     <h3 class="govuk-heading-s">@Resource.lblEndOfSoilDrainage</h3>
                     <p class="govuk-body">@Resource.lblDateWhenSoilDrainageEnds.</p>
@@ -276,7 +276,14 @@
                         {
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@Resource.lblAutumnCropNitrogenUptake</td>
-                                <td class="govuk-table__cell">@Resource.lblTheAmountIsDifferentForEachOfTheseFields</td>
+                                @if (Model.AutumnCropNitrogenUptakes.All(x => x.AutumnCropNitrogenUptake == Model.AutumnCropNitrogenUptakes.First().AutumnCropNitrogenUptake))
+                                {
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#,0.#")))</td>
+                                }
+                                else
+                                {
+                                    <td class="govuk-table__cell">@Resource.lblTheAmountIsDifferentForEachOfTheseFields</td>
+                                }
                                 <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptakeDetail" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></a></td>
                             </tr>
                         }

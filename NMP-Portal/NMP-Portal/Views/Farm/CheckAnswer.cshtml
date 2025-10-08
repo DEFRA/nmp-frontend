@@ -3,7 +3,7 @@
 
 @{
     //ViewData["Title"] = Resource.lblCheckAnswer;
-    ViewData["Title"] = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblUpdateFarm, Model.Name)} {Resource.lblHyphen} {Resource.lblDetails}" : $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddAFarm}";
+    ViewData["Title"] = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower())} {Resource.lblHyphen} {Resource.lblDetails}" : $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddAFarm}";
     //ViewData["Title"] ={title}";
     var organicProducer = "";
     var fieldsAbove300m = "";

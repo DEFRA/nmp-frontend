@@ -2,14 +2,21 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
+    string action = string.Empty;
+    string heading = string.Empty;
     @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
     {
-        ViewData["Title"] = Resource.lblUpdateAnOrganicMaterialImportOrExport;
+        heading = Resource.lblUpdateAnOrganicMaterialImportOrExport;
+        action = Resource.lblUpdate;
     }
     else
     {
-        ViewData["Title"] = Resource.lblCheckAnswer;
+        action = Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
+        heading = string.Format(Resource.lblAddAnImportOrExportForYear,
+        Model.Year);
     }
+
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     string importExport = "";
     @if (Model.IsImport == null)
     {
@@ -169,21 +176,11 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-form-group">
-                    <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">
-                            @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
-                            {
-                                @string.Format(Resource.lblAddAnImportOrExportForYear,
-                                Model.Year)
-                                                }
-                            else
-                            {
-                                @Resource.lblUpdateAnOrganicMaterialImportOrExport
-                            }
-
-                        </h1>
-                </div>
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-fieldset-legend>
+                </govuk-fieldset>
                 <div class="check-answers margin-bottom-forty">
                     <govuk-summary-list>
                         @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
@@ -748,7 +745,6 @@
                     }
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-
                     <a asp-action="Cancel" asp-controller="Report">
                         @Resource.lblCancel
                     </a>

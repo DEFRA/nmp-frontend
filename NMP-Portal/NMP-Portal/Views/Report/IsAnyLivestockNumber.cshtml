@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var action = "";
@@ -11,7 +11,7 @@
     }
     else
     {
-        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count>0)
+        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count > 0)
         {
             action = "ManageLivestock";
         }
@@ -165,7 +165,7 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                
+
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
                     {
@@ -189,7 +189,7 @@
                         </a>
                     }
                 </p>
-                
+
 
             </div>
 

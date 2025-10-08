@@ -59,7 +59,7 @@ namespace NMP.Portal.ViewModels
         public decimal? NO3N { get; set; }
         public bool? IsDefaultNutrient { get; set; } = false;
         public bool IsCheckAnswer { get; set; } = false;
-        public decimal? AutumnCropNitrogenUptake { get; set; }
+        public int? AutumnCropNitrogenUptake { get; set; }
         public List<AutumnCropNitrogenUptakeDetail>? AutumnCropNitrogenUptakes { get; set; }
         public int? RainfallWithinSixHoursID { get; set; }
         public string? RainfallWithinSixHours { get; set; }

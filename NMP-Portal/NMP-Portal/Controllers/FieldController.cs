@@ -907,13 +907,13 @@ namespace NMP.Portal.Controllers
                 //    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
                 //}
 
-                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
-                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate)))
                 {
                     ModelState["SoilAnalyses.Date"].Errors.Clear();
                     ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgTheDateMustInclude);

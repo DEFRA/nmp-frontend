@@ -1,7 +1,11 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblNutrient;
+    string heading = (Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                        Resource.lblWhoAreYouImportingThisLivestockManureFrom :
+                                        Resource.lblWhoAreYouExportingThisLivestockManureTo);
+    string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -11,9 +15,9 @@
 
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                 "LivestockImportExportCheckAnswer":
-                 (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)?
-                 "LivestockManualNutrientValue":"LivestockDefaultNutrientValue")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+                                      "LivestockImportExportCheckAnswer" :
+                                      (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis) ?
+                                      "LivestockManualNutrientValue" : "LivestockDefaultNutrientValue")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockReceiver"] != null)
 {
@@ -130,58 +134,56 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
                 }
             }
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                     @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
                                         Resource.lblWhoAreYouImportingThisLivestockManureFrom :
                                         Resource.lblWhoAreYouExportingThisLivestockManureTo)
-                    </h1>
-                </legand>
-                <div class="govuk-form-group">
+                </govuk-fieldset-legend>
+
+
                     <govuk-input asp-for="@Model.ReceiverName">
                         <govuk-input-label>@Resource.lblName</govuk-input-label>
                     </govuk-input>
-                </div>
-                <div class="govuk-form-group">
+
+
                     <govuk-input asp-for="@Model.Address1" id="Address1">
                         <govuk-input-label>@string.Format("{0} {1}", Resource.lblAddressLine1, Resource.lblOptional)</govuk-input-label>
                     </govuk-input>
-                </div>
 
-                <div class="govuk-form-group">
+
+
                     <govuk-input asp-for="@Model.Address2">
                         <govuk-input-label>@Resource.lblAddressLine2</govuk-input-label>
                     </govuk-input>
-                </div>
 
-                <div class="govuk-form-group">
+
+
                     <govuk-input class="govuk-input--width-20" asp-for="@Model.Address3">
                         <govuk-input-label>@string.Format("{0} {1}", Resource.lblTownOrCity, Resource.lblOptional)</govuk-input-label>
                     </govuk-input>
-                </div>
 
-                <div class="govuk-form-group">
+
+
                     <govuk-input class="govuk-input--width-20" asp-for="@Model.Address4">
                         <govuk-input-label>@string.Format("{0} {1}", Resource.lblCounty, Resource.lblOptional)</govuk-input-label>
                     </govuk-input>
-                </div>
 
-                <div class="govuk-form-group">
+
+
                     <govuk-input class="govuk-input--width-10" asp-for="@Model.Postcode">
                         <govuk-input-label>@string.Format("{0} {1}", Resource.lblPostCode, Resource.lblOptional)</govuk-input-label>
                     </govuk-input>
-                </div>
-                @* <div class="govuk-form-group"> *@
-                    <govuk-button type="submit" class="margin-bottom-forty">
-                        @Resource.lblContinue
-                    </govuk-button>
 
-                @* </div> *@
-              @*   <p class="govuk-body cancel-link">
+                </govuk-fieldset>
+
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+                @*   <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckList)
                     {
                         <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">

@@ -4343,8 +4343,8 @@ live</value>
   <data name="lblCropFieldAndNutrientApplicationsForOneOrMoreFields" xml:space="preserve">
     <value>Crop, field and nutrient applications, for one or more fields.</value>
   </data>
-  <data name="lblDemonstrateComplianceWithTheNMaxLimitForEachCrop" xml:space="preserve">
-    <value>Demonstrate compliance with the N-max limit for each crop.</value>
+  <data name="NMaxReportHint" xml:space="preserve">
+    <value>Assess compliance with the N-max limit for each crop in your fields.</value>
   </data>
   <data name="lblNMaxReport" xml:space="preserve">
     <value>N-max report</value>
@@ -4635,7 +4635,7 @@ live</value>
     <value>Check your plan data</value>
   </data>
   <data name="lblCheckYourYearData" xml:space="preserve">
-    <value>Check your {0} data</value>
+    <value>Before you start a {0} plan, check your {1} data</value>
   </data>
   <data name="lblCropPlantingDates" xml:space="preserve">
     <value>crop planting dates</value>
@@ -4653,7 +4653,7 @@ live</value>
     <value>yields of any arable crops</value>
   </data>
   <data name="lblYourRecommWillbeBasedOnYourYearData" xml:space="preserve">
-    <value>Your {0} recommendations will be based on your {1} data, so it is important that it is up to date.</value>
+    <value>Your {0} recommendations will be based on your {1} plan. But plans change depending on factors like the weather, so it's important to keep the information in this tool accurate to what you actually did on the farm.</value>
   </data>
   <data name="lblYourYearPlanWasLastUpdatedOn" xml:space="preserve">
     <value>Your {0} plan was last updated on {1}.</value>
@@ -4865,8 +4865,8 @@ live</value>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
   </data>
-  <data name="lblDemonstrateComplianceWithTheLivestockManure" xml:space="preserve">
-    <value>Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm</value>
+  <data name="LivestockManureNitrogenFarmLimitReportHint" xml:space="preserve">
+    <value>Assess compliance with the livestock manure nitrogen (N) limit for the whole farm.</value>
   </data>
   <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit report</value>
@@ -5693,8 +5693,8 @@ live</value>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
   </data>
-  <data name="lblDemonstrateComplianceWithRulesForOrganicMaterialStorage" xml:space="preserve">
-    <value>Demonstrate compliance with rules for organic material storage.</value>
+  <data name="ExistingManureStorageCapacityReportHint" xml:space="preserve">
+    <value>Assess compliance with rules for organic manure storage for your farm.</value>
   </data>
   <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
     <value>Which year would you like to create an Existing manure storage capacity report for?</value>
@@ -6549,5 +6549,116 @@ livestock manure.</value>
   </data>
   <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
     <value>Total area should not more than 2 decimal</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields </value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForFieldInWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} </value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForTheseFieldWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForFieldInSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1}</value>
+  </data>
+  <data name="lblQuestionMark" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="lblOptionalQues" xml:space="preserve">
+    <value>(optional)?</value>
+  </data>
+  <data name="lblPhosphorusPPerLitreOfSoil" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffix" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1}</value>
+  </data>
+  <data name="lblWhatWasTheTotalRainfallSinceApplicationSuffix" xml:space="preserve">
+    <value>What was the total rainfall since application</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfSuffix" xml:space="preserve">
+    <value>What is the average number of {0} in {1}</value>
+  </data>
+  <data name="lblWhatIsTheTotalFarmAreaSuffix" xml:space="preserve">
+    <value>What is the total farm area</value>
+  </data>
+  <data name="lblWhatIsTheTotalAreaInAnNVZSuffix" xml:space="preserve">
+    <value>What is the total area in an NVZ</value>
+  </data>
+  <data name="lblWhatPercentageOfTheLandIsFarmedAsGrassSuffix" xml:space="preserve">
+    <value>What percentage of the land is farmed as grass</value>
+  </data>
+  <data name="lblNumberInMonthSuffix" xml:space="preserve">
+    <value>Number in {0} {1}</value>
+  </data>
+  <data name="lblHowMuchDidYouSuffix" xml:space="preserve">
+    <value>How much did you {0}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenStandardForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
+    <value>What is the average total number of this {0} type for {1}</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheAdjustmentValuePerPectareSuffix" xml:space="preserve">
+    <value>What is the adjustment value per hectare</value>
+  </data>
+  <data name="lblWhatIsThePercentageOfOrganicMatterInTheSoilSuffix" xml:space="preserve">
+    <value>What is the percentage of organic matter in the soil</value>
+  </data>
+  <data name="lblPhValueSuffix" xml:space="preserve">
+    <value>pH value </value>
+  </data>
+  <data name="lblWhatIsTheWidthAtTheTopEdgeOfTheLagoonSuffix" xml:space="preserve">
+    <value>What is the width at the top edge of the lagoon</value>
+  </data>
+  <data name="lblWhatIsTheWidthSuffix" xml:space="preserve">
+    <value>What is the width</value>
+  </data>
+  <data name="lblWhatIsTheCircumferenceSuffix" xml:space="preserve">
+    <value>What is the circumference</value>
+  </data>
+  <data name="lblWhatIsTheDiameterSuffix" xml:space="preserve">
+    <value>What is the diameter</value>
+  </data>
+  <data name="lblWhatIsTheDepthSuffix" xml:space="preserve">
+    <value>What is the depth</value>
+  </data>
+  <data name="lblWhatIsTheTotalDepthSuffix" xml:space="preserve">
+    <value>What is the total depth</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOfSuffix" xml:space="preserve">
+    <value>What is the total capacity of {0}</value>
+  </data>
+  <data name="lblWhatIsTheWeightCapacityOfSuffix" xml:space="preserve">
+    <value>What is the weight capacity of {0}</value>
+  </data>
+  <data name="lblReport" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="lblAddLivestockNumber" xml:space="preserve">
+    <value>Add livestock number</value>
+  </data>
+  <data name="lblUpdateALivestockType" xml:space="preserve">
+    <value>Update a livestock type</value>
+  </data>
+  <data name="lblUpdateThisLivestockType" xml:space="preserve">
+    <value>Update this livestock type</value>
+  </data>
+  <data name="lblAddThisLivestock" xml:space="preserve">
+    <value>Add this livestock type</value>
+  </data>
+  <data name="OrganicMaterialInventoryStorageRequirementReport" xml:space="preserve">
+    <value>Organic material inventory and storage requirement report</value>
+  </data>
+  <data name="OrganicMaterialInventoryStorageRequirementReportHint" xml:space="preserve">
+    <value>Assess compliance with rules for manure inventory and storage requirements for your farm.</value>
+  </data>
+  <data name="lblStorageCapacityForTitle" xml:space="preserve">
+    <value>Storage capacity</value>
   </data>
 </root>
