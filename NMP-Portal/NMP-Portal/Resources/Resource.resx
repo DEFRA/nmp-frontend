@@ -6661,4 +6661,10 @@ livestock manure.</value>
   <data name="lblStorageCapacityForTitle" xml:space="preserve">
     <value>Storage capacity</value>
   </data>
+  <data name="MsgGenericFor" xml:space="preserve">
+    <value>for {0}</value>
+  </data>
+  <data name="lblView" xml:space="preserve">
+    <value>View</value>
+  </data>
 </root>
