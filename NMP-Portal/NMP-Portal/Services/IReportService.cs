@@ -24,5 +24,8 @@ namespace NMP.Portal.Services
         Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes();
         Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id);
         Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId);
+
+        Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
+
     }
 }
