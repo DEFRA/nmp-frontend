@@ -131,6 +131,7 @@ namespace NMP.Portal.Helpers
         public const string FetchFertiliserTotalNByManagementPeriodIDAPI = "/fertiliser-manures/total-nitrogen-by/{0}";
         public const string FetchOragnicManureAvailableNByManagementPeriodIDAPI = "/organic-manure/total-nitrogen-by/{0}";
         public const string DeleteNutrientsLoadingManuresByIdAPI = "nutrientsLoadingManures/{0}";
+        public const string DeleteNutrientsLoadingLivestockByIdAPI = "nutrients-loading-live-stocks/{0}";
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
         public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
@@ -213,6 +214,7 @@ namespace NMP.Portal.Helpers
         public const string CopyStoreManureCapacityAsyncAPI = "storage-capacities/copystoragecapacities";
         public const string DeleteStorageCapacityByIdAPI = "store-capacities/{0}";
         public const string UpdateStoreCapacityAsyncAPI = "store-capacities";
-        public const string FetchNutrientsLoadingLiveStockByIdAsyncAPI = "nutrients-loading-live-stocks/by-id/{0}";
+        public const string FetchNutrientsLoadingLiveStockByIdAsyncAPI = "nutrients-loading-live-stocks-by-id/{0}";
+        public const string UpdateNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
     }
 }

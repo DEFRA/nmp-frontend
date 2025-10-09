@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
-    ViewData["Title"] = $"{string.Format(Resource.lblRemoveStoreName, Model.StoreName)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblRemovePropertyName, Model.StoreName)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
@@ -72,7 +72,7 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblRemoveStoreName, Model.StoreName)
+                    @string.Format(Resource.lblRemovePropertyName, Model.StoreName)
                 </h1>
                 <p class="govuk-body">
                     @string.Format(Resource.lblRemoveContent, Model.StoreName,Model.FarmName)
