@@ -5544,6 +5544,7 @@ namespace NMP.Portal.Controllers
 
                 var nutrientsLoadingLiveStock = new NutrientsLoadingLiveStock()
                 {
+                    ID = !string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID) ? Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedNLLivestockID)) : null,
                     FarmID = model.FarmId,
                     CalendarYear = model.Year,
                     LiveStockTypeID = model.LivestockTypeId,
@@ -5566,27 +5567,63 @@ namespace NMP.Portal.Controllers
                     Nov = model.NumbersInNovember,
                     Dec = model.NumbersInDecember
                 };
-                (NutrientsLoadingLiveStock nutrientsLoadingLiveStockData, error) = await _reportService.AddNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
+                
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID))
                 {
-                    TempData["ErrorOnLivestockCheckAnswer"] = error.Message;
-                    return View(model);
+                    (NutrientsLoadingLiveStock nutrientsLoadingLiveStockData, error) = await _reportService.AddNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
                 }
                 else
                 {
+                    (NutrientsLoadingLiveStock nutrientsLoadingLiveStockData, error) = await _reportService.UpdateNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["ErrorOnLivestockCheckAnswer"] = error.Message;
+                    return RedirectToAction("LivestockCheckAnswer");
+                }
+                else
+                {
+                    HttpContext?.Session.Remove("ReportData");
                     bool success = true;
-                    string successMsg = Resource.lblYouHaveAddedLivestock;
+                    string successMsg = string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID) ? Resource.lblYouHaveAddedLivestock : Resource.lblYouHaveUpdatedLivestock;
 
-                    //_httpContextAccessor.HttpContext?.Session.Remove("ReportData");
-
-                    return RedirectToAction("ManageLivestock", "Report", new
+                    var tabId = "";
+                    if (model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Cattle)
                     {
-                        q = model.EncryptedFarmId,
-                        y = model.EncryptedHarvestYear,
-                        r = _reportDataProtector.Protect(successMsg),
-                        s = _reportDataProtector.Protect(success.ToString())
-                    });
+                        tabId = "cattle";
+                    }
+                    else if (model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
+                    {
+                        tabId = "pigs";
+                    }
+                    else if (model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Poultry)
+                    {
+                        tabId = "poultry";
+                    }
+                    else if (model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Sheep)
+                    {
+                        tabId = "sheep";
+                    }
+                    else if (model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses)
+                    {
+                        tabId = "goatsDeerAndHorses";
+                    }
+
+                    return RedirectToAction(
+                           actionName: "ManageLivestock",
+                           controllerName: "Report",
+                           routeValues: new
+                           {
+                               q = model.EncryptedFarmId,
+                               y = model.EncryptedHarvestYear,
+                               r = _reportDataProtector.Protect(successMsg),
+                               s = _reportDataProtector.Protect(success.ToString())
+                           },
+                           fragment: tabId
+                       );
+
                 }
 
             }
@@ -5818,39 +5855,48 @@ namespace NMP.Portal.Controllers
             var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
             var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
 
-            if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+            if(!string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID))
             {
-                if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
-                {
-                    return RedirectToAction("AverageNumber");
-                }
-                else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
-                {
-                    return RedirectToAction("LivestockNumbersMonthly");
-                }
+                return RedirectToAction("ManageLivestock", "Report", new { q = model.EncryptedFarmId, y = _farmDataProtector.Protect(model.Year.Value.ToString()) });
             }
             else
             {
-                if (model.IsGrasslandDerogation == false)
+                if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
                 {
-                    if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                    if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
                     {
-                        return RedirectToAction("Occupancy");
+                        return RedirectToAction("AverageNumber");
                     }
-                    else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                    else if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
                     {
-                        return RedirectToAction("NitrogenStandard");
-                    }
-                    else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
-                    {
-                        return RedirectToAction("OccupancyAndStandard");
+                        return RedirectToAction("LivestockNumbersMonthly");
                     }
                 }
                 else
                 {
-                    return RedirectToAction("NitrogenStandard");
+                    if (model.IsGrasslandDerogation == false)
+                    {
+                        if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                        {
+                            return RedirectToAction("Occupancy");
+                        }
+                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                        {
+                            return RedirectToAction("NitrogenStandard");
+                        }
+                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
+                        {
+                            return RedirectToAction("OccupancyAndStandard");
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("NitrogenStandard");
+                    }
                 }
             }
+
+            
 
 
             return RedirectToAction("AverageNumber");
@@ -6756,7 +6802,7 @@ namespace NMP.Portal.Controllers
                             if (defaultOccupancy != null)
                             {
                                 decimal defaultNitrogen = livestockList.Where(x => x.ID == nonGrazing.LiveStockTypeID).Select(x => x.NByUnit.Value).FirstOrDefault();
-                                nonGrazing.NitrogenStandard = defaultNitrogen * ((nonGrazing.Occupancy ?? 0) / defaultOccupancy);
+                                nonGrazing.TotalNProduced = defaultNitrogen * ((nonGrazing.Occupancy ?? 0) / defaultOccupancy);
                             }
                         }
                     }

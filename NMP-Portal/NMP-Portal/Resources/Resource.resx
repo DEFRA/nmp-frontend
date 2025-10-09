@@ -6661,4 +6661,7 @@ livestock manure.</value>
   <data name="lblStorageCapacityForTitle" xml:space="preserve">
     <value>Storage capacity</value>
   </data>
+  <data name="lblYouHaveUpdatedLivestock" xml:space="preserve">
+    <value>You have updated livestock</value>
+  </data>
 </root>

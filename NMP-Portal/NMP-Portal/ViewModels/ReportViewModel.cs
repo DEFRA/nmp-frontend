@@ -157,6 +157,6 @@ namespace NMP.Portal.ViewModels
         public int? GrassPercentage { get; set; }
         public int? OccupancyAndNitrogenOptions { get; set; }
 
-        public string EncryptedNLLivestockID { get; set; } = string.Empty;
+        public string? EncryptedNLLivestockID { get; set; } = string.Empty;
     }
 }
