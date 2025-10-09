@@ -166,7 +166,7 @@
                         }
                     </govuk-fieldset-legend>
 
-                   @*  <h1 class="govuk-heading-l">
+                    @*  <h1 class="govuk-heading-l">
                         @(string.Format(Resource.lblAddLivestockDetailsFor, Model.Year))
                     </h1> *@
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
@@ -362,6 +362,19 @@
                         </govuk-summary-list>
                     </div>
                 </govuk-fieldset>
+
+                @if (!string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
+                {
+                    <govuk-inset-text>
+                        <p class="govuk-body">
+                            @Resource.lblYouCanAlso
+                            <a asp-action="DeleteNLLivestock" asp-controller="Report">
+                                @Resource.lblRemoveThisLivestockType
+                            </a>
+                            @Resource.lblFromYourManureNitrogenFarmLimitReport
+                        </p>
+                    </govuk-inset-text>
+                }
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
                     {
@@ -371,9 +384,8 @@
                     {
                         @Resource.lblUpdateThisLivestockType
                     }
-                    
-                </govuk-button>
 
+                </govuk-button>
                 <p class="govuk-body cancel-link">
                     <a asp-action="Cancel" asp-controller="Report">
                         @Resource.lblCancel

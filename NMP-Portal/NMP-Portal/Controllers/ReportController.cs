@@ -5599,7 +5599,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageLivestock(string q, string y, string r, string s)
+        public async Task<IActionResult> ManageLivestock(string q, string y, string r, string s, string? t)
         {
             _logger.LogTrace($"Report Controller : ManageLivestock() action called");
             ReportViewModel model = new ReportViewModel();
@@ -5649,10 +5649,17 @@ namespace NMP.Portal.Controllers
                     if (!string.IsNullOrWhiteSpace(r))
                     {
                         TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(r);
-                        if (!string.IsNullOrWhiteSpace(s))
+                        if (!string.IsNullOrWhiteSpace(s)|| !string.IsNullOrWhiteSpace(t))
                         {
                             ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
-                            TempData["succesMsgContent2"] = Resource.lblAddMoreLivestock;
+                            if (!string.IsNullOrWhiteSpace(s))
+                            {
+                                TempData["succesMsgContent2"] = Resource.lblAddAnotherLivestock;
+                            }
+                            if (!string.IsNullOrWhiteSpace(t))
+                            {
+                                TempData["RemoveSuccessMsg"] = Resource.lblAddMoreLivestock;
+                            }
                             TempData["succesMsgContent3"] = string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
                         }
                     }
@@ -6879,9 +6886,114 @@ namespace NMP.Portal.Controllers
             }
             return string.Empty; // not in any group
         }
+        [HttpGet]
+        public IActionResult DeleteNLLivestock()
+        {
+            _logger.LogTrace("Report Controller : DeleteNLLivestock() action called");
+            ReportViewModel? model = new ReportViewModel();
+            try
+            {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in DeleteNLLivestock() get action : {ex.Message}, {ex.StackTrace}");
+                TempData["ErrorOnLivestockCheckAnswer"] = ex.Message;
+                return RedirectToAction("LivestockCheckAnswer");
+            }
+            return View(model);
+        }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteNLLivestock(ReportViewModel model)
+        {
+            _logger.LogTrace("Report Controller : DeleteNLLivestock() post action called");
+            try
+            {
+                if (model.IsDeleteNLLivestock == null)
+                {
+                    ModelState.AddModelError("IsDeleteNLLivestock", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
 
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                if (!model.IsDeleteNLLivestock.Value)
+                {
+                    return RedirectToAction("LivestockCheckAnswer");
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID))
+                    {
+                        Error error = null;
+                        int id = Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedNLLivestockID));
+                        (string success, error) = await _reportService.DeleteNutrientsLoadingLivestockByIdAsync(id);
+                        if (!string.IsNullOrWhiteSpace(error.Message))
+                        {
+                            TempData["DeleteNLLivestockError"] = error.Message;
+                            return View(model);
+                        }
+                        else
+                        {
+                            (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year.Value);
+                            if (string.IsNullOrWhiteSpace(error.Message))
+                            {
+                                string successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedJourneyName, model.LivestockGroupName));
+                                bool Issuccess = true;
+                                if (nutrientsLoadingLiveStockList.Count > 0)
+                                {
+
+                                    return RedirectToAction("ManageLivestock", "Report", new
+                                    {
+                                        q = model.EncryptedFarmId,
+                                        y = model.EncryptedHarvestYear,
+                                        r = successMsg,
+                                        t = _reportDataProtector.Protect(Issuccess.ToString())
+                                    });
+                                }
+                                else
+                                {
+                                    return RedirectToAction("LivestockManureNitrogenReportChecklist", "Report", new
+                                    {
+                                        q = _reportDataProtector.Protect(Issuccess.ToString()),
+                                        r = successMsg
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                TempData["DeleteNLLivestockError"] = error.Message;
+                                return View(model);
+                            }
+                        }
+
+
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace($"Report Controller : Exception in DeleteNLLivestock() post action : {ex.Message}, {ex.StackTrace}");
+                TempData["DeleteNLLivestockError"] = ex.Message;
+                return View(model);
+            }
+
+            return View(model);
+        }
     }
 
 }
