@@ -6809,7 +6809,7 @@ namespace NMP.Portal.Controllers
                             if (defaultOccupancy != null)
                             {
                                 decimal defaultNitrogen = livestockList.Where(x => x.ID == nonGrazing.LiveStockTypeID).Select(x => x.NByUnit.Value).FirstOrDefault();
-                                nonGrazing.TotalNProduced = defaultNitrogen * ((nonGrazing.Occupancy ?? 0) / defaultOccupancy);
+                                nonGrazing.NitrogenStandard = defaultNitrogen * ((nonGrazing.Occupancy ?? 0) / defaultOccupancy);
                             }
                         }
                     }
