@@ -1177,6 +1177,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add another livestock category.
+        /// </summary>
+        public static string lblAddAnotherLivestock {
+            get {
+                return ResourceManager.GetString("lblAddAnotherLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add another year.
         /// </summary>
         public static string lblAddAnotherYear {
@@ -1330,7 +1339,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add another livestock category.
+        ///   Looks up a localized string similar to Add more livestock.
         /// </summary>
         public static string lblAddMoreLivestock {
             get {
@@ -5457,6 +5466,15 @@ namespace NMP.Portal.Resources {
         public static string lblFromManures {
             get {
                 return ResourceManager.GetString("lblFromManures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  from your manure nitrogen (N) farm limit report..
+        /// </summary>
+        public static string lblFromYourManureNitrogenFarmLimitReport {
+            get {
+                return ResourceManager.GetString("lblFromYourManureNitrogenFarmLimitReport", resourceCulture);
             }
         }
         
@@ -10792,6 +10810,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will remove {0} from your manure nitrogen (N) farm limit report..
+        /// </summary>
+        public static string lblRemoveNLLivetsockContent {
+            get {
+                return ResourceManager.GetString("lblRemoveNLLivetsockContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove {0}.
+        /// </summary>
+        public static string lblRemovePropertyName {
+            get {
+                return ResourceManager.GetString("lblRemovePropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will remove all data about this SNS from the current crop. You will not be able to get it back..
         /// </summary>
         public static string lblRemoveSNSAnalysisContentOne {
@@ -10815,15 +10851,6 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveSoilAnalysisFromFieldName {
             get {
                 return ResourceManager.GetString("lblRemoveSoilAnalysisFromFieldName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove {0}.
-        /// </summary>
-        public static string lblRemoveStoreName {
-            get {
-                return ResourceManager.GetString("lblRemoveStoreName", resourceCulture);
             }
         }
         
@@ -10887,6 +10914,15 @@ namespace NMP.Portal.Resources {
         public static string lblRemoveThisGroup {
             get {
                 return ResourceManager.GetString("lblRemoveThisGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove this livestock type.
+        /// </summary>
+        public static string lblRemoveThisLivestockType {
+            get {
+                return ResourceManager.GetString("lblRemoveThisLivestockType", resourceCulture);
             }
         }
         

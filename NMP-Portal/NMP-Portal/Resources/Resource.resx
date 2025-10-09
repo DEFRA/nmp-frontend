@@ -5348,7 +5348,7 @@ live</value>
   <data name="lblAddALivestockType" xml:space="preserve">
     <value>Add a livestock type</value>
   </data>
-  <data name="lblAddMoreLivestock" xml:space="preserve">
+  <data name="lblAddAnotherLivestock" xml:space="preserve">
     <value>Add another livestock category</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
@@ -6208,7 +6208,7 @@ livestock manure.</value>
   <data name="ReportTitle" xml:space="preserve">
     <value>{0} for {1} {2}</value>
   </data>
-  <data name="lblRemoveStoreName" xml:space="preserve">
+  <data name="lblRemovePropertyName" xml:space="preserve">
     <value>Remove {0}</value>
   </data>
   <data name="lblRemoveContent" xml:space="preserve">
@@ -6660,6 +6660,18 @@ livestock manure.</value>
   </data>
   <data name="lblStorageCapacityForTitle" xml:space="preserve">
     <value>Storage capacity</value>
+  </data>
+  <data name="lblRemoveThisLivestockType" xml:space="preserve">
+    <value>remove this livestock type</value>
+  </data>
+  <data name="lblFromYourManureNitrogenFarmLimitReport" xml:space="preserve">
+    <value> from your manure nitrogen (N) farm limit report.</value>
+  </data>
+  <data name="lblRemoveNLLivetsockContent" xml:space="preserve">
+    <value>This will remove {0} from your manure nitrogen (N) farm limit report.</value>
+  </data>
+  <data name="lblAddMoreLivestock" xml:space="preserve">
+    <value>Add more livestock</value>
   </data>
   <data name="lblYouHaveUpdatedLivestock" xml:space="preserve">
     <value>You have updated livestock</value>

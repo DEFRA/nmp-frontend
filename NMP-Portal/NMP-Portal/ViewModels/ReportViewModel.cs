@@ -158,5 +158,6 @@ namespace NMP.Portal.ViewModels
         public int? OccupancyAndNitrogenOptions { get; set; }
 
         public string? EncryptedNLLivestockID { get; set; } = string.Empty;
+        public bool? IsDeleteNLLivestock { get; set; }
     }
 }
