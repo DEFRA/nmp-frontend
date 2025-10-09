@@ -215,5 +215,6 @@ namespace NMP.Portal.Helpers
         public const string DeleteStorageCapacityByIdAPI = "store-capacities/{0}";
         public const string UpdateStoreCapacityAsyncAPI = "store-capacities";
         public const string FetchNutrientsLoadingLiveStockByIdAsyncAPI = "nutrients-loading-live-stocks-by-id/{0}";
+        public const string UpdateNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
     }
 }

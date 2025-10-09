@@ -16221,6 +16221,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have updated livestock.
+        /// </summary>
+        public static string lblYouHaveUpdatedLivestock {
+            get {
+                return ResourceManager.GetString("lblYouHaveUpdatedLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have updated manure storage.
         /// </summary>
         public static string lblYouHaveUpdatedManureStorage {
