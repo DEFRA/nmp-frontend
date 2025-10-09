@@ -587,10 +587,10 @@ namespace NMP.Portal.Services
             return (nutrientsLoadingLiveStocks, error);
         }
 
-        public async Task<(List<NutrientsLoadingLiveStock>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
+        public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
         {
             Error error = new Error();
-            List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList = new List<NutrientsLoadingLiveStock>();
+            List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList = new List<NutrientsLoadingLiveStockViewModel>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -602,7 +602,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var nutrientsLoadingLiveStock = responseWrapper.Data.ToObject<List<NutrientsLoadingLiveStock>>();
+                        var nutrientsLoadingLiveStock = responseWrapper.Data.ToObject<List<NutrientsLoadingLiveStockViewModel>>();
                         if (nutrientsLoadingLiveStock != null)
                         {
                             nutrientsLoadingLiveStockList = nutrientsLoadingLiveStock;
