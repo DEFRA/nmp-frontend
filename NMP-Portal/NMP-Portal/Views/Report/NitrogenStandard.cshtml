@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisLivestock, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var backAction = "";
-    if (Model.IsLivestockCheckAnswer)
+    if (Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange)
     {
         backAction = "LivestockCheckAnswer";
     }
@@ -126,6 +126,7 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageLivestock"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedNLLivestockID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockGroupChange" value="@Model.IsLivestockGroupChange.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
