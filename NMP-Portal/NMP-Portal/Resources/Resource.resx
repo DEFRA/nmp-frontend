@@ -6673,4 +6673,13 @@ livestock manure.</value>
   <data name="lblAddMoreLivestock" xml:space="preserve">
     <value>Add more livestock</value>
   </data>
+  <data name="lblYouHaveUpdatedLivestock" xml:space="preserve">
+    <value>You have updated livestock</value>
+  </data>
+  <data name="MsgGenericFor" xml:space="preserve">
+    <value>for {0}</value>
+  </data>
+  <data name="lblView" xml:space="preserve">
+    <value>View</value>
+  </data>
 </root>
