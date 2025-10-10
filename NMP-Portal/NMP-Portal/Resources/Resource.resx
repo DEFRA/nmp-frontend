@@ -5043,7 +5043,7 @@ live</value>
     <value>When did you {0} this livestock manure?</value>
   </data>
   <data name="lblHowMuchDidYouImport" xml:space="preserve">
-    <value>How much did you {0}?</value>
+    <value>How much did you {0}</value>
   </data>
   <data name="lblEnterTheAmountYouImportedInTonnes" xml:space="preserve">
     <value>Enter the amount you imported in tonnes</value>

@@ -142,11 +142,12 @@
         <div class="govuk-grid-column-two-thirds">
             <govuk-fieldset>
                 <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                    @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
+                    
                 </govuk-fieldset-legend>
                 <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="false" class="govuk-label--l">
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                        @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, unit)</span>
                         @Resource.lblQuestionMark
                     </govuk-input-label>

@@ -6164,7 +6164,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How much did you {0}?.
+        ///   Looks up a localized string similar to How much did you {0}.
         /// </summary>
         public static string lblHowMuchDidYouImport {
             get {
