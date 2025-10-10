@@ -92,15 +92,17 @@
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@item.Name</td>
                                 <td class="govuk-table__cell">
-                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblFieldAndSoilDetails</a>
+                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
+                                        <span class="govuk-visually-hidden">@Resource.lblView </span>@Resource.lblFieldAndSoilDetails<span class="govuk-visually-hidden"> @string.Format(Resource.MsgGenericFor, item.Name)</span>
+                                    </a>
                                 </td>
                             </tr>
                         }
                     }
-
-
                 </tbody>
             </table>
+
+           
         </div>
     </div>
 }

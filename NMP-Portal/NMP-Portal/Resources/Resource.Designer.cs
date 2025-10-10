@@ -14142,6 +14142,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        public static string lblView {
+            get {
+                return ResourceManager.GetString("lblView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View, create or update a nutrient management plan.
         /// </summary>
         public static string lblViewCreateOrUpdateAPlan {
@@ -18172,6 +18181,15 @@ namespace NMP.Portal.Resources {
         public static string MsgForSuccessCrop {
             get {
                 return ResourceManager.GetString("MsgForSuccessCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for {0}.
+        /// </summary>
+        public static string MsgGenericFor {
+            get {
+                return ResourceManager.GetString("MsgGenericFor", resourceCulture);
             }
         }
         
