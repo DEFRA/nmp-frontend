@@ -6,11 +6,7 @@
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 
     var backAction = "";
-    if (Model.RecentSoilAnalysisQuestion.Value == true && Model.PreviousGrasses.HasGrassInLastThreeYear == false)
-    {
-        backAction = "SoilNutrientValue";
-    }
-    else if (Model.PreviousGrasses.HasGrassInLastThreeYear != null)
+    if (Model.PreviousGrasses.HasGrassInLastThreeYear != null)
     {
         if (Model.PreviousGrasses.HasGrassInLastThreeYear == true)
         {
@@ -38,8 +34,13 @@
     }
     else
     {
+        if (Model.RecentSoilAnalysisQuestion.Value == true)
+        {
+            backAction = "SoilNutrientValue";
+        }
         backAction = "RecentSoilAnalysisQuestion";
     }
+   
 }
 
 @section BeforeContent {
