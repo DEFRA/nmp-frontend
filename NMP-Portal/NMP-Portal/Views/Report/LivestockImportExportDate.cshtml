@@ -185,8 +185,8 @@
                                 @Resource.lblCancel
                             </a>
                         }
-
-                        @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else
+  @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {
