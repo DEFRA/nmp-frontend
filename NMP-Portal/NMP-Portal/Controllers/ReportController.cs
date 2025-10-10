@@ -4301,9 +4301,13 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
-                    if (model.LivestockGroupId == reportModel.LivestockGroupId)
+                    if (model.LivestockGroupId == reportModel.LivestockGroupId && !model.IsLivestockGroupChange)
                     {
                         return RedirectToAction("LivestockCheckAnswer");
+                    }
+                    else
+                    {
+                        model.IsLivestockGroupChange = true;
                     }
                 }
 
@@ -4379,17 +4383,9 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
-                {
-                    if (model.LivestockTypeId == reportModel.LivestockTypeId)
-                    {
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -4401,6 +4397,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
                 {
+                    model.AverageOccupancy = null;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockNumberQuestion");
                 }
                 else
@@ -4494,7 +4492,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
-                    if (model.LivestockNumberQuestion == reportModel.LivestockNumberQuestion)
+                    if (model.LivestockNumberQuestion == reportModel.LivestockNumberQuestion && !model.IsLivestockGroupChange)
                     {
                         return RedirectToAction("LivestockCheckAnswer");
                     }
@@ -4635,28 +4633,9 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
-                {
-                    if (model.NumbersInJanuary == reportModel.NumbersInJanuary &&
-                    model.NumbersInFebruary == reportModel.NumbersInFebruary &&
-                    model.NumbersInMarch == reportModel.NumbersInMarch &&
-                    model.NumbersInApril == reportModel.NumbersInApril &&
-                    model.NumbersInMay == reportModel.NumbersInMay &&
-                    model.NumbersInJune == reportModel.NumbersInJune &&
-                    model.NumbersInJuly == reportModel.NumbersInJuly &&
-                    model.NumbersInAugust == reportModel.NumbersInAugust &&
-                    model.NumbersInSeptember == reportModel.NumbersInSeptember &&
-                    model.NumbersInOctober == reportModel.NumbersInOctober &&
-                    model.NumbersInNovember == reportModel.NumbersInNovember &&
-                    model.NumbersInDecember == reportModel.NumbersInDecember)
-                    {
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
                 }
 
                 model.AverageNumber = null;
@@ -4761,17 +4740,10 @@ namespace NMP.Portal.Controllers
                 model.NumbersInNovember = null;
                 model.NumbersInDecember = null;
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
-                {
-                    if (model.AverageNumber == reportModel.AverageNumber)
-                    {
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
@@ -4861,17 +4833,10 @@ namespace NMP.Portal.Controllers
                 model.LivestockNumberQuestion = null;
                 model.AverageNumber = null;
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
-                {
-                    if (model.AverageNumberOfPlaces == reportModel.AverageNumberOfPlaces && model.AverageOccupancy == reportModel.AverageOccupancy && model.NitrogenStandard == reportModel.NitrogenStandard)
-                    {
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -4940,19 +4905,10 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
-                {
-                    if (model.OccupancyAndNitrogenOptions == reportModel.OccupancyAndNitrogenOptions)
-                    {
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
                 {
                     return RedirectToAction("Occupancy");
@@ -4967,6 +4923,11 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
+                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+                    model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+                    model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
                     return RedirectToAction("LivestockCheckAnswer");
                 }
 
@@ -5065,23 +5026,11 @@ namespace NMP.Portal.Controllers
                 //Calculation end
 
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
-                {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
-                    if (model.AverageOccupancy == reportModel.AverageOccupancy)
-                    {
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
-                    else
-                    {
-                        return RedirectToAction("NitrogenStandard");
-                    }
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5158,17 +5107,9 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                }
-                if (model.IsLivestockCheckAnswer)
-                {
-                    if (model.NitrogenStandard == reportModel.NitrogenStandard)
-                    {
                         return RedirectToAction("LivestockCheckAnswer");
-                    }
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5199,6 +5140,11 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
+                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
+                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
+                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     model.EncryptedNLLivestockID = id;
@@ -5235,18 +5181,29 @@ namespace NMP.Portal.Controllers
                         model.LivestockGroupId = livestockList.Where(x => x.ID == model.LivestockTypeId).Select(x => x.LivestockGroupID).FirstOrDefault();
 
                     }
-                    if (model.NumbersInJanuary == null && model.NumbersInFebruary == null && model.NumbersInMarch == null &&
+                    if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+                    {
+                        if (model.NumbersInJanuary == null && model.NumbersInFebruary == null && model.NumbersInMarch == null &&
                         model.NumbersInApril == null && model.NumbersInMay == null && model.NumbersInJune == null &&
                         model.NumbersInJuly == null && model.NumbersInAugust == null && model.NumbersInSeptember == null &&
                         model.NumbersInOctober == null && model.NumbersInNovember == null && model.NumbersInDecember == null)
-                    {
-                        model.LivestockNumberQuestion = (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear;
+                        {
+                            model.LivestockNumberQuestion = (int)NMP.Portal.Enums.LivestockNumberQuestion.AverageNumberForTheYear;
+                        }
+                        else
+                        {
+                            model.LivestockNumberQuestion = (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth;
+                        }
                     }
                     else
                     {
-                        model.LivestockNumberQuestion = (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth;
+                        model.AverageNumberOfPlaces = model.AverageNumber;
+                        model.AverageNumber = null;
+                        model.LivestockNumberQuestion = null;
+                        
                     }
-                    (CommonResponse livestockGroup, error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId ?? 0);
+
+                        (CommonResponse livestockGroup, error) = await _reportService.FetchLivestockGroupById(model.LivestockGroupId ?? 0);
                     if (error == null)
                     {
                         model.LivestockGroupName = livestockGroup.Name;
@@ -5258,6 +5215,7 @@ namespace NMP.Portal.Controllers
                     }
                     (List<LivestockTypeResponse> livestockType, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     model.LivestockTypeName = livestockType.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Name;
+                    
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
 
@@ -5267,7 +5225,6 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-
                     string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
@@ -5276,14 +5233,10 @@ namespace NMP.Portal.Controllers
                     }
                     ViewBag.LivestockCategory = groupName;
                 }
+                
                 (List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
-                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
-                var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
-                var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
-                var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
-                var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
-
+                
                 decimal totalNProduced = 0;
                 decimal totalPProduced = 0;
                 decimal averageNumberForYear = 0;
@@ -5321,6 +5274,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.TotalNProduced = totalNProduced;
                 ViewBag.TotalPProduced = totalPProduced;
                 model.IsLivestockCheckAnswer = true;
+                model.IsLivestockGroupChange = false;
 
                 (List<LivestockTypeResponse> livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 var defaultOccupancy = 0;
@@ -5348,8 +5302,15 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+                else
+                {
+                    if(!string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID))
+                    {
+                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault;
+                    }
+                }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
