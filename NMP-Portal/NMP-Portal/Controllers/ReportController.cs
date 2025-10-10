@@ -6043,7 +6043,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> backActionForManureGroup()
+        public async Task<IActionResult> BackActionForManureGroup()
         {
             _logger.LogTrace($"Report Controller : BackActionForManureGroup() action called");
             ReportViewModel? model = new ReportViewModel();

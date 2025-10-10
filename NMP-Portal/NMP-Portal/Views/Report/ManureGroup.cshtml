@@ -10,7 +10,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="backActionForManureGroup" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackActionForManureGroup" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnManureGroup"] != null)
 {
