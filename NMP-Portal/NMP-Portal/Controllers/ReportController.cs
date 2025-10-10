@@ -746,108 +746,68 @@ namespace NMP.Portal.Controllers
                 (model.Farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                 if (model.Farm != null && string.IsNullOrWhiteSpace(error.Message))
                 {
-                    (List<HarvestYearPlanResponse> harvestYearPlan, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlan != null && harvestYearPlan.Count > 0)
+                    (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+                    if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
                     {
-                        List<HarvestYearPlanResponse> harvestYearPlanResponse = harvestYearPlan;
-                        List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
+                        // Get your dictionary of groups
+                        var cropGroups = GetNmaxReportCropGroups();
+                        // Build reverse lookup: cropId -> groupIds[]
+                        var idToGroup = cropGroups
+                            .SelectMany(g => g.Value, (g, id) => new { id, groupIds = g.Value })
+                            .ToDictionary(x => x.id, x => x.groupIds);
 
-                        foreach (var cropType in harvestYearPlan)
+                        var cropGroupIds = model.CropTypeList?
+                        .Select(cropType => int.Parse(cropType)).ToList();
+                        //.Where(cropId => idToGroup.ContainsKey(cropId) || !idToGroup.ContainsKey(cropId))
+
+                        List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypes();
+                        if (cropGroupIds != null)
                         {
-                            Field field = await _fieldService.FetchFieldByFieldId(cropType.FieldID);
-                            if (field != null && (!field.IsWithinNVZ.Value))
+                            foreach (int cropGroup in cropGroupIds)
                             {
-                                filteredList.Add(cropType);
-                            }
-                        }
-                        if (filteredList.Count > 0)
-                        {
-                            // Remove all matching cropTypes from cropTypeList
-                            harvestYearPlan.RemoveAll(ct => filteredList.Contains(ct));
-                        }
-                        if (harvestYearPlan.Count > 0)
-                        {
-                            (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropService.FetchCropTypeLinking();
-                            if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
-                            {
-                                if (model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                List<int> selectedCropGroupList = idToGroup
+                               .Where(x => x.Key == cropGroup).SelectMany(x => x.Value).ToList();
+
+                                if (selectedCropGroupList.Count == 0)
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                    selectedCropGroupList.Add(cropGroup);
                                 }
-                                else
+                                string cropTypeName = string.Empty;
+                                int nMaxLimit = 0;
+                                List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
+                                List<NMaxLimitReportResponse> nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
+
+                                string groupName = cropGroups
+                                .FirstOrDefault(group => group.Value.Contains(cropGroup)).Key;
+                                if (string.IsNullOrWhiteSpace(groupName))
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                    groupName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
                                 }
 
-                                harvestYearPlan = harvestYearPlan
-                                .Where(crop => cropTypeLinking
-                                .Any(link => link.CropTypeId == crop.CropTypeID))
-                                .DistinctBy(x => x.CropTypeID).ToList();
-
-                                // Get your dictionary of groups
-                                var cropGroups = GetNmaxReportCropGroups();
-                                // Build reverse lookup: cropId -> groupIds[]
-                                var idToGroup = cropGroups
-                                    .SelectMany(g => g.Value, (g, id) => new { id, groupIds = g.Value })
-                                    .ToDictionary(x => x.id, x => x.groupIds);
-
-                                var cropGroupIds = model.CropTypeList?
-                                .Select(cropType => int.Parse(cropType)).ToList();
-                                //.Where(cropId => idToGroup.ContainsKey(cropId) || !idToGroup.ContainsKey(cropId))
-
-                                List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypes();
-                                if (cropGroupIds != null)
+                                (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, Convert.ToInt32(cropGroup), model,
+                                               nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, selectedCropGroupList);
+                                cropTypeName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
+                                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                                 {
-                                    foreach (int cropGroup in cropGroupIds)
+                                    TempData["ErrorOnSelectField"] = error.Message;
+                                    return RedirectToAction("ExportFieldsOrCropType");
+                                }
+                                if (nMaxLimitReportResponse != null && nMaxLimitReportResponse.Count > 0)
+                                {
+                                    var fullReport = new NMaxReportResponse
                                     {
-                                        List<int> selectedCropGroupList = idToGroup
-                                       .Where(x => x.Key == cropGroup).SelectMany(x => x.Value).ToList();
-
-                                        if (selectedCropGroupList.Count == 0)
-                                        {
-                                            selectedCropGroupList.Add(cropGroup);
-                                        }
-                                        string cropTypeName = string.Empty;
-                                        int nMaxLimit = 0;
-                                        List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
-                                        List<NMaxLimitReportResponse> nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
-
-                                        string groupName = cropGroups
-                                        .FirstOrDefault(group => group.Value.Contains(cropGroup)).Key;
-                                        if (string.IsNullOrWhiteSpace(groupName))
-                                        {
-                                            groupName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
-                                        }
-
-                                        (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, Convert.ToInt32(cropGroup), model,
-                                                       nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, selectedCropGroupList);
-                                        cropTypeName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
-                                        if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                        {
-                                            TempData["ErrorOnSelectField"] = error.Message;
-                                            return RedirectToAction("ExportFieldsOrCropType");
-                                        }
-                                        if (nMaxLimitReportResponse != null && nMaxLimitReportResponse.Count > 0)
-                                        {
-                                            var fullReport = new NMaxReportResponse
-                                            {
-                                                CropTypeName = cropTypeName ?? string.Empty,
-                                                NmaxLimit = nMaxLimit,
-                                                GroupName = groupName ?? string.Empty,
-                                                IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >= nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
-                                                NMaxLimitReportResponse = nMaxLimitReportResponse ?? null,
-                                                NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
-                                            };
-                                            model.NMaxLimitReport.Add(fullReport);
-                                        }
-
-                                    }
+                                        CropTypeName = cropTypeName ?? string.Empty,
+                                        NmaxLimit = nMaxLimit,
+                                        GroupName = groupName ?? string.Empty,
+                                        IsComply = (nMaxLimitReportResponse == null && nitrogenApplicationsForNMaxReportResponse == null) ? false : (nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >= nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal) ? true : false),
+                                        NMaxLimitReportResponse = nMaxLimitReportResponse ?? null,
+                                        NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null
+                                    };
+                                    model.NMaxLimitReport.Add(fullReport);
                                 }
-
 
                             }
                         }
-
                     }
 
 
