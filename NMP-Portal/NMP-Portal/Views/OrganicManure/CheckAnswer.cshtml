@@ -796,6 +796,24 @@
                             }
                             else
                             {
+                                @if(Model.DefaultNutrientValue==Resource.lblIwantToEnterARecentOrganicMaterialAnalysis&&Model.DefaultFarmManureValueDate!=null)
+                                {
+                                <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                               @Model.DefaultNutrientValue
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="DefaultNutrientValues" asp-controller="OrganicManure">@Resource.lblChange
+                                   <span class="govuk-visually-hidden">
+                                    @string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)
+                                    </span>
+                                </govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        }
                                 <govuk-summary-list-row>
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)

@@ -8784,7 +8784,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No crop types available..
+        ///   Looks up a localized string similar to You do not have any fields in an NVZ growing crops with an Nmax limit in HY {0}.
         /// </summary>
         public static string lblNoCropTypesAvailable {
             get {
