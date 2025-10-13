@@ -4414,7 +4414,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                        return RedirectToAction("LivestockCheckAnswer");
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    return RedirectToAction("LivestockCheckAnswer");
                 }
 
                 model.AverageNumber = null;
