@@ -267,17 +267,17 @@
                                                                                                                      </govuk-summary-list-row>
                                                                                                                      <govuk-summary-list-row>
                                                                                                                          <govuk-summary-list-row-key class=@((!Model.LivestockQuantity.HasValue) ? "govuk-error-message" : "")>
-                            @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-                                                                                                                 </govuk-summary-list-row-key>
-                                                                                                                 <govuk-summary-list-row-value>
-                                                                                                                     @((!Model.LivestockQuantity.HasValue) ? Resource.lblNotSet : string.Format("{0:N0} {1}", Model.LivestockQuantity.Value, unit))
-                                                                                                                 </govuk-summary-list-row-value>
-                                                                                                                 <govuk-summary-list-row-actions>
-                                                                                                                     <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">
-                                                                                                                         @Resource.lblChange<span class="govuk-visually-hidden">
-                                    @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
+                            @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
+                                                                                                                                            </govuk-summary-list-row-key>
+                                                                                                                                            <govuk-summary-list-row-value>
+                                                                                                                                                @((!Model.LivestockQuantity.HasValue) ? Resource.lblNotSet : string.Format("{0:N0} {1}", Model.LivestockQuantity.Value, unit))
+                                                                                                                                            </govuk-summary-list-row-value>
+                                                                                                                                            <govuk-summary-list-row-actions>
+                                                                                                                                                <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">
+                                                                                                                                                    @Resource.lblChange<span class="govuk-visually-hidden">
+                                    @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
