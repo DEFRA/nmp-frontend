@@ -7117,7 +7117,7 @@ namespace NMP.Portal.Controllers
                     (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop[0].CropTypeID.Value);
                     if (error == null)
                     {
-                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland) ?? 0;
+                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
                         if (nmaxLimitEnglandOrWales != null)
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);

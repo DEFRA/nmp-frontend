@@ -6656,7 +6656,7 @@ namespace NMP.Portal.Controllers
 
                 { Resource.lblGroup1Vegetables, new [] { (int)Enums.CropTypes.Asparagus, (int)Enums.CropTypes.Carrots, (int)Enums.CropTypes.Radish, (int)Enums.CropTypes.Swedes } },
 
-                { Resource.lblGroup2Vegetables, new [] { (int)Enums.CropTypes.CelerySelfBlanching, (int)Enums.CropTypes.Courgettes, (int)Enums.CropTypes.DwarfBeans, (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BulbOnions, (int)Enums.CropTypes.SaladOnions, (int)Enums.CropTypes.Parsnips, (int)Enums.CropTypes.RunnerBeans, (int)Enums.CropTypes.Sweetcorn, (int)Enums.CropTypes.Turnips } },
+                { Resource.lblGroup2Vegetables, new [] { (int)Enums.CropTypes.CelerySelfBlanching, (int)Enums.CropTypes.Courgettes, (int)Enums.CropTypes.DwarfBeans, (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BulbOnions, (int)Enums.CropTypes.SaladOnions, (int)Enums.CropTypes.Parsnips, (int)Enums.CropTypes.RunnerBeans, (int)Enums.CropTypes.Sweetcorn, (int)Enums.CropTypes.Turnips, (int)Enums.CropTypes.BabyLeafLettuce } },
 
                 { Resource.lblGroup3Vegetables, new [] { (int)Enums.CropTypes.Beetroot, (int)Enums.CropTypes.BrusselSprouts, (int)Enums.CropTypes.Cabbage, (int)Enums.CropTypes.Calabrese, (int)Enums.CropTypes.Cauliflower, (int)Enums.CropTypes.Leeks } }
             };
