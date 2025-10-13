@@ -233,19 +233,19 @@ namespace NMP.Portal.Controllers
 
                                             if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                             {
-                                                TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                                TempData["ErrorOnYear"] =string.Format(Resource.lblNoCropTypesAvailable,model.Year);
                                                 return RedirectToAction("Year");
                                             }
                                             else
                                             {
                                                 if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                                 {
-                                                    TempData["ErrorOnFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                                    TempData["ErrorOnFieldAndPlanReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                                     return RedirectToAction("FieldAndPlanReports");
                                                 }
                                                 else
                                                 {
-                                                    TempData["ErrorOnNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                                    TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                                     return RedirectToAction("NVZComplianceReports");
                                                 }
                                             }
@@ -258,19 +258,19 @@ namespace NMP.Portal.Controllers
                                     if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                     {
                                         ViewBag.Years = GetReportYearsList();
-                                        TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                        TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                         return View("Year", model);
                                     }
                                     else
                                     {
                                         if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                         {
-                                            TempData["ErrorOnFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                            TempData["ErrorOnFieldAndPlanReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                             return RedirectToAction("FieldAndPlanReports");
                                         }
                                         else
                                         {
-                                            TempData["ErrorOnNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                            TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                             return RedirectToAction("NVZComplianceReports");
                                         }
                                     }
@@ -418,19 +418,19 @@ namespace NMP.Portal.Controllers
                                 if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                 {
                                     ViewBag.Years = GetReportYearsList();
-                                    TempData["ErrorOnYear"] = Resource.lblNoCropTypesAvailable; ;
+                                    TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                     return View("Year", model);
                                 }
                                 else
                                 {
                                     if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                     {
-                                        TempData["ErrorOnFieldAndPlanReports"] = Resource.lblNoCropTypesAvailable; ;
+                                        TempData["ErrorOnFieldAndPlanReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                         return RedirectToAction("FieldAndPlanReports");
                                     }
                                     else
                                     {
-                                        TempData["ErrorOnNVZComplianceReports"] = Resource.lblNoCropTypesAvailable; ;
+                                        TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                                         return RedirectToAction("NVZComplianceReports");
                                     }
                                 }
@@ -5324,7 +5324,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    HttpContext?.Session.Remove("ReportData");
+                    //HttpContext?.Session.Remove("ReportData");
                     bool success = true;
                     string successMsg = string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID) ? Resource.lblYouHaveAddedLivestock : Resource.lblYouHaveUpdatedLivestock;
 
