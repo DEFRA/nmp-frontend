@@ -141,9 +141,7 @@
                     }
                     <govuk-input asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
-                            @string.Format(Resource.lblWhatIsTheAverageNumberOfSuffix, ViewBag.LivestockCategory, Model.Year)
-                            <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>
-                            @Resource.lblQuestionMark
+                            @string.Format(Resource.lblWhatIsTheAverageNumberOfSuffix, ViewBag.LivestockCategory, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
                         <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
                     </govuk-input>
