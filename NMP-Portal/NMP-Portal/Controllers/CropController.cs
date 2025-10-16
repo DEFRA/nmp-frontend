@@ -4635,14 +4635,17 @@ namespace NMP.Portal.Controllers
                 }
                 Error error = null;
                 bool isThereAnyPreviousFieldLeft = false;
-                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-                (List<HarvestYearPlanResponse> crops, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && crops.Count > 0)
+                if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
-                    List<string> fieldIds = crops.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID.ToString()).ToList();
-                    if (fieldIds.Count > 0 && fieldIds.Any(fieldId => model.FieldList.Contains(fieldId)))
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                    (List<HarvestYearPlanResponse> crops, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
+                    if (string.IsNullOrWhiteSpace(error.Message) && crops.Count > 0)
                     {
-                        isThereAnyPreviousFieldLeft = true;
+                        List<string> fieldIds = crops.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID.ToString()).ToList();
+                        if (fieldIds.Count > 0 && fieldIds.Any(fieldId => model.FieldList.Contains(fieldId)))
+                        {
+                            isThereAnyPreviousFieldLeft = true;
+                        }
                     }
                 }
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
