@@ -124,7 +124,7 @@
                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
 
                     <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.None)"
-                                           behavior="Exclusive"
+                                           behavior="CheckboxesItemBehavior.Exclusive"
                                            checked="@(Model.OrganicInorganicCopy == OrganicInorganicCopy.None)">
                         @Resource.lblIncludeNoneOfThese
                     </govuk-checkboxes-item>

@@ -2987,7 +2987,7 @@ cubic metres per hectare  not set</value>
     <value>Beta</value>
   </data>
   <data name="lblPhaseBannerText" xml:space="preserve">
-    <value>This is a new service. &lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
+    <value>This is a new service. &lt;a class="govuk-link" href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
@@ -6681,5 +6681,11 @@ livestock manure.</value>
   </data>
   <data name="lblView" xml:space="preserve">
     <value>View</value>
+  </data>
+  <data name="lblOrgenisation" xml:space="preserve">
+    <value>lblOrgenisation</value>
+  </data>
+  <data name="lblMenu" xml:space="preserve">
+    <value>Menu</value>
   </data>
 </root>
