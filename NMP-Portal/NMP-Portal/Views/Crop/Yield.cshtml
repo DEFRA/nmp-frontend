@@ -156,8 +156,7 @@
                                                         Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForTheseFieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
                                                         : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
                                 }
-                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblTonnesAndHectare)</span>
-                                @((ViewBag.IsYieldOptional != null) ? Resource.lblOptionalQues : Resource.lblQuestionMark)
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblTonnesAndHectare)</span>@((ViewBag.IsYieldOptional != null) ? Resource.lblOptionalQues : Resource.lblQuestionMark)
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblTonnesAndHectare</govuk-input-suffix>
                         </govuk-input>

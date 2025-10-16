@@ -68,9 +68,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <govuk-input asp-for=@Model.CapacityWeight type="number" step="any" spellcheck="false">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                        @string.Format(Resource.lblWhatIsTheWeightCapacityOfSuffix, Model.StoreName)
-                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lbltonnes)</span>
-                        @Resource.lblQuestionMark
+                        @string.Format(Resource.lblWhatIsTheWeightCapacityOfSuffix, Model.StoreName)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lbltonnes)</span>@Resource.lblQuestionMark
                     </govuk-input-label>
                     <govuk-input-hint>@Resource.lblThisIsCalculatedFromTheDimentionsYouEntered</govuk-input-hint>
                     <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>

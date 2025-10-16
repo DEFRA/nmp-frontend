@@ -150,18 +150,15 @@
                     </p>
                     <govuk-input asp-for=@Model.TotalFarmArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-label>
-                            @Resource.lblWhatIsTheTotalFarmAreaSuffix
-                            <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
+                            @Resource.lblWhatIsTheTotalFarmAreaSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
 
                         <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
-                        @Resource.lblQuestionMark
+                        
                     </govuk-input>
                     <govuk-input asp-for=@Model.TotalAreaInNVZ type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-label>
-                            @Resource.lblWhatIsTheTotalAreaInAnNVZSuffix
-                            <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
-                            @Resource.lblQuestionMark
+                            @Resource.lblWhatIsTheTotalAreaInAnNVZSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
                         <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
                     </govuk-input>
@@ -169,9 +166,7 @@
                     {
                         <govuk-input asp-for=@Model.GrassPercentage type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label>
-                                @Resource.lblWhatPercentageOfTheLandIsFarmedAsGrassSuffix
-                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>
-                                @Resource.lblQuestionMark
+                                @Resource.lblWhatPercentageOfTheLandIsFarmedAsGrassSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblQuestionMark
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
                         </govuk-input>
