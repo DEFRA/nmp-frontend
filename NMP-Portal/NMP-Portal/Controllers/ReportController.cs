@@ -2418,7 +2418,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.LivestockQuantity == null)
                 {
-                    ModelState.AddModelError("LivestockQuantity", Resource.lblEnterAFigure);
+                    ModelState.AddModelError("LivestockQuantity", Resource.lblEnterTheAmountYouImportedInTonnes);
                 }
                 else
                 {

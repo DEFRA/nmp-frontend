@@ -4327,15 +4327,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a positive value of quantity..
-        /// </summary>
-        public static string lblEnterAPositiveValueOfQuantity {
-            get {
-                return ResourceManager.GetString("lblEnterAPositiveValueOfQuantity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enter a single figure for all these fields.
         /// </summary>
         public static string lblEnterASingleFigureForAllTheseFields {

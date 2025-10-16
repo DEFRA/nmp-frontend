@@ -4634,7 +4634,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 Error error = null;
-                bool isCropGroupNew = false;
+                bool isThereAnyPreviousFieldLeft = false;
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                 (List<HarvestYearPlanResponse> crops, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && crops.Count > 0)
@@ -4642,12 +4642,12 @@ namespace NMP.Portal.Controllers
                     List<string> fieldIds = crops.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID.ToString()).ToList();
                     if (fieldIds.Count > 0 && fieldIds.Any(fieldId => model.FieldList.Contains(fieldId)))
                     {
-                        isCropGroupNew = true;
+                        isThereAnyPreviousFieldLeft = true;
                     }
                 }
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
-                    if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) || (!isCropGroupNew))
+                    if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) || (!isThereAnyPreviousFieldLeft))
                     {
                         (List<HarvestYearPlanResponse> harvestYearPlanResponses, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                         if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponses.Count > 0)
