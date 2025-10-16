@@ -10405,7 +10405,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quantity must be between 1 to 999999.
+        ///   Looks up a localized string similar to Quantity must be between 1 to 9,99,999.
         /// </summary>
         public static string lblQuantityMustBeBetweenOneTo9999999 {
             get {
@@ -17474,7 +17474,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an quantity between 0 and 999999.
+        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999.
         /// </summary>
         public static string MsgEnterAnQuantityBetweenValue {
             get {

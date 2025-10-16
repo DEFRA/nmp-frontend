@@ -6683,9 +6683,9 @@ livestock manure.</value>
     <value>View</value>
   </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
-    <value>Enter an quantity between 0 and 999999</value>
+    <value>Enter an quantity between 1 and 9,99,999</value>
   </data>
   <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
-    <value>Quantity must be between 1 to 999999</value>
+    <value>Quantity must be between 1 to 9,99,999</value>
   </data>
 </root>
