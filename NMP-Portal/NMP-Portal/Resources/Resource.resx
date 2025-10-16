@@ -6682,4 +6682,7 @@ livestock manure.</value>
   <data name="lblView" xml:space="preserve">
     <value>View</value>
   </data>
+  <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
+    <value>Was future field used for grass in {0}?</value>
+  </data>
 </root>

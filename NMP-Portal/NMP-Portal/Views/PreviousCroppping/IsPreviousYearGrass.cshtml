@@ -1,0 +1,55 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PreviousCroppingViewModel
+@{
+    //ViewData["Title"] = Resource.lblNVZField;
+    
+    ViewData["Title"] = $"{string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, ViewBag.YearList)} {Resource.lblHyphen} {Resource.lblPreviousCrop}";
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var backAction = "";
+    
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@backAction asp-controller="PreviousCroppping">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="IsPreviousYearGrass" asp-controller="PreviousCroppping" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div hidden="true">
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupID"></govuk-input>
+
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGrassInLastThreeYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassManagementOptionID"></govuk-input>
+
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGreaterThan30PercentClover"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNitrogenSupplyItemID"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LayDuration"></govuk-input>
+        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"></govuk-input>
+
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsPreviousYearGrass">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear,ViewBag.YearList)
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+
+               
+            </p>
+
+        </div>
+
+    </div>
+</form>

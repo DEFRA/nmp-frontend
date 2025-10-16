@@ -14232,6 +14232,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Was future field used for grass in {0}?.
+        /// </summary>
+        public static string lblWasFutureFieldUsedForGrassInYear {
+            get {
+                return ResourceManager.GetString("lblWasFutureFieldUsedForGrassInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content.
         /// </summary>
         public static string lblWaterResourcesRegulation2021Content {
