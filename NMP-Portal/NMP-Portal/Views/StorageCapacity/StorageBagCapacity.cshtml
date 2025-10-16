@@ -69,9 +69,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <govuk-input asp-for=@Model.StorageBagCapacity type="number" step="any" spellcheck="false">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                        @string.Format(Resource.lblWhatIsTheTotalCapacityOfSuffix, Model.StoreName)
-                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblCubicMeters)</span>
-                        @Resource.lblQuestionMark
+                        @string.Format(Resource.lblWhatIsTheTotalCapacityOfSuffix, Model.StoreName)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblCubicMeters)</span>@Resource.lblQuestionMark
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblCubicMeters</govuk-input-suffix>
                 </govuk-input>

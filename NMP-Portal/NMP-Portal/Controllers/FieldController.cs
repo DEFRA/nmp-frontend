@@ -166,33 +166,30 @@ namespace NMP.Portal.Controllers
 
 
 
-                    if (currentDate <= harvestYearEndDate)
-                    {
-                        model.LastHarvestYear = currentDate.Year - 1;
-                    }
-                    else
-                    {
-                        model.LastHarvestYear = currentDate.Year;
-                    }
-                    //if plan created then check the latest, less than or equal to current year.
-                    //List<PlanSummaryResponse> cropPlans = await _cropService.FetchPlanSummaryByFarmId(model.FarmID, 0);
-                    //cropPlans.RemoveAll(x => x.Year == 0);
-                    //if (cropPlans.Count() > 0)
+                    //if (currentDate <= harvestYearEndDate)
                     //{
-                    //    int currentYear = 2030;
-
-                    //    int? latestPreviousHarvestYear = cropPlans
-                    //        .Where(p => p.Year <= currentYear)
-                    //        .Select(p => (int?)p.Year)
-                    //        .DefaultIfEmpty()
-                    //        .Max();
-
-                    //    model.LastHarvestYear = latestPreviousHarvestYear;
+                    //    model.LastHarvestYear = currentDate.Year - 1;
                     //}
                     //else
                     //{
-                    //    //model.LastHarvestYear = model.LastHarvestYear;
+                    //    model.LastHarvestYear = currentDate.Year;
                     //}
+                    //if plan created then check the latest, less than or equal to current year.
+                    List<PlanSummaryResponse> cropPlans = await _cropService.FetchPlanSummaryByFarmId(model.FarmID, 0);
+                    cropPlans.RemoveAll(x => x.Year == 0);
+                    if (cropPlans.Count() > 0)
+                    {
+                        int currentYear = currentDate.Year;
+
+                        int? latestPreviousHarvestYear = cropPlans
+                            .Where(p => p.Year <= currentYear)
+                            .Select(p => (int?)p.Year)
+                            .DefaultIfEmpty()
+                            .Max();
+
+                        model.LastHarvestYear = latestPreviousHarvestYear;
+                    }
+                    
                 }
                 if (!string.IsNullOrWhiteSpace(r))
                 {
