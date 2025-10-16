@@ -42,6 +42,7 @@ namespace NMP.Portal.ViewModels
         public string? ManureTypeName { get; set; }
         public bool IsDefaultValueChange { get; set; } = false;
         public DateTime? LivestockImportExportDate { get; set; }
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAnQuantityBetweenValue))]
         public int? LivestockQuantity { get; set; }
         public List<HarvestYear>? HarvestYear { get; set; }
         public string? DefaultNutrientValue { get; set; }

@@ -6682,4 +6682,10 @@ livestock manure.</value>
   <data name="lblView" xml:space="preserve">
     <value>View</value>
   </data>
+  <data name="lblEnterAPositiveValueOfQuantity" xml:space="preserve">
+    <value>Enter a positive value of quantity.</value>
+  </data>
+  <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
+    <value>Enter an quantity between 0 and 999999</value>
+  </data>
 </root>

@@ -4327,6 +4327,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a positive value of quantity..
+        /// </summary>
+        public static string lblEnterAPositiveValueOfQuantity {
+            get {
+                return ResourceManager.GetString("lblEnterAPositiveValueOfQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a single figure for all these fields.
         /// </summary>
         public static string lblEnterASingleFigureForAllTheseFields {
@@ -17461,6 +17470,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAnApplicationRateTo1DecimalPlace {
             get {
                 return ResourceManager.GetString("MsgEnterAnApplicationRateTo1DecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an quantity between 0 and 999999.
+        /// </summary>
+        public static string MsgEnterAnQuantityBetweenValue {
+            get {
+                return ResourceManager.GetString("MsgEnterAnQuantityBetweenValue", resourceCulture);
             }
         }
         

@@ -46,5 +46,6 @@ namespace NMP.Portal.Services
         Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking();
 
         Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
+        Task<(List<Crop>, Error)> MergeCrop(string cropData);
     }
 }

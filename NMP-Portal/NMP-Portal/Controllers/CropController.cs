@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Enums;
@@ -254,7 +255,7 @@ namespace NMP.Portal.Controllers
                         model.IsCropGroupChange = true;
                     }
                     else
-                    if ((CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass||
+                    if ((CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ||
                         CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                         && model.IsCheckAnswer && (!model.IsCropGroupChange))
                     {
@@ -965,10 +966,10 @@ namespace NMP.Portal.Controllers
                 //}
                 //else
                 //{
-                    //if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
-                    //{
-                    //    ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
-                    //}
+                //if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
+                //{
+                //    ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
+                //}
                 //}
                 if (!ModelState.IsValid)
                 {
@@ -1090,6 +1091,21 @@ namespace NMP.Portal.Controllers
                     {
                         SelectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
                     }
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                    List<Field> allFieldList = await _fieldService.FetchFieldsByFarmId(farmId);
+                    if (allFieldList.Count > 0)
+                    {
+                        var fieldIdsToRemove = harvestYearPlanResponse
+                            .Select(x => x.FieldID)
+                            .ToList();
+
+                        allFieldList.RemoveAll(field => fieldIdsToRemove.Contains(field.ID.Value));
+                        SelectListItem.AddRange(allFieldList.Select(x => new SelectListItem
+                        {
+                            Value = x.ID.Value.ToString(),
+                            Text = x.Name.ToString()
+                        }));
+                    }
                 }
                 else
                 {
@@ -1169,6 +1185,21 @@ namespace NMP.Portal.Controllers
                     {
                         selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
                     }
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                    List<Field> allFieldList = await _fieldService.FetchFieldsByFarmId(farmId);
+                    if (allFieldList.Count > 0)
+                    {
+                        var fieldIdsToRemove = harvestYearPlanResponse
+                            .Select(x => x.FieldID)
+                            .ToList();
+
+                        allFieldList.RemoveAll(field => fieldIdsToRemove.Contains(field.ID.Value));
+                        selectListItem.AddRange(allFieldList.Select(x => new SelectListItem
+                        {
+                            Value = x.ID.Value.ToString(),
+                            Text = x.Name.ToString()
+                        }));
+                    }
                 }
                 else
                 {
@@ -1228,8 +1259,9 @@ namespace NMP.Portal.Controllers
                                     harvestYearPlanResponseForUpdate = harvestYearPlanResponseForUpdate.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                                     if (harvestYearPlanResponseForUpdate != null)
                                     {
-                                        crop.ID = harvestYearPlanResponseForUpdate.Where(x => x.FieldID == fieldId).Select(x => x.CropID).FirstOrDefault();
-                                        crop.CropOrder = harvestYearPlanResponseForUpdate.Where(x => x.FieldID == fieldId).Select(x => x.CropOrder).FirstOrDefault();
+                                        crop.ID = harvestYearPlanResponseForUpdate.FirstOrDefault(x => x.FieldID == fieldId)?.CropID;
+                                        crop.CropOrder = harvestYearPlanResponseForUpdate.FirstOrDefault(x => x.FieldID == fieldId)?.CropOrder ?? 1;
+
                                     }
                                 }
                             }
@@ -2520,7 +2552,28 @@ namespace NMP.Portal.Controllers
                     harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                     if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count == 1)
                     {
-                        ViewBag.IsFieldChange = true;
+                        int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                        List<Field> allFieldList = await _fieldService.FetchFieldsByFarmId(farmId);
+                        if (allFieldList.Count > 0)
+                        {
+                            var fieldIdsToRemove = harvestYearPlanResponse
+                                .Select(x => x.FieldID)
+                                .ToList();
+
+                            allFieldList.RemoveAll(field => fieldIdsToRemove.Contains(field.ID.Value));
+                            if (allFieldList.Count == 0)
+                            {
+                                ViewBag.IsFieldChange = true;
+                            }
+                            else
+                            {
+                                ViewBag.IsFieldChange = false;
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.IsFieldChange = true;
+                        }
                     }
                 }
 
@@ -2548,7 +2601,34 @@ namespace NMP.Portal.Controllers
                 (harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
-                    ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
+                    List<int> updatedFields = harvestYearPlanResponse
+                    .Where(x => x.CropGroupName == model.PreviousCropGroupName)
+                    .Select(x => x.FieldID)
+                    .ToList();
+
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                    List<Field> allFieldList = await _fieldService.FetchFieldsByFarmId(farmId);
+                    if (allFieldList.Count > 0)
+                    {
+                        var fieldIdsToRemove = harvestYearPlanResponse
+                            .Select(x => x.FieldID)
+                            .ToList();
+
+                        allFieldList.RemoveAll(field => fieldIdsToRemove.Contains(field.ID.Value));
+
+                        updatedFields.AddRange(allFieldList.Select(x => x.ID.Value));
+
+                        ViewBag.FieldOptions = updatedFields;
+                    }
+                    else
+                    {
+                        ViewBag.FieldOptions = harvestYearPlanResponse
+                            .Where(x => x.CropGroupName == model.PreviousCropGroupName)
+                            .Select(x => x.FieldID)
+                            .ToList();
+                    }
+
+
                     var fieldIdsForFilter = fieldList.Select(f => f.ID);
                     harvestYearPlanResponse = harvestYearPlanResponse
                         .Where(x => fieldIdsForFilter.Contains(x.FieldID))
@@ -2826,7 +2906,7 @@ namespace NMP.Portal.Controllers
                 action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
                    "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                    || cropInfoOneList.Count == 1) ?
-                   ((model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields||
+                   ((model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
                    model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield) ?
                "YieldQuestion" : "Yield") : "CropInfoOne");
 
@@ -5477,21 +5557,28 @@ namespace NMP.Portal.Controllers
 
 
                         List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
-
-                        (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
+                        List<ManagementPeriod> managementPeriodList = new List<ManagementPeriod>();
+                        if (crop.ID != null)
+                        {
+                            (managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
+                        }
                         if (model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
+                            managementPeriods.Add(new ManagementPeriod
+                            {
+                                Defoliation = 1,
+                                Utilisation1ID = 2
+                            });
                             if (managementPeriodList != null && managementPeriodList.Any())
                             {
-                                //managementPeriods = new List<ManagementPeriod> { managementPeriodList.First() };
-
-                                managementPeriods.Add(new ManagementPeriod
+                                if (crop.ID != null)
                                 {
-                                    Defoliation = 1,
-                                    Utilisation1ID = 2,
-                                    ModifiedOn = DateTime.Now,
-                                    ModifiedByID = userId
-                                });
+                                    foreach (var managementPeriod in managementPeriods)
+                                    {
+                                        managementPeriod.ModifiedOn = DateTime.Now;
+                                        managementPeriod.ModifiedByID = userId;
+                                    }
+                                }
                             }
                         }
                         if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
@@ -5530,17 +5617,23 @@ namespace NMP.Portal.Controllers
                                     {
                                         utilisation1 = (int)NMP.Portal.Enums.Utilisation1.Hay;
                                     }
-
                                     managementPeriods.Add(new ManagementPeriod
                                     {
                                         Defoliation = defoliation,
                                         Utilisation1ID = utilisation1,
-                                        Yield = crop.Yield ?? 0 / model.PotentialCut,
-                                        //CreatedOn = DateTime.Now,
-                                        //CreatedByID = userId,
-                                        ModifiedOn = DateTime.Now,
-                                        ModifiedByID = userId
+                                        Yield = crop.Yield ?? 0 / model.PotentialCut
                                     });
+                                    if (managementPeriodList != null && managementPeriodList.Any())
+                                    {
+                                        if (crop.ID != null)
+                                        {
+                                            foreach (var managementPeriod in managementPeriods)
+                                            {
+                                                managementPeriod.ModifiedOn = DateTime.Now;
+                                                managementPeriod.ModifiedByID = userId;
+                                            }
+                                        }
+                                    }
                                     defoliation++;
                                 }
                             }

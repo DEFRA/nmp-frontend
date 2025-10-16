@@ -144,7 +144,7 @@
                 <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                     
                 </govuk-fieldset-legend>
-                <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input asp-for=@Model.LivestockQuantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false" input-maxlength="6">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">
                         @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
                                                 Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
