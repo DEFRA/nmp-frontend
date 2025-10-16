@@ -28,7 +28,7 @@
 
             @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     @if (@TempData["successMsg"] == null)
                     {
                         <div class="">

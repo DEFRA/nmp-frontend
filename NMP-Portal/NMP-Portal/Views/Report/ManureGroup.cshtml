@@ -1,24 +1,16 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblManureGroup;
-    // var backAction = "";
-    // if (Model.IsImport != null)
-    // {
-    //     backAction = "ManageImportExport";
-    // }
-    // else if (Model.IsCheckAnswer)
-    // {
-    //     backAction = "LivestockImportExportCheckAnswer";
-    // }
-    // else
-    // {
-    //     backAction = "ImportExportOption";
-    // }
+    string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
+
+    string heading = string.Format(Resource.lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting,
+                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
+                            Resource.lblExporting);
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="backActionForManureGroup" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackActionForManureGroup" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnManureGroup"] != null)
 {
@@ -141,12 +133,9 @@
                 <govuk-radios class="govuk-radios" asp-for="@Model.ManureGroupIdForFilter">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting,
-                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
-                            Resource.lblExporting
-                                                )
-                    </govuk-radios-fieldset-legend>
-                    @if (ViewBag.FarmManureTypeList != null)
+                            @heading
+                        </govuk-radios-fieldset-legend>
+                        @if (ViewBag.FarmManureTypeList != null)
                         {
                             @foreach (var item in ViewBag.FarmManureTypeList)
                             {

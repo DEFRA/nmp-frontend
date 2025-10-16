@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblEndOfSoilDrainage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblWhatIsTheEndOfDrainageDate} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -192,7 +193,7 @@
                     }
                 }
             </div>
-            <govuk-date-input asp-for="@Model.SoilDrainageEndDate" pattern="[0-9]*">
+            <govuk-date-input asp-for="@Model.SoilDrainageEndDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblWhatIsTheEndOfDrainageDate
@@ -200,6 +201,9 @@
                     <govuk-date-input-hint>
                         <p>@Resource.lblForExample</p>
                     </govuk-date-input-hint>
+                    <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                    <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                    <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
                 </govuk-date-input-fieldset>
             </govuk-date-input>
 

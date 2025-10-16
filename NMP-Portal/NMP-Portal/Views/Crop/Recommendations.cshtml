@@ -2,7 +2,11 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.RecommendationViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblFieldPlanYear, Model.FieldName, Model.Crops[0].Year);
+
+    string title = Resource.lblRecommendations;
+    ViewData["Title"] = $"{string.Format(Resource.lblFieldPlanYear, Model.FieldName, Model.Crops[0].Year)} {Resource.lblHyphen} {title}";
+
+
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int CerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
     var lastUpdate = string.Empty;
@@ -35,7 +39,7 @@
 
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["successMsg"]
                     </p>
@@ -49,7 +53,7 @@
             }
             @if (TempData["successSnsAnalysis"] != null)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @string.Format(Resource.MsgSnsSuccess, Model.FieldName)
                     </p>
@@ -285,7 +289,7 @@
                                         <p class="govuk-body margin-bottom-forty">
                                             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
                                         </p>
-                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#">@Resource.lblBackToTheTop</a></p>
+                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#tab_crop-1">@Resource.lblBackToTheTop</a></p>
 
                                     }
 
@@ -489,7 +493,7 @@
                                         <p class="govuk-body margin-bottom-forty">
                                             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
                                         </p>
-                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#">@Resource.lblBackToTheTop</a></p>
+                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#tab_crop-2">@Resource.lblBackToTheTop</a></p>
                                     }
 
                                 </govuk-tabs-item>

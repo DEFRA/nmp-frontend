@@ -166,33 +166,30 @@ namespace NMP.Portal.Controllers
 
 
 
-                    if (currentDate <= harvestYearEndDate)
-                    {
-                        model.LastHarvestYear = currentDate.Year - 1;
-                    }
-                    else
-                    {
-                        model.LastHarvestYear = currentDate.Year;
-                    }
-                    //if plan created then check the latest, less than or equal to current year.
-                    //List<PlanSummaryResponse> cropPlans = await _cropService.FetchPlanSummaryByFarmId(model.FarmID, 0);
-                    //cropPlans.RemoveAll(x => x.Year == 0);
-                    //if (cropPlans.Count() > 0)
+                    //if (currentDate <= harvestYearEndDate)
                     //{
-                    //    int currentYear = 2030;
-
-                    //    int? latestPreviousHarvestYear = cropPlans
-                    //        .Where(p => p.Year <= currentYear)
-                    //        .Select(p => (int?)p.Year)
-                    //        .DefaultIfEmpty()
-                    //        .Max();
-
-                    //    model.LastHarvestYear = latestPreviousHarvestYear;
+                    //    model.LastHarvestYear = currentDate.Year - 1;
                     //}
                     //else
                     //{
-                    //    //model.LastHarvestYear = model.LastHarvestYear;
+                    //    model.LastHarvestYear = currentDate.Year;
                     //}
+                    //if plan created then check the latest, less than or equal to current year.
+                    List<PlanSummaryResponse> cropPlans = await _cropService.FetchPlanSummaryByFarmId(model.FarmID, 0);
+                    cropPlans.RemoveAll(x => x.Year == 0);
+                    if (cropPlans.Count() > 0)
+                    {
+                        int currentYear = currentDate.Year;
+
+                        int? latestPreviousHarvestYear = cropPlans
+                            .Where(p => p.Year <= currentYear)
+                            .Select(p => (int?)p.Year)
+                            .DefaultIfEmpty()
+                            .Max();
+
+                        model.LastHarvestYear = latestPreviousHarvestYear;
+                    }
+                    
                 }
                 if (!string.IsNullOrWhiteSpace(r))
                 {
@@ -907,13 +904,13 @@ namespace NMP.Portal.Controllers
                 //    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
                 //}
 
-                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
-                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate)))
                 {
                     ModelState["SoilAnalyses.Date"].Errors.Clear();
                     ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgTheDateMustInclude);

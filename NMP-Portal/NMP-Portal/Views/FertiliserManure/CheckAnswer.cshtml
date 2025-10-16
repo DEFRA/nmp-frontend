@@ -2,7 +2,17 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourAnswers;
+    var heading="";
+    if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+    {
+        heading = Resource.lblCheckYourAnswers;
+    }
+    else
+    {
+        heading = string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0);
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     int counter = 1;
 }
 
@@ -46,6 +56,25 @@
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"></govuk-input>
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
+                @* warning model properties start *@
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning.ToString().ToLower()"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"></govuk-input>
+                
+                
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeading" value="@Model.ClosedPeriodWarningHeading"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara2" value="@Model.ClosedPeriodWarningPara2"></govuk-input>
+                
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningHeading" value="@Model.ClosedPeriodNitrogenExceedWarningHeading"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara1" value="@Model.ClosedPeriodNitrogenExceedWarningPara1"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara2" value="@Model.ClosedPeriodNitrogenExceedWarningPara2"></govuk-input>
+
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeader" value="@Model.ClosedPeriodWarningHeader"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningCodeID" value="@Model.ClosedPeriodWarningCodeID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningLevelID" value="@Model.ClosedPeriodWarningLevelID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningHeader" value="@Model.ClosedPeriodNitrogenExceedWarningHeader"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningCodeID" value="@Model.ClosedPeriodNitrogenExceedWarningCodeID"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningLevelID" value="@Model.ClosedPeriodNitrogenExceedWarningLevelID"></govuk-input>
+
                 @if (Model != null)
                 {
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
@@ -159,7 +188,7 @@
                 }
                 else
                 {
-                    @string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear.Value)
+                    @string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0)
                 }
 
             </h1>
@@ -421,12 +450,12 @@
                                 }
                                 else
                                 {
-                                    @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
+                                    @(Model.FieldList?.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
                                 }
                             }
                             else
                             {
-                                @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
+                                @(Model.FieldList?.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
                             }
                             @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
                         </govuk-summary-list-row-key>
@@ -444,12 +473,12 @@
                                         }
                                         else
                                         {
-                                            @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
+                                            @(Model.FieldList?.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
                                         }
                                     }
                                     else
                                     {
-                                        @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
+                                        @(Model.FieldList?.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
                                     }
                                 </span>
                             </govuk-summary-list-row-action>

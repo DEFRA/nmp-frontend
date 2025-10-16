@@ -1,7 +1,17 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+    var heading = "";
+    if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+    {
+        heading = Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications;
+    }
+    else
+    {
+        heading = Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic;
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
@@ -130,7 +140,7 @@
                     }
 
                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                    <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
                 </govuk-checkboxes-fieldset>
             </govuk-checkboxes>
             

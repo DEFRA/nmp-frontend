@@ -1,13 +1,13 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsLivestockCheckAnswer ? "LivestockCheckAnswer" : "LivestockGroup")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "LivestockGroup")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockType"] != null)
 {
@@ -116,6 +116,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedNLLivestockID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockGroupChange" value="@Model.IsLivestockGroupChange.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)

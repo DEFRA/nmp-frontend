@@ -43,7 +43,7 @@ namespace NMP.Portal.Controllers
                     ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
                 }
 
-               
+
             }
             catch (Exception ex)
             {
@@ -75,6 +75,6 @@ namespace NMP.Portal.Controllers
                 ViewBag.ServiceError = Resource.MsgNmptServiceNotAvailable;
             }
             return View();
-        }                
+        }
     }
 }

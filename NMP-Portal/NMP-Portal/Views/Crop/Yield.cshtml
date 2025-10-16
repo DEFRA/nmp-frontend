@@ -7,13 +7,16 @@
     var pageHeading = "";
     @if (ViewBag.IsYieldOptional != null)
     {
-        pageHeading = string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+        pageHeading = (Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.YieldCurrentCounter].FieldName));
     }
     else
     {
-        pageHeading = string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+        pageHeading = (Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.YieldCurrentCounter].FieldName));
     }
-    ViewData["Title"] = pageHeading;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
     if (Model.Crops.Count > 1)
     {
         backAction = "Yield";
@@ -144,16 +147,16 @@
                                 @if (ViewBag.IsYieldOptional != null)
                                 {
                                     @(Model.Crops.Count > 1 &&
-                                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName  : Model.CropType)
-                                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType, Model.Crops[i].FieldName))
-                                        }
+                                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
+                                }
                                 else
                                 {
                                     @(Model.Crops.Count > 1 &&
-                                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName :  Model.CropType, Model.Crops[i].FieldName))
-                                        }
-                                   
+                                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForTheseFieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
+                                }
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblTonnesAndHectare)</span>@((ViewBag.IsYieldOptional != null) ? Resource.lblOptionalQues : Resource.lblQuestionMark)
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblTonnesAndHectare</govuk-input-suffix>
                         </govuk-input>

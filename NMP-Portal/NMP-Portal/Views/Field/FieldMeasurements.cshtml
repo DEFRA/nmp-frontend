@@ -3,7 +3,7 @@
 
 @{
     //ViewData["Title"] = string.Format(Resource.lblFieldMeasurements, Model.Name);
-    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateXField, Model.Name) : Resource.lblAddField;
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
     ViewData["Title"] = $"{string.Format(Resource.lblFieldMeasurements, Model.Name)} {Resource.lblHyphen} {title}";
     var backAction = "";
     if (Model.IsCheckAnswer)
@@ -90,24 +90,37 @@
                 }
                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"></govuk-input>
             </div>
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
-            </legand>
-            <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label>@Resource.lblTotalFieldArea<span class="govuk-visually-hidden"> @($"{@Resource.lblTotalFieldArea},in {@Resource.lblHectares}")</span> </govuk-input-label>
-                
-                <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label>@Resource.lblCroppedArea<span class="govuk-visually-hidden">@($"{@Resource.lblCroppedAreaForCheckAnswere},in {@Resource.lblHectares} {Resource.lblOptional}") </span> </govuk-input-label>
-                
-                <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label>@Resource.lblManureNonSpreadingArea<span class="govuk-visually-hidden">@($"{@Resource.lblManureNonSpreadArea},in {@Resource.lblHectares} {Resource.lblOptional}") </span> </govuk-input-label>
-                
-                <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
-            </govuk-input>
+            <govuk-fieldset>
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
+                </govuk-fieldset-legend>
+                <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" inputmode="decimal"
+                             pattern="^\d+(\.\d{0,2})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>@Resource.lblTotalFieldArea
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
+                    </govuk-input-label>
+
+                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>
+                        @Resource.lblCroppedAreaForCheckAnswere
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
+                        @Resource.lblOptional
+                    </govuk-input-label>
+
+                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>
+                        @Resource.lblManureNonSpreadingAreaForCheckAnswere
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span> 
+                        @Resource.lblOptional
+                    </govuk-input-label>
+
+                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                </govuk-input>
+            </govuk-fieldset>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

@@ -98,12 +98,12 @@
                         {
                             @foreach (var item in ViewBag.PreviousGrassesYear)
                             {
-                                <govuk-checkboxes-item value="@item">@item</govuk-checkboxes-item>
+                            <govuk-checkboxes-item value="@item">@item</govuk-checkboxes-item>
                             }
                         }
 
                         <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                        <govuk-checkboxes-item value="0" behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                    <govuk-checkboxes-item value="0" id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
                     </govuk-checkboxes-fieldset>
                 </govuk-checkboxes>
             

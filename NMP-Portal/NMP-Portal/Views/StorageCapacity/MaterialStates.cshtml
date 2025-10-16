@@ -1,8 +1,8 @@
 ﻿﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblStorageType;
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{Resource.lblWhatKindOfManureStorageDoYouWantToAdd} {Resource.lblHyphen} {title}";
     var backAction = "";
     if (Model.IsCheckAnswer == true)
     {

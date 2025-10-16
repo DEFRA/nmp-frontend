@@ -1,8 +1,9 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblAreaAndQuantity;
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {title}";
+    
     int trueWarningCount = 0;
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
     if (Model.IsNMaxLimitWarning) trueWarningCount++;

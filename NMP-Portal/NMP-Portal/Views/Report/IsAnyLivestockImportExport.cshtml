@@ -2,14 +2,14 @@
 
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblImportsExports;
+    ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                 "LivestockImportExportCheckAnswer": "LivestockManureNitrogenReportChecklist") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+                                      "LivestockImportExportCheckAnswer" : "LivestockManureNitrogenReportChecklist") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsAnyLivestockImportExport"] != null)
 {
@@ -132,20 +132,20 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
-                </h1>
-
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestockImportExport">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                        <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
+                    </govuk-fieldset-legend>
+                    <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestockImportExport">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
+                            </govuk-radios-fieldset-legend>
+                            <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+                            <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                            <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
@@ -164,7 +164,8 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else
+ @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

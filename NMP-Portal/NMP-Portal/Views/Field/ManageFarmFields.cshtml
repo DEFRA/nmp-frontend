@@ -31,7 +31,7 @@
 
             @if (ViewBag.Success != null && ViewBag.Success == true)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.FieldName)</h3>
                         <p class="govuk-body">
@@ -51,7 +51,7 @@
             }
             @if (ViewBag.IsDeleted != null && ViewBag.IsDeleted == true)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemovedField, ViewBag.FieldName)</h3>
                     </div>
@@ -92,15 +92,17 @@
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@item.Name</td>
                                 <td class="govuk-table__cell">
-                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblFieldAndSoilDetails</a>
+                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
+                                        <span class="govuk-visually-hidden">@Resource.lblView </span>@Resource.lblFieldAndSoilDetails<span class="govuk-visually-hidden"> @string.Format(Resource.MsgGenericFor, item.Name)</span>
+                                    </a>
                                 </td>
                             </tr>
                         }
                     }
-
-
                 </tbody>
             </table>
+
+           
         </div>
     </div>
 }

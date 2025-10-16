@@ -1,7 +1,24 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblInOrganicManureDuration;
+    var heading = "";
+    if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+    {
+        if (int.TryParse(Model.FieldGroup, out int value))
+        {
+            heading = string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropTypeName);
+        }
+        else
+        {
+            heading = (Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields, Model.FieldName));
+        }
+    }
+    else
+    {
+        heading = (Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields : string.Format(Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField, Model.FieldName));
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var count = 0;
 }
 
@@ -166,57 +183,58 @@
                 </govuk-notification-banner> *@
                 }
             }
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                    {
-                        @if (int.TryParse(Model.FieldGroup, out int value))
-                        {
-                            @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropTypeName)
-                        }
-                        else
-                        {
-                            @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields, Model.FieldName))
-                        }
-                    }
-                    else
-                    {
-                        @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields : string.Format(Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField, Model.FieldName))
-                    }
-                </h1>
-            </legand>
-
-            @if (ViewBag.ClosedPeriod != null && Model.IsWithinNVZ == true)
-            {
-                <div id="closed-date" class="govuk-body">
-                    <p>
-                        @Resource.lblYourClosedPeriodForSpreading
-                    </p>
-                    <h3 class="govuk-heading-s closed-date">
-                        @ViewBag.ClosedPeriod
-                    </h3>
-                    <p>
-                        @Resource.lblBasedOnYourCropSoilTypeAndFarmDetails
-                    </p>
 
 
-                </div>
-            }
-            <div class="govuk-body">
-                @Resource.lblForFertiliserSecond
-            </div>
-            <govuk-date-input asp-for="@Model.Date" pattern="[0-9]*">
+            <govuk-date-input asp-for="@Model.Date">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
+                        <legend class="govuk-fieldset__legend--l">
+                            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+                            {
+                                @if (int.TryParse(Model.FieldGroup, out int value))
+                                {
+                                    @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropTypeName)
+                                }
+                                else
+                                {
+                                    @(Model.FieldList.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields, Model.FieldName))
+                                }
+                            }
+                            else
+                            {
+                                @(Model.FieldList.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields : string.Format(Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField, Model.FieldName))
+                            }
+                        </legend>
+                        @if (ViewBag.ClosedPeriod != null && Model.IsWithinNVZ == true)
+                        {
+                            <div id="closed-date" class="govuk-body">
+                                <p>
+                                    @Resource.lblYourClosedPeriodForSpreading
+                                </p>
+                                <h3 class="govuk-heading-s closed-date">
+                                    @ViewBag.ClosedPeriod
+                                </h3>
+                                <p>
+                                    @Resource.lblBasedOnYourCropSoilTypeAndFarmDetails
+                                </p>
+
+
+                            </div>
+                        }
+                        <div class="govuk-body">
+                            @Resource.lblForFertiliserSecond
+                        </div>
                     </govuk-date-input-fieldset-legend>
 
                     <govuk-date-input-hint>
                         @Resource.hintTheDateFormat
                     </govuk-date-input-hint>
+                    <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                    <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                    <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
                 </govuk-date-input-fieldset>
 
             </govuk-date-input>
-
 
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue

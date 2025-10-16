@@ -2,7 +2,14 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year);
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year)} {Resource.lblHyphen} {title}";
+
+    var varietyNameHeading = ((Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
+                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
+                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
+                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4) ? Resource.lblWhatIsThePotatoVarietyName : Resource.lblVarietyNameWithOptional);
 }
 @section BeforeContent {
     <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
@@ -108,14 +115,11 @@
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @((Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
-                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
-                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
-                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4) ? Resource.lblWhatIsThePotatoVarietyName : Resource.lblVarietyNameWithOptional)
+                        @varietyNameHeading
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>@(string.IsNullOrWhiteSpace(Model.Variety) ? Resource.lblNotEntered : Model.Variety)</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblChange<span class="govuk-visually-hidden">@varietyNameHeading</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -137,7 +141,7 @@
                     <govuk-summary-list-row-key>@Resource.lblWhatWouldYouLikeToCallThisCropGroup</govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>@Model.CropGroupName</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="CropGroupName" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblChange</govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="CropGroupName" asp-controller="Crop" asp-route-q="@Model.EncryptedIsCropUpdate">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWouldYouLikeToCallThisCropGroup</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -147,7 +151,7 @@
                         <govuk-summary-list-row-key>@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@Resource.lblNotEntered</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SowingDateQuestion" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SowingDateQuestion" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -157,7 +161,7 @@
                         <govuk-summary-list-row-key>@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>@sowingDateQuestion</govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SowingDateQuestion" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SowingDateQuestion" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropType))</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
@@ -227,7 +231,7 @@
                                     @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                             renderSowingDate = true;
@@ -246,7 +250,7 @@
                                 @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : crop.Yield.Value.ToString("#.#") + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@crop.EncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@crop.EncryptedCounter>@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, crop.FieldName)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }

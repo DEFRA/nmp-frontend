@@ -3,7 +3,10 @@
 
 @model PlanViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblCheckYourYearData, Model.Year - 1);
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{string.Format(Resource.lblCheckYourYearData, Model.Year, Model.Year - 1)} {Resource.lblHyphen} {title}";
+
 
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
 
@@ -30,7 +33,7 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l">
-                @string.Format(Resource.lblCheckYourYearData, Model.Year - 1)
+                @string.Format(Resource.lblCheckYourYearData, Model.Year, Model.Year - 1)
             </h1>
 
             <h3 class="govuk-heading-s">

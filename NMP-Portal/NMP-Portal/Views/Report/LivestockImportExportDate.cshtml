@@ -1,7 +1,12 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblDate;
+    string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
+
+
+    string heading = (string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var backAction = "";
     if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
     {
@@ -145,21 +150,20 @@
                     <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
                 }
             }
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l">
-                @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
-                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
-            </h1>
-
-                <govuk-date-input asp-for="@Model.LivestockImportExportDate" pattern="[0-9]*">
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-date-input asp-for="@Model.LivestockImportExportDate">
                     <govuk-date-input-fieldset>
-                        <govuk-date-input-fieldset-legend is-page-heading="false" class="govuk-fieldset">
+                        <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @heading
                         </govuk-date-input-fieldset-legend>
                         <govuk-date-input-hint>
                             <p>@Resource.lblSampleDate</p>
                         </govuk-date-input-hint>
+                        <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                        <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                        <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
                     </govuk-date-input-fieldset>
                 </govuk-date-input>
 
@@ -167,7 +171,7 @@
                     @Resource.lblContinue
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                @if (Model.IsCheckAnswer)
+                    @if (Model.IsCheckAnswer)
                     {
                         <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">
                             @Resource.lblCancel
@@ -182,7 +186,7 @@
                             </a>
                         }
                         else
- @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+  @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

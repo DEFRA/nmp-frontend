@@ -3,15 +3,19 @@
 @{
     int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int potatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
-
+    var heading = "";
     if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
     {
-        ViewData["Title"] = Resource.lblWhichFieldsWouldYouLikeToAddToThisGrass;
+        heading = Resource.lblWhichFieldsWouldYouLikeToAddToThisGrass;
     }
     else
     {
-        ViewData["Title"] = (string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType));
+        heading = (string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType));
     }
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
     var action = "";
     if (Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange))
     {
@@ -123,7 +127,8 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-checkboxes name="FieldList" asp-for="FieldList">
+           
+            <govuk-checkboxes name="FieldList" asp-for="@Model.FieldList" data-module="govuk-checkboxes">
                 <govuk-checkboxes-fieldset>
                     @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                     {
@@ -134,7 +139,7 @@
                     else
                     {
                         <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @(string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName  : Model.CropType))
+                            @(string.Format(Resource.lblWhichFieldsDoYouPlanToGrow, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         </govuk-checkboxes-fieldset-legend>
                     }
 
@@ -145,12 +150,17 @@
                     {
                         @foreach (var item in ViewBag.fieldList)
                         {
-                            <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
+                            <govuk-checkboxes-item value="@item.Value">
+                                @item.Text
+                            </govuk-checkboxes-item>
                         }
                     }
 
                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                    <govuk-checkboxes-item value="@Resource.lblSelectAll" id="select-all" name="select-all">
+                        @Resource.lblSelectAll
+                    </govuk-checkboxes-item>
+
                 </govuk-checkboxes-fieldset>
             </govuk-checkboxes>
             <govuk-button type="submit" class="margin-bottom-forty">

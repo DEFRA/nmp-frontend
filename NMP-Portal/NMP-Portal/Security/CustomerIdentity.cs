@@ -26,7 +26,7 @@ namespace NMP.Portal.Security
     public static class CustomerIdentity
     {
         private static IConfiguration? configuration = null;
-        
+
         public static IServiceCollection AddDefraCustomerIdentity(this IServiceCollection services, WebApplicationBuilder builder)
         {
             configuration = builder.Configuration;
@@ -49,14 +49,23 @@ namespace NMP.Portal.Security
                         //options.CallbackPath = builder.Configuration["CustomerIdentityCallbackPath"]; // "/signin-oidc";
                         //options.SignedOutCallbackPath = builder.Configuration["CustomerIdentitySignedOutCallbackPath"];
                         options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
-                        options.ErrorPath = "/Error/Index"; 
-                    })                    
+                        options.ErrorPath = "/Error/Index";
+                    },
+                    cookieOptions =>
+                    {
+                        // How long your app's cookie is valid
+                        cookieOptions.ExpireTimeSpan = TimeSpan.FromHours(8); // e.g. 8 hours
+                        cookieOptions.SlidingExpiration = true;
+                        // optionally:
+                        cookieOptions.Cookie.MaxAge = cookieOptions.ExpireTimeSpan;
+                    })
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
                     .AddInMemoryTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {                               
-                options.ResponseType = OpenIdConnectResponseType.Code;                
+            {
+                //options.ResponseType = OpenIdConnectResponseType.CodeToken;
+                options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;  // Save tokens in the authentication session
                 options.Scope.Add("openid profile offline_access");
                 options.Events ??= new OpenIdConnectEvents();
@@ -70,12 +79,13 @@ namespace NMP.Portal.Security
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
 
             });
-            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20); // Set cookie expiration time
-                options.SlidingExpiration = true; // Enable sliding expiration               
-                
-            });
+            //services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            //{
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
+            //    options.SlidingExpiration = true; // Enable sliding expiration
+            //    options.Cookie.MaxAge = options.ExpireTimeSpan;
+
+            //});
             services.AddTokenAcquisition();
             services.AddInMemoryTokenCaches();
             services.AddSingleton<TokenAcquisitionService>();
@@ -132,11 +142,11 @@ namespace NMP.Portal.Security
 
         private static async Task OnRedirectToIdentityProvider(RedirectContext context)
         {
-            if(!string.IsNullOrWhiteSpace(configuration?["CustomerIdentityReturnURI"]?.ToString()))
+            if (!string.IsNullOrWhiteSpace(configuration?["CustomerIdentityReturnURI"]?.ToString()))
             {
                 context.ProtocolMessage.RedirectUri = configuration?["CustomerIdentityReturnURI"]?.ToString(); // "https://your-gateway.com/signin-oidc";
             }
-            
+
             //context.ProtocolMessage.Parameters.Add("serviceId", configuration["CustomerIdentityServiceId"].ToString());
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
@@ -184,13 +194,13 @@ namespace NMP.Portal.Security
                     if (jsonToken != null)
                     {
                         int userId = 0;
-                        
+
                         Guid? userIdentifier = null;
                         string firstName = string.Empty;
                         string lastName = string.Empty;
                         string email = string.Empty;
                         string currentRelationShipId = string.Empty;
-                        string organisationName = string.Empty;                       
+                        string organisationName = string.Empty;
                         Guid? organisationId = null;
 
                         foreach (var claim in jsonToken.Claims)
@@ -243,7 +253,7 @@ namespace NMP.Portal.Security
                                     {
                                         relationShipDetails.AddRange(rs.Split(":"));
                                         if (relationShipDetails[4] == "Citizen")
-                                        {                                            
+                                        {
                                             organisationName = $"{firstName} {lastName}";
                                             organisationId = Guid.Parse(relationShipDetails[0]);
                                         }
@@ -311,12 +321,12 @@ namespace NMP.Portal.Security
                             httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? "http://localhost:3000/");
                             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
                             var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                            
+
                             if (response.IsSuccessStatusCode)
                             {
                                 string result = await response.Content.ReadAsStringAsync();
                                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                                if(responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+                                if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
                                 {
                                     userId = responseWrapper?.Data?["UserID"];
                                     identity?.AddClaim(new Claim("userId", userId.ToString()));
@@ -330,10 +340,10 @@ namespace NMP.Portal.Security
                                 }
 
                             }
-                            else if(response.StatusCode == HttpStatusCode.Forbidden)
+                            else if (response.StatusCode == HttpStatusCode.Forbidden)
                             {
                                 throw new Exception(Resource.MsgNmptApiServiceBlockedAccess);
-                            }                            
+                            }
                         }
                     }
                     else
@@ -347,11 +357,11 @@ namespace NMP.Portal.Security
                 }
 
             }
-            catch(HttpRequestException ex)
+            catch (HttpRequestException ex)
             {
                 var errorViewModel = new ErrorViewModel();
                 //errorViewModel.Code= (int)ex.StatusCode;
-                errorViewModel.Message = Resource.MsgNmptServiceNotAvailable;               
+                errorViewModel.Message = Resource.MsgNmptServiceNotAvailable;
                 errorViewModel.Stack = string.Empty;
                 context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
                 context?.Response.Redirect("/Error");
@@ -359,7 +369,7 @@ namespace NMP.Portal.Security
             }
             catch (Exception ex)
             {
-                var errorViewModel = new ErrorViewModel();                
+                var errorViewModel = new ErrorViewModel();
                 errorViewModel.Message = ex.Message;
                 errorViewModel.Stack = string.Empty;
                 context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);

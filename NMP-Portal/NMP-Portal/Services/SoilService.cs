@@ -9,8 +9,7 @@ namespace NMP.Portal.Services
     public class SoilService : Service, ISoilService
     {
         private readonly ILogger<SoilService> _logger;
-        public SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
-        (httpContextAccessor, clientFactory)
+        public SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

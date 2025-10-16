@@ -15,12 +15,12 @@
         }
     }
     var isFieldsEmpty = false;
-    if (ViewData["IsPostRequest"]!=null)
+    if (ViewData["IsPostRequest"] != null)
     {
-         isFieldsEmpty = Model.SoilAnalyses.PH == null && ((Model.SoilAnalyses.PhosphorusIndex == null && Model.SoilAnalyses.PotassiumIndex == null && Model.SoilAnalyses.MagnesiumIndex == null)
+        isFieldsEmpty = Model.SoilAnalyses.PH == null && ((Model.SoilAnalyses.PhosphorusIndex == null && string.IsNullOrWhiteSpace(Model.PotassiumIndexValue) && Model.SoilAnalyses.MagnesiumIndex == null)
         || (Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Potassium == null && Model.SoilAnalyses.Magnesium == null));
     }
-    
+
 }
 
 @section BeforeContent {
@@ -140,7 +140,7 @@
                             <govuk-input-label is-page-heading="true" class="govuk-label govuk-input__wrapper">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
                         </govuk-input>
 
-                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.SoilAnalyses.PotassiumIndex">
+                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="true" class="govuk-label govuk-input__wrapper">@Resource.lblPotassiumIndexOptional</govuk-input-label>
                         </govuk-input>
 
@@ -177,15 +177,27 @@
                             <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblPHLevelOption</govuk-input-label>
                         </govuk-input>
                         <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblPhosphorusPerLitreOfSoilOption<span class="govuk-visually-hidden">@($"{@Resource.lblPhosphorusPerLitreOfSoil},in {Resource.lblMgL} {Resource.lblOptional}") </span> </govuk-input-label>
+                            <govuk-input-label is-page-heading="true" class="govuk-label">
+                                @Resource.lblPhosphorusPPerLitreOfSoil
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMgL)</span>
+                            </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
+                            @Resource.lblOptional
                         </govuk-input>
                         <govuk-input asp-for=@Model.SoilAnalyses.Potassium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblPotassiumPerLitreOfSoilOption<span class="govuk-visually-hidden">@($"{@Resource.lblPotassiumPerLitreOfSoil},in {Resource.lblMgL} {Resource.lblOptional}") </span> </govuk-input-label>
+                            <govuk-input-label is-page-heading="true" class="govuk-label">
+                                @Resource.lblPotassiumPerLitreOfSoil
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMgL)</span>
+                            </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
+                            @Resource.lblOptional
                         </govuk-input>
                         <govuk-input asp-for=@Model.SoilAnalyses.Magnesium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
-                            <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblMagnesiumPerLitreOfSoilOption<span class="govuk-visually-hidden">@($"{@Resource.lblMagnesiumPerLitreOfSoil},in {Resource.lblMgL} {Resource.lblOptional}") </span> </govuk-input-label>
+                            <govuk-input-label is-page-heading="true" class="govuk-label">
+                                @Resource.lblMagnesiumPerLitreOfSoil
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMgL)</span>
+                                @Resource.lblOptional
+                            </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                         </govuk-input>
                     </govuk-fieldset>

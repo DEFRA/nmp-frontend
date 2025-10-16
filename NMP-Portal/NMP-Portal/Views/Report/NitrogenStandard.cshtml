@@ -1,9 +1,9 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblNitrogenStandards;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisLivestock, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var backAction = "";
-    if (Model.IsLivestockCheckAnswer)
+    if (Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange)
     {
         backAction = "LivestockCheckAnswer";
     }
@@ -125,7 +125,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageLivestock"></govuk-input>
-
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedNLLivestockID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockGroupChange" value="@Model.IsLivestockGroupChange.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -144,31 +145,32 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisLivestock, Model.Year)</h1>
-                </legand>
-                
-                <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
-                <govuk-details>
-                    <govuk-details-summary>
-                        @Resource.lblHelpWithNitrogenNStandard
-                    </govuk-details-summary>
-                    <govuk-details-text class="explanations">
-                        <p class="govuk-body">
-                            @Resource.lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced
-                        </p>
-                        <p class="govuk-body margin-bottom-forty">
-                            @Resource.lblThisFigureAccountsForOccupancyAlready
-                        </p>
-                    </govuk-details-text>
-                </govuk-details>
 
-                <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
-                    <govuk-input-label is-page-heading="false"></govuk-input-label>
-                    <govuk-input-hint>@Resource.lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount</govuk-input-hint>
-                    <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places)</govuk-input-suffix>
-                </govuk-input> 
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhatIsTheNitrogenStandardForThisLivestockTypeInSuffix, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places))</span>@Resource.lblQuestionMark
+                    </govuk-fieldset-legend>
+                    <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
+                    <govuk-details>
+                        <govuk-details-summary>
+                            @Resource.lblHelpWithNitrogenNStandard
+                        </govuk-details-summary>
+                        <govuk-details-text class="explanations">
+                            <p class="govuk-body">
+                                @Resource.lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced
+                            </p>
+                            <p class="govuk-body margin-bottom-forty">
+                                @Resource.lblThisFigureAccountsForOccupancyAlready
+                            </p>
+                        </govuk-details-text>
+                    </govuk-details>
 
+                    <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
+                        <govuk-input-label is-page-heading="false"></govuk-input-label>
+                        <govuk-input-hint>@Resource.lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount</govuk-input-hint>
+                        <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places)</govuk-input-suffix>
+                    </govuk-input>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

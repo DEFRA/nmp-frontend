@@ -3,7 +3,7 @@
 @model SnsAnalysisViewModel
 
 @{
-    ViewData["Title"] = Resource.lblSampleDepth;
+    ViewData["Title"] = $"{string.Format(Resource.lblAddSoilMineralNitrogen, Model.FieldName)} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
     var backAction = Model.IsCheckAnswer ? "CheckAnswer" : "SoilSampleDate";
 }
 

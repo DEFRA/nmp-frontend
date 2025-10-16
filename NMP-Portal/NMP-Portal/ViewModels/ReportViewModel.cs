@@ -28,10 +28,10 @@ namespace NMP.Portal.ViewModels
         public string? ReportTypeName { get; set; } = string.Empty;
         public bool? IsGrasslandDerogation { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalFarmArea))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalFarmArea))]
         public decimal? TotalFarmArea { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
         public decimal? TotalAreaInNVZ { get; set; }
         public decimal? LivestockNumbers { get; set; }
         public bool? IsAnyLivestockImportExport { get; set; }
@@ -41,7 +41,7 @@ namespace NMP.Portal.ViewModels
         public int? ManureTypeId { get; set; }
         public string? ManureTypeName { get; set; }
         public bool IsDefaultValueChange { get; set; } = false;
-        public DateTime? LivestockImportExportDate { get; set; }
+        public DateTime? LivestockImportExportDate { get; set; }        
         public int? LivestockQuantity { get; set; }
         public List<HarvestYear>? HarvestYear { get; set; }
         public string? DefaultNutrientValue { get; set; }
@@ -152,9 +152,14 @@ namespace NMP.Portal.ViewModels
         public bool IsManageLivestock { get; set; } = false;
         public bool IsLivestockCheckAnswer { get; set; } = false;
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
+        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
         [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
         public int? OccupancyAndNitrogenOptions { get; set; }
+
+        public string? EncryptedNLLivestockID { get; set; } = string.Empty;
+        public bool? IsDeleteNLLivestock { get; set; }
+        public bool IsLivestockGroupChange { get; set; } = false;
+
     }
 }

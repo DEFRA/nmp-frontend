@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
-    var backAction = ((Model.IsComingFromPlan.HasValue&&!Model.IsComingFromPlan.Value)) ? "Year" :
+    ViewData["Title"] = $" {string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
+    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)) ? "Year" :
         ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
         ? "FieldAndPlanReports" : "NVZComplianceReports");
 }
@@ -23,10 +23,9 @@
 
 @if (Model != null)
 {
-    <form asp-action="ExportFieldsOrCropType" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="ExportFieldsOrCropType" class="form-with-overlay" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
@@ -143,12 +142,12 @@
                     {
                         <h2 class="govuk-heading-l">@ViewBag.NoPlan</h2>
                         <p class="govuk-body">
-                           @Resource.MsgForIfPlanIsNotCreated
+                            @Resource.MsgForIfPlanIsNotCreated
                         </p>
                         <div class="margin-bottom-forty">
-                        <a class="govuk-button add-button" asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@ViewBag.EncryptedYear" asp-route-isPlanRecord="true">
-                            @Resource.lblAddCrops
-                        </a>
+                            <a class="govuk-button add-button" asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@ViewBag.EncryptedYear" asp-route-isPlanRecord="true">
+                                @Resource.lblAddCrops
+                            </a>
                         </div>
                     }
                     else
@@ -160,9 +159,9 @@
                             @Resource.MsgForIfFieldsAreNotCreated
                         </p>
                         <div class="margin-bottom-forty">
-                        <a class="govuk-button add-button" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
-                            @Resource.lblAddField
-                        </a>
+                            <a class="govuk-button add-button" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
+                                @Resource.lblAddField
+                            </a>
                         </div>
                     }
                 }
@@ -201,7 +200,7 @@
                                     }
 
                                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                                    <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
                                 </govuk-checkboxes-fieldset>
                             </govuk-checkboxes>
                             <govuk-button type="submit" class="margin-bottom-forty">
@@ -242,7 +241,7 @@
                                     }
 
                                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                                    <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
                                 </govuk-checkboxes-fieldset>
                             </govuk-checkboxes>
                             <govuk-button type="submit" class="margin-bottom-forty">

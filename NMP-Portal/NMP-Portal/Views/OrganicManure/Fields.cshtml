@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblField;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
@@ -208,7 +209,7 @@
                     }
 
                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                    <govuk-checkboxes-item value=@Resource.lblSelectAll behavior="Exclusive">@Resource.lblSelectAll</govuk-checkboxes-item>
+                    <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
                 </govuk-checkboxes-fieldset>
             </govuk-checkboxes>
             <govuk-button type="submit" class="margin-bottom-forty">

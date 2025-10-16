@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblAutumnCropNitrogenUptake;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, ViewBag.CropTypeName, ViewBag.FieldName)} {Resource.lblHyphen} {title}";
 
 }
 @section BeforeContent {
@@ -190,7 +191,9 @@
                 }
             </div>
             <govuk-input asp-for="@Model.AutumnCropNitrogenUptake" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, ViewBag.CropTypeName, ViewBag.FieldName)</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForSuffix, ViewBag.CropTypeName, ViewBag.FieldName)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>@Resource.lblQuestionMark
+                </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty">

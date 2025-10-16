@@ -12,7 +12,7 @@ namespace NMP.Portal.Services
     public class SnsAnalysisService:Service,ISnsAnalysisService
     {
         private readonly ILogger<SnsAnalysisService> _logger;
-        public SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

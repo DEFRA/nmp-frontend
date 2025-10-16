@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblIsAnyLivestock;
+    ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var action = "";
@@ -11,7 +11,7 @@
     }
     else
     {
-        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count>0)
+        if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count > 0)
         {
             action = "ManageLivestock";
         }
@@ -132,6 +132,8 @@
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
             <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageLivestock"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedNLLivestockID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockGroupChange" value="@Model.IsLivestockGroupChange.ToString().ToLower()"></govuk-input>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -165,7 +167,7 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                
+
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
                     {
@@ -189,7 +191,7 @@
                         </a>
                     }
                 </p>
-                
+
 
             </div>
 

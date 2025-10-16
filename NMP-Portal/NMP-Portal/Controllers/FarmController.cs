@@ -41,6 +41,7 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
+        public readonly IHttpContextAccessor _httpContextAccessor;
         public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IReportService reportService, IStorageCapacityService storageCapacityService)
@@ -54,6 +55,7 @@ namespace NMP.Portal.Controllers
             _cropService = cropService;
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
+            _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Index()
         {
@@ -1046,6 +1048,24 @@ namespace NMP.Portal.Controllers
                     farmId = _dataProtector.Unprotect(id);
 
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
+                    var identity = user?.Identity as ClaimsIdentity;
+
+                    var existingCurrentFarmNameClaim = identity.FindFirst("current_farm_name");
+                    if (existingCurrentFarmNameClaim != null)
+                    {
+                        identity.RemoveClaim(existingCurrentFarmNameClaim);
+                    }
+                    _httpContextAccessor.HttpContext?.Session.SetString("current_farm_name", farm.Name ?? "");
+                    _httpContextAccessor.HttpContext?.Session.SetString("current_farm_id", id);
+
+                    identity?.AddClaim(new Claim("current_farm_name", farm.Name ?? ""));                    
+                    var existingCurrentFarmIdClaim = identity?.FindFirst("current_farm_id");
+                    if (existingCurrentFarmIdClaim != null)
+                    {
+                        identity?.RemoveClaim(existingCurrentFarmIdClaim);
+                    }                    
+                    identity?.AddClaim(new Claim("current_farm_id", id ?? ""));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;

@@ -2,6 +2,7 @@
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
 using System.Text;
 
@@ -9,8 +10,8 @@ namespace NMP.Portal.Services
 {
     public class AuthService: Service,IAuthService
     {
-        private readonly ILogger<AuthService> _logger;
-        public AuthService(ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        private readonly ILogger<AuthService> _logger;        
+        public AuthService(ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

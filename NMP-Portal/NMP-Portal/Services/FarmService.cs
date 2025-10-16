@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.ViewModels;
 using System.Net.Http;
@@ -15,8 +16,7 @@ namespace NMP.Portal.Services
     public class FarmService : Service, IFarmService
     {
         private readonly ILogger<FarmService> _logger;
-        public FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
-        (httpContextAccessor, clientFactory)
+        public FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }

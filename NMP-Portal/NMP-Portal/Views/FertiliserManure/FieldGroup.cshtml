@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblFieldGroup;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {

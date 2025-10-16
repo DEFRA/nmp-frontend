@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    ViewData["Title"] = Resource.lblEffectiveRainfall;
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
+    ViewData["Title"] = $"{Resource.lblTotalRainfallSinceApplication} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -196,7 +196,7 @@
                 <h3 class="govuk-heading-s">@Resource.lblTotalRainfall</h3>
                 <p class="govuk-body">@string.Concat(Model.TotalRainfall, Resource.lblmm)</p>
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link" asp-action="EffectiveRainfallManual" asp-controller="OrganicManure">@Resource.lblChange</a>
+                    <a class="govuk-link" asp-action="EffectiveRainfallManual" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTotalRainfallSinceApplication</span></a>
                 </p>
 
             </div>

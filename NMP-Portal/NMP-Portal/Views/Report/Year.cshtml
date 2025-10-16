@@ -1,7 +1,21 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblYear;
+    var heading = "";
+    if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport ||
+                                        Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+    {
+        heading = string.Format(Resource.lblForYearForReport, Model.ReportTypeName);
+    }
+    if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+    {
+        heading = Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
+    }
+    if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+    {
+        heading = Resource.lblWhichYearWouldYouLikeToCreateExistingManureReport;
+    }
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
 
     var currentYear = DateTime.Now.Year;
     var nextYear = DateTime.Now.Year + 1;
@@ -17,7 +31,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["ErrorOnYear"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#Year">@TempData["ErrorOnYear"]</govuk-error-summary-item>
             </govuk-error-summary>
         </div>
     </div>
@@ -29,7 +43,7 @@
         <div class="govuk-grid-column-two-thirds">
             <div class="margin-bottom-thirty">
 
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["succesMsgContent1"]
                     </p>
@@ -151,46 +165,32 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <h1 class="govuk-heading-l">
-                    @if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport ||
-                                    Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
-                    {
-                        @string.Format(Resource.lblForYearForReport, Model.ReportTypeName)
-                    }
-                    @if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
-                    {
-                        @Resource.lblWhichYearWouldYouLikeToCreateALivestockReport
-                    }
-                    @if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
-                    {
-                        @Resource.lblWhichYearWouldYouLikeToCreateExistingManureReport
-                    }
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-fieldset-legend>
+                    <govuk-radios asp-for="@Model.Year">
+                        <govuk-radios-fieldset>
+                            <govuk-radios-fieldset-legend is-page-heading="false">
+                            </govuk-radios-fieldset-legend>
 
-                </h1>
-
-
-                <govuk-radios asp-for="@Model.Year">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false">
-                        </govuk-radios-fieldset-legend>
-
-                        <govuk-radios-hint>
-                            @Resource.lblSelectOneOption
-                        </govuk-radios-hint>
-                        @if (ViewBag.Years != null && ViewBag.Years.Count > 0)
-                        {
-                            foreach (int year in ViewBag.Years)
+                            <govuk-radios-hint>
+                                @Resource.lblSelectOneOption
+                            </govuk-radios-hint>
+                            @if (ViewBag.Years != null && ViewBag.Years.Count > 0)
                             {
-                                <govuk-radios-item value="@year">
-                                    @year
-                                </govuk-radios-item>
+                                foreach (int year in ViewBag.Years)
+                                {
+                                    <govuk-radios-item value="@year">
+                                        @year
+                                    </govuk-radios-item>
+                                }
                             }
-                        }
 
 
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-
+                        </govuk-radios-fieldset>
+                    </govuk-radios>
+                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

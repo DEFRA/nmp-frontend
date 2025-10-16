@@ -6,9 +6,7 @@
         public int? FarmID { get; set; }
         public int? CalendarYear { get; set; }
         public int? LiveStockTypeID { get; set; }
-        public string? LiveStockType { get; set; }
         public decimal? Units { get; set; }
-        public decimal? NitrogenStandard { get; set; }
         public decimal? NByUnit { get; set; }
         public decimal? TotalNProduced { get; set; }
         public int? Occupancy { get; set; }

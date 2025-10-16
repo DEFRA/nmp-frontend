@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.SnsAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilOrganicMatter;
+    ViewData["Title"] = $"{Resource.lblWhatIsThePercentageOfOrganicMatter} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
 }
 
 @section BeforeContent {
@@ -58,7 +58,9 @@
         <div class="govuk-grid-column-two-thirds">
 
             <govuk-input asp-for=@Model.SoilOrganicMatter is-page-heading="false" inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsThePercentageOfOrganicMatter</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @Resource.lblWhatIsThePercentageOfOrganicMatterInTheSoilSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblQuestionMark
+                </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
             </govuk-input>
 
