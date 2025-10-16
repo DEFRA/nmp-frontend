@@ -10405,6 +10405,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quantity must be between 1 to 9,99,999.
+        /// </summary>
+        public static string lblQuantityMustBeBetweenOneTo9999999 {
+            get {
+                return ResourceManager.GetString("lblQuantityMustBeBetweenOneTo9999999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question for spread inorganic fertiliser.
         /// </summary>
         public static string lblQuestionForSpreadInorganicFertiliser {
@@ -17461,6 +17470,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterAnApplicationRateTo1DecimalPlace {
             get {
                 return ResourceManager.GetString("MsgEnterAnApplicationRateTo1DecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999.
+        /// </summary>
+        public static string MsgEnterAnQuantityBetweenValue {
+            get {
+                return ResourceManager.GetString("MsgEnterAnQuantityBetweenValue", resourceCulture);
             }
         }
         
