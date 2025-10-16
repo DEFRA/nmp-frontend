@@ -45,7 +45,7 @@
         <div class="govuk-grid-column-two-thirds">
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["successMsg"]
                     </p>

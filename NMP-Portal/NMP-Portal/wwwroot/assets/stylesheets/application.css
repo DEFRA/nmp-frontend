@@ -294,14 +294,27 @@ a:focus, .govuk-link:focus {
     margin-bottom: 60px !important;
 }
 
+.govuk-phase-banner__content {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding-left: 15px;
+    padding-right:15px;
+}
+
+/*.govuk-service-navigation__list {
+    display: flex;
+    justify-content: space-between;
+}*/
 
 
-.govuk-phase-banner {
+/*.govuk-phase-banner {
     width: 100%;
 }
 
 .govuk-phase-banner__content {
-    width: 100%;
+    max-width: 100%;
     display: flex !important;
     align-items: center;
     justify-content: space-between !important;
@@ -318,8 +331,7 @@ a:focus, .govuk-link:focus {
 
 .govuk-phase-banner__text__right {
     text-align: right !important;
-}
-
+}*/
 .cancel-link__bottom_padding {
     padding-bottom: 2% !important;
 }
@@ -764,4 +776,18 @@ hr.seperator_thirty {
 
 #all-plans-table {
     margin-top: 10px;
+}
+
+.nav_left{
+    float:left;
+    
+}
+
+.nav_right {
+    float: right;
+    text-align: right;
+}
+
+.govuk-service-navigation__item:last-child {
+    margin-right: 30px;
 }
