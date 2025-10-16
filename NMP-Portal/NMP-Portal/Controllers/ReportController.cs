@@ -2404,52 +2404,31 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Report Controller : LivestockQuantity() post action called");
             try
             {
-                if (model.LivestockQuantity == null)
+                if (ModelState.TryGetValue(nameof(model.LivestockQuantity), out var entry))
                 {
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey("LivestockQuantity"))
+                    foreach (var error in entry.Errors.ToList())
                     {
-                        var areaError = ModelState["LivestockQuantity"].Errors.Count > 0 ?
-                                        ModelState["LivestockQuantity"].Errors[0].ErrorMessage.ToString() : null;
-
-                        if (areaError != null && areaError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["LivestockQuantity"].RawValue, Resource.lblLivestockQuantityWIthoutSpace)))
+                        if (error.ErrorMessage.Contains("is not valid for", StringComparison.OrdinalIgnoreCase))
                         {
-                            ModelState["LivestockQuantity"].Errors.Clear();
-                            var rawValue = ModelState["LivestockQuantity"].RawValue?.ToString();
-                            if (rawValue != null)
-                            {
-                                if (long.TryParse(rawValue, out long result))
-                                {
-                                    if (result < 0 || result > 999999)
-                                    {
-                                        ModelState["LivestockQuantity"].Errors.Add(Resource.MsgEnterAnQuantityBetweenValue);
-                                    }
-                                    else
-                                    {
-                                        ModelState["LivestockQuantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblQuantity.ToLower()));
-                                    }
-                                }
-                                else
-                                {
-                                    ModelState["LivestockQuantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblQuantity.ToLower()));
-                                }
-                            }
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("LivestockQuantity", Resource.lblEnterTheAmountYouImportedInTonnes);
+                            
+                            entry.Errors.Remove(error);
+                            entry.Errors.Add(new ModelError(Resource.MsgEnterAnQuantityBetweenValue));
                         }
                     }
+                }
+                if (model.LivestockQuantity == null)
+                {
 
                 }
-                if (model.LivestockQuantity != null && model.LivestockQuantity < 0)
+                else
                 {
-                    ModelState.AddModelError("LivestockQuantity", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblQuantity.ToLower()));
+                    if(model.LivestockQuantity < 1||model.LivestockQuantity>999999)
+                    {
+                        ModelState["LivestockQuantity"].Errors.Add(Resource.MsgEnterAnQuantityBetweenValue);
+                    }
                 }
-                if (model.LivestockQuantity != null && model.LivestockQuantity > 999999)
-                {
-                    ModelState.AddModelError("LivestockQuantity", string.Format(Resource.MsgEnterValueInBetween, Resource.lblQuantity, 0, 999999));
 
-                }
+
                 if (!ModelState.IsValid)
                 {
                     return View(model);

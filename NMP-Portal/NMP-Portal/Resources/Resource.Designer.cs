@@ -10414,6 +10414,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quantity must be between 1 to 999999.
+        /// </summary>
+        public static string lblQuantityMustBeBetweenOneTo9999999 {
+            get {
+                return ResourceManager.GetString("lblQuantityMustBeBetweenOneTo9999999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question for spread inorganic fertiliser.
         /// </summary>
         public static string lblQuestionForSpreadInorganicFertiliser {

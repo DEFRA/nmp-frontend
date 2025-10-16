@@ -1421,9 +1421,9 @@ namespace NMP.Portal.Services
             return (success, error);
         }
 
-        public async Task<(List<Crop>, Error)> MergeCrop(string cropData)
+        public async Task<(bool, Error)> MergeCrop(string cropData)
         {
-            List<Crop> crops = new List<Crop>();
+            bool success = false;
             Error error = new Error();
             try
             {
@@ -1433,12 +1433,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                 {
-                    var cropResponse = responseWrapper.Data.updatedCrops.ToObject<List<Crop>>();
-                    if (cropResponse != null)
-                    {
-                        crops = cropResponse;
-                    }
-
+                    success = responseWrapper.Data;
                 }
                 else
                 {
@@ -1459,7 +1454,7 @@ namespace NMP.Portal.Services
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
             }
-            return (crops, error);
+            return (success, error);
         }
 
     }

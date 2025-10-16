@@ -41,8 +41,7 @@ namespace NMP.Portal.ViewModels
         public int? ManureTypeId { get; set; }
         public string? ManureTypeName { get; set; }
         public bool IsDefaultValueChange { get; set; } = false;
-        public DateTime? LivestockImportExportDate { get; set; }
-        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAnQuantityBetweenValue))]
+        public DateTime? LivestockImportExportDate { get; set; }        
         public int? LivestockQuantity { get; set; }
         public List<HarvestYear>? HarvestYear { get; set; }
         public string? DefaultNutrientValue { get; set; }
@@ -161,5 +160,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedNLLivestockID { get; set; } = string.Empty;
         public bool? IsDeleteNLLivestock { get; set; }
         public bool IsLivestockGroupChange { get; set; } = false;
+
     }
 }
