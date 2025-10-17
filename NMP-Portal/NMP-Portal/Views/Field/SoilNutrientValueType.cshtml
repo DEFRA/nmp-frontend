@@ -58,13 +58,13 @@
         <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
         @if (Model != null)
         {
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGrassInLastThreeYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.GrassManagementOptionID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HarvestYear"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.GrassManagementOptionID"></govuk-input>
             
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.HasGreaterThan30PercentClover"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.SoilNitrogenSupplyItemID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrasses.LayDuration"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGreaterThan30PercentClover"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.SoilNitrogenSupplyItemID"></govuk-input>
+            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.LayDuration"></govuk-input>
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
             {
                 @for (int i = 0; i < Model.PreviousGrassYears.Count; i++)

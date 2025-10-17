@@ -5120,6 +5120,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
+
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
