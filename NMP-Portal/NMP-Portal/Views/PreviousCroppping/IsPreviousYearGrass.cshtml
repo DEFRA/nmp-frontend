@@ -35,7 +35,7 @@
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsPreviousYearGrass">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear,ViewBag.YearList)
+                        @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear,ViewBag.Year1, ViewBag.Year2, ViewBag.Year3)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>

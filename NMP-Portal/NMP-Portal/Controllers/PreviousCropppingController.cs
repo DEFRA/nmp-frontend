@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Helpers;
+using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
@@ -11,10 +12,16 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<PreviousCropppingController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public PreviousCropppingController(ILogger<PreviousCropppingController> logger, IHttpContextAccessor httpContextAccessor)
+        private readonly IFieldService _fieldService;
+        private readonly ICropService _cropService;
+        private readonly IDataProtector _farmDataProtector;
+        public PreviousCropppingController(ILogger<PreviousCropppingController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _fieldService = fieldService;
+            _cropService = cropService;
+            _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         }
         public IActionResult Index()
         {
@@ -22,30 +29,37 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> IsPreviousYearGrass()
+        public async Task<IActionResult> IsPreviousYearGrass(string? q, string? r)
         {
-            _logger.LogTrace($"Field Controller : IsPreviousYearGrass() action called");
+            _logger.LogTrace($"Previous Croppping  Controller: IsPreviousYearGrass() action called");
             PreviousCroppingViewModel model = new PreviousCroppingViewModel();
-            List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("PreviousCroppingData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PreviousCroppingViewModel>("FieldData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PreviousCroppingViewModel>("PreviousCroppingData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
+                {
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                    int year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                    //fetch from previousCroppingTable 
+                    ViewBag.Year1 = "2024";
+                    ViewBag.Year2 = "2024";
+                    ViewBag.Year3 = "2024";
+                }
 
-               
+
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Field Controller : Exception in CropGroups() action : {ex.Message}, {ex.StackTrace}");
-                
-               
+                _logger.LogTrace($"Previous Croppping Controller : Exception in IsPreviousYearGrass() action : {ex.Message}, {ex.StackTrace}");
+
             }
             return View(model);
         }
@@ -54,7 +68,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropGroups(FieldViewModel field)
         {
-            _logger.LogTrace($"Field Controller : CropGroups() post action called");
+            _logger.LogTrace($"Previous Croppping Controller : CropGroups() post action called");
             if (field.CropGroupId == null)
             {
                 ModelState.AddModelError("CropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
@@ -92,7 +106,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> CropGroups()
         //{
-        //    _logger.LogTrace($"Field Controller : CropGroups() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : CropGroups() action called");
         //    FieldViewModel model = new FieldViewModel();
         //    List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
 
@@ -113,7 +127,7 @@ namespace NMP.Portal.Controllers
         //    }
         //    catch (Exception ex)
         //    {
-        //        _logger.LogTrace($"Field Controller : Exception in CropGroups() action : {ex.Message}, {ex.StackTrace}");
+        //        _logger.LogTrace($"Previous Croppping Controller : Exception in CropGroups() action : {ex.Message}, {ex.StackTrace}");
         //        //TempData["Error"] = ex.Message;
         //        if (model.RecentSoilAnalysisQuestion != null && model.RecentSoilAnalysisQuestion.Value == true)
         //        {
@@ -139,7 +153,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> CropGroups(FieldViewModel field)
         //{
-        //    _logger.LogTrace($"Field Controller : CropGroups() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : CropGroups() post action called");
         //    if (field.CropGroupId == null)
         //    {
         //        ModelState.AddModelError("CropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
@@ -177,7 +191,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> CropTypes()
         //{
-        //    _logger.LogTrace($"Field Controller : CropTypes() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : CropTypes() action called");
         //    FieldViewModel model = new FieldViewModel();
         //    List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
 
@@ -213,7 +227,7 @@ namespace NMP.Portal.Controllers
         //    }
         //    catch (Exception ex)
         //    {
-        //        _logger.LogTrace($"Field Controller : Exception in CropTypes() action : {ex.Message}, {ex.StackTrace}");
+        //        _logger.LogTrace($"Previous Croppping Controller : Exception in CropTypes() action : {ex.Message}, {ex.StackTrace}");
         //        TempData["Error"] = ex.Message;
         //        return RedirectToAction("CropGroups");
         //    }
@@ -225,7 +239,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> CropTypes(FieldViewModel field)
         //{
-        //    _logger.LogTrace($"Field Controller : CropTypes() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : CropTypes() post action called");
         //    if (field.CropTypeID == null)
         //    {
         //        ModelState.AddModelError("CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
@@ -250,7 +264,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> HasGrassInLastThreeYear()
         //{
-        //    _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : HasGrassInLastThreeYear() action called");
         //    Error error = new Error();
 
         //    FieldViewModel model = new FieldViewModel();
@@ -270,7 +284,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public IActionResult HasGrassInLastThreeYear(FieldViewModel model)
         //{
-        //    _logger.LogTrace($"Field Controller : HasGrassInLastThreeYear() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : HasGrassInLastThreeYear() post action called");
         //    if (model.PreviousGrasses.HasGrassInLastThreeYear == null)
         //    {
         //        ModelState.AddModelError("PreviousGrasses.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -363,7 +377,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> GrassLastThreeHarvestYear()
         //{
-        //    _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() action called");
         //    Error error = new Error();
 
         //    FieldViewModel model = new FieldViewModel();
@@ -390,7 +404,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
         //{
-        //    _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() post action called");
         //    int lastHarvestYear = 0;
         //    if (model.PreviousGrassYears == null)
         //    {
@@ -444,7 +458,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> GrassManagementOptions()
         //{
-        //    _logger.LogTrace($"Field Controller : GrassManagementOptions() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : GrassManagementOptions() action called");
         //    Error error = new Error();
 
         //    FieldViewModel model = new FieldViewModel();
@@ -466,7 +480,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> GrassManagementOptions(FieldViewModel model)
         //{
-        //    _logger.LogTrace($"Field Controller : GrassManagementOptions() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : GrassManagementOptions() post action called");
 
         //    if (model.PreviousGrasses.GrassManagementOptionID == null)
         //    {
@@ -496,7 +510,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> HasGreaterThan30PercentClover()
         //{
-        //    _logger.LogTrace($"Field Controller : HasGreaterThan30PercentClover() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : HasGreaterThan30PercentClover() action called");
         //    Error error = new Error();
 
         //    FieldViewModel model = new FieldViewModel();
@@ -516,7 +530,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public IActionResult HasGreaterThan30PercentClover(FieldViewModel model)
         //{
-        //    _logger.LogTrace($"Field Controller : HasGreaterThan30PercentClover() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : HasGreaterThan30PercentClover() post action called");
         //    if (model.PreviousGrasses.HasGreaterThan30PercentClover == null)
         //    {
         //        ModelState.AddModelError("PreviousGrasses.HasGreaterThan30PercentClover", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -548,7 +562,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> SoilNitrogenSupplyItems()
         //{
-        //    _logger.LogTrace($"Field Controller : SoilNitrogenSupplyItems() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : SoilNitrogenSupplyItems() action called");
         //    Error error = new Error();
 
         //    FieldViewModel model = new FieldViewModel();
@@ -570,7 +584,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> SoilNitrogenSupplyItems(FieldViewModel model)
         //{
-        //    _logger.LogTrace($"Field Controller : SoilNitrogenSupplyItems() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : SoilNitrogenSupplyItems() post action called");
 
         //    if (model.PreviousGrasses.SoilNitrogenSupplyItemID == null)
         //    {
@@ -598,7 +612,7 @@ namespace NMP.Portal.Controllers
         //[HttpGet]
         //public async Task<IActionResult> LayDuration()
         //{
-        //    _logger.LogTrace($"Field Controller : LayDuration() action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : LayDuration() action called");
         //    FieldViewModel model = new FieldViewModel();
 
         //    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
@@ -617,7 +631,7 @@ namespace NMP.Portal.Controllers
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> LayDuration(FieldViewModel model)
         //{
-        //    _logger.LogTrace($"Field Controller : LayDuration() post action called");
+        //    _logger.LogTrace($"Previous Croppping Controller : LayDuration() post action called");
 
         //    if (model.PreviousGrasses.LayDuration == null)
         //    {

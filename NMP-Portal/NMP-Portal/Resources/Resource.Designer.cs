@@ -14232,7 +14232,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Was future field used for grass in {0}?.
+        ///   Looks up a localized string similar to Was future field used for grass in {0},{1}  or {2}?.
         /// </summary>
         public static string lblWasFutureFieldUsedForGrassInYear {
             get {
