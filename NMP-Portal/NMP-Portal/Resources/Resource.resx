@@ -6709,6 +6709,37 @@ livestock manure.</value>
   <data name="lblMenu" xml:space="preserve">
     <value>Menu</value>
   </data>
+  <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
+    <value>Was future field used for grass in {0},{1}  or {2}?</value>
+  </data>
+  <data name="lblRecommendationNotAvailable" xml:space="preserve">
+    <value>Recommendations not available</value>
+  </data>
+  <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
+    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+  </data>
+  <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
+    <value>Add {0} crop details for {1}</value>
+  </data>
+  <data name="lblAddPreviousCrop" xml:space="preserve">
+    <value>Add previous crop</value>
+  </data>
+  <data name="lblWhatWasTheCropGroup" xml:space="preserve">
+    <value>What was the crop group in {0}?</value>
+  </data>
+  <data name="lblWhatWasTheCropType" xml:space="preserve">
+    <value>What was the crop type in {0}?</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has Future Field been used for grass in any of the last 3 years?</value>
+  </data>
+  <data name="lblAddYearCropHistoryToFieldName" xml:space="preserve">
+    <value>Add {0} crop history to {1}</value>
+  </data>
+  <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has {0} been used for grass in any of the last 3 year?</value>
+  </data>
+</root> 
   <data name="lblChangeCompany" xml:space="preserve">
     <value>Change company</value>
   </data>

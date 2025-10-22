@@ -133,6 +133,7 @@ builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
 builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddSingleton<IStorageCapacityService, StorageCapacityService>();
+builder.Services.AddSingleton<IPreviousCroppingService, PreviousCroppingService>();
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.

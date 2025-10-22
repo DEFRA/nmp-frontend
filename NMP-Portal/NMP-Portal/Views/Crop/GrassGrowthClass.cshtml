@@ -172,7 +172,7 @@
                                         <govuk-radios-fieldset-legend is-page-heading="false">
                                         @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
                                         </govuk-radios-fieldset-legend>
-                                        <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblDryMatterYields)</govuk-radios-hint>
+                                        @* <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblDryMatterYields)</govuk-radios-hint> *@
                                         @if (ViewBag.YieldRanges != null)
                                         {
                                             @foreach (var yieldRanges in ViewBag.YieldRanges)
