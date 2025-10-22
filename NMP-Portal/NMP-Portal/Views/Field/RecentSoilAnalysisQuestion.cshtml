@@ -99,38 +99,26 @@
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
             } 
-            <govuk-fieldset>
-                        <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                    @* <h1 class="govuk-fieldset__heading"> *@
-                        @string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)
-                        @* </h1> *@
-                        </govuk-fieldset-legend>
-           @*  <govuk-radios name="SoilAnasysis">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)
-                    </govuk-radios-fieldset-legend>
-                </govuk-radios-fieldset>
-            </govuk-radios> *@
-            <p class="govuk-hint">
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)</h1>
+            <p class="govuk-body">
                 @Resource.MsgSoilAnalysisHint1
-            </p>           
-            <p class="govuk-hint">
+            </p>
+            <p class="govuk-body">
                 @Resource.MsgSoilAnalysisHint2
             </p>
-            <p class="govuk-hint">
+            <p class="govuk-body margin-bottom-forty">
                 @Resource.MsgSoilAnalysisHint3
             </p>
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.RecentSoilAnalysisQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="false">
+                        @string.Format(Resource.lblDoYouWantToAddSoilAnalysisFor, Model.Name)                           
                     </govuk-radios-fieldset-legend>
+                    
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-
-            </govuk-fieldset>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
