@@ -45,10 +45,11 @@ namespace NMP.Portal.Controllers
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly ISnsAnalysisService _snsAnalysisService;
+        private readonly IPreviousCroppingService _previousCroppingService;
 
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService)
+             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService, IPreviousCroppingService previousCroppingService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -61,6 +62,7 @@ namespace NMP.Portal.Controllers
             _organicManureService = organicManureService;
             _fertiliserManureService = fertiliserManureService;
             _snsAnalysisService = snsAnalysisService;
+            _previousCroppingService = previousCroppingService;
         }
         public IActionResult Index()
         {
@@ -3934,6 +3936,10 @@ namespace NMP.Portal.Controllers
                         TempData["successMsgSecond"] = _cropDataProtector.Unprotect(u);
                     }
                 }
+                if (HttpContext.Session.Keys.Contains("PreviousCroppingData"))
+                {
+                    HttpContext?.Session.Remove("PreviousCroppingData");
+                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -3994,11 +4000,11 @@ namespace NMP.Portal.Controllers
                             {
                                 model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                             }
+                            string firstCropName = recommendations.FirstOrDefault().Crops.CropTypeID == 140 ? NMP.Portal.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldService.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
                             foreach (var recommendation in recommendations)
                             {
                                 //check sns already exist or not in SnsAnalyses table by cropID
                                 SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
-
 
                                 var crop = new CropViewModel
                                 {
@@ -4258,6 +4264,17 @@ namespace NMP.Portal.Controllers
                                 model.Nutrients = nutrients;
                             }
 
+                            (PreviousCropping PreviousCropping, error) = await _previousCroppingService.FetchDataByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear-1);
+                            if (PreviousCropping == null && (string.IsNullOrWhiteSpace(error.Message)))
+                            {
+                                string encryptedYear = _farmDataProtector.Protect((decryptedHarvestYear - 1).ToString());
+                                ViewBag.PreviousYear = s;
+                                ViewBag.IsThereAnyPreviousCropping= false;
+                                TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
+                                TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
+                                TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
+
+                            }
                         }
                     }
                 }
