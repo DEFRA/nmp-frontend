@@ -1258,6 +1258,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added on {0}.
+        /// </summary>
+        public static string lblAddedOn {
+            get {
+                return ResourceManager.GetString("lblAddedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add excess winter rainfall for harvest year {0}..
         /// </summary>
         public static string lblAddExcessWinterRainfallForHarvestYear {
@@ -3976,11 +3985,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to add a recent soil analysis for {0}?.
+        ///   Looks up a localized string similar to Soil analysis for {0}.
         /// </summary>
         public static string lblDoYouWantToAddARecentSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblDoYouWantToAddARecentSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to add soil analysis for {0}?.
+        /// </summary>
+        public static string lblDoYouWantToAddSoilAnalysisFor {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToAddSoilAnalysisFor", resourceCulture);
             }
         }
         
@@ -4071,6 +4089,15 @@ namespace NMP.Portal.Resources {
         public static string lblDoYouWantToUseTheseNutrientValuesFromRB209 {
             get {
                 return ResourceManager.GetString("lblDoYouWantToUseTheseNutrientValuesFromRB209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these typical nutrient values?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseTypicalNutrientValues {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseTypicalNutrientValues", resourceCulture);
             }
         }
         
@@ -9192,6 +9219,15 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nutrient values for {0}.
         /// </summary>
+        public static string lblNutrientValuesFor {
+            get {
+                return ResourceManager.GetString("lblNutrientValuesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient values for {0}.
+        /// </summary>
         public static string lblNutrientValuesForManureTypeName {
             get {
                 return ResourceManager.GetString("lblNutrientValuesForManureTypeName", resourceCulture);
@@ -13670,6 +13706,15 @@ namespace NMP.Portal.Resources {
         public static string lblTypicalManagedQuestionHint {
             get {
                 return ResourceManager.GetString("lblTypicalManagedQuestionHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These are typical nutrient values..
+        /// </summary>
+        public static string lblTypicalNutrientValues {
+            get {
+                return ResourceManager.GetString("lblTypicalNutrientValues", resourceCulture);
             }
         }
         
