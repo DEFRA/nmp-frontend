@@ -6709,7 +6709,6 @@ livestock manure.</value>
   <data name="lblMenu" xml:space="preserve">
     <value>Menu</value>
   </data>
-</root>
   <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
     <value>Was future field used for grass in {0},{1}  or {2}?</value>
   </data>
@@ -6740,4 +6739,4 @@ livestock manure.</value>
   <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
     <value>Has {0} been used for grass in any of the last 3 year?</value>
   </data>
-</root>
+</root> 

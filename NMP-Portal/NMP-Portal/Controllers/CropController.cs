@@ -3936,6 +3936,10 @@ namespace NMP.Portal.Controllers
                         TempData["successMsgSecond"] = _cropDataProtector.Unprotect(u);
                     }
                 }
+                if (HttpContext.Session.Keys.Contains("PreviousCroppingData"))
+                {
+                    HttpContext?.Session.Remove("PreviousCroppingData");
+                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));

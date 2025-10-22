@@ -653,7 +653,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                model.IsCheckAnswer = true;
+                //model.IsCheckAnswer = true;
             }
             catch (Exception ex)
             {
