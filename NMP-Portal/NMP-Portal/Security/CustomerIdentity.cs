@@ -54,10 +54,10 @@ namespace NMP.Portal.Security
                     cookieOptions =>
                     {
                         // How long your app's cookie is valid
-                        cookieOptions.ExpireTimeSpan = TimeSpan.FromHours(8); // e.g. 8 hours
+                        cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(10); // e.g. 8 hours
                         cookieOptions.SlidingExpiration = true;
                         // optionally:
-                        cookieOptions.Cookie.MaxAge = cookieOptions.ExpireTimeSpan;
+                        //cookieOptions.Cookie.MaxAge = cookieOptions.ExpireTimeSpan;
                     })
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
                     .AddInMemoryTokenCaches();

@@ -9,11 +9,11 @@
     var expireAt, warnAt;
     var countdownInterval, warningTimeout, logoutTimeout;
     var modal = document.getElementById("session-timeout-dialog");
-    var banner = document.getElementById("session-timeout-banner");
+    //var banner = document.getElementById("session-timeout-banner");
     var stayBtn = document.getElementById("stay-signed-in");
-    var stayBtnBanner = document.getElementById("stay-signed-in-banner");
+   // var stayBtnBanner = document.getElementById("stay-signed-in-banner");
     var signOutBtn = document.getElementById("sign-out");
-    var focusableElements = [stayBtn, signOutBtn];
+    //var focusableElements = [stayBtn, signOutBtn];
 
     var lastActivity = new Date().getTime();
 
@@ -86,27 +86,27 @@
 
     // ---- Show warning (modal or banner) ----
     function showWarning() {
-        if (window.innerWidth <= 640) {
-            banner.classList.remove("govuk-!-display-none");
-            countdownInterval = setInterval(function () {
-                updateCountdown("countdown-banner");
-            }, 1000);
-        } else {
+        //if (window.innerWidth <= 640) {
+        //    banner.classList.remove("govuk-!-display-none");
+        //    countdownInterval = setInterval(function () {
+        //        updateCountdown("countdown-banner");
+        //    }, 1000);
+        //} else {
             modal.classList.remove("govuk-!-display-none");
-            document.addEventListener("keydown", trapFocus);
+            //document.addEventListener("keydown", trapFocus);
             stayBtn.focus();
             countdownInterval = setInterval(function () {
                 updateCountdown("countdown");
             }, 1000);
-        }
+       /* }*/
     }
 
     // ---- Refresh session ----
     function refreshSession() {
         fetch(keepAliveUrl).then(() => {
             modal.classList.add("govuk-!-display-none");
-            banner.classList.add("govuk-!-display-none");
-            document.removeEventListener("keydown", trapFocus);
+            //banner.classList.add("govuk-!-display-none");
+            //document.removeEventListener("keydown", trapFocus);
 
             resetTimers(); // 🔥 critical fix
             console.log("Session refreshed at " + new Date().toLocaleTimeString());
@@ -118,6 +118,7 @@
         lastActivity = new Date().getTime();
         //console.log("Last Activity at :" + new Date().toLocaleTimeString());
     }
+
     ['click', 'mousemove', 'keydown', 'scroll'].forEach(function (evt) {
         document.addEventListener(evt, activityDetected);
     });
@@ -133,7 +134,7 @@
 
     // ---- Button actions ----
     stayBtn.addEventListener("click", refreshSession);
-    stayBtnBanner.addEventListener("click", refreshSession);
+    //stayBtnBanner.addEventListener("click", refreshSession);
 
     // ---- Init timers on page load ----
     resetTimers();

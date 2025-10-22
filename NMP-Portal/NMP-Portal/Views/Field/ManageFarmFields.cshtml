@@ -15,9 +15,9 @@
 {
     @section BeforeContent {
         <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+            @* <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
                 @Resource.lblAllFarm
-            </govuk-breadcrumbs-item>
+            </govuk-breadcrumbs-item> *@
             <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                 @Model.FarmName
             </govuk-breadcrumbs-item>

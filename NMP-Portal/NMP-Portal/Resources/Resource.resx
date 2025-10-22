@@ -6694,4 +6694,13 @@ livestock manure.</value>
   <data name="lblMenu" xml:space="preserve">
     <value>Menu</value>
   </data>
+  <data name="lblChangeCompany" xml:space="preserve">
+    <value>Change company</value>
+  </data>
+  <data name="lblSignoutnow" xml:space="preserve">
+    <value>Sign out now</value>
+  </data>
+  <data name="lblYou canalso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
 </root>
