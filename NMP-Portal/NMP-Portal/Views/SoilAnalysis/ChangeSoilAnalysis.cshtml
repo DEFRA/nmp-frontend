@@ -57,24 +57,24 @@
                 }
                 <div hidden="true">
                     <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"></govuk-input>
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
                 </div>
                 <govuk-summary-list>
                     <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>

@@ -47,21 +47,21 @@
                 @string.Format(Resource.lblUpdateXField,Model.Name)
             </h1>
             <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
             </div>
             <govuk-summary-list>
                 <govuk-summary-list-row>

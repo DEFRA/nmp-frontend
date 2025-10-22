@@ -59,6 +59,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+
 builder.Services.AddControllersWithViews(options =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -159,8 +160,10 @@ builder.Services.AddMvc(options =>
 
 builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs }));
 
+
 builder.Services.AddGovUkFrontend(options =>
 {
+    options.Rebrand = true;
     // Un-comment this block if you want to use a CSP nonce instead of hashes
     options.GetCspNonceForRequest = context =>
     {
@@ -171,6 +174,7 @@ builder.Services.AddGovUkFrontend(options =>
 builder.Services.AddCsp(nonceByteAmount: 32);
 
 var app = builder.Build();
+app.UseGovUkFrontend();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 if (app.Environment.IsDevelopment())
