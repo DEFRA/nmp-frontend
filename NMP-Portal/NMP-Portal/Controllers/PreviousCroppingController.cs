@@ -83,7 +83,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Previous Croppping Controller : IsPreviousYearGrass() post action called");
             if (model.IsPreviousYearGrass == null)
             {
-                ModelState.AddModelError("IsPreviousYearGrass", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
+                ModelState.AddModelError("IsPreviousYearGrass",Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
@@ -248,7 +248,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> HasGrassInLastThreeYear()
+        public IActionResult HasGrassInLastThreeYear()
         {
             _logger.LogTrace($"Previous Croppping Controller : HasGrassInLastThreeYear() action called");
             Error error = new Error();
