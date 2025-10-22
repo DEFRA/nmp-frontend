@@ -58,8 +58,6 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
-
-
 builder.Services.AddControllersWithViews(options =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -85,8 +83,8 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
     options.Cookie.SameSite = SameSiteMode.Strict;// Prevent CSRF
     options.Cookie.IsEssential = true;
-    //options.IdleTimeout = TimeSpan.FromMinutes(60);  // Session timeout 
-    options.IdleTimeout = TimeSpan.FromHours(2);  // 2-hour idle session 
+    options.IdleTimeout = TimeSpan.FromMinutes(20);  // Session timeout 
+    //options.IdleTimeout = TimeSpan.FromHours(2);  // 2-hour idle session 
 });
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();

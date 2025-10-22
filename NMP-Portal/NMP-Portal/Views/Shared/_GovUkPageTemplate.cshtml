@@ -91,9 +91,9 @@
         </main>
     </div>
 
-    @RenderSection("Footer", required: false)
-    @Html.GovUkFrontendScriptImports(cspNonce)
-    <script type="text/javascript"   src="~/assets/javascripts/application.js"></script>
-    @RenderSection("BodyEnd")
+    @RenderSection("Footer", required: false) 
+    @Html.GovUkFrontendScriptImports(cspNonce)    
+    <script type="text/javascript" asp-add-nonce="true" asp-append-version="true" src="~/assets/javascripts/application.js"></script>
+    @RenderSection("BodyEnd")    
 </body>
 </html>

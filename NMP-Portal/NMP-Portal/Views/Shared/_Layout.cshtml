@@ -47,7 +47,7 @@
                 </div>
             </div>
         </header>
-    }
+    }   
     <govuk-phase-banner class="noprint">        
             <govuk-phase-banner-tag>@Resource.lblPhaseBannerContent</govuk-phase-banner-tag>
             @Html.Raw(Resource.lblPhaseBannerText)
@@ -64,10 +64,9 @@
             </govuk-footer-meta-items>
         </govuk-footer-meta>
     </govuk-footer>
-}
+} 
 @section BodyEnd {
     @RenderSection("BodyEnd", required: false)
-    @await Html.PartialAsync("_LoadingOverlay")
+    @await Html.PartialAsync("_LoadingOverlay")      
+   @await Html.PartialAsync("_SessionTimeout")
 }
-
-

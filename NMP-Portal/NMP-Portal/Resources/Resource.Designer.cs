@@ -2500,6 +2500,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change company.
+        /// </summary>
+        public static string lblChangeCompany {
+            get {
+                return ResourceManager.GetString("lblChangeCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change field details.
         /// </summary>
         public static string lblChangeFieldDetails {
@@ -11494,6 +11503,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign out now.
+        /// </summary>
+        public static string lblSignoutnow {
+            get {
+                return ResourceManager.GetString("lblSignoutnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Silage.
         /// </summary>
         public static string lblSilage {
@@ -16091,6 +16109,15 @@ namespace NMP.Portal.Resources {
         public static string lblYieldTonnesPerHectare {
             get {
                 return ResourceManager.GetString("lblYieldTonnesPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can also.
+        /// </summary>
+        public static string lblYou_canalso {
+            get {
+                return ResourceManager.GetString("lblYou canalso", resourceCulture);
             }
         }
         

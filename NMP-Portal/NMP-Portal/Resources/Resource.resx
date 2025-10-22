@@ -6740,3 +6740,13 @@ livestock manure.</value>
     <value>Has {0} been used for grass in any of the last 3 year?</value>
   </data>
 </root> 
+  <data name="lblChangeCompany" xml:space="preserve">
+    <value>Change company</value>
+  </data>
+  <data name="lblSignoutnow" xml:space="preserve">
+    <value>Sign out now</value>
+  </data>
+  <data name="lblYou canalso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
+</root>

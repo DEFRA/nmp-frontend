@@ -1,4 +1,5 @@
 ﻿@using NMP.Portal.Resources
+@using GovUk.Frontend.AspNetCore
 @inject IHttpContextAccessor httpContextAccessor
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
@@ -9,11 +10,12 @@
 
 @if (User.Identity?.IsAuthenticated == true)
 {
-    var firstName = User.Claims.FirstOrDefault(c => c.Type == "firstName")?.Value;
-    var lastName = User.Claims.FirstOrDefault(c => c.Type == "lastName")?.Value;
+    //var firstName = User.Claims.FirstOrDefault(c => c.Type == "firstName")?.Value;
+   // var lastName = User.Claims.FirstOrDefault(c => c.Type == "lastName")?.Value;
+    //var organisationName = User.Claims.FirstOrDefault(c => c.Type == "organisationName")?.Value;
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name"); //User.Claims.FirstOrDefault(c => c.Type == "current_farm_name")?.Value;
     var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id"); //User.Claims.FirstOrDefault(c => c.Type == "current_farm_id")?.Value;
-    var name = $"{firstName} {lastName}";
+   //var name = $"{firstName} {lastName}";
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
@@ -36,56 +38,34 @@
         );
     string allFarmsActiveClass = isAllFarm ? "govuk-service-navigation__item--active" : "";
     string currentFarmActiveClass = (!isAllFarm) ? "govuk-service-navigation__item--active" : "";
-    <section aria-label="Service information" class="govuk-service-navigation noprint" data-module="govuk-service-navigation" data-govuk-service-navigation-init="">
-        <div class="govuk-width-container">
-            <div class="govuk-service-navigation__container">
-                <span class="govuk-service-navigation__service-name">
-                    <a asp-action="Index" asp-controller="Home" class="govuk-service-navigation__link">
-                        @Resource.lblPlanAndRecordNutrientApplications
-                    </a>
-                </span>
-                <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-                    <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
-                        @Resource.lblMenu
-                    </button>
-                    <ul class="govuk-service-navigation__list nav_left" id="navigation">
-                        <li class="govuk-service-navigation__item @allFarmsActiveClass">
-                            <a class="govuk-service-navigation__link" asp-action="FarmList" asp-controller="Farm" aria-current="@isAllFarm">
-                                <strong class="govuk-service-navigation__active-fallback">@Resource.lblAllFarm</strong>
-                            </a>
-                        </li>
-                        @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
-                        {
-                            <li class="govuk-service-navigation__item @currentFarmActiveClass">
-                                <a class="govuk-service-navigation__link" asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" aria-current="@isFarmContext">
-                                    <strong class="govuk-service-navigation__active-fallback">@currentFarmName</strong>
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                    <ul class="govuk-service-navigation__list nav_right" id="navigation">
-                        <li class="govuk-service-navigation__item ">
-                            @if (enrolmentCount > 1)
-                            {
-                                var organisationName = User.Claims.FirstOrDefault(c => c.Type == "organisationName")?.Value;
-                                @if (organisationName?.Length > 20)
-                                {
-                                    <div>@organisationName | <a class="govuk-service-navigation__link" asp-controller="Account" asp-action="ChangeOrganisation">@Resource.lblChange</a>  </div>
 
-                                }
-                                else
-                                {
-                                    <span>
-                                        @organisationName | <a class="govuk-service-navigation__link" asp-controller="Account" asp-action="ChangeOrganisation">@Resource.lblChange</a>
-                                        |
-                                    </span>
-                                }
-                            }
-                            <span> @name | <a class="govuk-service-navigation__link" asp-controller="Account" asp-action="logout">@Resource.lblSignout</a></span>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </section>
+    <govuk-service-navigation class="noprint" service-name="@Resource.lblPlanAndRecordNutrientApplications" service-url="/">
+        <govuk-service-navigation-start>          
+        </govuk-service-navigation-start>
+        <govuk-service-navigation-nav>
+            <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
+            <govuk-service-navigation-nav-item asp-action="FarmList" asp-controller="Farm" active="@(isAllFarm)">
+                @Resource.lblAllFarm
+            </govuk-service-navigation-nav-item>
+            @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
+            {
+                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isFarmContext)">
+                    @currentFarmName
+                </govuk-service-navigation-nav-item>
+            }
+            @if (enrolmentCount > 1)
+            {
+                <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation">
+                    @Resource.lblChangeCompany
+            </govuk-service-navigation-nav-item>
+            }
+            <govuk-service-navigation-nav-item asp-controller="Account" asp-action="Logout">
+                @Resource.lblSignout
+            </govuk-service-navigation-nav-item>
+            <govuk-service-navigation-nav-end></govuk-service-navigation-nav-end>
+        </govuk-service-navigation-nav>
+        <govuk-service-navigation-end>
+
+        </govuk-service-navigation-end>
+    </govuk-service-navigation>
 }
