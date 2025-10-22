@@ -27,13 +27,13 @@
         <form asp-action="ExcessWinterRainfall" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <div hidden="true">
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
-                @* <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"></govuk-input> *@
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"></govuk-input>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"/>
+                @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"/> *@
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"/>
             </div>
             <govuk-radios asp-for="@Model.ExcessWinterRainfallId">
                 <govuk-radios-fieldset>

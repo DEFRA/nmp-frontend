@@ -18,16 +18,16 @@
     <form class="form-with-overlay" asp-action="ExcessWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
         @Html.AntiForgeryToken()
         <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallCheckAnswer"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallCheckAnswer"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"/>
         </div>
         <div class="govuk-grid-column-two-thirds-from-desktop">
 

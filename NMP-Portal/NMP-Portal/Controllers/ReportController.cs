@@ -4814,6 +4814,15 @@ namespace NMP.Portal.Controllers
                     model.NitrogenStandard = Math.Round(nitrogen / 100, 6);
                     decimal phosphate = (phosphateStandardFor100PercentOccupancy * model.AverageOccupancy) ?? 0;
                     model.PhosphateStandard = Math.Round(phosphate / 100, 6);
+
+                    if (model.IsGrasslandDerogation == true)
+                    {
+                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
+                    }
+                    else
+                    {
+                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
+                    }
                 }
                 //Calculation end
 
@@ -4885,14 +4894,26 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("NitrogenStandard", Resource.MsgEnterTheNitrogenStandardPerAnimal);
                 }
-
+                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 if (!ModelState.IsValid)
                 {
-                    (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                     model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
                     model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
                     return View(model);
+                }
+
+                var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+                if (model.NitrogenStandard != defaultNitrogenStandard)
+                {
+                    if (model.IsGrasslandDerogation == true)
+                    {
+                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
+                    }
+                    else
+                    {
+                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
+                    }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
 
@@ -5070,31 +5091,35 @@ namespace NMP.Portal.Controllers
                 }
                 var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                if (model.AverageOccupancy != defaultOccupancy || model.NitrogenStandard != defaultNitrogenStandard)
+                if (!string.IsNullOrWhiteSpace(id))
                 {
-                    if (model.IsGrasslandDerogation == true)
+                    if (model.AverageOccupancy != defaultOccupancy || model.NitrogenStandard != defaultNitrogenStandard)
                     {
-                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
+                        if (model.IsGrasslandDerogation == true)
+                        {
+                            model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
+                        }
+                        else
+                        {
+                            if (model.AverageOccupancy != defaultOccupancy)
+                            {
+                                model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
+                            }
+                            else
+                            {
+                                model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
+                            }
+                        }
                     }
                     else
                     {
-                        if (model.AverageOccupancy != defaultOccupancy)
+                        if (model.OccupancyAndNitrogenOptions == null && !string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID))
                         {
-                            model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
-                        }
-                        if (model.NitrogenStandard != defaultNitrogenStandard)
-                        {
-                            model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
+                            model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault;
                         }
                     }
                 }
-                else
-                {
-                    if (model.OccupancyAndNitrogenOptions == null && !string.IsNullOrWhiteSpace(model.EncryptedNLLivestockID))
-                    {
-                        model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault;
-                    }
-                }
+
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
