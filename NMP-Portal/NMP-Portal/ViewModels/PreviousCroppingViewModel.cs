@@ -2,7 +2,7 @@
 
 namespace NMP.Portal.ViewModels
 {
-    public class PreviousCroppingViewModel:PreviousGrass
+    public class PreviousCroppingViewModel:PreviousCropping
     {
         public bool IsPreviousYearGrass { get; set; }
     }

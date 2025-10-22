@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Helpers;
+using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
@@ -15,13 +16,15 @@ namespace NMP.Portal.Controllers
         private readonly IFieldService _fieldService;
         private readonly ICropService _cropService;
         private readonly IDataProtector _farmDataProtector;
-        public PreviousCropppingController(ILogger<PreviousCropppingController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService)
+        private readonly IPreviousCropppingService _previousCropppingService;
+        public PreviousCropppingController(ILogger<PreviousCropppingController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IPreviousCropppingService previousCropppingService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _fieldService = fieldService;
             _cropService = cropService;
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+            _previousCropppingService = previousCropppingService;
         }
         public IActionResult Index()
         {
@@ -46,12 +49,22 @@ namespace NMP.Portal.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
                 {
-                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                    int fieldId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     int year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
-                    //fetch from previousCroppingTable 
-                    ViewBag.Year1 = "2024";
-                    ViewBag.Year2 = "2024";
-                    ViewBag.Year3 = "2024";
+                    (PreviousCropping PreviousCroppping, Error error) = await _previousCropppingService.FetchDataByFieldIdAndYear(fieldId, year);
+                    if (PreviousCroppping!=null && (string.IsNullOrWhiteSpace(error.Message)))
+                    {
+                        //List<int> yearList = new List<int>
+                        //{
+                        //    PreviousGrass.Select(x => x.HarvestYear ?? 0).FirstOrDefault(),
+                        //    (PreviousGrass.Select(x => x.HarvestYear ?? 0).FirstOrDefault() - 1),
+                        //    (PreviousGrass.Select(x => x.HarvestYear ?? 0).FirstOrDefault() - 2)
+                        //};
+
+
+                        ViewBag.PreviousYear = PreviousCroppping.HarvestYear;
+                    }
+
                 }
 
 

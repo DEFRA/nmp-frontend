@@ -49,6 +49,33 @@
                             @TempData["successMsgSecond"]
                         </p>
                     }
+                   
+                </govuk-notification-banner>
+            }
+            @if (ViewBag.IsThereAnyPreviousCroppping != null && ViewBag.IsThereAnyPreviousCroppping == false)
+            {
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    @if (TempData["PreviousCropppingContentOne"]!=null)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @TempData["PreviousCropppingContentOne"]
+                        </p>                        
+                    }
+                    @if (TempData["PreviousCropppingContentSecond"] != null)
+                    {
+                        <p class="govuk-body">@TempData["PreviousCropppingContentSecond"]</p>
+                        @if (TempData["PreviousCropppingContentThird"] != null)
+                        {
+                            <p class="govuk-body">
+                                <a asp-action="IsPreviousYearGrass" asp-controller="PreviousCroppping" asp-route-q="@Model.EncryptedFieldId" asp-route-r="@ViewBag.PreviousYear">
+                                    @TempData["PreviousCropppingContentThird"]
+                                </a>
+                            </p>
+                        }
+                    }
                 </govuk-notification-banner>
             }
             @if (TempData["successSnsAnalysis"] != null)

@@ -43,10 +43,11 @@ namespace NMP.Portal.Controllers
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly ISnsAnalysisService _snsAnalysisService;
+        private readonly IPreviousCropppingService _previousCropppingService;
 
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService)
+             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService, IPreviousCropppingService previousCropppingService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -59,6 +60,7 @@ namespace NMP.Portal.Controllers
             _organicManureService = organicManureService;
             _fertiliserManureService = fertiliserManureService;
             _snsAnalysisService = snsAnalysisService;
+            _previousCropppingService = previousCropppingService;
         }
         public IActionResult Index()
         {
@@ -254,7 +256,7 @@ namespace NMP.Portal.Controllers
                         model.IsCropGroupChange = true;
                     }
                     else
-                    if ((CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass||
+                    if ((CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass ||
                         CropData.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                         && model.IsCheckAnswer && (!model.IsCropGroupChange))
                     {
@@ -965,10 +967,10 @@ namespace NMP.Portal.Controllers
                 //}
                 //else
                 //{
-                    //if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
-                    //{
-                    //    ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
-                    //}
+                //if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes && model.Variety == null)
+                //{
+                //    ModelState.AddModelError("Variety", Resource.MsgEnterAPotatoVarietyNameBeforeContinuing);
+                //}
                 //}
                 if (!ModelState.IsValid)
                 {
@@ -2826,7 +2828,7 @@ namespace NMP.Portal.Controllers
                 action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
                    "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
                    || cropInfoOneList.Count == 1) ?
-                   ((model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields||
+                   ((model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
                    model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield) ?
                "YieldQuestion" : "Yield") : "CropInfoOne");
 
@@ -3889,11 +3891,11 @@ namespace NMP.Portal.Controllers
                             {
                                 model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                             }
+                            string firstCropName = recommendations.FirstOrDefault().Crops.CropTypeID == 140 ? NMP.Portal.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldService.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
                             foreach (var recommendation in recommendations)
                             {
                                 //check sns already exist or not in SnsAnalyses table by cropID
                                 SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
-
 
                                 var crop = new CropViewModel
                                 {
@@ -4153,6 +4155,22 @@ namespace NMP.Portal.Controllers
                                 model.Nutrients = nutrients;
                             }
 
+                            (PreviousCropping PreviousCroppping, error) = await _previousCropppingService.FetchDataByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
+                            if (PreviousCroppping != null && (string.IsNullOrWhiteSpace(error.Message)))
+                            {
+                                string encryptedYear = _farmDataProtector.Protect((decryptedHarvestYear - 1).ToString());
+                                ViewBag.PreviousYear = encryptedYear;
+                                ViewBag.IsThereAnyPreviousCroppping= false;
+                                TempData["PreviousCropppingContentOne"] = Resource.lblRecommendationNotAvailable;
+                                TempData["PreviousCropppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
+                                TempData["PreviousCropppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
+
+                                //return RedirectToAction("IsPreviousYearGrass", "PreviousCroppping", new
+                                //{
+                                //    q = r,
+                                //    r = encryptedYear
+                                //});
+                            }
                         }
                     }
                 }

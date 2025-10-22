@@ -6685,4 +6685,13 @@ livestock manure.</value>
   <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
     <value>Was future field used for grass in {0},{1}  or {2}?</value>
   </data>
+  <data name="lblRecommendationNotAvailable" xml:space="preserve">
+    <value>Recommendations not available</value>
+  </data>
+  <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
+    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+  </data>
+  <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
+    <value>Add {0} crop details for {1}</value>
+  </data>
 </root>

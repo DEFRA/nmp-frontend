@@ -1573,6 +1573,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add {0} crop details for {1}.
+        /// </summary>
+        public static string lblAddYearCropDetailsForFieldName {
+            get {
+                return ResourceManager.GetString("lblAddYearCropDetailsForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add {0} imports or exports.
         /// </summary>
         public static string lblAddYearImportsOrExports {
@@ -10306,6 +10315,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}..
+        /// </summary>
+        public static string lblPreviousCroppingContentOnRecommendation {
+            get {
+                return ResourceManager.GetString("lblPreviousCroppingContentOnRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;..
         /// </summary>
         public static string lblPrint1 {
@@ -10572,6 +10590,15 @@ namespace NMP.Portal.Resources {
         public static string lblRecommendationFromthisService {
             get {
                 return ResourceManager.GetString("lblRecommendationFromthisService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommendations not available.
+        /// </summary>
+        public static string lblRecommendationNotAvailable {
+            get {
+                return ResourceManager.GetString("lblRecommendationNotAvailable", resourceCulture);
             }
         }
         
