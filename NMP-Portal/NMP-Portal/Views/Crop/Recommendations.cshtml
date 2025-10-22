@@ -52,26 +52,26 @@
                    
                 </govuk-notification-banner>
             }
-            @if (ViewBag.IsThereAnyPreviousCroppping != null && ViewBag.IsThereAnyPreviousCroppping == false)
+            @if (ViewBag.IsThereAnyPreviousCropping != null && ViewBag.IsThereAnyPreviousCropping == false)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-                    @if (TempData["PreviousCropppingContentOne"]!=null)
+                    @if (TempData["PreviousCroppingContentOne"]!=null)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @TempData["PreviousCropppingContentOne"]
+                            @TempData["PreviousCroppingContentOne"]
                         </p>                        
                     }
-                    @if (TempData["PreviousCropppingContentSecond"] != null)
+                    @if (TempData["PreviousCroppingContentSecond"] != null)
                     {
-                        <p class="govuk-body">@TempData["PreviousCropppingContentSecond"]</p>
-                        @if (TempData["PreviousCropppingContentThird"] != null)
+                        <p class="govuk-body">@TempData["PreviousCroppingContentSecond"]</p>
+                        @if (TempData["PreviousCroppingContentThird"] != null)
                         {
                             <p class="govuk-body">
-                                <a asp-action="IsPreviousYearGrass" asp-controller="PreviousCroppping" asp-route-q="@Model.EncryptedFieldId" asp-route-r="@ViewBag.PreviousYear">
-                                    @TempData["PreviousCropppingContentThird"]
+                                <a asp-action="IsPreviousYearGrass" asp-controller="PreviousCropping" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@ViewBag.PreviousYear">
+                                    @TempData["PreviousCroppingContentThird"]
                                 </a>
                             </p>
                         }

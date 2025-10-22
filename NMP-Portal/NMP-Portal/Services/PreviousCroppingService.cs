@@ -7,37 +7,35 @@ using NMP.Portal.ServiceResponses;
 
 namespace NMP.Portal.Services
 {
-    public class PreviousCropppingService : Service, IPreviousCropppingService
+    public class PreviousCroppingService : Service, IPreviousCroppingService
     {
-        private readonly ILogger<PreviousCropppingService> _logger;
-        public PreviousCropppingService(ILogger<PreviousCropppingService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        private readonly ILogger<PreviousCroppingService> _logger;
+        public PreviousCroppingService(ILogger<PreviousCroppingService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }
 
         public async Task<(PreviousCropping, Error)> FetchDataByFieldIdAndYear(int fieldId, int year)
         {
-            PreviousCropping previousCroppping = new PreviousCropping();
+            PreviousCropping? previousCropping = null;
             Error error = new Error();
 
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDataByFieldIdAndYearAsyncAPI, fieldId,year));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDataByFieldIdAndYearAsyncAPI, fieldId, year));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode)
+
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null)
-                    {
-                         previousCroppping = responseWrapper.Data.ToObject<PreviousCropping>();                        
-                    }
+                    previousCropping = responseWrapper.Data.PreviousCropping.ToObject<PreviousCropping>();
                 }
                 else
                 {
                     if (responseWrapper != null && responseWrapper.Error != null)
                     {
-                        error = responseWrapper.Error.ToObject<Error>();
+                        error = responseWrapper.Error.ToObject<ErrorViewModel>();
                         _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
                     }
                 }
@@ -55,7 +53,7 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
 
-            return (previousCroppping, error);
+            return (previousCropping, error);
         }
 
     }

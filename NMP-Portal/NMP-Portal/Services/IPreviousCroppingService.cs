@@ -3,7 +3,7 @@ using NMP.Portal.ServiceResponses;
 
 namespace NMP.Portal.Services
 {
-    public interface IPreviousCropppingService : IService
+    public interface IPreviousCroppingService : IService
     {
         Task<(PreviousCropping, Error)> FetchDataByFieldIdAndYear(int fieldId, int year);
     }

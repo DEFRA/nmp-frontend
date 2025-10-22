@@ -1393,6 +1393,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add previous crop.
+        /// </summary>
+        public static string lblAddPreviousCrop {
+            get {
+                return ResourceManager.GetString("lblAddPreviousCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string lblAddress {
@@ -1578,6 +1587,15 @@ namespace NMP.Portal.Resources {
         public static string lblAddYearCropDetailsForFieldName {
             get {
                 return ResourceManager.GetString("lblAddYearCropDetailsForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add {0} crop history to {1}.
+        /// </summary>
+        public static string lblAddYearCropHistoryToFieldName {
+            get {
+                return ResourceManager.GetString("lblAddYearCropHistoryToFieldName", resourceCulture);
             }
         }
         
@@ -5790,6 +5808,15 @@ namespace NMP.Portal.Resources {
         public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
             get {
                 return ResourceManager.GetString("lblHasBeenUsedForGrassInAnyOfTheLast3Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has {0} been used for grass in any of the last 3 year?.
+        /// </summary>
+        public static string lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear {
+            get {
+                return ResourceManager.GetString("lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear", resourceCulture);
             }
         }
         
@@ -14286,6 +14313,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Has Future Field been used for grass in any of the last 3 years?.
+        /// </summary>
+        public static string lblWasFutureFieldUsedForGrassInAnyOfTheLastThreeYear {
+            get {
+                return ResourceManager.GetString("lblWasFutureFieldUsedForGrassInAnyOfTheLastThreeYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Was future field used for grass in {0},{1}  or {2}?.
         /// </summary>
         public static string lblWasFutureFieldUsedForGrassInYear {
@@ -15227,6 +15263,24 @@ namespace NMP.Portal.Resources {
         public static string lblWhatTypeOfReportDoYouWantToCreateFromYourYearData {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfReportDoYouWantToCreateFromYourYearData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the crop group in {0}?.
+        /// </summary>
+        public static string lblWhatWasTheCropGroup {
+            get {
+                return ResourceManager.GetString("lblWhatWasTheCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the crop type in {0}?.
+        /// </summary>
+        public static string lblWhatWasTheCropType {
+            get {
+                return ResourceManager.GetString("lblWhatWasTheCropType", resourceCulture);
             }
         }
         

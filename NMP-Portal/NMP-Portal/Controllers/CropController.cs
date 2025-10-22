@@ -44,11 +44,11 @@ namespace NMP.Portal.Controllers
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly ISnsAnalysisService _snsAnalysisService;
-        private readonly IPreviousCropppingService _previousCropppingService;
+        private readonly IPreviousCroppingService _previousCroppingService;
 
         public CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService, IPreviousCropppingService previousCropppingService)
+             IFertiliserManureService fertiliserManureService, ISnsAnalysisService snsAnalysisService, IPreviousCroppingService previousCroppingService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -61,7 +61,7 @@ namespace NMP.Portal.Controllers
             _organicManureService = organicManureService;
             _fertiliserManureService = fertiliserManureService;
             _snsAnalysisService = snsAnalysisService;
-            _previousCropppingService = previousCropppingService;
+            _previousCroppingService = previousCroppingService;
         }
         public IActionResult Index()
         {
@@ -4259,21 +4259,16 @@ namespace NMP.Portal.Controllers
                                 model.Nutrients = nutrients;
                             }
 
-                            (PreviousCropping PreviousCroppping, error) = await _previousCropppingService.FetchDataByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
-                            if (PreviousCroppping != null && (string.IsNullOrWhiteSpace(error.Message)))
+                            (PreviousCropping PreviousCropping, error) = await _previousCroppingService.FetchDataByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear-1);
+                            if (PreviousCropping == null && (string.IsNullOrWhiteSpace(error.Message)))
                             {
                                 string encryptedYear = _farmDataProtector.Protect((decryptedHarvestYear - 1).ToString());
-                                ViewBag.PreviousYear = encryptedYear;
-                                ViewBag.IsThereAnyPreviousCroppping= false;
-                                TempData["PreviousCropppingContentOne"] = Resource.lblRecommendationNotAvailable;
-                                TempData["PreviousCropppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
-                                TempData["PreviousCropppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
+                                ViewBag.PreviousYear = s;
+                                ViewBag.IsThereAnyPreviousCropping= false;
+                                TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
+                                TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
+                                TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
 
-                                //return RedirectToAction("IsPreviousYearGrass", "PreviousCroppping", new
-                                //{
-                                //    q = r,
-                                //    r = encryptedYear
-                                //});
                             }
                         }
                     }
