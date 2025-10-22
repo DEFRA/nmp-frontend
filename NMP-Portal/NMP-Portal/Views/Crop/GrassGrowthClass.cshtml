@@ -128,24 +128,18 @@
             {
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
-                        <govuk-fieldset>
+                        
                             @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
                             {
-                                @* <h1 class="govuk-heading-l">
+                                <h1 class="govuk-heading-l">
                                     @Resource.lblAnnualDryMatterYield
-                                </h1> *@
-                                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                                    @Resource.lblAnnualDryMatterYield
-                                </govuk-fieldset-legend>
+                                </h1>                               
                             }
                             @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
                             {
-                                @* <h1 class="govuk-heading-l">
+                                <h1 class="govuk-heading-l">
                                     @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName)
-                                </h1> *@
-                                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                                    @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName)
-                                </govuk-fieldset-legend>
+                                </h1>                               
                             }
                             <p class="govuk-body">@Resource.lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass</p>
 
@@ -169,20 +163,18 @@
                             @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
                             {
                                 <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>
-                                @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
+                                @* @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
                                 {
                                     <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</b></p>
-                                }
-                                <h2 class="govuk-heading-m">@string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</h2>
+                                }  *@                               
                                 <govuk-radios asp-for="@Model.Crops[i].Yield">
                                     <govuk-radios-fieldset>
-                                        <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
-                                            
+                                        <govuk-radios-fieldset-legend is-page-heading="false">
+                                        @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
                                         </govuk-radios-fieldset-legend>
                                         <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblDryMatterYields)</govuk-radios-hint>
                                         @if (ViewBag.YieldRanges != null)
                                         {
-
                                             @foreach (var yieldRanges in ViewBag.YieldRanges)
                                             {
                                                 var modelYieldInt = (int)Math.Floor(Convert.ToDecimal(Model.Crops[i].Yield));
@@ -192,11 +184,7 @@
                                                     @(string.Concat(yieldRanges.YieldId.ToString(), " ", Resource.lblTonnesPerHectare))
                                                 </govuk-radios-item>
                                             }
-
-
                                         }
-
-
                                     </govuk-radios-fieldset>
                                 </govuk-radios>
 
@@ -206,15 +194,14 @@
                                 <p class="govuk-body">@Resource.lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf</p>
                                 @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
                                 {
-                                    <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</b></p>
+                                    <p class="govuk-body"><strong>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</strong></p>
                                 }
 
                                 <govuk-radios asp-for="@Model.GrassGrowthClassQuestion">
                                     <govuk-radios-fieldset>
                                         <govuk-radios-fieldset-legend is-page-heading="false">
-                                            <b>@Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields</b>
+                                            @Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields
                                         </govuk-radios-fieldset-legend>
-
                                         <govuk-radios-item value="@EnterASingleFigureForAllTheseFields">@Resource.lblYesEnterTheSameTargetYieldForTheseFields</govuk-radios-item>
                                         <govuk-radios-item value="@EnterDifferentFiguresForEachField">@Resource.lblNoEnterADifferentTargetYieldForEachFields</govuk-radios-item>
                                     </govuk-radios-fieldset>
@@ -222,7 +209,7 @@
                                 <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"></govuk-input>
 
                             }
-                        </govuk-fieldset>
+                        
                     </div>
 
                 </div>

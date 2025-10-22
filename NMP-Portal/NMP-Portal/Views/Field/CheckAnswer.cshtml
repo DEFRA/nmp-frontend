@@ -300,13 +300,13 @@
                     }
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)
+                            @string.Format(Resource.lblDoYouWantToAddSoilAnalysisFor, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @addRecentSoilAnalysis
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="RecentSoilAnalysisQuestion" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name))</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="RecentSoilAnalysisQuestion" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoYouWantToAddSoilAnalysisFor, Model.Name))</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     @if (Model.RecentSoilAnalysisQuestion.HasValue && Model.RecentSoilAnalysisQuestion.Value)
