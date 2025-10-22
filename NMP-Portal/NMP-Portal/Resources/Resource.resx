@@ -6696,6 +6696,7 @@ livestock manure.</value>
   </data>
   <data name="lblTypicalNutrientValues" xml:space="preserve">
     <value>These are typical nutrient values.</value>
+</data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
     <value>Enter an quantity between 1 and 9,99,999</value>
   </data>
