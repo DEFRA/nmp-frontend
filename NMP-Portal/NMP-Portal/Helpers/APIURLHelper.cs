@@ -132,6 +132,7 @@ namespace NMP.Portal.Helpers
         public const string FetchOragnicManureAvailableNByManagementPeriodIDAPI = "/organic-manure/total-nitrogen-by/{0}";
         public const string DeleteNutrientsLoadingManuresByIdAPI = "nutrientsLoadingManures/{0}";
         public const string DeleteNutrientsLoadingLivestockByIdAPI = "nutrients-loading-live-stocks/{0}";
+        public const string MergeCropAPI = "crops/mergeCrop";
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
         public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
