@@ -51,108 +51,108 @@
     <form asp-action="LivestockDefaultNutrientValue" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport"/>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport"/>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterPercent"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NH4N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NO3N"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UricAcid"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReceiverName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"></govuk-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"></govuk-input>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"/>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterPercent"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NH4N"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NO3N"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UricAcid"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReceiverName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment"/>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId"/>
+            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage"/>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"/>
 
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJanuary"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInFebruary"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInMarch"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInApril"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInMay"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJune"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJuly"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInAugust"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInSeptember"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInOctober"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInNovember"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInDecember"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJanuary"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInFebruary"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInMarch"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInApril"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInMay"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJune"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJuly"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInAugust"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInSeptember"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInOctober"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInNovember"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInDecember"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard"/>
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
                 @for (int i = 0; i < Model.FieldList.Count; i++)
                 {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"/>
                 }
             }
             @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
             {
                 @for (int i = 0; i < Model.CropTypeList.Count; i++)
                 {
-                    <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"></govuk-input>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"/>
                 }
             }
         </div>
