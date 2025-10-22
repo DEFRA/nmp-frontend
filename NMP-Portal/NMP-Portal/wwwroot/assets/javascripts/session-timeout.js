@@ -12,7 +12,7 @@
     //var banner = document.getElementById("session-timeout-banner");
     var stayBtn = document.getElementById("stay-signed-in");
    // var stayBtnBanner = document.getElementById("stay-signed-in-banner");
-    var signOutBtn = document.getElementById("sign-out");
+    //var signOutBtn = document.getElementById("sign-out");
     //var focusableElements = [stayBtn, signOutBtn];
 
     var lastActivity = new Date().getTime();
@@ -36,22 +36,22 @@
     }
 
     // ---- Focus trap (modal only) ----
-    function trapFocus(e) {
-        if (e.key === "Tab") {
-            var focusedIndex = focusableElements.indexOf(document.activeElement);
-            if (e.shiftKey) {
-                if (focusedIndex === 0) {
-                    e.preventDefault();
-                    focusableElements[focusableElements.length - 1].focus();
-                }
-            } else {
-                if (focusedIndex === focusableElements.length - 1) {
-                    e.preventDefault();
-                    focusableElements[0].focus();
-                }
-            }
-        }
-    }
+    //function trapFocus(e) {
+    //    if (e.key === "Tab") {
+    //        var focusedIndex = focusableElements.indexOf(document.activeElement);
+    //        if (e.shiftKey) {
+    //            if (focusedIndex === 0) {
+    //                e.preventDefault();
+    //                focusableElements[focusableElements.length - 1].focus();
+    //            }
+    //        } else {
+    //            if (focusedIndex === focusableElements.length - 1) {
+    //                e.preventDefault();
+    //                focusableElements[0].focus();
+    //            }
+    //        }
+    //    }
+    //}
 
     function formatTime(seconds) {
         var minutes = Math.floor(seconds / 60);
@@ -76,7 +76,7 @@
         var remainingMs = expireAt - new Date().getTime();
         var remainingSeconds = Math.max(0, Math.floor(remainingMs / 1000));
 
-        document.getElementById(elementId).innerText = formatTime(remainingSeconds);
+        //document.getElementById(elementId).innerText = formatTime(remainingSeconds);
 
         if (remainingSeconds <= 0) {
             clearInterval(countdownInterval);
@@ -94,7 +94,7 @@
         //} else {
             modal.classList.remove("govuk-!-display-none");
             //document.addEventListener("keydown", trapFocus);
-            stayBtn.focus();
+            //stayBtn.focus();
             countdownInterval = setInterval(function () {
                 updateCountdown("countdown");
             }, 1000);
