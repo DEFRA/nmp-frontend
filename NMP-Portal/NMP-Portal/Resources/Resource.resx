@@ -6696,7 +6696,7 @@ livestock manure.</value>
   </data>
   <data name="lblTypicalNutrientValues" xml:space="preserve">
     <value>These are typical nutrient values.</value>
-</data>
+  </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
     <value>Enter an quantity between 1 and 9,99,999</value>
   </data>
@@ -6738,7 +6738,7 @@ livestock manure.</value>
   </data>
   <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
     <value>Has {0} been used for grass in any of the last 3 year?</value>
-  </data> 
+  </data>
   <data name="lblChangeCompany" xml:space="preserve">
     <value>Change company</value>
   </data>
@@ -6747,5 +6747,8 @@ livestock manure.</value>
   </data>
   <data name="lblYou canalso" xml:space="preserve">
     <value>You can also</value>
+  </data>
+  <data name="HintSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Include nitrogen in fertiliser and crop available nitrogen in organic materials.</value>
   </data>
 </root>

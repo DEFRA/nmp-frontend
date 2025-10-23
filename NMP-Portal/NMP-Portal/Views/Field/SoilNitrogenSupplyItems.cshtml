@@ -93,6 +93,9 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)
                     </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @Resource.HintSoilNitrogenSupplyItems
+                    </govuk-radios-hint>
                     @if (ViewBag.SoilNitrogenSupplyItems != null)
                     {
                         @foreach (var item in ViewBag.SoilNitrogenSupplyItems)

@@ -223,6 +223,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include nitrogen in fertiliser and crop available nitrogen in organic materials..
+        /// </summary>
+        public static string HintSoilNitrogenSupplyItems {
+            get {
+                return ResourceManager.GetString("HintSoilNitrogenSupplyItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date format is 21 06 2024..
         /// </summary>
         public static string hintTheDateFormat {
