@@ -498,32 +498,33 @@
                         <govuk-summary-list-row-value>
                             @if ((Model.N.HasValue))
                             {
-                                @string.Format("{0} {1} {2}",(Model.N.Value==0 ? Model.N.Value: string.Format("{0:N3}",Model.N.Value)), Resource.lblKgPerHectare, Resource.lblNitrogen)
+                                @string.Format("{0} {1} {2}",(Model.N.Value==0 ? Model.N.Value: string.Format("{0:N0}",Model.N.Value)), Resource.lblKgPerHectare, Resource.lblNitrogen)
                                 <br/>
                             }
                             @if ((Model.P2O5.HasValue))
                             {
-                                @string.Format("{0} {1} {2}", (Model.P2O5.Value==0 ? Model.P2O5.Value: string.Format("{0:N3}",Model.P2O5.Value)), Resource.lblKgPerHectare, Resource.lblPhosphateP2O5)
+                                @string.Format("{0} {1} {2}", (Model.P2O5.Value==0 ? Model.P2O5.Value: string.Format("{0:N0}",Model.P2O5.Value)), Resource.lblKgPerHectare, Resource.lblPhosphateP2O5)
                                 <br/>
                             }
                             @if ((Model.K2O.HasValue))
                             {
-                                @string.Format("{0} {1} {2}",(Model.K2O.Value==0 ? Model.K2O.Value: string.Format("{0:N3}",Model.K2O.Value)), Resource.lblKgPerHectare, Resource.lblPotashK2O)
+                                @string.Format("{0} {1} {2}",(Model.K2O.Value==0 ? Model.K2O.Value: string.Format("{0:N0}",Model.K2O.Value)), Resource.lblKgPerHectare, Resource.lblPotashK2O)
                                 <br />
                             }
                             @if ((Model.SO3.HasValue))
                             {
-                                @string.Format("{0} {1} {2}",(Model.SO3.Value==0 ? Model.SO3.Value: string.Format("{0:N3}",Model.SO3.Value)), Resource.lblKgPerHectare, Resource.lblSulphurSO3)
+                                @string.Format("{0} {1} {2}",(Model.SO3.Value==0 ? Model.SO3.Value: string.Format("{0:N0}",Model.SO3.Value)), Resource.lblKgPerHectare, Resource.lblSulphurSO3)
                                 <br />
                             }
                             @if ((Model.MgO.HasValue))
                             {
-                                @string.Format("{0} {1} {2}",(Model.MgO.Value==0 ? Model.MgO.Value: string.Format("{0:N3}",Model.MgO.Value)), Resource.lblKgPerHectare, Resource.lblMagnesiumMgO)
+                                @string.Format("{0} {1} {2}",(Model.MgO.Value==0 ? Model.MgO.Value: string.Format("{0:N0}",Model.MgO.Value)), Resource.lblKgPerHectare, Resource.lblMagnesiumMgO)
                                 <br />
                             }
                             @if ((Model.Lime.HasValue))
                             {
-                                @(string.Format("{0} {1} {2}", Model.Lime.Value, Resource.lbltonnes, Resource.lblLime))
+                                 @string.Format("{0} {1} {2}",(Model.Lime.Value==0 ? Model.Lime.Value: string.Format("{0:N1}",Model.Lime.Value)), Resource.lbltonnes, Resource.lblLime)
+                                @* @(string.Format("{0} {1} {2}", Model.Lime.Value, Resource.lbltonnes, Resource.lblLime)) *@
                                 <br />
                             }
                         </govuk-summary-list-row-value>
