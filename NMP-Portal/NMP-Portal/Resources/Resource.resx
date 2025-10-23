@@ -6738,8 +6738,7 @@ livestock manure.</value>
   </data>
   <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
     <value>Has {0} been used for grass in any of the last 3 year?</value>
-  </data>
-</root> 
+  </data> 
   <data name="lblChangeCompany" xml:space="preserve">
     <value>Change company</value>
   </data>
