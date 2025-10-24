@@ -1231,6 +1231,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add crop history.
+        /// </summary>
+        public static string lblAddCropHistory {
+            get {
+                return ResourceManager.GetString("lblAddCropHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add crops.
         /// </summary>
         public static string lblAddCrops {

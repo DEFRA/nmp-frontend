@@ -6754,4 +6754,7 @@ livestock manure.</value>
   <data name="MsgRecommendationsUpdated" xml:space="preserve">
     <value>Recommendations updated</value>
   </data>
+  <data name="lblAddCropHistory" xml:space="preserve">
+    <value>Add crop history</value>
+  </data>
 </root>
