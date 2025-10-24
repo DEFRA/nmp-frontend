@@ -37,7 +37,7 @@
 
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["successMsg"]
                     </p>
@@ -47,11 +47,38 @@
                             @TempData["successMsgSecond"]
                         </p>
                     }
+                   
+                </govuk-notification-banner>
+            }
+            @if (ViewBag.IsThereAnyPreviousCropping != null && ViewBag.IsThereAnyPreviousCropping == false)
+            {
+                <govuk-notification-banner>
+                    <govuk-notification-banner-title>
+                        @Resource.lblImportant
+                    </govuk-notification-banner-title>
+                    @if (TempData["PreviousCroppingContentOne"]!=null)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @TempData["PreviousCroppingContentOne"]
+                        </p>                        
+                    }
+                    @if (TempData["PreviousCroppingContentSecond"] != null)
+                    {
+                        <p class="govuk-body">@TempData["PreviousCroppingContentSecond"]</p>
+                        @if (TempData["PreviousCroppingContentThird"] != null)
+                        {
+                            <p class="govuk-body">
+                                <a asp-action="HasGrassInLastThreeYear" asp-controller="PreviousCropping" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@ViewBag.PreviousYear">
+                                    @TempData["PreviousCroppingContentThird"]
+                                </a>
+                            </p>
+                        }
+                    }
                 </govuk-notification-banner>
             }
             @if (TempData["successSnsAnalysis"] != null)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @string.Format(Resource.MsgSnsSuccess, Model.FieldName)
                     </p>

@@ -24,19 +24,19 @@
     <form asp-action="CopyExistingManureStorageYearList" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCopyExistingManureStorage"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCopyExistingManureStorage"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"/>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">

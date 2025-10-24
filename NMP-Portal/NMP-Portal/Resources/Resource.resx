@@ -2987,7 +2987,7 @@ cubic metres per hectare  not set</value>
     <value>Beta</value>
   </data>
   <data name="lblPhaseBannerText" xml:space="preserve">
-    <value>This is a new service. &lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
+    <value>This is a new service. &lt;a class="govuk-link" href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
@@ -6705,5 +6705,65 @@ livestock manure.</value>
   </data>
   <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
     <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
+   </data>
+    <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
+    <value>Enter an quantity between 1 and 9,99,999</value>
+  </data>
+  <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
+    <value>Quantity must be between 1 to 9,99,999</value>
+  </data>
+  <data name="lblOrgenisation" xml:space="preserve">
+    <value>lblOrgenisation</value>
+  </data>
+  <data name="lblMenu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
+    <value>Was future field used for grass in {0},{1}  or {2}?</value>
+  </data>
+  <data name="lblRecommendationNotAvailable" xml:space="preserve">
+    <value>Recommendations not available</value>
+  </data>
+  <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
+    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+  </data>
+  <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
+    <value>Add {0} crop details for {1}</value>
+  </data>
+  <data name="lblAddPreviousCrop" xml:space="preserve">
+    <value>Add previous crop</value>
+  </data>
+  <data name="lblWhatWasTheCropGroup" xml:space="preserve">
+    <value>What was the crop group in {0}?</value>
+  </data>
+  <data name="lblWhatWasTheCropType" xml:space="preserve">
+    <value>What was the crop type in {0}?</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has Future Field been used for grass in any of the last 3 years?</value>
+  </data>
+  <data name="lblAddYearCropHistoryToFieldName" xml:space="preserve">
+    <value>Add {0} crop history to {1}</value>
+  </data>
+  <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has {0} been used for grass in any of the last 3 year?</value>
+  </data>
+  <data name="lblChangeCompany" xml:space="preserve">
+    <value>Change company</value>
+  </data>
+  <data name="lblSignoutnow" xml:space="preserve">
+    <value>Sign out now</value>
+  </data>
+  <data name="lblYou canalso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
+  <data name="HintSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Include nitrogen in fertiliser and crop available nitrogen in organic materials.</value>
+  </data>
+  <data name="MsgRecommendationsUpdated" xml:space="preserve">
+    <value>Recommendations updated</value>
+  </data>
+  <data name="lblAddCropHistory" xml:space="preserve">
+    <value>Add crop history</value>
   </data>
 </root>
