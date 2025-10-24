@@ -494,7 +494,7 @@ a:focus, .govuk-link:focus {
 
 .guidance {
     display: block;
-    width: 66%;
+    width: 100%;
 }
 .nmax_header h1 {
     margin-bottom: 20px;
@@ -826,4 +826,23 @@ hr.seperator_thirty {
     left: 0;
     right: 0;
     z-index: 1000;
+}
+
+.govuk-caption-l {
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.1111111111;
+    display: block;
+    margin-bottom: 5px;
+    color: #505a5f;
+}
+@media (min-width: 40.0625em) {
+    .govuk-caption-l {
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
 }

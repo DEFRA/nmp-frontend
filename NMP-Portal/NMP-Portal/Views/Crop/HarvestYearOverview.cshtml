@@ -24,9 +24,9 @@
     @section BeforeContent {
         <govuk-breadcrumbs class="govuk-breadcrumbs-link">
 
-            <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            @* <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                 @Model.FarmName
-            </govuk-breadcrumbs-item>
+            </govuk-breadcrumbs-item> *@
             <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
                 @Resource.lblPlanningAndRecording
             </govuk-breadcrumbs-item>
@@ -317,27 +317,28 @@
                                                 @if (inorganicFertiliser.N != null)
                                                 {
                                                     <span class="nutrient-list">
-                    @string.Format(Resource.lblKgWithNutrient,string.Format("{0:N2}", inorganicFertiliser.N), Resource.lblNitrogen)</span>
+                    @string.Format(Resource.lblKgWithNutrient,string.Format("{0:N0}", inorganicFertiliser.N), Resource.lblNitrogen)</span>
                                                 }
                                                 @if (inorganicFertiliser.P2O5 != null)
                                                 {
-                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N2}", inorganicFertiliser.P2O5), Resource.lblPhosphateP2O5)</span>
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N0}", inorganicFertiliser.P2O5), Resource.lblPhosphateP2O5)</span>
                                                 }
                                                 @if (inorganicFertiliser.K2O != null)
                                                 {
-                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N2}", inorganicFertiliser.K2O), Resource.lblPotashK2O)</span>
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N0}", inorganicFertiliser.K2O), Resource.lblPotashK2O)</span>
                                                 }
                                                 @if (inorganicFertiliser.SO3 != null)
                                                 {
-                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N2}", inorganicFertiliser.SO3), Resource.lblSulphurSO3)</span>
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N0}", inorganicFertiliser.SO3), Resource.lblSulphurSO3)</span>
                                                 }
                                                 @if (inorganicFertiliser.MgO != null)
                                                 {
-                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N2}", inorganicFertiliser.MgO), Resource.lblMagnesiumMgO)</span>
+                                                    <span class="nutrient-list">@string.Format(Resource.lblKgWithNutrient, string.Format("{0:N0}", inorganicFertiliser.MgO), Resource.lblMagnesiumMgO)</span>
                                                 }
                                                 @if (inorganicFertiliser.Lime != null)
                                                 {
-                                                    <span class="nutrient-list">@string.Format(Resource.lblTonneWithNutrient, inorganicFertiliser.Lime, Resource.lblLime)</span>
+                                                    <span class="nutrient-list">@string.Format(Resource.lblTonneWithNutrient, string.Format("{0:N1}", inorganicFertiliser.Lime), Resource.lblLime)</span>
+                                                    @* <span class="nutrient-list">@string.Format(Resource.lblTonneWithNutrient, inorganicFertiliser.Lime, Resource.lblLime)</span> *@
                                                 }
 
                                             </td>

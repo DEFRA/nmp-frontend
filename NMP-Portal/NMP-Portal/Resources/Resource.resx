@@ -6748,6 +6748,9 @@ livestock manure.</value>
   <data name="lblYou canalso" xml:space="preserve">
     <value>You can also</value>
   </data>
+  <data name="HintSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Include nitrogen in fertiliser and crop available nitrogen in organic materials.</value>
+  </data>
   <data name="MsgRecommendationsUpdated" xml:space="preserve">
     <value>Recommendations updated</value>
   </data>
