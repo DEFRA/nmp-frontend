@@ -113,6 +113,12 @@
                                 </div>
                                 @* big_crop_table_version_five *@
                                 <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
+                                    <caption class="govuk-table__caption--m govuk-visually-hidden">
+                                        @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
+                                        {
+                                            <span class="nonbold">@string.Concat(Resource.lblHyphen, " ", harvestYearPlan.CropGroupName)</span>
+                                        }
+                                    </caption>
                                     <thead class="govuk-table__head">
                                         <tr class="govuk-table__row">
                                             <th scope="col" class="govuk-table__header field-name">@Resource.lblField</th>
@@ -173,7 +179,7 @@
                                                     </td>
                                                     <td class="govuk-table__cell">
                                                         <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
-                                                            @Resource.lblUpdateThisFieldOrViewRecommendations
+                                                            @string.Format(Resource.lblUpdateThisFieldOrViewRecommendations, field.FieldName)
                                                         </a>
                                                     </td>
                                                 </tr>

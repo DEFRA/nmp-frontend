@@ -665,7 +665,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Cropped area</value>
   </data>
   <data name="lblDateSampleTaken" xml:space="preserve">
-    <value>When was the soil sample taken?</value>
+    <value>When was the soil analysis for {0} taken?</value>
   </data>
   <data name="lblDoesPotashClayForCheckAnswere" xml:space="preserve">
     <value>Does this field contain potash-releasing clay?</value>
@@ -1592,7 +1592,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Plan or edit an application of organic material to {0}</value>
   </data>
   <data name="lblUpdateThisFieldOrViewRecommendations" xml:space="preserve">
-    <value>Update this field or view recommendations</value>
+    <value>Update {0} or view recommendations</value>
   </data>
   <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
     <value>Area must be greater than zero</value>
@@ -6696,5 +6696,14 @@ livestock manure.</value>
   </data>
   <data name="lblTypicalNutrientValues" xml:space="preserve">
     <value>These are typical nutrient values.</value>
+  </data>
+  <data name="HeadingClimateConditions" xml:space="preserve">
+    <value>Climate conditions</value>
+  </data>
+  <data name="AddFieldNameQuestion" xml:space="preserve">
+    <value>What is the field name?</value>
+  </data>
+  <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
+    <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
   </data>
 </root>

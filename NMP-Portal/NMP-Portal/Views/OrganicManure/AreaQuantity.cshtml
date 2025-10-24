@@ -339,10 +339,8 @@
 
                 </govuk-notification-banner>
             }
-
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">@Resource.lblEnterTheAreaAndQuantity</h1>
-            </legand>
+            
+            <h1 class="govuk-heading-l">@Resource.lblEnterTheAreaAndQuantity</h1>
             <govuk-input asp-for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
@@ -354,8 +352,7 @@
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
-            </govuk-input>
-
+            </govuk-input>            
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="AreaQuantity">
                 @Resource.lblContinue
             </govuk-button>

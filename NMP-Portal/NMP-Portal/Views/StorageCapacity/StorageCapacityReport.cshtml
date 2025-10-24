@@ -30,7 +30,7 @@
 {
     <div class="govuk-grid-row noprint margin-bottom-forty">
         <div class="govuk-grid-column-two-thirds">
-            <h2 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h2>
+            <h3 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h3>
             <ol class="govuk-list govuk-list--number">
                 <li>@Html.Raw(Resource.lblPrint1)</li>
                 <li>@Html.Raw(Resource.lblPrint2)</li>
@@ -95,7 +95,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m">@Resource.lblSlurryStores</h2>
+        <h2 class="govuk-heading-l">@Resource.lblSlurryStores</h2>
         @if (ViewBag.SlurryStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
@@ -149,7 +149,8 @@
                 </div>
             </div>
         }
-        <h2 class="govuk-heading-m">@Resource.lblDirtyWaterStores</h2>
+
+        <h2 class="govuk-heading-l">@Resource.lblDirtyWaterStores</h2>
         @if (ViewBag.DirtyWaterStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
@@ -203,7 +204,9 @@
                 </div>
             </div>
         }
-        <h2 class="govuk-heading-m">@Resource.lblSolidManureStores</h2>
+        
+        
+        <h2 class="govuk-heading-l">@Resource.lblSolidManureStores</h2>
         @if (ViewBag.SolidStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentFour</p>
@@ -265,7 +268,7 @@
         <!-- <p>None entered</p>
          <hr class="separator_thirty"> -->
 
-        <h2 class="govuk-heading-m">Manure storage totals</h2>
+        <h3 class="govuk-heading-l">Manure storage totals</h3>
         <table class="govuk-table margin-bottom-forty data-table manure_store_totals">
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
@@ -293,7 +296,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         @* <hr class="seperator_five"> *@
-        <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
+        <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
         <p class="govuk-body">
             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
         </p>
