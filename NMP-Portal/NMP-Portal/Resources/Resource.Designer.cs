@@ -70,6 +70,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the field name?.
+        /// </summary>
+        public static string AddFieldNameQuestion {
+            get {
+                return ResourceManager.GetString("AddFieldNameQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start now.
         /// </summary>
         public static string btnStartNow {
@@ -210,6 +219,15 @@ namespace NMP.Portal.Resources {
         public static string FieldGreaterThanX {
             get {
                 return ResourceManager.GetString("FieldGreaterThanX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Climate conditions.
+        /// </summary>
+        public static string HeadingClimateConditions {
+            get {
+                return ResourceManager.GetString("HeadingClimateConditions", resourceCulture);
             }
         }
         
@@ -3625,7 +3643,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When was the soil sample taken?.
+        ///   Looks up a localized string similar to When was the soil analysis for {0} taken?.
         /// </summary>
         public static string lblDateSampleTaken {
             get {
@@ -13998,7 +14016,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update this field or view recommendations.
+        ///   Looks up a localized string similar to Update {0} or view recommendations.
         /// </summary>
         public static string lblUpdateThisFieldOrViewRecommendations {
             get {
@@ -17857,6 +17875,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterDataOnlyInNumber {
             get {
                 return ResourceManager.GetString("MsgEnterDataOnlyInNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the expected yield for {0} in {1}, in tonnes per hectare?.
+        /// </summary>
+        public static string MsgEnterExpectedYieldforCropinField {
+            get {
+                return ResourceManager.GetString("MsgEnterExpectedYieldforCropinField", resourceCulture);
             }
         }
         

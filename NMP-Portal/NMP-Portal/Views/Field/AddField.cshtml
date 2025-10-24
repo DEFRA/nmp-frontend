@@ -99,17 +99,16 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"/>
             </div>
-
-                <govuk-fieldset>
-                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @Resource.lblAddField
-                    </govuk-fieldset-legend>
-                <govuk-input asp-for="@Model.Name"></govuk-input>
+                    <govuk-input asp-for="@Model.Name">
+                        <govuk-input-label is-page-heading="true" >
+                        @Resource.AddFieldNameQuestion
+                        </govuk-input-label>
+                    </govuk-input>
                     @if (Model?.isEnglishRules != null && (!Model.isEnglishRules))
                     {
                     <govuk-input class="input-width-15 margin-bottom-forty" asp-for="@Model.LPIDNumber"></govuk-input>
                     }
-                </govuk-fieldset>
+               
 
 
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">

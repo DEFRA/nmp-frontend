@@ -142,21 +142,21 @@
                     </div>
                     @if (Model.YieldCurrentCounter == i)
                     {
+                        var question ="";
+                        if (ViewBag.IsYieldOptional != null)
+                        {
+                            question = Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName);
+                        }
+                        else
+                        {
+                            question = Model.Crops.Count > 1 &&
+                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForTheseFieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName);
+                        }
                         <govuk-input asp-for=@Model.Crops[i].Yield input-class="govuk-input--width-5" type="number" step="any" spellcheck="false">
                             <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                                @if (ViewBag.IsYieldOptional != null)
-                                {
-                                    @(Model.Crops.Count > 1 &&
-                                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
-                                }
-                                else
-                                {
-                                    @(Model.Crops.Count > 1 &&
-                                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForTheseFieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName))
-                                }
-                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblTonnesAndHectare)</span>@((ViewBag.IsYieldOptional != null) ? Resource.lblOptionalQues : Resource.lblQuestionMark)
+                                @question<span class="govuk-visually-hidden">@string.Format(Resource.lblInUnit, Resource.lblTonnesAndHectare)</span>@((ViewBag.IsYieldOptional != null) ? Resource.lblOptionalQues : Resource.lblQuestionMark)
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblTonnesAndHectare</govuk-input-suffix>
                         </govuk-input>
