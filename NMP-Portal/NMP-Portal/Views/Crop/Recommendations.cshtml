@@ -70,7 +70,7 @@
                         @if (TempData["PreviousCroppingContentThird"] != null)
                         {
                             <p class="govuk-body">
-                                <a asp-action="IsPreviousYearGrass" asp-controller="PreviousCropping" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@ViewBag.PreviousYear">
+                                <a asp-action="HasGrassInLastThreeYear" asp-controller="PreviousCropping" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@ViewBag.PreviousYear">
                                     @TempData["PreviousCroppingContentThird"]
                                 </a>
                             </p>

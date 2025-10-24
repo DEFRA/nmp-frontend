@@ -19085,6 +19085,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recommendations updated.
+        /// </summary>
+        public static string MsgRecommendationsUpdated {
+            get {
+                return ResourceManager.GetString("MsgRecommendationsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will remove all the data about this farm and its fields. It will also remove this farm and its fields from your plans and records. You will not be able to get it back..
         /// </summary>
         public static string MsgRemoveFarm {

@@ -12,7 +12,7 @@
     }
     else
     {
-        backAction = "IsPreviousYearGrass";
+        backAction = "HasGrassInLastThreeYear";
     }
 }
 
@@ -35,7 +35,9 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGreaterThan30PercentClover"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNitrogenSupplyItemID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LayDuration"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
         
     </div>
     <div class="govuk-grid-row">
