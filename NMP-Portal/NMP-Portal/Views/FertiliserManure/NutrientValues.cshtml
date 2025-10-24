@@ -156,10 +156,8 @@
                             }
                         </govuk-notification-banner>
                     }
-                }
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">
-                        @* @Resource.lblHowMuchOfEachNutrientDoYouPlan *@
+                }               
+                    <h1 class="govuk-heading-l">                       
                         @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                         {
                             @Resource.lblHowMuchOfEachNutrientDoYouPlan
@@ -168,8 +166,7 @@
                         {
                             @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
                         }
-                    </h1>
-                </legand>
+                    </h1>                
             </div>
             <div class="govuk-grid-column-full">
                 @if (Model.FieldList.Count == 1)
@@ -281,49 +278,47 @@
                     </govuk-error-message>
                 }
                 <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true">
+                    <govuk-input-label is-page-heading="false">
                         @Resource.lblNitrogen
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true">
+                    <govuk-input-label is-page-heading="false">
                         @Resource.lblPhosphateP2O5
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true">
+                    <govuk-input-label is-page-heading="false">
                         @Resource.lblPotashK2O
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true">
+                    <govuk-input-label is-page-heading="false">
                         @Resource.lblSulphurSO3
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true">
+                    <govuk-input-label is-page-heading="false">
                         @Resource.lblMagnesiumMgO
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input asp-for=@Model.Lime inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                    <govuk-input-label is-page-heading="true">
+                    <govuk-input-label is-page-heading="false">
                         @Resource.lblLime
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lbltonnes)</span>
                     </govuk-input-label>
                     <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
                 </govuk-input>
-
-
             </div>
         </div>
 

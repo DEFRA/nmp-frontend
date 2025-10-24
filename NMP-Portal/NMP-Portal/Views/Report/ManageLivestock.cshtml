@@ -26,19 +26,7 @@
     decimal totalPhosphateGoatsDeerAndHorses = 0;
 }
 
-@section BeforeContent {
-    @* <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @string.Format(Resource.lblLivestockDetailsYear, Model.Year)
-        </govuk-breadcrumbs-item>
-
-    </govuk-breadcrumbs> *@
+@section BeforeContent {   
     <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnManageLivestock"] != null)
@@ -106,7 +94,7 @@
         {
             @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblCattle</h2>
+                <h2 class="govuk-heading-m">@Resource.lblCattle</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table data-table">
                         <thead class="govuk-table__head">
@@ -176,7 +164,7 @@
             }
             @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblPigs</h2>
+                <h2 class="govuk-heading-m">@Resource.lblPigs</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
@@ -246,7 +234,7 @@
             }
             @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
+                <h2 class="govuk-heading-m">@Resource.lblPoultry</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
@@ -310,7 +298,7 @@
             }
             @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
+                <h2 class="govuk-heading-m">@Resource.lblSheep</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
@@ -375,7 +363,7 @@
             }
             @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
+                <h2 class="govuk-heading-m">@Resource.lblGoatsDeerAndHorses</h2>
                 <div class="margin-bottom-thirty">
                     <table class="govuk-table sortable-table recomendation-table data-table">
                         <thead class="govuk-table__head">
@@ -445,7 +433,7 @@
                 @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
                 {
                     <govuk-tabs-item id="cattle" label=@Resource.lblCattle>
-                        <h2 class="govuk-heading-l">@Resource.lblCattle</h2>
+                        <h2 class="govuk-heading-m">@Resource.lblCattle</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table data-table">
                                 <thead class="govuk-table__head">
@@ -506,7 +494,7 @@
                 @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
                 {
                     <govuk-tabs-item id="pigs" label=@Resource.lblPigs>
-                        <h2 class="govuk-heading-l">@Resource.lblPigs</h2>
+                        <h2 class="govuk-heading-m">@Resource.lblPigs</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
@@ -572,7 +560,7 @@
                 @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
                 {
                     <govuk-tabs-item id="poultry" label=@Resource.lblPoultry>
-                        <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
+                        <h2 class="govuk-heading-m">@Resource.lblPoultry</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
@@ -636,7 +624,7 @@
                 @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
                 {
                     <govuk-tabs-item id="sheep" label=@Resource.lblSheep>
-                        <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
+                        <h2 class="govuk-heading-m">@Resource.lblSheep</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">
@@ -697,7 +685,7 @@
                 @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
                 {
                     <govuk-tabs-item id="goatsDeerAndHorses" label=@Resource.lblGoatsDeerAndHorses>
-                        <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
+                        <h2 class="govuk-heading-m">@Resource.lblGoatsDeerAndHorses</h2>
                         <div class="margin-bottom-thirty">
                             <table class="govuk-table sortable-table recomendation-table data-table">
                                 <thead class="govuk-table__head">

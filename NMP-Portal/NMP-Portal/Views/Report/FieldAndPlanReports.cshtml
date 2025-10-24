@@ -131,37 +131,31 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <govuk-fieldset>
-                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate
-                    </govuk-fieldset-legend>
-
-                    <govuk-radios asp-for="@Model.FieldAndPlanReportOption">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="false">
-
-                            </govuk-radios-fieldset-legend>
-                            <govuk-radios-item value="@cropFieldManagementReport">
-                                @Resource.lblFieldRecordsAndNutrientManagementPlanning
-                                <govuk-radios-item-hint>
-                                    @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
-                                </govuk-radios-item-hint>
-                            </govuk-radios-item>
-                            <govuk-radios-item value="@livestockNumbersReport" disabled>
-                                @Resource.lblLivestockNumbers
-                                <govuk-radios-item-hint>
-                                    @Resource.lblIncludesAllLivestockNumbersForTheYear
-                                </govuk-radios-item-hint>
-                            </govuk-radios-item>
-                            <govuk-radios-item value="@importsAndExportsReport" disabled>
-                                @Resource.lblImportsExports
-                                <govuk-radios-item-hint>
-                                    @Resource.lblIncludesAllLivestockNumbersForTheYear
-                                </govuk-radios-item-hint>
-                            </govuk-radios-item>
-                        </govuk-radios-fieldset>
-                    </govuk-radios>
-                </govuk-fieldset>
+                <govuk-radios asp-for="@Model.FieldAndPlanReportOption">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-item value="@cropFieldManagementReport">
+                            @Resource.lblFieldRecordsAndNutrientManagementPlanning
+                            <govuk-radios-item-hint>
+                                @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@livestockNumbersReport" disabled>
+                            @Resource.lblLivestockNumbers
+                            <govuk-radios-item-hint>
+                                @Resource.lblIncludesAllLivestockNumbersForTheYear
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@importsAndExportsReport" disabled>
+                            @Resource.lblImportsExports
+                            <govuk-radios-item-hint>
+                                @Resource.lblIncludesAllLivestockNumbersForTheYear
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

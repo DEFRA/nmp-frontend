@@ -129,18 +129,13 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <govuk-fieldset>
-                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @Resource.lblOccupancyAndNitrogenStandard
-                    </govuk-fieldset-legend>
-                </govuk-fieldset>
+                <h1 class="govuk-heading-l"> @Resource.lblOccupancyAndNitrogenStandard</h1>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                 <govuk-details>
                     <govuk-details-summary>
                         @Resource.lblHelpWithOccupancyAndNitrogenNStandard
                     </govuk-details-summary>
                     <govuk-details-text class="explanations">
-
                         <strong>
                             @Resource.lblOccupancy
                         </strong>
@@ -201,36 +196,30 @@
 
                     </tbody>
                 </table>
-                <govuk-fieldset>
-                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                    </govuk-fieldset-legend>
-                    <govuk-radios asp-for="@Model.OccupancyAndNitrogenOptions">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="false">
-                                @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)
-                            </govuk-radios-fieldset-legend>
+                <govuk-radios asp-for="@Model.OccupancyAndNitrogenOptions">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="false">
+                            @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>
                             @if (Model.IsGrasslandDerogation == true)
                             {
-                                <govuk-radios-hint>
-                                    @Resource.lblThePhosphateP205StandardCanNotBeChanged
-                                </govuk-radios-hint>
+                                @Resource.lblThePhosphateP205StandardCanNotBeChanged
                             }
+                        </govuk-radios-hint>
+                        <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)">@Resource.lblYesUseTheseValues</govuk-radios-item>
+                        @if (Model.IsGrasslandDerogation == false)
+                        {
+                            <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)">@Resource.lblNoChangeTheOccupancyValue</govuk-radios-item>
+                            <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)">@Resource.lblNoChangeTheNitrogenNStandardValue</govuk-radios-item>
+                        }
+                        else
+                        {
+                            <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)">@Resource.lblNoChangeTheseValues</govuk-radios-item>
+                        }
+                    </govuk-radios-fieldset>
+                </govuk-radios>
 
-                            <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)">@Resource.lblYesUseTheseValues</govuk-radios-item>
-                            @if (Model.IsGrasslandDerogation == false)
-                            {
-                                <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)">@Resource.lblNoChangeTheOccupancyValue</govuk-radios-item>
-                                <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)">@Resource.lblNoChangeTheNitrogenNStandardValue</govuk-radios-item>
-                            }
-                            else
-                            {
-                                <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)">@Resource.lblNoChangeTheseValues</govuk-radios-item>
-                            }
-
-                        </govuk-radios-fieldset>
-                    </govuk-radios>
-
-                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
