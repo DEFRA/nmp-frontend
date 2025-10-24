@@ -4,6 +4,7 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
+using System.Text;
 
 namespace NMP.Portal.Services
 {
@@ -55,6 +56,40 @@ namespace NMP.Portal.Services
 
             return (previousCropping, error);
         }
-
+        public async Task<(bool, Error)> MergePreviousCropping(string jsonData)
+        {
+            bool success = false;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.PutAsync(string.Format(APIURLHelper.MergePreviousCropAPI), new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+                    success = responseWrapper.Data.PreviousCropping;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return (success, error);
+        }
     }
 }

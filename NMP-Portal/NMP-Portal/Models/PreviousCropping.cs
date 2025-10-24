@@ -2,7 +2,7 @@
 {
     public class PreviousCropping
     {
-        public int ID { get; set; }
+        public int? ID { get; set; }
         public int FieldID { get; set; }
         public int? CropGroupID { get; set; }
         public int? CropTypeID { get; set; }

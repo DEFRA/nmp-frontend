@@ -13,5 +13,8 @@ namespace NMP.Portal.ViewModels
         public List<int>? PreviousGrassYears { get; set; }
         public string? EncryptedCurrentYear { get; set; }
         public string? CropTypeName { get; set; }
+        public bool? HasGrassInLastThreeYear { get; set; }
+        public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
+        public bool? IsCancel { get; set; }
     }
 }
