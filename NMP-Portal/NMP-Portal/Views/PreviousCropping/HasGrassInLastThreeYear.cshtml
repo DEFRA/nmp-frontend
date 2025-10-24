@@ -71,7 +71,14 @@
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link">
-
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="PreviousCropping">@Resource.lblCancel</a>
+                }
 
             </p>
 
