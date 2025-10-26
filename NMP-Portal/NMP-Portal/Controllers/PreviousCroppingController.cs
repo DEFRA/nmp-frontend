@@ -693,9 +693,13 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("SoilNitrogenSupplyItemID", $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, model.FieldName)} {Resource.lblNotSet}");
                     }
-                    if (model.CropTypeID == null && model.PreviousGrassYears != null && model.PreviousGrassYears.Count != 3)
+                    if (model.CropTypeID == null)
                     {
-                        ModelState.AddModelError("CropTypeID", $"{string.Format(Resource.lblWhatWasTheCropType, model.HarvestYear)} {Resource.lblNotSet}");
+                        if (model.HasGrassInLastThreeYear.HasValue && (!model.HasGrassInLastThreeYear.Value)
+                            || (model.IsPreviousYearGrass.HasValue && !model.IsPreviousYearGrass.Value))
+                        {
+                            ModelState.AddModelError("CropTypeID", $"{string.Format(Resource.lblWhatWasTheCropType, model.HarvestYear)} {Resource.lblNotSet}");
+                        }
                     }
                 }
                 else
@@ -920,8 +924,8 @@ namespace NMP.Portal.Controllers
             }
             if (!model.IsCancel.Value)
             {
-                    return RedirectToAction("CheckAnswer");
-              
+                return RedirectToAction("CheckAnswer");
+
             }
             else
             {
