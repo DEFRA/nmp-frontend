@@ -1954,7 +1954,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.Crops[model.YieldCurrentCounter].Yield == null)
                     {
-                        ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterFigureBeforeContinuing);
+                        ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
                     }
                 }
                 if (model.Crops[model.YieldCurrentCounter].Yield != null)

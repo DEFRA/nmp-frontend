@@ -164,16 +164,11 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                <govuk-fieldset>
-                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @heading
-                    </govuk-fieldset-legend>
                     <govuk-radios asp-for="@Model.Year">
                         <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="false">
+                            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                @heading
                             </govuk-radios-fieldset-legend>
-
                             <govuk-radios-hint>
                                 @Resource.lblSelectOneOption
                             </govuk-radios-hint>
@@ -186,11 +181,8 @@
                                     </govuk-radios-item>
                                 }
                             }
-
-
                         </govuk-radios-fieldset>
-                    </govuk-radios>
-                </govuk-fieldset>
+                    </govuk-radios>                
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

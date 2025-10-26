@@ -268,7 +268,89 @@
                 </govuk-details-text>
             </govuk-details>
 
-            <table class="govuk-table">
+
+            <h2 class="govuk-heading-m">@Resource.HeadingClimateConditions</h2>
+            <govuk-summary-list>
+                @if (!isAutumnNUptakeZero)
+                {
+                    @if (Model.FieldList.Count > 1)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblAutumnCropNitrogenUptake
+                            </govuk-summary-list-row-key>
+                            @if (Model.AutumnCropNitrogenUptakes.All(x => x.AutumnCropNitrogenUptake == Model.AutumnCropNitrogenUptakes.First().AutumnCropNitrogenUptake))
+                            {
+                                <govuk-summary-list-row-value>@string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#,0.#")))</govuk-summary-list-row-value>
+                            }
+                            else
+                            {
+                                <govuk-summary-list-row-value>@Resource.lblTheAmountIsDifferentForEachOfTheseFields</govuk-summary-list-row-value>
+                            }
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="AutumnCropNitrogenUptakeDetail" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                    else
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblAutumnCropNitrogenUptake
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#,0.#")))
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure" asp-route-f="@Model.AutumnCropNitrogenUptakes[0].EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblEndOfSoilDrainage
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.SoilDrainageEndDate.Value.Date.ToString("dd MMMM yyyy")
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="SoilDrainageEndDate" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblEndOfSoilDrainage</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblRainfallWithin6HoursOfApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@Model.RainfallWithinSixHours</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="RainfallWithinSixHour" asp-controller="OrganicManure">
+                            @Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblRainfallWithin6HoursOfApplication</span>
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblEffectiveRainfallAfterApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@string.Format(Resource.lblRainfallMM, string.Format("{0:N0}", Model.TotalRainfall))</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="EffectiveRainfall" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblEffectiveRainfallAfterApplication</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblWindspeedDuringApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@Model.Windspeed</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Windspeed" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWindspeedDuringApplication</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblTopsoilMoisture</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@Model.MoistureType</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="TopsoilMoisture" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTopsoilMoisture</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+            </govuk-summary-list>
+
+            @* <table class="govuk-table">
                 <tbody class="govuk-table__body">
                     @if (!isAutumnNUptakeZero)
                     {
@@ -323,7 +405,7 @@
                         <td class="govuk-table__cell"><a asp-action="TopsoilMoisture" asp-controller="OrganicManure">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTopsoilMoisture</span></a></td>
                     </tr>
                 </tbody>
-            </table>
+            </table> *@
 
 
             <govuk-button type="submit" class="margin-bottom-forty">

@@ -57,22 +57,11 @@
                 }
                 
             </div>
-            @* @if (ViewBag.FieldCount != null && ViewBag.FieldCount == 0)
-        {
-        <p class="govuk-body">
-        @Resource.lblToStartCreatingPlanAndRecords
-        <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
-        @Resource.lblAddYourFields
-        </a>
-        </p>
-        } *@
 
             
             <div>
                 <hr class="seperator_thirty">
-
-                <p class="govuk-heading-m">@Resource.lblFarmSummaryContent1</p>
-
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent1</h2>
                 <p class="govuk-hint">@Resource.lblFarmSummaryContent2</p>
                 <ul class="menu-list govuk-list govuk-list--spaced">
                     <li>
@@ -98,7 +87,7 @@
             </div>
             <div>
                 <hr class="seperator_thirty">
-                <p class="govuk-heading-m">@Resource.lblFarmSummaryContent4</p>
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent4</h2>
                 <p class="govuk-hint">@Resource.lblFarmSummaryContent5</p>
                 <ul class="menu-list govuk-list govuk-list--spaced">
                     <li>
@@ -109,7 +98,7 @@
             @* <hr class="seperator_five" /> *@
             <div>
                 <hr class="seperator_thirty">
-                <p class="govuk-heading-m">@Resource.lblFarmSummaryContent7</p>
+                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent7</h2>
                 <p class="govuk-hint">@Resource.lblFarmSummaryContent7</p>
                 <ul class="menu-list govuk-list">
                     <li>

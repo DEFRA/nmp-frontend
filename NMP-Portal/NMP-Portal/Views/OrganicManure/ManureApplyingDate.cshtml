@@ -2,7 +2,8 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-    ViewData["Title"] = $"{Resource.lblEnterTheDateInCorrectFormat} {Resource.lblHyphen} {title}";
+    string pageHeader = (Model.FieldList?.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName));
+    ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
     var backAction = "";
     // if (Model.IsDoubleCropAvailable)
     // {
@@ -263,23 +264,24 @@
 
             }
 
-            <govuk-date-input asp-for="ApplicationDate">
-                <govuk-date-input-fieldset>
-                    <govuk-date-input-fieldset-legend is-page-heading="false" class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend--l">@(Model.FieldList.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName))</legend>
+            <govuk-date-input asp-for="ApplicationDate" >                
+                <govuk-date-input-fieldset>                    
+                    <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @pageHeader                     
+                    </govuk-date-input-fieldset-legend>                   
+                    <govuk-date-input-hint>
                         @if (Model.HighReadilyAvailableNitrogen == true && Model.ClosedPeriodForUI != null && Model.IsWithinNVZ == true)
                         {
-                            <p>@Resource.lblYourClosedPeriodForSpreadingOrganicMaterials</p>
-                            <p>
-                                <b>@Model.ClosedPeriodForUI</b><br />
+                            <p class="govuk-body">@Resource.lblYourClosedPeriodForSpreadingOrganicMaterials</p>
+                            <p class ="govuk-body">
+                                <strong>@Model.ClosedPeriodForUI</strong><br />
                                 @Resource.lblBasedOnYourCropSoilTypeFarmDetails
                             </p>
                         }
+                        <p class ="govuk-body">
                         @Resource.MsgManureApplyingDateDontHaveExactDate
-                    </govuk-date-input-fieldset-legend>
-
-                    <govuk-date-input-hint>
-                        <p>@Resource.lblSampleDate</p>
+                        </p>
+                        @Resource.lblSampleDate
                     </govuk-date-input-hint>
 
                     <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
