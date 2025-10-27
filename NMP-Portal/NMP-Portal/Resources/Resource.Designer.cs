@@ -9577,7 +9577,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organic fertiliser added to fields in this plan.
+        ///   Looks up a localized string similar to Organic material added to fields in this plan.
         /// </summary>
         public static string lblOrganicManureCreatedSuccessfullyForAllField {
             get {
@@ -10891,7 +10891,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​.
+        ///   Looks up a localized string similar to This will remove crop information, and fertiliser and organic material applications to all fields in this crop group..
         /// </summary>
         public static string lblRemoveCropGroupContent1 {
             get {
@@ -15330,7 +15330,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What type of organic material are you using in this application?.
+        ///   Looks up a localized string similar to What type of organic material are you using?.
         /// </summary>
         public static string lblWhatTypeOfOrganicMaterialAreYouUsing {
             get {

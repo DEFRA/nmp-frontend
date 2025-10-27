@@ -481,7 +481,7 @@
                     }
                     <govuk-summary-list-row class=@((!Model.ManureTypeId.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblWhatTypeOfOrganicMaterialAreYouUsing
+                            @Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ManureTypeId.HasValue) ? Model.ManureTypeName : Resource.lblNotSet)
@@ -489,7 +489,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="ManureGroup" asp-controller="OrganicManure">@Resource.lblChange
                                <span class="govuk-visually-hidden">
-                                   @Resource.lblWhatTypeOfOrganicMaterialAreYouUsing
+                                   @Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication
                                </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
