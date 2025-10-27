@@ -70,7 +70,7 @@ namespace NMP.Portal.Controllers
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("PreviousCroppingData", model);
                 }
-                ViewBag.PreviousYear = model.HarvestYear;
+                //ViewBag.PreviousYear = model.HarvestYear;
             }
             catch (Exception ex)
             {
@@ -101,6 +101,7 @@ namespace NMP.Portal.Controllers
                     PreviousCroppingViewModel previousCroppingData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PreviousCroppingViewModel>("PreviousCroppingData");
                     if (model.HasGrassInLastThreeYear != previousCroppingData.HasGrassInLastThreeYear)
                     {
+                        model.IsHasGrassInLastThreeYearChange = true;
                         if ((model.HasGrassInLastThreeYear != null && (!model.HasGrassInLastThreeYear.Value)))
                         {
                             model.CropGroupID = null;
@@ -127,7 +128,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        //model.IsHasGrassInLastThreeYearChange = false;
+                        model.IsHasGrassInLastThreeYearChange = false;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("PreviousCroppingData", model);
                         return RedirectToAction("CheckAnswer");
                     }

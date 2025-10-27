@@ -1514,7 +1514,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the application method for your {0}?</value>
   </data>
   <data name="lblWhatTypeOfOrganicMaterialAreYouUsing" xml:space="preserve">
-    <value>What type of organic material are you using in this application?</value>
+    <value>What type of organic material are you using?</value>
   </data>
   <data name="lblWhenAreYouApplyingYourManureType" xml:space="preserve">
     <value>When are you applying your {0} ?</value>
@@ -1532,7 +1532,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>We could not add your application, try again later</value>
   </data>
   <data name="lblOrganicManureCreatedSuccessfullyForAllField" xml:space="preserve">
-    <value>Organic fertiliser added to fields in this plan</value>
+    <value>Organic material added to fields in this plan</value>
   </data>
   <data name="lblOrganicMaterialApplications" xml:space="preserve">
     <value>Organic material applications</value>
@@ -3717,7 +3717,7 @@ live</value>
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
-    <value>This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​</value>
+    <value>This will remove crop information, and fertiliser and organic material applications to all fields in this crop group.</value>
   </data>
   <data name="lblRemoveCropGroupContent2" xml:space="preserve">
     <value>Your fields will remain, and you'll be able to use them again in your plans.​</value>
@@ -6705,8 +6705,8 @@ livestock manure.</value>
   </data>
   <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
     <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
-   </data>
-    <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
+  </data>
+  <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
     <value>Enter an quantity between 1 and 9,99,999</value>
   </data>
   <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
