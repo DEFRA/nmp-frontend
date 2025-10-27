@@ -2185,7 +2185,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available Phosphate (P205).
+        ///   Looks up a localized string similar to Available Phosphate (P2O5).
         /// </summary>
         public static string lblAvailablePhosphate {
             get {
@@ -12160,7 +12160,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P205) and Potash (K20) balance..
+        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance..
         /// </summary>
         public static string lblSourceRb209 {
             get {
@@ -12763,7 +12763,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Phosphate (P205) standard can not be changed..
+        ///   Looks up a localized string similar to The Phosphate (P2O5) standard can not be changed..
         /// </summary>
         public static string lblThePhosphateP205StandardCanNotBeChanged {
             get {
@@ -13566,7 +13566,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total phosphate (P205) in this {0}.
+        ///   Looks up a localized string similar to Total phosphate (P2O5) in this {0}.
         /// </summary>
         public static string lblTotalPhosphateInThisImportOrExport {
             get {
@@ -14016,7 +14016,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update {0} or view recommendations.
+        ///   Looks up a localized string similar to Update field or view recommendations.
         /// </summary>
         public static string lblUpdateThisFieldOrViewRecommendations {
             get {

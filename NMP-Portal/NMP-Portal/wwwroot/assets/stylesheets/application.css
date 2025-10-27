@@ -202,16 +202,17 @@ a.disabled {
         table-layout: auto;
     }
 
-@media (max-width: 600px) {
+@media (min-width: 40.0625em) {   
+
     .table-container {
         overflow-x: auto;
     }
-
         .table-container table {
             width: 100%;
             min-width: 600px;
         }
 }
+
 
 hr.big_seperator {
     margin: 40px 0 40px 0;
