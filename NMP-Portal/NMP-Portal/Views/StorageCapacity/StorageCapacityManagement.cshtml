@@ -30,7 +30,7 @@
 @if (TempData["ErrorOnStorageCapacityManagement"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@TempData["ErrorOnStorageCapacityManagement"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -40,7 +40,7 @@
 @if (TempData["succesMsgContent1"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <div class="margin-bottom-thirty">
 
                 <govuk-notification-banner type="Success">
@@ -53,7 +53,7 @@
     </div>
 }
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
         <div class="margin-bottom-thirty">
             <span class="name govuk-caption-l">@ViewBag.FarmName</span>
             <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
@@ -61,7 +61,7 @@
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+    <div id="all-plans-table" class="govuk-grid-column-two-thirds-from-desktop">
         @if (ViewBag.FinalYearList != null)
         {
             <table class="govuk-table">

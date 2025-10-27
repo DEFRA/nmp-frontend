@@ -46,7 +46,7 @@
 @if (TempData["ErrorOnLivestockCheckAnswer"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockCheckAnswer"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -164,7 +164,7 @@
             }
         </div>
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                         @if (string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))
