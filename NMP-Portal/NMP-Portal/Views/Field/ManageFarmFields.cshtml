@@ -15,9 +15,9 @@
 {
     @section BeforeContent {
         <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+            @* <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
                 @Resource.lblAllFarm
-            </govuk-breadcrumbs-item>
+            </govuk-breadcrumbs-item> *@
             <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                 @Model.FarmName
             </govuk-breadcrumbs-item>
@@ -31,7 +31,7 @@
 
             @if (ViewBag.Success != null && ViewBag.Success == true)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.FieldName)</h3>
                         <p class="govuk-body">
@@ -51,7 +51,7 @@
             }
             @if (ViewBag.IsDeleted != null && ViewBag.IsDeleted == true)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemovedField, ViewBag.FieldName)</h3>
                     </div>

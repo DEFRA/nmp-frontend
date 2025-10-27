@@ -20,10 +20,10 @@
     <form asp-action="RemoveSnsAnalysis" asp-controller="SnsAnalysis" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" value="@Model.EncryptedFarmId"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" value="@Model.EncryptedFieldId"></govuk-input>
-        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId" value="@Model.CropId"></govuk-input>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" value="@Model.EncryptedFarmId"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" value="@Model.EncryptedFieldId"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId" value="@Model.CropId"/>
             </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">

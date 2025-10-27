@@ -1,0 +1,92 @@
+﻿@using NMP.Portal.Resources
+@model NMP.Portal.ViewModels.PreviousCroppingViewModel
+@{
+    //ViewData["Title"] = Resource.lblGrassManagementOptions;
+    ViewData["Title"] = $"{Resource.lblHowWasTheGrassTypicallyManagedEachYear} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
+    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var backAction = "";
+    if (Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (Model.PreviousGrassYears?.All(x => x < Model.HarvestYear) == true)
+    {
+        backAction = "LayDuration";
+    }
+    else
+    {
+        backAction = "GrassLastThreeHarvestYear";
+    }
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@backAction asp-controller="PreviousCropping">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="GrassManagementOptions" asp-controller="PreviousCropping" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div hidden="true">
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGrassInLastThreeYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGreaterThan30PercentClover" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNitrogenSupplyItemID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LayDuration" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" />
+        @if (Model != null)
+        {
+            @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
+            {
+                @for (int i = 0; i < Model.PreviousGrassYears.Count; i++)
+                {
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassYears[i]" value="@Model.PreviousGrassYears[i]" />
+                }
+            }
+        }
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-radios class="govuk-radios" asp-for="@Model.GrassManagementOptionID">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblHowWasTheGrassTypicallyManagedEachYear
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>@Resource.lblTypicalManagedQuestionHint</govuk-radios-hint>
+                    @if (ViewBag.GrassManagementOptions != null)
+                    {
+                        @foreach (var item in ViewBag.GrassManagementOptions)
+                        {
+                            <govuk-radios-item value="@item.Id">@item.Name</govuk-radios-item>
+                        }
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="PreviousCropping">@Resource.lblCancel</a>
+                }
+            </p>
+
+        </div>
+
+    </div>
+</form>

@@ -54,10 +54,10 @@ namespace NMP.Portal.Security
                     cookieOptions =>
                     {
                         // How long your app's cookie is valid
-                        cookieOptions.ExpireTimeSpan = TimeSpan.FromHours(8); // e.g. 8 hours
+                        cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(20); // e.g. 8 hours
                         cookieOptions.SlidingExpiration = true;
                         // optionally:
-                        cookieOptions.Cookie.MaxAge = cookieOptions.ExpireTimeSpan;
+                        //cookieOptions.Cookie.MaxAge = cookieOptions.ExpireTimeSpan;
                     })
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
                     .AddInMemoryTokenCaches();
@@ -159,10 +159,7 @@ namespace NMP.Portal.Security
         }
 
         private static async Task OnTokenValidated(TokenValidatedContext context)
-        {
-            var exp = await context.HttpContext.GetTokenAsync("expires_at");
-            var oldrefreshToken = await context.HttpContext.GetTokenAsync("refresh_token");
-            var oldaccessToken = await context.HttpContext.GetTokenAsync("access_token");
+        {            
             var accessToken = context?.TokenEndpointResponse?.AccessToken;
             var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
             var identity = context?.Principal?.Identity as ClaimsIdentity;

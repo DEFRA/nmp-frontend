@@ -295,14 +295,27 @@ a:focus, .govuk-link:focus {
     margin-bottom: 60px !important;
 }
 
+.govuk-phase-banner__content {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding-left: 15px;
+    padding-right:15px;
+}
+
+/*.govuk-service-navigation__list {
+    display: flex;
+    justify-content: space-between;
+}*/
 
 
-.govuk-phase-banner {
+/*.govuk-phase-banner {
     width: 100%;
 }
 
 .govuk-phase-banner__content {
-    width: 100%;
+    max-width: 100%;
     display: flex !important;
     align-items: center;
     justify-content: space-between !important;
@@ -319,8 +332,7 @@ a:focus, .govuk-link:focus {
 
 .govuk-phase-banner__text__right {
     text-align: right !important;
-}
-
+}*/
 .cancel-link__bottom_padding {
     padding-bottom: 2% !important;
 }
@@ -483,7 +495,7 @@ a:focus, .govuk-link:focus {
 
 .guidance {
     display: block;
-    width: 66%;
+    width: 100%;
 }
 .nmax_header h1 {
     margin-bottom: 20px;
@@ -765,4 +777,73 @@ hr.seperator_thirty {
 
 #all-plans-table {
     margin-top: 10px;
+}
+
+.nav_left{
+    float:left;
+}
+
+.nav_right {
+    float: inline-end;
+    text-align: end;
+    padding-top: 5px;
+    /*padding-bottom: 10px;*/
+    /*display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    justify-content: flex-end;*/
+}
+
+.govuk-service-navigation__item:last-child {
+    margin-right: 15px;
+}
+
+
+#session-timeout-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.9);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.govuk-!-display-none {
+    display: none !important;
+}
+
+.session-timeout-box {
+    max-width: 700px;
+    margin: auto;
+}
+
+.session-timeout-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.govuk-caption-l {
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.1111111111;
+    display: block;
+    margin-bottom: 5px;
+    color: #505a5f;
+}
+@media (min-width: 40.0625em) {
+    .govuk-caption-l {
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
 }

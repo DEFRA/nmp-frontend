@@ -1514,7 +1514,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the application method for your {0}?</value>
   </data>
   <data name="lblWhatTypeOfOrganicMaterialAreYouUsing" xml:space="preserve">
-    <value>What type of organic material are you using in this application?</value>
+    <value>What type of organic material are you using?</value>
   </data>
   <data name="lblWhenAreYouApplyingYourManureType" xml:space="preserve">
     <value>When are you applying your {0} ?</value>
@@ -1532,7 +1532,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>We could not add your application, try again later</value>
   </data>
   <data name="lblOrganicManureCreatedSuccessfullyForAllField" xml:space="preserve">
-    <value>Organic fertiliser added to fields in this plan</value>
+    <value>Organic material added to fields in this plan</value>
   </data>
   <data name="lblOrganicMaterialApplications" xml:space="preserve">
     <value>Organic material applications</value>
@@ -2987,7 +2987,7 @@ cubic metres per hectare  not set</value>
     <value>Beta</value>
   </data>
   <data name="lblPhaseBannerText" xml:space="preserve">
-    <value>This is a new service. &lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
+    <value>This is a new service. &lt;a class="govuk-link" href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
@@ -3717,7 +3717,7 @@ live</value>
     <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
-    <value>This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​</value>
+    <value>This will remove crop information, and fertiliser and organic material applications to all fields in this crop group.</value>
   </data>
   <data name="lblRemoveCropGroupContent2" xml:space="preserve">
     <value>Your fields will remain, and you'll be able to use them again in your plans.​</value>
@@ -6705,5 +6705,65 @@ livestock manure.</value>
   </data>
   <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
     <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
+  </data>
+  <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
+    <value>Enter an quantity between 1 and 9,99,999</value>
+  </data>
+  <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
+    <value>Quantity must be between 1 to 9,99,999</value>
+  </data>
+  <data name="lblOrgenisation" xml:space="preserve">
+    <value>lblOrgenisation</value>
+  </data>
+  <data name="lblMenu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
+    <value>Was future field used for grass in {0},{1}  or {2}?</value>
+  </data>
+  <data name="lblRecommendationNotAvailable" xml:space="preserve">
+    <value>Recommendations not available</value>
+  </data>
+  <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
+    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+  </data>
+  <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
+    <value>Add {0} crop details for {1}</value>
+  </data>
+  <data name="lblAddPreviousCrop" xml:space="preserve">
+    <value>Add previous crop</value>
+  </data>
+  <data name="lblWhatWasTheCropGroup" xml:space="preserve">
+    <value>What was the crop group in {0}?</value>
+  </data>
+  <data name="lblWhatWasTheCropType" xml:space="preserve">
+    <value>What was the crop type in {0}?</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has Future Field been used for grass in any of the last 3 years?</value>
+  </data>
+  <data name="lblAddYearCropHistoryToFieldName" xml:space="preserve">
+    <value>Add {0} crop history to {1}</value>
+  </data>
+  <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has {0} been used for grass in any of the last 3 year?</value>
+  </data>
+  <data name="lblChangeCompany" xml:space="preserve">
+    <value>Change company</value>
+  </data>
+  <data name="lblSignoutnow" xml:space="preserve">
+    <value>Sign out now</value>
+  </data>
+  <data name="lblYou canalso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
+  <data name="HintSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Include nitrogen in fertiliser and crop available nitrogen in organic materials.</value>
+  </data>
+  <data name="MsgRecommendationsUpdated" xml:space="preserve">
+    <value>Recommendations updated</value>
+  </data>
+  <data name="lblAddCropHistory" xml:space="preserve">
+    <value>Add crop history</value>
   </data>
 </root>
