@@ -2300,7 +2300,7 @@ cubic metres per hectare  not set</value>
     <value>Enter a GAI value before continuing</value>
   </data>
   <data name="MSGEnterAValidCropHeight" xml:space="preserve">
-    <value>Enter a valid numeric crop height before continuing (0-30)</value>
+    <value>Enter a valid numeric crop height before continuing (0-30 cm)</value>
   </data>
   <data name="MsgEnterAValidNumericGAIvalue" xml:space="preserve">
     <value>Enter a valid numeric GAI value before continuing (0-3)</value>
@@ -6780,5 +6780,8 @@ livestock manure.</value>
   </data>
   <data name="lblLivestock" xml:space="preserve">
     <value>livestock</value>
+  </data>
+  <data name="lblcm" xml:space="preserve">
+    <value>cm</value>
   </data>
 </root>

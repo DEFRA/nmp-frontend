@@ -2770,6 +2770,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to cm.
+        /// </summary>
+        public static string lblcm {
+            get {
+                return ResourceManager.GetString("lblcm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string lblComment {
@@ -17816,7 +17825,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a valid numeric crop height before continuing (0-30).
+        ///   Looks up a localized string similar to Enter a valid numeric crop height before continuing (0-30 cm).
         /// </summary>
         public static string MSGEnterAValidCropHeight {
             get {

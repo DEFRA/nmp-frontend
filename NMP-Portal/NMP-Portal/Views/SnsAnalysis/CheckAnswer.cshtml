@@ -225,7 +225,7 @@
                                                 @Resource.lblWhatIsTheCropHeight
                                             </govuk-summary-list-row-key>
                                             <govuk-summary-list-row-value>
-                                                @(Model.CropHeight.HasValue? Model.CropHeight: Resource.lblNotSet)
+                                                @(Model.CropHeight.HasValue? Model.CropHeight + Resource.lblcm: Resource.lblNotSet)
                                             </govuk-summary-list-row-value>
                                             <govuk-summary-list-row-actions>
                                                 <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheCropHeight</span></govuk-summary-list-row-action>
