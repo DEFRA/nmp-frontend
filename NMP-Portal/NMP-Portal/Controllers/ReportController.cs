@@ -699,7 +699,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("ReportType", Resource.MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate);
                 }
                 if (!ModelState.IsValid)
-                {                   
+                {
                     return View("ReportType", model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -1202,7 +1202,7 @@ namespace NMP.Portal.Controllers
                         model.IsComingFromPlan = false;
                     }
                 }
-                if (model.FarmId != null&&model.Country==null)
+                if (model.FarmId != null && model.Country == null)
                 {
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
@@ -1391,13 +1391,13 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    if (model.FarmId != null&&model.Country==null)
+                    if (model.FarmId != null && model.Country == null)
                     {
                         (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                         if (farm != null)
                         {
                             model.FarmName = farm.Name;
-                            model.Country= farm.CountryID;
+                            model.Country = farm.CountryID;
                         }
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
@@ -1697,9 +1697,17 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                Error error = null;
+                if (model.FarmId != null && model.Country == null)
+                {
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farm != null)
+                    {
+                        model.Country = farm.CountryID;
+                    }
+                }
                 model.IsCheckList = true;
                 model.IsManageImportExport = false;
-                Error error = null;
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (!string.IsNullOrWhiteSpace(q))
                 {
@@ -1815,6 +1823,14 @@ namespace NMP.Portal.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    if (model.FarmId != null && model.Country == null)
+                    {
+                        (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                        if (farm != null)
+                        {
+                            model.Country = farm.CountryID;
+                        }
+                    }
                     return View("~/Views/Report/LivestockManureNitrogenReportChecklist.cshtml", model);
                 }
 
@@ -1831,7 +1847,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult FarmAreaForLivestockManure()
+        public async Task<IActionResult> FarmAreaForLivestockManure()
         {
             _logger.LogTrace("Report Controller : FarmAreaForLivestockManure() action called");
             ReportViewModel model = new ReportViewModel();
@@ -1845,7 +1861,14 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
+                if (model.FarmId != null && model.Country == null)
+                {
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farm != null)
+                    {
+                        model.Country = farm.CountryID;
+                    }
+                }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -1866,11 +1889,20 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Report Controller : FarmAreaForLivestockManure() post action called");
             try
             {
+                Error error = null;
+                if (model.FarmId != null && model.Country == null)
+                {
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farm != null)
+                    {
+                        model.Country = farm.CountryID;
+                    }
+                }
                 if (model.TotalFarmArea == null)
                 {
                     ModelState.AddModelError("TotalFarmArea", Resource.MsgEnterTotalFarmArea);
                 }
-                if (model.TotalAreaInNVZ == null)
+                if (model.TotalAreaInNVZ == null&&(model.Country!=null&&model.Country!=(int)NMP.Portal.Enums.FarmCountry.Wales))
                 {
                     ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
                 }
@@ -1895,10 +1927,10 @@ namespace NMP.Portal.Controllers
                 }
 
                 if (!ModelState.IsValid)
-                {
+                {                    
                     return View(model);
                 }
-                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList,  error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
                 (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (nutrientsLoadingManures.Count > 0)
@@ -4246,20 +4278,13 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                if (model.LivestockGroupId == (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
-                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                    ViewBag.LivestockCategory = Resource.lblLivestock;
                 }
                 else
                 {
-
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
-                    if (!string.IsNullOrWhiteSpace(groupName))
-                    {
-                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
-                            groupName = groupName + "s";
-                    }
-                    ViewBag.LivestockCategory = groupName;
+                    ViewBag.LivestockCategory = model.LivestockGroupName.ToLower();
                 }
             }
             catch (Exception ex)
@@ -4283,20 +4308,13 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("LivestockNumberQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+                if (model.LivestockGroupId == (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
-                    ViewBag.LivestockCategory = model.LivestockGroupName;
+                    ViewBag.LivestockCategory = Resource.lblLivestock;
                 }
                 else
                 {
-
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
-                    if (!string.IsNullOrWhiteSpace(groupName))
-                    {
-                        if (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse))
-                            groupName = groupName + "s";
-                    }
-                    ViewBag.LivestockCategory = groupName;
+                    ViewBag.LivestockCategory = model.LivestockGroupName.ToLower();
                 }
                 if (!ModelState.IsValid)
                 {
@@ -5063,13 +5081,14 @@ namespace NMP.Portal.Controllers
 
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
-
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
                     ViewBag.LivestockCategory = model.LivestockGroupName;
+                    ViewBag.LivestockCategoryForLivestockNumber = model.LivestockGroupName.ToLower();
                 }
                 else
                 {
+                    ViewBag.LivestockCategoryForLivestockNumber = Resource.lblLivestock;
                     string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
@@ -5300,11 +5319,12 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                     {
+                        ViewBag.LivestockCategoryForLivestockNumber = model.LivestockGroupName.ToLower();
                         ViewBag.LivestockCategory = model.LivestockGroupName;
                     }
                     else
                     {
-
+                        ViewBag.LivestockCategoryForLivestockNumber = Resource.lblLivestock;
                         string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                         if (!string.IsNullOrWhiteSpace(groupName))
                         {
