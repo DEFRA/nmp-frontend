@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
 
-    ViewData["Title"] = $"{Resource.lblWhichNVZComplianceReport} {Resource.lblHyphen} {Resource.lblReport}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm)} {Resource.lblHyphen} {Resource.lblReport}";
 
     var nmaxReport = (int)NMP.Portal.Enums.NVZReportOption.NmaxReport;
     var livestockManureNFarmLimitReport = (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport;
@@ -16,7 +16,7 @@
 @if (TempData["ErrorOnNVZComplianceReports"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#NVZReportOption">@TempData["ErrorOnNVZComplianceReports"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -27,7 +27,7 @@
 @if (TempData["succesMsgContent1"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <div class="margin-bottom-thirty">
 
                 <govuk-notification-banner type="NotificationBannerType.Success">
@@ -153,7 +153,7 @@
                 <govuk-radios asp-for="@Model.NVZReportOption">                    
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend class="govuk-fieldset__legend--l" is-page-heading="true">
-                            @Resource.lblWhichNVZComplianceReport
+                            @string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@nmaxReport">
                             @Resource.lblNMaxReport

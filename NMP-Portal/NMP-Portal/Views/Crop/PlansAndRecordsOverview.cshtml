@@ -10,7 +10,7 @@
 @if (ViewBag.Error != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
             </govuk-error-summary>
@@ -20,7 +20,7 @@
 @if (TempData["CheckYourPlanDataError"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@TempData["CheckYourPlanDataError"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -42,7 +42,7 @@
     </govuk-breadcrumbs> *@
     }
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
@@ -52,33 +52,27 @@
                    
                 </govuk-notification-banner>
             }
-            
-        </div>            
-    </div>
-    <span class="govuk-caption-l">@Model.FarmName</span>
-    <h1 class="govuk-heading-l">@Resource.lblPlaningndRecording</h1>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <table class="govuk-table">
-                    @* <caption class="govuk-table__caption govuk-table__caption--m">@Resource.lblPlans</caption> *@
-                    <thead class="govuk-table__head">
-                        <tr class="govuk-table__row">
-                            <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblHarvestYear</th>
-                            <th scope="col" class="govuk-table__header">@Resource.lblLastModified </th>
-                            <th scope="col" class="govuk-table__header"><span class="vi"></span>@Resource.lblAction</th>
-                        </tr>
-                    </thead>
-                    <tbody class="govuk-table__body">
-                        @if (Model.HarvestYear != null)
-                        {
-                            for (int i = 0; i < Model.HarvestYear.Count; i++)
+            <h1 class="govuk-heading-l">@Resource.lblPlaningndRecording</h1>
+                <div class="table-container">
+            <table class="govuk-table">                
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblHarvestYear</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblLastModified </th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @if (Model.HarvestYear != null)
+                    {                        
+                       for (int i = 0; i < Model.HarvestYear.Count; i++)
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Model.HarvestYear[i].Year</td>
                                     <td class="govuk-table__cell">
                                         @if (@Model.HarvestYear[i].LastModifiedOn != null)
                                         {
-                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy")
+                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy");
                                         }
                                         else
                                         {
@@ -101,10 +95,10 @@
                                     </td>
                                 </tr>
                             }
-                        }
-
-                    </tbody>
-                </table>
+                    }
+                </tbody>
+            </table>
+            </div>
         </div>
     </div>
 }

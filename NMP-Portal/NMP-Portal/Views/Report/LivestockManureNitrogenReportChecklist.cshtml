@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblLivestockManureNitrogenFarmLimitReport, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
+    ViewData["Title"] = $"{string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReportYear, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
 
 }
 
@@ -11,7 +11,7 @@
 @if (TempData["ErrorOnLivestockManureNitrogenReportChecklist"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@TempData["ErrorOnLivestockManureNitrogenReportChecklist"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -19,7 +19,7 @@
     </div>
 }
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
 
         @if (TempData["succesMsgContent"] != null)
         {
@@ -182,7 +182,7 @@
                 </div>
 
                 <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblLivestockManureNitrogenFarmLimitReport, Model.Year)
+                    @string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReportYear, Model.Year)
                 </h1>
 
                 <p class="govuk-hint">

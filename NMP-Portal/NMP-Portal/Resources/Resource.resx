@@ -1592,7 +1592,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Plan or edit an application of organic material to {0}</value>
   </data>
   <data name="lblUpdateThisFieldOrViewRecommendations" xml:space="preserve">
-    <value>Update {0} or view recommendations</value>
+    <value>Update field or view recommendations</value>
   </data>
   <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
     <value>Area must be greater than zero</value>
@@ -2888,7 +2888,7 @@ cubic metres per hectare  not set</value>
     <value>Application date {0}</value>
   </data>
   <data name="lblAvailablePhosphate" xml:space="preserve">
-    <value>Available Phosphate (P205)</value>
+    <value>Available Phosphate (P2O5)</value>
   </data>
   <data name="lblAvailablePotash" xml:space="preserve">
     <value>Available Potash (K2O)</value>
@@ -3906,7 +3906,7 @@ live</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P205) and Potash (K20) balance.</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance.</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
@@ -4824,7 +4824,7 @@ live</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
-    <value>Farm and field details for NVZ records</value>
+    <value>Farm and field details for {0} records</value>
   </data>
   <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
     <value>Field records and nutrient management planning</value>
@@ -5559,7 +5559,7 @@ live</value>
     <value>{0}% of this farm is grass.</value>
   </data>
   <data name="lblTotalPhosphateInThisImportOrExport" xml:space="preserve">
-    <value>Total phosphate (P205) in this {0}</value>
+    <value>Total phosphate (P2O5) in this {0}</value>
   </data>
   <data name="lblGrazingLivestockManureTotalN" xml:space="preserve">
     <value>Grazing livestock manure total nitrogen (N)</value>
@@ -5969,7 +5969,7 @@ livestock manure.</value>
     <value>Do you want to use these values for this {0} type?</value>
   </data>
   <data name="lblThePhosphateP205StandardCanNotBeChanged" xml:space="preserve">
-    <value>The Phosphate (P205) standard can not be changed.</value>
+    <value>The Phosphate (P2O5) standard can not be changed.</value>
   </data>
   <data name="lblNoChangeTheOccupancyValue" xml:space="preserve">
     <value>No, change the occupancy value</value>
@@ -6765,6 +6765,18 @@ livestock manure.</value>
   </data>
   <data name="lblAddCropHistory" xml:space="preserve">
     <value>Add crop history</value>
+  </data>
+  <data name="lblIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="lblWaterResourcesRegulations" xml:space="preserve">
+    <value>Water Resources Regulations</value>
+  </data>
+  <data name="lblNVZShortForm" xml:space="preserve">
+    <value>NVZ</value>
+  </data>
+  <data name="lblCreateALivestockManureNitrogenFarmLimitReportYear" xml:space="preserve">
+    <value>Create a livestock manure nitrogen (N) farm limit report {0}</value>
   </data>
   <data name="lblCropInYear" xml:space="preserve">
     <value>Crop in {0}</value>
