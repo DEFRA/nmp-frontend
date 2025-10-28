@@ -53,7 +53,7 @@
                 </govuk-notification-banner>
             }
             <h1 class="govuk-heading-l">@Resource.lblPlaningndRecording</h1>
-            <div class="table-container">
+                <div class="table-container">
             <table class="govuk-table">                
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -64,17 +64,15 @@
                 </thead>
                 <tbody class="govuk-table__body">
                     @if (Model.HarvestYear != null)
-                    {
-                        for (int i = 0; i < Model.HarvestYear.Count; i++)
-                        {
-                            for (int i = 0; i < Model.HarvestYear.Count; i++)
+                    {                        
+                       for (int i = 0; i < Model.HarvestYear.Count; i++)
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Model.HarvestYear[i].Year</td>
                                     <td class="govuk-table__cell">
                                         @if (@Model.HarvestYear[i].LastModifiedOn != null)
                                         {
-                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy")
+                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy");
                                         }
                                         else
                                         {
@@ -97,8 +95,7 @@
                                     </td>
                                 </tr>
                             }
-                        }
-
+                    }
                 </tbody>
             </table>
             </div>
