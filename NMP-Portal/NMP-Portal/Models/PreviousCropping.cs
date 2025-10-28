@@ -1,4 +1,6 @@
-﻿namespace NMP.Portal.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace NMP.Portal.Models
 {
     public class PreviousCropping
     {

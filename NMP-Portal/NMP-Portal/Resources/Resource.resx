@@ -6766,4 +6766,16 @@ livestock manure.</value>
   <data name="lblAddCropHistory" xml:space="preserve">
     <value>Add crop history</value>
   </data>
+  <data name="lblCropInYear" xml:space="preserve">
+    <value>Crop in {0}</value>
+  </data>
+  <data name="lblTypicalGrassManagement" xml:space="preserve">
+    <value>Typical grass management</value>
+  </data>
+  <data name="lblHighCloverContent" xml:space="preserve">
+    <value>High clover content</value>
+  </data>
+  <data name="lblLengthOfTheLay" xml:space="preserve">
+    <value>Length of the lay</value>
+  </data>
 </root>

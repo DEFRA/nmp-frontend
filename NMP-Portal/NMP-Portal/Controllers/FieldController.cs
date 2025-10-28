@@ -42,10 +42,11 @@ namespace NMP.Portal.Controllers
         private readonly ISoilAnalysisService _soilAnalysisService;
         private readonly IPKBalanceService _pKBalanceService;
         private readonly ICropService _cropService;
+        private readonly IPreviousCroppingService _previousCroppingService;
 
         public FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, IHttpContextAccessor httpContextAccessor, ISoilService soilService,
-             IFieldService fieldService, IOrganicManureService organicManureService, ISoilAnalysisService soilAnalysisService, IPKBalanceService pKBalanceService, ICropService cropService)
+             IFieldService fieldService, IOrganicManureService organicManureService, ISoilAnalysisService soilAnalysisService, IPKBalanceService pKBalanceService, ICropService cropService, IPreviousCroppingService previousCroppingService)
         {
             _logger = logger;
             _farmService = farmService;
@@ -60,6 +61,7 @@ namespace NMP.Portal.Controllers
             _pKBalanceService = pKBalanceService;
             _cropService = cropService;
             _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
+            _previousCroppingService = previousCroppingService;
         }
         public IActionResult Index()
         {
@@ -1966,10 +1968,72 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Field Controller : FieldSoilAnalysisDetail() action called");
             FieldViewModel model = new FieldViewModel();
-
-            (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+            Error error = new Error();
+            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
             var field = await _fieldService.FetchFieldByFieldId(fieldId);
+            model.LastHarvestYear = farm.LastHarvestYear;
+            (List<PreviousCropping> previousCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId);
+
+            if (string.IsNullOrWhiteSpace(error.Message))
+            {
+                List<int> previousYears = new List<int>();
+                List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+
+                
+
+                previousCroppings = previousCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear)).ToList();
+                foreach (var item in previousCroppings)
+                {
+                    previousYears.Add(item.HarvestYear ?? 0);
+                }
+
+                var tasks = previousCroppings.Select(async pc => new
+                {
+                    pc.ID,
+                    pc.FieldID,
+                    pc.CropGroupID,
+                    pc.CropTypeID,
+                    pc.HasGrassInLastThreeYear,
+                    pc.HarvestYear,
+                    pc.LayDuration,
+                    pc.GrassManagementOptionID,
+                    pc.HasGreaterThan30PercentClover,
+                    pc.SoilNitrogenSupplyItemID,
+                    pc.CreatedOn,
+                    pc.CreatedByID,
+                    pc.ModifiedOn,
+                    pc.ModifiedByID,
+                    CropTypeName = await _fieldService.FetchCropTypeById(pc.CropTypeID ?? 0)
+                }).ToList();
+
+                ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).ToList();
+
+                model.PreviousGrassYears = previousYears;
+                if(previousCroppings.All(x=>x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                {
+                    model.PreviousCroppings = previousCroppings.FirstOrDefault();
+                }
+                else
+                {
+                    model.PreviousCroppings = previousCroppings.FirstOrDefault(x=>x.CropTypeID== (int)NMP.Portal.Enums.CropTypes.Grass);
+                }
+
+                ViewBag.HasGrassInLastThreeYear = previousCroppings.FirstOrDefault().HasGrassInLastThreeYear;
+
+                if(previousCroppings.FirstOrDefault().HasGrassInLastThreeYear==true)
+                {
+                    
+                    List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
+                    ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
+
+                    List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
+                    ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
+                }
+                
+            }
+
+
             model.Name = field.Name;
             model.TotalArea = field.TotalArea ?? 0;
             model.CroppedArea = field.CroppedArea ?? 0;
@@ -2276,6 +2340,69 @@ namespace NMP.Portal.Controllers
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
                     int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
                     var field = await _fieldService.FetchFieldByFieldId(fieldId);
+
+
+                    model.LastHarvestYear = farm.LastHarvestYear;
+                    (List<PreviousCropping> previousCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId);
+
+                    if (string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        List<int> previousYears = new List<int>();
+                        List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+
+                        
+
+                        previousCroppings = previousCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear)).ToList();
+
+                        foreach (var item in previousCroppings)
+                        {
+                            previousYears.Add(item.HarvestYear ?? 0);
+                        }
+                        var tasks = previousCroppings.Select(async pc => new
+                        {
+                            pc.ID,
+                            pc.FieldID,
+                            pc.CropGroupID,
+                            pc.CropTypeID,
+                            pc.HasGrassInLastThreeYear,
+                            pc.HarvestYear,
+                            pc.LayDuration,
+                            pc.GrassManagementOptionID,
+                            pc.HasGreaterThan30PercentClover,
+                            pc.SoilNitrogenSupplyItemID,
+                            pc.CreatedOn,
+                            pc.CreatedByID,
+                            pc.ModifiedOn,
+                            pc.ModifiedByID,
+                            CropTypeName = await _fieldService.FetchCropTypeById(pc.CropTypeID ?? 0)
+                        }).ToList();
+
+                        ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).ToList();
+
+                        model.PreviousGrassYears = previousYears;
+                        if (previousCroppings.All(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                        {
+                            model.PreviousCroppings = previousCroppings.FirstOrDefault();
+                        }
+                        else
+                        {
+                            model.PreviousCroppings = previousCroppings.FirstOrDefault(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                        }
+
+                        ViewBag.HasGrassInLastThreeYear = previousCroppings.FirstOrDefault().HasGrassInLastThreeYear;
+
+                        if (previousCroppings.FirstOrDefault().HasGrassInLastThreeYear == true)
+                        {
+
+                            List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
+                            ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
+
+                            List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
+                            ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
+                        }
+
+                    }
+
                     model.Name = field.Name;
                     model.TotalArea = field.TotalArea ?? 0;
                     model.CroppedArea = field.CroppedArea ?? 0;
