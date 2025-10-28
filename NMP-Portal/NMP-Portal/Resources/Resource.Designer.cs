@@ -3013,6 +3013,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a livestock manure nitrogen (N) farm limit report {0}.
+        /// </summary>
+        public static string lblCreateALivestockManureNitrogenFarmLimitReportYear {
+            get {
+                return ResourceManager.GetString("lblCreateALivestockManureNitrogenFarmLimitReportYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create an existing manure storage capacity report.
         /// </summary>
         public static string lblCreateAnExistingManureStorageCapacityReport {
@@ -4849,7 +4858,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Farm and field details for NVZ records.
+        ///   Looks up a localized string similar to Farm and field details for {0} records.
         /// </summary>
         public static string lblFarmAndFieldDetailsForNVZRecords {
             get {
@@ -6682,6 +6691,15 @@ namespace NMP.Portal.Resources {
         public static string lblIncorrectSecondCropType {
             get {
                 return ResourceManager.GetString("lblIncorrectSecondCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index.
+        /// </summary>
+        public static string lblIndex {
+            get {
+                return ResourceManager.GetString("lblIndex", resourceCulture);
             }
         }
         
@@ -9375,6 +9393,15 @@ namespace NMP.Portal.Resources {
         public static string lblNVZFieldForFieldCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNVZFieldForFieldCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZ.
+        /// </summary>
+        public static string lblNVZShortForm {
+            get {
+                return ResourceManager.GetString("lblNVZShortForm", resourceCulture);
             }
         }
         
@@ -14435,6 +14462,15 @@ namespace NMP.Portal.Resources {
         public static string lblWaterResourcesRegulation2021Content {
             get {
                 return ResourceManager.GetString("lblWaterResourcesRegulation2021Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Water Resources Regulations.
+        /// </summary>
+        public static string lblWaterResourcesRegulations {
+            get {
+                return ResourceManager.GetString("lblWaterResourcesRegulations", resourceCulture);
             }
         }
         

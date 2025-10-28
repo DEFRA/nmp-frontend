@@ -699,7 +699,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("ReportType", Resource.MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate);
                 }
                 if (!ModelState.IsValid)
-                {
+                {                   
                     return View("ReportType", model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -1188,6 +1188,7 @@ namespace NMP.Portal.Controllers
                         if (farm != null)
                         {
                             model.FarmName = farm.Name;
+                            model.Country = farm.CountryID;
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(h))
@@ -1201,7 +1202,15 @@ namespace NMP.Portal.Controllers
                         model.IsComingFromPlan = false;
                     }
                 }
-
+                if (model.FarmId != null&&model.Country==null)
+                {
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farm != null)
+                    {
+                        model.Country = farm.CountryID;
+                    }
+                }
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (!string.IsNullOrWhiteSpace(r))
                 {
                     model.IsManageImportExport = true;
@@ -1222,7 +1231,7 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ReportOptions(ReportViewModel model)
+        public async Task<IActionResult> ReportOptions(ReportViewModel model)
         {
             _logger.LogTrace("Report Controller : ReportOptions() post action called");
             try
@@ -1233,6 +1242,14 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    if (model.FarmId != null && model.Country == null)
+                    {
+                        (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                        if (farm != null)
+                        {
+                            model.Country = farm.CountryID;
+                        }
+                    }
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -1322,7 +1339,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult NVZComplianceReports(string? q)//success Msg
+        public async Task<IActionResult> NVZComplianceReports(string? q)//success Msg
         {
             _logger.LogTrace("Report Controller : NVZComplianceReports() action called");
             ReportViewModel model = null;
@@ -1338,6 +1355,16 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
+                if (model.FarmId != null && model.Country == null)
+                {
+                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farm != null)
+                    {
+                        model.FarmName = farm.Name;
+                        model.Country = farm.CountryID;
+                    }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(q);
@@ -1353,7 +1380,7 @@ namespace NMP.Portal.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NVZComplianceReports(ReportViewModel model)
+        public async Task<IActionResult> NVZComplianceReports(ReportViewModel model)
         {
             _logger.LogTrace("Report Controller : NVZComplianceReports() post action called");
             try
@@ -1364,6 +1391,16 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
+                    if (model.FarmId != null&&model.Country==null)
+                    {
+                        (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
+                        if (farm != null)
+                        {
+                            model.FarmName = farm.Name;
+                            model.Country= farm.CountryID;
+                        }
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    }
                     return View(model);
                 }
                 model.FieldAndPlanReportOption = null;

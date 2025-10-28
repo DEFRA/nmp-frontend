@@ -614,13 +614,13 @@
                                                 <td class="govuk-table__cell">@(soilAnalysis.Date != null ? soilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
                                                 <td class="govuk-table__cell">@(soilAnalysis.PH != null ? soilAnalysis.PH : Resource.lblNotEntered)</td>
                                                 <td class="govuk-table__cell">
-                                                    @(soilAnalysis.PhosphorusIndex != null ? soilAnalysis.PhosphorusIndex : Resource.lblNotEntered)
+                                                    @(soilAnalysis.PhosphorusIndex != null ? $"{Resource.lblIndex} {soilAnalysis.PhosphorusIndex}" : Resource.lblNotEntered)
                                                 </td>
                                                 <td class="govuk-table__cell">
-                                                    @(soilAnalysis.PotassiumIndex != null ? soilAnalysis.PotassiumIndex : Resource.lblNotEntered)
+                                                    @(soilAnalysis.PotassiumIndex != null ? $"{Resource.lblIndex} {soilAnalysis.PotassiumIndex}" : Resource.lblNotEntered)
                                                 </td>
                                                 <td class="govuk-table__cell">
-                                                    @(soilAnalysis.MagnesiumIndex != null ? soilAnalysis.MagnesiumIndex : Resource.lblNotEntered)
+                                                    @(soilAnalysis.MagnesiumIndex != null ? $"{Resource.lblIndex} {soilAnalysis.MagnesiumIndex}" : Resource.lblNotEntered)
                                                 </td>
                                             </tr>
                                         }
