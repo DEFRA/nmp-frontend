@@ -4824,7 +4824,7 @@ live</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
-    <value>Farm and field details for NVZ records</value>
+    <value>Farm and field details for {0} records</value>
   </data>
   <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
     <value>Field records and nutrient management planning</value>
@@ -6765,5 +6765,17 @@ livestock manure.</value>
   </data>
   <data name="lblAddCropHistory" xml:space="preserve">
     <value>Add crop history</value>
+  </data>
+  <data name="lblIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="lblWaterResourcesRegulations" xml:space="preserve">
+    <value>Water Resources Regulations</value>
+  </data>
+  <data name="lblNVZShortForm" xml:space="preserve">
+    <value>NVZ</value>
+  </data>
+  <data name="lblCreateALivestockManureNitrogenFarmLimitReportYear" xml:space="preserve">
+    <value>Create a livestock manure nitrogen (N) farm limit report {0}</value>
   </data>
 </root>

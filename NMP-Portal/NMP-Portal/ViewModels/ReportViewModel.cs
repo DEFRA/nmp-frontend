@@ -160,6 +160,7 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedNLLivestockID { get; set; } = string.Empty;
         public bool? IsDeleteNLLivestock { get; set; }
         public bool IsLivestockGroupChange { get; set; } = false;
+        public int? Country { get; set; }
 
     }
 }

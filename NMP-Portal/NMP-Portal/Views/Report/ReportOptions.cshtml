@@ -147,7 +147,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <govuk-radios asp-for="@Model.ReportOption">
                     <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">                          
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @if (Model.Year == null)
                             {
                                 @Resource.lblWhatTypeOfReportDoYouWantToCreate
@@ -155,7 +155,7 @@
                             else
                             {
                                 @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
-                            }                           
+                            }
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@fieldRecordsAndPlan">
                             @Resource.lblFieldRecordsAndNutrientManagementPlanning
@@ -164,7 +164,7 @@
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                         <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
-                            @Resource.lblFarmAndFieldDetailsForNVZRecords
+                            @(string.Format(Resource.lblFarmAndFieldDetailsForNVZRecords, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
                             <govuk-radios-item-hint>
                                 @Resource.lblIncludesNmaxLivestockManureNitrogen
                             </govuk-radios-item-hint>
