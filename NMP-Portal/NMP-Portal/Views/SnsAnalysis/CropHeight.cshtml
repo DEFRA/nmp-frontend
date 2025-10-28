@@ -56,10 +56,10 @@
             <govuk-fieldset>
                 <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                     @Resource.lblCropHeight
-                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblcm)</span>
                 </govuk-fieldset-legend>
                 <govuk-input asp-for="@Model.CropHeight" input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
-                    <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
+                    <govuk-input-suffix>@Resource.lblcm</govuk-input-suffix>
                 </govuk-input>
 
                 <govuk-radios asp-for="@Model.SeasonId">
