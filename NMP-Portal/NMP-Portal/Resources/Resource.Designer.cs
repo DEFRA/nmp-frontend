@@ -2770,6 +2770,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to cm.
+        /// </summary>
+        public static string lblcm {
+            get {
+                return ResourceManager.GetString("lblcm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string lblComment {
@@ -6443,7 +6452,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to enter the number of {0} in {1}?.
+        ///   Looks up a localized string similar to How do you want to enter the numbers for this {0} type?.
         /// </summary>
         public static string lblHowWouldYouLikeToEnterYourLivestockNumbers {
             get {
@@ -7407,6 +7416,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to livestock.
+        /// </summary>
+        public static string lblLivestock {
+            get {
+                return ResourceManager.GetString("lblLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Livestock average number.
         /// </summary>
         public static string lblLivestockAverageNumber {
@@ -7434,7 +7452,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can use this space to record any other comments or details about this manure import. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information..
+        ///   Looks up a localized string similar to You can use this space to record any other comments or details about this manure {0}. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information..
         /// </summary>
         public static string lblLivestockCommentContent2 {
             get {
@@ -12772,7 +12790,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal..
+        ///   Looks up a localized string similar to The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal. Accounting for the occupancy..
         /// </summary>
         public static string lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced {
             get {
@@ -15870,7 +15888,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which NVZ compliance report do you want to create?.
+        ///   Looks up a localized string similar to Which {0} compliance report do you want to create?.
         /// </summary>
         public static string lblWhichNVZComplianceReport {
             get {
@@ -17843,7 +17861,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a valid numeric crop height before continuing (0-30).
+        ///   Looks up a localized string similar to Enter a valid numeric crop height before continuing (0-30 cm).
         /// </summary>
         public static string MSGEnterAValidCropHeight {
             get {
