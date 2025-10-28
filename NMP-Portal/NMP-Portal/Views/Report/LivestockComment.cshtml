@@ -142,7 +142,7 @@
                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                 </govuk-fieldset-legend>
                 <div class="govuk-hint">
-                    @Resource.lblLivestockCommentContent2
+                    @string.Format(Resource.lblLivestockCommentContent2, (Model.ImportExport== (int)NMP.Portal.Enums.ImportExport.Import) ?NMP.Portal.Enums.ImportExport.Import.ToString().ToLower() : NMP.Portal.Enums.ImportExport.Export.ToString().ToLower())                                      
                 </div>
                 <govuk-textarea asp-for="@Model.Comment" rows="5"></govuk-textarea>
             </govuk-fieldset>
