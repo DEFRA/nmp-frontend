@@ -325,7 +325,7 @@
 
                         <govuk-summary-list-row class=@((!Model.SoilAnalyses.Date.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @Resource.lblDateSampleTaken
+                                @string.Format(Resource.lblDateSampleTaken, Model.Name)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @((!Model.SoilAnalyses.Date.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
