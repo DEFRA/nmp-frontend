@@ -153,7 +153,7 @@
                 <govuk-radios asp-for="@Model.NVZReportOption">                    
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend class="govuk-fieldset__legend--l" is-page-heading="true">
-                            @string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
+                            @(string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@nmaxReport">
                             @Resource.lblNMaxReport

@@ -4884,7 +4884,7 @@ live</value>
     <value>Which farm information and planning report do you want to create?</value>
   </data>
   <data name="lblWhichNVZComplianceReport" xml:space="preserve">
-    <value>Which NVZ compliance report do you want to create?</value>
+    <value>Which {0} compliance report do you want to create?</value>
   </data>
   <data name="lblCurrentYearForReport" xml:space="preserve">
     <value>Current year - {0}</value>
@@ -5229,7 +5229,7 @@ live</value>
     <value>{0} kg per cubic metre {1}</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
-    <value>How would you like to enter the number of {0} in {1}?</value>
+    <value>How do you want to enter the numbers for this {0} type?</value>
   </data>
   <data name="lblEnterANumberForEachMonth" xml:space="preserve">
     <value>Enter a number for each month</value>
@@ -5304,7 +5304,7 @@ live</value>
     <value>places</value>
   </data>
   <data name="lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced" xml:space="preserve">
-    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal.</value>
+    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal. Accounting for the occupancy.</value>
   </data>
   <data name="lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem" xml:space="preserve">
     <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals.</value>
@@ -6777,5 +6777,8 @@ livestock manure.</value>
   </data>
   <data name="lblCreateALivestockManureNitrogenFarmLimitReportYear" xml:space="preserve">
     <value>Create a livestock manure nitrogen (N) farm limit report {0}</value>
+  </data>
+  <data name="lblLivestock" xml:space="preserve">
+    <value>livestock</value>
   </data>
 </root>
