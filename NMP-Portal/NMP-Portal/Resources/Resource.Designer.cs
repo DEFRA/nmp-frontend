@@ -7416,7 +7416,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can use this space to record any other comments or details about this manure import. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information..
+        ///   Looks up a localized string similar to You can use this space to record any other comments or details about this manure {0}. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information..
         /// </summary>
         public static string lblLivestockCommentContent2 {
             get {
