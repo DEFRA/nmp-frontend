@@ -15573,7 +15573,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What was the sample depth?.
+        ///   Looks up a localized string similar to What was the sample depth in centimeters?.
         /// </summary>
         public static string lblWhatWasTheSampleDepth {
             get {
@@ -16248,7 +16248,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target yield (per hectare).
+        ///   Looks up a localized string similar to Yield (per hectare).
         /// </summary>
         public static string lblYieldPerHectare {
             get {

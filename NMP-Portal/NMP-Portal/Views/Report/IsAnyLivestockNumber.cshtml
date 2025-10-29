@@ -151,7 +151,6 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestockNumber">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -162,12 +161,9 @@
                         <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
                     </govuk-radios-fieldset>
                 </govuk-radios>
-
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-
-
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
                     {
@@ -191,10 +187,7 @@
                         </a>
                     }
                 </p>
-
-
             </div>
-
         </div>
     </form>
 }

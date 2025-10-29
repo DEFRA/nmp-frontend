@@ -157,10 +157,10 @@
             }
         </div>
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">                
-                    <govuk-radios asp-for="@Model.ManureTypeId">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+                <govuk-radios asp-for="@Model.ManureTypeId">
                         <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                 @heading
                             </govuk-radios-fieldset-legend>
                             <govuk-radios-hint>
@@ -171,7 +171,6 @@
                                 @foreach (var item in ViewBag.ManureTypeList)
                                 {
                                     <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
-
                                 }
                             }
                         </govuk-radios-fieldset>

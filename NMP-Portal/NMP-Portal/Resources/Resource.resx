@@ -2192,7 +2192,7 @@ cubic metres per hectare  not set</value>
     <value>Add soil mineral nitrogen (N) for {0}</value>
   </data>
   <data name="lblWhatWasTheSampleDepth" xml:space="preserve">
-    <value>What was the sample depth?</value>
+    <value>What was the sample depth in centimeters?</value>
   </data>
   <data name="lblSoilMineralNitrogen" xml:space="preserve">
     <value>Soil mineral nitrogen (N)</value>
@@ -2618,7 +2618,7 @@ cubic metres per hectare  not set</value>
     <value>Type of manure</value>
   </data>
   <data name="lblYieldPerHectare" xml:space="preserve">
-    <value>Target yield (per hectare)</value>
+    <value>Yield (per hectare)</value>
   </data>
   <data name="lblUpdateThisGroup" xml:space="preserve">
     <value>Update this group</value>
