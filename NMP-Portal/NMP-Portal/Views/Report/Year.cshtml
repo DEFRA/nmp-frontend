@@ -42,7 +42,6 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <div class="margin-bottom-thirty">
-
                 <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["succesMsgContent1"]
@@ -163,7 +162,7 @@
             }
         </div>
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
                     <govuk-radios asp-for="@Model.Year">
                         <govuk-radios-fieldset>
                             <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -191,9 +190,7 @@
                         @Resource.lblCancel
                     </a>
                 </p>
-
             </div>
-
         </div>
     </form>
 }
