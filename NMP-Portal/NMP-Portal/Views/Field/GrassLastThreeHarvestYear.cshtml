@@ -68,6 +68,8 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"/>
 
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear"/>
         @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HarvestYear"/> *@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.GrassManagementOptionID"/>
@@ -82,6 +84,26 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"/>
+        @if (Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
+        {
+            @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)
+            {
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ID" value="@Model.PreviousCroppingsList[i].ID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].FieldID" value="@Model.PreviousCroppingsList[i].FieldID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CropGroupID" value="@Model.PreviousCroppingsList[i].CropGroupID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CropTypeID" value="@Model.PreviousCroppingsList[i].CropTypeID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HasGrassInLastThreeYear" value="@Model.PreviousCroppingsList[i].HasGrassInLastThreeYear" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HarvestYear" value="@Model.PreviousCroppingsList[i].HarvestYear" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].LayDuration" value="@Model.PreviousCroppingsList[i].LayDuration" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].GrassManagementOptionID" value="@Model.PreviousCroppingsList[i].GrassManagementOptionID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HasGreaterThan30PercentClover" value="@Model.PreviousCroppingsList[i].HasGreaterThan30PercentClover" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].SoilNitrogenSupplyItemID" value="@Model.PreviousCroppingsList[i].SoilNitrogenSupplyItemID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedOn" value="@Model.PreviousCroppingsList[i].CreatedOn" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedByID" value="@Model.PreviousCroppingsList[i].CreatedByID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedOn" value="@Model.PreviousCroppingsList[i].ModifiedOn" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedByID" value="@Model.PreviousCroppingsList[i].ModifiedByID" />
+            }
+        }
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -111,7 +133,11 @@
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
+                @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
+                {
+                    <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
+                }
+                else if (!Model.IsCheckAnswer)
                 {
                     <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
                 }

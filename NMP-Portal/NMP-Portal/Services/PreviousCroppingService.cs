@@ -56,6 +56,47 @@ namespace NMP.Portal.Services
 
             return (previousCropping, error);
         }
+
+        public async Task<(List<PreviousCropping>, Error)> FetchDataByFieldId(int fieldId)
+        {
+            List<PreviousCropping> previousCroppings = null;
+            Error error = new Error();
+
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    previousCroppings = responseWrapper.Data.PreviousCropping.ToObject<List<PreviousCropping>>();
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<ErrorViewModel>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (previousCroppings, error);
+        }
         public async Task<(bool, Error)> MergePreviousCropping(string jsonData)
         {
             bool success = false;

@@ -134,6 +134,7 @@ namespace NMP.Portal.Helpers
         public const string DeleteNutrientsLoadingLivestockByIdAPI = "nutrients-loading-live-stocks/{0}";
         public const string MergeCropAPI = "crops/mergeCrop";
         public const string FetchDataByFieldIdAndYearAsyncAPI = "previous-cropping/{0}?year={1}";
+        public const string FetchFieldDataByFieldIdAsyncAPI = "previous-cropping/{0}";
         public const string MergePreviousCropAPI = "previous-cropping/mergePreviousCrop";
         //Manner APi Url
         public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

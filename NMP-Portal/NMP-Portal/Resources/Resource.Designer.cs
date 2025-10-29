@@ -3346,6 +3346,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop in {0}.
+        /// </summary>
+        public static string lblCropInYear {
+            get {
+                return ResourceManager.GetString("lblCropInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop need.
         /// </summary>
         public static string lblCropNeed {
@@ -6118,6 +6127,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to High clover content.
+        /// </summary>
+        public static string lblHighCloverContent {
+            get {
+                return ResourceManager.GetString("lblHighCloverContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home page.
         /// </summary>
         public static string lblHomePage {
@@ -7340,6 +7358,15 @@ namespace NMP.Portal.Resources {
         public static string lblLength {
             get {
                 return ResourceManager.GetString("lblLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length of the lay.
+        /// </summary>
+        public static string lblLengthOfTheLay {
+            get {
+                return ResourceManager.GetString("lblLengthOfTheLay", resourceCulture);
             }
         }
         
@@ -13796,6 +13823,15 @@ namespace NMP.Portal.Resources {
         public static string lblTypeOfManure {
             get {
                 return ResourceManager.GetString("lblTypeOfManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Typical grass management.
+        /// </summary>
+        public static string lblTypicalGrassManagement {
+            get {
+                return ResourceManager.GetString("lblTypicalGrassManagement", resourceCulture);
             }
         }
         
