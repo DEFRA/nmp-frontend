@@ -164,23 +164,17 @@
             }
         </div>
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-
-                <govuk-fieldset>
-                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @heading
-                    </govuk-fieldset-legend>
-
+            <div class="govuk-grid-column-two-thirds-from-desktop">
                     <govuk-radios class="govuk-radios" asp-for="@Model.ImportExport">
                         <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
+                            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                @heading
                             </govuk-radios-fieldset-legend>
                             <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                             <govuk-radios-item value=@import>@Resource.lblImport</govuk-radios-item>
                             <govuk-radios-item value=@export>@Resource.lblExport</govuk-radios-item>
                         </govuk-radios-fieldset>
                     </govuk-radios>
-                </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
