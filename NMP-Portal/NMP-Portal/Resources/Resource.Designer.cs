@@ -3706,6 +3706,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These values come from the AHDB Nutrient Management Guide (RB209)..
+        /// </summary>
+        public static string lblDefaultNutrientValueContentFirst {
+            get {
+                return ResourceManager.GetString("lblDefaultNutrientValueContentFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these nutrient values?.
+        /// </summary>
+        public static string lblDefaultNutrientValueContentFourth {
+            get {
+                return ResourceManager.GetString("lblDefaultNutrientValueContentFourth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your nutrient values for {0}.
+        /// </summary>
+        public static string lblDefaultNutrientValueContentSecond {
+            get {
+                return ResourceManager.GetString("lblDefaultNutrientValueContentSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These values were entered on {0}..
+        /// </summary>
+        public static string lblDefaultNutrientValueContentThird {
+            get {
+                return ResourceManager.GetString("lblDefaultNutrientValueContentThird", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defoliation.
         /// </summary>
         public static string lblDefoliation {
@@ -9325,7 +9361,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nutrient values for {0}.
+        ///   Looks up a localized string similar to Typical nutrient values for {0}.
         /// </summary>
         public static string lblNutrientValuesFor {
             get {
@@ -14241,7 +14277,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, use the standard nutrient values from RB209.
+        ///   Looks up a localized string similar to No, use the typical values from the AHDB Nutrient management guide (RB209).
         /// </summary>
         public static string lblUseValuesFromRB209 {
             get {
@@ -14304,6 +14340,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value per tonne.
+        /// </summary>
+        public static string lblValuePerTonne {
+            get {
+                return ResourceManager.GetString("lblValuePerTonne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to These values are taken from the AHDB Nutrient Management Guide (RB209)..
         /// </summary>
         public static string lblValuesAreSourcedFromAHDB {
@@ -14327,6 +14372,15 @@ namespace NMP.Portal.Resources {
         public static string lblValuesKgPerTonne {
             get {
                 return ResourceManager.GetString("lblValuesKgPerTonne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (total).
+        /// </summary>
+        public static string lblValueTotal {
+            get {
+                return ResourceManager.GetString("lblValueTotal", resourceCulture);
             }
         }
         
@@ -16149,7 +16203,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, use these standard nutrient values.
+        ///   Looks up a localized string similar to Yes, use these typical nutrient values.
         /// </summary>
         public static string lblYesUseTheseStandardNutrientValues {
             get {
