@@ -15,6 +15,7 @@ namespace NMP.Portal.ViewModels
             ManagementPeriods = new List<ManagementPeriod>();
             PKBalance = new PKBalance();
             PreviousCroppings = new PreviousCropping();
+            PreviousCroppingsList = new List<PreviousCropping>();
         }
         public List<Field> Fields { get; set; }
         public List<ManagementPeriod> ManagementPeriods { get; set; }
@@ -59,5 +60,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedHarvestYear { get; set; }
         public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
         public bool? IsCancel { get; set; }
+        public List<PreviousCropping> PreviousCroppingsList { get; set; }
     }
 }
