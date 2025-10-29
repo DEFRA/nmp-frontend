@@ -6,6 +6,7 @@ namespace NMP.Portal.Services
     public interface IPreviousCroppingService : IService
     {
         Task<(PreviousCropping, Error)> FetchDataByFieldIdAndYear(int fieldId, int year);
+        Task<(List<PreviousCropping>, Error)> FetchDataByFieldId(int fieldId);
         Task<(bool, Error)> MergePreviousCropping(string jsonData);
     }
 }
