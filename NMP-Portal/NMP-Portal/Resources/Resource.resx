@@ -893,7 +893,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the planting date for {0} in these fields?</value>
   </data>
   <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
-    <value>You can change your planting date later.</value>
+    <value>You can change your sowing date later.</value>
   </data>
   <data name="lblPotato" xml:space="preserve">
     <value>potato </value>
@@ -6813,5 +6813,8 @@ livestock manure.</value>
   </data>
   <data name="lblValueTotal" xml:space="preserve">
     <value>{0} (total)</value>
+  </data>
+  <data name="lblOptions" xml:space="preserve">
+    <value>options</value>
   </data>
 </root>
