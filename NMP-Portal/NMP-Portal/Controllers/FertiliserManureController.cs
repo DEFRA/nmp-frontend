@@ -6069,7 +6069,7 @@ namespace NMP.Portal.Controllers
                     if (model.FieldList != null && model.FieldList.Count > 0)
                     {
 
-                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[model.DoubleCropCurrentCounter]));
+                        List<Crop> cropList = await _cropService.FetchCropsByFieldId(Convert.ToInt32(model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID));
                         cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
                         if (model.DoubleCrop == null)
                         {

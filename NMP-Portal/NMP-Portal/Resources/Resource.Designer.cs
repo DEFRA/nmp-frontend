@@ -9595,6 +9595,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to options.
+        /// </summary>
+        public static string lblOptions {
+            get {
+                return ResourceManager.GetString("lblOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to or.
         /// </summary>
         public static string lblOr {
@@ -16338,7 +16347,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can change your planting date later..
+        ///   Looks up a localized string similar to You can change your sowing date later..
         /// </summary>
         public static string lblYouCanChangeYourPlantingDateLater {
             get {
