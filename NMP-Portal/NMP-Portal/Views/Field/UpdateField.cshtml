@@ -63,7 +63,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
 
-                
+
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear" />
@@ -254,7 +254,7 @@
                     </govuk-summary-list-row>
 
                 }
-                
+
 
                 @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
                 {
