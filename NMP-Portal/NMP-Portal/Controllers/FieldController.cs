@@ -2984,7 +2984,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
                 return RedirectToAction("UpdateField");
             }
@@ -3032,13 +3032,15 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
             
+
             if (model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
             {
                 if (model.IsPreviousYearGrass == false)
                 {
                     return RedirectToAction("CropGroups");
                 }
-                if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+
+                if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
                 {
                     return RedirectToAction("UpdateField");
                 }
@@ -3093,15 +3095,17 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+            if (model.IsPreviousYearGrass == false)
+            {
+                if(model.CropGroupId==null)
+                {
+                    return RedirectToAction("CropGroups");
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
             {
                 return RedirectToAction("UpdateField");
             }
-            if (model.IsPreviousYearGrass == false)
-            {
-                return RedirectToAction("CropGroups");
-            }
-
             return RedirectToAction("CheckAnswer");
         }
 
@@ -3142,7 +3146,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass==true)
             {
                 return RedirectToAction("UpdateField");
             }
