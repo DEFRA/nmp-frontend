@@ -2988,7 +2988,7 @@ namespace NMP.Portal.Controllers
                 {
                     action = "CropInfoOne";
                 }
-                model.IsCheckAnswer = false;
+                    model.IsCheckAnswer = false;                
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
             }
             catch (Exception ex)
@@ -4814,7 +4814,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    model.IsComingFromRecommendation = false;
+                    model.IsComingFromRecommendation = null;
                 }
                 ViewBag.EncryptedCropType = q;
                 if (!string.IsNullOrWhiteSpace(r))

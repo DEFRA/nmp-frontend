@@ -16,6 +16,7 @@ using NMP.Portal.ViewModels;
 using System;
 using System.Diagnostics.Metrics;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -1454,7 +1455,7 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Year(string? q)//success Msg
+        public async Task<IActionResult> Year(string? q)//success Msg
         {
             _logger.LogTrace("Report Controller : Year() action called");
             ReportViewModel model = new ReportViewModel();
@@ -1499,7 +1500,15 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(q);
                 }
-                ViewBag.Years = GetReportYearsList();
+                List<int> yearList = GetReportYearsList();
+                int maxYear = yearList.Max();
+                List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+                if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+                {
+                    List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+                    yearList.AddRange(maxYearList);
+                }
+                ViewBag.Years = yearList.OrderByDescending(x=>x);
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
@@ -1530,7 +1539,15 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("Year", string.Format(Resource.lblSelectAOptionBeforeContinuing, Resource.lblYear.ToLower()));
                 }
-                ViewBag.Years = GetReportYearsList();
+                List<int> yearList = GetReportYearsList();
+                int maxYear = yearList.Max();
+                List<PlanSummaryResponse> PlanYearList=await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+                if(PlanYearList.Count>0&&PlanYearList.Any(x=>x.Year>maxYear))
+                {
+                    List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x=>x.Year).ToList();
+                    yearList.AddRange(maxYearList);
+                }
+                ViewBag.Years = yearList.OrderByDescending(x => x);
                 if (!ModelState.IsValid)
                 {
                     return View(model);

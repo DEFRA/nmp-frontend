@@ -263,7 +263,7 @@
                     }
                     @if (trueWarningCount > 1)
                     {
-                        <div class="govuk-notification-banner__content">
+                        @* <div class="govuk-notification-banner__content">*@
                             <p class="govuk-notification-banner__heading">
                                 @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                                 {
@@ -339,7 +339,7 @@
                             }
 
 
-                        </div>
+                       @* </div>*@
                     }
 
                 </govuk-notification-banner>
@@ -349,7 +349,7 @@
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblEnterTheApplicationRate
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
-                    <govuk-input-hint>@Resource.lblEnterANumberFrom0To250</govuk-input-hint>
+                      @*<govuk-input-hint>@Resource.lblEnterANumberFrom0To250</govuk-input-hint>*@
 
                     <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>

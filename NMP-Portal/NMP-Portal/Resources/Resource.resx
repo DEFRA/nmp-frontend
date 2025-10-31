@@ -6817,4 +6817,10 @@ livestock manure.</value>
   <data name="lblOptions" xml:space="preserve">
     <value>options</value>
   </data>
+  <data name="lblRemoveCropTypeFromFieldNameInYear" xml:space="preserve">
+    <value>remove {0} from {1} in {2}</value>
+  </data>
+  <data name="lblUpdateTheCropTypeForFieldName" xml:space="preserve">
+    <value>Update the {0} for {1}</value>
+  </data>
 </root>

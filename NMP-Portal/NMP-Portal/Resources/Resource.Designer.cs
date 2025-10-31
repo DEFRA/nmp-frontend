@@ -11071,6 +11071,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove {0} from {1} in {2}.
+        /// </summary>
+        public static string lblRemoveCropTypeFromFieldNameInYear {
+            get {
+                return ResourceManager.GetString("lblRemoveCropTypeFromFieldNameInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove {0}.
         /// </summary>
         public static string lblRemoveFarm {
@@ -14111,6 +14120,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateSoilAnalysis {
             get {
                 return ResourceManager.GetString("lblUpdateSoilAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update the {0} for {1}.
+        /// </summary>
+        public static string lblUpdateTheCropTypeForFieldName {
+            get {
+                return ResourceManager.GetString("lblUpdateTheCropTypeForFieldName", resourceCulture);
             }
         }
         

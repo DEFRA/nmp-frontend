@@ -277,7 +277,14 @@
             else
             {
                 <h1 class="govuk-heading-l">
-                        @string.Format(Resource.lblUpdateCropGroupNameForHarvestYear,(Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)? Model.FieldName:Model.CropGroupName, Model.Year)
+                    @if((Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value))
+                    {
+                        @string.Format(Resource.lblUpdateTheCropTypeForFieldName,Model.CropType, Model.FieldName)
+                    }
+                    else{
+                        @string.Format(Resource.lblUpdateCropGroupNameForHarvestYear,Model.CropGroupName, Model.Year)
+                    }
+                        
                     
                 </h1>
 
@@ -992,7 +999,7 @@
                     }
                     else
                     {
-                        <a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldName, Model.CropType, Model.FieldName)</a>
+                        <a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldNameInYear, Model.CropType, Model.FieldName, Model.Year)</a>
                     }.
                 </p>
             }
@@ -1003,7 +1010,7 @@
                 }
                 else
                 {
-                    @((Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)?$"{Resource.lblUpdate} {Model.FieldName}":Resource.lblUpdateThisCropGroup)
+                    @((Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)?$"{Resource.lblUpdateThisField}":Resource.lblUpdateThisCropGroup)
                 }
             </govuk-button>
             <p class="govuk-body cancel-link">
