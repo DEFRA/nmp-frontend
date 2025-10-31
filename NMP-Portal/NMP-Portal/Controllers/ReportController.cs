@@ -42,10 +42,11 @@ namespace NMP.Portal.Controllers
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly IReportService _reportService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IStorageCapacityService _storageCapacityService;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-            IFertiliserManureService fertiliserManureService, IReportService reportService)
+            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService)
         {
             _logger = logger;
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
@@ -59,6 +60,7 @@ namespace NMP.Portal.Controllers
             _fertiliserManureService = fertiliserManureService;
             _httpContextAccessor = httpContextAccessor;
             _reportService = reportService;
+            _storageCapacityService = storageCapacityService;
         }
         public IActionResult Index()
         {
@@ -1469,11 +1471,20 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+                List<int> yearList = GetReportYearsList();
+                int maxYear = yearList.Max();
+
                 if (model.FieldAndPlanReportOption != null)
                 {
                     if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
                         model.ReportTypeName = Resource.lblFieldRecordsAndNutrientManagementPlanning;
+                        List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+                        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+                        {
+                            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+                            yearList.AddRange(maxYearList);
+                        }
                     }
                     else if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.LivestockNumbersReport)
                     {
@@ -1483,32 +1494,44 @@ namespace NMP.Portal.Controllers
                     {
                         model.ReportTypeName = Resource.lblImportsExports;
                     }
-                    // = Enum.GetName(typeof(FieldAndPlanReportOption), model.FieldAndPlanReportOption);
                 }
                 else if (model.NVZReportOption != null)
                 {
                     if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                     {
                         model.ReportTypeName = Resource.lblNMax;
+                        List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+                        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+                        {
+                            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+                            yearList.AddRange(maxYearList);
+                        }
                     }
                     else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                     {
+                        (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetail, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(model.FarmId.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail.Count > 0 && nutrientsLoadingFarmDetail.Any(x => x.CalendarYear > maxYear))
+                        {
+                            List<int> maxYearList = nutrientsLoadingFarmDetail.Where(x => x.CalendarYear > maxYear).Select(x => x.CalendarYear.Value).ToList();
+                            yearList.AddRange(maxYearList);
+                        }
                         model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
+                    }
+                    else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                    {
+                        (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, null);
+                        if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
+                        {
+                            List<int> maxYearList = storeCapacities.Where(x => x.Year > maxYear).Select(x => x.Year.Value).ToList();
+                            yearList.AddRange(maxYearList);
+                        }
                     }
                 }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     TempData["succesMsgContent1"] = _reportDataProtector.Unprotect(q);
                 }
-                List<int> yearList = GetReportYearsList();
-                int maxYear = yearList.Max();
-                List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-                if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
-                {
-                    List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
-                    yearList.AddRange(maxYearList);
-                }
-                ViewBag.Years = yearList.OrderByDescending(x=>x);
+                ViewBag.Years = yearList.OrderByDescending(x => x);
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
@@ -1541,11 +1564,36 @@ namespace NMP.Portal.Controllers
                 }
                 List<int> yearList = GetReportYearsList();
                 int maxYear = yearList.Max();
-                List<PlanSummaryResponse> PlanYearList=await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-                if(PlanYearList.Count>0&&PlanYearList.Any(x=>x.Year>maxYear))
+                if ((model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport) ||
+                    (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport))
                 {
-                    List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x=>x.Year).ToList();
-                    yearList.AddRange(maxYearList);
+                    List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+                    if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+                    {
+                        List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+                        yearList.AddRange(maxYearList);
+                    }
+                }
+                if (model.NVZReportOption != null)
+                {
+                    if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                    {
+                        (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetail, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(model.FarmId.Value);
+                        if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail.Count > 0 && nutrientsLoadingFarmDetail.Any(x => x.CalendarYear > maxYear))
+                        {
+                            List<int> maxYearList = nutrientsLoadingFarmDetail.Where(x => x.CalendarYear > maxYear).Select(x => x.CalendarYear.Value).ToList();
+                            yearList.AddRange(maxYearList);
+                        }
+                    }
+                    else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                    {
+                        (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, null);
+                        if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
+                        {
+                            List<int> maxYearList = storeCapacities.Where(x => x.Year > maxYear).Select(x => x.Year.Value).ToList();
+                            yearList.AddRange(maxYearList);
+                        }
+                    }
                 }
                 ViewBag.Years = yearList.OrderByDescending(x => x);
                 if (!ModelState.IsValid)
@@ -1919,7 +1967,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("TotalFarmArea", Resource.MsgEnterTotalFarmArea);
                 }
-                if (model.TotalAreaInNVZ == null&&(model.Country!=null&&model.Country!=(int)NMP.Portal.Enums.FarmCountry.Wales))
+                if (model.TotalAreaInNVZ == null && (model.Country != null && model.Country != (int)NMP.Portal.Enums.FarmCountry.Wales))
                 {
                     ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
                 }
@@ -1944,10 +1992,10 @@ namespace NMP.Portal.Controllers
                 }
 
                 if (!ModelState.IsValid)
-                {                    
+                {
                     return View(model);
                 }
-                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList,  error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
                 (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
                 if (nutrientsLoadingManures.Count > 0)
