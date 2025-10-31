@@ -277,14 +277,7 @@
             else
             {
                 <h1 class="govuk-heading-l">
-                    @if((Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value))
-                    {
-                        @string.Format(Resource.lblUpdateTheCropTypeForFieldName,Model.CropType, Model.FieldName)
-                    }
-                    else{
-                        @string.Format(Resource.lblUpdateCropGroupNameForHarvestYear,Model.CropGroupName, Model.Year)
-                    }
-                        
+                        @string.Format(Resource.lblUpdateTheCropForField,(Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)? Model.CropType:Model.CropGroupName, Model.FieldName)
                     
                 </h1>
 
@@ -292,14 +285,14 @@
                     <p class="govuk-body">
                         @if (Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)
                         {
-                            @string.Format(Resource.lblUpdateCropGroupNameContentForSingleField, Model.FieldName) <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@ViewBag.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId">@Resource.lblUpdateThisCropGroup.</a>
+                            @string.Format(Resource.lblUpdateCropGroupNameContentForSingleField, Model.FieldName) <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@ViewBag.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId">@Resource.lblUpdateThisCropGroup</a>
 
                         }
                         else
                         {
                             @Resource.lblUpdateCropGroupNameContent1 <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewTheYearCropPlan, Model.Year)</a>
 
-                        }
+                        }.
                     </p>
                 </govuk-inset-text>
             }
@@ -999,7 +992,7 @@
                     }
                     else
                     {
-                        <a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldNameInYear, Model.CropType, Model.FieldName, Model.Year)</a>
+                        <a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropFromFieldInYear, Model.CropType, Model.FieldName, Model.Year)</a>
                     }.
                 </p>
             }
@@ -1010,7 +1003,7 @@
                 }
                 else
                 {
-                    @((Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)?$"{Resource.lblUpdateThisField}":Resource.lblUpdateThisCropGroup)
+                    @((Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)?Resource.lblUpdateThisField :Resource.lblUpdateThisCropGroup)
                 }
             </govuk-button>
             <p class="govuk-body cancel-link">

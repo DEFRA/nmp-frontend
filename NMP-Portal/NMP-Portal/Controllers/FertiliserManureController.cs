@@ -1554,8 +1554,8 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    if (int.TryParse(model.FieldGroup, out int fieldGroup) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
-                    {
+                    //if (int.TryParse(model.FieldGroup, out int fieldGroup) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                    //{
                         foreach (var fieldId in model.FieldList)
                         {
                             (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
@@ -1635,13 +1635,14 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                    }
+                    //}
                     return View(model);
                 }
 
                 model.IsClosedPeriodWarning = false;
                 model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
-                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                if (model.FieldList.Count >= 1)
                 {
                     FertiliserManureViewModel fertiliserManureViewModel = new FertiliserManureViewModel();
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -2100,7 +2101,8 @@ namespace NMP.Portal.Controllers
                 model.IsNitrogenExceedWarning = false;
 
 
-                if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                if (model.FieldList.Count >= 1)
                 {
                     FertiliserManureViewModel fertiliserManureViewModel = new FertiliserManureViewModel();
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
@@ -2512,7 +2514,8 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
                     model.IsClosedPeriodWarning = false;
-                    if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                    //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+                    if (model.FieldList.Count >= 1)
                     {
                         Crop crop = null;
                         CropTypeLinkingResponse cropTypeLinkingResponse = null;

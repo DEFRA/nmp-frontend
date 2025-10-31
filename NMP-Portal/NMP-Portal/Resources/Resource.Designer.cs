@@ -11008,6 +11008,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove {0} from {1} in {2}.
+        /// </summary>
+        public static string lblRemoveCropFromFieldInYear {
+            get {
+                return ResourceManager.GetString("lblRemoveCropFromFieldInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will remove crop information, and fertiliser and organic material applications to all fields in this crop group..
         /// </summary>
         public static string lblRemoveCropGroupContent1 {
@@ -14124,6 +14133,16 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update the {0} for {1}.
+        /// </summary>
+        public static string lblUpdateTheCropForField {
+            get {
+                return ResourceManager.GetString("lblUpdateTheCropForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to update this crop group.
         ///   Looks up a localized string similar to Update the {0} for {1}.
         /// </summary>
         public static string lblUpdateTheCropTypeForFieldName {
