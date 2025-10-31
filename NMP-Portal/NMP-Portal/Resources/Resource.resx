@@ -4068,7 +4068,7 @@ live</value>
     <value>remove this crop group</value>
   </data>
   <data name="lblUpdateThisCropGroup" xml:space="preserve">
-    <value>Update this crop group</value>
+    <value>update this crop group</value>
   </data>
   <data name="lblViewTheYearCropPlan" xml:space="preserve">
     <value>View the {0} crop plan</value>
@@ -6821,6 +6821,12 @@ livestock manure.</value>
     <value>remove {0} from {1} in {2}</value>
   </data>
   <data name="lblUpdateTheCropTypeForFieldName" xml:space="preserve">
+    <value>Update the {0} for {1}</value>
+  </data>
+  <data name="lblRemoveCropFromFieldInYear" xml:space="preserve">
+    <value>remove {0} from {1} in {2}</value>
+  </data>
+  <data name="lblUpdateTheCropForField" xml:space="preserve">
     <value>Update the {0} for {1}</value>
   </data>
 </root>
