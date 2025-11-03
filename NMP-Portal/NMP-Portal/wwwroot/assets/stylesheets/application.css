@@ -847,3 +847,21 @@ hr.seperator_thirty {
         line-height: 1.25;
     }
 }
+
+#nutrient_list .nutrient_row {
+    display: block;
+    width: 100%;
+    clear: both;
+    padding-bottom: 5px;
+}
+
+    #nutrient_list .nutrient_row:last-child {
+        padding-bottom: 10px;
+        float: left;
+    }
+
+    #nutrient_list .nutrient_row .figure {
+        float: right;
+        width: 30%;
+        padding-right: 5px;
+    }

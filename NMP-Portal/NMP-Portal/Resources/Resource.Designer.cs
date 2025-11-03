@@ -4228,7 +4228,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dry Matter content:.
+        ///   Looks up a localized string similar to Dry Matter content.
         /// </summary>
         public static string lblDryMatterContent {
             get {
@@ -14350,6 +14350,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}kg/ha.
+        /// </summary>
+        public static string lblValueKgPerHectare {
+            get {
+                return ResourceManager.GetString("lblValueKgPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} kg per cubic metre.
         /// </summary>
         public static string lblValueKgPerMeterCube {
@@ -14364,6 +14373,15 @@ namespace NMP.Portal.Resources {
         public static string lblValueKgPerTon {
             get {
                 return ResourceManager.GetString("lblValueKgPerTon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}kg/t.
+        /// </summary>
+        public static string lblValueKgPerTonne {
+            get {
+                return ResourceManager.GetString("lblValueKgPerTonne", resourceCulture);
             }
         }
         
@@ -14602,7 +14620,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Was future field used for grass in {0},{1}  or {2}?.
+        ///   Looks up a localized string similar to Was future field used for grass in {0}, {1}  or {2}?.
         /// </summary>
         public static string lblWasFutureFieldUsedForGrassInYear {
             get {

@@ -5217,7 +5217,7 @@ live</value>
     <value>What type of {0} would you like to add?</value>
   </data>
   <data name="lblDryMatterContent" xml:space="preserve">
-    <value>Dry Matter content:</value>
+    <value>Dry Matter content</value>
   </data>
   <data name="lblUpdateAnOrganicMaterialImportOrExport" xml:space="preserve">
     <value>Update an organic material import or export</value>
@@ -6719,7 +6719,7 @@ livestock manure.</value>
     <value>Menu</value>
   </data>
   <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
-    <value>Was future field used for grass in {0},{1}  or {2}?</value>
+    <value>Was future field used for grass in {0}, {1}  or {2}?</value>
   </data>
   <data name="lblRecommendationNotAvailable" xml:space="preserve">
     <value>Recommendations not available</value>
@@ -6828,5 +6828,11 @@ livestock manure.</value>
   </data>
   <data name="lblUpdateTheCropForField" xml:space="preserve">
     <value>Update the {0} for {1}</value>
+  </data>
+  <data name="lblValueKgPerTonne" xml:space="preserve">
+    <value>{0}kg/t</value>
+  </data>
+  <data name="lblValueKgPerHectare" xml:space="preserve">
+    <value>{0}kg/ha</value>
   </data>
 </root>
