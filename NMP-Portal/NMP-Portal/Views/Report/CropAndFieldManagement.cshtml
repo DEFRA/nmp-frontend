@@ -10,7 +10,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ExportFieldsOrCropType" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
+        <govuk-back-link asp-action="ExportFieldsOrCropType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
     </div>
 
 }
@@ -22,7 +22,7 @@
 }
 @if (Model != null && Model.CropAndFieldReport != null)
 {
-    <div class="govuk-grid-row noprint margin-bottom-forty">
+    <div class="govuk-grid-row noprint">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             <h3 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h3>
             <ol class="govuk-list govuk-list--number">
@@ -30,22 +30,27 @@
                 <li>@Html.Raw(Resource.lblPrint2)</li>
                 <li>@Html.Raw(Resource.lblPrint3)</li>
             </ol>
-            <govuk-button id="cropReportPrintButton" type="button">
+            <govuk-button class="margin-bottom-forty" id="cropReportPrintButton" type="button">
                 @Resource.lblPrintOrSaveAsAPDF
             </govuk-button>
-            <hr>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row noprint">
+        <div class="govuk-grid-column-full">
+            <hr class="margin-bottom-forty">
         </div>
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <span class="govuk-caption-l">@Model.FarmName</span>
-            <h1 class="govuk-heading-xl">
+            <h1 class="govuk-heading-xl margin-bottom-thirty">
                 @string.Format(Resource.lblCropAndFieldManagementReport, Model.Year)
             </h1>
-            <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
+            <p class="govuk-body  margin-bottom-thirty">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
         </div>
     </div>
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row margin-bottom-ten">
         <div class="govuk-grid-column-one-third">
             <p class="govuk-body">
                 @Model.CropAndFieldReport.Farm.Name, <br>
@@ -70,10 +75,14 @@
                     <br />
                 }
                 @Model.CropAndFieldReport.Farm.Postcode
-            </p>
-            <p class="govuk-body margin-bottom-none">
+
+                <br />
+                <br />
                 @(string.Format("{0}{1} {2}", Resource.lblAnnualRainfall, ":", string.Format(Resource.lblRainfallMM, Model.CropAndFieldReport.Farm.Rainfall)))
             </p>
+            @* <p class="govuk-body margin-bottom-none">
+                
+            </p> *@
 
             @* <h2 class="govuk-heading-l">@Resource.lblFarmInformation</h2>
             <table class="govuk-table  govuk-table-small margin-bottom-sixty">
@@ -107,19 +116,19 @@
             <br />
         </p> *@
         </div>
-    </div>
+    </div>    
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <hr class="seperator_five">
-            <h4 class="govuk-heading-s">@Resource.lblPrivate_beta_disclaimer</h4>
+            <hr class="margin-bottom-thirty">
+            <h4 class="govuk-heading-s  margin-bottom-thirty">@Resource.lblPrivate_beta_disclaimer</h4>
             <p class="govuk-body">
                 @Resource.lblPrivate_beta_disclaimer_sub_heading
             </p>
-            <ul class="govuk-list govuk-list--bullet">
+            <ul class="govuk-list govuk-list--bullet  margin-bottom-thirty">
                 <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line1</li>
                 <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line2</li>
             </ul>
-            <hr class="seperator_five">
+            <hr class="margin-bottom-thirty">
         </div>
     </div>
     @if (Model.CropAndFieldReport.Farm.Fields != null && Model.CropAndFieldReport.Farm.Fields.Count > 0)
@@ -128,7 +137,7 @@
         foreach (var field in Model.CropAndFieldReport.Farm.Fields)
         {
 
-            <h2 class="govuk-heading-l">@field.Name</h2>
+            <h2 class="govuk-heading-l  margin-bottom-thirty">@field.Name</h2>
             <div class="table-container">
                 <table class="govuk-table">
                     <thead class="govuk-table__head">
@@ -747,7 +756,7 @@
                 }
             }
         }
-    }
+    }    
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <hr class="seperator_five">
