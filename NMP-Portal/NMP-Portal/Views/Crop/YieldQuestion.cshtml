@@ -134,7 +134,7 @@
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios asp-for="@Model.YieldQuestion">
                 <govuk-radios-fieldset>
-                    @* <govuk-radios-hint>@Resource.lblYouCanEnterAYieldLater</govuk-radios-hint> *@
+                     <govuk-radios-hint>@Resource.lblYouCanEnterAYieldLater</govuk-radios-hint> 
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
                         {
