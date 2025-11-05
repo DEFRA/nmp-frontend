@@ -18,7 +18,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackStoreCapacityCheckAnswer" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackStoreCapacityCheckAnswer") asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckAnswer"] != null)
 {
@@ -382,8 +382,28 @@
                     </govuk-button>
                 }
 
+               
+                <p class="govuk-body cancel-link">
+                    
 
-                <p class="govuk-body cancel-link"><a asp-action="Cancel" asp-controller="StorageCapacity">@Resource.lblCancel</a></p>
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId))
+                    {
+                        <a asp-action="Cancel" asp-controller="StorageCapacity">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        @if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                        {
+                            <a asp-action="Cancel" asp-controller="StorageCapacity">@Resource.lblCancel</a>
+                        }
+                        else
+                        {
+                            <a asp-action="BackStoreCapacityCheckAnswer" asp-controller="StorageCapacity">@Resource.lblCancel</a>
+                            @* BackStoreCapacityCheckAnswer this will be simple back without cancel confirmation page*@
+                        }
+
+                    }
+                </p>
 
 
             </div>

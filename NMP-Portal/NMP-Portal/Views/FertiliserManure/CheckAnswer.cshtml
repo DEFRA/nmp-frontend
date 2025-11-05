@@ -17,7 +17,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="FertiliserManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="FertiliserManure">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -577,9 +577,25 @@
                 }
 
             </govuk-button>
-
             <p class="govuk-body cancel-link">
+            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+            {
                 <a asp-action="Cancel" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+
+                    
+            }
+            else
+            {
+                 @if(ViewBag.IsDataChange != null && ViewBag.IsDataChange==true)
+                 {
+                     <a asp-action="Cancel" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                 }
+                 else
+                 {
+                     <a asp-action="BackCheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                 }
+            }
+               
             </p>
 
         </form>
