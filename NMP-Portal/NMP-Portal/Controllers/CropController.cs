@@ -5855,7 +5855,7 @@ namespace NMP.Portal.Controllers
                                         Year = harvestYearPlanResponseForFilter.Where(x => x.FieldID == field.FieldID).Select(x => x.Year).FirstOrDefault(),
                                         Confirm = false,
                                         CropOrder = harvestYearPlanResponseForFilter.Where(x => x.FieldID == field.FieldID).Select(x => x.CropOrder).FirstOrDefault(),
-                                        IsDelete = true
+                                        IsDeleted = true
                                     };
                                     List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
                                     managementPeriods.Add(new ManagementPeriod
