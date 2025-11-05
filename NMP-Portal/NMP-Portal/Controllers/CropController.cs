@@ -2840,6 +2840,25 @@ namespace NMP.Portal.Controllers
                 model.IsAnyChangeInField = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
 
+                if(!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
+                    !string.IsNullOrWhiteSpace(t) && !string.IsNullOrWhiteSpace(u))
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropDataBeforeUpdate", model);
+
+                }
+                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PlanViewModel>("CropDataBeforeUpdate");
+
+                bool isDataChanged = false;
+
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+                ViewBag.IsDataChange=isDataChanged;
+
             }
             catch (Exception ex)
             {
@@ -3367,7 +3386,18 @@ namespace NMP.Portal.Controllers
             PlanViewModel? model = null;
             try
             {
-
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("OrganicDataBeforeUpdate");
+                }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("FertiliserDataBeforeUpdate");
+                }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("CropDataBeforeUpdate");
+                }
                 if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
                     HttpContext?.Session.Remove("ReportData");
@@ -3970,6 +4000,18 @@ namespace NMP.Portal.Controllers
             List<Crop> crops = null;
             try
             {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("OrganicDataBeforeUpdate");
+                }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("FertiliserDataBeforeUpdate");
+                }
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("CropDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("CropDataBeforeUpdate");
+                }
                 //string q, 
                 if (!string.IsNullOrWhiteSpace(t))
                 {

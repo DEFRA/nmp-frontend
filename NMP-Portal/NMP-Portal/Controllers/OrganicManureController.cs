@@ -5888,6 +5888,24 @@ namespace NMP.Portal.Controllers
                 }
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+
+                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicDataBeforeUpdate", model);
+
+                }
+                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicDataBeforeUpdate");
+
+                bool isDataChanged = false;
+
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+                ViewBag.IsDataChange = isDataChanged;
             }
             catch (Exception ex)
             {

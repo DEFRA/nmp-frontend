@@ -16491,7 +16491,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to you can enter a yield later..
+        ///   Looks up a localized string similar to You can enter a yield later..
         /// </summary>
         public static string lblYouCanEnterAYieldLater {
             get {

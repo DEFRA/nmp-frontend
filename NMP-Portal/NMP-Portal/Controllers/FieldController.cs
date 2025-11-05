@@ -1981,6 +1981,14 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q, string? r, string? s, string? t)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
         {
             _logger.LogTrace($"Field Controller : FieldSoilAnalysisDetail() action called");
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisDataBeforeUpdate"))
+            {
+                HttpContext?.Session.Remove("SoilAnalysisDataBeforeUpdate");
+            }
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldDataBeforeUpdate"))
+            {
+                HttpContext?.Session.Remove("FieldDataBeforeUpdate");
+            }
             FieldViewModel model = new FieldViewModel();
             Error error = new Error();
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
@@ -2579,6 +2587,24 @@ namespace NMP.Portal.Controllers
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldDataBeforeUpdate", model);
+
+                }
+                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldDataBeforeUpdate");
+
+                bool isDataChanged = false;
+
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+                ViewBag.IsDataChange = isDataChanged;
+
 
             }
             catch (Exception ex)
@@ -2631,6 +2657,7 @@ namespace NMP.Portal.Controllers
                     string success = _farmDataProtector.Protect(Resource.lblTrue);
                     string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
                     _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                    
 
                     return RedirectToAction("FieldSoilAnalysisDetail", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblField) });
                 }

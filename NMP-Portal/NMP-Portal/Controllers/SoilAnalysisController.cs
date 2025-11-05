@@ -206,6 +206,23 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsCheckAnswer = true;
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+
+                    if (!string.IsNullOrWhiteSpace(i))
+                    {
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisDataBeforeUpdate", model);
+                    }
+                    var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisDataBeforeUpdate");
+
+                    bool isDataChanged = false;
+
+                    if (previousModel != null)
+                    {
+                        string oldJson = JsonConvert.SerializeObject(previousModel);
+                        string newJson = JsonConvert.SerializeObject(model);
+
+                        isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                    }
+                    ViewBag.IsDataChange = isDataChanged;
                 }
             }
             catch (Exception ex)

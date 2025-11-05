@@ -169,7 +169,7 @@
 
     @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Crop" asp-route-q="@(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass ? Model.GrassGrowthClassEncryptedCounter: Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId==(int)NMP.Portal.Enums.CropGroup.Grass ? Model.GrassGrowthClassEncryptedCounter: Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
     @* }
     else
     {
@@ -1014,7 +1014,21 @@
                 }
                 else
                 {
-                    <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
+                    {
+                        <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        if(ViewBag.IsDataChange != null && ViewBag.IsDataChange==true)
+                        {
+                            <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                        }
+                        else
+                        {
+                            <a asp-action="BackCheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                        }
+                    }
                 }
             </p>
         </form>
