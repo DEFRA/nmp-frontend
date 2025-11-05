@@ -107,5 +107,6 @@ namespace NMP.Portal.ViewModels
         public int? CopyYear { get; set; }
         public OrganicInorganicCopy? OrganicInorganicCopy { get; set; }
         public string? GrassSeasonName { get; set; }
+        public bool? IsFieldToBeRemoved { get; set; }
     }
 }

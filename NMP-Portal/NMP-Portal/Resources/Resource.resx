@@ -2825,7 +2825,7 @@ cubic metres per hectare  not set</value>
     <value>Creating and following a nutrient management plan will help you comply with these rules.</value>
   </data>
   <data name="lblOpenInANewWindow" xml:space="preserve">
-    <value>(opens in a new window)</value>
+    <value>(opens in a new window).</value>
   </data>
   <data name="lblFarmingRuleOfWaterFifthForEngland" xml:space="preserve">
     <value>rules for farmers and land managers</value>
@@ -4008,7 +4008,7 @@ live</value>
     <value>All agricultural land in Wales is subject to the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021. These regulations have been introduced to reduce losses of pollutants from agriculture to the environment by setting rules for certain farming practices.</value>
   </data>
   <data name="lblFarmingRuleOfWaterSecondForWale" xml:space="preserve">
-    <value>You must follow rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+    <value>You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
   </data>
   <data name="lblFarmingRuleOfWaterThirdForWale" xml:space="preserve">
     <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021</value>
@@ -6834,5 +6834,29 @@ livestock manure.</value>
   </data>
   <data name="lblValueKgPerHectare" xml:space="preserve">
     <value>{0}kg/ha</value>
+  </data>
+  <data name="lblAddingOrRemovingFieldsFromACropGroup" xml:space="preserve">
+    <value>Adding or removing fields from a crop group</value>
+  </data>
+  <data name="lblFieldToBeAdded" xml:space="preserve">
+    <value>Fields to be added</value>
+  </data>
+  <data name="lblFieldsToBeAdded" xml:space="preserve">
+    <value>Fields to be added</value>
+  </data>
+  <data name="lblTheseFieldWillBeAddedToThisCropGroup" xml:space="preserve">
+    <value>These fields will be added to this crop group.</value>
+  </data>
+  <data name="lblFieldsToBeRemoved" xml:space="preserve">
+    <value>Fields to be removed</value>
+  </data>
+  <data name="lblTheseFieldWillBeRemovedFromThisCropGroup" xml:space="preserve">
+    <value>These fields will be removed from this crop group.</value>
+  </data>
+  <data name="lblAnyExistingCropsAndOragnicOrInorganicContent" xml:space="preserve">
+    <value>Any existing crops, and organic or inorganic material applications, planned for {0} will be lost from these fields.</value>
+  </data>
+  <data name="lblUpdateThisCropGroupOnButton" xml:space="preserve">
+    <value>Update this crop group</value>
   </data>
 </root>
