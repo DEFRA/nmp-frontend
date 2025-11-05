@@ -3675,6 +3675,24 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                if (!string.IsNullOrWhiteSpace(i))
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("LivestockImportExportDataBeforeUpdate", model);
+
+                }
+                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("LivestockImportExportDataBeforeUpdate");
+
+                bool isDataChanged = false;
+
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+                ViewBag.IsDataChange = isDataChanged;
             }
             catch (Exception ex)
             {
@@ -3845,6 +3863,10 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ManageImportExport(string q, string y, string r, string s)
         {
             _logger.LogTrace($"Report Controller : ManageImportExport() action called");
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("LivestockImportExportDataBeforeUpdate"))
+            {
+                HttpContext?.Session.Remove("LivestockImportExportDataBeforeUpdate");
+            }
             ReportViewModel model = new ReportViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -5241,8 +5263,25 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("LivestockDataBeforeUpdate", model);
+
+                }
+                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("LivestockDataBeforeUpdate");
+
+                bool isDataChanged = false;
+
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+                ViewBag.IsDataChange = isDataChanged;
             }
             catch (Exception ex)
             {
@@ -5534,6 +5573,10 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Report Controller : ManageLivestock() action called");
             ReportViewModel model = new ReportViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("LivestockDataBeforeUpdate"))
+            {
+                HttpContext?.Session.Remove("LivestockDataBeforeUpdate");
+            }
             if (!string.IsNullOrWhiteSpace(q))
             {
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))

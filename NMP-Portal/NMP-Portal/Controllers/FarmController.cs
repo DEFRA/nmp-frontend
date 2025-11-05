@@ -904,6 +904,25 @@ namespace NMP.Portal.Controllers
                 model.EncryptedIsUpdate = q;
             }
             HttpContext.Session.SetObjectAsJson("FarmData", model);
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmDataBeforeUpdate", model);
+
+            }
+            var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmDataBeforeUpdate");
+
+            bool isDataChanged = false;
+
+            if (previousModel != null)
+            {
+                string oldJson = JsonConvert.SerializeObject(previousModel);
+                string newJson = JsonConvert.SerializeObject(model);
+
+                isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+            }
+            ViewBag.IsDataChange = isDataChanged;
+
             return View(model);
 
         }
@@ -1137,6 +1156,10 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("FarmDataBeforeUpdate");
+                }
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
@@ -1435,7 +1458,8 @@ namespace NMP.Portal.Controllers
             else
             {
                 HttpContext?.Session.Remove("FarmData");
-                return RedirectToAction("FarmList", "Farm");
+                //return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
 
             }
 

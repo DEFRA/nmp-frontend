@@ -45,7 +45,7 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackCheckAnswer") asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay" asp-action="@(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? "FarmUpdate" : "CheckAnswer")" asp-controller="Farm" method="post">
     @Html.AntiForgeryToken()
@@ -217,8 +217,22 @@
             </govuk-button>
             <p class="govuk-body cancel-link">
                
+                    
+                @if (string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+                {
                     <a class="govuk-link" asp-action="Cancel" asp-controller="Farm">@Resource.lblCancel</a>
-               
+                }
+                else
+                {
+                    if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                    {
+                        <a class="govuk-link" asp-action="Cancel" asp-controller="Farm">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        <a class="govuk-link" asp-action="BackCheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                    }
+                }
             </p>
         </div>
     </div>

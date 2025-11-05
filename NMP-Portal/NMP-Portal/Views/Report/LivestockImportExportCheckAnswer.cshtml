@@ -52,7 +52,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackLivestockImportExportCheckAnswer" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackLivestockImportExportCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckYourAnswers"] != null)
 {
@@ -745,9 +745,23 @@
                     }
                 </govuk-button>
                 <p class="govuk-body cancel-link">
-                    <a asp-action="Cancel" asp-controller="Report">
-                        @Resource.lblCancel
-                    </a>
+
+                    @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
+                    {
+                        <a asp-action="Cancel" asp-controller="Report">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                        {
+                            <a asp-action="Cancel" asp-controller="Report">@Resource.lblCancel</a>
+                        }
+                        else
+                        {
+                            <a asp-action="BackLivestockImportExportCheckAnswer" asp-controller="Report">@Resource.lblCancel</a>
+                        }
+                    }
+                    
                 </p>
 
             </div>
