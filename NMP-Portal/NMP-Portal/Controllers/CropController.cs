@@ -1345,7 +1345,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
-                                    return RedirectToAction("CheckAnswer");
+                                    //return RedirectToAction("CheckAnswer");
                                 }
                                 if (!matchFound || model.Crops.Count != planViewModel.Crops.Count)
                                 {

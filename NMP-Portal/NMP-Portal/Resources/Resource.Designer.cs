@@ -5047,7 +5047,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must follow rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications..
+        ///   Looks up a localized string similar to You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications..
         /// </summary>
         public static string lblFarmingRuleOfWaterSecondForWale {
             get {
@@ -9604,7 +9604,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (opens in a new window).
+        ///   Looks up a localized string similar to (opens in a new window)..
         /// </summary>
         public static string lblOpenInANewWindow {
             get {
@@ -14219,6 +14219,15 @@ namespace NMP.Portal.Resources {
         public static string lblUpdateThisCropGroup {
             get {
                 return ResourceManager.GetString("lblUpdateThisCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update this crop group.
+        /// </summary>
+        public static string lblUpdateThisCropGroupOnButton {
+            get {
+                return ResourceManager.GetString("lblUpdateThisCropGroupOnButton", resourceCulture);
             }
         }
         
