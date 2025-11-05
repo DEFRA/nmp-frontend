@@ -41,5 +41,6 @@ namespace NMP.Portal.Models
         public int? ModifiedByID { get; set; }
         public string? FieldName { get; set; }
         public string? EncryptedCounter { get; set; }
+        public bool? IsDelete { get; set; }
     }
 }

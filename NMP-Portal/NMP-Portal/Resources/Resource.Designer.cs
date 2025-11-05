@@ -1330,6 +1330,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding or removing fields from a crop group.
+        /// </summary>
+        public static string lblAddingOrRemovingFieldsFromACropGroup {
+            get {
+                return ResourceManager.GetString("lblAddingOrRemovingFieldsFromACropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add inorganic fertiliser.
         /// </summary>
         public static string lblAddInorganicFeriliser {
@@ -1902,6 +1911,15 @@ namespace NMP.Portal.Resources {
         public static string lblAnyChangesYouMakeMayAffectTheNutrientRecommendation {
             get {
                 return ResourceManager.GetString("lblAnyChangesYouMakeMayAffectTheNutrientRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any existing crops, and organic or inorganic material applications, planned for {0} will be lost from these fields..
+        /// </summary>
+        public static string lblAnyExistingCropsAndOragnicOrInorganicContent {
+            get {
+                return ResourceManager.GetString("lblAnyExistingCropsAndOragnicOrInorganicContent", resourceCulture);
             }
         }
         
@@ -5421,6 +5439,33 @@ namespace NMP.Portal.Resources {
         public static string lblFieldSoilAnalysisDetail {
             get {
                 return ResourceManager.GetString("lblFieldSoilAnalysisDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields to be added.
+        /// </summary>
+        public static string lblFieldsToBeAdded {
+            get {
+                return ResourceManager.GetString("lblFieldsToBeAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields to be removed.
+        /// </summary>
+        public static string lblFieldsToBeRemoved {
+            get {
+                return ResourceManager.GetString("lblFieldsToBeRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields to be added.
+        /// </summary>
+        public static string lblFieldToBeAdded {
+            get {
+                return ResourceManager.GetString("lblFieldToBeAdded", resourceCulture);
             }
         }
         
@@ -13008,6 +13053,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to These fields will be added to this crop group..
+        /// </summary>
+        public static string lblTheseFieldWillBeAddedToThisCropGroup {
+            get {
+                return ResourceManager.GetString("lblTheseFieldWillBeAddedToThisCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These fields will be removed from this crop group..
+        /// </summary>
+        public static string lblTheseFieldWillBeRemovedFromThisCropGroup {
+            get {
+                return ResourceManager.GetString("lblTheseFieldWillBeRemovedFromThisCropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one option. These are the {0} from MANNER-NPK..
         /// </summary>
         public static string lblTheseOptionsComeFromMannerNpk {
@@ -14142,7 +14205,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to update this crop group.
         ///   Looks up a localized string similar to Update the {0} for {1}.
         /// </summary>
         public static string lblUpdateTheCropTypeForFieldName {
@@ -14152,7 +14214,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update this crop group.
+        ///   Looks up a localized string similar to update this crop group.
         /// </summary>
         public static string lblUpdateThisCropGroup {
             get {
