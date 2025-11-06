@@ -2261,10 +2261,10 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
                 }
-                if (model.IsManageImportExport || (!string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage)))
-                {
-                    return RedirectToAction("ManureGroup");
-                }
+                //if (model.IsManageImportExport || (!string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage)))
+                //{
+                //    return RedirectToAction("ManureGroup");
+                //}
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
