@@ -136,25 +136,25 @@
                 {
                     @if (Model.IsNitrogenExceedWarning)
                     {
-                        <govuk-notification-banner>
-                            <govuk-notification-banner-title>
-                                @Resource.lblImportant
-                            </govuk-notification-banner-title>
-                            @TempData["NitrogenExceedMessageTitle"]<br />
-                            <p class="govuk-notification-banner__heading">
-                                @Model.ClosedPeriodNitrogenExceedWarningHeading
-                            </p>
-                            <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
-                            @* @if (Model.ClosedPeriodNitrogenExceedWarningPara1 != null)
-                {
-                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
-
-                } *@
-                            @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
-                            {
-                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
-                            }
-                        </govuk-notification-banner>
+                        @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningHeading))
+                        {
+                            <govuk-notification-banner>
+                                <govuk-notification-banner-title>
+                                    @Resource.lblImportant
+                                </govuk-notification-banner-title>
+                                @TempData["NitrogenExceedMessageTitle"]<br />
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.ClosedPeriodNitrogenExceedWarningHeading
+                                </p>
+                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+                                
+                                @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
+                                {
+                                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                }
+                            </govuk-notification-banner>
+                        }
+                        
                     }
                 }               
                     <h1 class="govuk-heading-l">                       
