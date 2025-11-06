@@ -17447,7 +17447,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resourcess Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare..
+        ///   Looks up a localized string similar to The Water Resources Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara1Wales {
             get {

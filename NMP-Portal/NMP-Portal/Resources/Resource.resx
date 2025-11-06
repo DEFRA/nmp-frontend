@@ -3311,7 +3311,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resourcess Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
+    <value>The Water Resources Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply.</value>
