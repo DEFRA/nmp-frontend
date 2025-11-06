@@ -374,19 +374,19 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblUpdateThisField
             </govuk-button>
-            if(ViewBag.IsDataChange != null && ViewBag.IsDataChange==true)
+            @if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
             {
-            <p class="govuk-body cancel-link">
-                <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
-            </p>
+                <p class="govuk-body cancel-link">
+                    <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
+                </p>
             }
             else
             {
-            <p class="govuk-body cancel-link">
-                <a asp-action="FieldSoilAnalysisDetail" asp-controller="Field">@Resource.lblCancel</a>
-            </p>
+                <p class="govuk-body cancel-link">
+                    <a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                </p>
             }
-            
+
         </div>
     </div>
 </form>
