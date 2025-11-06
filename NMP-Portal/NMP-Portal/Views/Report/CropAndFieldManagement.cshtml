@@ -75,10 +75,6 @@
                     <br />
                 }
                 @Model.CropAndFieldReport.Farm.Postcode
-
-                <br />
-                <br />
-                @(string.Format("{0}{1} {2}", Resource.lblAnnualRainfall, ":", string.Format(Resource.lblRainfallMM, Model.CropAndFieldReport.Farm.Rainfall)))
             </p>
             @* <p class="govuk-body margin-bottom-none">
                 
@@ -116,7 +112,14 @@
             <br />
         </p> *@
         </div>
-    </div>    
+    </div>
+    <div class="govuk-grid-row govuk-grid-column-full margin-bottom-ten">
+        <p class="govuk-body">
+            @(string.Format("{0}{1} {2}", Resource.lblAnnualRainfall, ":", string.Format(Resource.lblRainfallMM, Model.CropAndFieldReport.Farm.Rainfall)))                        
+            <br>
+            @(string.Format("{0}{1} {2}", Resource.lblExcessWinterRainfall, ":", Model.CropAndFieldReport.ExcessWinterRainfall))
+        </p>
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <hr class="margin-bottom-thirty">

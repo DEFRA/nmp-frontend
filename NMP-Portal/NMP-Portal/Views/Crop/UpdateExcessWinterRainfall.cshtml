@@ -34,7 +34,7 @@
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblExcessWinterRainfall</th>
                     <td class="govuk-table__cell">
-                        @(Model.ExcessWinterRainfallValue != null ? string.Format(Resource.lblRainfallMM, Model.ExcessWinterRainfallValue) : Resource.lblNotEntered)
+                        @(!string.IsNullOrWhiteSpace(Model.ExcessWinterRainfallName)? Model.ExcessWinterRainfallName : Resource.lblNotEntered)
                     </td>
                 </tr>
             </tbody>
