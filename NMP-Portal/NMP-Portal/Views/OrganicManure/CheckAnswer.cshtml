@@ -446,10 +446,10 @@
                                     }
                                 }
                             </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
+                            <govuk-summary-list-row-actions>                               
+                                    <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">@Resource.lblChange
+                                         @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                 {
-                                    <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure">@Resource.lblChange
                                        <span class="govuk-visually-hidden">
                                            @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
                                            {
@@ -460,8 +460,8 @@
                                                @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
                                            }
                                        </span>
+                                       }
                                     </govuk-summary-list-row-action>
-                                }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
