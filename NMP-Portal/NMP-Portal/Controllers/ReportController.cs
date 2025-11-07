@@ -487,6 +487,18 @@ namespace NMP.Portal.Controllers
                 model.Nutrients = new List<NutrientResponseWrapper>();
                 model.Nutrients = nutrients;
             }
+            (ExcessRainfalls excessRainfalls, error) = await _farmService.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
+            if (string.IsNullOrWhiteSpace(error.Message) && excessRainfalls != null)
+            {
+                (List<CommonResponse> excessWinterRainfallOption, error) = await _farmService.FetchExcessWinterRainfallOptionAsync();
+                if (string.IsNullOrWhiteSpace(error.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
+                {
+                    string excessRainfallName = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == excessRainfalls.WinterRainfall)).Name;
+                    string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
+                    model.CropAndFieldReport.ExcessWinterRainfall = $"{parts[0]} ({parts[1]})";
+                }
+            }
+
             if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
             {
                 if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))

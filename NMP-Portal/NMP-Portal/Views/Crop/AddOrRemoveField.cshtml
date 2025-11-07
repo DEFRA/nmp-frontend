@@ -12,12 +12,12 @@
 }
 <form asp-action="AddOrRemoveField" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    @if (TempData["AddingOrRemovingFieldsError"] != null)
+    @if (TempData["AddOrRemoveFieldsError"] != null)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["AddingOrRemovingFieldsError"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["AddOrRemoveFieldsError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             </div>
         </div>
