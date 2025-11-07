@@ -667,15 +667,20 @@ namespace NMP.Portal.Controllers
                     {
                         selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
                     }
-                    if (fieldsAllowedForSecondCrops.Count > 0)
+                    if (fieldsAllowedForSecondCrops.Count > 0 &&
+                      fieldsAllowedForSecondCrops.All(addFieldId =>
+                      !selectListItem.Any(x => x.Value == addFieldId.ToString())))
                     {
-                        foreach (var addFieldId in fieldsAllowedForSecondCrops)
+                        foreach (int addFieldId in fieldsAllowedForSecondCrops)
                         {
-                            selectListItem.Add(new SelectListItem
+                            if (selectListItem.Any(x => x.Value != addFieldId.ToString()))
                             {
-                                Value = addFieldId.ToString(),
-                                Text = allFields.Where(x => x.ID == addFieldId).Select(x => x.Name).FirstOrDefault()
-                            });
+                                selectListItem.Add(new SelectListItem
+                                {
+                                    Value = addFieldId.ToString(),
+                                    Text = allFields.Where(x => x.ID == addFieldId).Select(x => x.Name).FirstOrDefault()
+                                });
+                            }
                         }
                     }
                 }
