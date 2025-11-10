@@ -2558,7 +2558,8 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.LivestockQuantity < 1 || model.LivestockQuantity > 999999)
                     {
-                        ModelState["LivestockQuantity"].Errors.Add(Resource.MsgEnterAnQuantityBetweenValue);
+                        //ModelState["LivestockQuantity"].Errors.Add(Resource.MsgEnterAnQuantityBetweenValue);
+                        ModelState.AddModelError("LivestockQuantity", Resource.MsgEnterAnQuantityBetweenValue);
                     }
                 }
 

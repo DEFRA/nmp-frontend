@@ -207,7 +207,7 @@ namespace NMP.Portal.Controllers
                     model.IsCheckAnswer = true;
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
 
-                    if (!string.IsNullOrWhiteSpace(i))
+                    if (!string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(l))
                     {
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisDataBeforeUpdate", model);
                     }
