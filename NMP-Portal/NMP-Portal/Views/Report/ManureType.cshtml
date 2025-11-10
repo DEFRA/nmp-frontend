@@ -10,22 +10,22 @@
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 
-    var backAction = "";
-    @if (Model.ManureGroupIdForFilter == null)
-    {
-        if (Model.IsImport != null)
-        {
-            backAction = "ManageImportExport";
-        }
-        else if (Model.IsCheckAnswer)
-        {
-            backAction = "LivestockImportExportCheckAnswer";
-        }
-        else
-        {
-            backAction = "ImportExportOption";
-        }
-    }
+    // var backAction = "";
+    // @if (Model.ManureGroupIdForFilter == null)
+    // {
+    //     if (Model.IsImport != null)
+    //     {
+    //         backAction = "ManageImportExport";
+    //     }
+    //     else if (Model.IsCheckAnswer)
+    //     {
+    //         backAction = "LivestockImportExportCheckAnswer";
+    //     }
+    //     else
+    //     {
+    //         backAction = "ImportExportOption";
+    //     }
+    // }
     // else
     // {
     //     backAction = "ManureGroup";
@@ -34,7 +34,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackActionForManureType" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnManureType"] != null)
 {
