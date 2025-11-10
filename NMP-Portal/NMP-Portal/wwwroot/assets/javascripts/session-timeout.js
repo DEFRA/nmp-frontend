@@ -29,7 +29,7 @@
 
         warningTimeout = setTimeout(showWarning, warnAt - now);
         logoutTimeout = setTimeout(function () {
-            window.location.href = loginUrl;
+            window.location.href = logoutUrl;
         }, expireAt - now);
 
         console.log("Timers reset → expire at", new Date(expireAt).toLocaleTimeString());
