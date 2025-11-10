@@ -156,9 +156,6 @@ builder.Services.AddMvc(options =>
     options.MaxModelBindingCollectionSize = int.MaxValue;
 });
 
-//builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs }));
-
-
 builder.Services.AddGovUkFrontend(options =>
 {
     options.Rebrand = true;
