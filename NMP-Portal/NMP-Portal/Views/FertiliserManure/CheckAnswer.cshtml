@@ -296,12 +296,12 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-
-                                @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
-                                {
-                                    <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure">@Resource.lblChange
-                                    
-                                        <span class="govuk-visually-hidden">
+                                
+                                    <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">
+                                       @Resource.lblChange                                        
+                                    @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
+                                    {         
+                                    <span class="govuk-visually-hidden">
                                             @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                                             {
                                                 @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
@@ -311,8 +311,9 @@
                                                 @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
                                             }
                                         </span>
+                                    }
                                     </govuk-summary-list-row-action>
-                                }
+                               
 
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
