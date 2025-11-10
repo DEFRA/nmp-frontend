@@ -143,16 +143,20 @@
                     }
                     @if (ViewBag.HasGrassInLastThreeYear != null && ViewBag.HasGrassInLastThreeYear == true)
                     {
-                        @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears[0] == Model.LastHarvestYear))
+                        @if (Model.PreviousGrassYears.Count() > 0)
                         {
-                            if (Model.PreviousCroppings.LayDuration != null)
+                            @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears[0] == Model.LastHarvestYear))
                             {
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@Resource.lblLengthOfTheLay</td>
-                                    <td class="govuk-table__cell">@(Model.PreviousCroppings.LayDuration.Value == (int)NMP.Portal.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore)</td>
-                                </tr>
+                                if (Model.PreviousCroppings.LayDuration != null)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@Resource.lblLengthOfTheLay</td>
+                                        <td class="govuk-table__cell">@(Model.PreviousCroppings.LayDuration.Value == (int)NMP.Portal.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore)</td>
+                                    </tr>
+                                }
                             }
                         }
+                        
                         @if (ViewBag.GrassManagementOption != null)
                         {
                             <tr class="govuk-table__row">

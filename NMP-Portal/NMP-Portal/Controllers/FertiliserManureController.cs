@@ -2723,8 +2723,7 @@ namespace NMP.Portal.Controllers
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
 
-                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
-                !string.IsNullOrWhiteSpace(t) && !string.IsNullOrWhiteSpace(u))
+                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserDataBeforeUpdate", model);
 

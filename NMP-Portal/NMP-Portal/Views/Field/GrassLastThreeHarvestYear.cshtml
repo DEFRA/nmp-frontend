@@ -10,6 +10,10 @@
     {
         backAction = "CheckAnswer";
     }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
     else
     {
         backAction = "HasGrassInLastThreeYear";
