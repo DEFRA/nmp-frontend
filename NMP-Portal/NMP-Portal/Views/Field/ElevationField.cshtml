@@ -79,6 +79,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
         @if (Model != null)
         {
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear" />

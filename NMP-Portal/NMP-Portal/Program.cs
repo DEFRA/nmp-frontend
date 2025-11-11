@@ -156,9 +156,6 @@ builder.Services.AddMvc(options =>
     options.MaxModelBindingCollectionSize = int.MaxValue;
 });
 
-builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs }));
-
-
 builder.Services.AddGovUkFrontend(options =>
 {
     options.Rebrand = true;
@@ -181,9 +178,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    // Configure the HTTP request pipeline.
-    //app.UseExceptionHandler("/Error/404");   
-    //app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    // Configure the HTTP request pipeline.    
     app.Use(async (ctx, next) =>
     {
         await next();
@@ -236,7 +231,7 @@ app.UseCsp(csp =>
     //    .AllowUnsafeInline()
     //    .From("cdnjs.cloudflare.com")
     //    .AddNonce();
-    ////.From(pageTemplateHelper.GetCspScriptHashes());
+    //    .From(pageTemplateHelper.GetCspScriptHashes());
     csp.AllowImages.FromSelf().From("data:").From("https:");
     csp.AllowWorkers.FromSelf().From("blob:");
 });

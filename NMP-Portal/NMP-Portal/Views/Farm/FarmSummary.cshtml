@@ -74,10 +74,8 @@
                         else
                         {
                             <p class="govuk-body">
+                                <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddYourFields</a>
                                 @Resource.lblToStartCreatingPlanAndRecords
-                                <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
-                                    @Resource.lblAddYourFields
-                                </a>
                             </p>
                         }
 

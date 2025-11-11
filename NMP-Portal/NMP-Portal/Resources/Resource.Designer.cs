@@ -5164,7 +5164,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications..
+        ///   Looks up a localized string similar to Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), and add organic material and inorganic fertiliser applications..
         /// </summary>
         public static string lblFarmSummaryContent2 {
             get {
@@ -5191,7 +5191,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning..
+        ///   Looks up a localized string similar to Create reports for NVZ compliance (N-max, livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning..
         /// </summary>
         public static string lblFarmSummaryContent5 {
             get {
@@ -13494,7 +13494,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To start creating plans and records,.
+        ///   Looks up a localized string similar to  to start creating plans and records..
         /// </summary>
         public static string lblToStartCreatingPlanAndRecords {
             get {

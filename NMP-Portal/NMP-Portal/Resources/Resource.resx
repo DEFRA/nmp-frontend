@@ -452,7 +452,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Farm summary</value>
   </data>
   <data name="lblToStartCreatingPlanAndRecords" xml:space="preserve">
-    <value>To start creating plans and records,</value>
+    <value> to start creating plans and records.</value>
   </data>
   <data name="lblUpdateFarmDetails" xml:space="preserve">
     <value>Update farm details</value>
@@ -4815,7 +4815,7 @@ live</value>
     <value>Nutrient management planning</value>
   </data>
   <data name="lblFarmSummaryContent2" xml:space="preserve">
-    <value>Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications.</value>
+    <value>Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), and add organic material and inorganic fertiliser applications.</value>
   </data>
   <data name="lblFarmSummaryContent3" xml:space="preserve">
     <value>View, create or update a plan</value>
@@ -4845,7 +4845,7 @@ live</value>
     <value>Reports and outputs</value>
   </data>
   <data name="lblFarmSummaryContent5" xml:space="preserve">
-    <value>Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning.</value>
+    <value>Create reports for NVZ compliance (N-max, livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning.</value>
   </data>
   <data name="lblFarmSummaryContent6" xml:space="preserve">
     <value>Create a report</value>

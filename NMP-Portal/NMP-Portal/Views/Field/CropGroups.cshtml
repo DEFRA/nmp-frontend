@@ -8,7 +8,15 @@
     var backAction = "";
     if (Model.PreviousCroppings.HasGrassInLastThreeYear != null)
     {
-        if (Model.PreviousCroppings.HasGrassInLastThreeYear == true)
+        if (Model.IsCheckAnswer)
+        {
+            backAction = "CheckAnswer";
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+        {
+            backAction = "UpdateField";
+        }
+        else if (Model.PreviousCroppings.HasGrassInLastThreeYear == true)
         {
             if (Model.IsPreviousYearGrass == false)
             {
@@ -109,6 +117,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
         @if (Model != null)
         {
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
