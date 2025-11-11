@@ -30,7 +30,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="UpdateField" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -199,7 +199,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                @if (Model.IsAbove300SeaLevelForFarm == true)
+                @if (Model.IsAbove300SeaLevel != null)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -255,6 +255,18 @@
 
                 }
 
+                <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGrassInLastThreeYear==null)?"govuk-error-message":"")>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.PreviousCroppings.HasGrassInLastThreeYear != null ? (Model.PreviousCroppings.HasGrassInLastThreeYear.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name))</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+
 
                 @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
                 {
@@ -283,19 +295,22 @@
                         </govuk-summary-list-row-actions>
 
                     </govuk-summary-list-row>
-                    @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears[0] == Model.LastHarvestYear))
+                    @if (Model.PreviousGrassYears.Count() > 0)
                     {
-                        <govuk-summary-list-row class=@((!Model.PreviousCroppings.LayDuration.HasValue)?"govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.PreviousCroppings.LayDuration != null ? (Model.PreviousCroppings.LayDuration.Value == (int)NMP.Portal.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore) : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+                        @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears?[0] == Model.LastHarvestYear))
+                        {
+                            <govuk-summary-list-row class=@((!Model.PreviousCroppings.LayDuration.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.PreviousCroppings.LayDuration != null ? (Model.PreviousCroppings.LayDuration.Value == (int)NMP.Portal.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore) : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
                     }
 
                     <govuk-summary-list-row class=@((!Model.PreviousCroppings.GrassManagementOptionID.HasValue)?"govuk-error-message":"")>
@@ -374,9 +389,19 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblUpdateThisField
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
-            </p>
+            @if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+            {
+                <p class="govuk-body cancel-link">
+                    <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
+                </p>
+            }
+            else
+            {
+                <p class="govuk-body cancel-link">
+                    <a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                </p>
+            }
+
         </div>
     </div>
 </form>

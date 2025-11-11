@@ -77,7 +77,7 @@
                 @Resource.lblAddAnImportOrExport
             </a>
         </p>
-        <p class="govuk-body"><a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-r="@ViewBag.IsManageImportExport">@Resource.lblCreateAReportFromThisInformation</a></p>
+        <p class="govuk-body"><a class="govuk-link" asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblCreateAReportFromThisInformation</a></p>
 
         <govuk-tabs>
             <govuk-tabs-item id="imports" label=@Resource.lblImports>
@@ -117,7 +117,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyImports</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="ManureGroup" asp-controller="Report" asp-route-q="@ViewBag.IsImport">@Resource.lblAddAnImport</a>
+                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsImport">@Resource.lblAddAnImport</a>
                     </p>
                 }
             </govuk-tabs-item>
@@ -157,7 +157,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyExports</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="ManureGroup" asp-controller="Report" asp-route-q="@ViewBag.IsExport">@Resource.lblAddAnExport</a>
+                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsExport">@Resource.lblAddAnExport</a>
                     </p>
                 }
 

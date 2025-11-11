@@ -55,7 +55,7 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay"  asp-action=@(!string.IsNullOrEmpty(Model.EncryptedOrgManureId) ? "OrganicManureUpdate" : "CheckAnswer") asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -446,10 +446,10 @@
                                     }
                                 }
                             </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
+                            <govuk-summary-list-row-actions>                               
+                                    <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">@Resource.lblChange
+                                         @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                 {
-                                    <govuk-summary-list-row-action asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure">@Resource.lblChange
                                        <span class="govuk-visually-hidden">
                                            @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
                                            {
@@ -460,8 +460,8 @@
                                                @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
                                            }
                                        </span>
+                                       }
                                     </govuk-summary-list-row-action>
-                                }
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -1390,7 +1390,26 @@
                     @Resource.lblUpdate
                 </govuk-button>
             }
-            <p class="govuk-body cancel-link"><a asp-action="Cancel" asp-controller="OrganicManure">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link">
+                @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
+                {
+                    <a asp-action="Cancel" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    
+                }
+                else
+                {
+                    @if(ViewBag.IsDataChange != null && ViewBag.IsDataChange==true)
+                    {
+                    <a asp-action="Cancel" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        <a asp-action="BackCheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    }
+                }
+               
+                
+             </p>
         </div>
     </div>
 </form>

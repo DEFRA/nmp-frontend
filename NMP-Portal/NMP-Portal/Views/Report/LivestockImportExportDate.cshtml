@@ -8,15 +8,24 @@
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var backAction = "";
-    if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
-    {
-        backAction = "ManureGroup";
-    }
-    else if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
-    {
-        backAction = "OtherMaterialName";
-    }
-    else if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
+    // if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+    // {
+    //     backAction = "ManureGroup";
+    // }
+    // else if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+    // {
+    //     backAction = "OtherMaterialName";
+    // }
+    // else if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
+    // {
+    //     backAction = "LivestockImportExportCheckAnswer";
+    // }
+    // else
+    // {
+    //     backAction = "ManureType";
+    // }
+
+    if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
     {
         backAction = "LivestockImportExportCheckAnswer";
     }
