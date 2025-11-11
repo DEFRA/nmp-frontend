@@ -1670,7 +1670,7 @@ namespace NMP.Portal.Controllers
                     TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
                     return RedirectToAction("CheckAnswer");
                 }
-                List<PreviousCropping> previousCropping = new List<PreviousCropping>();
+                List<PreviousCroppingData> previousCropping = new List<PreviousCroppingData>();
 
                 if (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
                 {
@@ -1680,7 +1680,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.PreviousCroppings.HarvestYear = year;
 
-                        var newPreviousCropping = new PreviousCropping
+                        var newPreviousCropping = new PreviousCroppingData
                         {
                             CropGroupID = model.CropGroupId,
                             CropTypeID = model.CropTypeID,
@@ -1696,7 +1696,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    var newPreviousCropping = new PreviousCropping
+                    var newPreviousCropping = new PreviousCroppingData
                     {
                         CropGroupID = model.CropGroupId,
                         CropTypeID = model.CropTypeID,
@@ -1717,7 +1717,7 @@ namespace NMP.Portal.Controllers
                         {
                             model.PreviousCroppings.HarvestYear = year;
 
-                            var newPreviousGass = new PreviousCropping
+                            var newPreviousGass = new PreviousCroppingData
                             {
                                 CropGroupID = model.CropGroupId,
                                 CropTypeID = model.CropTypeID,
@@ -1996,9 +1996,9 @@ namespace NMP.Portal.Controllers
             var field = await _fieldService.FetchFieldByFieldId(fieldId);
             //model.LastHarvestYear = farm.LastHarvestYear;
             List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-            int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
+            int oldestYearWithPlan = cropPlans.Any()? cropPlans.Min(cp => cp.Year):farm.LastHarvestYear??0;
             model.LastHarvestYear = oldestYearWithPlan - 1;
-            (List<PreviousCropping> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
+            (List<PreviousCroppingData> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
 
             if (string.IsNullOrWhiteSpace(error.Message))
             {
@@ -2016,7 +2016,7 @@ namespace NMP.Portal.Controllers
                                        .Take(3).ToList();
 
                 
-                List<PreviousCropping> grassCroppings = minThreeCroppings.Where(x => x.HarvestYear < oldestYearWithPlan && x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
+                List<PreviousCroppingData> grassCroppings = minThreeCroppings.Where(x => x.HarvestYear < oldestYearWithPlan && x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
                 foreach (var item in grassCroppings)
                 {
                     previousYears.Add(item.HarvestYear ?? 0);
@@ -2024,7 +2024,7 @@ namespace NMP.Portal.Controllers
 
                 model.PreviousGrassYears = previousYears;
 
-                List<PreviousCropping> previousCroppingsExcludePlan = prevCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear && cp.Year >= oldestYearWithPlan)).ToList();
+                List<PreviousCroppingData> previousCroppingsExcludePlan = prevCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear && cp.Year >= oldestYearWithPlan)).ToList();
 
                 var tasks = previousCroppingsExcludePlan.Select(async pc => new
                 {
@@ -2401,7 +2401,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(id))
                 {
-                    model.EncryptedFieldId = id;
+                    //model.EncryptedFieldId = id;
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
                     int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
                     var field = await _fieldService.FetchFieldByFieldId(fieldId);
@@ -2409,16 +2409,16 @@ namespace NMP.Portal.Controllers
                     //get plans of field
                     List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
                     //get oldest plan
-                    int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
+                    int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : farm.LastHarvestYear ?? 0;
 
                     //fetch previous cropping data and extract 3 from this and assing into model.PreviousCroppingsList
-                    (List<PreviousCropping> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
+                    (List<PreviousCroppingData> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
                     // model.PreviousCroppingsList = prevCroppings.Where(pc => pc.HarvestYear.HasValue).OrderBy(pc => pc.HarvestYear.Value).Take(3).ToList();
 
                     prevCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan).ToList();
                     model.PreviousCroppingsList = prevCroppings;
                     //get previous grasses which harvest year is less than oldest plan.
-                    List<PreviousCropping> grassCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan && x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
+                    List<PreviousCroppingData> grassCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan && x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
                     model.PreviousGrassYears = new List<int>();
                     foreach (var item in grassCroppings)
                     {
@@ -2565,7 +2565,7 @@ namespace NMP.Portal.Controllers
                                 else
                                 {
                                     // Add new record if not present
-                                    model.PreviousCroppingsList.Add(new PreviousCropping
+                                    model.PreviousCroppingsList.Add(new PreviousCroppingData
                                     {
                                         FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId)),
                                         CropGroupID = model.CropGroupId,
@@ -2601,7 +2601,7 @@ namespace NMP.Portal.Controllers
                                 else
                                 {
                                     // Add new record if not present
-                                    model.PreviousCroppingsList.Add(new PreviousCropping
+                                    model.PreviousCroppingsList.Add(new PreviousCroppingData
                                     {
                                         FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId)),
                                         CropGroupID = (int)NMP.Portal.Enums.CropGroup.Grass,

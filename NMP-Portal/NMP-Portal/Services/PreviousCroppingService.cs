@@ -57,9 +57,9 @@ namespace NMP.Portal.Services
             return (previousCropping, error);
         }
 
-        public async Task<(List<PreviousCropping>, Error)> FetchDataByFieldId(int fieldId, int? year)
+        public async Task<(List<PreviousCroppingData>, Error)> FetchDataByFieldId(int fieldId, int? year)
         {
-            List<PreviousCropping> previousCroppings = null;
+            List<PreviousCroppingData> previousCroppings = null;
             Error error = new Error();
 
             try
@@ -80,7 +80,7 @@ namespace NMP.Portal.Services
 
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    previousCroppings = responseWrapper.Data.PreviousCropping.ToObject<List<PreviousCropping>>();
+                    previousCroppings = responseWrapper.Data.PreviousCropping.ToObject<List<PreviousCroppingData>>();
                 }
                 else
                 {
