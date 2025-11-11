@@ -10,6 +10,10 @@
     {
         backAction = "CheckAnswer";
     }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
     else if (Model.PreviousGrassYears?.All(x => x < Model.LastHarvestYear) == true)
     {
         backAction = "LayDuration";
@@ -73,6 +77,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"/>
 
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear"/>

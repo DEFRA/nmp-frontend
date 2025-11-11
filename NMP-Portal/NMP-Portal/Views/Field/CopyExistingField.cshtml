@@ -54,6 +54,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear" value="@Model.LastHarvestYear"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleForSoilMineralNitrogen" value="@Model.SampleForSoilMineralNitrogen"></govuk-date-input>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"/>
+
             @if (Model != null)
             {
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
