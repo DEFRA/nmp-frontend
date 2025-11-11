@@ -3,10 +3,24 @@
 @{
     //ViewData["Title"] = Resource.lblCropType;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
+
+    var backAction = "";
+    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
+    else
+    {
+        backAction = "CropGroups";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange)) ? "CheckAnswer" : "CropGroups")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropTypes" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -58,6 +72,7 @@
 
         @if (Model != null)
         {
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
