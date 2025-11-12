@@ -277,13 +277,13 @@
                             @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @if (Model.PreviousGrassYears == null || Model.PreviousGrassYears.Count==0)
+                            @if (Model.PreviousGrassYears == null || !Model.PreviousGrassYears.Any())
                             {
                                 @Resource.lblNotSet
                             }
                             else
                             {
-                                foreach (var year in Model.PreviousGrassYears)
+                                foreach (var year in Model.PreviousGrassYears.OrderByDescending(x=>x))
                                 {
                                     @year
                                     <br />
