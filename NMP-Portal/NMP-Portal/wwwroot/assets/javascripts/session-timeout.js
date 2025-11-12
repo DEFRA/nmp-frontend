@@ -1,141 +1,183 @@
 ﻿(function () {
     if (!window.sessionConfig) return;
 
-    var sessionTimeoutMinutes = window.sessionConfig.timeoutMinutes;
-    var warningBeforeMinutes = window.sessionConfig.warningMinutes;
-    var logoutUrl = window.sessionConfig.logoutUrl;
-    var keepAliveUrl = window.sessionConfig.keepAliveUrl;
+    const SESSION_LENGTH = window.sessionConfig.timeoutMinutes * 60 * 1000;
+    const WARNING_TIME = window.sessionConfig.warningMinutes * 60 * 1000; // Show warning 3 minutes before expiry
+    const REFRESH_URL = window.sessionConfig.keepAliveUrl;
+    const SIGNOUT_URL = window.sessionConfig.logoutUrl;
+    const STORAGE_KEY = 'govuk-last-activity';
+    const CHANNEL_NAME = 'govuk-session';
+    const DIALOG = document.getElementById('session-timeout-dialog');
+    //const COUNTDOWN_ELEMENT = document.getElementById('timeout-countdown');
+    const STAY_SIGNED_IN_BUTTON = document.getElementById('stay-signed-in');
+    const SIGNOUT_BUTTON = document.getElementById("sign-out");
+    const FOCUSABLE_ELEMENTS = [STAY_SIGNED_IN_BUTTON, SIGNOUT_BUTTON];
 
-    var expireAt, warnAt;
-    var countdownInterval, warningTimeout, logoutTimeout;
-    var modal = document.getElementById("session-timeout-dialog");
-    //var banner = document.getElementById("session-timeout-banner");
-    var stayBtn = document.getElementById("stay-signed-in");
-   // var stayBtnBanner = document.getElementById("stay-signed-in-banner");
-    var signOutBtn = document.getElementById("sign-out");
-    var focusableElements = [stayBtn, signOutBtn];
+    let warningTimer, expiryTimer, countdownInterval;
+    let channel = null;      
 
-    var lastActivity = new Date().getTime();
+    // Try BroadcastChannel first
+    try {
+        channel = new BroadcastChannel(CHANNEL_NAME);
+        channel.onmessage = (e) => {
+            switch (e.data.type) {
+                case 'activity':
+                    resetTimers();
+                    break;
+                case 'refresh':
+                    hideDialog();      // 🔹 auto-close dialog in other tabs
+                    resetTimers();
+                    break;
+                case 'expire':
+                    expireSession();
+                    break;
+            }
+        };
+    } catch (err) {
+        console.warn('BroadcastChannel not supported, using localStorage fallback');
+    }
 
-    // ---- Reset timers ----
+    // Fallback (storage event for Safari/IE)
+    window.addEventListener('storage', function (e) {
+        if (e.key === STORAGE_KEY) resetTimers();
+        if (e.key === 'govuk-session-refresh') hideDialog();
+    });
+
+    // Reset timers
     function resetTimers() {
+        clearTimeout(warningTimer);
+        clearTimeout(expiryTimer);
+        const last = parseInt(localStorage.getItem(STORAGE_KEY) || Date.now());
+        const since = Date.now() - last;
+        const warnDelay = Math.max(0, SESSION_LENGTH - WARNING_TIME - since);
+        const expireDelay = Math.max(0, SESSION_LENGTH - since);
+        warningTimer = setTimeout(showDialog, warnDelay);
+        expiryTimer = setTimeout(expireSession, expireDelay);
+    }
+
+    // Record user activity
+    function recordActivity() {
+        const now = Date.now();
+        localStorage.setItem(STORAGE_KEY, now);
+        if (channel) channel.postMessage({ type: 'activity', timestamp: now });
+        resetTimers();
+    }
+
+    // GOV.UK dialog controls
+    function showDialog() {
+        DIALOG.classList.remove('govuk-!-display-none');
+        document.addEventListener('keydown', trapFocus);
+        STAY_SIGNED_IN_BUTTON.focus();
+        startCountdown(WARNING_TIME / 1000);
+    }
+
+    function hideDialog() {
+        DIALOG.classList.add('govuk-!-display-none');
         clearInterval(countdownInterval);
-        clearTimeout(warningTimeout);
-        clearTimeout(logoutTimeout);
+        document.removeEventListener('keydown', trapFocus);
 
-        var now = new Date().getTime();
-        expireAt = now + (sessionTimeoutMinutes * 60 * 1000);
-        warnAt = expireAt - (warningBeforeMinutes * 60 * 1000);
+    }
 
-        warningTimeout = setTimeout(showWarning, warnAt - now);
-        logoutTimeout = setTimeout(function () {
-            window.location.href = logoutUrl;
-        }, expireAt - now);
+    function startCountdown(seconds) {
+        let remaining = seconds;
+        updateCountdown(remaining);
+        countdownInterval = setInterval(() => {
+            remaining--;
+            updateCountdown(remaining);
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                expireSession();
+            }
+        }, 1000);
+    }
 
-        console.log("Timers reset → expire at", new Date(expireAt).toLocaleTimeString());
+    function updateCountdown(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        // countdownEl.textContent = `${mins} minute${mins !== 1 ? 's' : ''} ${secs} second${secs !== 1 ? 's' : ''}`;
+    }
+
+    function keepAlive() {
+        //const tokenElement = document.querySelector('input[name="NMP-Portal-Antiforgery-Field"]');
+        //const token = tokenElement ? tokenElement.value : null;
+
+        //// Protect against missing or expired tokens
+        //if (!token) {
+        //    console.warn('Anti-forgery token missing or expired. Redirecting to sign-in.');
+        //    expireSession();
+        //    return;
+        //}
+
+        fetch(REFRESH_URL).then(response => {
+            if (response.ok) {
+                // Session refreshed successfully
+                hideDialog();
+                recordActivity();
+
+                // Inform all tabs
+                if (channel) {
+                    channel.postMessage({ type: 'refresh' });
+                } else {
+                    localStorage.setItem('govuk-session-refresh', Date.now());
+                }
+            } else if (response.status === 401 || response.status === 419) {
+                // Token or session expired
+                console.warn('Session expired on server. Signing out.');
+                expireSession();
+            } else {
+                console.error('Unexpected response', response.status);
+                expireSession();
+            }
+        })
+            .catch(error => {
+                console.error('KeepAlive failed', error);
+                expireSession();
+            });
     }
 
     // ---- Focus trap (modal only) ----
     function trapFocus(e) {
         if (e.key === "Tab") {
-            var focusedIndex = focusableElements.indexOf(document.activeElement);
+            var focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
             if (e.shiftKey) {
                 if (focusedIndex === 0) {
                     e.preventDefault();
-                    focusableElements[focusableElements.length - 1].focus();
+                    FOCUSABLE_ELEMENTS[FOCUSABLE_ELEMENTS.length - 1].focus();
                 }
             } else {
-                if (focusedIndex === focusableElements.length - 1) {
+                if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
                     e.preventDefault();
-                    focusableElements[0].focus();
+                    FOCUSABLE_ELEMENTS[0].focus();
                 }
             }
         }
     }
 
-    function formatTime(seconds) {
-        var minutes = Math.floor(seconds / 60);
-        var secs = seconds % 60;
+    function expireSession() {
+        if (channel) channel.postMessage({ type: 'expire' });
+        //hideDialog();
+        window.location.href = SIGNOUT_URL;
+    }
 
-        if (minutes >= 5) {
-            // Keep it simple for longer times
-            return minutes + " minute" + (minutes > 1 ? "s" : "");
-        }
-        else if (minutes > 0) {
-            // Show minutes + seconds if under 5 minutes
-            return minutes + " minute" + (minutes > 1 ? "s " : " ") +
-                (secs > 0 ? secs + " second" + (secs > 1 ? "s" : "") : "");
-        }
-        else {
-            // Less than 1 minute → seconds only
-            return secs + " second" + (secs !== 1 ? "s" : "");
+    function userActivityHandler() {
+        // Only record activity if the timeout dialog is hidden
+        if (DIALOG.classList.contains('govuk-!-display-none')) {
+            recordActivity();
         }
     }
 
-    function updateCountdown(elementId) {
-        var remainingMs = expireAt - new Date().getTime();
-        var remainingSeconds = Math.max(0, Math.floor(remainingMs / 1000));
-
-        //document.getElementById(elementId).innerText = formatTime(remainingSeconds);
-
-        if (remainingSeconds <= 0) {
-            clearInterval(countdownInterval);
-            window.location.href = logoutUrl;
-        }
-    }
-
-    // ---- Show warning (modal or banner) ----
-    function showWarning() {
-        //if (window.innerWidth <= 640) {
-        //    banner.classList.remove("govuk-!-display-none");
-        //    countdownInterval = setInterval(function () {
-        //        updateCountdown("countdown-banner");
-        //    }, 1000);
-        //} else {
-            modal.classList.remove("govuk-!-display-none");
-            document.addEventListener("keydown", trapFocus);
-            stayBtn.focus();
-            countdownInterval = setInterval(function () {
-                updateCountdown("countdown");
-            }, 1000);
-       /* }*/
-    }
-
-    // ---- Refresh session ----
-    function refreshSession() {
-        fetch(keepAliveUrl).then(() => {
-            modal.classList.add("govuk-!-display-none");
-            //banner.classList.add("govuk-!-display-none");
-            document.removeEventListener("keydown", trapFocus);
-
-            resetTimers(); // 🔥 critical fix
-            console.log("Session refreshed at " + new Date().toLocaleTimeString());
+    // Hook up events   
+    function bindActivityListeners() {
+        ['click', 'keypress', 'mousemove', 'scroll'].forEach(eventType => {
+            window.addEventListener(eventType, () => {                
+                userActivityHandler();
+            });
         });
     }
 
-    // ---- User activity detection ----
-    function activityDetected() {
-        lastActivity = new Date().getTime();
-        console.log("Last Activity at :" + new Date().toLocaleTimeString());
-    }
-
-    ['click', 'mousemove', 'keydown', 'scroll'].forEach(function (evt) {
-        document.addEventListener(evt, activityDetected);
-    });
-
-    // ---- Auto refresh if user active ----
-    setInterval(function () {
-        var now = new Date().getTime();
-        var inactiveMs = now - lastActivity;
-        if (inactiveMs < 2 * 60 * 1000) {
-            refreshSession();
-        }
-    }, 5 * 60 * 1000);
-
-    // ---- Button actions ----
-    stayBtn.addEventListener("click", refreshSession);
-    //stayBtnBanner.addEventListener("click", refreshSession);
-
-    // ---- Init timers on page load ----
-    resetTimers();
+    STAY_SIGNED_IN_BUTTON.addEventListener('click', keepAlive);
+    bindActivityListeners();
+    // Initialise timers on load
+    recordActivity();
+     
 })();

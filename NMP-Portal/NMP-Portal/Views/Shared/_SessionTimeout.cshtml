@@ -15,6 +15,7 @@
      aria-labelledby="session-timeout-title"
      aria-describedby="session-timeout-message"
      aria-modal="true">
+    <div class="dialog-container">
     <govuk-notification-banner type="NotificationBannerType.Default">
         <govuk-notification-banner-title heading-level="2" id="banner-title">
             @Resource.lblSessionTimeoutBoxHeading
@@ -27,31 +28,13 @@
             @Resource.lblYouCanAlso <a class="govuk-link" id="sign-out" asp-action="Logout" asp-controller="Account">@Resource.lblSignoutnow</a>.
         </div>
     </govuk-notification-banner>
-</div>
-
-<!-- Mobile banner -->
-@* <div class="govuk-!-display-none" id="session-timeout-banner">
-    <div class="govuk-notification-banner govuk-notification-banner--warning session-timeout-banner" aria-labelledby="session-timeout-banner-title" role="alert">
-        <div class="govuk-notification-banner__content">
-            <h2 class="govuk-notification-banner__title" id="session-timeout-banner-title">
-                @Resource.lblSessionTimeoutBoxHeading
-            </h2>
-            <div class="govuk-notification-banner__heading">
-                @Resource.lblSessionTimeoutBoxContent
-                <br /><span id="countdown-banner">@warningSeconds</span>
-            </div>
-            <button type="button" class="govuk-button govuk-!-margin-top-2"
-                    id="stay-signed-in-banner">
-                @Resource.lblStaySignedIn
-            </button>
-        </div>
     </div>
-</div> *@
+</div>
 
 <script type="text/javascript" asp-add-nonce="true" asp-append-version="true">
     window.sessionConfig = {
-        timeoutMinutes: @timeoutMinutes,
-        warningMinutes: @warningMinutes,
+        timeoutMinutes: parseInt("@timeoutMinutes"),
+        warningMinutes: parseInt("@warningMinutes"),
         logoutUrl: '/Account/Logout',
         keepAliveUrl: '/Session/KeepAlive'
     };
