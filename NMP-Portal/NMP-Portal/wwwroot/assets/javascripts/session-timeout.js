@@ -13,16 +13,8 @@
     const SIGNOUT_BUTTON = document.getElementById("sign-out");
     const FOCUSABLE_ELEMENTS = [STAY_SIGNED_IN_BUTTON, SIGNOUT_BUTTON];
 
-
-    var expireAt, warnAt;
-    var countdownInterval, warningTimeout, logoutTimeout;
-             
-    
-    
-
-    var lastActivity = new Date().getTime();
-
-    let channel = null;
+    let warningTimer, expiryTimer, countdownInterval;
+    let channel = null;      
 
     // Try BroadcastChannel first
     try {
@@ -51,6 +43,17 @@
         if (e.key === 'govuk-session-refresh') hideDialog();
     });
 
+    // Reset timers
+    function resetTimers() {
+        clearTimeout(warningTimer);
+        clearTimeout(expiryTimer);
+        const last = parseInt(localStorage.getItem(STORAGE_KEY) || Date.now());
+        const since = Date.now() - last;
+        const warnDelay = Math.max(0, SESSION_LENGTH - WARNING_TIME - since);
+        const expireDelay = Math.max(0, SESSION_LENGTH - since);
+        warningTimer = setTimeout(showDialog, warnDelay);
+        expiryTimer = setTimeout(expireSession, expireDelay);
+    }
 
     // Record user activity
     function recordActivity() {
@@ -60,22 +63,76 @@
         resetTimers();
     }
 
-    // ---- Reset timers ----
-    function resetTimers() {
+    // GOV.UK dialog controls
+    function showDialog() {
+        DIALOG.classList.remove('govuk-!-display-none');
+        document.addEventListener('keydown', trapFocus);
+        STAY_SIGNED_IN_BUTTON.focus();
+        startCountdown(WARNING_TIME / 1000);
+    }
+
+    function hideDialog() {
+        DIALOG.classList.add('govuk-!-display-none');
         clearInterval(countdownInterval);
-        clearTimeout(warningTimeout);
-        clearTimeout(logoutTimeout);
+        document.removeEventListener('keydown', trapFocus);
 
-        var now = new Date().getTime();
-        expireAt = now + (SESSION_LENGTH);
-        warnAt = expireAt - (WARNING_TIME);
+    }
 
-        warningTimeout = setTimeout(showWarning, warnAt - now);
-        logoutTimeout = setTimeout(function () {
-            window.location.href = SIGNOUT_URL;
-        }, expireAt - now);
+    function startCountdown(seconds) {
+        let remaining = seconds;
+        updateCountdown(remaining);
+        countdownInterval = setInterval(() => {
+            remaining--;
+            updateCountdown(remaining);
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                expireSession();
+            }
+        }, 1000);
+    }
 
-        console.log("Timers reset → expire at", new Date(expireAt).toLocaleTimeString());
+    function updateCountdown(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        // countdownEl.textContent = `${mins} minute${mins !== 1 ? 's' : ''} ${secs} second${secs !== 1 ? 's' : ''}`;
+    }
+
+    function keepAlive() {
+        //const tokenElement = document.querySelector('input[name="NMP-Portal-Antiforgery-Field"]');
+        //const token = tokenElement ? tokenElement.value : null;
+
+        //// Protect against missing or expired tokens
+        //if (!token) {
+        //    console.warn('Anti-forgery token missing or expired. Redirecting to sign-in.');
+        //    expireSession();
+        //    return;
+        //}
+
+        fetch(REFRESH_URL).then(response => {
+            if (response.ok) {
+                // Session refreshed successfully
+                hideDialog();
+                recordActivity();
+
+                // Inform all tabs
+                if (channel) {
+                    channel.postMessage({ type: 'refresh' });
+                } else {
+                    localStorage.setItem('govuk-session-refresh', Date.now());
+                }
+            } else if (response.status === 401 || response.status === 419) {
+                // Token or session expired
+                console.warn('Session expired on server. Signing out.');
+                expireSession();
+            } else {
+                console.error('Unexpected response', response.status);
+                expireSession();
+            }
+        })
+            .catch(error => {
+                console.error('KeepAlive failed', error);
+                expireSession();
+            });
     }
 
     // ---- Focus trap (modal only) ----
@@ -96,97 +153,31 @@
         }
     }
 
-    function formatTime(seconds) {
-        var minutes = Math.floor(seconds / 60);
-        var secs = seconds % 60;
-
-        if (minutes >= 5) {
-            // Keep it simple for longer times
-            return minutes + " minute" + (minutes > 1 ? "s" : "");
-        }
-        else if (minutes > 0) {
-            // Show minutes + seconds if under 5 minutes
-            return minutes + " minute" + (minutes > 1 ? "s " : " ") +
-                (secs > 0 ? secs + " second" + (secs > 1 ? "s" : "") : "");
-        }
-        else {
-            // Less than 1 minute → seconds only
-            return secs + " second" + (secs !== 1 ? "s" : "");
-        }
+    function expireSession() {
+        if (channel) channel.postMessage({ type: 'expire' });
+        //hideDialog();
+        window.location.href = SIGNOUT_URL;
     }
 
-    function updateCountdown(elementId) {
-        var remainingMs = expireAt - new Date().getTime();
-        var remainingSeconds = Math.max(0, Math.floor(remainingMs / 1000));
-        //document.getElementById(elementId).innerText = formatTime(remainingSeconds);
-
-        if (remainingSeconds <= 0) {
-            clearInterval(countdownInterval);
-            window.location.href = SIGNOUT_URL;
-        }
-    }
-
-    // ---- Show warning (modal or banner) ----
-    function showWarning() {       
-        DIALOG.classList.remove("govuk-!-display-none");
-            document.addEventListener("keydown", trapFocus);
-        STAY_SIGNED_IN_BUTTON.focus();
-            countdownInterval = setInterval(function () {
-                updateCountdown("countdown");
-            }, 1000);
-      
-    }
-
-    // ---- Refresh session ----
-    function refreshSession() {
-        fetch(REFRESH_URL).then(() => {
-            DIALOG.classList.add("govuk-!-display-none");            
-            document.removeEventListener("keydown", trapFocus);
-
-            resetTimers(); // 🔥 critical fix
-            console.log("Session refreshed at " + new Date().toLocaleTimeString());
-        });
-    }
-
-    // ---- User activity detection ----
-    function activityDetected() {
-        lastActivity = new Date().getTime();
-        console.log("Last Activity at :" + new Date().toLocaleTimeString());
-    }
-
-    ['click', 'mousemove', 'keydown', 'scroll'].forEach(function (evt) {
-        document.addEventListener(evt, activityDetected);
-    });
-
-    // ---- Auto refresh if user active ----
-    setInterval(function () {
-        var now = new Date().getTime();
-        var inactiveMs = now - lastActivity;
-        if (inactiveMs < 2 * 60 * 1000) {
-            refreshSession();
-        }
-    }, 5 * 60 * 1000);
-
-    // ---- Button actions ----
-    STAY_SIGNED_IN_BUTTON.addEventListener("click", refreshSession);
-    //STAY_SIGNED_IN_BUTTON.addEventListener('click', keepAlive);
     function userActivityHandler() {
         // Only record activity if the timeout dialog is hidden
         if (DIALOG.classList.contains('govuk-!-display-none')) {
             recordActivity();
         }
     }
+
+    // Hook up events   
     function bindActivityListeners() {
         ['click', 'keypress', 'mousemove', 'scroll'].forEach(eventType => {
-            window.addEventListener(eventType, () => {
-                if (DIALOG.classList.contains('govuk-!-display-none')) {
-                    userActivityHandler();
-                }
+            window.addEventListener(eventType, () => {                
+                userActivityHandler();
             });
         });
     }
-    
-    bindActivityListeners();
 
-    resetTimers();
+    STAY_SIGNED_IN_BUTTON.addEventListener('click', keepAlive);
+    bindActivityListeners();
+    // Initialise timers on load
+    recordActivity();
+     
 })();
