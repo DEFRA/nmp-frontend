@@ -1236,15 +1236,15 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
-                {
-                    int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-                    List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-                    if(cropPlans.Any(cp => cp.Year == model.LastHarvestYear))
-                    {
-                        return RedirectToAction("UpdateField");
-                    }
-                }
+                //if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+                //{
+                //    int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+                //    List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+                //    if(cropPlans.Any(cp => cp.Year == model.LastHarvestYear))
+                //    {
+                //        return RedirectToAction("UpdateField");
+                //    }
+                //}
                 cropGroups = await _fieldService.FetchCropGroups();
                 List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
                 //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropGroupList", cropGroups);
@@ -1670,7 +1670,7 @@ namespace NMP.Portal.Controllers
                     TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
                     return RedirectToAction("CheckAnswer");
                 }
-                List<PreviousCropping> previousCropping = new List<PreviousCropping>();
+                List<PreviousCroppingData> previousCropping = new List<PreviousCroppingData>();
 
                 if (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
                 {
@@ -1680,7 +1680,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.PreviousCroppings.HarvestYear = year;
 
-                        var newPreviousCropping = new PreviousCropping
+                        var newPreviousCropping = new PreviousCroppingData
                         {
                             CropGroupID = model.CropGroupId,
                             CropTypeID = model.CropTypeID,
@@ -1696,7 +1696,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    var newPreviousCropping = new PreviousCropping
+                    var newPreviousCropping = new PreviousCroppingData
                     {
                         CropGroupID = model.CropGroupId,
                         CropTypeID = model.CropTypeID,
@@ -1709,7 +1709,7 @@ namespace NMP.Portal.Controllers
                     };
                     previousCropping.Add(newPreviousCropping);
 
-                    if(model.PreviousGrassYears != null)
+                    if (model.PreviousGrassYears != null)
                     {
                         model.CropGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
                         model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
@@ -1717,7 +1717,7 @@ namespace NMP.Portal.Controllers
                         {
                             model.PreviousCroppings.HarvestYear = year;
 
-                            var newPreviousGass = new PreviousCropping
+                            var newPreviousGass = new PreviousCroppingData
                             {
                                 CropGroupID = model.CropGroupId,
                                 CropTypeID = model.CropTypeID,
@@ -1731,7 +1731,7 @@ namespace NMP.Portal.Controllers
                             previousCropping.Add(newPreviousGass);
                         }
                     }
-                    
+
                 }
 
 
@@ -1994,21 +1994,24 @@ namespace NMP.Portal.Controllers
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
             var field = await _fieldService.FetchFieldByFieldId(fieldId);
-            model.LastHarvestYear = farm.LastHarvestYear;
-            (List<PreviousCropping> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId);
+            List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+            int oldestYearWithPlan = cropPlans.Any()? cropPlans.Min(cp => cp.Year):(farm.LastHarvestYear??0)+1;
+            model.LastHarvestYear = oldestYearWithPlan - 1;
+            (List<PreviousCroppingData> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
 
             if (string.IsNullOrWhiteSpace(error.Message))
             {
                 List<int> previousYears = new List<int>();
-                List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-                List<PreviousCropping> grassCroppings = prevCroppings.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
+                
+                List<PreviousCroppingData> grassCroppings = prevCroppings.Where(x=> x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
                 foreach (var item in grassCroppings)
                 {
                     previousYears.Add(item.HarvestYear ?? 0);
                 }
+
                 model.PreviousGrassYears = previousYears;
 
-                List<PreviousCropping> previousCroppingsExcludePlan = prevCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear)).ToList();
+                List<PreviousCroppingData> previousCroppingsExcludePlan = prevCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear)).ToList();
 
                 var tasks = previousCroppingsExcludePlan.Select(async pc => new
                 {
@@ -2029,41 +2032,49 @@ namespace NMP.Portal.Controllers
                     CropTypeName = await _fieldService.FetchCropTypeById(pc.CropTypeID ?? 0)
                 }).ToList();
 
-                ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).ToList();
+                ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).OrderByDescending(x=>x.HarvestYear).ToList();
 
                 bool? hasGrassInLastThreeYear = null;
-                if (prevCroppings.All(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+
+                if (grassCroppings.Count > 0)
                 {
-                    model.IsPreviousYearGrass = false;
-                    hasGrassInLastThreeYear = false;
+                    //grass
+                    model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear) ? true : false;
+                    model.PreviousCroppings = grassCroppings.FirstOrDefault();
+                    hasGrassInLastThreeYear = true;
                 }
                 else
                 {
-                    model.IsPreviousYearGrass = prevCroppings.FirstOrDefault().CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass ? true : false;
-                    hasGrassInLastThreeYear = true;
-                    model.PreviousCroppings = prevCroppings.FirstOrDefault(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                    //arable
+                    model.IsPreviousYearGrass = false;
+                    hasGrassInLastThreeYear = false;
+                    if (model.PreviousCroppingsList.Count > 0)
+                    {
+                        model.PreviousCroppings.HasGrassInLastThreeYear = false;
+                    }
+                    else
+                    {
+                        model.PreviousCroppings.HasGrassInLastThreeYear = null;
+                    }
                 }
                 model.CropGroupId = prevCroppings.FirstOrDefault(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)?.CropGroupID;
                 model.CropTypeID = prevCroppings.FirstOrDefault(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)?.CropTypeID;
-                if(model.CropGroupId != null && model.CropTypeID != null)
+
+                if (model.CropGroupId != null && model.CropTypeID != null)
                 {
                     model.CropGroup = await _fieldService.FetchCropGroupById(model.CropGroupId.Value);
                     model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
                 }
-                
                 ViewBag.HasGrassInLastThreeYear = hasGrassInLastThreeYear;
-
-
                 if (hasGrassInLastThreeYear == true)
                 {
-                    
                     List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
                     ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
                              .Where(pc => pc.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                              .Select(pc => pc.GrassManagementOptionID)
                              .FirstOrDefault())?.Name;
 
-                    
+
                     List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
                     ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x =>
                           x.Id == prevCroppings
@@ -2071,7 +2082,7 @@ namespace NMP.Portal.Controllers
                             .Select(pc => pc.SoilNitrogenSupplyItemID)
                             .FirstOrDefault())?.Name;
                 }
-                
+
             }
 
 
@@ -2385,61 +2396,76 @@ namespace NMP.Portal.Controllers
                     int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
                     var field = await _fieldService.FetchFieldByFieldId(fieldId);
 
+                    //get plans of field
+                    List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+                    //get oldest plan
+                    int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : (farm.LastHarvestYear ?? 0)+1;
 
-                    model.LastHarvestYear = farm.LastHarvestYear;
-                    (List<PreviousCropping> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId);
+                    //fetch previous cropping data and extract 3 from this and assing into model.PreviousCroppingsList
+                    (List<PreviousCroppingData> prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
 
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    prevCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan).ToList();
+                    model.PreviousCroppingsList = prevCroppings;
+                    //get previous grasses which harvest year is less than oldest plan.
+                    List<PreviousCroppingData> grassCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan && x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
+                    model.PreviousGrassYears = new List<int>();
+                    foreach (var item in grassCroppings)
                     {
-                        List<int> previousYears = new List<int>();
-                        List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-                        ViewBag.isPlanCreatedForLastHarvestYear = cropPlans.Any(cp => cp.Year == model.LastHarvestYear);
-                        model.PreviousCroppingsList = prevCroppings;
-                        //List<PreviousCropping> previousCroppingsExcludePlan = previousCroppings.Where(pc => !cropPlans.Any(cp => cp.Year == pc.HarvestYear)).ToList();
-                        List<PreviousCropping> grassCroppings = prevCroppings.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
-                        foreach (var item in grassCroppings)
-                        {
-                            previousYears.Add(item.HarvestYear ?? 0);
-                        }
+                        model.PreviousGrassYears.Add(item.HarvestYear ?? 0);
+                    }
 
-                        model.PreviousGrassYears = previousYears;
+                    //update last harvest year 
+                    model.LastHarvestYear = oldestYearWithPlan - 1;
 
-                        bool? hasGrassInLastThreeYear = null;
-                        if (prevCroppings.All(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass))
+                    bool? hasGrassInLastThreeYear = null;
+                    if (grassCroppings.Count > 0)
+                    {
+                        //grass
+                        model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear)?true:false;
+
+                        model.PreviousCroppings = grassCroppings.FirstOrDefault();
+
+                        hasGrassInLastThreeYear = true;
+
+                    }
+                    else
+                    {
+                        //arable
+                        model.IsPreviousYearGrass = false;
+                        hasGrassInLastThreeYear = false;
+                        if(model.PreviousCroppingsList.Count>0)
                         {
-                            model.IsPreviousYearGrass = false;
-                            hasGrassInLastThreeYear = false;
+                            model.PreviousCroppings.HasGrassInLastThreeYear = false;
                         }
                         else
                         {
-                            model.IsPreviousYearGrass = prevCroppings.FirstOrDefault().CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass ? true : false;
-                            hasGrassInLastThreeYear = true;
-                            model.PreviousCroppings = prevCroppings.FirstOrDefault(x=>x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                            model.PreviousCroppings.HasGrassInLastThreeYear = null;
                         }
-                        model.CropGroupId = prevCroppings.FirstOrDefault(x=>x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)?.CropGroupID;
-                        model.CropTypeID = prevCroppings.FirstOrDefault(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)?.CropTypeID;
-                        if (model.CropGroupId != null && model.CropTypeID != null)
-                        {
-                            model.CropGroup = await _fieldService.FetchCropGroupById(model.CropGroupId.Value);
-                            model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
-                        }
-                        ViewBag.HasGrassInLastThreeYear = hasGrassInLastThreeYear;
-
-                        if (hasGrassInLastThreeYear == true)
-                        {
-                            ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
-                              .Where(pc => pc.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                              .Select(pc => pc.GrassManagementOptionID)
-                              .FirstOrDefault())?.Name;
-
-                      ViewBag.SoilNitrogenSupplyItem =soilNitrogenSupplyItems?.FirstOrDefault(x => 
-                            x.Id == prevCroppings
-                              .Where(pc => pc.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
-                              .Select(pc => pc.SoilNitrogenSupplyItemID)
-                              .FirstOrDefault())?.Name;
-                        }
-                        
                     }
+             
+                    model.CropGroupId = prevCroppings.FirstOrDefault(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass && x.HarvestYear == model.LastHarvestYear)?.CropGroupID;
+                    model.CropTypeID = prevCroppings.FirstOrDefault(x => x.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass && x.HarvestYear == model.LastHarvestYear)?.CropTypeID;
+                    if (model.CropGroupId != null && model.CropTypeID != null)
+                    {
+                        model.CropGroup = await _fieldService.FetchCropGroupById(model.CropGroupId.Value);
+                        model.CropType = await _fieldService.FetchCropTypeById(model.CropTypeID.Value);
+                    }
+
+                    if (hasGrassInLastThreeYear == true)
+                    {
+                        ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
+                          .Where(pc => pc.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                          .Select(pc => pc.GrassManagementOptionID)
+                          .FirstOrDefault())?.Name;
+
+                        ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == prevCroppings
+                          .Where(pc => pc.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                          .Select(pc => pc.SoilNitrogenSupplyItemID)
+                          .FirstOrDefault())?.Name;
+                    }
+
+
+
                     model.Name = field.Name;
                     model.TotalArea = field.TotalArea ?? 0;
                     model.CroppedArea = field.CroppedArea ?? 0;
@@ -2493,87 +2519,103 @@ namespace NMP.Portal.Controllers
                     }
                     if (model != null)
                     {
-                        if(model.PreviousCroppings.GrassManagementOptionID != null)
+                        if (model.PreviousCroppings.GrassManagementOptionID != null)
                         {
                             ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
 
                         }
-                        if(model.PreviousCroppings.SoilNitrogenSupplyItemID != null)
+                        if (model.PreviousCroppings.SoilNitrogenSupplyItemID != null)
                         {
                             ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
                         }
-
-
+                        if(model.PreviousGrassYears==null)
+                        {
+                            model.PreviousGrassYears = new List<int>();
+                        }
                         if (model.PreviousCroppingsList != null && model.PreviousGrassYears != null)
                         {
-                            // Sort descending by HarvestYear to get the top-most (latest year)
-                            model.PreviousCroppingsList = model.PreviousCroppingsList
-                                .OrderByDescending(pc => pc.HarvestYear)
-                                .ToList();
+                            //if PreviousGrassYears does not contains last harvest year means last harvest year is arable
+                            if (!model.PreviousGrassYears.Contains(model.LastHarvestYear??0))
+                            {
+                                var existing = model.PreviousCroppingsList.FirstOrDefault(pc => pc.HarvestYear == model.LastHarvestYear);
+                                if (existing != null)
+                                {
+                                    existing.FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+                                    existing.CropGroupID = model.CropGroupId;
+                                    existing.CropTypeID = model.CropTypeID;
+                                    existing.HasGrassInLastThreeYear = model.PreviousCroppings.HasGrassInLastThreeYear;
+                                    existing.LayDuration = null;
+                                    existing.GrassManagementOptionID = null;
+                                    existing.HasGreaterThan30PercentClover = null;
+                                    existing.SoilNitrogenSupplyItemID = null;
+                                    existing.Action = existing.Action== null ? (int)NMP.Portal.Enums.Action.Update : existing.Action;
+                                }
+                                else
+                                {
+                                    // Add new record if not present
+                                    model.PreviousCroppingsList.Add(new PreviousCroppingData
+                                    {
+                                        FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId)),
+                                        CropGroupID = model.CropGroupId,
+                                        CropTypeID = model.CropTypeID,
+                                        HasGrassInLastThreeYear = model.PreviousCroppings.HasGrassInLastThreeYear,
+                                        HarvestYear=model.LastHarvestYear,
+                                        LayDuration = null,
+                                        GrassManagementOptionID = null,
+                                        HasGreaterThan30PercentClover = null,
+                                        SoilNitrogenSupplyItemID = null,
+                                        Action = (int)NMP.Portal.Enums.Action.Insert,
 
-                            var topMost = model.PreviousCroppingsList.FirstOrDefault();
-                            int topYear = topMost?.HarvestYear ?? 0;
+                                    });
+                                }
+                            }
+                            // 1️. Add or update
+                            foreach (var year in model.PreviousGrassYears)
+                            {
+                                var existing = model.PreviousCroppingsList.FirstOrDefault(pc => pc.HarvestYear == year);
+                                if (existing != null)
+                                {
+                                    existing.FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+                                    existing.CropGroupID = (int)NMP.Portal.Enums.CropGroup.Grass;
+                                    existing.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                                    existing.HasGrassInLastThreeYear = model.PreviousCroppings.HasGrassInLastThreeYear;
+                                    existing.LayDuration = model.PreviousCroppings.LayDuration;
+                                    existing.GrassManagementOptionID = model.PreviousCroppings.GrassManagementOptionID;
+                                    existing.HasGreaterThan30PercentClover = model.PreviousCroppings.HasGreaterThan30PercentClover;
+                                    existing.SoilNitrogenSupplyItemID = model.PreviousCroppings.SoilNitrogenSupplyItemID;
+                                    existing.Action = existing.Action == null ? (int)NMP.Portal.Enums.Action.Update: existing.Action;
 
-                            // Keep only records whose year is in PreviousGrassYears OR top-most year
-                            model.PreviousCroppingsList = model.PreviousCroppingsList
-                                .Where(pc => pc.HarvestYear == topYear || model.PreviousGrassYears.Contains(pc.HarvestYear ?? 0))
-                                .ToList();
+                                }
+                                else
+                                {
+                                    // Add new record if not present
+                                    model.PreviousCroppingsList.Add(new PreviousCroppingData
+                                    {
+                                        FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId)),
+                                        CropGroupID = (int)NMP.Portal.Enums.CropGroup.Grass,
+                                        CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass,
+                                        HasGrassInLastThreeYear = model.PreviousCroppings.HasGrassInLastThreeYear,
+                                        HarvestYear=year,
+                                        LayDuration = model.PreviousCroppings.LayDuration,
+                                        GrassManagementOptionID = model.PreviousCroppings.GrassManagementOptionID,
+                                        HasGreaterThan30PercentClover = model.PreviousCroppings.HasGreaterThan30PercentClover,
+                                        SoilNitrogenSupplyItemID = model.PreviousCroppings.SoilNitrogenSupplyItemID,
+                                        Action = (int)NMP.Portal.Enums.Action.Insert,
 
-                            // Update existing records
+                                    });
+                                }
+                            }
+
+                            // 2️. Remove items that are not in PreviousGrassYears
                             foreach (var pc in model.PreviousCroppingsList)
                             {
-                                // Grass or arable logic
-                                if (model.PreviousGrassYears.Contains(pc.HarvestYear ?? 0))
+                                if (!model.PreviousGrassYears.Contains(pc.HarvestYear ?? 0) && pc.HarvestYear != model.LastHarvestYear)
                                 {
-                                    pc.FieldID = model.PreviousCroppings.FieldID;
-                                    pc.CropGroupID = model.PreviousCroppings.CropGroupID;
-                                    pc.CropTypeID = model.PreviousCroppings.CropTypeID;
-                                    pc.HasGrassInLastThreeYear = model.PreviousCroppings.HasGrassInLastThreeYear;
-
-                                    pc.LayDuration = model.PreviousCroppings.LayDuration;
-                                    pc.GrassManagementOptionID = model.PreviousCroppings.GrassManagementOptionID;
-                                    pc.HasGreaterThan30PercentClover = model.PreviousCroppings.HasGreaterThan30PercentClover;
-                                    pc.SoilNitrogenSupplyItemID = model.PreviousCroppings.SoilNitrogenSupplyItemID;
+                                    pc.Action = (int)NMP.Portal.Enums.Action.Delete;
                                 }
-                                else if (pc.HarvestYear == topYear)
-                                {
-                                    pc.FieldID = model.PreviousCroppings.FieldID;
-                                    pc.CropGroupID = model.CropGroupId;  //arable
-                                    pc.CropTypeID = model.CropTypeID;
-                                    pc.HasGrassInLastThreeYear = model.PreviousCroppings.HasGrassInLastThreeYear;
-
-                                    pc.LayDuration = null;
-                                    pc.GrassManagementOptionID = null;
-                                    pc.HasGreaterThan30PercentClover = null;
-                                    pc.SoilNitrogenSupplyItemID = null;
-                                }
-                            }
-
-                            // Add missing years from PreviousGrassYears
-                            var existingYears = model.PreviousCroppingsList
-                                .Select(pc => pc.HarvestYear ?? 0)
-                                .ToHashSet();
-
-                            var missingYears = model.PreviousGrassYears
-                                .Where(y => !existingYears.Contains(y))
-                                .ToList();
-
-                            foreach (var year in missingYears)
-                            {
-                                model.PreviousCroppingsList.Add(new PreviousCropping
-                                {
-                                    FieldID = model.PreviousCroppings.FieldID,
-                                    HarvestYear = year,
-                                    CropGroupID = model.PreviousCroppings.CropGroupID,
-                                    CropTypeID = model.PreviousCroppings.CropTypeID,
-                                    HasGrassInLastThreeYear = true,
-                                    LayDuration = model.PreviousCroppings.LayDuration,
-                                    GrassManagementOptionID = model.PreviousCroppings.GrassManagementOptionID,
-                                    HasGreaterThan30PercentClover = model.PreviousCroppings.HasGreaterThan30PercentClover,
-                                    SoilNitrogenSupplyItemID = model.PreviousCroppings.SoilNitrogenSupplyItemID
-                                });
                             }
                         }
+
 
                         if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
                         {
@@ -2648,7 +2690,7 @@ namespace NMP.Portal.Controllers
                         ModifiedOn = DateTime.Now,
                         ModifiedByID = userId
                     },
-                    PreviousCroppings=model.PreviousCroppingsList,
+                    PreviousCroppings = model.PreviousCroppingsList,
                 };
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
                 (Field fieldResponse, Error error1) = await _fieldService.UpdateFieldAsync(fieldData, fieldId);
@@ -2657,7 +2699,7 @@ namespace NMP.Portal.Controllers
                     string success = _farmDataProtector.Protect(Resource.lblTrue);
                     string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
                     _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
-                    
+
 
                     return RedirectToAction("FieldSoilAnalysisDetail", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblField) });
                 }
@@ -2935,10 +2977,10 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
-                {
-                    return RedirectToAction("UpdateField");
-                }
+                //if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+                //{
+                //    return RedirectToAction("UpdateField");
+                //}
                 return RedirectToAction("CropGroups");
             }
 
@@ -2966,14 +3008,26 @@ namespace NMP.Portal.Controllers
             previousYears.Add(lastHarvestYear - 1);
             previousYears.Add(lastHarvestYear - 2);
 
-            //if(!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
-            //{
-            //    int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-            //    List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+            {
+                int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+                List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+                //if(cropPlans.Count>0)
+                //{
+                //    previousYears = new List<int>();
+                //    int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
+                //    previousYears.Add(oldestYearWithPlan - 1);
+                //    previousYears.Add(oldestYearWithPlan - 2);
+                //    previousYears.Add(oldestYearWithPlan - 3);
 
-            //    previousYears = previousYears.Where(py => !cropPlans.Any(cp => cp.Year == py)).ToList();
-            //}
-            
+                //}
+                if (cropPlans.Any())
+                {
+                    int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
+                    previousYears = Enumerable.Range(1, 3).Select(i => oldestYearWithPlan - i).ToList();
+                }
+            }
+
             ViewBag.PreviousCroppingsYear = previousYears;
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             return View(model);
@@ -2989,6 +3043,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
             }
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
             if (!ModelState.IsValid)
             {
                 List<int> previousYears = new List<int>();
@@ -3127,7 +3182,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            
+
 
             if (model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
             {
@@ -3195,7 +3250,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsPreviousYearGrass == false)
             {
-                if(model.CropGroupId==null)
+                if (model.CropGroupId == null)
                 {
                     return RedirectToAction("CropGroups");
                 }
@@ -3244,7 +3299,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass==true)
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
                 return RedirectToAction("UpdateField");
             }

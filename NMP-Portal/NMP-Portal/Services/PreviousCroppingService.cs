@@ -57,21 +57,30 @@ namespace NMP.Portal.Services
             return (previousCropping, error);
         }
 
-        public async Task<(List<PreviousCropping>, Error)> FetchDataByFieldId(int fieldId)
+        public async Task<(List<PreviousCroppingData>, Error)> FetchDataByFieldId(int fieldId, int? year)
         {
-            List<PreviousCropping> previousCroppings = null;
+            List<PreviousCroppingData> previousCroppings = null;
             Error error = new Error();
 
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId));
+                string url = "";
+                if(year==null)
+                {
+                    url = string.Format(APIURLHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId);
+                }
+                else
+                {
+                    url = string.Format(APIURLHelper.FetchFieldDataByFieldIdOldestHarvestYearAsyncAPI, fieldId, year);
+                }
+                var response = await httpClient.GetAsync(url);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    previousCroppings = responseWrapper.Data.PreviousCropping.ToObject<List<PreviousCropping>>();
+                    previousCroppings = responseWrapper.Data.PreviousCropping.ToObject<List<PreviousCroppingData>>();
                 }
                 else
                 {

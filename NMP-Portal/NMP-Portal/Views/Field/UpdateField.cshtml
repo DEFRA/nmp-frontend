@@ -63,7 +63,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
 
-
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear" />
@@ -99,6 +99,8 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedByID" value="@Model.PreviousCroppingsList[i].CreatedByID" />
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedOn" value="@Model.PreviousCroppingsList[i].ModifiedOn" />
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedByID" value="@Model.PreviousCroppingsList[i].ModifiedByID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].Action" value="@Model.PreviousCroppingsList[i].Action" />
+
                     }
                 }
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
@@ -268,20 +270,20 @@
                 </govuk-summary-list-row>
 
 
-                @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
+                @if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue)
                 {
-                    <govuk-summary-list-row class=@((Model.PreviousGrassYears==null)?"govuk-error-message":"")>
+                    <govuk-summary-list-row class=@((Model.PreviousGrassYears==null || Model.PreviousGrassYears.Count==0)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @if (Model.PreviousGrassYears == null)
+                            @if (Model.PreviousGrassYears == null || !Model.PreviousGrassYears.Any())
                             {
                                 @Resource.lblNotSet
                             }
                             else
                             {
-                                foreach (var year in Model.PreviousGrassYears)
+                                foreach (var year in Model.PreviousGrassYears.OrderByDescending(x=>x))
                                 {
                                     @year
                                     <br />
@@ -355,7 +357,7 @@
                     }
 
                 }
-                @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && (Model.PreviousCroppings.HasGrassInLastThreeYear.Value == false || Model.IsPreviousYearGrass == false))
+                @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && (Model.IsPreviousYearGrass==null || Model.IsPreviousYearGrass == false))
                 {
                     <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.CropGroup))?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
