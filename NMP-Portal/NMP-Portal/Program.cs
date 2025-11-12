@@ -83,7 +83,7 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
     options.Cookie.SameSite = SameSiteMode.Strict;// Prevent CSRF
     options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromMinutes(5);  // Session timeout 
+    options.IdleTimeout = TimeSpan.FromMinutes(20);  // Session timeout 
     //options.IdleTimeout = TimeSpan.FromHours(2);  // 2-hour idle session 
 });
 

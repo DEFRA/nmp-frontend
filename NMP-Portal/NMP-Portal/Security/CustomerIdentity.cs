@@ -54,7 +54,7 @@ namespace NMP.Portal.Security
                     cookieOptions =>
                     {
                         // How long your app's cookie is valid
-                        cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(5); // e.g. 8 hours
+                        cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(20); // e.g. 8 hours
                         cookieOptions.SlidingExpiration = true;
                         // optionally:
                         //cookieOptions.Cookie.MaxAge = cookieOptions.ExpireTimeSpan;
