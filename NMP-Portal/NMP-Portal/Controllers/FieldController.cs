@@ -2039,7 +2039,7 @@ namespace NMP.Portal.Controllers
                 if (grassCroppings.Count > 0)
                 {
                     //grass
-                    model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear) ? true : false;
+                    model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear);
                     model.PreviousCroppings = grassCroppings.FirstOrDefault();
                     hasGrassInLastThreeYear = true;
                 }
