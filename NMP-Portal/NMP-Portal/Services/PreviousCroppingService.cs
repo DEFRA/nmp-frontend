@@ -74,7 +74,7 @@ namespace NMP.Portal.Services
                 {
                     url = string.Format(APIURLHelper.FetchFieldDataByFieldIdOldestHarvestYearAsyncAPI, fieldId, year);
                 }
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId));
+                var response = await httpClient.GetAsync(url);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
