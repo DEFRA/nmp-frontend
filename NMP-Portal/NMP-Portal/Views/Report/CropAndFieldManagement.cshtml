@@ -1,5 +1,6 @@
 ﻿@using NMP.Portal.Resources
 @using System.Globalization
+@using NMP.Portal.ServiceResponses
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblCropAndFieldManagementReportName, Model.FarmName, Model.Year);
@@ -553,6 +554,41 @@
                             }
                         }
                     }
+                    @if (ViewBag.WarningCodes != null)
+                    {
+                        @* bool isWarningExistForThisField = false;
+                        @foreach (var warning in ViewBag.WarningCodes)
+                        {
+                            @if (warning.FieldId == crop.FieldID)
+                            {
+                                isWarningExistForThisField=true;
+                                break;
+                            }
+                        } *@
+                        var warnings = from w in (List<WarningCodeResponse>)ViewBag.WarningCodes where w.FieldId == crop.FieldID select w;
+                        bool isWarningExistForThisField = warnings.Any();
+
+                        @if (isWarningExistForThisField)
+                        {
+                            <h2 class="govuk-heading-m">
+                                @string.Format(Resource.lblNvzWarningFor, field.Name)
+                            </h2>
+
+                            <p class="govuk-body">@Resource.lblThePlannedApplicationsmayNotComplyWith</p>
+
+                            <ul class="govuk-list govuk-list--bullet">
+                                @foreach (var warning in ViewBag.WarningCodes)
+                                {
+                                    @if (warning.FieldId == crop.FieldID)
+                                    {
+                                        <li>@warning.WarningCode</li>
+                                    }
+                                }
+                            </ul>
+                        }
+                        
+                    }
+
                     @if (field.SoilDetails != null)
                     {
                         <div class="govuk-grid-row">
@@ -590,7 +626,7 @@
             </tbody>
         </table>
     </div>
-                            <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-one-half">
         <table class="govuk-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">

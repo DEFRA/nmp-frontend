@@ -43,10 +43,11 @@ namespace NMP.Portal.Controllers
         private readonly IReportService _reportService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStorageCapacityService _storageCapacityService;
+        private readonly IWarningService _warningService;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService)
+            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningService warningService)
         {
             _logger = logger;
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
@@ -61,6 +62,7 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor = httpContextAccessor;
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
+            _warningService = warningService;
         }
         public IActionResult Index()
         {
@@ -462,6 +464,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CropAndFieldManagement()
         {
             ReportViewModel model = new ReportViewModel();
+            Error error = new Error();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
@@ -471,7 +474,19 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             string fieldIds = string.Join(",", model.FieldList);
-            (CropAndFieldReportResponse cropAndFieldReportResponse, Error error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
+
+            (List<WarningCodeResponse> warningCodeResponses, error) = await _warningService.FetchWarningCodeByFieldIdAndYear(fieldIds, model.Year.Value);
+            if (string.IsNullOrWhiteSpace(error.Message))
+            {
+                ViewBag.WarningCodes = warningCodeResponses;
+            }
+            else
+            {
+                TempData["ErrorOnSelectField"] = error.Message;
+                return RedirectToAction("ExportFieldsOrCropType");
+            }
+
+            (CropAndFieldReportResponse cropAndFieldReportResponse, error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
             if (string.IsNullOrWhiteSpace(error.Message))
             {
                 model.CropAndFieldReport = cropAndFieldReportResponse;
