@@ -57,6 +57,5 @@ namespace NMP.Portal.Models
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; } = null;
         public int? ModifiedByID { get; set; } = null;
-        public int? LastHarvestYear { get; set; } = null;
     }
 }

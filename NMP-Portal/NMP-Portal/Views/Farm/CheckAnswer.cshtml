@@ -82,7 +82,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"/>
@@ -196,19 +195,7 @@
                     <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducer)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
-
-                <govuk-summary-list-row>
-                    <govuk-summary-list-row-key>
-                        @Resource.lblWhatIsYourLastHarvestYear
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                        @Model.LastHarvestYear
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="LastHarvestYear" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblLastHarvestYear)</span></govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
+                </govuk-summary-list-row>               
             </govuk-summary-list>
             </div>
 

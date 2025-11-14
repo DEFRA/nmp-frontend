@@ -7,7 +7,7 @@
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
-    if (Model.IsCheckAnswer)
+    if (Model.IsCheckAnswer&&(!Model.IsLastHarvestYearChange))
     {
         backAction = "CheckAnswer";
     }
@@ -15,14 +15,14 @@
     {
         backAction = "UpdateField";
     }
-    else if (Model.RecentSoilAnalysisQuestion.Value)
+    else 
     {
-        backAction = "SoilNutrientValue";
+        backAction = "LastHarvestYear";
     }
-    else
-    {
-        backAction = "RecentSoilAnalysisQuestion";
-    }
+    // else
+    // {
+    //     backAction = "RecentSoilAnalysisQuestion";
+    // }
 }
 
 @section BeforeContent {
@@ -76,6 +76,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLastHarvestYearChange" />
 
         @if (Model != null)
         {

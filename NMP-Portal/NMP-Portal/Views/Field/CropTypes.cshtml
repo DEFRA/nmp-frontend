@@ -69,6 +69,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLastHarvestYearChange" />
 
         @if (Model != null)
         {
