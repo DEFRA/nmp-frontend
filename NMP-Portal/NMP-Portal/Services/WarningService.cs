@@ -12,29 +12,48 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(List<WarningCodeResponse>,Error)> FetchWarningCodeByFieldIdAndYear(string fieldIds, int harvestYear)
+        public async Task<(List<WarningCodeResponse>, Error)> FetchWarningCodeByFieldIdAndYear(
+    string fieldIds, int harvestYear)
         {
-            List<WarningCodeResponse> warningCodes = new List<WarningCodeResponse>();
-            Error error = new Error();
+            var warningCodes = new List<WarningCodeResponse>();
+            var error = new Error();
+
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, fieldIds, harvestYear));
+                var response = await httpClient.GetAsync(
+                    string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, fieldIds, harvestYear));
+
                 string result = await response.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+                ResponseWrapper? responseWrapper = null;
+
+                try
+                {
+                    responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                }
+                catch
+                {
+                    // invalid JSON
+                    responseWrapper = null;
+                }
+
                 if (response.IsSuccessStatusCode)
                 {
-                    if (responseWrapper != null && responseWrapper.Data != null)
+                    var warningList = responseWrapper?.Data?.ToObject<List<WarningCodeResponse>>();
+
+                    if (warningList != null)
                     {
-                        var warningCodelist = responseWrapper.Data.ToObject<List<WarningCodeResponse>>();
-                        warningCodes.AddRange(warningCodelist);
+                        warningCodes.AddRange(warningList);
                     }
                 }
                 else
                 {
-                    if (responseWrapper != null && responseWrapper.Error != null)
+                    var apiError = responseWrapper?.Error?.ToObject<Error>();
+
+                    if (apiError != null)
                     {
-                        error = responseWrapper.Error.ToObject<Error>();
+                        error = apiError;
                         _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
                     }
                 }
@@ -43,16 +62,17 @@ namespace NMP.Portal.Services
             {
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre.Message);
-                throw new Exception(error.Message, hre);
+                throw new HttpRequestException(error.Message, hre);
             }
             catch (Exception ex)
             {
                 error.Message = ex.Message;
                 _logger.LogError(ex.Message);
-                throw new Exception(error.Message, ex);
+                throw new InvalidOperationException(error.Message, ex);
             }
 
-            return (warningCodes,error);
+            return (warningCodes, error);
         }
+
     }
 }
