@@ -6859,4 +6859,139 @@ livestock manure.</value>
   <data name="lblUpdateThisCropGroupOnButton" xml:space="preserve">
     <value>Update this crop group</value>
   </data>
+  <data name="lblCookies" xml:space="preserve">
+    <value>Cookies</value>
+  </data>
+  <data name="lblOnClosingBrowser" xml:space="preserve">
+    <value>On closing browser</value>
+  </data>
+  <data name="lblCookieStatementUpdateOn" xml:space="preserve">
+    <value>This was last updated on 12 November 2025</value>
+  </data>
+  <data name="lblGovernmentServices" xml:space="preserve">
+    <value>Government services</value>
+  </data>
+  <data name="ContentCookiesOfOtherGovServices" xml:space="preserve">
+    <value>Most services we link to are run by different government departments, for example HM Revenue and Customs (HMRC) or the Home Office. These services may set other cookies and, if so, will have their own cookies policy.</value>
+  </data>
+  <data name="lblUsedForStoringTheRelayCookie" xml:space="preserve">
+    <value>Used for storing the relay cookie</value>
+  </data>
+  <data name="CsrfCookieName" xml:space="preserve">
+    <value>x-ms-cpim-csrf</value>
+  </data>
+  <data name="RpCookieName" xml:space="preserve">
+    <value>x-ms-cpim-rp</value>
+  </data>
+  <data name="ContentUsedForStoringMembershipDataForTheResourceProviderTenant" xml:space="preserve">
+    <value>Used for storing membership data for the resource provider tenant</value>
+  </data>
+  <data name="lblContext" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="DcCookieName" xml:space="preserve">
+    <value>x-ms-cpim-dc</value>
+  </data>
+  <data name="CtxCookieName" xml:space="preserve">
+    <value>x-ms-cpim-ctx</value>
+  </data>
+  <data name="ContentUsedForAzureADB2CNetworkRouting" xml:space="preserve">
+    <value>Used for Azure AD B2C network routing</value>
+  </data>
+  <data name="ContentCrossSiteRequestForgeryToken" xml:space="preserve">
+    <value>Cross-Site Request Forgery token used for CRSF protection</value>
+  </data>
+  <data name="CpimCsrfCookieName" xml:space="preserve">
+    <value>x-ms-cpim-csrf</value>
+  </data>
+  <data name="ContentUsedForMaintainingTheRequestState" xml:space="preserve">
+    <value>Used for maintaining the request state, successful authentication</value>
+  </data>
+  <data name="CacheIdCookieName" xml:space="preserve">
+    <value>x-ms-cpim-cache:{id}_n</value>
+  </data>
+  <data name="ContentUsedForMaintainingTheSSOSession" xml:space="preserve">
+    <value>Used for maintaining the SSO session</value>
+  </data>
+  <data name="SSOIdCookieName" xml:space="preserve">
+    <value>x-ms-cpim-sso:{Id}</value>
+  </data>
+  <data name="ContentUsedForTrackingTheTransactionsAndTheCurrentTransaction" xml:space="preserve">
+    <value>Used for tracking the transactions and the current transaction</value>
+  </data>
+  <data name="TransCookieName" xml:space="preserve">
+    <value>x-ms-cpim-trans</value>
+  </data>
+  <data name="ContentUsedToRouteRequestsToTheAppropriateProductionInstance" xml:space="preserve">
+    <value>Used to route requests to the appropriate production instance</value>
+  </data>
+  <data name="SliceCookieName" xml:space="preserve">
+    <value>x-ms-cpim-slice</value>
+  </data>
+  <data name="ContentHoldsUserMembershipDataAcrossTenants" xml:space="preserve">
+    <value>Holds user membership data across tenants</value>
+  </data>
+  <data name="AdminCookieName" xml:space="preserve">
+    <value>x-ms-cpim-admin</value>
+  </data>
+  <data name="lblPurpose" xml:space="preserve">
+    <value>Purpose</value>
+  </data>
+  <data name="lblExpires" xml:space="preserve">
+    <value>Expires</value>
+  </data>
+  <data name="SubHeadingAzureActiveDirectoryB2Ccookies" xml:space="preserve">
+    <value>Azure Active Directory B2C cookies</value>
+  </data>
+  <data name="lblThreeDays" xml:space="preserve">
+    <value>3 days</value>
+  </data>
+  <data name="SubHeadingCookiesThatAreStrictlyNecessary" xml:space="preserve">
+    <value>Cookies that are strictly necessary</value>
+  </data>
+  <data name="ContentEssentialCookieStatementText" xml:space="preserve">
+    <value>These cookies are essential to make this service run and to help us stay in line with data protection laws. You cannot turn these cookies off.</value>
+  </data>
+  <data name="SubHeadingEssentialCookies" xml:space="preserve">
+    <value>Essential cookies</value>
+  </data>
+  <data name="lblNever" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="ContentLetsUsKnowThatYouHaveBeenAskedAboutCookies" xml:space="preserve">
+    <value>Lets us know that you’ve been asked about cookies</value>
+  </data>
+  <data name="CookieChallengeCookieName" xml:space="preserve">
+    <value>cookieChallenge</value>
+  </data>
+  <data name="ContentAbourCookies" xml:space="preserve">
+    <value>Cookies are files saved on your phone, tablet or computer that help run the service.</value>
+  </data>
+  <data name="CrumbCookieName" xml:space="preserve">
+    <value>crumb</value>
+  </data>
+  <data name="ContentHelpsToPreventUnauthorisedRequests" xml:space="preserve">
+    <value>Helps to prevent unauthorised requests</value>
+  </data>
+  <data name="IdmCookieName" xml:space="preserve">
+    <value>idm</value>
+  </data>
+  <data name="ContentLetsUsKnowThatYouHaveLoggedInOrRegistered" xml:space="preserve">
+    <value>Lets us know that you’ve logged in or registered</value>
+  </data>
+  <data name="InteractionCookieName" xml:space="preserve">
+    <value>_interaction</value>
+  </data>
+  <data name="ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications" xml:space="preserve">
+    <value>Allows us to identify you as an individual user in our applications</value>
+  </data>
+  <data name="InteractionSigCookieName" xml:space="preserve">
+    <value>_interaction.sig</value>
+  </data>
+  <data name="SessionCookieName" xml:space="preserve">
+    <value>session</value>
+  </data>
+  <data name="ContentStoreInformationThatYouHaveSubmitted" xml:space="preserve">
+    <value>Stores information that you’ve submitted</value>
+  </data>
 </root>

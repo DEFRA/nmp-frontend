@@ -79,11 +79,74 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-admin.
+        /// </summary>
+        public static string AdminCookieName {
+            get {
+                return ResourceManager.GetString("AdminCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start now.
         /// </summary>
         public static string btnStartNow {
             get {
                 return ResourceManager.GetString("btnStartNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-cache:{id}_n.
+        /// </summary>
+        public static string CacheIdCookieName {
+            get {
+                return ResourceManager.GetString("CacheIdCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cookies are files saved on your phone, tablet or computer that help run the service..
+        /// </summary>
+        public static string ContentAbourCookies {
+            get {
+                return ResourceManager.GetString("ContentAbourCookies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows us to identify you as an individual user in our applications.
+        /// </summary>
+        public static string ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications {
+            get {
+                return ResourceManager.GetString("ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most services we link to are run by different government departments, for example HM Revenue and Customs (HMRC) or the Home Office. These services may set other cookies and, if so, will have their own cookies policy..
+        /// </summary>
+        public static string ContentCookiesOfOtherGovServices {
+            get {
+                return ResourceManager.GetString("ContentCookiesOfOtherGovServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cross-Site Request Forgery token used for CRSF protection.
+        /// </summary>
+        public static string ContentCrossSiteRequestForgeryToken {
+            get {
+                return ResourceManager.GetString("ContentCrossSiteRequestForgeryToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These cookies are essential to make this service run and to help us stay in line with data protection laws. You cannot turn these cookies off..
+        /// </summary>
+        public static string ContentEssentialCookieStatementText {
+            get {
+                return ResourceManager.GetString("ContentEssentialCookieStatementText", resourceCulture);
             }
         }
         
@@ -124,6 +187,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Helps to prevent unauthorised requests.
+        /// </summary>
+        public static string ContentHelpsToPreventUnauthorisedRequests {
+            get {
+                return ResourceManager.GetString("ContentHelpsToPreventUnauthorisedRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Holds user membership data across tenants.
+        /// </summary>
+        public static string ContentHoldsUserMembershipDataAcrossTenants {
+            get {
+                return ResourceManager.GetString("ContentHoldsUserMembershipDataAcrossTenants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it&apos;s best to add a separate farm for each one..
         /// </summary>
         public static string ContentHowToolWorks {
@@ -142,6 +223,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lets us know that you’ve been asked about cookies.
+        /// </summary>
+        public static string ContentLetsUsKnowThatYouHaveBeenAskedAboutCookies {
+            get {
+                return ResourceManager.GetString("ContentLetsUsKnowThatYouHaveBeenAskedAboutCookies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lets us know that you’ve logged in or registered.
+        /// </summary>
+        public static string ContentLetsUsKnowThatYouHaveLoggedInOrRegistered {
+            get {
+                return ResourceManager.GetString("ContentLetsUsKnowThatYouHaveLoggedInOrRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET..
         /// </summary>
         public static string ContentReplacePlanetandManner {
@@ -151,11 +250,74 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stores information that you’ve submitted.
+        /// </summary>
+        public static string ContentStoreInformationThatYouHaveSubmitted {
+            get {
+                return ResourceManager.GetString("ContentStoreInformationThatYouHaveSubmitted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to , you will need a nutrient plan. This service will create a plan that you can use for this purpose..
         /// </summary>
         public static string ContentSustainableFarmingIncentiveEnd {
             get {
                 return ResourceManager.GetString("ContentSustainableFarmingIncentiveEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for Azure AD B2C network routing.
+        /// </summary>
+        public static string ContentUsedForAzureADB2CNetworkRouting {
+            get {
+                return ResourceManager.GetString("ContentUsedForAzureADB2CNetworkRouting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for maintaining the request state, successful authentication.
+        /// </summary>
+        public static string ContentUsedForMaintainingTheRequestState {
+            get {
+                return ResourceManager.GetString("ContentUsedForMaintainingTheRequestState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for maintaining the SSO session.
+        /// </summary>
+        public static string ContentUsedForMaintainingTheSSOSession {
+            get {
+                return ResourceManager.GetString("ContentUsedForMaintainingTheSSOSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for storing membership data for the resource provider tenant.
+        /// </summary>
+        public static string ContentUsedForStoringMembershipDataForTheResourceProviderTenant {
+            get {
+                return ResourceManager.GetString("ContentUsedForStoringMembershipDataForTheResourceProviderTenant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for tracking the transactions and the current transaction.
+        /// </summary>
+        public static string ContentUsedForTrackingTheTransactionsAndTheCurrentTransaction {
+            get {
+                return ResourceManager.GetString("ContentUsedForTrackingTheTransactionsAndTheCurrentTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used to route requests to the appropriate production instance.
+        /// </summary>
+        public static string ContentUsedToRouteRequestsToTheAppropriateProductionInstance {
+            get {
+                return ResourceManager.GetString("ContentUsedToRouteRequestsToTheAppropriateProductionInstance", resourceCulture);
             }
         }
         
@@ -192,6 +354,60 @@ namespace NMP.Portal.Resources {
         public static string contentYourData4 {
             get {
                 return ResourceManager.GetString("contentYourData4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to cookieChallenge.
+        /// </summary>
+        public static string CookieChallengeCookieName {
+            get {
+                return ResourceManager.GetString("CookieChallengeCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-csrf.
+        /// </summary>
+        public static string CpimCsrfCookieName {
+            get {
+                return ResourceManager.GetString("CpimCsrfCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to crumb.
+        /// </summary>
+        public static string CrumbCookieName {
+            get {
+                return ResourceManager.GetString("CrumbCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-csrf.
+        /// </summary>
+        public static string CsrfCookieName {
+            get {
+                return ResourceManager.GetString("CsrfCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-ctx.
+        /// </summary>
+        public static string CtxCookieName {
+            get {
+                return ResourceManager.GetString("CtxCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-dc.
+        /// </summary>
+        public static string DcCookieName {
+            get {
+                return ResourceManager.GetString("DcCookieName", resourceCulture);
             }
         }
         
@@ -255,6 +471,33 @@ namespace NMP.Portal.Resources {
         public static string hintTheDateFormat {
             get {
                 return ResourceManager.GetString("hintTheDateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to idm.
+        /// </summary>
+        public static string IdmCookieName {
+            get {
+                return ResourceManager.GetString("IdmCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _interaction.
+        /// </summary>
+        public static string InteractionCookieName {
+            get {
+                return ResourceManager.GetString("InteractionCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _interaction.sig.
+        /// </summary>
+        public static string InteractionSigCookieName {
+            get {
+                return ResourceManager.GetString("InteractionSigCookieName", resourceCulture);
             }
         }
         
@@ -2896,6 +3139,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Context.
+        /// </summary>
+        public static string lblContext {
+            get {
+                return ResourceManager.GetString("lblContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
         public static string lblContinue {
@@ -2910,6 +3162,24 @@ namespace NMP.Portal.Resources {
         public static string lblContinueToCreateAPlanFor {
             get {
                 return ResourceManager.GetString("lblContinueToCreateAPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cookies.
+        /// </summary>
+        public static string lblCookies {
+            get {
+                return ResourceManager.GetString("lblCookies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This was last updated on 12 November 2025.
+        /// </summary>
+        public static string lblCookieStatementUpdateOn {
+            get {
+                return ResourceManager.GetString("lblCookieStatementUpdateOn", resourceCulture);
             }
         }
         
@@ -4858,6 +5128,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expires.
+        /// </summary>
+        public static string lblExpires {
+            get {
+                return ResourceManager.GetString("lblExpires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         public static string lblExport {
@@ -5754,6 +6033,15 @@ namespace NMP.Portal.Resources {
         public static string lblGoatsDeerAndHorses {
             get {
                 return ResourceManager.GetString("lblGoatsDeerAndHorses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Government services.
+        /// </summary>
+        public static string lblGovernmentServices {
+            get {
+                return ResourceManager.GetString("lblGovernmentServices", resourceCulture);
             }
         }
         
@@ -8730,6 +9018,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string lblNever {
+            get {
+                return ResourceManager.GetString("lblNever", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New swards.
         /// </summary>
         public static string lblNewSwards {
@@ -9564,6 +9861,15 @@ namespace NMP.Portal.Resources {
         public static string lblOctober {
             get {
                 return ResourceManager.GetString("lblOctober", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On closing browser.
+        /// </summary>
+        public static string lblOnClosingBrowser {
+            get {
+                return ResourceManager.GetString("lblOnClosingBrowser", resourceCulture);
             }
         }
         
@@ -10689,6 +10995,15 @@ namespace NMP.Portal.Resources {
         public static string lblPrivate_beta_disclaimer_sub_heading_line2 {
             get {
                 return ResourceManager.GetString("lblPrivate_beta_disclaimer_sub_heading_line2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purpose.
+        /// </summary>
+        public static string lblPurpose {
+            get {
+                return ResourceManager.GetString("lblPurpose", resourceCulture);
             }
         }
         
@@ -13368,6 +13683,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 3 days.
+        /// </summary>
+        public static string lblThreeDays {
+            get {
+                return ResourceManager.GetString("lblThreeDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tine cultivator.
         /// </summary>
         public static string lblTineCultivator {
@@ -14345,6 +14669,15 @@ namespace NMP.Portal.Resources {
         public static string lblUricAcidN {
             get {
                 return ResourceManager.GetString("lblUricAcidN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for storing the relay cookie.
+        /// </summary>
+        public static string lblUsedForStoringTheRelayCookie {
+            get {
+                return ResourceManager.GetString("lblUsedForStoringTheRelayCookie", resourceCulture);
             }
         }
         
@@ -20246,11 +20579,83 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-rp.
+        /// </summary>
+        public static string RpCookieName {
+            get {
+                return ResourceManager.GetString("RpCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one {0} type. You can add more {0} types later..
         /// </summary>
         public static string SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater {
             get {
                 return ResourceManager.GetString("SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to session.
+        /// </summary>
+        public static string SessionCookieName {
+            get {
+                return ResourceManager.GetString("SessionCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-slice.
+        /// </summary>
+        public static string SliceCookieName {
+            get {
+                return ResourceManager.GetString("SliceCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-sso:{Id}.
+        /// </summary>
+        public static string SSOIdCookieName {
+            get {
+                return ResourceManager.GetString("SSOIdCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Azure Active Directory B2C cookies.
+        /// </summary>
+        public static string SubHeadingAzureActiveDirectoryB2Ccookies {
+            get {
+                return ResourceManager.GetString("SubHeadingAzureActiveDirectoryB2Ccookies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cookies that are strictly necessary.
+        /// </summary>
+        public static string SubHeadingCookiesThatAreStrictlyNecessary {
+            get {
+                return ResourceManager.GetString("SubHeadingCookiesThatAreStrictlyNecessary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Essential cookies.
+        /// </summary>
+        public static string SubHeadingEssentialCookies {
+            get {
+                return ResourceManager.GetString("SubHeadingEssentialCookies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x-ms-cpim-trans.
+        /// </summary>
+        public static string TransCookieName {
+            get {
+                return ResourceManager.GetString("TransCookieName", resourceCulture);
             }
         }
         
