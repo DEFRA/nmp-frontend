@@ -4,7 +4,7 @@
     Layout = "_GovUkPageTemplate";   
 }
 @section BodyStart {
-    
+    @RenderSection("BodyStart", required: false)        
 }
 @section BeforeContent {
     @RenderSection("BeforeContent", required: false)
@@ -23,6 +23,7 @@
         <govuk-footer-meta>
             <govuk-footer-meta-items>
                 <govuk-footer-meta-item asp-action="Index" asp-controller="AccessibilityStatement">@Resource.lblAccessibilityStatement</govuk-footer-meta-item>
+                <govuk-footer-meta-item asp-action="Index" asp-controller="Cookie">@Resource.lblCookies</govuk-footer-meta-item>
                 <govuk-footer-meta-item asp-action="Index" asp-controller="AcceptTerms">@Resource.lblTermsOfUse</govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>
@@ -31,5 +32,5 @@
 @section BodyEnd {
     @RenderSection("BodyEnd", required: false)
     @await Html.PartialAsync("_LoadingOverlay")      
-   @await Html.PartialAsync("_SessionTimeout")
+    @await Html.PartialAsync("_SessionTimeout")
 }
