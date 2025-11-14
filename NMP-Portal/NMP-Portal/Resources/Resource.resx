@@ -6245,46 +6245,37 @@ livestock manure.</value>
     <value>This website is fully compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt; Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard.</value>
   </data>
   <data name="lblAccessibilityStatementLine14" xml:space="preserve">
-    <value>This website is partially compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard, due to [insert one of the following: ‘the non-compliances’, ‘the exemptions’ or ‘the non-compliances and exemptions’] listed below.</value>
+    <value>There are no non accessible content issues identified</value>
   </data>
   <data name="lblAccessibilityStatementLine15" xml:space="preserve">
-    <value>This website is not compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard. The [insert one of the following: ‘non-compliances’, ‘exemptions’ or ‘non-compliances and exemptions’] are listed below.</value>
+    <value>RB209 technical guidance</value>
   </data>
   <data name="lblAccessibilityStatementLine16" xml:space="preserve">
-    <value>*compliance status TBD based on accessibility audit</value>
+    <value>Gov Gateway</value>
   </data>
   <data name="lblAccessibilityStatementLine17" xml:space="preserve">
-    <value>The content listed below is non-accessible for the following reasons.</value>
+    <value>Providing an assisted digital journey for users with guidance from Defra's Inclusion and Experience Specialist</value>
   </data>
   <data name="lblAccessibilityStatementLine18" xml:space="preserve">
-    <value>*TBD based on accessibility audit</value>
+    <value>Maintaining a shared approach to assisted digital support across services</value>
   </data>
   <data name="lblAccessibilityStatementLine19" xml:space="preserve">
-    <value>Our accessibility roadmap shows how and when we plan to improve accessibility on this website.</value>
+    <value>Allowing users to feedback improvements we can make</value>
   </data>
   <data name="lblAccessibilityStatementLine2" xml:space="preserve">
     <value>This tool is run by the Department for the Environment, Food and Rural Affairs (Defra).</value>
   </data>
   <data name="lblAccessibilityStatementLine20" xml:space="preserve">
-    <value>*roadmap TBD based on accessibility audit</value>
+    <value>This statement was prepared on 29/10/2025</value>
   </data>
   <data name="lblAccessibilityStatementLine21" xml:space="preserve">
-    <value>This statement was prepared on 1 August 2025.</value>
+    <value>It was last reviewed on  28/10/2025</value>
   </data>
   <data name="lblAccessibilityStatementLine22" xml:space="preserve">
-    <value>It was last reviewed on 21 August 2025.</value>
+    <value>This website was last tested on 28/10/2025</value>
   </data>
   <data name="lblAccessibilityStatementLine23" xml:space="preserve">
-    <value>This website was last tested on 18 August 2025.</value>
-  </data>
-  <data name="lblAccessibilityStatementLine24" xml:space="preserve">
-    <value>The test was carried out by internal teams, as part of the development process.</value>
-  </data>
-  <data name="lblAccessibilityStatementLine25" xml:space="preserve">
-    <value>You can read the full accessibility test report.</value>
-  </data>
-  <data name="lblAccessibilityStatementLine26" xml:space="preserve">
-    <value>*report to follow</value>
+    <value>The test was carried out by The Digital accessibility centre as part of service standard assurance.</value>
   </data>
   <data name="lblAccessibilityStatementLine3" xml:space="preserve">
     <value>We want as many people as possible to be able to use this tool.</value>
@@ -6334,9 +6325,6 @@ livestock manure.</value>
   <data name="lblContentThatsNotWithinTheScopeOfTheAccessibilityRegulations" xml:space="preserve">
     <value>Content that’s not within the scope of the accessibility regulations</value>
   </data>
-  <data name="lblDisproportionateBurden" xml:space="preserve">
-    <value>Disproportionate burden</value>
-  </data>
   <data name="lblemail" xml:space="preserve">
     <value>email</value>
   </data>
@@ -6351,9 +6339,6 @@ livestock manure.</value>
   </data>
   <data name="lblNonAccessibleContent" xml:space="preserve">
     <value>Non-accessible content</value>
-  </data>
-  <data name="lblNonComplianceWithTheAccessibilityRegulations" xml:space="preserve">
-    <value>Non-compliance with the accessibility regulations</value>
   </data>
   <data name="lblPreparationOfThisAccessibilityStatement" xml:space="preserve">
     <value>Preparation of this accessibility statement</value>
@@ -6858,6 +6843,141 @@ livestock manure.</value>
   </data>
   <data name="lblUpdateThisCropGroupOnButton" xml:space="preserve">
     <value>Update this crop group</value>
+  </data>
+  <data name="lblCookies" xml:space="preserve">
+    <value>Cookies</value>
+  </data>
+  <data name="lblOnClosingBrowser" xml:space="preserve">
+    <value>On closing browser</value>
+  </data>
+  <data name="lblCookieStatementUpdateOn" xml:space="preserve">
+    <value>This was last updated on 12 November 2025</value>
+  </data>
+  <data name="lblGovernmentServices" xml:space="preserve">
+    <value>Government services</value>
+  </data>
+  <data name="ContentCookiesOfOtherGovServices" xml:space="preserve">
+    <value>Most services we link to are run by different government departments, for example HM Revenue and Customs (HMRC) or the Home Office. These services may set other cookies and, if so, will have their own cookies policy.</value>
+  </data>
+  <data name="lblUsedForStoringTheRelayCookie" xml:space="preserve">
+    <value>Used for storing the relay cookie</value>
+  </data>
+  <data name="CsrfCookieName" xml:space="preserve">
+    <value>x-ms-cpim-csrf</value>
+  </data>
+  <data name="RpCookieName" xml:space="preserve">
+    <value>x-ms-cpim-rp</value>
+  </data>
+  <data name="ContentUsedForStoringMembershipDataForTheResourceProviderTenant" xml:space="preserve">
+    <value>Used for storing membership data for the resource provider tenant</value>
+  </data>
+  <data name="lblContext" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="DcCookieName" xml:space="preserve">
+    <value>x-ms-cpim-dc</value>
+  </data>
+  <data name="CtxCookieName" xml:space="preserve">
+    <value>x-ms-cpim-ctx</value>
+  </data>
+  <data name="ContentUsedForAzureADB2CNetworkRouting" xml:space="preserve">
+    <value>Used for Azure AD B2C network routing</value>
+  </data>
+  <data name="ContentCrossSiteRequestForgeryToken" xml:space="preserve">
+    <value>Cross-Site Request Forgery token used for CRSF protection</value>
+  </data>
+  <data name="CpimCsrfCookieName" xml:space="preserve">
+    <value>x-ms-cpim-csrf</value>
+  </data>
+  <data name="ContentUsedForMaintainingTheRequestState" xml:space="preserve">
+    <value>Used for maintaining the request state, successful authentication</value>
+  </data>
+  <data name="CacheIdCookieName" xml:space="preserve">
+    <value>x-ms-cpim-cache:{id}_n</value>
+  </data>
+  <data name="ContentUsedForMaintainingTheSSOSession" xml:space="preserve">
+    <value>Used for maintaining the SSO session</value>
+  </data>
+  <data name="SSOIdCookieName" xml:space="preserve">
+    <value>x-ms-cpim-sso:{Id}</value>
+  </data>
+  <data name="ContentUsedForTrackingTheTransactionsAndTheCurrentTransaction" xml:space="preserve">
+    <value>Used for tracking the transactions and the current transaction</value>
+  </data>
+  <data name="TransCookieName" xml:space="preserve">
+    <value>x-ms-cpim-trans</value>
+  </data>
+  <data name="ContentUsedToRouteRequestsToTheAppropriateProductionInstance" xml:space="preserve">
+    <value>Used to route requests to the appropriate production instance</value>
+  </data>
+  <data name="SliceCookieName" xml:space="preserve">
+    <value>x-ms-cpim-slice</value>
+  </data>
+  <data name="ContentHoldsUserMembershipDataAcrossTenants" xml:space="preserve">
+    <value>Holds user membership data across tenants</value>
+  </data>
+  <data name="AdminCookieName" xml:space="preserve">
+    <value>x-ms-cpim-admin</value>
+  </data>
+  <data name="lblPurpose" xml:space="preserve">
+    <value>Purpose</value>
+  </data>
+  <data name="lblExpires" xml:space="preserve">
+    <value>Expires</value>
+  </data>
+  <data name="SubHeadingAzureActiveDirectoryB2Ccookies" xml:space="preserve">
+    <value>Azure Active Directory B2C cookies</value>
+  </data>
+  <data name="lblThreeDays" xml:space="preserve">
+    <value>3 days</value>
+  </data>
+  <data name="SubHeadingCookiesThatAreStrictlyNecessary" xml:space="preserve">
+    <value>Cookies that are strictly necessary</value>
+  </data>
+  <data name="ContentEssentialCookieStatementText" xml:space="preserve">
+    <value>These cookies are essential to make this service run and to help us stay in line with data protection laws. You cannot turn these cookies off.</value>
+  </data>
+  <data name="SubHeadingEssentialCookies" xml:space="preserve">
+    <value>Essential cookies</value>
+  </data>
+  <data name="lblNever" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="ContentLetsUsKnowThatYouHaveBeenAskedAboutCookies" xml:space="preserve">
+    <value>Lets us know that you’ve been asked about cookies</value>
+  </data>
+  <data name="CookieChallengeCookieName" xml:space="preserve">
+    <value>cookieChallenge</value>
+  </data>
+  <data name="ContentAbourCookies" xml:space="preserve">
+    <value>Cookies are files saved on your phone, tablet or computer that help run the service.</value>
+  </data>
+  <data name="CrumbCookieName" xml:space="preserve">
+    <value>crumb</value>
+  </data>
+  <data name="ContentHelpsToPreventUnauthorisedRequests" xml:space="preserve">
+    <value>Helps to prevent unauthorised requests</value>
+  </data>
+  <data name="IdmCookieName" xml:space="preserve">
+    <value>idm</value>
+  </data>
+  <data name="ContentLetsUsKnowThatYouHaveLoggedInOrRegistered" xml:space="preserve">
+    <value>Lets us know that you’ve logged in or registered</value>
+  </data>
+  <data name="InteractionCookieName" xml:space="preserve">
+    <value>_interaction</value>
+  </data>
+  <data name="ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications" xml:space="preserve">
+    <value>Allows us to identify you as an individual user in our applications</value>
+  </data>
+  <data name="InteractionSigCookieName" xml:space="preserve">
+    <value>_interaction.sig</value>
+  </data>
+  <data name="SessionCookieName" xml:space="preserve">
+    <value>session</value>
+  </data>
+  <data name="ContentStoreInformationThatYouHaveSubmitted" xml:space="preserve">
+    <value>Stores information that you’ve submitted</value>
   </data>
   <data name="lblNvzWarningFor" xml:space="preserve">
     <value>NVZ warnings for {0}</value>

@@ -2,7 +2,9 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name);
-    ViewData["Title"] = $"{string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name)} {Resource.lblHyphen} {Resource.lblAddField}";
+
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
+    ViewData["Title"] = $"{string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
@@ -73,7 +75,8 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLastHarvestYearChange" />
 
         @if (Model != null)
         {

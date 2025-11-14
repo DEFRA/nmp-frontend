@@ -17,6 +17,10 @@
     else
     {
         backAction = "SoilType";
+        if(Model.CopyExistingField.HasValue&&Model.CopyExistingField.Value)
+        {
+            backAction = "AddField";
+        }
     }
 
 }

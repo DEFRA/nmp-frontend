@@ -61,5 +61,6 @@ namespace NMP.Portal.ViewModels
         public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
         public bool? IsCancel { get; set; }
         public List<PreviousCroppingData> PreviousCroppingsList { get; set; }
+        public bool IsLastHarvestYearChange { get; set; } = false;
     }
 }

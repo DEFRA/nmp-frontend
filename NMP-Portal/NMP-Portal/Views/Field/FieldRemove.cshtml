@@ -40,7 +40,8 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear" />
                     @if (Model != null)
                     {
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear"/>
