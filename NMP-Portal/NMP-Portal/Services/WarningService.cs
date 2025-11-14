@@ -7,8 +7,8 @@ namespace NMP.Portal.Services
 {
     public class WarningService : Service, IWarningService
     {
-        private readonly ILogger<FieldService> _logger;
-        public WarningService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        private readonly ILogger<WarningService> _logger;
+        public WarningService(ILogger<WarningService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
         {
             _logger = logger;
         }
