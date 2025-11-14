@@ -6704,7 +6704,7 @@ livestock manure.</value>
     <value>Menu</value>
   </data>
   <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
-    <value>Was future field used for grass in {0}, {1}  or {2}?</value>
+    <value>Was {0} used for grass in {1}, {2}  or {3}?</value>
   </data>
   <data name="lblRecommendationNotAvailable" xml:space="preserve">
     <value>Recommendations not available</value>

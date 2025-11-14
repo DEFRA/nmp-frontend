@@ -28,6 +28,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
         @if (Model != null)
         {
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
@@ -57,7 +58,7 @@
 
                         <govuk-summary-list-row class=@((!Model.HasGrassInLastThreeYear.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                                                @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)
+                                @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.FieldName, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.HasGrassInLastThreeYear.HasValue ? (Model.HasGrassInLastThreeYear.Value ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
