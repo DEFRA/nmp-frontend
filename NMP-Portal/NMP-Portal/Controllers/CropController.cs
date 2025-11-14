@@ -1007,7 +1007,7 @@ namespace NMP.Portal.Controllers
                         var fieldIdsToRemove = harvestYearPlanResponse
                             .Select(x => x.FieldID)
                             .ToList();
-                                                
+
                         allFieldList.RemoveAll(field => cropPlanForFirstCropFilter
                          .Any(x => x.FieldID == field.ID.Value));
 
@@ -3978,7 +3978,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                 //   return RedirectToAction("HarvestYearForPlan", new { q = id, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
+                    //   return RedirectToAction("HarvestYearForPlan", new { q = id, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
                 }
                 model.EncryptedFarmId = id;
             }
@@ -4355,7 +4355,11 @@ namespace NMP.Portal.Controllers
                                 model.Nutrients = new List<NutrientResponseWrapper>();
                                 model.Nutrients = nutrients;
                             }
-                            (List<HarvestYearPlanResponse> planList, error) = await _cropService.FetchHarvestYearPlansByFarmId(decryptedHarvestYear - 1, decryptedFarmId);
+                            List<Crop> planList= await _cropService.FetchCropsByFieldId(decryptedFieldId);
+                            if (planList.Count > 0)
+                            {
+                                planList = planList.Where(x => x.Year == decryptedHarvestYear-1).ToList();
+                            }
                             if (planList.Count == 0)
                             {
                                 (PreviousCropping PreviousCropping, error) = await _previousCroppingService.FetchDataByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear - 1);
