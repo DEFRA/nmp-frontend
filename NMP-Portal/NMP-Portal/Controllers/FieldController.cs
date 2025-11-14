@@ -1244,6 +1244,7 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsRecentSoilAnalysisQuestionChange = false;
                 model.IsCheckAnswer = true;
+                model.IsLastHarvestYearChange = false;
                 if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Portal.Enums.SoilTypeEngland.Shallow)
                 {
                     model.SoilOverChalk = null;

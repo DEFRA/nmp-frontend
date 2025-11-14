@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = Resource.lblCropType;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
+    ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
 
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))

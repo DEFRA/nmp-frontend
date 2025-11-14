@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = Resource.lblCropGroup;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
+    ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 
     var backAction = "";
