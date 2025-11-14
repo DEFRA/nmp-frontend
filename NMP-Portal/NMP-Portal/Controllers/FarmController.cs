@@ -868,11 +868,11 @@ namespace NMP.Portal.Controllers
             }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            if (farm.IsCheckAnswer)
-            {
+            //if (farm.IsCheckAnswer)
+            //{
                 return RedirectToAction("CheckAnswer");
-            }
-            return RedirectToAction("LastHarvestYear");
+            //}
+            //return RedirectToAction("LastHarvestYear");
         }
         [HttpGet]
         public IActionResult CheckAnswer(string? q)
@@ -970,7 +970,6 @@ namespace NMP.Portal.Controllers
                         EnglishRules = farm.EnglishRules,
                         NVZFields = farm.NVZFields,
                         FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        LastHarvestYear = farm.LastHarvestYear,
                         CountryID = farm.CountryID,
                         ClimateDataPostCode = farm.ClimateDataPostCode,
                         CreatedByID = userId,
@@ -1026,7 +1025,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsCheckAnswer = false;
                 HttpContext.Session.SetObjectAsJson("FarmData", model);
-                return RedirectToAction("LastHarvestYear");
+                return RedirectToAction("Organic");
             }
 
         }
@@ -1055,6 +1054,10 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("StorageCapacityData"))
             {
                 HttpContext?.Session.Remove("StorageCapacityData");
+            }
+            if (HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                HttpContext?.Session.Remove("FieldData");
             }
             ViewBag.FieldCount = 0;
 
@@ -1199,7 +1202,6 @@ namespace NMP.Portal.Controllers
                         farmData.NVZFields = farm.NVZFields;
                         farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        farmData.LastHarvestYear = farm.LastHarvestYear;
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
                         farmData.CountryID = farm.CountryID;
@@ -1284,7 +1286,6 @@ namespace NMP.Portal.Controllers
                         EnglishRules = farm.EnglishRules,
                         NVZFields = farm.NVZFields,
                         FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        LastHarvestYear = farm.LastHarvestYear,
                         CountryID = farm.CountryID,
                         ClimateDataPostCode = farm.ClimateDataPostCode,
                         CreatedByID = createdByID,
@@ -1375,41 +1376,6 @@ namespace NMP.Portal.Controllers
             }
             return View(farm);
 
-        }
-
-        [HttpGet]
-        public IActionResult LastHarvestYear()
-        {
-            _logger.LogTrace($"Farm Controller : LastHarvestYear() action called");
-            FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-
-            return View(model);
-
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult LastHarvestYear(FarmViewModel farm)
-        {
-            _logger.LogTrace($"Farm Controller : LastHarvestYear() post action called");
-            if (farm.LastHarvestYear == null)
-            {
-                ModelState.AddModelError("LastHarvestYear", Resource.MsgSelectAHarvestYearBeforeContinuing);
-            }
-            if (!ModelState.IsValid)
-            {
-                return View("LastHarvestYear", farm);
-            }
-
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
         public IActionResult Cancel()

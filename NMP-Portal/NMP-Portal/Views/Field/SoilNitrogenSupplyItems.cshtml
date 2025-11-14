@@ -1,8 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
-
-    ViewData["Title"] = $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)} {Resource.lblHyphen} {Resource.lblAddField}";
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
+    ViewData["Title"] = $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)} {Resource.lblHyphen} {title}";
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
     {

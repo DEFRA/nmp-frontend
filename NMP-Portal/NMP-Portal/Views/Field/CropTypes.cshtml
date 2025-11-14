@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = Resource.lblCropType;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
+    ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
 
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
@@ -69,6 +69,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLastHarvestYearChange" />
 
         @if (Model != null)
         {

@@ -3978,7 +3978,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("HarvestYearForPlan", new { q = id, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
+                 //   return RedirectToAction("HarvestYearForPlan", new { q = id, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
                 }
                 model.EncryptedFarmId = id;
             }
@@ -7225,7 +7225,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
+                    //return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(farm.LastHarvestYear.ToString()), isPlanRecord = false });
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("CropData", model);
                 bool isPreviousYearPlanExist = false;

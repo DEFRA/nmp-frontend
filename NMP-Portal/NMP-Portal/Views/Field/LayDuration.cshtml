@@ -2,7 +2,8 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = Resource.lblLayDuration;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])} {Resource.lblHyphen} {Resource.lblAddField}";
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])} {Resource.lblHyphen} {title}";
     var oneToTwoYears = (int)NMP.Portal.Enums.LayDuration.OneToTwoYears;
     var threeYearsOrMore = (int)NMP.Portal.Enums.LayDuration.ThreeYearsOrMore;
     var backAction = "";
@@ -83,7 +84,8 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.SoilNitrogenSupplyItemID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLastHarvestYearChange" />
         @if (Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
         {
             @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)
