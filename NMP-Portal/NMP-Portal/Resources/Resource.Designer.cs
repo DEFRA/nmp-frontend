@@ -9784,6 +9784,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NVZ warnings for {0}.
+        /// </summary>
+        public static string lblNvzWarningFor {
+            get {
+                return ResourceManager.GetString("lblNvzWarningFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Occupancy.
         /// </summary>
         public static string lblOccupancy {
@@ -13218,6 +13227,15 @@ namespace NMP.Portal.Resources {
         public static string lblThePhosphateP205StandardCanNotBeChanged {
             get {
                 return ResourceManager.GetString("lblThePhosphateP205StandardCanNotBeChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The planned applications may not comply with these Nitrate Vulnerable Zone (NVZ) rules:.
+        /// </summary>
+        public static string lblThePlannedApplicationsmayNotComplyWith {
+            get {
+                return ResourceManager.GetString("lblThePlannedApplicationsmayNotComplyWith", resourceCulture);
             }
         }
         

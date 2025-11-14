@@ -3804,7 +3804,7 @@ namespace NMP.Portal.Controllers
                                             if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                             {
                                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
                                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
                                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
@@ -3814,7 +3814,7 @@ namespace NMP.Portal.Controllers
                                             if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                                             {
                                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
                                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);

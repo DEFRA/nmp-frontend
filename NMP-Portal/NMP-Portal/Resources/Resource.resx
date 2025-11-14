@@ -6979,4 +6979,10 @@ livestock manure.</value>
   <data name="ContentStoreInformationThatYouHaveSubmitted" xml:space="preserve">
     <value>Stores information that you’ve submitted</value>
   </data>
+  <data name="lblNvzWarningFor" xml:space="preserve">
+    <value>NVZ warnings for {0}</value>
+  </data>
+  <data name="lblThePlannedApplicationsmayNotComplyWith" xml:space="preserve">
+    <value>The planned applications may not comply with these Nitrate Vulnerable Zone (NVZ) rules:</value>
+  </data>
 </root>
