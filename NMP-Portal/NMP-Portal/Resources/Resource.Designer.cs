@@ -1033,7 +1033,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This website is partially compliant with the &lt;a href=&quot;https://www.w3.org/TR/WCAG21/&quot; target=&quot;_blank&quot;&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard, due to [insert one of the following: ‘the non-compliances’, ‘the exemptions’ or ‘the non-compliances and exemptions’] listed below..
+        ///   Looks up a localized string similar to There are no non accessible content issues identified.
         /// </summary>
         public static string lblAccessibilityStatementLine14 {
             get {
@@ -1042,7 +1042,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This website is not compliant with the &lt;a href=&quot;https://www.w3.org/TR/WCAG21/&quot; target=&quot;_blank&quot;&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard. The [insert one of the following: ‘non-compliances’, ‘exemptions’ or ‘non-compliances and exemptions’] are listed below..
+        ///   Looks up a localized string similar to RB209 technical guidance.
         /// </summary>
         public static string lblAccessibilityStatementLine15 {
             get {
@@ -1051,7 +1051,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *compliance status TBD based on accessibility audit.
+        ///   Looks up a localized string similar to Gov Gateway.
         /// </summary>
         public static string lblAccessibilityStatementLine16 {
             get {
@@ -1060,7 +1060,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The content listed below is non-accessible for the following reasons..
+        ///   Looks up a localized string similar to Providing an assisted digital journey for users with guidance from Defra&apos;s Inclusion and Experience Specialist.
         /// </summary>
         public static string lblAccessibilityStatementLine17 {
             get {
@@ -1069,7 +1069,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *TBD based on accessibility audit.
+        ///   Looks up a localized string similar to Maintaining a shared approach to assisted digital support across services.
         /// </summary>
         public static string lblAccessibilityStatementLine18 {
             get {
@@ -1078,7 +1078,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Our accessibility roadmap shows how and when we plan to improve accessibility on this website..
+        ///   Looks up a localized string similar to Allowing users to feedback improvements we can make.
         /// </summary>
         public static string lblAccessibilityStatementLine19 {
             get {
@@ -1096,7 +1096,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *roadmap TBD based on accessibility audit.
+        ///   Looks up a localized string similar to This statement was prepared on 29/10/2025.
         /// </summary>
         public static string lblAccessibilityStatementLine20 {
             get {
@@ -1105,7 +1105,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This statement was prepared on 1 August 2025..
+        ///   Looks up a localized string similar to It was last reviewed on  28/10/2025.
         /// </summary>
         public static string lblAccessibilityStatementLine21 {
             get {
@@ -1114,7 +1114,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It was last reviewed on 21 August 2025..
+        ///   Looks up a localized string similar to This website was last tested on 28/10/2025.
         /// </summary>
         public static string lblAccessibilityStatementLine22 {
             get {
@@ -1123,38 +1123,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This website was last tested on 18 August 2025..
+        ///   Looks up a localized string similar to The test was carried out by The Digital accessibility centre as part of service standard assurance..
         /// </summary>
         public static string lblAccessibilityStatementLine23 {
             get {
                 return ResourceManager.GetString("lblAccessibilityStatementLine23", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The test was carried out by internal teams, as part of the development process..
-        /// </summary>
-        public static string lblAccessibilityStatementLine24 {
-            get {
-                return ResourceManager.GetString("lblAccessibilityStatementLine24", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can read the full accessibility test report..
-        /// </summary>
-        public static string lblAccessibilityStatementLine25 {
-            get {
-                return ResourceManager.GetString("lblAccessibilityStatementLine25", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to *report to follow.
-        /// </summary>
-        public static string lblAccessibilityStatementLine26 {
-            get {
-                return ResourceManager.GetString("lblAccessibilityStatementLine26", resourceCulture);
             }
         }
         
@@ -4188,15 +4161,6 @@ namespace NMP.Portal.Resources {
         public static string lblDiscs {
             get {
                 return ResourceManager.GetString("lblDiscs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Disproportionate burden.
-        /// </summary>
-        public static string lblDisproportionateBurden {
-            get {
-                return ResourceManager.GetString("lblDisproportionateBurden", resourceCulture);
             }
         }
         
@@ -9419,15 +9383,6 @@ namespace NMP.Portal.Resources {
         public static string lblNonCompliance {
             get {
                 return ResourceManager.GetString("lblNonCompliance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Non-compliance with the accessibility regulations.
-        /// </summary>
-        public static string lblNonComplianceWithTheAccessibilityRegulations {
-            get {
-                return ResourceManager.GetString("lblNonComplianceWithTheAccessibilityRegulations", resourceCulture);
             }
         }
         
