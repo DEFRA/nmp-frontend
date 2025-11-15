@@ -5,28 +5,32 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblCropGroupForPlan} {Resource.lblHyphen} {title}";
 
-
     int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
+
+    int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
 
     var action = "HarvestYearForPlan";
     if (Model.IsCheckAnswer)
     {
         action = "CheckAnswer";
     }
-    else if (Model.CopyExistingPlan != null)
+    else if (index>=0)
     {
-        action = "CopyExistingPlan";
+        action = "CheckYourPlanData";
     }
     else
     {
         action = "HarvestYearForPlan";
     }
+    
 }
 
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@(index>=0? Model.HarvestYear[index].EncryptedYear:null)">@Resource.lblBack</govuk-back-link>
+
+    @* <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link> *@
     @* <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"HarvestYearForPlan")" asp-controller="Crop">@Resource.lblBack</govuk-back-link> *@
 }
 <form asp-action="CropGroups" asp-controller="Crop" method="post" autocomplete="off">
