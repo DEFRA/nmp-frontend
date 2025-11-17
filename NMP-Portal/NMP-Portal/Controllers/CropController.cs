@@ -2863,7 +2863,7 @@ namespace NMP.Portal.Controllers
 
                     isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
                 }
-                ViewBag.IsDataChange=isDataChanged;
+                ViewBag.IsDataChange = isDataChanged;
 
             }
             catch (Exception ex)
@@ -3902,30 +3902,67 @@ namespace NMP.Portal.Controllers
                 }
                 ViewBag.PlanSummaryList = planSummaryResponse;
 
-                //To show the list Create Plan for year (2023,2024,..) 
-                List<int> yearList = new List<int>();
-                if (planSummaryResponse != null && planSummaryResponse.Count > 0)
+                //fetch oldest previous cropping
+                (int? oldestPrevCroppingYear, error) = await _previousCroppingService.FetchOldestYearByFarmdId(farmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && oldestPrevCroppingYear > 0)
                 {
-                    foreach (var item in planSummaryResponse)
+
+                    //To show the list Create Plan for year (2023,2024,..) 
+                    List<int> yearList = new List<int>();
+                    if (planSummaryResponse != null && planSummaryResponse.Count > 0)
                     {
-                        yearList.Add(item.Year);
-                    }
-                    for (int j = 0; j < planSummaryResponse.Count; j++)
-                    {
-                        var harvestNewYear = new HarvestYear
+                        foreach (var item in planSummaryResponse)
                         {
-                            Year = planSummaryResponse[j].Year,
-                            EncryptedYear = _farmDataProtector.Protect(planSummaryResponse[j].Year.ToString()),
-                            LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
-                            IsAnyPlan = true
-                        };
-                        model.HarvestYear.Add(harvestNewYear);
+                            yearList.Add(item.Year);
+                        }
+                        for (int j = 0; j < planSummaryResponse.Count; j++)
+                        {
+                            var harvestNewYear = new HarvestYear
+                            {
+                                Year = planSummaryResponse[j].Year,
+                                EncryptedYear = _farmDataProtector.Protect(planSummaryResponse[j].Year.ToString()),
+                                LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
+                                IsAnyPlan = true
+                            };
+                            model.HarvestYear.Add(harvestNewYear);
+                        }
+                        //int minYear = planSummaryResponse.Min(x => x.Year) - 1;
+                        int minYear = oldestPrevCroppingYear??0;
+                        int maxYear = planSummaryResponse.Max(x => x.Year) + 1;
+                        for (int i = minYear; i <= maxYear; i++)
+                        {
+                            if (!yearList.Contains(i))
+                            {
+                                var harvestYear = new HarvestYear
+                                {
+                                    Year = i,
+                                    EncryptedYear = _farmDataProtector.Protect(i.ToString()),
+                                    IsAnyPlan = false
+                                };
+
+                                if (minYear == i)
+                                {
+                                    harvestYear.IsThisOldYear = true;
+                                }
+                                model.HarvestYear.Add(harvestYear);
+                            }
+                        }
                     }
-                    int minYear = planSummaryResponse.Min(x => x.Year) - 1;
-                    int maxYear = planSummaryResponse.Max(x => x.Year) + 1;
-                    for (int i = minYear; i <= maxYear; i++)
+                    else
                     {
-                        if (!yearList.Contains(i))
+                        DateTime currentDate = DateTime.Now;
+                        DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31);
+                        int currentHarvestYear = 0;
+                        if (currentDate > harvestYearEndDate)
+                        {
+                            currentHarvestYear = currentDate.Year + 1;
+                        }
+                        else
+                        {
+                            currentHarvestYear = currentDate.Year;
+                        }
+
+                        for (int i = oldestPrevCroppingYear??0; i <= currentHarvestYear; i++)
                         {
                             var harvestYear = new HarvestYear
                             {
@@ -3934,43 +3971,14 @@ namespace NMP.Portal.Controllers
                                 IsAnyPlan = false
                             };
 
-                            if (minYear == i)
+                            if (oldestPrevCroppingYear == i)
                             {
                                 harvestYear.IsThisOldYear = true;
                             }
                             model.HarvestYear.Add(harvestYear);
                         }
-                    }
-                }
-                else
-                {
-                    DateTime currentDate = DateTime.Now;
-                    DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31);
-                    int currentHarvestYear = 0;
-                    if (currentDate > harvestYearEndDate)
-                    {
-                        currentHarvestYear = currentDate.Year + 1;
-                    }
-                    else
-                    {
-                        currentHarvestYear = currentDate.Year;
-                    }
-                    for (int i = currentHarvestYear-1; i <= currentHarvestYear; i++)
-                    {
-                        var harvestYear = new HarvestYear
-                        {
-                            Year = i,
-                            EncryptedYear = _farmDataProtector.Protect(i.ToString()),
-                            IsAnyPlan = false
-                        };
 
-                        if (currentHarvestYear - 1 == i)
-                        {
-                            harvestYear.IsThisOldYear = true;
-                        }
-                        model.HarvestYear.Add(harvestYear);
                     }
-
                 }
                 if (model.HarvestYear.Count > 0)
                 {

@@ -8,5 +8,7 @@ namespace NMP.Portal.Services
         Task<(PreviousCropping, Error)> FetchDataByFieldIdAndYear(int fieldId, int year);
         Task<(List<PreviousCroppingData>, Error)> FetchDataByFieldId(int fieldId, int? year);
         Task<(bool, Error)> MergePreviousCropping(string jsonData);
+
+        Task<(int?, Error)> FetchOldestYearByFarmdId(int farmId);
     }
 }

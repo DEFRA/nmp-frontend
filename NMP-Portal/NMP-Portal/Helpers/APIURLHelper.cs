@@ -222,5 +222,6 @@ namespace NMP.Portal.Helpers
         public const string FetchNutrientsLoadingLiveStockByIdAsyncAPI = "nutrients-loading-live-stocks-by-id/{0}";
         public const string UpdateNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
         public const string FetchWarningCodesByFieldIdAndYearAsyncAPI = "warning-message/{0}?harvestYear={1}";
+        public const string FetchOldestPreviousCroppingYearByFarmIdAsyncAPI = "previous-cropping-oldest-years/{0}";
     }
 }
