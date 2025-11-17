@@ -9,17 +9,16 @@ namespace NMP.Portal.Controllers
 {
     public class AboutServiceController : Controller
     {
-        private readonly ILogger<AboutServiceController> _logger;
+        
         private readonly IUserExtensionService _userExtensionService;
-        public AboutServiceController(ILogger<AboutServiceController> logger, IUserExtensionService userExtensionService)
-        {
-            _logger = logger;
+        public AboutServiceController(IUserExtensionService userExtensionService)
+        {            
             _userExtensionService = userExtensionService;
         }
         public async Task<IActionResult> Index()
         {
             AboutServiceViewModel model = new AboutServiceViewModel();
-            (UserExtension userExtension, Error error) = await _userExtensionService.FetchUserExtensionAsync();
+            (UserExtension userExtension, _) = await _userExtensionService.FetchUserExtensionAsync();
             if (userExtension != null && userExtension.DoNotShowAboutThisService)
             {
                 return RedirectToAction("Accept", "AcceptTerms");
@@ -35,9 +34,10 @@ namespace NMP.Portal.Controllers
             if (ModelState.IsValid)
             {
                 if (model.DoNotShowAboutThisService)
-                {// Save to Database
+                {
+                    // Save to Database
                     AboutService aboutService = model;
-                    (UserExtension userExtension, Error error) = await _userExtensionService.UpdateShowAboutServiceAsync(aboutService);
+                    (UserExtension userExtension, _) = await _userExtensionService.UpdateShowAboutServiceAsync(aboutService);
                     if (userExtension != null)
                     {
                         //saved in DB

@@ -46,7 +46,7 @@
 
         @if (TempData["succesMsgContent1"] != null)
         {
-            <govuk-notification-banner type="Success">
+            <govuk-notification-banner type="NotificationBannerType.Success">
                 <p class="govuk-notification-banner__heading">
                     @TempData["succesMsgContent1"]
                 </p>
@@ -94,9 +94,9 @@
         {
             @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
             {
-                <h2 class="govuk-heading-m">@Resource.lblCattle</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table data-table">
+                <h2 class="govuk-heading-m">@Resource.lblCattle</h2>                
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
@@ -165,8 +165,8 @@
             @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
             {
                 <h2 class="govuk-heading-m">@Resource.lblPigs</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPigType</th>
@@ -235,8 +235,8 @@
             @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
             {
                 <h2 class="govuk-heading-m">@Resource.lblPoultry</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPoultryType</th>
@@ -299,8 +299,8 @@
             @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
             {
                 <h2 class="govuk-heading-m">@Resource.lblSheep</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
@@ -364,8 +364,8 @@
             @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
             {
                 <h2 class="govuk-heading-m">@Resource.lblGoatsDeerAndHorses</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
@@ -434,8 +434,8 @@
                 {
                     <govuk-tabs-item id="cattle" label=@Resource.lblCattle>
                         <h2 class="govuk-heading-m">@Resource.lblCattle</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table data-table">
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
@@ -495,8 +495,8 @@
                 {
                     <govuk-tabs-item id="pigs" label=@Resource.lblPigs>
                         <h2 class="govuk-heading-m">@Resource.lblPigs</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblPigType</th>
@@ -561,8 +561,8 @@
                 {
                     <govuk-tabs-item id="poultry" label=@Resource.lblPoultry>
                         <h2 class="govuk-heading-m">@Resource.lblPoultry</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblPoultryType</th>
@@ -625,8 +625,8 @@
                 {
                     <govuk-tabs-item id="sheep" label=@Resource.lblSheep>
                         <h2 class="govuk-heading-m">@Resource.lblSheep</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
@@ -686,8 +686,8 @@
                 {
                     <govuk-tabs-item id="goatsDeerAndHorses" label=@Resource.lblGoatsDeerAndHorses>
                         <h2 class="govuk-heading-m">@Resource.lblGoatsDeerAndHorses</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>

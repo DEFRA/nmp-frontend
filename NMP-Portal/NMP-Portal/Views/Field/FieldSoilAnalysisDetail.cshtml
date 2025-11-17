@@ -16,7 +16,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    @if (Model.HarvestYear == null && Model.EncryptedHarvestYear == null)
+        @if (Model.HarvestYear == null && Model.EncryptedHarvestYear == null)
         {
             <govuk-breadcrumbs class="govuk-breadcrumbs-link">
                 <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
@@ -47,10 +47,10 @@
                 @if (ViewBag.SuccessMsgContent != null)
                 {
 
-                    <govuk-notification-banner type="Success">
+                    <govuk-notification-banner type="NotificationBannerType.Success">
                         <div class="">
                             <h3 class="govuk-notification-banner__heading">@ViewBag.SuccessMsgContent</h3>
-                            @if (ViewBag.SuccessMsgContentLink!=null)
+                            @if (ViewBag.SuccessMsgContentLink != null)
                             {
                                 <p class="govuk-body"><a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgContentLink</a></p>
                             }
@@ -64,7 +64,8 @@
                                     {
                                         <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgAdditionalContentSecondForAdd</a>
                                     }
-                                    else @if (ViewBag.SuccessMsgAdditionalContentSecondForUpdate != null)
+                                    else
+                                    @if (ViewBag.SuccessMsgAdditionalContentSecondForUpdate != null)
                                     {
                                         <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId">@ViewBag.SuccessMsgAdditionalContentSecondForUpdate</a>
                                     }
@@ -116,9 +117,9 @@
                             <td class="govuk-table__cell">@(Model.SoilOverChalk == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
-                    @if (Model.IsWithinNVZForFarm!=null&&Model.IsWithinNVZForFarm == true)
+                    @if (Model.IsWithinNVZForFarm != null && Model.IsWithinNVZForFarm == true)
                     {
-                        <tr class="govuk-table__row">
+                        <tr class="govuk-table__row"> 
                             <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
                             <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
@@ -130,6 +131,56 @@
                             <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
+                    @if (ViewBag.PreviousCroppingsList != null && ViewBag.PreviousCroppingsList.Count > 0)
+                    {
+                        @foreach (var previousCrop in ViewBag.PreviousCroppingsList)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@string.Format(Resource.lblCropInYear, previousCrop.HarvestYear)</td>
+                                <td class="govuk-table__cell">@previousCrop.CropTypeName</td>
+                            </tr>
+                        }
+                    }
+                    @if (ViewBag.HasGrassInLastThreeYear != null && ViewBag.HasGrassInLastThreeYear == true)
+                    {
+                        @if (Model.PreviousGrassYears.Count() > 0)
+                        {
+                            @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears[0] == Model.LastHarvestYear))
+                            {
+                                if (Model.PreviousCroppings.LayDuration != null)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@Resource.lblLengthOfTheLay</td>
+                                        <td class="govuk-table__cell">@(Model.PreviousCroppings.LayDuration.Value == (int)NMP.Portal.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore)</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        
+                        @if (ViewBag.GrassManagementOption != null)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@Resource.lblTypicalGrassManagement</td>
+                                <td class="govuk-table__cell">@ViewBag.GrassManagementOption</td>
+                            </tr>
+                        }
+                        @if (Model.PreviousCroppings.HasGreaterThan30PercentClover != null)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@Resource.lblHighCloverContent</td>
+                                <td class="govuk-table__cell">@(Model.PreviousCroppings.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo)</td>
+                            </tr>
+                        }
+                       
+                            @if (ViewBag.SoilNitrogenSupplyItem != null)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Resource.lblTypicalGrassManagement</td>
+                                    <td class="govuk-table__cell">@ViewBag.SoilNitrogenSupplyItem</td>
+                                </tr>
+                            }
+                    }
+
                 </tbody>
             </table>
             <p class="govuk-body margin-bottom-forty"><a asp-action="UpdateField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblChangeFieldDetails</a></p>

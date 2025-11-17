@@ -78,6 +78,10 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext?.Session.Remove("StorageCapacityData");
             }
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityDataBeforeUpdate"))
+            {
+                HttpContext?.Session.Remove("StorageCapacityDataBeforeUpdate");
+            }
             List<StoreCapacityResponse> storeCapacityList = new List<StoreCapacityResponse>();
             Error storeCapacityError = new Error();
             if (!string.IsNullOrWhiteSpace(q))
@@ -1418,6 +1422,24 @@ namespace NMP.Portal.Controllers
                 model.IsStorageTypeChange = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
 
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityDataBeforeUpdate", model);
+
+                }
+                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityDataBeforeUpdate");
+
+                bool isDataChanged = false;
+
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+                ViewBag.IsDataChange = isDataChanged;
+
             }
             catch (Exception ex)
             {
@@ -1666,7 +1688,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
                 {
-                    return RedirectToAction("CapacityWeight");
+                    return RedirectToAction("WeightCapacity");
                 }
                 else
                 {

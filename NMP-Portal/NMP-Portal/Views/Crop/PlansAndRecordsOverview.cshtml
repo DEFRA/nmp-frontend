@@ -30,22 +30,22 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+    @* <govuk-breadcrumbs class="govuk-breadcrumbs-link">
 
         <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
             @Model.FarmName
-        </govuk-breadcrumbs-item>
+        </govuk-breadcrumbs-item> 
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
             @Resource.lblPlaningndRecording
         </govuk-breadcrumbs-item>
 
-    </govuk-breadcrumbs>
+    </govuk-breadcrumbs> *@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["successMsg"]
                     </p>
@@ -53,7 +53,7 @@
                 </govuk-notification-banner>
             }
             <h1 class="govuk-heading-l">@Resource.lblPlaningndRecording</h1>
-            <div class="table-container">
+                <div class="table-container">
             <table class="govuk-table">                
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -64,39 +64,38 @@
                 </thead>
                 <tbody class="govuk-table__body">
                     @if (Model.HarvestYear != null)
-                    {
-                        for (int i = 0; i < Model.HarvestYear.Count; i++)
-                        {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@Model.HarvestYear[i].Year</td>
-                                <td class="govuk-table__cell">
-                                    @if (@Model.HarvestYear[i].LastModifiedOn != null)
-                                    {
-                                        @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy")
-                                    }
-                                    else
-                                    {
-                                        @Resource.lblHyphen
-                                    }
-                                </td>
-                                <td class="govuk-table__cell">
-                                    @if (Model.HarvestYear[i].IsAnyPlan != null && Model.HarvestYear[i].IsAnyPlan)
-                                    {
-                                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear">
-                                            @string.Format(Resource.lblViewEditThePlan, Model.HarvestYear[i].Year)
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-isPlanRecord="true">
-                                            @string.Format((Model.HarvestYear[i].IsThisOldYear) ? Resource.lblEnterYearInformation : Resource.lblStartAPlan, Model.HarvestYear[i].Year)
-                                        </a>
-                                    }
-                                </td>
-                            </tr>
-                        }
+                    {                        
+                       for (int i = 0; i < Model.HarvestYear.Count; i++)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@Model.HarvestYear[i].Year</td>
+                                    <td class="govuk-table__cell">
+                                        @if (@Model.HarvestYear[i].LastModifiedOn != null)
+                                        {
+                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy");
+                                        }
+                                        else
+                                        {
+                                            @Resource.lblHyphen
+                                        }
+                                    </td>
+                                    <td class="govuk-table__cell">
+                                        @if (Model.HarvestYear[i].IsAnyPlan != null && Model.HarvestYear[i].IsAnyPlan)
+                                        {
+                                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear">
+                                                @string.Format(Resource.lblViewEditThePlan, Model.HarvestYear[i].Year)
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-isPlanRecord="true">
+                                                @string.Format((Model.HarvestYear[i].IsThisOldYear) ? Resource.lblEnterYearInformation : Resource.lblStartAPlan, Model.HarvestYear[i].Year)
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                     }
-
                 </tbody>
             </table>
             </div>

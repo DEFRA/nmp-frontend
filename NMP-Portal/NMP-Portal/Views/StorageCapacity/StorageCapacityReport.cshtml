@@ -15,7 +15,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@(string.IsNullOrWhiteSpace(Model.Farm.Name) ? string.Empty : Model.Farm.Name)</govuk-back-link>
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@Resource.lblBack</govuk-back-link>
 
     </div>
 
@@ -99,7 +99,8 @@
         @if (ViewBag.SlurryStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
-            <table class="govuk-table margin-bottom-forty data-table">
+            <div class="table-container margin-bottom-forty">
+                <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
@@ -138,6 +139,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         }
         else
         {
@@ -154,7 +156,8 @@
         @if (ViewBag.DirtyWaterStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
-            <table class="govuk-table margin-bottom-forty data-table">
+            <div class="table-container margin-bottom-forty">
+                <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
@@ -193,6 +196,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         }
         else
         {
@@ -210,7 +214,8 @@
         @if (ViewBag.SolidStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentFour</p>
-            <table class="govuk-table margin-bottom-forty data-table">
+            <div class="table-container margin-bottom-forty">
+                <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
@@ -254,6 +259,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         }
         else
         {
@@ -269,7 +275,8 @@
          <hr class="separator_thirty"> -->
 
         <h3 class="govuk-heading-l">Manure storage totals</h3>
-        <table class="govuk-table margin-bottom-forty data-table manure_store_totals">
+        <div class="table-container margin-bottom-forty">
+        <table class="govuk-table">
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblTotaLiquidCapacity</th>

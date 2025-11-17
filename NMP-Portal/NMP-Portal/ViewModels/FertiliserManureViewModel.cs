@@ -23,12 +23,12 @@ namespace NMP.Portal.ViewModels
         public string? InOrgnaicManureDuration { get; set; }
         public List<FertiliserManure>? FertiliserManures { get; set; }
 
-        public decimal? N { get; set; }
-        public decimal? P2O5 { get; set; }
-        public decimal? K2O { get; set; }
-        public decimal? MgO { get; set; }
-        public decimal? SO3 { get; set; }
-        public decimal? Na2O { get; set; }
+        public int? N { get; set; }
+        public int? P2O5 { get; set; }
+        public int? K2O { get; set; }
+        public int? MgO { get; set; }
+        public int? SO3 { get; set; }
+        public int? Na2O { get; set; }
         public decimal? Lime { get; set; }
         public DateTime? Date { get; set; }
         public bool? QuestionForSpreadInorganicFertiliser { get; set; }

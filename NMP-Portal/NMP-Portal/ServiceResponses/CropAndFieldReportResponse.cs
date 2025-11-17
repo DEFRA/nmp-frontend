@@ -9,6 +9,7 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("Farm")]
         public FarmReportResponse? Farm { get; set; }
+        public string? ExcessWinterRainfall { get; set; }
         //[JsonProperty("Fields")]
         //public List<FieldAndCropReportResponse>? Fields { get; set; }
     }
