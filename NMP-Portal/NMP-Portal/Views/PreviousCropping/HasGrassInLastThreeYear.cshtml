@@ -3,7 +3,7 @@
 @{
     //ViewData["Title"] = Resource.lblNVZField;
 
-    ViewData["Title"] = $"{string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)} {Resource.lblHyphen} {Resource.lblPreviousCrop}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.FieldName, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)} {Resource.lblHyphen} {Resource.lblPreviousCrop}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
     var backAction = "";
@@ -43,6 +43,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
         @if (Model != null)
         {
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
@@ -59,7 +60,7 @@
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.HasGrassInLastThreeYear">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">                        
-                            @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)
+                            @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.FieldName,Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>

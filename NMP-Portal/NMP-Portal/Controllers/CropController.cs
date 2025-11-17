@@ -4363,23 +4363,40 @@ namespace NMP.Portal.Controllers
                                 model.Nutrients = new List<NutrientResponseWrapper>();
                                 model.Nutrients = nutrients;
                             }
+
+                            int count = 0;
+                            List<int> yearsToCheck = new List<int> { decryptedHarvestYear - 1, decryptedHarvestYear - 2, decryptedHarvestYear - 3 };
+                            List<int> missingYears = new List<int>();
+
+
                             List<Crop> planList = await _cropService.FetchCropsByFieldId(decryptedFieldId);
                             if (planList.Count > 0)
                             {
-                                planList = planList.Where(x => x.Year == decryptedHarvestYear - 1).ToList();
+                                count = planList.Count(x => yearsToCheck.Contains(x.Year));
+                                missingYears = yearsToCheck.Where(year => !planList.Any(x => x.Year == year)).ToList();
                             }
-                            if (planList.Count == 0)
-                            {
-                                (PreviousCropping PreviousCropping, error) = await _previousCroppingService.FetchDataByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear - 1);
-                                if (PreviousCropping == null && (string.IsNullOrWhiteSpace(error.Message)))
-                                {
-                                    string encryptedYear = _farmDataProtector.Protect((decryptedHarvestYear - 1).ToString());
-                                    ViewBag.PreviousYear = s;
-                                    ViewBag.IsThereAnyPreviousCropping = false;
-                                    TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
-                                    TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
-                                    TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
 
+                            if (count < 3 && missingYears.Count > 0)
+                            {
+                                (List<PreviousCroppingData> previousCropping, error) = await _previousCroppingService.FetchDataByFieldId(decryptedFieldId, null);
+                                if (string.IsNullOrWhiteSpace(error.Message))
+                                {
+                                    if (previousCropping.Count > 0)
+                                    {
+                                        previousCropping = previousCropping.Where(x => missingYears.Contains(x.HarvestYear.Value)).ToList();
+                                    }
+                                    if (missingYears.Count != previousCropping.Count)
+                                    {
+                                        foreach (var missingYear in missingYears)
+                                        {
+                                            string encryptedYear = _farmDataProtector.Protect((decryptedHarvestYear - 1).ToString());
+                                            ViewBag.PreviousYear = s;
+                                            ViewBag.IsThereAnyPreviousCropping = false;
+                                            TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
+                                            TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
+                                            TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
+                                        }
+                                    }
                                 }
                             }
                         }
