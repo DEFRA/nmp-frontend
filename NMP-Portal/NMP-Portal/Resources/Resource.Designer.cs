@@ -7659,11 +7659,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last harvest year.
+        ///   Looks up a localized string similar to Last harvest year for {0}.
         /// </summary>
-        public static string lblLastHarvestYear {
+        public static string lblLastHarvestYearForFieldName {
             get {
-                return ResourceManager.GetString("lblLastHarvestYear", resourceCulture);
+                return ResourceManager.GetString("lblLastHarvestYearForFieldName", resourceCulture);
             }
         }
         

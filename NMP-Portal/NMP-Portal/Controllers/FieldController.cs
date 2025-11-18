@@ -1952,7 +1952,7 @@ namespace NMP.Portal.Controllers
                 {
                     //grass
                     model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear);
-                    model.PreviousCroppings = grassCroppings.First();
+                    model.PreviousCroppings = grassCroppings[0];
                     hasGrassInLastThreeYear = true;
                 }
                 else
@@ -3287,7 +3287,7 @@ namespace NMP.Portal.Controllers
         public IActionResult LastHarvestYear()
         {
             _logger.LogTrace($"Field Controller : LastHarvestYear() action called");
-            FieldViewModel model = new FieldViewModel();
+            FieldViewModel model;
             if (HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldData");

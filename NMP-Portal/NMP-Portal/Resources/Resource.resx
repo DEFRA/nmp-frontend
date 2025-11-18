@@ -1957,8 +1957,8 @@ cubic metres per hectare  not set</value>
   <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
     <value>If you have harvested most of your {0} crops you can set {1} as your last harvest year.</value>
   </data>
-  <data name="lblLastHarvestYear" xml:space="preserve">
-    <value>Last harvest year</value>
+  <data name="lblLastHarvestYearForFieldName" xml:space="preserve">
+    <value>Last harvest year for {0}</value>
   </data>
   <data name="lblToCreatePlansAndGiveRecommendation" xml:space="preserve">
     <value>To create plans and give recommendations we need information about your last harvest year.</value>
