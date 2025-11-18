@@ -476,6 +476,9 @@
                                 @Model.FieldName
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action class="govuk-visually-hidden" asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure" aria-hidden="false">@Resource.lblChange
+                                
+                                    </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }

@@ -249,6 +249,9 @@
                                 @Model.FieldName
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
+                                 <govuk-summary-list-row-action class="govuk-visually-hidden"  asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure"  aria-hidden="false">@Resource.lblChange
+                                
+                                    </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
