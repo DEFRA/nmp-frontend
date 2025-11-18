@@ -1,7 +1,30 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $" {string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
+    var title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
+    @if (ViewBag.NoPlan != null)
+    {
+        title = ViewBag.NoPlan;
+    }
+    else if (ViewBag.NoField != null)
+    {
+        title = ViewBag.NoField;
+    }
+    else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+    {
+        title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
+    }
+    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+    {
+        title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year);
+    }
+
+    if (ViewBag.NMaxReportNotAvailable != null && ViewBag.NMaxReportNotAvailable)
+    {
+        title = Resource.lblAnNmaxReportIsNotAvailable;
+    }
+
+    ViewData["Title"] = $" {title} {Resource.lblHyphen} {Resource.lblReport}";
     var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)) ? "Year" :
         ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
         ? "FieldAndPlanReports" : "NVZComplianceReports");
@@ -21,6 +44,53 @@
     </div>
 }
 
+@if (ViewBag.NMaxReportNotAvailable != null && ViewBag.NMaxReportNotAvailable)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-l">
+                @Resource.lblAnNmaxReportIsNotAvailable
+            </h2>
+            <p class="govuk-body">
+                @if (ViewBag.FarmOrFieldNotInNVZ != null && ViewBag.FarmOrFieldNotInNVZ)
+                {
+                    @Resource.lblNMaxReportsAreOnlyAvailableForFarms
+                }
+                else
+                {
+                    @string.Format(Resource.lblYouHaveNotPlannedAnyCropsForYear, Model.Year)
+                }
+            </p>
+            <p class="govuk-body  margin-bottom-thirty">
+                @Resource.lblYouCan
+                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblCheckTheFarmSetUp</a>
+                @Resource.lblAndChangeWhetherYourWholeFarm
+            </p>
+            @if (ViewBag.FarmOrFieldNotInNVZ == null)
+            {
+                <p class="govuk-body  margin-bottom-thirty">
+                    @Resource.lblYouCanAlso
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@($"{string.Format(Resource.lblCheckYourPlan.ToLower(), Model.Year)}{"."}")</a>
+                </p>
+            }
+            <p class="govuk-body cancel-link">
+                @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                {
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                        @Resource.lblCancel
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                        @Resource.lblCancel
+                    </a>
+                }
+            </p>
+        </div>
+    </div>
+}
+else
 @if (Model != null)
 {
     <form asp-action="ExportFieldsOrCropType" class="form-with-overlay" asp-controller="Report" method="post" autocomplete="off">
@@ -169,19 +239,7 @@
                 {
                     @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
-                        @if (ViewBag.fieldList == null)
-                        {
-                            <govuk-notification-banner>
-                                <govuk-notification-banner-title>
-                                    @Resource.lblImportant
-                                </govuk-notification-banner-title>
-                                <p class="govuk-notification-banner__heading">
-                                    Page is in under construction.
-                                </p>
-                            </govuk-notification-banner>
-                        }
-                        else
-                        {
+                        
                             <govuk-checkboxes asp-for="FieldList">
                                 <govuk-checkboxes-fieldset>
                                     <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -206,23 +264,9 @@
                             <govuk-button type="submit" class="margin-bottom-forty">
                                 @Resource.lblContinue
                             </govuk-button>
-                        }
                     }
                     else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                     {
-                        @if (ViewBag.CropTypeList == null)
-                        {
-                            <govuk-notification-banner>
-                                <govuk-notification-banner-title>
-                                    @Resource.lblImportant
-                                </govuk-notification-banner-title>
-                                <p class="govuk-notification-banner__heading">
-                                    Page is in under construction.
-                                </p>
-                            </govuk-notification-banner>
-                        }
-                        else
-                        {
                             <govuk-checkboxes asp-for="CropTypeList">
                                 <govuk-checkboxes-fieldset>
                                     <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -247,7 +291,6 @@
                             <govuk-button type="submit" class="margin-bottom-forty">
                                 @Resource.lblContinue
                             </govuk-button>
-                        }
                     }
                 }
                 <p class="govuk-body cancel-link">
