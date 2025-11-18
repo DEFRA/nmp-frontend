@@ -868,11 +868,8 @@ namespace NMP.Portal.Controllers
             }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            //if (farm.IsCheckAnswer)
-            //{
-                return RedirectToAction("CheckAnswer");
-            //}
-            //return RedirectToAction("LastHarvestYear");
+
+            return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
         public IActionResult CheckAnswer(string? q)
@@ -1081,12 +1078,12 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.SetString("current_farm_name", farm.Name ?? "");
                     _httpContextAccessor.HttpContext?.Session.SetString("current_farm_id", id);
 
-                    identity?.AddClaim(new Claim("current_farm_name", farm.Name ?? ""));                    
+                    identity?.AddClaim(new Claim("current_farm_name", farm.Name ?? ""));
                     var existingCurrentFarmIdClaim = identity?.FindFirst("current_farm_id");
                     if (existingCurrentFarmIdClaim != null)
                     {
                         identity?.RemoveClaim(existingCurrentFarmIdClaim);
-                    }                    
+                    }
                     identity?.AddClaim(new Claim("current_farm_id", id ?? ""));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {

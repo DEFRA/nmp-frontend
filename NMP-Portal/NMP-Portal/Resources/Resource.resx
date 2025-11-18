@@ -1957,8 +1957,8 @@ cubic metres per hectare  not set</value>
   <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
     <value>If you have harvested most of your {0} crops you can set {1} as your last harvest year.</value>
   </data>
-  <data name="lblLastHarvestYear" xml:space="preserve">
-    <value>Last harvest year</value>
+  <data name="lblLastHarvestYearForFieldName" xml:space="preserve">
+    <value>Last harvest year for {0}</value>
   </data>
   <data name="lblToCreatePlansAndGiveRecommendation" xml:space="preserve">
     <value>To create plans and give recommendations we need information about your last harvest year.</value>
@@ -6984,5 +6984,23 @@ livestock manure.</value>
   </data>
   <data name="lblThePlannedApplicationsmayNotComplyWith" xml:space="preserve">
     <value>The planned applications may not comply with these Nitrate Vulnerable Zone (NVZ) rules:</value>
+  </data>
+  <data name="lblAnNmaxReportIsNotAvailable" xml:space="preserve">
+    <value>An N-max report is not available</value>
+  </data>
+  <data name="lblYouHaveNotPlannedAnyCropsForYear" xml:space="preserve">
+    <value>You have not planned any crops for {0} that require an N-max report.</value>
+  </data>
+  <data name="lblYouCan" xml:space="preserve">
+    <value>You can</value>
+  </data>
+  <data name="lblCheckTheFarmSetUp" xml:space="preserve">
+    <value>check the farm set-up</value>
+  </data>
+  <data name="lblAndChangeWhetherYourWholeFarm" xml:space="preserve">
+    <value>and change whether your whole farm, or some fields, are in a nitrate vulnerable zone (NVZ).</value>
+  </data>
+  <data name="lblNMaxReportsAreOnlyAvailableForFarms" xml:space="preserve">
+    <value>N-max reports are only available for farms that are in a nitrate vulnerable zone (NVZ).</value>
   </data>
 </root>

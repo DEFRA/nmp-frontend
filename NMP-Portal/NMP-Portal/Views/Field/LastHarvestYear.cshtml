@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.FieldViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateField) : Resource.lblAddField;
-    ViewData["Title"] = $"{Resource.lblLastHarvestYear} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblLastHarvestYearForFieldName,Model.Name)} {Resource.lblHyphen} {title}";
     var currentYear = System.DateTime.Now.Year;
     var previousYear = currentYear-1;
 
@@ -143,7 +143,7 @@
                 }
             </div>
 
-            <h1 class="govuk-heading-l">@Resource.lblLastHarvestYear</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblLastHarvestYearForFieldName, Model.Name)</h1>
             <p class="govuk-body">@Resource.lblToCreatePlansAndGiveRecommendation</p>
             <p class="govuk-body">@string.Format(Resource.lblIfYouHaveHarvestedMostOfYourCrops, year, year)</p>
 
