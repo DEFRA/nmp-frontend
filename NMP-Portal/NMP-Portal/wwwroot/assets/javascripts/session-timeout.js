@@ -8,13 +8,15 @@
     const STORAGE_KEY = 'govuk-last-activity';
     const CHANNEL_NAME = 'govuk-session';
     const DIALOG = document.getElementById('session-timeout-dialog');
-    //const COUNTDOWN_ELEMENT = document.getElementById('timeout-countdown');
     const STAY_SIGNED_IN_BUTTON = document.getElementById('stay-signed-in');
     const SIGNOUT_BUTTON = document.getElementById("sign-out");
     const FOCUSABLE_ELEMENTS = [STAY_SIGNED_IN_BUTTON, SIGNOUT_BUTTON];
+    const DISPLAY_NONE_CLASS = 'govuk-!-display-none';
+    const UNAUTHORISED_STATUS_CODE = 401;
+    const SESSION_EXPIRED = 419;
 
     let warningTimer, expiryTimer, countdownInterval;
-    let channel = null;      
+    let channel = null;
 
     // Try BroadcastChannel first
     try {
@@ -39,8 +41,12 @@
 
     // Fallback (storage event for Safari/IE)
     window.addEventListener('storage', function (e) {
-        if (e.key === STORAGE_KEY) resetTimers();
-        if (e.key === 'govuk-session-refresh') hideDialog();
+        if (e.key === STORAGE_KEY) {
+            resetTimers();
+        }
+        if (e.key === 'govuk-session-refresh') {
+            hideDialog();
+        }
     });
 
     // Reset timers
@@ -59,20 +65,22 @@
     function recordActivity() {
         const now = Date.now();
         localStorage.setItem(STORAGE_KEY, now);
-        if (channel) channel.postMessage({ type: 'activity', timestamp: now });
+        if (channel) {
+            channel.postMessage({ type: 'activity', timestamp: now });
+        }
         resetTimers();
     }
 
     // GOV.UK dialog controls
     function showDialog() {
-        DIALOG.classList.remove('govuk-!-display-none');
+        DIALOG.classList.remove(DISPLAY_NONE_CLASS);
         document.addEventListener('keydown', trapFocus);
         STAY_SIGNED_IN_BUTTON.focus();
         startCountdown(WARNING_TIME / 1000);
     }
 
     function hideDialog() {
-        DIALOG.classList.add('govuk-!-display-none');
+        DIALOG.classList.add(DISPLAY_NONE_CLASS);
         clearInterval(countdownInterval);
         document.removeEventListener('keydown', trapFocus);
 
@@ -80,34 +88,22 @@
 
     function startCountdown(seconds) {
         let remaining = seconds;
-        updateCountdown(remaining);
+        //updateCountdown(remaining);
         countdownInterval = setInterval(() => {
             remaining--;
-            updateCountdown(remaining);
+            //updateCountdown(remaining);
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 expireSession();
             }
         }, 1000);
     }
-
     function updateCountdown(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         // countdownEl.textContent = `${mins} minute${mins !== 1 ? 's' : ''} ${secs} second${secs !== 1 ? 's' : ''}`;
     }
-
     function keepAlive() {
-        //const tokenElement = document.querySelector('input[name="NMP-Portal-Antiforgery-Field"]');
-        //const token = tokenElement ? tokenElement.value : null;
-
-        //// Protect against missing or expired tokens
-        //if (!token) {
-        //    console.warn('Anti-forgery token missing or expired. Redirecting to sign-in.');
-        //    expireSession();
-        //    return;
-        //}
-
         fetch(REFRESH_URL).then(response => {
             if (response.ok) {
                 // Session refreshed successfully
@@ -120,7 +116,7 @@
                 } else {
                     localStorage.setItem('govuk-session-refresh', Date.now());
                 }
-            } else if (response.status === 401 || response.status === 419) {
+            } else if (response.status === UNAUTHORISED_STATUS_CODE || response.status === SESSION_EXPIRED) {
                 // Token or session expired
                 console.warn('Session expired on server. Signing out.');
                 expireSession();
@@ -161,7 +157,7 @@
 
     function userActivityHandler() {
         // Only record activity if the timeout dialog is hidden
-        if (DIALOG.classList.contains('govuk-!-display-none')) {
+        if (DIALOG.classList.contains(DISPLAY_NONE_CLASS)) {
             recordActivity();
         }
     }
@@ -169,7 +165,7 @@
     // Hook up events   
     function bindActivityListeners() {
         ['click', 'keypress', 'mousemove', 'scroll'].forEach(eventType => {
-            window.addEventListener(eventType, () => {                
+            window.addEventListener(eventType, () => {
                 userActivityHandler();
             });
         });
@@ -177,7 +173,8 @@
 
     STAY_SIGNED_IN_BUTTON.addEventListener('click', keepAlive);
     bindActivityListeners();
+
     // Initialise timers on load
     recordActivity();
-     
+
 })();
