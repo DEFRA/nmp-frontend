@@ -150,8 +150,10 @@
     }
 
     function expireSession() {
-        if (channel) channel.postMessage({ type: 'expire' });
-        //hideDialog();
+        if (channel) {
+            channel.postMessage({ type: 'expire' });
+        }
+        hideDialog();
         window.location.href = SIGNOUT_URL;
     }
 
