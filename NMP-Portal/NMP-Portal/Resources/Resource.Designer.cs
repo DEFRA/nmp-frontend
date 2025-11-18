@@ -2086,6 +2086,24 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to and change whether your whole farm, or some fields, are in a nitrate vulnerable zone (NVZ)..
+        /// </summary>
+        public static string lblAndChangeWhetherYourWholeFarm {
+            get {
+                return ResourceManager.GetString("lblAndChangeWhetherYourWholeFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An N-max report is not available.
+        /// </summary>
+        public static string lblAnNmaxReportIsNotAvailable {
+            get {
+                return ResourceManager.GetString("lblAnNmaxReportIsNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Annual dry matter yield.
         /// </summary>
         public static string lblAnnualDryMatterYield {
@@ -2892,6 +2910,15 @@ namespace NMP.Portal.Resources {
         public static string lblCheckInorganicFertiliserDetailsForFields {
             get {
                 return ResourceManager.GetString("lblCheckInorganicFertiliserDetailsForFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to check the farm set-up.
+        /// </summary>
+        public static string lblCheckTheFarmSetUp {
+            get {
+                return ResourceManager.GetString("lblCheckTheFarmSetUp", resourceCulture);
             }
         }
         
@@ -7632,11 +7659,11 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last harvest year.
+        ///   Looks up a localized string similar to Last harvest year for {0}.
         /// </summary>
-        public static string lblLastHarvestYear {
+        public static string lblLastHarvestYearForFieldName {
             get {
-                return ResourceManager.GetString("lblLastHarvestYear", resourceCulture);
+                return ResourceManager.GetString("lblLastHarvestYearForFieldName", resourceCulture);
             }
         }
         
@@ -9221,6 +9248,15 @@ namespace NMP.Portal.Resources {
         public static string lblNMaxReport {
             get {
                 return ResourceManager.GetString("lblNMaxReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max reports are only available for farms that are in a nitrate vulnerable zone (NVZ)..
+        /// </summary>
+        public static string lblNMaxReportsAreOnlyAvailableForFarms {
+            get {
+                return ResourceManager.GetString("lblNMaxReportsAreOnlyAvailableForFarms", resourceCulture);
             }
         }
         
@@ -16743,6 +16779,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can.
+        /// </summary>
+        public static string lblYouCan {
+            get {
+                return ResourceManager.GetString("lblYouCan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can also .
         /// </summary>
         public static string lblYouCanAlso {
@@ -16973,6 +17018,15 @@ namespace NMP.Portal.Resources {
         public static string lblYouHaveNotEnteredAnyOrganicMaterialStorageFor {
             get {
                 return ResourceManager.GetString("lblYouHaveNotEnteredAnyOrganicMaterialStorageFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not planned any crops for {0} that require an N-max report..
+        /// </summary>
+        public static string lblYouHaveNotPlannedAnyCropsForYear {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotPlannedAnyCropsForYear", resourceCulture);
             }
         }
         
