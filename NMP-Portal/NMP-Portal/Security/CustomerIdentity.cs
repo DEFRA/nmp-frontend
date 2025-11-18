@@ -105,13 +105,37 @@ namespace NMP.Portal.Security
             await Task.CompletedTask.ConfigureAwait(false);
         }
 
-        static string GetOidcErrorCode(string src) =>
-            src.Contains("login_required", StringComparison.OrdinalIgnoreCase) ? "login_required" :
-            src.Contains("interaction_required", StringComparison.OrdinalIgnoreCase) ? "interaction_required" :
-            src.Contains("access_denied", StringComparison.OrdinalIgnoreCase) ? "access_denied" :
-            src.Contains("invalid_request", StringComparison.OrdinalIgnoreCase) ? "invalid_request" :
-            src.Contains("server_error", StringComparison.OrdinalIgnoreCase) ? "server_error" :
-            "unknown";
+        private static string GetOidcErrorCode(string src)
+        {
+            if (src.Contains("login_required", StringComparison.OrdinalIgnoreCase))
+            {
+                return "login_required";
+            }
+            else if (src.Contains("consent_required", StringComparison.OrdinalIgnoreCase))
+            {
+                return "consent_required";
+            }
+            else if (src.Contains("interaction_required", StringComparison.OrdinalIgnoreCase))
+            {
+                return "interaction_required";
+            }
+            else if (src.Contains("access_denied", StringComparison.OrdinalIgnoreCase))
+            {
+                return "access_denied";
+            }
+            else if (src.Contains("invalid_request", StringComparison.OrdinalIgnoreCase))
+            {
+                return "invalid_request";
+            }
+            else if (src.Contains("server_error", StringComparison.OrdinalIgnoreCase))
+            {
+                return "server_error";
+            }
+            else
+            {
+                return "unknown";
+            }
+        }
 
         private static async Task OnRemoteSignOut(RemoteSignOutContext context)
         {
