@@ -238,8 +238,17 @@ namespace NMP.Portal.Controllers
 
                                             if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                             {
-                                                TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                                return RedirectToAction("Year");
+                                                if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord)
+                                                {
+                                                    ViewBag.NMaxReportNotAvailable = true;
+                                                    return View(model);
+                                                }
+                                                else
+                                                {
+                                                    ViewBag.Years = GetReportYearsList();
+                                                    TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                                    return RedirectToAction("Year");
+                                                }
                                             }
                                             else
                                             {
@@ -250,8 +259,10 @@ namespace NMP.Portal.Controllers
                                                 }
                                                 else
                                                 {
-                                                    TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                                    return RedirectToAction("NVZComplianceReports");
+                                                    //TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                                    //return RedirectToAction("NVZComplianceReports");
+                                                    ViewBag.NMaxReportNotAvailable = true;
+                                                    return View(model);
                                                 }
                                             }
                                         }
@@ -262,9 +273,18 @@ namespace NMP.Portal.Controllers
 
                                     if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                     {
-                                        ViewBag.Years = GetReportYearsList();
-                                        TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                        return View("Year", model);
+                                        if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord)
+                                        {
+                                            ViewBag.NMaxReportNotAvailable = true;
+                                            ViewBag.FarmOrFieldNotInNVZ = true;
+                                            return View(model);
+                                        }
+                                        else
+                                        {
+                                            ViewBag.Years = GetReportYearsList();
+                                            TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                            return View("Year", model);
+                                        }
                                     }
                                     else
                                     {
@@ -275,8 +295,11 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                            return RedirectToAction("NVZComplianceReports");
+                                            //TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                            //return RedirectToAction("NVZComplianceReports");
+                                            ViewBag.NMaxReportNotAvailable = true;
+                                            ViewBag.FarmOrFieldNotInNVZ = true;
+                                            return View(model);
                                         }
                                     }
                                 }
@@ -422,9 +445,18 @@ namespace NMP.Portal.Controllers
 
                                 if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
                                 {
-                                    ViewBag.Years = GetReportYearsList();
-                                    TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                    return View("Year", model);
+                                    if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord)
+                                    {
+                                        ViewBag.NMaxReportNotAvailable = true;
+                                        ViewBag.FarmOrFieldNotInNVZ = true;
+                                        return View(model);
+                                    }
+                                    else
+                                    {
+                                        ViewBag.Years = GetReportYearsList();
+                                        TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                        return View("Year", model);
+                                    }
                                 }
                                 else
                                 {
@@ -435,8 +467,11 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                        return RedirectToAction("NVZComplianceReports");
+                                        //TempData["ErrorOnNVZComplianceReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                        //return RedirectToAction("NVZComplianceReports");
+                                        ViewBag.NMaxReportNotAvailable = true;
+                                        ViewBag.FarmOrFieldNotInNVZ = true;
+                                        return View(model);
                                     }
                                 }
                             }

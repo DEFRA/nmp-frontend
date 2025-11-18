@@ -1952,7 +1952,7 @@ namespace NMP.Portal.Controllers
                 {
                     //grass
                     model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear);
-                    model.PreviousCroppings = grassCroppings.FirstOrDefault();
+                    model.PreviousCroppings = grassCroppings.First();
                     hasGrassInLastThreeYear = true;
                 }
                 else
@@ -2905,10 +2905,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                //if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
-                //{
-                //    return RedirectToAction("UpdateField");
-                //}
+                
                 return RedirectToAction("CropGroups");
             }
 
@@ -2940,15 +2937,7 @@ namespace NMP.Portal.Controllers
             {
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
                 List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-                //if(cropPlans.Count>0)
-                //{
-                //    previousYears = new List<int>();
-                //    int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
-                //    previousYears.Add(oldestYearWithPlan - 1);
-                //    previousYears.Add(oldestYearWithPlan - 2);
-                //    previousYears.Add(oldestYearWithPlan - 3);
-
-                //}
+                
                 if (cropPlans.Any())
                 {
                     int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
@@ -3298,7 +3287,7 @@ namespace NMP.Portal.Controllers
         public IActionResult LastHarvestYear()
         {
             _logger.LogTrace($"Field Controller : LastHarvestYear() action called");
-            FieldViewModel? model = new FieldViewModel();
+            FieldViewModel model = new FieldViewModel();
             if (HttpContext.Session.Keys.Contains("FieldData"))
             {
                 model = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldData");
