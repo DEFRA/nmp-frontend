@@ -182,6 +182,63 @@ namespace NMP.Portal.Controllers
                                             //grouping of same type crops into one crop for nmax reporting
 
                                             var cropGroups = GetNmaxReportCropGroups();
+                                            List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypes();
+
+                                            var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
+
+                                            // Group 1
+                                            var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
+                                                ? cropGroups[Resource.lblGroup1Vegetables]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (group1List.Count > 1)
+                                            {
+                                                for (int i = 1; i < group1List.Count; i++)
+                                                {
+                                                    group1List[i] = group1List[i].ToLower();
+                                                }
+                                            }
+
+                                            // Group 2
+                                            var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
+                                                ? cropGroups[Resource.lblGroup2Vegetables]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (group2List.Count > 1)
+                                            {
+                                                for (int i = 1; i < group2List.Count; i++)
+                                                {
+                                                    group2List[i] = group2List[i].ToLower();
+                                                }
+                                            }
+
+                                            // Group 3
+                                            var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
+                                                ? cropGroups[Resource.lblGroup3Vegetables]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (group3List.Count > 1)
+                                            {
+                                                for (int i = 1; i < group3List.Count; i++)
+                                                {
+                                                    group3List[i] = group3List[i].ToLower();
+                                                }
+                                            }
+                                            ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
+                                            ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
+                                            ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
 
                                             var list = new List<SelectListItem>();
 
@@ -205,7 +262,7 @@ namespace NMP.Portal.Controllers
                                                     Value = chosenId.ToString(),
                                                     Text = group.Key
                                                 });
-                                            }
+                                               }
 
                                             // Handle crops not in groups
                                             var groupedIds = cropGroups.Values.SelectMany(g => g).ToHashSet();
@@ -390,26 +447,128 @@ namespace NMP.Portal.Controllers
                                     .Where(crop => cropTypeLinking
                                     .Any(link => link.CropTypeId == crop.CropTypeID))
                                     .DistinctBy(x => x.CropTypeID).ToList();
-                                    var SelectListItem = cropTypeList.Select(f => new SelectListItem
+                                    var list = new List<SelectListItem>();
+
+                                    if (cropTypeList.Count > 0)
                                     {
-                                        Value = f.CropTypeID.ToString(),
-                                        Text = f.CropTypeName
-                                    }).ToList();
+                                        //grouping of same type crops into one crop for nmax reporting
+                                        var cropGroups = GetNmaxReportCropGroups();
+
+                                        List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypes();
+                                        var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
+
+                                        // Group 1
+                                        var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
+                                            ? cropGroups[Resource.lblGroup1Vegetables]
+                                                .Where(id => cropTypeMap.ContainsKey(id))
+                                                .Select(id => cropTypeMap[id])
+                                                .OrderBy(name => name)
+                                                .ToList()
+                                            : new List<string>();
+
+                                        if (group1List.Count > 1)
+                                        {
+                                            for (int i = 1; i < group1List.Count; i++)
+                                            {
+                                                group1List[i] = group1List[i].ToLower();
+                                            }
+                                        }
+
+                                        // Group 2
+                                        var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
+                                            ? cropGroups[Resource.lblGroup2Vegetables]
+                                                .Where(id => cropTypeMap.ContainsKey(id))
+                                                .Select(id => cropTypeMap[id])
+                                                .OrderBy(name => name)
+                                                .ToList()
+                                            : new List<string>();
+
+                                        if (group2List.Count > 1)
+                                        {
+                                            for (int i = 1; i < group2List.Count; i++)
+                                            {
+                                                group2List[i] = group2List[i].ToLower();
+                                            }
+                                        }
+
+                                        // Group 3
+                                        var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
+                                            ? cropGroups[Resource.lblGroup3Vegetables]
+                                                .Where(id => cropTypeMap.ContainsKey(id))
+                                                .Select(id => cropTypeMap[id])
+                                                .OrderBy(name => name)
+                                                .ToList()
+                                            : new List<string>();
+
+                                        if (group3List.Count > 1)
+                                        {
+                                            for (int i = 1; i < group3List.Count; i++)
+                                            {
+                                                group3List[i] = group3List[i].ToLower();
+                                            }
+                                        }
+                                        ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
+                                        ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
+                                        ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
+
+                                        foreach (var group in cropGroups)
+                                        {
+                                            // Find which IDs from this group exist in cropTypeList
+                                            var available = cropTypeList
+                                                .Where(c => group.Value.Contains(c.CropTypeID))
+                                                .Select(c => c.CropTypeID)
+                                                .ToList();
+
+                                            if (available.Count == 0)
+                                            {
+                                                continue;
+                                            }
+                                            // Pick the first matching ID according to the defined group order
+                                            int chosenId = group.Value.First(id => available.Contains(id));
+
+                                            list.Add(new SelectListItem
+                                            {
+                                                Value = chosenId.ToString(),
+                                                Text = group.Key
+                                            });
+
+                                        }
+
+                                        // Handle crops not in groups
+                                        var groupedIds = cropGroups.Values.SelectMany(g => g).ToHashSet();
+
+                                        var remainingCrops = cropTypeList
+                                            .Where(c => !groupedIds.Contains(c.CropTypeID))
+                                            .Select(c => new SelectListItem
+                                            {
+                                                Value = c.CropTypeID.ToString(),
+                                                Text = c.CropTypeName
+                                            });
+
+                                        list.AddRange(remainingCrops);
+
+                                        // Final sorted distinct list
+                                        ViewBag.CropTypeList = list
+                                            .DistinctBy(x => x.Value)   // avoid duplicates by ID
+                                            .OrderBy(x => x.Text)
+                                            .ToList();
+                                        
+                                    }
+
                                     if (model.CropTypeList == null || model.CropTypeList.Count == 0)
                                     {
                                         ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
                                     }
                                     if (!ModelState.IsValid)
                                     {
-                                        ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                         return View(model);
                                     }
                                     if (model.CropTypeList.Count > 0 && model.CropTypeList.Contains(Resource.lblSelectAll))
                                     {
-                                        model.CropTypeList = SelectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
+                                        model.CropTypeList = list.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
                                     }
                                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
-                                    ViewBag.CropTypeList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
+                                    ViewBag.CropTypeList = list.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                 }
                                 else
                                 {
