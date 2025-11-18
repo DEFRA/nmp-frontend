@@ -1,31 +1,34 @@
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Joonasw.AspNetCore.SecurityHeaders;
 using Joonasw.AspNetCore.SecurityHeaders.Csp;
-using NMP.Portal.Security;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using NMP.Portal.Authorization;
-using System.Net.Http.Headers;
-using Microsoft.Extensions.DependencyInjection;
-using NMP.Portal.Services;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using NMP.Portal.Authorization;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
-using Microsoft.Identity.Web.UI;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
-using Azure.Monitor.OpenTelemetry.AspNetCore;
-using Microsoft.Extensions.Options;
+using NMP.Portal.Security;
+using NMP.Portal.Services;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+using System.Net.Http.Headers;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
@@ -91,13 +94,28 @@ var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSI
 
 if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
 {
-    builder.Services.AddOpenTelemetry().UseAzureMonitor();
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(t => t.AddAspNetCoreInstrumentation())
+        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
+        .UseAzureMonitor(options =>
+        {
+            options.ConnectionString = applicationInsightsConnectionString;
+        });
+
+    builder.Services.AddApplicationInsightsTelemetry(options =>
+    {
+        options.ConnectionString = applicationInsightsConnectionString;
+    });
+
 }
+
 
 builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
     builder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.AddApplicationInsights();
+    builder.AddOpenTelemetry();
 });
 
 
