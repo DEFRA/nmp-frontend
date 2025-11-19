@@ -313,47 +313,35 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
             }
-            if (field.TotalArea != null)
+            if (field.TotalArea != null && field.TotalArea < 0)
             {
-                if (field.TotalArea < 0)
-                {
-                    ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
             if (field.CroppedArea == null || field.CroppedArea == 0)
             {
                 ModelState.AddModelError("CroppedArea", Resource.MsgEnterTheCroppedArea);
             }
-            if (field.CroppedArea != null)
+            if (field.CroppedArea != null && field.CroppedArea < 0)
             {
-                if (field.CroppedArea < 0)
-                {
-                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (field.CroppedArea > field.TotalArea)
             {
                 ModelState.AddModelError("CroppedArea", Resource.MsgCroppedAreaIsGreaterThanTotalArea);
             }
-            if (field.CroppedArea != null)
+            if (field.CroppedArea != null && field.CroppedArea < 0)
             {
-                if (field.CroppedArea < 0)
-                {
-                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (field.ManureNonSpreadingArea > field.TotalArea)
             {
                 ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
             }
-            if (field.ManureNonSpreadingArea != null)
+            if (field.ManureNonSpreadingArea != null && field.ManureNonSpreadingArea < 0)
             {
-                if (field.ManureNonSpreadingArea < 0)
-                {
-                    ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (!ModelState.IsValid)
@@ -1460,47 +1448,35 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
                 }
-                if (model.TotalArea != null)
+                if (model.TotalArea != null && model.TotalArea < 0)
                 {
-                    if (model.TotalArea < 0)
-                    {
-                        ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                    }
+                    ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
                 if (model.CroppedArea == null || model.CroppedArea == 0)
                 {
                     ModelState.AddModelError("CroppedArea", Resource.MsgEnterTheCroppedArea);
                 }
-                if (model.CroppedArea != null)
+                if (model.CroppedArea != null && model.CroppedArea < 0)
                 {
-                    if (model.CroppedArea < 0)
-                    {
-                        ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                    }
+                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
 
                 if (model.CroppedArea > model.TotalArea)
                 {
                     ModelState.AddModelError("CroppedArea", Resource.MsgCroppedAreaIsGreaterThanTotalArea);
                 }
-                if (model.CroppedArea != null)
+                if (model.CroppedArea != null && model.CroppedArea < 0)
                 {
-                    if (model.CroppedArea < 0)
-                    {
-                        ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                    }
+                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
 
                 if (model.ManureNonSpreadingArea > model.TotalArea)
                 {
                     ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
                 }
-                if (model.ManureNonSpreadingArea != null)
+                if (model.ManureNonSpreadingArea != null && model.ManureNonSpreadingArea < 0)
                 {
-                    if (model.ManureNonSpreadingArea < 0)
-                    {
-                        ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                    }
+                    ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -2590,7 +2566,7 @@ namespace NMP.Portal.Controllers
                                     var existing = model.PreviousCroppingsList.FirstOrDefault(pcl => pcl.HarvestYear == pc.HarvestYear);
                                     pc.Action = existing != null ? (int)NMP.Portal.Enums.Action.Update : (int)NMP.Portal.Enums.Action.Insert;
                                     pc.CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other;
-                                    pc.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other; 
+                                    pc.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other;
                                     existing.LayDuration = null;
                                     existing.GrassManagementOptionID = null;
                                     existing.HasGreaterThan30PercentClover = null;
@@ -2963,7 +2939,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                
+
                 return RedirectToAction("CropGroups");
             }
 
@@ -2995,7 +2971,7 @@ namespace NMP.Portal.Controllers
             {
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
                 List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-                
+
                 if (cropPlans.Any())
                 {
                     int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
@@ -3358,7 +3334,7 @@ namespace NMP.Portal.Controllers
             DateTime currentDate = System.DateTime.Now;
             DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1);
             DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31);
-            int secondLastHarvestYear= System.DateTime.Now.Year - 1;
+            int secondLastHarvestYear = System.DateTime.Now.Year - 1;
             int lastHarvestYear = System.DateTime.Now.Year;
             if (currentDate.Date >= startOfCurrentHarvestYear.Date && currentDate.Date <= endOfCurrentHarvestYear.Date) // Between April and February
             {
