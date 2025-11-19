@@ -313,36 +313,35 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
             }
-            if (field.TotalArea != null)
+            if (field.TotalArea != null && field.TotalArea < 0)
             {
-                if (field.TotalArea < 0)
-                {
-                    ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
+            if (field.CroppedArea == null || field.CroppedArea == 0)
+            {
+                ModelState.AddModelError("CroppedArea", Resource.MsgEnterTheCroppedArea);
+            }
+            if (field.CroppedArea != null && field.CroppedArea < 0)
+            {
+                ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (field.CroppedArea > field.TotalArea)
             {
                 ModelState.AddModelError("CroppedArea", Resource.MsgCroppedAreaIsGreaterThanTotalArea);
             }
-            if (field.CroppedArea != null)
+            if (field.CroppedArea != null && field.CroppedArea < 0)
             {
-                if (field.CroppedArea < 0)
-                {
-                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (field.ManureNonSpreadingArea > field.TotalArea)
             {
                 ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
             }
-            if (field.ManureNonSpreadingArea != null)
+            if (field.ManureNonSpreadingArea != null && field.ManureNonSpreadingArea < 0)
             {
-                if (field.ManureNonSpreadingArea < 0)
-                {
-                    ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (!ModelState.IsValid)
@@ -1443,6 +1442,41 @@ namespace NMP.Portal.Controllers
                     {
                         ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgNutrientValueTypeForCheckAnswereNotSet);
                     }
+                }
+
+                if (model.TotalArea == null || model.TotalArea == 0)
+                {
+                    ModelState.AddModelError("TotalArea", Resource.MsgEnterTotalFieldArea);
+                }
+                if (model.TotalArea != null && model.TotalArea < 0)
+                {
+                    ModelState.AddModelError("TotalArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
+                if (model.CroppedArea == null || model.CroppedArea == 0)
+                {
+                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterTheCroppedArea);
+                }
+                if (model.CroppedArea != null && model.CroppedArea < 0)
+                {
+                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
+
+                if (model.CroppedArea > model.TotalArea)
+                {
+                    ModelState.AddModelError("CroppedArea", Resource.MsgCroppedAreaIsGreaterThanTotalArea);
+                }
+                if (model.CroppedArea != null && model.CroppedArea < 0)
+                {
+                    ModelState.AddModelError("CroppedArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
+
+                if (model.ManureNonSpreadingArea > model.TotalArea)
+                {
+                    ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
+                }
+                if (model.ManureNonSpreadingArea != null && model.ManureNonSpreadingArea < 0)
+                {
+                    ModelState.AddModelError("ManureNonSpreadingArea", Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
                 if (!ModelState.IsValid)
                 {
