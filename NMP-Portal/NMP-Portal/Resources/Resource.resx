@@ -7003,4 +7003,7 @@ livestock manure.</value>
   <data name="lblNMaxReportsAreOnlyAvailableForFarms" xml:space="preserve">
     <value>N-max reports are only available for farms that are in a nitrate vulnerable zone (NVZ).</value>
   </data>
+  <data name="lblYouCurrentlyDoNotHaveAPlanFor" xml:space="preserve">
+    <value>You currently do not have a plan for {0}</value>
+  </data>
 </root>

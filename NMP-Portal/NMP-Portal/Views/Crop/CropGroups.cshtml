@@ -28,7 +28,16 @@
 
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@(index>=0? Model.HarvestYear[index].EncryptedYear:null)">@Resource.lblBack</govuk-back-link>
+    @if (index >= 0 && index == Model.HarvestYear.Count - 1)
+    {
+        <govuk-back-link asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+
+    }
+    else
+    {
+        <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@(index >= 0 ? Model.HarvestYear[index].EncryptedYear : null)">@Resource.lblBack</govuk-back-link>
+
+    }
 
     @* <govuk-back-link asp-action="@action" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link> *@
     @* <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"HarvestYearForPlan")" asp-controller="Crop">@Resource.lblBack</govuk-back-link> *@
