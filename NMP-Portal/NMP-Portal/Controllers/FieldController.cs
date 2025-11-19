@@ -1980,7 +1980,7 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
 
-                if (tasks != null)
+                if (tasks != null&&tasks.Count>0)
                 {
                     var completedTasks = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
                     var hasGrass = completedTasks.Any(t => t.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
