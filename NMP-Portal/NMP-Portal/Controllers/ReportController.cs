@@ -97,13 +97,11 @@ namespace NMP.Portal.Controllers
                             foreach (var field in fields)
                             {
                                 List<Crop> cropList = await _cropService.FetchCropsByFieldId(field.ID.Value);
-                                if (cropList.Count > 0)
+
+                                cropList = cropList.Where(x => x.Year == model.Year).ToList();
+                                if (cropList.Count == 0)
                                 {
-                                    cropList = cropList.Where(x => x.Year == model.Year).ToList();
-                                    if (cropList.Count == 0)
-                                    {
-                                        fieldCount++;
-                                    }
+                                    fieldCount++;
                                 }
                             }
                             if (fields.Count == fieldCount)
@@ -262,7 +260,7 @@ namespace NMP.Portal.Controllers
                                                     Value = chosenId.ToString(),
                                                     Text = group.Key
                                                 });
-                                               }
+                                            }
 
                                             // Handle crops not in groups
                                             var groupedIds = cropGroups.Values.SelectMany(g => g).ToHashSet();
@@ -571,7 +569,7 @@ namespace NMP.Portal.Controllers
                                             .DistinctBy(x => x.Value)   // avoid duplicates by ID
                                             .OrderBy(x => x.Text)
                                             .ToList();
-                                        
+
                                     }
 
                                     if (model.CropTypeList == null || model.CropTypeList.Count == 0)
