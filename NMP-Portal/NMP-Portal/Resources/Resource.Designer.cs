@@ -16869,6 +16869,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You currently do not have a plan for {0}.
+        /// </summary>
+        public static string lblYouCurrentlyDoNotHaveAPlanFor {
+            get {
+                return ResourceManager.GetString("lblYouCurrentlyDoNotHaveAPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  You have added {0}.
         /// </summary>
         public static string lblYouHaveAdded {

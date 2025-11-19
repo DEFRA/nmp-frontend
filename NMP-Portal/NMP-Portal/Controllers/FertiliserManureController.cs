@@ -1855,6 +1855,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
+                
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
                 {
                     var totalNitrogenError = ModelState["N"].Errors.Count > 0 ?
@@ -1922,7 +1923,8 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                if (model.N == null && model.P2O5 == null
+                bool hasValidationErrors = ModelState.Values.Any(v => v.Errors.Count > 0);
+                if ((!hasValidationErrors)&&model.N == null && model.P2O5 == null
                     && model.K2O == null && model.SO3 == null && model.MgO == null
                     && model.Lime == null)
                 {

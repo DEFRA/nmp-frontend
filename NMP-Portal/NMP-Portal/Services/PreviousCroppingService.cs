@@ -141,7 +141,7 @@ namespace NMP.Portal.Services
             }
             return (success, error);
         }
-        public async Task<(int?, Error)> FetchOldestYearByFarmdId(int farmId)
+        public async Task<(int?, Error)> FetchPreviousCroppingYearByFarmdId(int farmId)
         {
             int? oldestYear = null;
             Error error = new Error();
@@ -149,7 +149,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOldestPreviousCroppingYearByFarmIdAsyncAPI, farmId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchPreviousCroppingYearByFarmIdAsyncAPI, farmId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
