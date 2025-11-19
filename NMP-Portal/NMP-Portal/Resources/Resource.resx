@@ -7006,4 +7006,7 @@ livestock manure.</value>
   <data name="lblYouCurrentlyDoNotHaveAPlanFor" xml:space="preserve">
     <value>You currently do not have a plan for {0}</value>
   </data>
+  <data name="MsgEnterTheCroppedArea" xml:space="preserve">
+    <value>Enter the cropped area</value>
+  </data>
 </root>

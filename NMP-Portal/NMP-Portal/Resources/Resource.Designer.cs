@@ -18617,6 +18617,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the cropped area.
+        /// </summary>
+        public static string MsgEnterTheCroppedArea {
+            get {
+                return ResourceManager.GetString("MsgEnterTheCroppedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 3 2023.
         /// </summary>
         public static string MsgEnterTheDateInNumber {
