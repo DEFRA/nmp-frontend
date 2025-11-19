@@ -1946,6 +1946,22 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
 
+                if (tasks != null)
+                {
+                    var completedTasks = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
+                    var hasGrass = completedTasks.Any(t => t.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                    int maxYear = completedTasks.Where(x => x.HarvestYear.HasValue).Max(x => x.HarvestYear.Value);
+                    if (hasGrass)
+                    {
+                        ViewBag.PreviousCroppingsList = completedTasks.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass||x.HarvestYear==maxYear).ToList();
+                    }
+                    else
+                    {
+                        
+                        ViewBag.PreviousCroppingsList = completedTasks.Where(x=> x.HarvestYear.HasValue&&x.HarvestYear.Value== maxYear).ToList();
+                    }
+                }
+
                 bool? hasGrassInLastThreeYear = null;
 
                 if (grassCroppings.Count > 0)
@@ -2532,7 +2548,7 @@ namespace NMP.Portal.Controllers
                                     var existing = model.PreviousCroppingsList.FirstOrDefault(pcl => pcl.HarvestYear == pc.HarvestYear);
                                     pc.Action = existing != null ? (int)NMP.Portal.Enums.Action.Update : (int)NMP.Portal.Enums.Action.Insert;
                                     pc.CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other;
-                                    pc.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other; 
+                                    pc.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other;
                                     existing.LayDuration = null;
                                     existing.GrassManagementOptionID = null;
                                     existing.HasGreaterThan30PercentClover = null;
@@ -2905,7 +2921,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-                
+
                 return RedirectToAction("CropGroups");
             }
 
@@ -2937,7 +2953,7 @@ namespace NMP.Portal.Controllers
             {
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
                 List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
-                
+
                 if (cropPlans.Any())
                 {
                     int oldestYearWithPlan = cropPlans.Min(cp => cp.Year);
@@ -3300,7 +3316,7 @@ namespace NMP.Portal.Controllers
             DateTime currentDate = System.DateTime.Now;
             DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1);
             DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31);
-            int secondLastHarvestYear= System.DateTime.Now.Year - 1;
+            int secondLastHarvestYear = System.DateTime.Now.Year - 1;
             int lastHarvestYear = System.DateTime.Now.Year;
             if (currentDate.Date >= startOfCurrentHarvestYear.Date && currentDate.Date <= endOfCurrentHarvestYear.Date) // Between April and February
             {

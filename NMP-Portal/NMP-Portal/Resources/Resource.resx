@@ -4884,7 +4884,7 @@ live</value>
     <value>Which farm information and planning report do you want to create?</value>
   </data>
   <data name="lblWhichNVZComplianceReport" xml:space="preserve">
-    <value>Which {0} compliance report do you want to create?</value>
+    <value>Which {0} report do you want to create?</value>
   </data>
   <data name="lblCurrentYearForReport" xml:space="preserve">
     <value>Current year - {0}</value>
@@ -7005,5 +7005,8 @@ livestock manure.</value>
   </data>
   <data name="lblYouCurrentlyDoNotHaveAPlanFor" xml:space="preserve">
     <value>You currently do not have a plan for {0}</value>
+  </data>
+  <data name="ExistingManureStorageCapacityReportHintReword" xml:space="preserve">
+    <value>Calculate the storage capacity of your existing manure stores.</value>
   </data>
 </root>
