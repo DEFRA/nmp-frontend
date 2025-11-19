@@ -3935,7 +3935,7 @@ namespace NMP.Portal.Controllers
                             };
                             model.HarvestYear.Add(harvestNewYear);
                         }
-                        int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear ?? 0: planSummaryResponse.Min(x => x.Year) - 1;
+                        int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear.GetValueOrDefault() : planSummaryResponse.Min(x => x.Year) - 1;
                         int maxYear = planSummaryResponse.Max(x => x.Year) < currentHarvestYear ? currentHarvestYear: planSummaryResponse.Max(x => x.Year) + 1;
                         for (int i = minYear; i <= maxYear; i++)
                         {
@@ -3959,7 +3959,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         
-                        for (int i = topPrevCroppingYear ?? 0; i <= currentHarvestYear; i++)
+                        for (int i = topPrevCroppingYear.GetValueOrDefault(); i <= currentHarvestYear; i++)
                         {
                             var harvestYear = new HarvestYear
                             {
@@ -7207,7 +7207,8 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(error.Message) && topPrevCroppingYear > 0)
                 {
                     DateTime currentDate = DateTime.Now;
-                    DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31);
+                    DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31, 0, 0, 0, DateTimeKind.Local);
+
                     int currentHarvestYear = 0;
                     if (currentDate > harvestYearEndDate)
                     {
