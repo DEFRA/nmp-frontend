@@ -120,18 +120,9 @@
             <br>
             @(string.Format("{0}{1} {2}", Resource.lblExcessWinterRainfall, ":", Model.CropAndFieldReport.ExcessWinterRainfall))
         </p>
-    </div>
+    </div>    
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <hr class="margin-bottom-thirty">
-            <h4 class="govuk-heading-s  margin-bottom-thirty">@Resource.lblPrivate_beta_disclaimer</h4>
-            <p class="govuk-body">
-                @Resource.lblPrivate_beta_disclaimer_sub_heading
-            </p>
-            <ul class="govuk-list govuk-list--bullet  margin-bottom-thirty">
-                <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line1</li>
-                <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line2</li>
-            </ul>
             <hr class="margin-bottom-thirty">
         </div>
     </div>
@@ -806,21 +797,15 @@
         <div class="govuk-grid-column-full">
             <hr class="seperator_five">
             <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
-            <h4 class="govuk-heading-s">@Resource.lblDisclaimer</h4>
             <p class="govuk-body">
-                @Resource.lblDisclaimerContentOne
+                @Resource.lblAboutRecommendationGuidenceAdviceContent1
             </p>
             <p class="govuk-body">
-                @Resource.lblDisclaimerContentSecond
+                @Resource.lblAboutRecommendationGuidenceAdviceContent2
             </p>
             <p class="govuk-body margin-bottom-forty">
-                @Resource.lblDisclaimerContentThird
+                @Resource.lblAboutRecommendationGuidenceAdviceContent3
             </p>
-            <h4 class="govuk-heading-s">@Resource.lblYourData</h4>
-            <p class="govuk-body">
-                @Resource.lblYourDataContentOne
-            </p>
-            <p class="govuk-body">@Html.Raw(Resource.lblYourDataContentSecond)</p>
         </div>
     </div>
 }

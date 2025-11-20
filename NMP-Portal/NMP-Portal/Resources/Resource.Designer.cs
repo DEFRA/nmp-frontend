@@ -835,7 +835,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This {0} was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB..
+        ///   Looks up a localized string similar to NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB)..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent1 {
             get {
@@ -844,7 +844,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this {0} is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool..
+        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage, injury, or liabilities howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to this tool, including the information contained in or omitted from this tool..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent2 {
             get {
@@ -853,7 +853,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This {0} should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions..
+        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This tool, including the information contained in or omitted from it, should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and take appropriate measures to mitigate run-off and nutrient leaching. Where necessary consult a FACTS Qualified Adviser before making nutrient management decisions..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent3 {
             get {
@@ -4197,33 +4197,6 @@ namespace NMP.Portal.Resources {
         public static string lblDisclaimer {
             get {
                 return ResourceManager.GetString("lblDisclaimer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB)..
-        /// </summary>
-        public static string lblDisclaimerContentOne {
-            get {
-                return ResourceManager.GetString("lblDisclaimerContentOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage, injury, or liabilities howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to this tool, including the information contained in or omitted from this tool..
-        /// </summary>
-        public static string lblDisclaimerContentSecond {
-            get {
-                return ResourceManager.GetString("lblDisclaimerContentSecond", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This tool, including the information contained in or omitted from it, should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and take appropriate measures to mitigate run-off and nutrient leaching. Where necessary consult a FACTS Qualified Adviser before making nutrient management decisions..
-        /// </summary>
-        public static string lblDisclaimerContentThird {
-            get {
-                return ResourceManager.GetString("lblDisclaimerContentThird", resourceCulture);
             }
         }
         
@@ -9685,6 +9658,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the {0} to one decimal place.
+        /// </summary>
+        public static string lblNutrientCanHaveOnlyOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblNutrientCanHaveOnlyOneDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}kg/yr.
         /// </summary>
         public static string lblNutrientKgPerYear {
@@ -11004,42 +10986,6 @@ namespace NMP.Portal.Resources {
         public static string lblPrivate_beta_disclaimer {
             get {
                 return ResourceManager.GetString("lblPrivate_beta_disclaimer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this tool cannot be used:.
-        /// </summary>
-        public static string lblPrivate_beta_disclaimer_sub_heading {
-            get {
-                return ResourceManager.GetString("lblPrivate_beta_disclaimer_sub_heading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this service cannot be used:.
-        /// </summary>
-        public static string lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport {
-            get {
-                return ResourceManager.GetString("lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to to demonstrate compliance with any regulation or legislation, such as NVZ rules.
-        /// </summary>
-        public static string lblPrivate_beta_disclaimer_sub_heading_line1 {
-            get {
-                return ResourceManager.GetString("lblPrivate_beta_disclaimer_sub_heading_line1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI).
-        /// </summary>
-        public static string lblPrivate_beta_disclaimer_sub_heading_line2 {
-            get {
-                return ResourceManager.GetString("lblPrivate_beta_disclaimer_sub_heading_line2", resourceCulture);
             }
         }
         
@@ -18775,6 +18721,15 @@ namespace NMP.Portal.Resources {
         public static string MsgEnterTheValidValueOfNutrient {
             get {
                 return ResourceManager.GetString("MsgEnterTheValidValueOfNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the {0} amount using integer values only..
+        /// </summary>
+        public static string MsgEnterTheValueAmountUsingIntValueOnly {
+            get {
+                return ResourceManager.GetString("MsgEnterTheValueAmountUsingIntValueOnly", resourceCulture);
             }
         }
         
