@@ -4192,6 +4192,42 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disclaimer.
+        /// </summary>
+        public static string lblDisclaimer {
+            get {
+                return ResourceManager.GetString("lblDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB)..
+        /// </summary>
+        public static string lblDisclaimerContentOne {
+            get {
+                return ResourceManager.GetString("lblDisclaimerContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage, injury, or liabilities howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to this tool, including the information contained in or omitted from this tool..
+        /// </summary>
+        public static string lblDisclaimerContentSecond {
+            get {
+                return ResourceManager.GetString("lblDisclaimerContentSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users are responsible for the accuracy of their own data and the application of guidance provided. This tool, including the information contained in or omitted from it, should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and take appropriate measures to mitigate run-off and nutrient leaching. Where necessary consult a FACTS Qualified Adviser before making nutrient management decisions..
+        /// </summary>
+        public static string lblDisclaimerContentThird {
+            get {
+                return ResourceManager.GetString("lblDisclaimerContentThird", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discs.
         /// </summary>
         public static string lblDiscs {
@@ -17180,6 +17216,24 @@ namespace NMP.Portal.Resources {
         public static string lblYourData {
             get {
                 return ResourceManager.GetString("lblYourData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool only gathers the data required to provide you with nutrient recommendations..
+        /// </summary>
+        public static string lblYourDataContentOne {
+            get {
+                return ResourceManager.GetString("lblYourDataContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the  &lt;a href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot; target=&quot;_blank&quot;&gt; Rural Payments Agency&lt;/a&gt; (RPA) or the Environment Agency (EA)..
+        /// </summary>
+        public static string lblYourDataContentSecond {
+            get {
+                return ResourceManager.GetString("lblYourDataContentSecond", resourceCulture);
             }
         }
         

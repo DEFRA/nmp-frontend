@@ -805,16 +805,22 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <hr class="seperator_five">
-            <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
+            <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
+            <h4 class="govuk-heading-s">@Resource.lblDisclaimer</h4>
             <p class="govuk-body">
-                @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
+                @Resource.lblDisclaimerContentOne
             </p>
             <p class="govuk-body">
-                @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
+                @Resource.lblDisclaimerContentSecond
             </p>
+            <p class="govuk-body margin-bottom-forty">
+                @Resource.lblDisclaimerContentThird
+            </p>
+            <h4 class="govuk-heading-s">@Resource.lblYourData</h4>
             <p class="govuk-body">
-                @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
+                @Resource.lblYourDataContentOne
             </p>
+            <p class="govuk-body">@Html.Raw(Resource.lblYourDataContentSecond)</p>
         </div>
     </div>
 }

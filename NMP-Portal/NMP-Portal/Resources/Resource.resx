@@ -7012,4 +7012,22 @@ livestock manure.</value>
   <data name="ExistingManureStorageCapacityReportHintReword" xml:space="preserve">
     <value>Calculate the storage capacity of your existing manure stores.</value>
   </data>
+  <data name="lblDisclaimerContentOne" xml:space="preserve">
+    <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
+  </data>
+  <data name="lblDisclaimer" xml:space="preserve">
+    <value>Disclaimer</value>
+  </data>
+  <data name="lblDisclaimerContentSecond" xml:space="preserve">
+    <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage, injury, or liabilities howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to this tool, including the information contained in or omitted from this tool.</value>
+  </data>
+  <data name="lblDisclaimerContentThird" xml:space="preserve">
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool, including the information contained in or omitted from it, should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and take appropriate measures to mitigate run-off and nutrient leaching. Where necessary consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+  </data>
+  <data name="lblYourDataContentOne" xml:space="preserve">
+    <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
+  </data>
+  <data name="lblYourDataContentSecond" xml:space="preserve">
+    <value>This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the  &lt;a href="https://www.gov.uk/government/organisations/rural-payments-agency" target="_blank"&gt; Rural Payments Agency&lt;/a&gt; (RPA) or the Environment Agency (EA).</value>
+  </data>
 </root>
