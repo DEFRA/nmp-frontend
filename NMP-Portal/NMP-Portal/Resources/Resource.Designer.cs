@@ -322,42 +322,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We only gather the data required to provide you with the appropriate recommendations..
-        /// </summary>
-        public static string contentYourData1 {
-            get {
-                return ResourceManager.GetString("contentYourData1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This tool will never share your data with any other organisations..
-        /// </summary>
-        public static string contentYourData2 {
-            get {
-                return ResourceManager.GetString("contentYourData2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to In particular, please note that this tool does not share data with the &lt;a href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot; target=&quot;_balnk&quot;&gt; Rural Payments Agency&lt;/a&gt; (RPA)..
-        /// </summary>
-        public static string contentYourData3 {
-            get {
-                return ResourceManager.GetString("contentYourData3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This tool was developed in conjunction with ADAS, AHDB and RSK..
-        /// </summary>
-        public static string contentYourData4 {
-            get {
-                return ResourceManager.GetString("contentYourData4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to cookieChallenge.
         /// </summary>
         public static string CookieChallengeCookieName {
@@ -4188,15 +4152,6 @@ namespace NMP.Portal.Resources {
         public static string lblDirtyWaterStores {
             get {
                 return ResourceManager.GetString("lblDirtyWaterStores", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Disclaimer.
-        /// </summary>
-        public static string lblDisclaimer {
-            get {
-                return ResourceManager.GetString("lblDisclaimer", resourceCulture);
             }
         }
         
@@ -10977,15 +10932,6 @@ namespace NMP.Portal.Resources {
         public static string lblPrintOrSaveAsAPDF {
             get {
                 return ResourceManager.GetString("lblPrintOrSaveAsAPDF", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Private beta disclaimer.
-        /// </summary>
-        public static string lblPrivate_beta_disclaimer {
-            get {
-                return ResourceManager.GetString("lblPrivate_beta_disclaimer", resourceCulture);
             }
         }
         
