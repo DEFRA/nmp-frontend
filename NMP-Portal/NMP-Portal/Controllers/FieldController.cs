@@ -1980,6 +1980,22 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
 
+                if (tasks != null&&tasks.Count>0)
+                {
+                    var completedTasks = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
+                    var hasGrass = completedTasks.Any(t => t.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                    int maxYear = completedTasks.Where(x => x.HarvestYear.HasValue).Max(x => x.HarvestYear.Value);
+                    if (hasGrass)
+                    {
+                        ViewBag.PreviousCroppingsList = completedTasks.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass||x.HarvestYear==maxYear).ToList();
+                    }
+                    else
+                    {
+                        
+                        ViewBag.PreviousCroppingsList = completedTasks.Where(x=> x.HarvestYear.HasValue&&x.HarvestYear.Value== maxYear).ToList();
+                    }
+                }
+
                 bool? hasGrassInLastThreeYear = null;
 
                 if (grassCroppings.Count > 0)

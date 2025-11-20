@@ -430,6 +430,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculate the storage capacity of your existing manure stores..
+        /// </summary>
+        public static string ExistingManureStorageCapacityReportHintReword {
+            get {
+                return ResourceManager.GetString("ExistingManureStorageCapacityReportHintReword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 20.
         /// </summary>
         public static string FieldGreaterThanX {
@@ -16419,7 +16428,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which {0} compliance report do you want to create?.
+        ///   Looks up a localized string similar to Which {0} report do you want to create?.
         /// </summary>
         public static string lblWhichNVZComplianceReport {
             get {
