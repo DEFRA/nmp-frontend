@@ -110,16 +110,7 @@
                             {
                                 <govuk-tabs-item id="crop-1" label="@(Model.Crops.Count==1?Resource.lblNutrientAndLimeRecommendations:Resource.lblCrop1Recommendations)">
                                     <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>
-                                    <h3 class="govuk-heading-s">@Resource.lblPrivate_beta_disclaimer</h3>
-                                    <p class="govuk-body">
-                                        @Resource.lblPrivate_beta_disclaimer_sub_heading
-                                    </p>
-                                    <ul class="govuk-list govuk-list--bullet">
-                                        <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line1</li>
-                                        <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line2</li>
-                                    </ul>
-                                    <hr class="seperator_five">
-
+                                    
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
                                                     && Model.Recommendations.Count > 0)
                                     {
@@ -306,14 +297,15 @@
                                         <hr class="seperator_five">
                                         <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
                                         <p class="govuk-body">
-                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
+                                            @Resource.lblAboutRecommendationGuidenceAdviceContent1
                                         </p>
                                         <p class="govuk-body">
-                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
+                                            @Resource.lblAboutRecommendationGuidenceAdviceContent2
                                         </p>
                                         <p class="govuk-body margin-bottom-forty">
-                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
+                                            @Resource.lblAboutRecommendationGuidenceAdviceContent3
                                         </p>
+                                       
                                         <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#tab_crop-1">@Resource.lblBackToTheTop</a></p>
 
                                     }
@@ -324,16 +316,7 @@
                             {
                                 managementTableIndex = 1;
                                 <govuk-tabs-item id="crop-2" label="@Resource.lblCrop2Recommendations">
-                                    <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>
-                                    <h3 class="govuk-heading-s">@Resource.lblPrivate_beta_disclaimer</h3>
-                                    <p class="govuk-body">
-                                        @Resource.lblPrivate_beta_disclaimer_sub_heading
-                                    </p>
-                                    <ul class="govuk-list govuk-list--bullet">
-                                        <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line1</li>
-                                        <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line2</li>
-                                    </ul>
-                                    <hr class="seperator_five">
+                                    <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>                                    
 
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
                                                     && Model.Recommendations.Count > 0)
@@ -511,13 +494,13 @@
                                         <hr class="seperator_five">
                                         <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
                                         <p class="govuk-body">
-                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblTool)
+                                            @Resource.lblAboutRecommendationGuidenceAdviceContent1
                                         </p>
                                         <p class="govuk-body">
-                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblTool)
+                                            @Resource.lblAboutRecommendationGuidenceAdviceContent2
                                         </p>
                                         <p class="govuk-body margin-bottom-forty">
-                                            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblTool)
+                                            @Resource.lblAboutRecommendationGuidenceAdviceContent3
                                         </p>
                                         <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#tab_crop-2">@Resource.lblBackToTheTop</a></p>
                                     }
