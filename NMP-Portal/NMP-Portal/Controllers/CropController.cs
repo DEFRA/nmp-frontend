@@ -2603,7 +2603,7 @@ namespace NMP.Portal.Controllers
                                 .Select(x => x.FieldID)
                                 .ToList();
 
-                            allFieldListForFilter.RemoveAll(field => fieldIdsToRemove.Contains(field.ID.Value));                         
+                            allFieldListForFilter.RemoveAll(field => fieldIdsToRemove.Contains(field.ID.Value));
                             if (allFieldListForFilter.Count == 0)
                             {
                                 ViewBag.IsFieldChange = true;
@@ -3958,7 +3958,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        
+
                         for (int i = topPrevCroppingYear.GetValueOrDefault(); i <= currentHarvestYear; i++)
                         {
                             var harvestYear = new HarvestYear
@@ -4172,7 +4172,10 @@ namespace NMP.Portal.Controllers
                                 {
                                     crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
                                 }
-
+                                if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                {
+                                    //ViewBag.Cuts = crop.PotentialCut.ToWords();
+                                }
                                 model.Crops.Add(crop);
 
                                 if (recommendation.PKBalance != null)
@@ -7300,7 +7303,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("HarvestYearForPlan", new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = true });
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {

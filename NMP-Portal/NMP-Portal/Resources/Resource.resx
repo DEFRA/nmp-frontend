@@ -6997,4 +6997,7 @@ livestock manure.</value>
   <data name="MsgEnterTheValueAmountUsingIntValueOnly" xml:space="preserve">
     <value>Enter the {0} amount using integer values only.</value>
   </data>
+  <data name="lblThereAreCountCutsAndGrazingsInYear" xml:space="preserve">
+    <value>There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one.</value>
+  </data>
 </root>
