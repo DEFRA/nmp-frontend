@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using NMP.Portal.Models;
 
-namespace NMP.Portal.Models
+namespace NMP.Portal.ViewModels
 {
-    public class OrganicManureData:OrganicManure
+    public class OrganicManureDataViewModel:OrganicManure
     {
-        public string ManureTypeName { get; set; }
         public string ApplicationMethodName { get; set; } = string.Empty;
         public string? IncorporationMethodName { get; set; } = string.Empty;
         public string? IncorporationDelayName { get; set; } = string.Empty;
@@ -12,5 +11,10 @@ namespace NMP.Portal.Models
         public string? EncryptedFieldName { get; set; }
         public string? EncryptedManureTypeName { get; set; }
         public string? RateUnit { get; set; }
+        public int? Defoliation { get; set; }
+        public string? DefoliationName { get; set; }
+        public int? FieldID { get; set; }
+        public string? FieldName { get; set; }
+        public string? EncryptedCounter { get; set; }
     }
 }

@@ -146,7 +146,7 @@ namespace NMP.Portal.Controllers
                             {
                                 if (model.OrganicManures == null)
                                 {
-                                    model.OrganicManures = new List<OrganicManure>();
+                                    model.OrganicManures = new List<OrganicManureDataViewModel>();
                                 }
                                 if (model.OrganicManures.Count > 0)
                                 {
@@ -154,7 +154,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 foreach (var manIds in managementIds)
                                 {
-                                    var organicManure = new OrganicManure
+                                    var organicManure = new OrganicManureDataViewModel
                                     {
                                         ManagementPeriodID = manIds,
                                         FieldID = Convert.ToInt32(fieldId),
@@ -336,7 +336,7 @@ namespace NMP.Portal.Controllers
                                 string fieldIds = string.Join(",", model.FieldList);
                                 if (model.OrganicManures == null)
                                 {
-                                    model.OrganicManures = new List<OrganicManure>();
+                                    model.OrganicManures = new List<OrganicManureDataViewModel>();
                                 }
                                 if (model.OrganicManures.Count > 0)
                                 {
@@ -387,7 +387,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             foreach (var manIds in managementIds)
                                             {
-                                                var organicManure = new OrganicManure
+                                                var organicManure = new OrganicManureDataViewModel
                                                 {
                                                     ManagementPeriodID = manIds
                                                 };
@@ -782,7 +782,7 @@ namespace NMP.Portal.Controllers
                         {
                             if (model.OrganicManures == null)
                             {
-                                model.OrganicManures = new List<OrganicManure>();
+                                model.OrganicManures = new List<OrganicManureDataViewModel>();
                             }
                             if (model.OrganicManures.Count > 0)
                             {
@@ -791,7 +791,7 @@ namespace NMP.Portal.Controllers
 
                             foreach (var manIds in managementIds)
                             {
-                                var organicManure = new OrganicManure
+                                var organicManure = new OrganicManureDataViewModel
                                 {
                                     ManagementPeriodID = manIds
                                 };
@@ -1306,7 +1306,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (model.OrganicManures == null)
                                             {
-                                                model.OrganicManures = new List<OrganicManure>();
+                                                model.OrganicManures = new List<OrganicManureDataViewModel>();
                                             }
                                             if (model.OrganicManures.Count > 0)
                                             {
@@ -1315,7 +1315,7 @@ namespace NMP.Portal.Controllers
                                             int counter = 1;
                                             foreach (var manIds in managementIds)
                                             {
-                                                var organicManure = new OrganicManure
+                                                var organicManure = new OrganicManureDataViewModel
                                                 {
                                                     ManagementPeriodID = manIds,
                                                     ManureTypeID = model.ManureTypeId.Value,
@@ -1677,7 +1677,7 @@ namespace NMP.Portal.Controllers
         //            //if manure type change 
         //            if (model.IsCheckAnswer)
         //            {
-        //                //OrganicManureViewModel organicManure = new OrganicManureViewModel();
+        //                //OrganicManureViewModel organicManure new OrganicManureDataViewModelViewModel();
         //                //if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
         //                //{
         //                //    organicManure = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
@@ -1848,7 +1848,7 @@ namespace NMP.Portal.Controllers
         //                        int counter = 1;
         //                        foreach (var manIds in managementIds)
         //                        {
-        //                            var organicManure = new OrganicManure
+        //                            var organicManure new OrganicManureDataViewModel
         //                            {
         //                                ManagementPeriodID = manIds,
         //                                ManureTypeID = model.ManureTypeId.Value,
@@ -5064,7 +5064,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (decryptedId > 0)
                     {
-                        (OrganicManure organicManure, error) = await _organicManureService.FetchOrganicManureById(decryptedId);
+                        (OrganicManureDataViewModel organicManure, error) = await _organicManureService.FetchOrganicManureById(decryptedId);
                         if (error == null && organicManure != null)
                         {
                             int counter = 1;
@@ -5152,7 +5152,7 @@ namespace NMP.Portal.Controllers
                                 int fieldIdForUpdate = Convert.ToInt32(model.FieldList.FirstOrDefault());
                                 if (model.OrganicManures == null)
                                 {
-                                    model.OrganicManures = new List<OrganicManure>();
+                                    model.OrganicManures = new List<OrganicManureDataViewModel>();
                                 }
                                 int? defoliation = null;
                                 string defoliationName = string.Empty;
@@ -5214,7 +5214,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 organicManure.FieldID = model.FieldID;
                                 organicManure.FieldName = model.FieldName;
-                                var organic = new OrganicManure
+                                var organic = new OrganicManureDataViewModel
                                 {
                                     ManagementPeriodID = organicManure.ManagementPeriodID,
                                     ManureTypeID = organicManure.ManureTypeID,
@@ -5752,7 +5752,7 @@ namespace NMP.Portal.Controllers
                 model.IsClosedPeriodWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList != null && model.FieldList.Count == 1))
-                if(model.FieldList.Count >= 1)
+                if (model.FieldList.Count >= 1)
                 {
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(farmId);
@@ -6129,7 +6129,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var manIds in managementIds)
                                     {
-                                        var organic = new OrganicManure
+                                        var organic = new OrganicManureDataViewModel
                                         {
                                             ManagementPeriodID = manIds,
                                             FieldID = model.FieldID,
@@ -6235,7 +6235,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        model.OrganicManures.Add(new OrganicManure
+                                        model.OrganicManures.Add(new OrganicManureDataViewModel
                                         {
                                             ManagementPeriodID = managementPeriodId,
                                             FieldID = doubleCrop.FieldID,
@@ -6292,7 +6292,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!(model.OrganicManures != null && model.OrganicManures.Count > 0))
                     {
-                        model.OrganicManures = new List<OrganicManure>();
+                        model.OrganicManures = new List<OrganicManureDataViewModel>();
                     }
                     if (model.OrganicManures.Count < model.FieldList.Count && targetFieldIds?.Count > 0)
                     {
@@ -6346,7 +6346,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var manId in managementIds)
                                     {
-                                        model.OrganicManures.Add(new OrganicManure
+                                        model.OrganicManures.Add(new OrganicManureDataViewModel
                                         {
                                             ManagementPeriodID = manId,
                                             FieldID = model.FieldID,
@@ -6432,7 +6432,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                   
+
                     //foreach (string field in model.FieldList)
                     //{
                     (Farm farmData, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -6470,7 +6470,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
                                                     postcode = farmData.ClimateDataPostCode.Split(" ")[0],
-                                                    countryID = farmData.CountryID,
+                                                    countryID =1,// farmData.CountryID,
                                                     field = new
                                                     {
                                                         fieldID = fieldData.ID,
@@ -6590,35 +6590,80 @@ namespace NMP.Portal.Controllers
                 var OrganicManures = new List<object>();
 
                 List<WarningMessage> warningMessageList = new List<WarningMessage>();
-                foreach (var orgManure in model.OrganicManures)
+                //List<OrganicManure> OrganicManureList = model.OrganicManures?.Select(vm => (OrganicManure)vm).ToList() ?? new List<OrganicManure>(); ; var OrganicManureList = model.OrganicManures?
+                //List<OrganicManure> OrganicManureList = model.OrganicManures?.Select(organicManure =>
+                //{
+                //    organicManure.ManureTypeID = model.ManureTypeId.Value;
+                //    organicManure.ManureTypeName = model.ManureTypeName;
+                //    organicManure.ApplicationMethodID = model.ApplicationMethod;
+
+                //    // Get first values from the list
+                //    var firstOM = model.OrganicManures.FirstOrDefault();
+                //    if (firstOM != null)
+                //    {
+                //        organicManure.N = firstOM.N;
+                //        organicManure.P2O5 = firstOM.P2O5;
+                //        organicManure.NH4N = firstOM.NH4N;
+                //        organicManure.K2O = firstOM.K2O;
+                //        organicManure.MgO = firstOM.MgO;
+                //        organicManure.NO3N = firstOM.NO3N;
+                //        organicManure.Confirm = firstOM.Confirm;
+                //        organicManure.SO3 = firstOM.SO3;
+                //        organicManure.DryMatterPercent = firstOM.DryMatterPercent;
+                //        organicManure.UricAcid = firstOM.UricAcid;
+                //        organicManure.Rainfall = firstOM.Rainfall;
+                //        organicManure.RainfallWithinSixHoursID = firstOM.RainfallWithinSixHoursID;
+                //        organicManure.WindspeedID = firstOM.WindspeedID;
+                //        organicManure.MoistureID = firstOM.MoistureID;
+                //    }
+                //    // Assign remaining properties
+                //    organicManure.ApplicationDate = model.ApplicationDate.Value;
+                //    organicManure.ApplicationRate = model.ApplicationRate;
+                //    organicManure.AreaSpread = model.Area;
+                //    organicManure.ManureQuantity = model.Quantity;
+                //    organicManure.EndOfDrain = model.SoilDrainageEndDate.Value.ToLocalTime();
+                //    organicManure.SoilDrainageEndDate = model.SoilDrainageEndDate.Value.ToLocalTime();
+                //    organicManure.IncorporationDelayID = model.IncorporationDelay;
+                //    organicManure.IncorporationMethodID = model.IncorporationMethod;
+                //    organicManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes
+                //        .Where(x => x.FieldName == model.FieldName)
+                //        .Select(x => x.AutumnCropNitrogenUptake)
+                //        .FirstOrDefault();
+
+                //});
+
+                //List<OrganicManure> OrganicManureList = model.OrganicManures?.Cast<OrganicManure>().ToList() ?? new List<OrganicManure>();
+                if (model.OrganicManures.Count > 0)
                 {
-                    int fieldTypeId = (int)NMP.Portal.Enums.FieldType.Arable;
-                    (ManagementPeriod ManData, error) = await _cropService.FetchManagementperiodById(orgManure.ManagementPeriodID);
-                    if (ManData != null)
+                    foreach (var orgManure in model.OrganicManures)
                     {
-
-                        (Crop crop, error) = (await _cropService.FetchCropById(ManData.CropID.Value));
-                        if (crop != null)
+                        int fieldTypeId = (int)NMP.Portal.Enums.FieldType.Arable;
+                        (ManagementPeriod ManData, error) = await _cropService.FetchManagementperiodById(orgManure.ManagementPeriodID);
+                        if (ManData != null)
                         {
-                            fieldTypeId = (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass) ?
-                             (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
 
+                            (Crop crop, error) = (await _cropService.FetchCropById(ManData.CropID.Value));
+                            if (crop != null)
+                            {
+                                fieldTypeId = (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass) ?
+                                 (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
+
+                            }
                         }
+                        warningMessageList = new List<WarningMessage>();
+                        warningMessageList = await GetWarningMessages(model);
+
+                        OrganicManures.Add(new
+                        {
+                            OrganicManure = orgManure,
+                            WarningMessages = warningMessageList.Count > 0 ? warningMessageList : null,
+                            FarmID = model.FarmId,
+                            FieldTypeID = fieldTypeId,
+                            SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
+
+                        });
                     }
-                    warningMessageList = new List<WarningMessage>();
-                    warningMessageList = await GetWarningMessages(model);
-
-                    OrganicManures.Add(new
-                    {
-                        OrganicManure = orgManure,
-                        WarningMessages = warningMessageList.Count > 0 ? warningMessageList : null,
-                        FarmID = model.FarmId,
-                        FieldTypeID = fieldTypeId,
-                        SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
-
-                    });
                 }
-
                 //var OrganicManures = model.OrganicManures.Select(orgManure => new
                 //{
                 //    OrganicManure = orgManure,
@@ -9261,7 +9306,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var manIds in managementIds)
                                     {
-                                        var organic = new OrganicManure
+                                        var organic = new OrganicManureDataViewModel
                                         {
                                             ManagementPeriodID = manIds,
                                             FieldID = model.FieldID,
@@ -9376,7 +9421,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        model.OrganicManures.Add(new OrganicManure
+                                        model.OrganicManures.Add(new OrganicManureDataViewModel
                                         {
                                             ManagementPeriodID = managementPeriodId,
                                             FieldID = doubleCrop.FieldID,
@@ -9433,7 +9478,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!(model.OrganicManures != null && model.OrganicManures.Count > 0))
                     {
-                        model.OrganicManures = new List<OrganicManure>();
+                        model.OrganicManures = new List<OrganicManureDataViewModel>();
                     }
                     if (model.OrganicManures.Count < model.FieldList.Count && targetFieldIds?.Count > 0)
                     {
@@ -9487,7 +9532,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var manId in managementIds)
                                     {
-                                        model.OrganicManures.Add(new OrganicManure
+                                        model.OrganicManures.Add(new OrganicManureDataViewModel
                                         {
                                             ManagementPeriodID = manId,
                                             FieldID = model.FieldID,
@@ -9761,7 +9806,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 fieldTypeId = (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass) ?
                                                  (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
-                                                fieldID= crop.FieldID;
+                                                fieldID = crop.FieldID;
                                             }
                                         }
                                         warningMessageList = new List<WarningMessage>();
@@ -10176,9 +10221,9 @@ namespace NMP.Portal.Controllers
                                     if (!anyExists)
                                     {
                                         int counter = model.OrganicManures.Count();
-                                        model.OrganicManures.AddRange(new List<OrganicManure>
+                                        model.OrganicManures.AddRange(new List<OrganicManureDataViewModel>
                                         {
-                                            new OrganicManure
+                                            new OrganicManureDataViewModel
                                             {
                                                 ManagementPeriodID = ManagementPeriod.First().ID.Value,
                                                 FieldID=model.DoubleCrop[model.DoubleCropCurrentCounter - 1].FieldID,
@@ -10718,7 +10763,7 @@ namespace NMP.Portal.Controllers
                             {
                                 if (model.OrganicManures == null)
                                 {
-                                    model.OrganicManures = new List<OrganicManure>();
+                                    model.OrganicManures = new List<OrganicManureDataViewModel>();
                                 }
                                 if (model.OrganicManures.Count > 0)
                                 {
@@ -10727,7 +10772,7 @@ namespace NMP.Portal.Controllers
                                 int counter = 1;
                                 foreach (var manIds in managementIds)
                                 {
-                                    var organicManure = new OrganicManure
+                                    var organicManure = new OrganicManureDataViewModel
                                     {
                                         ManagementPeriodID = manIds,
                                         ManureTypeID = model.ManureTypeId.Value,
@@ -11745,7 +11790,7 @@ namespace NMP.Portal.Controllers
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                     {
-                        var itemsToRemove = new List<OrganicManure>();
+                        var itemsToRemove = new List<OrganicManureDataViewModel>();
                         foreach (var organicManure in model.OrganicManures)
                         {
                             (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organicManure.ManagementPeriodID);
@@ -11861,7 +11906,7 @@ namespace NMP.Portal.Controllers
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                     {
-                        var itemsToRemove = new List<OrganicManure>();
+                        var itemsToRemove = new List<OrganicManureDataViewModel>();
                         foreach (var organicManure in model.OrganicManures)
                         {
                             (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(organicManure.ManagementPeriodID);
