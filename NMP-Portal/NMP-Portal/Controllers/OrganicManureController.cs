@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Abstractions;
-using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
@@ -14,14 +10,9 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
-using System;
 using System.Collections.Immutable;
-using System.Diagnostics.Metrics;
 using System.Globalization;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace NMP.Portal.Controllers
 {
@@ -6470,7 +6461,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
                                                     postcode = farmData.ClimateDataPostCode.Split(" ")[0],
-                                                    countryID =1,// farmData.CountryID,
+                                                    countryID = farmData.CountryID,
                                                     field = new
                                                     {
                                                         fieldID = fieldData.ID,
@@ -6590,52 +6581,63 @@ namespace NMP.Portal.Controllers
                 var OrganicManures = new List<object>();
 
                 List<WarningMessage> warningMessageList = new List<WarningMessage>();
-                //List<OrganicManure> OrganicManureList = model.OrganicManures?.Select(vm => (OrganicManure)vm).ToList() ?? new List<OrganicManure>(); ; var OrganicManureList = model.OrganicManures?
-                //List<OrganicManure> OrganicManureList = model.OrganicManures?.Select(organicManure =>
-                //{
-                //    organicManure.ManureTypeID = model.ManureTypeId.Value;
-                //    organicManure.ManureTypeName = model.ManureTypeName;
-                //    organicManure.ApplicationMethodID = model.ApplicationMethod;
+                // Initialize the new list
+                List<OrganicManure> OrganicManureList = new List<OrganicManure>();
 
-                //    // Get first values from the list
-                //    var firstOM = model.OrganicManures.FirstOrDefault();
-                //    if (firstOM != null)
-                //    {
-                //        organicManure.N = firstOM.N;
-                //        organicManure.P2O5 = firstOM.P2O5;
-                //        organicManure.NH4N = firstOM.NH4N;
-                //        organicManure.K2O = firstOM.K2O;
-                //        organicManure.MgO = firstOM.MgO;
-                //        organicManure.NO3N = firstOM.NO3N;
-                //        organicManure.Confirm = firstOM.Confirm;
-                //        organicManure.SO3 = firstOM.SO3;
-                //        organicManure.DryMatterPercent = firstOM.DryMatterPercent;
-                //        organicManure.UricAcid = firstOM.UricAcid;
-                //        organicManure.Rainfall = firstOM.Rainfall;
-                //        organicManure.RainfallWithinSixHoursID = firstOM.RainfallWithinSixHoursID;
-                //        organicManure.WindspeedID = firstOM.WindspeedID;
-                //        organicManure.MoistureID = firstOM.MoistureID;
-                //    }
-                //    // Assign remaining properties
-                //    organicManure.ApplicationDate = model.ApplicationDate.Value;
-                //    organicManure.ApplicationRate = model.ApplicationRate;
-                //    organicManure.AreaSpread = model.Area;
-                //    organicManure.ManureQuantity = model.Quantity;
-                //    organicManure.EndOfDrain = model.SoilDrainageEndDate.Value.ToLocalTime();
-                //    organicManure.SoilDrainageEndDate = model.SoilDrainageEndDate.Value.ToLocalTime();
-                //    organicManure.IncorporationDelayID = model.IncorporationDelay;
-                //    organicManure.IncorporationMethodID = model.IncorporationMethod;
-                //    organicManure.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes
-                //        .Where(x => x.FieldName == model.FieldName)
-                //        .Select(x => x.AutumnCropNitrogenUptake)
-                //        .FirstOrDefault();
-
-                //});
-
-                //List<OrganicManure> OrganicManureList = model.OrganicManures?.Cast<OrganicManure>().ToList() ?? new List<OrganicManure>();
-                if (model.OrganicManures.Count > 0)
+                if (model.OrganicManures != null && model.OrganicManures.Any())
                 {
-                    foreach (var orgManure in model.OrganicManures)
+                    foreach (var om in model.OrganicManures)
+                    {
+                        var newOM = new OrganicManure
+                        {
+                            ManagementPeriodID=om.ManagementPeriodID,
+                            N = om.N,
+                            P2O5 = om.P2O5,
+                            NH4N = om.NH4N,
+                            K2O = om.K2O,
+                            MgO = om.MgO,
+                            NO3N = om.NO3N,
+                            Confirm = om.Confirm,
+                            SO3 = om.SO3,
+                            DryMatterPercent = om.DryMatterPercent,
+                            UricAcid = om.UricAcid,
+                            Rainfall = om.Rainfall,
+                            RainfallWithinSixHoursID = om.RainfallWithinSixHoursID,
+                            WindspeedID = om.WindspeedID,
+                            MoistureID = om.MoistureID,
+                            ManureTypeID = om.ManureTypeID,
+                            ManureTypeName = om.ManureTypeName,
+                            ApplicationMethodID = om.ApplicationMethodID,
+                            ApplicationDate = om.ApplicationDate,
+                            ApplicationRate = om.ApplicationRate,
+                            AreaSpread = om.AreaSpread,
+                            ManureQuantity = om.ManureQuantity,
+                            EndOfDrain = om.EndOfDrain,
+                            SoilDrainageEndDate = om.SoilDrainageEndDate,
+                            IncorporationDelayID = om.IncorporationDelayID,
+                            IncorporationMethodID = om.IncorporationMethodID,
+                            AutumnCropNitrogenUptake = om.AutumnCropNitrogenUptake,
+                            AvailableN = om.AvailableN,
+                            AvailableSO3 = om.AvailableSO3,
+                            AvailableP2O5 = om.AvailableP2O5,
+                            AvailableK2O = om.AvailableK2O,
+                            TotalN = om.TotalN,
+                            TotalP2O5 = om.TotalP2O5,
+                            TotalSO3 = om.TotalSO3,
+                            TotalK2O = om.TotalK2O,
+                            TotalMgO = om.TotalMgO,
+                            AvailableNForNextYear = om.AvailableNForNextYear,
+                            AvailableNForNextDefoliation = om.AvailableNForNextDefoliation,
+                            AvailableNForNMax = om.AvailableNForNMax
+                        };
+
+                        OrganicManureList.Add(newOM);
+                    }
+                }
+
+                if (OrganicManureList.Count > 0)
+                {
+                    foreach (var orgManure in OrganicManureList)
                     {
                         int fieldTypeId = (int)NMP.Portal.Enums.FieldType.Arable;
                         (ManagementPeriod ManData, error) = await _cropService.FetchManagementperiodById(orgManure.ManagementPeriodID);

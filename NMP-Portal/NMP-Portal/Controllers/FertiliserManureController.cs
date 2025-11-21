@@ -26,6 +26,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class FertiliserManureController : Controller
     {
         private readonly ILogger<FertiliserManureController> _logger;
@@ -221,7 +222,7 @@ namespace NMP.Portal.Controllers
                             {
                                 if (model.FertiliserManures == null)
                                 {
-                                    model.FertiliserManures = new List<FertiliserManure>();
+                                    model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                                 }
                                 if (model.FertiliserManures.Count > 0)
                                 {
@@ -230,7 +231,7 @@ namespace NMP.Portal.Controllers
                                 int counter = 1;
                                 foreach (var manIds in managementIds)
                                 {
-                                    var fertiliserManure = new FertiliserManure
+                                    var fertiliserManure = new FertiliserManureDataViewModel
                                     {
                                         ManagementPeriodID = manIds,
                                         EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
@@ -592,7 +593,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (model.FertiliserManures == null)
                                             {
-                                                model.FertiliserManures = new List<FertiliserManure>();
+                                                model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                                             }
                                             if (model.FertiliserManures.Count > 0)
                                             {
@@ -601,7 +602,7 @@ namespace NMP.Portal.Controllers
                                             int counter = 1;
                                             foreach (var manIds in managementIds)
                                             {
-                                                var fertiliserManure = new FertiliserManure
+                                                var fertiliserManure = new FertiliserManureDataViewModel
                                                 {
                                                     ManagementPeriodID = manIds,
                                                     EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
@@ -669,7 +670,7 @@ namespace NMP.Portal.Controllers
                                     fieldIds = string.Join(",", model.FieldList);
                                     if (model.FertiliserManures == null)
                                     {
-                                        model.FertiliserManures = new List<FertiliserManure>();
+                                        model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                                     }
                                     if (model.FertiliserManures.Count > 0)
                                     {
@@ -708,7 +709,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 foreach (var manIds in managementIds)
                                                 {
-                                                    var fertiliser = new FertiliserManure
+                                                    var fertiliser = new FertiliserManureDataViewModel
                                                     {
                                                         ManagementPeriodID = manIds
                                                     };
@@ -1083,7 +1084,7 @@ namespace NMP.Portal.Controllers
                         {
                             if (model.FertiliserManures == null)
                             {
-                                model.FertiliserManures = new List<FertiliserManure>();
+                                model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                             }
                             if (model.FertiliserManures.Count > 0)
                             {
@@ -1092,7 +1093,7 @@ namespace NMP.Portal.Controllers
                             int counter = 1;
                             foreach (var manIds in managementIds)
                             {
-                                var fertiliserManure = new FertiliserManure
+                                var fertiliserManure = new FertiliserManureDataViewModel
                                 {
                                     ManagementPeriodID = manIds,
                                     EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
@@ -2324,7 +2325,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (decryptedId > 0)
                     {
-                        (FertiliserManure fertiliserManure, error) = await _fertiliserManureService.FetchFertiliserByIdAsync(decryptedId);
+                        (FertiliserManureDataViewModel fertiliserManure, error) = await _fertiliserManureService.FetchFertiliserByIdAsync(decryptedId);
 
                         int counter = 1;
                         if (string.IsNullOrWhiteSpace(error.Message) && fertiliserManure != null)
@@ -2417,7 +2418,7 @@ namespace NMP.Portal.Controllers
                                 int fieldIdForUpdate = Convert.ToInt32(model.FieldList.FirstOrDefault());
                                 if (model.FertiliserManures == null)
                                 {
-                                    model.FertiliserManures = new List<FertiliserManure>();
+                                    model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                                 }
                                 int? defoliation = null;
                                 string defoliationName = string.Empty;
@@ -2954,7 +2955,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var manIds in managementIds)
                                     {
-                                        var fertiliser = new FertiliserManure
+                                        var fertiliser = new FertiliserManureDataViewModel
                                         {
                                             ManagementPeriodID = manIds,
                                             FieldID = model.FieldID,
@@ -3034,7 +3035,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        model.FertiliserManures.Add(new FertiliserManure
+                                        model.FertiliserManures.Add(new FertiliserManureDataViewModel
                                         {
                                             ManagementPeriodID = managementPeriodId,
                                             FieldID = doubleCrop.FieldID,
@@ -3065,7 +3066,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!(model.FertiliserManures != null && model.FertiliserManures.Count > 0))
                     {
-                        model.FertiliserManures = new List<FertiliserManure>();
+                        model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                     }
                     if (model.FertiliserManures.Count < model.FieldList.Count && targetFieldIds?.Count > 0)
                     {
@@ -3131,7 +3132,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var managementId in managementIds)
                                     {
-                                        model.FertiliserManures.Add(new FertiliserManure
+                                        model.FertiliserManures.Add(new FertiliserManureDataViewModel
                                         {
                                             ManagementPeriodID = managementId,
                                             FieldID = model.FieldID,
@@ -4011,7 +4012,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var manIds in managementIds)
                                     {
-                                        var fertiliser = new FertiliserManure
+                                        var fertiliser = new FertiliserManureDataViewModel
                                         {
                                             ManagementPeriodID = manIds,
                                             FieldID = model.FieldID,
@@ -4111,7 +4112,7 @@ namespace NMP.Portal.Controllers
                                     }
                                     else
                                     {
-                                        model.FertiliserManures.Add(new FertiliserManure
+                                        model.FertiliserManures.Add(new FertiliserManureDataViewModel
                                         {
                                             ManagementPeriodID = managementPeriodId,
                                             FieldID = doubleCrop.FieldID,
@@ -4142,7 +4143,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!(model.FertiliserManures != null && model.FertiliserManures.Count > 0))
                     {
-                        model.FertiliserManures = new List<FertiliserManure>();
+                        model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                     }
                     if (model.FertiliserManures.Count < model.FieldList.Count && targetFieldIds?.Count > 0)
                     {
@@ -4206,7 +4207,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     foreach (var managementId in managementIds)
                                     {
-                                        model.FertiliserManures.Add(new FertiliserManure
+                                        model.FertiliserManures.Add(new FertiliserManureDataViewModel
                                         {
                                             ManagementPeriodID = managementId,
                                             FieldID = model.FieldID,
@@ -4237,7 +4238,7 @@ namespace NMP.Portal.Controllers
                             List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
                             List<WarningMessage> warningMessageList = new List<WarningMessage>();
                             var FertiliserManure = new List<object>();
-                            foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
+                            foreach (FertiliserManureDataViewModel fertiliserManure in model.FertiliserManures)
                             {
                                 int? fertID = model.UpdatedFertiliserIds != null ? (model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId.Value == fertiliserManure.ManagementPeriodID).Select(x => x.FertiliserId.Value).FirstOrDefault()) : 0;
 
@@ -4246,11 +4247,6 @@ namespace NMP.Portal.Controllers
                                     ID = fertID,
                                     ManagementPeriodID = fertiliserManure.ManagementPeriodID,
                                     ApplicationDate = model.Date,
-                                    Defoliation = fertiliserManure.Defoliation,
-                                    DefoliationName = fertiliserManure.DefoliationName,
-                                    FieldID = fertiliserManure.FieldID,
-                                    FieldName = fertiliserManure.FieldName,
-                                    EncryptedCounter = fertiliserManure.EncryptedCounter,
                                     ApplicationRate = 1,
                                     Confirm = fertiliserManure.Confirm,
                                     N = model.N ?? 0,
@@ -5307,7 +5303,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                     {
-                        var itemsToRemove = new List<FertiliserManure>();
+                        var itemsToRemove = new List<FertiliserManureDataViewModel>();
                         foreach (var fertiliser in model.FertiliserManures)
                         {
                             (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(fertiliser.ManagementPeriodID);
@@ -5432,7 +5428,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                     {
-                        var itemsToRemove = new List<FertiliserManure>();
+                        var itemsToRemove = new List<FertiliserManureDataViewModel>();
                         foreach (var fertiliser in model.FertiliserManures)
                         {
                             (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(fertiliser.ManagementPeriodID);
@@ -6304,9 +6300,9 @@ namespace NMP.Portal.Controllers
                                     if (!anyExists)
                                     {
                                         int counter = model.FertiliserManures.Count();
-                                        model.FertiliserManures.AddRange(new List<FertiliserManure>
+                                        model.FertiliserManures.AddRange(new List<FertiliserManureDataViewModel>
                                         {
-                                            new FertiliserManure
+                                            new FertiliserManureDataViewModel
                                             {
                                                 ManagementPeriodID = ManagementPeriod.First().ID.Value,
                                                 FieldID=model.DoubleCrop[model.DoubleCropCurrentCounter - 1].FieldID,
