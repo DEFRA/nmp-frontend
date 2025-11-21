@@ -122,9 +122,6 @@
                     <p class="govuk-body">
                         @Resource.MsgEnterTheValueOYourSoilAnalysisHint2
                     </p>
-                    <p class="govuk-body">
-                        @Resource.MsgEnterTheValueOYourSoilAnalysisHint3
-                    </p>
                     @if (isFieldsEmpty)
                     {
                         <govuk-error-message asp-for="@Model.SoilAnalyses.PH">
@@ -133,6 +130,9 @@
                     }
                     @if (Model.IsSoilNutrientValueTypeIndex.HasValue && Model.IsSoilNutrientValueTypeIndex.Value)
                     {
+                        <p class="govuk-body">
+                            @Resource.MsgEnterTheValueOYourSoilAnalysisHint3
+                        </p>
                         <govuk-input asp-for="@Model.SoilAnalyses.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
                             <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
                         </govuk-input>
