@@ -6454,25 +6454,28 @@ namespace NMP.Portal.Controllers
                                         (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                         if (error == null && cropTypeLinkingResponse != null)
                                         {
-                                            (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
-                                            if (error == null && manureType != null)
+                                            (List<Country> countryList, error) = await _farmService.FetchCountryAsync();
+                                            if (string.IsNullOrWhiteSpace(error.Message) && countryList.Count > 0)
                                             {
-                                                var mannerOutput = new
+                                                (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                                if (error == null && manureType != null)
                                                 {
-                                                    runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
-                                                    postcode = farmData.ClimateDataPostCode.Split(" ")[0],
-                                                    countryID = farmData.CountryID,
-                                                    field = new
+                                                    var mannerOutput = new
                                                     {
-                                                        fieldID = fieldData.ID,
-                                                        fieldName = fieldData.Name,
-                                                        MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
-                                                        topsoilID = topSoilID,
-                                                        subsoilID = subSoilID,
-                                                        isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
-                                                    },
-                                                    manureApplications = new[]
-                                                 {
+                                                        runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
+                                                        postcode = farmData.ClimateDataPostCode.Split(" ")[0],
+                                                        countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
+                                                        field = new
+                                                        {
+                                                            fieldID = fieldData.ID,
+                                                            fieldName = fieldData.Name,
+                                                            MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
+                                                            topsoilID = topSoilID,
+                                                            subsoilID = subSoilID,
+                                                            isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
+                                                        },
+                                                        manureApplications = new[]
+                                                     {
                                                         new
                                                         {
                                                             manureDetails = new
@@ -6511,27 +6514,33 @@ namespace NMP.Portal.Controllers
                                                             topsoilMoistureID = organic.MoistureID
                                                         }
                                                     }
-                                                };
-                                                //var mannerJsonData = new
-                                                //{
-                                                //    mannerOutput
-                                                //};
-                                                string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
-                                                (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
-                                                if (error == null && mannerCalculateNutrientResponse != null)
-                                                {
-                                                    organic.AvailableN = mannerCalculateNutrientResponse.CurrentCropAvailableN;
-                                                    organic.AvailableSO3 = mannerCalculateNutrientResponse.CropAvailableSO3;
-                                                    organic.AvailableP2O5 = mannerCalculateNutrientResponse.CropAvailableP2O5;
-                                                    organic.AvailableK2O = mannerCalculateNutrientResponse.CropAvailableK2O;
-                                                    organic.TotalN = mannerCalculateNutrientResponse.TotalN;
-                                                    organic.TotalP2O5 = mannerCalculateNutrientResponse.TotalP2O5;
-                                                    organic.TotalSO3 = mannerCalculateNutrientResponse.TotalSO3;
-                                                    organic.TotalK2O = mannerCalculateNutrientResponse.TotalK2O;
-                                                    organic.TotalMgO = mannerCalculateNutrientResponse.TotalMgO;
-                                                    organic.AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN;
-                                                    organic.AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear;
-                                                    organic.AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN;
+                                                    };
+                                                    //var mannerJsonData = new
+                                                    //{
+                                                    //    mannerOutput
+                                                    //};
+                                                    string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
+                                                    (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
+                                                    if (error == null && mannerCalculateNutrientResponse != null)
+                                                    {
+                                                        organic.AvailableN = mannerCalculateNutrientResponse.CurrentCropAvailableN;
+                                                        organic.AvailableSO3 = mannerCalculateNutrientResponse.CropAvailableSO3;
+                                                        organic.AvailableP2O5 = mannerCalculateNutrientResponse.CropAvailableP2O5;
+                                                        organic.AvailableK2O = mannerCalculateNutrientResponse.CropAvailableK2O;
+                                                        organic.TotalN = mannerCalculateNutrientResponse.TotalN;
+                                                        organic.TotalP2O5 = mannerCalculateNutrientResponse.TotalP2O5;
+                                                        organic.TotalSO3 = mannerCalculateNutrientResponse.TotalSO3;
+                                                        organic.TotalK2O = mannerCalculateNutrientResponse.TotalK2O;
+                                                        organic.TotalMgO = mannerCalculateNutrientResponse.TotalMgO;
+                                                        organic.AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN;
+                                                        organic.AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear;
+                                                        organic.AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN;
+                                                    }
+                                                    else
+                                                    {
+                                                        TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                                        return View(model);
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -8538,24 +8547,27 @@ namespace NMP.Portal.Controllers
                                     (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                     if (error == null && cropTypeLinkingResponse != null)
                                     {
-                                        (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
-                                        if (error == null && manureType != null)
+                                        (List<Country> countryList, error) = await _farmService.FetchCountryAsync();
+                                        if (string.IsNullOrWhiteSpace(error.Message) && countryList.Count > 0)
                                         {
-                                            var mannerOutput = new
+                                            (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                            if (error == null && manureType != null)
                                             {
-                                                runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
-                                                postcode = farmData.ClimateDataPostCode.Split(" ")[0],
-                                                countryID = farmData.CountryID,
-                                                field = new
+                                                var mannerOutput = new
                                                 {
-                                                    fieldID = fieldData.ID,
-                                                    fieldName = fieldData.Name,
-                                                    MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
-                                                    topsoilID = topSoilID,
-                                                    subsoilID = subSoilID,
-                                                    isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
-                                                },
-                                                manureApplications = new[]
+                                                    runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
+                                                    postcode = farmData.ClimateDataPostCode.Split(" ")[0],
+                                                    countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
+                                            field = new
+                                            {
+                                                fieldID = fieldData.ID,
+                                                fieldName = fieldData.Name,
+                                                MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
+                                                topsoilID = topSoilID,
+                                                subsoilID = subSoilID,
+                                                isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
+                                            },
+                                                    manureApplications = new[]
                                              {
                                                 new
                                                 {
@@ -8595,18 +8607,23 @@ namespace NMP.Portal.Controllers
                                                     topsoilMoistureID = organic.MoistureID
                                                 }
                                             }
-                                            };
-                                            //var mannerJsonData = new
-                                            //{
-                                            //    mannerOutput
-                                            //};
-                                            string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
-                                            (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
-                                            if (error == null && mannerCalculateNutrientResponse != null)
-                                            {
-                                                availableNfromManner = mannerCalculateNutrientResponse.CurrentCropAvailableN;
-                                                return (availableNfromManner, error);
+                                                };
+                                                //var mannerJsonData = new
+                                                //{
+                                                //    mannerOutput
+                                                //};
+                                                string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
+                                                (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
+                                                if (error == null && mannerCalculateNutrientResponse != null)
+                                                {
+                                                    availableNfromManner = mannerCalculateNutrientResponse.CurrentCropAvailableN;
+                                                    return (availableNfromManner, error);
 
+                                                }
+                                                else
+                                                {
+                                                    return (availableNfromManner, error);
+                                                }
                                             }
                                             else
                                             {
@@ -9652,24 +9669,27 @@ namespace NMP.Portal.Controllers
                                                 (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                                 if (error == null && cropTypeLinkingResponse != null)
                                                 {
-                                                    (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
-                                                    if (error == null && manureType != null)
+                                                    (List<Country> countryList, error) = await _farmService.FetchCountryAsync();
+                                                    if (string.IsNullOrWhiteSpace(error.Message) && countryList.Count > 0)
                                                     {
-                                                        var mannerOutput = new
+                                                        (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                                        if (error == null && manureType != null)
                                                         {
-                                                            runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
-                                                            postcode = farmData.ClimateDataPostCode.Split(" ")[0],
-                                                            countryID = farmData.CountryID,
-                                                            field = new
+                                                            var mannerOutput = new
                                                             {
-                                                                fieldID = fieldData.ID,
-                                                                fieldName = fieldData.Name,
-                                                                MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
-                                                                topsoilID = topSoilID,
-                                                                subsoilID = subSoilID,
-                                                                isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
-                                                            },
-                                                            manureApplications = new[]
+                                                                runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
+                                                                postcode = farmData.ClimateDataPostCode.Split(" ")[0],
+                                                                countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
+                                                                field = new
+                                                                {
+                                                                    fieldID = fieldData.ID,
+                                                                    fieldName = fieldData.Name,
+                                                                    MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
+                                                                    topsoilID = topSoilID,
+                                                                    subsoilID = subSoilID,
+                                                                    isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
+                                                                },
+                                                                manureApplications = new[]
                                                          {
                                                 new
                                                 {
@@ -9709,61 +9729,67 @@ namespace NMP.Portal.Controllers
                                                     topsoilMoistureID = organic.MoistureID
                                                 }
                                             }
-                                                        };
-
-                                                        string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
-                                                        (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
-                                                        if (error == null && mannerCalculateNutrientResponse != null)
-                                                        {
-
-                                                            OrganicManureUpdateData organicManure = new OrganicManureUpdateData
-                                                            {
-                                                                ID = model.UpdatedOrganicIds != null ? (model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId.Value == organic.ManagementPeriodID).Select(x => x.OrganicManureId.Value).FirstOrDefault()) : 0,
-                                                                ManagementPeriodID = organic.ManagementPeriodID,
-                                                                ManureTypeID = organic.ManureTypeID,
-                                                                ManureTypeName = model.ManureTypeName,
-                                                                ApplicationDate = organic.ApplicationDate.Value,
-                                                                Confirm = organic.Confirm,
-                                                                N = organic.N,
-                                                                P2O5 = organic.P2O5,
-                                                                K2O = organic.K2O,
-                                                                MgO = organic.MgO,
-                                                                SO3 = organic.SO3,
-                                                                AvailableN = mannerCalculateNutrientResponse.CurrentCropAvailableN,
-                                                                ApplicationRate = organic.ApplicationRate,
-                                                                DryMatterPercent = organic.DryMatterPercent,
-                                                                UricAcid = organic.UricAcid,
-                                                                EndOfDrain = organic.SoilDrainageEndDate,
-                                                                Rainfall = organic.Rainfall,
-                                                                AreaSpread = organic.AreaSpread,
-                                                                ManureQuantity = organic.ManureQuantity,
-                                                                ApplicationMethodID = organic.ApplicationMethodID,
-                                                                IncorporationMethodID = organic.IncorporationMethodID,
-                                                                IncorporationDelayID = organic.IncorporationDelayID,
-                                                                NH4N = organic.NH4N,
-                                                                NO3N = organic.NO3N,
-                                                                AvailableP2O5 = mannerCalculateNutrientResponse.CropAvailableP2O5,
-                                                                AvailableK2O = mannerCalculateNutrientResponse.CropAvailableK2O,
-                                                                AvailableSO3 = mannerCalculateNutrientResponse.CropAvailableSO3,
-                                                                WindspeedID = organic.WindspeedID,
-                                                                RainfallWithinSixHoursID = organic.RainfallWithinSixHoursID,
-                                                                MoistureID = organic.MoistureID,
-                                                                AutumnCropNitrogenUptake = organic.AutumnCropNitrogenUptake,
-                                                                AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN,
-                                                                AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN,
-                                                                AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear
-
                                                             };
 
-                                                            organicManureList.Add(organicManure);
+                                                            string mannerJsonString = JsonConvert.SerializeObject(mannerOutput);
+                                                            (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureService.FetchMannerCalculateNutrient(mannerJsonString);
+                                                            if (error == null && mannerCalculateNutrientResponse != null)
+                                                            {
 
+                                                                OrganicManureUpdateData organicManure = new OrganicManureUpdateData
+                                                                {
+                                                                    ID = model.UpdatedOrganicIds != null ? (model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId.Value == organic.ManagementPeriodID).Select(x => x.OrganicManureId.Value).FirstOrDefault()) : 0,
+                                                                    ManagementPeriodID = organic.ManagementPeriodID,
+                                                                    ManureTypeID = organic.ManureTypeID,
+                                                                    ManureTypeName = model.ManureTypeName,
+                                                                    ApplicationDate = organic.ApplicationDate.Value,
+                                                                    Confirm = organic.Confirm,
+                                                                    N = organic.N,
+                                                                    P2O5 = organic.P2O5,
+                                                                    K2O = organic.K2O,
+                                                                    MgO = organic.MgO,
+                                                                    SO3 = organic.SO3,
+                                                                    AvailableN = mannerCalculateNutrientResponse.CurrentCropAvailableN,
+                                                                    ApplicationRate = organic.ApplicationRate,
+                                                                    DryMatterPercent = organic.DryMatterPercent,
+                                                                    UricAcid = organic.UricAcid,
+                                                                    EndOfDrain = organic.SoilDrainageEndDate,
+                                                                    Rainfall = organic.Rainfall,
+                                                                    AreaSpread = organic.AreaSpread,
+                                                                    ManureQuantity = organic.ManureQuantity,
+                                                                    ApplicationMethodID = organic.ApplicationMethodID,
+                                                                    IncorporationMethodID = organic.IncorporationMethodID,
+                                                                    IncorporationDelayID = organic.IncorporationDelayID,
+                                                                    NH4N = organic.NH4N,
+                                                                    NO3N = organic.NO3N,
+                                                                    AvailableP2O5 = mannerCalculateNutrientResponse.CropAvailableP2O5,
+                                                                    AvailableK2O = mannerCalculateNutrientResponse.CropAvailableK2O,
+                                                                    AvailableSO3 = mannerCalculateNutrientResponse.CropAvailableSO3,
+                                                                    WindspeedID = organic.WindspeedID,
+                                                                    RainfallWithinSixHoursID = organic.RainfallWithinSixHoursID,
+                                                                    MoistureID = organic.MoistureID,
+                                                                    AutumnCropNitrogenUptake = organic.AutumnCropNitrogenUptake,
+                                                                    AvailableNForNMax = currentApplicationNitrogen != null ? currentApplicationNitrogen : mannerCalculateNutrientResponse.CurrentCropAvailableN,
+                                                                    AvailableNForNextYear = mannerCalculateNutrientResponse.FollowingCropYear2AvailableN,
+                                                                    AvailableNForNextDefoliation = mannerCalculateNutrientResponse.NextGrassNCropCurrentYear
+
+                                                                };
+
+                                                                organicManureList.Add(organicManure);
+
+                                                            }
+                                                            else
+                                                            {
+                                                                TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
+                                                                return RedirectToAction("CheckAnswer");
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
                                                             return RedirectToAction("CheckAnswer");
                                                         }
-                                                    }
+                                                    }                                                    
                                                     else
                                                     {
                                                         TempData["UpdateOrganicManureError"] = Resource.MsgWeCouldNotUpdateOrganicManure;
