@@ -26,6 +26,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class FertiliserManureController : Controller
     {
         private readonly ILogger<FertiliserManureController> _logger;
