@@ -4,7 +4,7 @@ namespace NMP.Portal.Helpers
 {
     public class OrganicManureNMaxLimitLogic
     {
-        public int NMaxLimit(int nMaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, List<int> currentYearManureTypeIds,
+        public int NMaxLimit(int nMaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut , List<int> currentYearManureTypeIds,
             List<int> previousYearManureTypeIds, int? manureTypeId)
         {
             bool manureTypeCondition = false;
@@ -102,8 +102,10 @@ namespace NMP.Portal.Helpers
             }
             else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
             {
-                //IF 3 or more ‘Cuts’ 
-                // nMaxLimit = nMaxLimit + 40;
+                if(potentialCut >= (int)NMP.Portal.Enums.PotentialCut.Three)
+                {
+                    nMaxLimit = nMaxLimit + 40;
+                }
             }
 
             if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterWheat || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat

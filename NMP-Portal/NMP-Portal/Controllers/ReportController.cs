@@ -184,59 +184,68 @@ namespace NMP.Portal.Controllers
 
                                             var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
 
-                                            // Group 1
-                                            var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
-                                                ? cropGroups[Resource.lblGroup1Vegetables]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (group1List.Count > 1)
+                                            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                             {
-                                                for (int i = 1; i < group1List.Count; i++)
+                                                // Group 1
+                                                var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
+                                                    ? cropGroups[Resource.lblGroup1Vegetables]
+                                                        .Where(id => cropTypeMap.ContainsKey(id))
+                                                        .Select(id => cropTypeMap[id])
+                                                        .OrderBy(name => name)
+                                                        .ToList()
+                                                    : new List<string>();
+
+                                                if (group1List.Count > 1)
                                                 {
-                                                    group1List[i] = group1List[i].ToLower();
+                                                    for (int i = 1; i < group1List.Count; i++)
+                                                    {
+                                                        group1List[i] = group1List[i].ToLower();
+                                                    }
                                                 }
+
+                                                // Group 2
+                                                var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
+                                                    ? cropGroups[Resource.lblGroup2Vegetables]
+                                                        .Where(id => cropTypeMap.ContainsKey(id))
+                                                        .Select(id => cropTypeMap[id])
+                                                        .OrderBy(name => name)
+                                                        .ToList()
+                                                    : new List<string>();
+
+                                                if (group2List.Count > 1)
+                                                {
+                                                    for (int i = 1; i < group2List.Count; i++)
+                                                    {
+                                                        group2List[i] = group2List[i].ToLower();
+                                                    }
+                                                }
+
+                                                // Group 3
+                                                var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
+                                                    ? cropGroups[Resource.lblGroup3Vegetables]
+                                                        .Where(id => cropTypeMap.ContainsKey(id))
+                                                        .Select(id => cropTypeMap[id])
+                                                        .OrderBy(name => name)
+                                                        .ToList()
+                                                    : new List<string>();
+
+                                                if (group3List.Count > 1)
+                                                {
+                                                    for (int i = 1; i < group3List.Count; i++)
+                                                    {
+                                                        group3List[i] = group3List[i].ToLower();
+                                                    }
+                                                }
+                                                ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
+                                                ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
+                                                ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
                                             }
-
-                                            // Group 2
-                                            var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
-                                                ? cropGroups[Resource.lblGroup2Vegetables]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (group2List.Count > 1)
+                                            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                                             {
-                                                for (int i = 1; i < group2List.Count; i++)
-                                                {
-                                                    group2List[i] = group2List[i].ToLower();
-                                                }
+                                                cropGroups.Remove(Resource.lblGroup1Vegetables);
+                                                cropGroups.Remove(Resource.lblGroup2Vegetables);
+                                                cropGroups.Remove(Resource.lblGroup3Vegetables);
                                             }
-
-                                            // Group 3
-                                            var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
-                                                ? cropGroups[Resource.lblGroup3Vegetables]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (group3List.Count > 1)
-                                            {
-                                                for (int i = 1; i < group3List.Count; i++)
-                                                {
-                                                    group3List[i] = group3List[i].ToLower();
-                                                }
-                                            }
-                                            ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
-                                            ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
-                                            ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
 
                                             var list = new List<SelectListItem>();
 
@@ -474,59 +483,68 @@ namespace NMP.Portal.Controllers
                                         List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypes();
                                         var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
 
-                                        // Group 1
-                                        var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
-                                            ? cropGroups[Resource.lblGroup1Vegetables]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (group1List.Count > 1)
+                                        if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
                                         {
-                                            for (int i = 1; i < group1List.Count; i++)
+                                            // Group 1
+                                            var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
+                                                ? cropGroups[Resource.lblGroup1Vegetables]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (group1List.Count > 1)
                                             {
-                                                group1List[i] = group1List[i].ToLower();
+                                                for (int i = 1; i < group1List.Count; i++)
+                                                {
+                                                    group1List[i] = group1List[i].ToLower();
+                                                }
                                             }
+
+                                            // Group 2
+                                            var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
+                                                ? cropGroups[Resource.lblGroup2Vegetables]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (group2List.Count > 1)
+                                            {
+                                                for (int i = 1; i < group2List.Count; i++)
+                                                {
+                                                    group2List[i] = group2List[i].ToLower();
+                                                }
+                                            }
+
+                                            // Group 3
+                                            var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
+                                                ? cropGroups[Resource.lblGroup3Vegetables]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (group3List.Count > 1)
+                                            {
+                                                for (int i = 1; i < group3List.Count; i++)
+                                                {
+                                                    group3List[i] = group3List[i].ToLower();
+                                                }
+                                            }
+                                            ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
+                                            ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
+                                            ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
                                         }
-
-                                        // Group 2
-                                        var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
-                                            ? cropGroups[Resource.lblGroup2Vegetables]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (group2List.Count > 1)
+                                        if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                                         {
-                                            for (int i = 1; i < group2List.Count; i++)
-                                            {
-                                                group2List[i] = group2List[i].ToLower();
-                                            }
+                                            cropGroups.Remove(Resource.lblGroup1Vegetables);
+                                            cropGroups.Remove(Resource.lblGroup2Vegetables);
+                                            cropGroups.Remove(Resource.lblGroup3Vegetables);
                                         }
-
-                                        // Group 3
-                                        var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
-                                            ? cropGroups[Resource.lblGroup3Vegetables]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (group3List.Count > 1)
-                                        {
-                                            for (int i = 1; i < group3List.Count; i++)
-                                            {
-                                                group3List[i] = group3List[i].ToLower();
-                                            }
-                                        }
-                                        ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
-                                        ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
-                                        ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
 
                                         foreach (var group in cropGroups)
                                         {
@@ -967,6 +985,12 @@ namespace NMP.Portal.Controllers
                     {
                         // Get your dictionary of groups
                         var cropGroups = GetNmaxReportCropGroups();
+                        if (model.Farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                        {
+                            cropGroups.Remove(Resource.lblGroup1Vegetables);
+                            cropGroups.Remove(Resource.lblGroup2Vegetables);
+                            cropGroups.Remove(Resource.lblGroup3Vegetables);
+                        }
                         // Build reverse lookup: cropId -> groupIds[]
                         var idToGroup = cropGroups
                             .SelectMany(g => g.Value, (g, id) => new { id, groupIds = g.Value })
