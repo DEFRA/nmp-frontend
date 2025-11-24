@@ -26,6 +26,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class FertiliserManureController : Controller
     {
         private readonly ILogger<FertiliserManureController> _logger;
@@ -1556,85 +1557,85 @@ namespace NMP.Portal.Controllers
                 {
                     //if (int.TryParse(model.FieldGroup, out int fieldGroup) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                     //{
-                        foreach (var fieldId in model.FieldList)
+                    foreach (var fieldId in model.FieldList)
+                    {
+                        (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                        if (error == null)
                         {
-                            (CropTypeResponse cropTypeResponse, error) = await _organicManureService.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                            if (error == null)
+                            WarningWithinPeriod warning = new WarningWithinPeriod();
+                            string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
+
+                            //model.ClosedPeriod = closedPeriod;
+                            if (!string.IsNullOrWhiteSpace(closedPeriod))
                             {
-                                WarningWithinPeriod warning = new WarningWithinPeriod();
-                                string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId);
-
-                                //model.ClosedPeriod = closedPeriod;
-                                if (!string.IsNullOrWhiteSpace(closedPeriod))
+                                int harvestYear = model.HarvestYear ?? 0;
+                                //int startYear = harvestYear;
+                                //int endYear = harvestYear + 1;
+                                string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+                                Regex regex = new Regex(pattern);
+                                if (closedPeriod != null)
                                 {
-                                    int harvestYear = model.HarvestYear ?? 0;
-                                    //int startYear = harvestYear;
-                                    //int endYear = harvestYear + 1;
-                                    string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                    Regex regex = new Regex(pattern);
-                                    if (closedPeriod != null)
+                                    Match match = regex.Match(closedPeriod);
+                                    if (match.Success)
                                     {
-                                        Match match = regex.Match(closedPeriod);
-                                        if (match.Success)
+                                        int startDay = int.Parse(match.Groups[1].Value);
+                                        string startMonthStr = match.Groups[2].Value;
+                                        int endDay = int.Parse(match.Groups[3].Value);
+                                        string endMonthStr = match.Groups[4].Value;
+
+                                        Dictionary<int, string> dtfi = new Dictionary<int, string>();
+                                        dtfi.Add(0, Resource.lblJanuary);
+                                        dtfi.Add(1, Resource.lblFebruary);
+                                        dtfi.Add(2, Resource.lblMarch);
+                                        dtfi.Add(3, Resource.lblApril);
+                                        dtfi.Add(4, Resource.lblMay);
+                                        dtfi.Add(5, Resource.lblJune);
+                                        dtfi.Add(6, Resource.lblJuly);
+                                        dtfi.Add(7, Resource.lblAugust);
+                                        dtfi.Add(8, Resource.lblSeptember);
+                                        dtfi.Add(9, Resource.lblOctober);
+                                        dtfi.Add(10, Resource.lblNovember);
+                                        dtfi.Add(11, Resource.lblDecember);
+                                        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
+                                        int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                                        DateTime? closedPeriodStartDate = null;
+                                        DateTime? closedPeriodEndDate = null;
+                                        if (startMonth <= endMonth)
                                         {
-                                            int startDay = int.Parse(match.Groups[1].Value);
-                                            string startMonthStr = match.Groups[2].Value;
-                                            int endDay = int.Parse(match.Groups[3].Value);
-                                            string endMonthStr = match.Groups[4].Value;
+                                            closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                                            closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                                        }
+                                        else if (startMonth >= endMonth)
+                                        {
+                                            closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                                            closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
+                                        }
+                                        string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
+                                        string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
 
-                                            Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                                            dtfi.Add(0, Resource.lblJanuary);
-                                            dtfi.Add(1, Resource.lblFebruary);
-                                            dtfi.Add(2, Resource.lblMarch);
-                                            dtfi.Add(3, Resource.lblApril);
-                                            dtfi.Add(4, Resource.lblMay);
-                                            dtfi.Add(5, Resource.lblJune);
-                                            dtfi.Add(6, Resource.lblJuly);
-                                            dtfi.Add(7, Resource.lblAugust);
-                                            dtfi.Add(8, Resource.lblSeptember);
-                                            dtfi.Add(9, Resource.lblOctober);
-                                            dtfi.Add(10, Resource.lblNovember);
-                                            dtfi.Add(11, Resource.lblDecember);
-                                            int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                                            int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
-                                            DateTime? closedPeriodStartDate = null;
-                                            DateTime? closedPeriodEndDate = null;
-                                            if (startMonth <= endMonth)
-                                            {
-                                                closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                                                closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
-                                            }
-                                            else if (startMonth >= endMonth)
-                                            {
-                                                closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                                                closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
-                                            }
-                                            string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
-                                            string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
+                                        Crop crop = null;
+                                        CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
+                                        if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
+                                        {
+                                            int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
 
-                                            Crop crop = null;
-                                            CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
-                                            if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
-                                            {
-                                                int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
+                                            (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
+                                            (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
 
-                                                (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
-                                                (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-
-                                                (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
-                                            }
-                                            //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                                            if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                                            {
-                                                ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
-                                            }
+                                            (cropTypeLinkingResponse, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
+                                        }
+                                        //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
+                                        if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                        {
+                                            ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
                                         }
                                     }
-
-
                                 }
+
+
                             }
                         }
+                    }
                     //}
                     return View(model);
                 }
@@ -1855,68 +1856,134 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                
+
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
                 {
-                    var totalNitrogenError = ModelState["N"].Errors.Count > 0 ?
-                                    ModelState["N"].Errors[0].ErrorMessage.ToString() : null;
+                    var totalNitrogenError = ModelState["N"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
                     if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"].RawValue, Resource.lblN)))
                     {
-                        ModelState["N"].Errors.Clear();
-                        ModelState["N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
+                        var rawValue = ModelState["N"]?.RawValue?.ToString();
+                        var errors = ModelState["N"]?.Errors;
+
+                        if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
+                        {
+                            bool isDecimal = decimal.TryParse(rawValue, out _);
+                            errors.Clear();
+                            if (isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblNitrogen));
+                            }
+                            else if (!isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
+                            }
+                        }
                     }
+
+
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
                 {
-                    var totalPhosphateError = ModelState["P2O5"].Errors.Count > 0 ?
-                                    ModelState["P2O5"].Errors[0].ErrorMessage.ToString() : null;
+                    var totalPhosphateError = ModelState["P2O5"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
                     if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"].RawValue, Resource.lblP2O5)))
                     {
-                        ModelState["P2O5"].Errors.Clear();
-                        ModelState["P2O5"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPhosphateP2O5));
+                        var rawValue = ModelState["P2O5"]?.RawValue?.ToString();
+                        var errors = ModelState["P2O5"]?.Errors;
+
+                        if (!string.IsNullOrWhiteSpace(rawValue)&& errors!=null)
+                        {
+                            bool isDecimal = decimal.TryParse(rawValue, out _);
+                            errors.Clear();
+                            if (isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblPhosphateP2O5));
+                            }
+                            else if (!isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPhosphateP2O5));
+                            }
+                        }                        
                     }
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
                 {
-                    var totalPotassiumError = ModelState["K2O"].Errors.Count > 0 ?
-                                    ModelState["K2O"].Errors[0].ErrorMessage.ToString() : null;
+                    var totalPotassiumError = ModelState["K2O"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
                     if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"].RawValue, Resource.lblK2O)))
                     {
-                        ModelState["K2O"].Errors.Clear();
-                        ModelState["K2O"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPotashK2O));
+                        var rawValue = ModelState["K2O"]?.RawValue?.ToString();
+                        var errors = ModelState["K2O"]?.Errors;
+
+                        if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
+                        {
+                            bool isDecimal = decimal.TryParse(rawValue, out _);
+                            errors.Clear();
+                            if (isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblPotashK2O));
+                            }
+                            else if (!isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPotashK2O));
+                            }
+                        }
                     }
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
                 {
-                    var sulphurSO3Error = ModelState["SO3"].Errors.Count > 0 ?
-                                    ModelState["SO3"].Errors[0].ErrorMessage.ToString() : null;
+                    var sulphurSO3Error = ModelState["SO3"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
                     if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"].RawValue, Resource.lblSO3)))
                     {
-                        ModelState["SO3"].Errors.Clear();
-                        ModelState["SO3"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSulphurSO3));
+                        var rawValue = ModelState["SO3"]?.RawValue?.ToString();
+                        var errors = ModelState["SO3"]?.Errors;
+
+                        if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
+                        {
+                            bool isDecimal = decimal.TryParse(rawValue, out _);
+                            errors.Clear();
+                            if (isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblSulphurSO3));
+                            }
+                            else if (!isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSulphurSO3));
+                            }
+                        }
                     }
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
                 {
-                    var magnesiumMgOError = ModelState["MgO"].Errors.Count > 0 ?
-                                    ModelState["MgO"].Errors[0].ErrorMessage.ToString() : null;
+                    var magnesiumMgOError = ModelState["MgO"]?.Errors.FirstOrDefault()?.ErrorMessage; 
 
                     if (magnesiumMgOError != null && magnesiumMgOError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
                     {
-                        ModelState["MgO"].Errors.Clear();
-                        ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
+                        var rawValue = ModelState["MgO"]?.RawValue?.ToString();
+                        var errors = ModelState["MgO"]?.Errors;
+
+                        if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
+                        {
+                            bool isDecimal = decimal.TryParse(rawValue, out _);
+                            errors.Clear();
+                            if (isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblMagnesiumMgO));
+                            }
+                            else if (!isDecimal)
+                            {
+                                errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
+                            }
+                        }
                     }
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("Lime"))
                 {
-                    var limeError = ModelState["Lime"].Errors.Count > 0 ?
-                                    ModelState["Lime"].Errors[0].ErrorMessage.ToString() : null;
+                    var limeError = ModelState["Lime"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
-                    if (limeError != null && limeError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Lime"].RawValue, Resource.lblLime)))
+                    if (limeError != null&& ModelState["Lime"]!=null && limeError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Lime"].RawValue, Resource.lblLime)))
                     {
                         ModelState["Lime"].Errors.Clear();
                         ModelState["Lime"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblLime));
@@ -1924,7 +1991,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 bool hasValidationErrors = ModelState.Values.Any(v => v.Errors.Count > 0);
-                if ((!hasValidationErrors)&&model.N == null && model.P2O5 == null
+                if ((!hasValidationErrors) && model.N == null && model.P2O5 == null
                     && model.K2O == null && model.SO3 == null && model.MgO == null
                     && model.Lime == null)
                 {
@@ -1933,20 +2000,6 @@ namespace NMP.Portal.Controllers
                     //return View(model);
                 }
 
-
-                //if (ModelState.IsValid)
-                //{
-                //    if(model.N!=0)
-                //    {
-                //        decimal totalNutrientValue = (model.N ?? 0) + (model.P2O5 ?? 0) +
-                //         (model.K2O ?? 0) + (model.SO3 ?? 0) + (model.MgO ?? 0) +
-                //         (model.Lime ?? 0);
-                //        if (totalNutrientValue == 0)
-                //        {
-                //            ModelState.AddModelError("CropTypeName", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                //        }
-                //    }                   
-                //}
                 if (model.N != null)
                 {
                     if (model.N < 0 || model.N > 9999)
@@ -1987,6 +2040,10 @@ namespace NMP.Portal.Controllers
                     if (model.Lime < 0 || model.Lime > 99.9m)
                     {
                         ModelState.AddModelError("Lime", string.Format(Resource.MsgMinMaxValidation, Resource.lblLime.ToLower(), 99.9));
+                    }
+                    if (ModelState.ContainsKey("Lime") && Math.Round(model.Lime.Value, 1) != model.Lime)
+                    {
+                        ModelState.AddModelError("Lime", string.Format(Resource.lblNutrientCanHaveOnlyOneDecimalPlace, Resource.lblLime));
                     }
                 }
 
@@ -2079,30 +2136,13 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                //if (model.Lime == null)
-                //{
-                //    model.Lime = 0;
-                //}
-                //if (model.N == null)
-                //{
-                //    model.N = 0;
-                //}
-                //if (model.P2O5 == null)
-                //{
-                //    model.P2O5 = 0;
-                //}
-                //if (model.K2O == null)
-                //{
-                //    model.K2O = 0;
-                //}
-                //if (model.SO3 == null)
-                //{
-                //    model.SO3 = 0;
-                //}
 
                 model.IsNitrogenExceedWarning = false;
 
-
+                if (model.Lime != null)
+                {
+                    model.Lime = Math.Round(model.Lime.Value, 1);
+                }
                 //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
                 if (model.FieldList.Count >= 1)
                 {
@@ -2205,7 +2245,7 @@ namespace NMP.Portal.Controllers
                                                     if (managementIds.Count > 0)
                                                     {
                                                         //(model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType);
-                                                        if(model.N != null)
+                                                        if (model.N != null)
                                                         {
                                                             (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
                                                         }
@@ -2625,7 +2665,7 @@ namespace NMP.Portal.Controllers
                                                 if (managementIds.Count > 0)
                                                 {
                                                     //(model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType);
-                                                    if(model.N != null)
+                                                    if (model.N != null)
                                                     {
                                                         (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
                                                     }
@@ -3166,7 +3206,7 @@ namespace NMP.Portal.Controllers
                         FertiliserManure.Add(new
                         {
                             FertiliserManure = fertManure,
-                            WarningMessages = warningMessageList.Count > 0 ? warningMessageList:null,
+                            WarningMessages = warningMessageList.Count > 0 ? warningMessageList : null,
                         });
                     }
 
@@ -3316,12 +3356,12 @@ namespace NMP.Portal.Controllers
                                         {
                                             //if (!isGetCheckAnswer)
                                             //{
-                                                model.IsClosedPeriodWarning = true;
+                                            model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                                model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2;
+                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2;
                                             //}
                                             //else
                                             //{
@@ -3333,12 +3373,12 @@ namespace NMP.Portal.Controllers
                                         {
                                             //if (!isGetCheckAnswer)
                                             //{
-                                                model.IsClosedPeriodWarning = true;
+                                            model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                                model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2Wales;
+                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2Wales;
                                             //}
                                             //else
                                             //{
@@ -3376,7 +3416,7 @@ namespace NMP.Portal.Controllers
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                                model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2;
+                                            model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2;
                                             //}
                                             //else
                                             //{
@@ -3388,12 +3428,12 @@ namespace NMP.Portal.Controllers
                                         {
                                             //if (!isGetCheckAnswer)
                                             //{
-                                                model.IsClosedPeriodWarning = true;
+                                            model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgApplicationAfter31October;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                                model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2Wales;
+                                            model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2Wales;
                                             //}
                                             //else
                                             //{
@@ -3506,8 +3546,8 @@ namespace NMP.Portal.Controllers
                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
 
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                                    model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1England, startPeriod, endPeriod);
-                                    model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
+                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1England, startPeriod, endPeriod);
+                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                                 //}
                                 //else
                                 //{
@@ -3523,8 +3563,8 @@ namespace NMP.Portal.Controllers
                                 model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingWales;
-                                    model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
-                                    model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2Wales;
+                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
+                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2Wales;
                                 //}
                                 //else
                                 //{
@@ -3578,8 +3618,8 @@ namespace NMP.Portal.Controllers
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNRateExceedWarningPara1England, startPeriod, endPeriod, maxNitrogenRate);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
+                            model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNRateExceedWarningPara1England, startPeriod, endPeriod, maxNitrogenRate);
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                             //}
                             //else
                             //{
@@ -3595,8 +3635,8 @@ namespace NMP.Portal.Controllers
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNRateExceedWarningHeadingWales;
-                                //model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
+                            //model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
                             //}
                             //else
                             //{
@@ -3653,8 +3693,8 @@ namespace NMP.Portal.Controllers
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1England, startPeriod);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
+                            model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1England, startPeriod);
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                             //}
                             //else
                             //{
@@ -3670,8 +3710,8 @@ namespace NMP.Portal.Controllers
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
-                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1Wales, startPeriod);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
+                            model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1Wales, startPeriod);
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
                             //}
                             //else
                             //{
@@ -3717,8 +3757,8 @@ namespace NMP.Portal.Controllers
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1England, startPeriod);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
+                            model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1England, startPeriod);
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                             //}
                             //else
                             //{
@@ -3734,8 +3774,8 @@ namespace NMP.Portal.Controllers
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
-                                model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1Wales, startPeriod);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
+                            model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1Wales, startPeriod);
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
                             //}
                             //else
                             //{
@@ -6556,7 +6596,7 @@ namespace NMP.Portal.Controllers
                             warningMessage.Para3 = model.ClosedPeriodNitrogenExceedWarningPara2;
                             warningMessages.Add(warningMessage);
                         }
-                        
+
                     }
                 }
             }
