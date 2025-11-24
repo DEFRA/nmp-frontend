@@ -470,7 +470,14 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
+                                 @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
+                                {
+                                    @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
+                                }
+                                else
+                                {
+                                    @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
+                                }
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @Model.FieldName
