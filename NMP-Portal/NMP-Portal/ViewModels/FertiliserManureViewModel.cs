@@ -21,7 +21,7 @@ namespace NMP.Portal.ViewModels
 
         public string? CropTypeName { get; set; }
         public string? InOrgnaicManureDuration { get; set; }
-        public List<FertiliserManure>? FertiliserManures { get; set; }
+        public List<FertiliserManureDataViewModel>? FertiliserManures { get; set; }
 
         public int? N { get; set; }
         public int? P2O5 { get; set; }

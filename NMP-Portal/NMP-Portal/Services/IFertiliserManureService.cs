@@ -1,5 +1,6 @@
 ﻿using NMP.Portal.Models;
 using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Services
 {
@@ -14,7 +15,7 @@ namespace NMP.Portal.Services
         Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure);
         Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm);
         Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds);
-        Task<(FertiliserManure, Error)> FetchFertiliserByIdAsync(int fertiliserId);
+        Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdAsync(int fertiliserId);
         Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId,int farmId,int harvestYear);
         Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData);
         Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID);

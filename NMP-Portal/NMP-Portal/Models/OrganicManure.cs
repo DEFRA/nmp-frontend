@@ -44,11 +44,6 @@ namespace NMP.Portal.Models
         public int AutumnCropNitrogenUptake { get; set; }
         public DateTime SoilDrainageEndDate { get; set; }
         public decimal? AvailableNForNMax { get; set; }
-        public int? Defoliation { get; set; }
-        public string? DefoliationName { get; set; }
-        public int? FieldID { get; set; }
-        public string? FieldName { get; set; }
-        public string? EncryptedCounter { get; set; }
         public int? AvailableNForNextYear { get; set; }
         public int? AvailableNForNextDefoliation { get; set; }
     }
