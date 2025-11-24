@@ -27,7 +27,7 @@ namespace NMP.Portal.ViewModels
         public string? DefaultNutrientValue { get; set; }
         public bool isEnglishRules { get; set; }
 
-        public List<OrganicManure>? OrganicManures { get; set; }
+        public List<OrganicManureDataViewModel>? OrganicManures { get; set; }
         public ManureType ManureType { get; set; }
 
         public string? ManureGroupName { get; set; }

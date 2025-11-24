@@ -4087,7 +4087,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (model.OrganicManures == null)
                             {
-                                model.OrganicManures = new List<OrganicManureData>();
+                                model.OrganicManures = new List<OrganicManureDataViewModel>();
                             }
                             if (model.FertiliserManures == null)
                             {
@@ -4303,7 +4303,7 @@ namespace NMP.Portal.Controllers
                                                 (ManureType manureType, error) = await _organicManureService.FetchManureTypeByManureTypeId(item.ManureTypeID);
                                                 if (error == null)
                                                 {
-                                                    var orgManure = new OrganicManureData
+                                                    var orgManure = new OrganicManureDataViewModel
                                                     {
                                                         ID = item.ID,
                                                         ManureTypeName = item.ManureTypeName,

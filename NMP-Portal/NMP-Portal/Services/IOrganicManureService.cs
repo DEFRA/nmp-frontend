@@ -1,5 +1,6 @@
 ﻿using NMP.Portal.Models;
 using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Services
 {
@@ -49,7 +50,7 @@ namespace NMP.Portal.Services
         Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string jsonData);
         Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeId(int soilTypeId);
         Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(int fieldId, DateTime startDate, DateTime endDate, bool confirm,bool isGreenFoodCompost,int? organicManureId);
-        Task<(OrganicManure, Error)> FetchOrganicManureById(int id);
+        Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureById(int id);
         Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYear(int farmId, int year);
         Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds);
         Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeId(int farmId, int ManureTypeId, string ManureTypeName);

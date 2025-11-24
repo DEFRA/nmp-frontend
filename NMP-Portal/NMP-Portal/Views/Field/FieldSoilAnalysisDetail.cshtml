@@ -18,7 +18,7 @@
     @section BeforeContent {
         @if (Model.HarvestYear == null && Model.EncryptedHarvestYear == null)
         {
-            <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+            @* <govuk-breadcrumbs class="govuk-breadcrumbs-link">
                 <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                     @Resource.lblAllFarm
                 </govuk-breadcrumbs-item>
@@ -31,7 +31,9 @@
                 <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
                     @Model.Name
                 </govuk-breadcrumbs-item>
-            </govuk-breadcrumbs>
+            </govuk-breadcrumbs> *@
+
+            <govuk-back-link asp-action="ManageFarmFields" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
         }
         else
         {
