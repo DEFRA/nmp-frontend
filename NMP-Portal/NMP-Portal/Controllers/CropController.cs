@@ -2846,7 +2846,7 @@ namespace NMP.Portal.Controllers
                 model.IsAnyChangeInField = false;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropData", model);
 
-                if(!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
+                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
                     !string.IsNullOrWhiteSpace(t) && !string.IsNullOrWhiteSpace(u))
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("CropDataBeforeUpdate", model);
@@ -3936,7 +3936,7 @@ namespace NMP.Portal.Controllers
                             model.HarvestYear.Add(harvestNewYear);
                         }
                         int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear.GetValueOrDefault() : planSummaryResponse.Min(x => x.Year) - 1;
-                        int maxYear = planSummaryResponse.Max(x => x.Year) < currentHarvestYear ? currentHarvestYear: planSummaryResponse.Max(x => x.Year) + 1;
+                        int maxYear = planSummaryResponse.Max(x => x.Year) < currentHarvestYear ? currentHarvestYear : planSummaryResponse.Max(x => x.Year) + 1;
                         for (int i = minYear; i <= maxYear; i++)
                         {
                             if (!yearList.Contains(i))
@@ -4093,12 +4093,12 @@ namespace NMP.Portal.Controllers
                             {
                                 model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                             }
+                            int cropCounter = 0;
                             string firstCropName = recommendations.FirstOrDefault().Crops.CropTypeID == 140 ? NMP.Portal.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldService.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
                             foreach (var recommendation in recommendations)
                             {
                                 //check sns already exist or not in SnsAnalyses table by cropID
                                 SnsAnalysis snsData = await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
-
                                 var crop = new CropViewModel
                                 {
                                     ID = recommendation.Crops.ID,
@@ -4128,6 +4128,7 @@ namespace NMP.Portal.Controllers
                                     PotentialCut = recommendation.Crops.PotentialCut,
 
                                 };
+                                cropCounter++;
                                 if (recommendation.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
                                 {
                                     List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
@@ -4172,9 +4173,22 @@ namespace NMP.Portal.Controllers
                                 {
                                     crop.CropInfo2Name = await _cropService.FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
                                 }
-                                if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.PotentialCut != null)
                                 {
-                                    //ViewBag.Cuts = crop.PotentialCut.ToWords();
+                                    var potentialCuts = new[]
+                                    {
+                                        Resource.lblOne.ToLower(), Resource.lblTwo.ToLower(), Resource.lblThree.ToLower(), Resource.lblFour.ToLower(),
+                                        Resource.lblFive.ToLower(), Resource.lblSix.ToLower(), Resource.lblSeven.ToLower(), Resource.lblEight.ToLower(), Resource.lblNine.ToLower()
+                                    };
+
+                                    if (cropCounter == 1)
+                                    {
+                                        ViewBag.PotentialCutNameForCrop1 = potentialCuts[(int)crop.PotentialCut - 1];
+                                    }
+                                    else if (cropCounter == 2)
+                                    {
+                                        ViewBag.PotentialCutNameForCrop2 = potentialCuts[(int)crop.PotentialCut - 1];
+                                    }
                                 }
                                 model.Crops.Add(crop);
 
@@ -7746,5 +7760,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CropFields");
             }
         }
+
+
     }
 }

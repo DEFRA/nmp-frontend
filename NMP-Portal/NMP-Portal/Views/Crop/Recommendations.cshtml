@@ -56,7 +56,7 @@
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-                    @if (TempData["PreviousCroppingContentOne"]!=null)
+                    @if (TempData["PreviousCroppingContentOne"] != null)
                     {
                         <p class="govuk-notification-banner__heading">
                             @TempData["PreviousCroppingContentOne"]
@@ -121,8 +121,14 @@
                                         @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                         {
                                             <p>
-                                                @string.Format(Resource.lblThereAreCountCutsAndGrazingsInYear,Model.Crops[0].PotentialCut, Model.Crops[0].Year)
+                                                @string.Format(Resource.lblThereAreCountCutsAndGrazingsInYear, ViewBag.PotentialCutNameForCrop1, Model.Crops[0].Year)
                                             </p>
+
+                                            <hr class="seperator_five">
+                                        }
+                                        else
+                                        {
+                                            <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
                                         }
                                         @foreach (var mp in cropManagementPeriods)
                                         {
@@ -131,10 +137,13 @@
                                             {
                                                 @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
                                                 {
-                                                    <h3 class="govuk-heading-s">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h3>
+                                                    <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h2>
                                                 }
-                                                <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
                                                 <div class="table-container">
+                                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    {
+                                                        <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+                                                    }
                                                     <table class="govuk-table new-recomendation-table data-table">
                                                         <thead class="govuk-table__header">
                                                             <tr class="govuk-table__row">
@@ -236,9 +245,9 @@
                                         <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
                                         @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                         {
-                                            <h3 class="govuk-heading-s">
+                                            <h2 class="govuk-heading-m">
                                                 @Resource.lblPhosphateP2O5AndPotashK2OBalance
-                                            </h3>
+                                            </h2>
                                             <div id="balance">
                                                 <table class="govuk-table data-table">
                                                     <thead class="govuk-table__head">
@@ -262,7 +271,7 @@
                                                     </tbody>
                                                 </table>
 
-                                                <p class="govuk-body">
+                                                <p class="govuk-body-s">
                                                     @Resource.lblThisIsTheRollingBalanceAtTheStartOfTheYear <br>@Resource.lblFertiliserPhosphateAndPotashRecommendations
                                                 </p>
                                             </div>
@@ -319,8 +328,7 @@
                             @if (cropNumber == 2)
                             {
                                 managementTableIndex = 1;
-                                <govuk-tabs-item id="crop-2" label="@Resource.lblCrop2Recommendations">
-                                    <h2 class="govuk-heading-m non-standard">@Resource.lblNutrientAndLimeRecommendations</h2>
+                                <govuk-tabs-item id="crop-2" label="@Resource.lblCrop2Recommendations">                                    
 
                                     @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
                                                     && Model.Recommendations.Count > 0)
@@ -330,7 +338,17 @@
                                             @string.Format(Resource.lblNutrientAndLimeRecommendationsForCropInField, crop.CropTypeName, Model.FieldName)
                                         </h3>
 
-
+                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            <p>
+                                                @string.Format(Resource.lblThereAreCountCutsAndGrazingsInYear, ViewBag.PotentialCutNameForCrop2, Model.Crops[0].Year)
+                                            </p>
+                                            <hr class="seperator_five">
+                                        }
+                                        else
+                                        {
+                                            <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+                                        }
                                         @foreach (var mp in cropManagementPeriods)
                                         {
                                             var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
@@ -339,10 +357,14 @@
                                                 @* Recommendation *@
                                                 @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
                                                 {
-                                                    <h4 class="govuk-heading-s">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h4>
+                                                    <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h2>
                                                 }
-                                                <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+
                                                 <div class="table-container">
+                                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    {
+                                                        <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+                                                    }
                                                     <table class="govuk-table new-recomendation-table data-table">
                                                         <thead class="govuk-table__header">
                                                             <tr class="govuk-table__row">
@@ -435,9 +457,9 @@
                                         <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
                                         @if (Model.PKBalance != null && !isPkBalanceTableDisplay)
                                         {
-                                            <h3 class="govuk-heading-m">
+                                            <h2 class="govuk-heading-m">
                                                 @Resource.lblPhosphateP2O5AndPotashK2OBalance
-                                            </h3>
+                                            </h2>
                                             <div id="balance">
                                                 <table class="govuk-table data-table">
                                                     <thead class="govuk-table__head">
@@ -461,7 +483,7 @@
                                                     </tbody>
                                                 </table>
 
-                                                <p class="govuk-body">
+                                                <p class="govuk-body-s">
                                                     @Resource.lblThisIsTheRollingBalanceAtTheStartOfTheYear <br>@Resource.lblFertiliserPhosphateAndPotashRecommendations
                                                 </p>
                                             </div>
@@ -472,7 +494,7 @@
                                         @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                         {
 
-                                            <h3 class="govuk-heading-m">@Resource.lblGuidance</h3>
+                                            <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
                                             <div class="guidance">
                                                 @foreach (var mp in cropManagementPeriods)
                                                 {
