@@ -150,7 +150,7 @@
             <govuk-radios class="govuk-radios" asp-for="@Model.LastHarvestYear">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>
-                        @Resource.lblWhatIsYourLastHarvestYear
+                        @string.Format(Resource.lblWhatIsYourLastHarvestYear,Model.Name)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@ViewBag.SecondLastHarvestYear">@ViewBag.SecondLastHarvestYear</govuk-radios-item>
                     <govuk-radios-item value="@ViewBag.LastHarvestYear">@ViewBag.LastHarvestYear</govuk-radios-item>

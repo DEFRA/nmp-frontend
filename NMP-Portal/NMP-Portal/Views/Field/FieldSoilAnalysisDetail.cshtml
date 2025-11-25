@@ -121,15 +121,15 @@
                     }
                     @if (Model.IsWithinNVZForFarm != null && Model.IsWithinNVZForFarm == true)
                     {
-                        <tr class="govuk-table__row"> 
-                            <td class="govuk-table__cell">@Resource.lblIsFieldWithinNVZ</td>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblNVZFieldForFieldCheckAnswere</td>
                             <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
                     @if (Model.IsAbove300SeaLevelForFarm != null & Model.IsAbove300SeaLevelForFarm == true)
                     {
                         <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Resource.lblIsFieldAbove300Meters</td>
+                            <td class="govuk-table__cell">@Resource.lblIsThisFieldAboveForFieldCheckAnswere</td>
                             <td class="govuk-table__cell">@(Model.IsAbove300SeaLevel == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
