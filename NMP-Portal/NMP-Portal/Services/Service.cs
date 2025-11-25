@@ -1,51 +1,56 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Identity.Client;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Security;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
-
 namespace NMP.Portal.Services
 {
     public abstract class Service : IService
     {
         public readonly IHttpClientFactory _clientFactory;
         public readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly TokenAcquisitionService _tokenAcquisitionService;
+        private readonly TokenRefreshService _tokenRefreshService;
 
-        public Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService)
+        public Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh)
         {
             _httpContextAccessor = httpContextAccessor;
             _clientFactory = clientFactory;
-            _tokenAcquisitionService = tokenAcquisitionService;
+            _tokenRefreshService = tokenRefresh;
+        }
+
+        private async Task<string> GetAccessTokenAsync()
+        {
+            var ctx = _httpContextAccessor.HttpContext;
+            if (ctx == null)
+            {
+                return null;
+            }
+
+            var token = await ctx.GetTokenAsync("access_token");
+            return token;
+        }
+
+        private bool JwtExpired(string jwt)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(jwt);
+            return token.ValidTo < DateTime.UtcNow.AddMinutes(-5);
         }
 
         public async Task<HttpClient> GetNMPAPIClient()
         {
-            ClaimsPrincipal? user = _httpContextAccessor?.HttpContext?.User;
-            var identity = user?.Identity as ClaimsIdentity;
-            if (user!= null && !_tokenAcquisitionService.IsTokenValid(user, out DateTime expiration))
+            var accessToken = await GetAccessTokenAsync();
+
+            if (JwtExpired(accessToken))
             {
-                
-                var refreshToken = identity?.FindFirst("refresh_token")?.Value;
-                var issuer = identity?.FindFirst("issuer")?.Value;
-                if(string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(issuer))
-                {
-                    throw new MsalUiRequiredException("401", "Token expired, need to re login");
-                }
-                OAuthTokenResponse oauthTokenResponse = await _tokenAcquisitionService.AcquireTokenByRefreshTokenAsync(refreshToken, issuer);
-                if (oauthTokenResponse != null)
-                {
-                    // Optionally, update the authentication cookie with the new access token                            
-                    identity?.RemoveClaim(identity.FindFirst("access_token"));
-                    identity?.AddClaim(new Claim("access_token", oauthTokenResponse.AccessToken));
-                    identity?.RemoveClaim(identity.FindFirst("refresh_token"));
-                    identity?.AddClaim(new Claim("refresh_token", oauthTokenResponse.RefeshToken));
-                    identity?.RemoveClaim(identity.FindFirst("access_token_expiry"));                    
-                    identity?.AddClaim(new Claim("access_token_expiry", oauthTokenResponse.ExpiresOn));
-                }                
+                accessToken = await _tokenRefreshService.RefreshUserAccessTokenAsync(_httpContextAccessor.HttpContext);
             }
-            var accessToken = identity?.FindFirst("access_token")?.Value; // _httpContextAccessor?.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
+
             HttpClient httpClient = _clientFactory.CreateClient("NMPApi");
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
             return await Task.FromResult(httpClient).ConfigureAwait(false);

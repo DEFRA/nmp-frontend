@@ -5,12 +5,13 @@ using NMP.Portal.Models;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Resources;
 using System.Text;
+using NMP.Portal.Security;
 
 namespace NMP.Portal.Services;
 public class UserExtensionService : Service, IUserExtensionService
 {
     private readonly ILogger<UserExtensionService> _logger;
-    public UserExtensionService(ILogger<UserExtensionService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+    public UserExtensionService(ILogger<UserExtensionService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
     {
         _logger = logger;
     }
