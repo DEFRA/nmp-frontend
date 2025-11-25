@@ -6,6 +6,7 @@ using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
 using System.Text;
 
 namespace NMP.Portal.Services
@@ -423,10 +424,10 @@ namespace NMP.Portal.Services
 
             return (message, error);
         }
-        public async Task<(FertiliserManure, Error)> FetchFertiliserByIdAsync(int fertiliserId)
+        public async Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdAsync(int fertiliserId)
         {
             Error error = new Error();
-            FertiliserManure fertiliserManure = new FertiliserManure();
+            FertiliserManureDataViewModel fertiliserManure = new FertiliserManureDataViewModel();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -435,7 +436,7 @@ namespace NMP.Portal.Services
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var fertiliser = responseWrapper.Data.ToObject<FertiliserManure>();
+                    var fertiliser = responseWrapper.Data.ToObject<FertiliserManureDataViewModel>();
                     if (fertiliser != null)
                     {
                         fertiliserManure = fertiliser;

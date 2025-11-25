@@ -164,6 +164,7 @@ namespace NMP.Portal.Controllers
             (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
             if (error != null && countryList.Count > 0)
             {
+                countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
                 ViewBag.CountryList = countryList.OrderBy(c => c.Name);
             }
             if (HttpContext.Session.Keys.Contains("FarmData"))
@@ -190,6 +191,7 @@ namespace NMP.Portal.Controllers
                 (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
                 if (error != null && countryList.Count > 0)
                 {
+                    countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
                     ViewBag.CountryList = countryList.OrderBy(c => c.Name);
                 }
                 return View("Country", farm);
@@ -472,7 +474,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(farm.Address1) && farm.Address1.Length > 50)
             {
-                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1,50));
+                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1, 50));
             }
             if (!string.IsNullOrWhiteSpace(farm.Address2) && farm.Address2.Length > 50)
             {
@@ -484,7 +486,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(farm.Address4) && farm.Address4.Length > 50)
             {
-                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry,50));
+                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
             }
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
@@ -991,7 +993,7 @@ namespace NMP.Portal.Controllers
                 HttpContext.Session.Remove("AddressList");
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["AddFarmError"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
@@ -1105,7 +1107,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID,null);
+                    (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID, null);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
