@@ -3520,78 +3520,33 @@ cubic metres per hectare  not set</value>
   <data name="lbl10February" xml:space="preserve">
     <value>10 February</value>
   </data>
-  <data name="lblAboutReleaseSchedule" xml:space="preserve">
-    <value>This is the plan for testing this tool, adding new features and rolling it out across the country.</value>
-  </data>
-  <data name="lblAllModulesLive" xml:space="preserve">
-    <value>NMPT-GB for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
-  </data>
   <data name="lblArableCoreFunctions" xml:space="preserve">
     <value>Core functions, arable:</value>
-  </data>
-  <data name="lblCreateAPlanAndRecord" xml:space="preserve">
-    <value>create a plan and record</value>
   </data>
   <data name="lblCreateAPlanandRecordForArableAndGrasslansFarms" xml:space="preserve">
     <value>create a plan and record for arable and grassland farms</value>
   </data>
-  <data name="lblExistingManureStorageCapacity" xml:space="preserve">
-    <value>added function: existing manure storage capacity NVZ compliance module</value>
-  </data>
-  <data name="lblMarchToAugust2025" xml:space="preserve">
-    <value>March to August 2025 - England and Wales private beta test</value>
-  </data>
   <data name="lblGrasslandCoreFunctions" xml:space="preserve">
     <value>Core functions, grassland:</value>
-  </data>
-  <data name="lblIntegratedMANNERNPKCalculations" xml:space="preserve">
-    <value>integrated MANNER-NPK calculations</value>
-  </data>
-  <data name="lblAugust2025Schedule" xml:space="preserve">
-    <value>August 2025 - England and Wales full tool live</value>
-  </data>
-  <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
-    <value>added function: livestock manure nitrogen (N) farm limit NVZ compliance module</value>
-  </data>
-  <data name="lblMannerNPKStandAloneFrontEnd" xml:space="preserve">
-    <value>added function: MANNER-NPK stand-alone module</value>
-  </data>
-  <data name="lblNMaxComplainceModule" xml:space="preserve">
-    <value>added function: N-max NVZ compliance module</value>
-  </data>
-  <data name="lblNMPTBetaTest1" xml:space="preserve">
-    <value>A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.</value>
-  </data>
-  <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
-    <value>NMPT-GB launches to users in Scotland</value>
   </data>
   <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
     <value>tool launches for cross-border farms</value>
   </data>
   <data name="lblServiceReleaseSchedule" xml:space="preserve">
-    <value>Release schedule for this tool</value>
+    <value>Release schedule</value>
   </data>
   <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
     <value>November 2025 - England, Wales and Scotland full service
 live</value>
   </data>
-  <data name="lblNVZAndFarmingRulesFor" xml:space="preserve">
-    <value>NVZ and Farming Rules for Water content and warning messages</value>
-  </data>
   <data name="lblNVZComplianceWarningMessages" xml:space="preserve">
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
-  </data>
-  <data name="lblOrganicManureInventory" xml:space="preserve">
-    <value>added function: organic manure inventory NVZ compliance module</value>
   </data>
   <data name="lblReadScheduleLink" xml:space="preserve">
     <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule for testing and new features&lt;/a&gt;</value>
   </data>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
-  </data>
-  <data name="lblSept2025" xml:space="preserve">
-    <value>September 2025 - Scotland launch phase</value>
   </data>
   <data name="lblCropGroupWithCounter" xml:space="preserve">
     <value>Crop group {0}</value>
@@ -4715,9 +4670,6 @@ live</value>
   <data name="lblAboutTheNutrientManagementPlanningToolGBLine6" xml:space="preserve">
     <value>manure imports and exports</value>
   </data>
-  <data name="lblCoreFunctionsGrassland" xml:space="preserve">
-    <value>Core functions, grassland:</value>
-  </data>
   <data name="lblCropInformation" xml:space="preserve">
     <value>crop information</value>
   </data>
@@ -4733,32 +4685,14 @@ live</value>
   <data name="lblCrossBorderHoldingsContent3" xml:space="preserve">
     <value>This means that NMPT-GB will be using the appropriate calculations and following the relevant regulations for each farm.</value>
   </data>
-  <data name="lblCurrentFunctionContent1" xml:space="preserve">
-    <value>This is what NMPT-GB can currently do in this test phase. This list will grow as we develop the tool.</value>
-  </data>
-  <data name="lblCurrentFunctionContent2" xml:space="preserve">
-    <value>Core functions, arable:</value>
-  </data>
-  <data name="lblCurrentFunctions" xml:space="preserve">
-    <value>Current functions</value>
-  </data>
   <data name="lblLivestockInformation" xml:space="preserve">
     <value>livestock information</value>
-  </data>
-  <data name="lblPlannedUpcomingFunction" xml:space="preserve">
-    <value>Planned upcoming functions</value>
-  </data>
-  <data name="lblPlannedUpcomingFunctionContent1" xml:space="preserve">
-    <value>This is the plan for adding new functions (subject to change as we go through testing).</value>
   </data>
   <data name="lblSoilAnalysisData" xml:space="preserve">
     <value>soil analysis data</value>
   </data>
   <data name="lblSoil_Analysis_line5" xml:space="preserve">
     <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
-  </data>
-  <data name="lblWaterResourcesRegulation2021Content" xml:space="preserve">
-    <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content</value>
   </data>
   <data name="lblCubicMeters" xml:space="preserve">
     <value>cubic metres</value>
@@ -6999,5 +6933,74 @@ livestock manure.</value>
   </data>
   <data name="lblThereAreCountCutsAndGrazingsInYear" xml:space="preserve">
     <value>There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one.</value>
+  </data>
+  <data name="lblLastUpdatedDate" xml:space="preserve">
+    <value>Last updated {0}</value>
+  </data>
+  <data name="lblReleaseScheduleContentOne" xml:space="preserve">
+    <value>Public Beta release, December 2025</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
+    <value>The first functionality in the nutrient management planning tool is ready for use by the public in England and Wales. This has had approximately eight months of user testing.</value>
+  </data>
+  <data name="lblReleaseScheduleContentThree" xml:space="preserve">
+    <value>The first public release helps users to;</value>
+  </data>
+  <data name="lblReleaseScheduleContentFour" xml:space="preserve">
+    <value>create a nutrient management plan for arable crops and grassland</value>
+  </data>
+  <data name="lblReleaseScheduleContentFive" xml:space="preserve">
+    <value>get nutrient recommendations from RB209</value>
+  </data>
+  <data name="lblReleaseScheduleContentSix" xml:space="preserve">
+    <value>plan organic and inorganic material applications, which include MANNER-NPK calculations</value>
+  </data>
+  <data name="lblReleaseScheduleContentSeven" xml:space="preserve">
+    <value>see warning messages where applications may breach Nitrate Vulnerable Zone (NVZ) rules</value>
+  </data>
+  <data name="lblReleaseScheduleContentEight" xml:space="preserve">
+    <value>update plans and record what happens at a field level</value>
+  </data>
+  <data name="lblReleaseScheduleContentNine" xml:space="preserve">
+    <value>This version also helps to create NVZ reports for:</value>
+  </data>
+  <data name="lblReleaseScheduleContentTen" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit</value>
+  </data>
+  <data name="lblReleaseScheduleContentEleven" xml:space="preserve">
+    <value>Next releases, early 2026</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
+    <value>Launch in Scotland</value>
+  </data>
+  <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
+    <value>The Scottish version of the nutrient management planning tool is currently in development. This will be released to all users in early 2026, after user testing.</value>
+  </data>
+  <data name="lblReleaseScheduleContentFourteen" xml:space="preserve">
+    <value>This version will give recommendations based on the Scottish Technical Notes. It will help users to create NVZ reports based on Scottish rules.</value>
+  </data>
+  <data name="lblReleaseScheduleContentFifteen" xml:space="preserve">
+    <value>Next available functionality</value>
+  </data>
+  <data name="lblReleaseScheduleContentSixteen" xml:space="preserve">
+    <value>Upcoming releases available in England, Scotland and Wales will include the ability to:</value>
+  </data>
+  <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
+    <value>create an NVZ report for existing manure storage capacity</value>
+  </data>
+  <data name="lblReleaseScheduleContentEighteen" xml:space="preserve">
+    <value>calculate NVZ organic manure storage requirements and manure inventory</value>
+  </data>
+  <data name="lblReleaseScheduleContentNineteen" xml:space="preserve">
+    <value>use MANNER NPK to create quick estimates of nitrogen (N) value and losses</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwenty" xml:space="preserve">
+    <value>import data from existing PLANET files</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwentyOne" xml:space="preserve">
+    <value>The current functionality will continue to be updated based on feedback from our users.</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwentyTwo" xml:space="preserve">
+    <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page)</value>
   </data>
 </root>
