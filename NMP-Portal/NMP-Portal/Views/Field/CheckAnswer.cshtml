@@ -576,13 +576,13 @@
                     </govuk-summary-list-row> *@
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @Resource.lblWhatIsYourLastHarvestYear
+                            @string.Format(Resource.lblWhatIsYourLastHarvestYear, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @Model.LastHarvestYear
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="LastHarvestYear" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblWhatIsYourLastHarvestYear)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="LastHarvestYear" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatIsYourLastHarvestYear, Model.Name))</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGrassInLastThreeYear==null)?"govuk-error-message":"")>

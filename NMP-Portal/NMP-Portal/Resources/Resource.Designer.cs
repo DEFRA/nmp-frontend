@@ -7199,7 +7199,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is this field more than 300 metres above sea level?.
+        ///   Looks up a localized string similar to Is the field above 300 metres?.
         /// </summary>
         public static string lblIsThisFieldAboveForFieldCheckAnswere {
             get {
@@ -9640,7 +9640,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is this field in a Nitrate Vulnerable Zone (NVZ)?.
+        ///   Looks up a localized string similar to Is the field in an NVZ?.
         /// </summary>
         public static string lblNVZFieldForFieldCheckAnswere {
             get {
@@ -15816,7 +15816,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is your last harvest year?.
+        ///   Looks up a localized string similar to What is your last harvest year for {0}?.
         /// </summary>
         public static string lblWhatIsYourLastHarvestYear {
             get {

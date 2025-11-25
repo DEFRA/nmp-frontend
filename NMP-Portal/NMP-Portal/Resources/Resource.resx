@@ -674,13 +674,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Field area</value>
   </data>
   <data name="lblIsThisFieldAboveForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field more than 300 metres above sea level?</value>
+    <value>Is the field above 300 metres?</value>
   </data>
   <data name="lblManureNonSpreadingAreaForCheckAnswere" xml:space="preserve">
     <value>Manure non-spreading area</value>
   </data>
   <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
+    <value>Is the field in an NVZ?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
     <value>How would you like to enter your soil analysis values?</value>
@@ -1964,7 +1964,7 @@ cubic metres per hectare  not set</value>
     <value>To create plans and give recommendations we need information about your last harvest year.</value>
   </data>
   <data name="lblWhatIsYourLastHarvestYear" xml:space="preserve">
-    <value>What is your last harvest year?</value>
+    <value>What is your last harvest year for {0}?</value>
   </data>
   <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
     <value>Please select a harvest year before continuing</value>
