@@ -3319,7 +3319,7 @@ namespace NMP.Portal.Controllers
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                             if (error == null)
                             {
-
+                                //warning excel sheet row no. 23
                                 HashSet<int> filterCrops = new HashSet<int>
                                 {
                                     (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape,
@@ -3388,7 +3388,7 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
-
+                                //warning excel sheet row no. 28
                                 if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
                                 {
                                     //31 october and end of closed period
@@ -3515,6 +3515,7 @@ namespace NMP.Portal.Controllers
                     startPeriod = periods[0];
                     endPeriod = periods[1];
                 }
+                //warning excel sheet row no. 25
                 if (brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod)
                 {
                     DateTime fourWeekDate = model.Date.Value.AddDays(-28);
@@ -3542,7 +3543,7 @@ namespace NMP.Portal.Controllers
                                 //if (!isGetCheckAnswer)
                                 //{
                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForBrasicas;
-                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
 
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
@@ -3560,7 +3561,7 @@ namespace NMP.Portal.Controllers
                                 //if (!isGetCheckAnswer)
                                 //{
                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForBrasicas;
-                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingWales;
                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
@@ -3579,6 +3580,8 @@ namespace NMP.Portal.Controllers
                         return (model, error);
                     }
                 }
+
+                //warning excel sheet row no. 24
                 if ((cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions) && isWithinClosedPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
@@ -3615,7 +3618,7 @@ namespace NMP.Portal.Controllers
                             //if (!isGetCheckAnswer)
                             //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateEverythingExceptWosr;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNRateExceedWarningPara1England, startPeriod, endPeriod, maxNitrogenRate);
@@ -3632,7 +3635,7 @@ namespace NMP.Portal.Controllers
                             //if (!isGetCheckAnswer)
                             //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateEverythingExceptWosr;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNRateExceedWarningHeadingWales;
                             //model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
@@ -3671,6 +3674,7 @@ namespace NMP.Portal.Controllers
                 }
                 // (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober,null, false);
 
+                //warning excel sheet row no. 26
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
@@ -3690,7 +3694,7 @@ namespace NMP.Portal.Controllers
                             //if (!isGetCheckAnswer)
                             //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForWinterOilseedRape;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1England, startPeriod);
@@ -3707,7 +3711,7 @@ namespace NMP.Portal.Controllers
                             //if (!isGetCheckAnswer)
                             //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForWinterOilseedRape;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1Wales, startPeriod);
@@ -3720,7 +3724,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-
+                //warning excel sheet row no. 27
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass && isWithinWarningPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
@@ -3754,7 +3758,7 @@ namespace NMP.Portal.Controllers
                             //if (!isGetCheckAnswer)
                             //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgApplicationToGrassAtRateOfMoreThan;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1England, startPeriod);
@@ -3771,7 +3775,7 @@ namespace NMP.Portal.Controllers
                             //if (!isGetCheckAnswer)
                             //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgApplicationToGrassAtRateOfMoreThan;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1Wales, startPeriod);
@@ -3784,6 +3788,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+                //warning excel sheet row no. 8
 
                 //NMax limit for crop logic
                 decimal previousApplicationsN = 0;
