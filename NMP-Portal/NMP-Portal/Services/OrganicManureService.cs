@@ -4,6 +4,7 @@ using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.ViewModels;
 using System.Security.Cryptography;
@@ -14,7 +15,7 @@ namespace NMP.Portal.Services
     public class OrganicManureService : Service, IOrganicManureService
     {
         private readonly ILogger<OrganicManureService> _logger;
-        public OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        public OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }
