@@ -11,7 +11,7 @@ namespace NMP.Portal.Services
     public class PreviousCroppingService : Service, IPreviousCroppingService
     {
         private readonly ILogger<PreviousCroppingService> _logger;
-        public PreviousCroppingService(ILogger<PreviousCroppingService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        public PreviousCroppingService(ILogger<PreviousCroppingService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }

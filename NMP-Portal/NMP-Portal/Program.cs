@@ -54,6 +54,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 builder.Services.AddHttpsRedirection(options => { });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDefraCustomerIdentity(builder);
 
 builder.Services.AddAuthorization(options =>
@@ -134,7 +135,7 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();

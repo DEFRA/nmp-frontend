@@ -11,7 +11,7 @@ namespace NMP.Portal.Services
     public class PKBalanceService : Service, IPKBalanceService
     {
         private readonly ILogger<PKBalanceService> _logger;
-        public PKBalanceService(ILogger<PKBalanceService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        public PKBalanceService(ILogger<PKBalanceService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }

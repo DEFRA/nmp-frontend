@@ -14,7 +14,7 @@ namespace NMP.Portal.Services
     public class FertiliserManureService : Service, IFertiliserManureService
     {
         private readonly ILogger<FertiliserManureService> _logger;
-        public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }

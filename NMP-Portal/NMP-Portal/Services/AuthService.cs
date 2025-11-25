@@ -11,7 +11,7 @@ namespace NMP.Portal.Services
     public class AuthService: Service,IAuthService
     {
         private readonly ILogger<AuthService> _logger;        
-        public AuthService(ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        public AuthService(ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }
