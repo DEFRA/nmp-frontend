@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NMP.Portal.Helpers;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
 
 namespace NMP.Portal.Services
@@ -8,7 +9,7 @@ namespace NMP.Portal.Services
     public class WarningService : Service, IWarningService
     {
         private readonly ILogger<WarningService> _logger;
-        public WarningService(ILogger<WarningService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenAcquisitionService tokenAcquisitionService) : base(httpContextAccessor, clientFactory, tokenAcquisitionService)
+        public WarningService(ILogger<WarningService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }

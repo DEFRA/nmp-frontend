@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -64,7 +65,7 @@ namespace NMP.Portal.Controllers
         }
 
         public async Task<IActionResult> FarmList(string? q)
-        {
+        {            
             _logger.LogTrace($"Farm Controller : FarmList({q}) action called");
             HttpContext?.Session.Remove("FarmData");
             HttpContext?.Session.Remove("AddressList");

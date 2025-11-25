@@ -14,7 +14,7 @@ namespace NMP.Portal.Security
         public string ExpiresIn { get; set; } = string.Empty;
 
         [JsonProperty("refresh_token")]
-        public string RefeshToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
 
         [JsonProperty("refresh_token_expires_in")]
         public string RefreshTokenExpiresIn { get; set; } = string.Empty;

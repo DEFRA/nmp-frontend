@@ -35,7 +35,13 @@ namespace NMP.Portal.Security
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
-            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
                     .AddMicrosoftIdentityWebApp(options =>
                     {
                         options.Instance = builder.Configuration?["CustomerIdentityInstance"] ?? string.Empty;
@@ -48,7 +54,9 @@ namespace NMP.Portal.Security
                         extraQueryParameters.Add("forceReselection", value: "true");
                         options.ExtraQueryParameters = extraQueryParameters;
                         options.CallbackPath = "/signin-oidc";
-                        options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];                       
+                        options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
                     },
                     cookieOptions =>
                     {
@@ -85,6 +93,7 @@ namespace NMP.Portal.Security
             //});
             services.AddTokenAcquisition();
             services.AddInMemoryTokenCaches();
+            services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;
         }

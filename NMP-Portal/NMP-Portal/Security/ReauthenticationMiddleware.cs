@@ -39,7 +39,7 @@ namespace NMP.Portal.Security
                             identity?.RemoveClaim(identity.FindFirst("access_token"));
                             identity?.AddClaim(new Claim("access_token", oauthTokenResponse.AccessToken));
                             identity?.RemoveClaim(identity.FindFirst("refresh_token"));
-                            identity?.AddClaim(new Claim("refresh_token", oauthTokenResponse.RefeshToken));
+                            identity?.AddClaim(new Claim("refresh_token", oauthTokenResponse.RefreshToken));
                             identity?.RemoveClaim(identity.FindFirst("access_token_expiry"));
                             //identity?.AddClaim(new Claim("access_token_expiry", DateTimeOffset.UtcNow.AddMilliseconds(60).ToUnixTimeSeconds().ToString()));
                             identity?.AddClaim(new Claim("access_token_expiry", oauthTokenResponse.ExpiresOn));
