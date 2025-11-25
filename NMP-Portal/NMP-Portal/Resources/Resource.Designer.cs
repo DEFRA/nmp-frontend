@@ -11278,7 +11278,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 25 November 2025.
+        ///   Looks up a localized string similar to 25th November 2025.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
