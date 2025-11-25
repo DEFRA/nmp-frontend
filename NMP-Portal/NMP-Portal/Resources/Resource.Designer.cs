@@ -11278,6 +11278,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 25 November 2025.
+        /// </summary>
+        public static string lblReleaseScheduleDate {
+            get {
+                return ResourceManager.GetString("lblReleaseScheduleDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string lblRemove {
