@@ -674,13 +674,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Field area</value>
   </data>
   <data name="lblIsThisFieldAboveForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field more than 300 metres above sea level?</value>
+    <value>Is the field above 300 metres?</value>
   </data>
   <data name="lblManureNonSpreadingAreaForCheckAnswere" xml:space="preserve">
     <value>Manure non-spreading area</value>
   </data>
   <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
+    <value>Is the field in an NVZ?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
     <value>How would you like to enter your soil analysis values?</value>
@@ -1964,7 +1964,7 @@ cubic metres per hectare  not set</value>
     <value>To create plans and give recommendations we need information about your last harvest year.</value>
   </data>
   <data name="lblWhatIsYourLastHarvestYear" xml:space="preserve">
-    <value>What is your last harvest year?</value>
+    <value>What is your last harvest year for {0}?</value>
   </data>
   <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
     <value>Please select a harvest year before continuing</value>
@@ -3299,7 +3299,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resource Regulations apply a limit of 250kg of total Nitrogen per individual hectare to the spreading of organic manure for any 12 month rolling period.</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningHeadingEngland" xml:space="preserve">
     <value>This application may take you over the maximum nitrogen rate limit (N-max) for this crop</value>
@@ -3311,7 +3311,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply.</value>
@@ -3338,7 +3338,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resource Regulations apply a limit of 1,000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
   </data>
   <data name="MsgNmaxWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
   </data>
   <data name="MsgNmaxWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
@@ -3350,7 +3350,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="MsgClosedPeriodWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="MsgClosedPeriodWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period.</value>
@@ -3383,7 +3383,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara1Within20DaysWales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryEngland" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of slurry.</value>
@@ -3395,10 +3395,10 @@ cubic metres per hectare  not set</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara30SlurryWales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara8PoultryWales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
   </data>
   <data name="ContentHowToolWorks" xml:space="preserve">
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
@@ -3449,13 +3449,13 @@ cubic metres per hectare  not set</value>
     <value>https://ahdb.org.uk/nutrient-management-guide-rb209</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the application rate of slurry.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of slurry.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the application rate of poultry manure.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider allowing more time between applications.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider allowing more time between applications.</value>
   </data>
   <data name="lblRemoveSoilAnalysisContentFirst" xml:space="preserve">
     <value>Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead.</value>
@@ -3564,13 +3564,13 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
   </data>
   <data name="MsgClosedPeriodNRateExceedWarningHeadingWales" xml:space="preserve">
     <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser to this crop during the closed spreading period</value>
@@ -3579,7 +3579,7 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {2}kg of nitrogen per hectare.</value>
   </data>
   <data name="MsgClosedPeriodNRateExceedWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
   </data>
   <data name="MsgWinterOilseedRapeNRateExceedWarningHeadingWales" xml:space="preserve">
     <value>This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period</value>
@@ -3588,7 +3588,7 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
   </data>
   <data name="MsgWinterOilseedRapeNRateExceedWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
   </data>
   <data name="lblRemoveThisGroup" xml:space="preserve">
     <value>Remove this group</value>
@@ -3603,7 +3603,7 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider changing your application date.</value>
   </data>
   <data name="Msg31OctoberToEndPeriodFertiliserWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider changing your application date.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider changing your application date.</value>
   </data>
   <data name="MsgClosedPeriodFertiliserWarningHeading" xml:space="preserve">
     <value>The application date you entered is inside your closed spreading period for applying inorganic nitrogen fertiliser</value>
@@ -3612,13 +3612,13 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period.</value>
   </data>
   <data name="MsgClosedPeriodFertiliserWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
   </data>
   <data name="MsgWinterGrassNRateExceedWarningPara1England" xml:space="preserve">
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
   </data>
   <data name="MsgWinterGrassNRateExceedWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
   </data>
   <data name="lblAction" xml:space="preserve">
     <value>Action</value>
@@ -3633,7 +3633,7 @@ live</value>
     <value>The application date you entered is inside your closed spreading period for applying manure with a high readily available nitrogen content</value>
   </data>
   <data name="MsgClosedPeriodWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningHeading" xml:space="preserve">
     <value>This application will take you over the maximum application rate for high readily available nitrogen organic manure during your closed spreading period</value>
@@ -3651,7 +3651,7 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1WinterOilseed" xml:space="preserve">
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on winter oilseed rape between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare.</value>
@@ -3660,13 +3660,13 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of high readily available nitrogen manures.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the application rate of high readily available nitrogen organic manure.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of high readily available nitrogen organic manure.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceedAdditionalWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the amount of nitrogen from organic manures.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
     <value>This will remove crop information, and fertiliser and organic material applications to all fields in this crop group.</value>
@@ -3708,7 +3708,7 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblItIsAnOffenceToBreachTheWaterResources" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021, and you should consider reducing the amount of nitrogen from organic manures.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblCropTypeNameRemoveFromFieldName" xml:space="preserve">
     <value>{0} removed from {1}</value>
