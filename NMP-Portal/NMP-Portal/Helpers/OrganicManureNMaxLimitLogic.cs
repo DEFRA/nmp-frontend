@@ -1,147 +1,155 @@
-﻿using NMP.Portal.Resources;
+﻿using NMP.Portal.Enums;
+using NMP.Portal.Resources;
 
 namespace NMP.Portal.Helpers
 {
     public class OrganicManureNMaxLimitLogic
     {
-        public int NMaxLimit(int nMaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut , List<int> currentYearManureTypeIds,
-            List<int> previousYearManureTypeIds, int? manureTypeId)
+        private static readonly int[] SpecialManureTypes =
         {
-            bool manureTypeCondition = false;
-            if (currentYearManureTypeIds.Count > 0)
+            (int)Enums.ManureTypes.StrawMulch,
+            (int)Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated,
+            (int)Enums.ManureTypes.PaperCrumbleBiologicallyTreated
+        };
+
+        private bool HasSpecialManure(List<int> manureHistory, int? manureTypeId)
+        {
+            return (manureHistory?.Intersect(SpecialManureTypes).Any() ?? false)
+                || (manureTypeId.HasValue && SpecialManureTypes.Contains(manureTypeId.Value));
+        }
+
+        private int ApplyYieldBonus(decimal? yield, decimal threshold, decimal step, int increment)
+        {
+            if (yield.HasValue && yield > threshold)
             {
-                foreach (var Ids in currentYearManureTypeIds)
-                {
-                    if (Ids == (int)NMP.Portal.Enums.ManureTypes.StrawMulch || Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated ||
-                        Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleBiologicallyTreated)
-                    {
-                        manureTypeCondition = true;
-                    }
-                }
+                return (int)Math.Round(((yield.Value - threshold) / step) * increment);
             }
-            if (previousYearManureTypeIds.Count > 0)
+            return 0;
+        }
+
+        private int ApplySoilTypeBonus(string soilType)
+        {
+            if (soilType == Resource.lblShallow)
             {
-                foreach (var Ids in previousYearManureTypeIds)
-                {
-                    if (Ids == (int)NMP.Portal.Enums.ManureTypes.StrawMulch || Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated ||
-                        Ids == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleBiologicallyTreated)
-                    {
-                        manureTypeCondition = true;
-                    }
-                }
+                return 20;
             }
-            if (manureTypeId == (int)NMP.Portal.Enums.ManureTypes.StrawMulch || manureTypeId == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated ||
-                        manureTypeId == (int)NMP.Portal.Enums.ManureTypes.PaperCrumbleBiologicallyTreated)
+            return 0;
+        }
+
+        private int ApplyCropInfo1Bonus(int? cropInfo1)
+        {
+            if (cropInfo1 == (int)Enums.CropInfoOne.Milling)
             {
-                manureTypeCondition = true;
+                return 40;
             }
-            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterWheat)
+            return 0;
+        }
+
+        private int ApplyPotentialCutBonus(int potentialCut)
+        {
+            if (potentialCut >= (int)Enums.PotentialCut.Three)
             {
-                if (soilType == Resource.lblShallow)
-                {
-                    nMaxLimit = nMaxLimit + 20;
-                }
-                if (cropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
-                {
-                    nMaxLimit = nMaxLimit + 40;
-                }
-                if (yield > 8.0m)
-                {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 8.0m) / 0.1m) * 2);
-                }
+                return 40;
             }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
+            return 0;
+        }
+
+        private bool IsManureBonusCrop(int cropTypeId)
+        {
+            int[] eligibleCrops =
             {
-                if (soilType == Resource.lblShallow)
-                {
-                    nMaxLimit = nMaxLimit + 20;
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley)
+                (int)Enums.CropTypes.WinterWheat,
+                (int)Enums.CropTypes.SpringWheat,
+                (int)Enums.CropTypes.WinterBarley,
+                (int)Enums.CropTypes.SpringBarley,
+                (int)Enums.CropTypes.WinterOilseedRape,
+                (int)Enums.CropTypes.SugarBeet,
+                (int)Enums.CropTypes.PotatoVarietyGroup1,
+                (int)Enums.CropTypes.PotatoVarietyGroup2,
+                (int)Enums.CropTypes.PotatoVarietyGroup3,
+                (int)Enums.CropTypes.PotatoVarietyGroup4,
+                (int)Enums.CropTypes.ForageMaize,
+                (int)Enums.CropTypes.WinterBeans,
+                (int)Enums.CropTypes.SpringBeans,
+                (int)Enums.CropTypes.Peas,
+                (int)Enums.CropTypes.Asparagus,
+                (int)Enums.CropTypes.Carrots,
+                (int)Enums.CropTypes.Radish,
+                (int)Enums.CropTypes.Swedes,
+                (int)Enums.CropTypes.CelerySelfBlanching,
+                (int)Enums.CropTypes.Courgettes,
+                (int)Enums.CropTypes.DwarfBeans,
+                (int)Enums.CropTypes.Lettuce,
+                (int)Enums.CropTypes.BulbOnions,
+                (int)Enums.CropTypes.SaladOnions,
+                (int)Enums.CropTypes.Parsnips,
+                (int)Enums.CropTypes.RunnerBeans,
+                (int)Enums.CropTypes.Sweetcorn,
+                (int)Enums.CropTypes.Turnips,
+                (int)Enums.CropTypes.Beetroot,
+                (int)Enums.CropTypes.BrusselSprouts,
+                (int)Enums.CropTypes.Cabbage,
+                (int)Enums.CropTypes.Calabrese,
+                (int)Enums.CropTypes.Cauliflower,
+                (int)Enums.CropTypes.Leeks,
+                (int)Enums.CropTypes.Grass,
+                (int)Enums.CropTypes.WholecropSpringBarley,
+                (int)Enums.CropTypes.WholecropSpringWheat,
+                (int)Enums.CropTypes.WholecropWinterBarley,
+                (int)Enums.CropTypes.WholecropWinterWheat
+            };
+
+            return eligibleCrops.Contains(cropTypeId);
+        }
+
+        public int NMaxLimit(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId,
+            int potentialCut, List<int> currentYearManure, List<int> previousYearManure, int? manureTypeId)
+        {
+            bool hasSpecialManure = HasSpecialManure(currentYearManure, manureTypeId)
+                                 || HasSpecialManure(previousYearManure, manureTypeId);
+
+            switch (cropTypeId)
             {
-                if (soilType == Resource.lblShallow)
-                {
-                    nMaxLimit = nMaxLimit + 20;
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat)
-            {
-                if (cropInfo1 == (int)NMP.Portal.Enums.CropInfoOne.Milling)
-                {
-                    nMaxLimit = nMaxLimit + 40;
-                }
-                if (yield > 7.0m)
-                {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 7.0m) / 0.1m) * 2);
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBarley)
-            {
-                if (soilType == Resource.lblShallow)
-                {
-                    nMaxLimit = nMaxLimit + 20;
-                }
-                if (yield > 6.5m)
-                {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 6.5m) / 0.1m) * 2);
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBarley)
-            {
-                if (yield > 5.5m)
-                {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 5.5m) / 0.1m) * 2);
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
-            {
-                if (yield > 3.5m)
-                {
-                    nMaxLimit = nMaxLimit + (int)Math.Round(((yield.Value - 3.5m) / 0.1m) * 6);
-                }
-            }
-            else if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
-            {
-                if(potentialCut >= (int)NMP.Portal.Enums.PotentialCut.Three)
-                {
-                    nMaxLimit = nMaxLimit + 40;
-                }
+                case (int)Enums.CropTypes.WinterWheat:
+                    nmaxLimit += ApplySoilTypeBonus(soilType);
+                    nmaxLimit += ApplyCropInfo1Bonus(cropInfo1);
+                    nmaxLimit += ApplyYieldBonus(yield, 8.0m, 0.1m, 2);
+                    break;
+
+                case (int)Enums.CropTypes.WholecropWinterWheat:
+                case (int)Enums.CropTypes.WholecropWinterBarley:
+                    nmaxLimit += ApplySoilTypeBonus(soilType);
+                    break;
+
+                case (int)Enums.CropTypes.SpringWheat:
+                    nmaxLimit += ApplyCropInfo1Bonus(cropInfo1);
+                    nmaxLimit += ApplyYieldBonus(yield, 7.0m, 0.1m, 2);
+                    break;
+
+                case (int)Enums.CropTypes.WinterBarley:
+                    nmaxLimit += ApplySoilTypeBonus(soilType);
+                    nmaxLimit += ApplyYieldBonus(yield, 6.5m, 0.1m, 2);
+                    break;
+
+                case (int)Enums.CropTypes.SpringBarley:
+                    nmaxLimit += ApplyYieldBonus(yield, 5.5m, 0.1m, 2);
+                    break;
+
+                case (int)Enums.CropTypes.WinterOilseedRape:
+                    nmaxLimit += ApplyYieldBonus(yield, 3.5m, 0.1m, 6);
+                    break;
+
+                case (int)Enums.CropTypes.Grass:                    
+                        nmaxLimit += ApplyPotentialCutBonus(potentialCut);                   
+                    break;
             }
 
-            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterWheat || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringWheat
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBarley || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBarley
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SugarBeet
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 || cropTypeId == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.ForageMaize || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterBeans
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SpringBeans || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Peas
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Carrots
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Radish || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Swedes
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.CelerySelfBlanching || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Courgettes
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.DwarfBeans || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Lettuce
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Parsnips || cropTypeId == (int)NMP.Portal.Enums.CropTypes.RunnerBeans
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Sweetcorn || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Turnips
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Beetroot || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BrusselSprouts
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cabbage || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Calabrese
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Cauliflower || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Leeks
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropSpringBarley
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropSpringWheat
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterBarley
-                || cropTypeId == (int)NMP.Portal.Enums.CropTypes.WholecropWinterWheat)
+            if (hasSpecialManure && IsManureBonusCrop(cropTypeId))
             {
-                if (manureTypeCondition)
-                {
-                    nMaxLimit = nMaxLimit + 80;
-                }
+                nmaxLimit += 80;
             }
 
-
-
-
-            return nMaxLimit;
-
+            return nmaxLimit;
         }
     }
 }
