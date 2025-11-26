@@ -641,7 +641,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Soil pH value</value>
   </data>
   <data name="MsgDateExample" xml:space="preserve">
-    <value>For example, 27 3 2023</value>
+    <value>For example, 27 3 {0}</value>
   </data>
   <data name="MsgEnterADateBeforeContinuing" xml:space="preserve">
     <value>Enter a date before continuing</value>
@@ -1256,7 +1256,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>If you do not know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblSampleDate" xml:space="preserve">
-    <value>The date format is '27 3 2023'.</value>
+    <value>The date format is '27 3 {0}'.</value>
   </data>
   <data name="lblAmmonium" xml:space="preserve">
     <value>Ammonium (N)</value>
@@ -1596,9 +1596,6 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
     <value>Area must be greater than zero</value>
-  </data>
-  <data name="lblForExample" xml:space="preserve">
-    <value>For example, 27 03 2023</value>
   </data>
   <data name="lblKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
@@ -2492,7 +2489,7 @@ cubic metres per hectare  not set</value>
     <value>We could not change soil analysis data, try again later</value>
   </data>
   <data name="MsgSampleDateExample" xml:space="preserve">
-    <value>For example, 11 February 2023</value>
+    <value>For example, 11 February {0}</value>
   </data>
   <data name="MsgSoilAnalysisChangesCouldNotSaved" xml:space="preserve">
     <value>Your soil analysis changes could not be saved.</value>
@@ -2510,7 +2507,7 @@ cubic metres per hectare  not set</value>
     <value>Update {0}</value>
   </data>
   <data name="hintTheDateFormat" xml:space="preserve">
-    <value>The date format is 21 06 2024.</value>
+    <value>The date format is 21 06 {0}.</value>
   </data>
   <data name="lblBasedOnYourCropSoilTypeAndFarmDetails" xml:space="preserve">
     <value>Based on your crop, soil type and farm details.</value>

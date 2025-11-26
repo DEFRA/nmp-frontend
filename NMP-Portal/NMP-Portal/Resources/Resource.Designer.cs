@@ -439,7 +439,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date format is 21 06 2024..
+        ///   Looks up a localized string similar to The date format is 21 06 {0}..
         /// </summary>
         public static string hintTheDateFormat {
             get {
@@ -5727,15 +5727,6 @@ namespace NMP.Portal.Resources {
         public static string lblForEarthBankedLagoonsYouMustKeep {
             get {
                 return ResourceManager.GetString("lblForEarthBankedLagoonsYouMustKeep", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For example, 27 03 2023.
-        /// </summary>
-        public static string lblForExample {
-            get {
-                return ResourceManager.GetString("lblForExample", resourceCulture);
             }
         }
         
@@ -11629,7 +11620,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date format is &apos;27 3 2023&apos;..
+        ///   Looks up a localized string similar to The date format is &apos;27 3 {0}&apos;..
         /// </summary>
         public static string lblSampleDate {
             get {
@@ -17861,7 +17852,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 27 3 2023.
+        ///   Looks up a localized string similar to For example, 27 3 {0}.
         /// </summary>
         public static string MsgDateExample {
             get {
@@ -19823,7 +19814,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 11 February 2023.
+        ///   Looks up a localized string similar to For example, 11 February {0}.
         /// </summary>
         public static string MsgSampleDateExample {
             get {
