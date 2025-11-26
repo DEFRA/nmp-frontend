@@ -5263,7 +5263,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021.
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales).
         /// </summary>
         public static string lblFarmingRuleOfWaterThirdForWale {
             get {
@@ -7244,7 +7244,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of nitrogen from organic manures..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of nitrogen from organic manures..
         /// </summary>
         public static string lblItIsAnOffenceToBreachTheWaterResources {
             get {
@@ -13449,7 +13449,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021.
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales).
         /// </summary>
         public static string lblTheWaterResourcesRegulations2021 {
             get {
@@ -15042,7 +15042,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;.
+        ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) Regulations 2021  (Wales)&lt;/a&gt;.
         /// </summary>
         public static string lblWalesWaterResourceRegulations {
             get {
@@ -17328,7 +17328,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider changing your application date..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider changing your application date..
         /// </summary>
         public static string Msg31OctoberToEndPeriodFertiliserWarningPara2Wales {
             get {
@@ -17600,7 +17600,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
         /// </summary>
         public static string MsgClosedPeriodFertiliserWarningPara2Wales {
             get {
@@ -17681,7 +17681,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of inorganic nitrogen fertiliser..
         /// </summary>
         public static string MsgClosedPeriodNitrogenExceedWarningPara2Wales {
             get {
@@ -17708,7 +17708,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of inorganic nitrogen fertiliser..
         /// </summary>
         public static string MsgClosedPeriodNRateExceedWarningPara2Wales {
             get {
@@ -17753,7 +17753,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
         /// </summary>
         public static string MsgClosedPeriodWarningPara2Wales {
             get {
@@ -17870,7 +17870,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara2Wales {
             get {
@@ -18230,7 +18230,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of slurry..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of slurry..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2nd30SlurryWales {
             get {
@@ -18248,7 +18248,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of poultry manure..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of poultry manure..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2nd8PoultryWales {
             get {
@@ -18257,7 +18257,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider allowing more time between applications..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider allowing more time between applications..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales {
             get {
@@ -19184,7 +19184,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of nitrogen from organic manures..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of nitrogen from organic manures..
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceedAdditionalWales {
             get {
@@ -20210,7 +20210,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of high readily available nitrogen organic manure..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of high readily available nitrogen organic manure..
         /// </summary>
         public static string MsgStartClosedPeriodEndFebWarningPara2Wales {
             get {
