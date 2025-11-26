@@ -89,7 +89,7 @@
                                         else
                                         {
                                             <a asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-isPlanRecord="true">
-                                                @string.Format((Model.HarvestYear[i].IsThisOldYear) ? Resource.lblEnterYearInformation : Resource.lblStartAPlan, Model.HarvestYear[i].Year)
+                                                @string.Format((Model.HarvestYear[i].IsThisOldYear) ? Resource.lblEnterTheDetailsFor : Resource.lblStartAPlan, Model.HarvestYear[i].Year)
                                             </a>
                                         }
                                     </td>
