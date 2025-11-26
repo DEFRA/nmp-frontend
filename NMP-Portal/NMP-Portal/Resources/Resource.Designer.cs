@@ -4858,6 +4858,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the details for {0}.
+        /// </summary>
+        public static string lblEnterTheDetailsFor {
+            get {
+                return ResourceManager.GetString("lblEnterTheDetailsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the number of shoots per square metre.
         /// </summary>
         public static string lblEnterTheNumberOfShootsPerSquareMetre {
@@ -4890,15 +4899,6 @@ namespace NMP.Portal.Resources {
         public static string lblEnterValidValue {
             get {
                 return ResourceManager.GetString("lblEnterValidValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter {0} information.
-        /// </summary>
-        public static string lblEnterYearInformation {
-            get {
-                return ResourceManager.GetString("lblEnterYearInformation", resourceCulture);
             }
         }
         
