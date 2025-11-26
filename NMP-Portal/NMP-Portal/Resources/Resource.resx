@@ -457,14 +457,8 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
   <data name="lblUpdateFarmDetails" xml:space="preserve">
     <value>Update farm details</value>
   </data>
-  <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
-    <value>Add or update fields and soil analysis</value>
-  </data>
   <data name="lblYouHaveAdded" xml:space="preserve">
     <value> You have added {0}</value>
-  </data>
-  <data name="lblThisFarmHas" xml:space="preserve">
-    <value>This farm has {0} fields.</value>
   </data>
   <data name="lblFieldMeasurements" xml:space="preserve">
     <value>Field measurements for {0}</value>
@@ -5791,8 +5785,8 @@ livestock manure.</value>
   <data name="lblLoadingOverlayContentOne" xml:space="preserve">
     <value>Loading...</value>
   </data>
-  <data name="lblEnterYearInformation" xml:space="preserve">
-    <value>Enter {0} information</value>
+  <data name="lblEnterTheDetailsFor" xml:space="preserve">
+    <value>Enter the details for {0}</value>
   </data>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
@@ -7005,6 +6999,12 @@ livestock manure.</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
     <value>25th November 2025</value>
+  </data>
+  <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
+    <value>Add or update fields and soil analysis</value>
+  </data>
+  <data name="lblThisFarmHas" xml:space="preserve">
+    <value>This farm has {0} fields.</value>
   </data>
   <data name="lblLivestockManureNitrogenNFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit</value>
