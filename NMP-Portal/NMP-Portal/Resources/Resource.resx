@@ -437,7 +437,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add fields for {0}</value>
   </data>
   <data name="lblAddYourFields" xml:space="preserve">
-    <value>Add your fields</value>
+    <value>add your fields</value>
   </data>
   <data name="lblAllFarm" xml:space="preserve">
     <value>All farms</value>
@@ -452,19 +452,19 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Farm summary</value>
   </data>
   <data name="lblToStartCreatingPlanAndRecords" xml:space="preserve">
-    <value> to start creating plans and records.</value>
+    <value>To start creating plans and recording details, </value>
   </data>
   <data name="lblUpdateFarmDetails" xml:space="preserve">
     <value>Update farm details</value>
   </data>
-  <data name="lblUpdateFieldsOrSoilAnalysis" xml:space="preserve">
-    <value>Update fields or soil analysis</value>
+  <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
+    <value>Add or update fields and soil analysis</value>
   </data>
   <data name="lblYouHaveAdded" xml:space="preserve">
     <value> You have added {0}</value>
   </data>
-  <data name="lblFieldsCount" xml:space="preserve">
-    <value>{0} field(s)</value>
+  <data name="lblThisFarmHas" xml:space="preserve">
+    <value>This farm has {0} fields.</value>
   </data>
   <data name="lblFieldMeasurements" xml:space="preserve">
     <value>Field measurements for {0}</value>
@@ -4719,13 +4719,13 @@ live</value>
     <value>Which cut or grazing is this inorganic material application for in {0}?</value>
   </data>
   <data name="lblFarmSummaryContent1" xml:space="preserve">
-    <value>Nutrient management planning</value>
+    <value>Create a nutrient management plan</value>
   </data>
   <data name="lblFarmSummaryContent2" xml:space="preserve">
-    <value>Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), and add organic material and inorganic fertiliser applications.</value>
+    <value>Add crops, organic and inorganic material applications, and get nutrient and lime recommendations from the Nutrient Management Guide (RB209)</value>
   </data>
   <data name="lblFarmSummaryContent3" xml:space="preserve">
-    <value>View, create or update a plan</value>
+    <value>View, create or update a nutrient management plan</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field or crop information for {0}</value>
@@ -4749,10 +4749,10 @@ live</value>
     <value>What type of report do you want to create from your {0} data?</value>
   </data>
   <data name="lblFarmSummaryContent4" xml:space="preserve">
-    <value>Reports and outputs</value>
+    <value>Create Nitrate Vulnerable Zone (NVZ) reports</value>
   </data>
   <data name="lblFarmSummaryContent5" xml:space="preserve">
-    <value>Create reports for NVZ compliance (N-max, livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning.</value>
+    <value>Create field and crop level reports, including:</value>
   </data>
   <data name="lblFarmSummaryContent6" xml:space="preserve">
     <value>Create a report</value>
@@ -7005,5 +7005,23 @@ livestock manure.</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
     <value>25th November 2025</value>
+  </data>
+  <data name="lblLivestockManureNitrogenNFarmLimit" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit</value>
+  </data>
+  <data name="lblExistingManureStorageCapacity" xml:space="preserve">
+    <value>Existing manure storage capacity</value>
+  </data>
+  <data name="lblOrganicManureInventoryAndStorageRequirement" xml:space="preserve">
+    <value>Organic manure inventory and storage requirement</value>
+  </data>
+  <data name="lblCreateAnNVZReport" xml:space="preserve">
+    <value>Create an NVZ report</value>
+  </data>
+  <data name="lblThisFarmhasNoFields" xml:space="preserve">
+    <value>This farm has no fields.</value>
+  </data>
+  <data name="lblAddAField" xml:space="preserve">
+    <value>Add a field</value>
   </data>
 </root>
