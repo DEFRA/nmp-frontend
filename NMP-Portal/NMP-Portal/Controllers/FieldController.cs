@@ -70,11 +70,36 @@ namespace NMP.Portal.Controllers
             return View();
         }
 
-        public IActionResult CreateFieldCancel(string id)
+        public IActionResult CreateFieldCancel(string id, string? q)
         {
             _logger.LogTrace($"Field Controller : CreateFieldCancel({id}) action called");
-            _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
-            return RedirectToAction("FarmSummary", "Farm", new { Id = id });
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                return RedirectToAction("FarmSummary", "Farm", new { Id = id });
+            }
+            else
+            {
+                FieldViewModel? model = null;
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
+                {
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                }
+                if (model != null)
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId) && !string.IsNullOrWhiteSpace(model.EncryptedFarmId))
+                    {
+                        return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId });
+                    }
+                    return RedirectToAction("FarmSummary", "Farm", new { Id = id });
+                }
+                else
+                {
+                    _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
+                    return RedirectToAction("FarmSummary", "Farm", new { Id = id });
+                }
+            }
         }
 
         public async Task<IActionResult> BackActionForAddField(string id)
@@ -1980,19 +2005,19 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
 
-                if (tasks != null&&tasks.Count>0)
+                if (tasks != null && tasks.Count > 0)
                 {
                     var completedTasks = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
                     var hasGrass = completedTasks.Any(t => t.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
                     int maxYear = completedTasks.Where(x => x.HarvestYear.HasValue).Max(x => x.HarvestYear.Value);
                     if (hasGrass)
                     {
-                        ViewBag.PreviousCroppingsList = completedTasks.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass||x.HarvestYear==maxYear).ToList();
+                        ViewBag.PreviousCroppingsList = completedTasks.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass || x.HarvestYear == maxYear).ToList();
                     }
                     else
                     {
-                        
-                        ViewBag.PreviousCroppingsList = completedTasks.Where(x=> x.HarvestYear.HasValue&&x.HarvestYear.Value== maxYear).ToList();
+
+                        ViewBag.PreviousCroppingsList = completedTasks.Where(x => x.HarvestYear.HasValue && x.HarvestYear.Value == maxYear).ToList();
                     }
                 }
 
@@ -3327,8 +3352,9 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                string isComingFromUpdate = !string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) ? _fieldDataProtector.Protect(true.ToString()) : _fieldDataProtector.Protect(false.ToString());
                 //HttpContext?.Session.Remove("FieldData");
-                return RedirectToAction("CreateFieldCancel", new { id = model.EncryptedFarmId });
+                return RedirectToAction("CreateFieldCancel", new { id = model.EncryptedFarmId, q = isComingFromUpdate });
             }
 
         }

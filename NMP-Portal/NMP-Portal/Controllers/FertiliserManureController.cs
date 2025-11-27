@@ -5966,7 +5966,7 @@ namespace NMP.Portal.Controllers
                         model.DoubleCropCurrentCounter = 0;
                         model.DoubleCropEncryptedCounter = string.Empty;
                         _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FertiliserManure", model);
-                        if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
+                        if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
                         {
                             return RedirectToAction("CheckAnswer");
                         }
