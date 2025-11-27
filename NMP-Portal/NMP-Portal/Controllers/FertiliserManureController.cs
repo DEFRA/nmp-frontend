@@ -1770,7 +1770,7 @@ namespace NMP.Portal.Controllers
                                         if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                         {
                                             (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
-                                            if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                                            if (error == null && defoliationSequence != null)
                                             {
                                                 int? defoliation = model.FertiliserManures?.FirstOrDefault()?.Defoliation;
                                                 if (defoliation != null)
@@ -2108,7 +2108,7 @@ namespace NMP.Portal.Controllers
                                             if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                             {
                                                 (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
-                                                if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                                                if (error == null && defoliationSequence != null)
                                                 {
                                                     int? defoliation = model.FertiliserManures?.FirstOrDefault()?.Defoliation;
                                                     if (defoliation != null)
