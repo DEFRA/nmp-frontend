@@ -320,27 +320,7 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction("CheckAnswer");
         }
-
-        //[HttpGet]
-        //public IActionResult HasGrassInLastThreeYear()
-        //{
-        //    _logger.LogTrace($"Previous Croppping Controller : HasGrassInLastThreeYear() action called");
-        //    Error error = new Error();
-
-        //    PreviousCroppingViewModel model = new PreviousCroppingViewModel();
-        //    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("PreviousCroppingData"))
-        //    {
-        //        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<PreviousCroppingViewModel>("PreviousCroppingData");
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("FarmList", "Farm");
-        //    }
-        //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("PreviousCroppingData", model);
-        //    return View(model);
-        //}
-
-
+        
         [HttpGet]
         public IActionResult GrassLastThreeHarvestYear()
         {

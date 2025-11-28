@@ -50,13 +50,12 @@ namespace NMP.Portal.Security
 
                 if(tokens == null || string.IsNullOrEmpty(tokens.AccessToken))
                 {
-                    throw new Exception("Failed to refresh access token.");
-                    //return null;
+                    throw new Exception("Failed to refresh access token.");                    
                 }
                 // Update authentication session
                 var auth = await context.AuthenticateAsync();
-                auth.Properties.UpdateTokenValue("access_token", tokens.AccessToken);
-                auth.Properties.UpdateTokenValue("refresh_token", tokens.RefreshToken);
+                auth?.Properties?.UpdateTokenValue("access_token", tokens.AccessToken);
+                auth?.Properties?.UpdateTokenValue("refresh_token", tokens.RefreshToken);
                 await context.SignInAsync(auth.Principal, auth.Properties);
 
             }

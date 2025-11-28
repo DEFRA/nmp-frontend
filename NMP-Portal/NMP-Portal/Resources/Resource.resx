@@ -7001,7 +7001,7 @@ livestock manure.</value>
     <value>Add or update fields and soil analysis</value>
   </data>
   <data name="lblThisFarmHas" xml:space="preserve">
-    <value>This farm has {0} fields.</value>
+    <value>This farm has {0} field(s).</value>
   </data>
   <data name="lblLivestockManureNitrogenNFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit</value>

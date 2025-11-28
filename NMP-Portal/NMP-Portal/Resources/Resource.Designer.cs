@@ -13557,7 +13557,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This farm has {0} fields..
+        ///   Looks up a localized string similar to This farm has {0} field(s)..
         /// </summary>
         public static string lblThisFarmHas {
             get {
