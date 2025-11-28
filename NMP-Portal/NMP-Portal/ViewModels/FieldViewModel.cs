@@ -14,13 +14,14 @@ namespace NMP.Portal.ViewModels
             Fields = new List<Field>();
             ManagementPeriods = new List<ManagementPeriod>();
             PKBalance = new PKBalance();
-            PreviousGrasses = new PreviousGrass();
+            PreviousCroppings = new PreviousCropping();
+            PreviousCroppingsList = new List<PreviousCroppingData>();
         }
         public List<Field> Fields { get; set; }
         public List<ManagementPeriod> ManagementPeriods { get; set; }
         public bool IsSoilReleasingClay { get; set; } = false;
         public SoilAnalysis SoilAnalyses { get; set; }
-        public PreviousGrass PreviousGrasses { get; set; }
+        public PreviousCropping PreviousCroppings { get; set; }
         public List<Crop> Crops { get; set; }
         public PKBalance PKBalance { get; set; }
         public int? CropTypeID { get; set; }
@@ -59,5 +60,7 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedHarvestYear { get; set; }
         public bool IsHasGrassInLastThreeYearChange { get; set; } = false;
         public bool? IsCancel { get; set; }
+        public List<PreviousCroppingData> PreviousCroppingsList { get; set; }
+        public bool IsLastHarvestYearChange { get; set; } = false;
     }
 }

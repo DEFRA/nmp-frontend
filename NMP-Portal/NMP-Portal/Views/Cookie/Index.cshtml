@@ -1,0 +1,195 @@
+﻿@using NMP.Portal.Resources
+@{
+    ViewData["Title"] = Resource.lblCookies;
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+        <p class="govuk-body">@Resource.ContentAbourCookies</p>       
+        <h2 class="govuk-heading-m">@Resource.SubHeadingCookiesThatAreStrictlyNecessary</h2>
+        <p class="govuk-body">
+            @Resource.ContentEssentialCookieStatementText
+        </p>       
+        <h3 class="govuk-heading-s">@Resource.SubHeadingEssentialCookies</h3>
+        <div class="table-container">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblName</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblPurpose</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblExpires</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.CookieChallengeCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentLetsUsKnowThatYouHaveBeenAskedAboutCookies
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblNever
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.CrumbCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentHelpsToPreventUnauthorisedRequests
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.IdmCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentLetsUsKnowThatYouHaveLoggedInOrRegistered
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblThreeDays
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.InteractionCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblThreeDays
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.InteractionSigCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblThreeDays
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.SessionCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentStoreInformationThatYouHaveSubmitted
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblThreeDays
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 class="govuk-heading-s">@Resource.SubHeadingAzureActiveDirectoryB2Ccookies</h3>
+        <div class="table-container">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblName</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblPurpose</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblExpires</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.AdminCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentHoldsUserMembershipDataAcrossTenants
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.SliceCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentUsedToRouteRequestsToTheAppropriateProductionInstance
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.TransCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentUsedForTrackingTheTransactionsAndTheCurrentTransaction
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.SSOIdCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentUsedForMaintainingTheSSOSession
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.CacheIdCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentUsedForMaintainingTheRequestState
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.CpimCsrfCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentCrossSiteRequestForgeryToken
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.DcCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentUsedForAzureADB2CNetworkRouting
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.CtxCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblContext
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.RpCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.ContentUsedForStoringMembershipDataForTheResourceProviderTenant
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.CsrfCookieName</td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblUsedForStoringTheRelayCookie
+                        </td>
+                        <td class="govuk-table__cell">
+                            @Resource.lblOnClosingBrowser
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h2 class="govuk-heading-m">@Resource.lblGovernmentServices</h2>
+        <p class="govuk-body">
+            @Resource.ContentCookiesOfOtherGovServices
+        </p>
+        <p class="govuk-body">
+            @Resource.lblCookieStatementUpdateOn
+        </p>
+    </div>
+</div>

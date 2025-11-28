@@ -3,20 +3,15 @@
 @{
     ViewData["Title"] = Model.Message;
 }
-
-@* <h1 class="text-danger">@ViewData["Title"]</h1> *@
-@* <govuk-error-summary>
-    <govuk-error-summary-item href="#">@Model.Message</govuk-error-summary-item>
-</govuk-error-summary> *@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-body">
-            <h1 class="govuk-heading-xl">                
+            <h1 class="govuk-heading-xl">
                 <strong>
                     @Resource.lblTechnicalDifficulties
                 </strong>
             </h1>
-            <p>@Html.Raw(string.Format(Resource.lblReportError, Model.Code))</p>            
+            <p>@Html.Raw(string.Format(Resource.lblReportError, Model.Code))</p>
         </div>
     </div>
 </div>

@@ -2,14 +2,14 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblNMaxReport, Model.Farm?.Name, Model.Year);
+    ViewData["Title"] = $"{string.Format(Resource.ReportTitle, Resource.lblNMaxReport, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
     int nMaxLimitCounter = 1;
     int totalCount = Model.NMaxLimitReport.Count;
 }
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ExportFieldsOrCropType" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
+        <govuk-back-link asp-action="ExportFieldsOrCropType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
     </div>
 
 }
@@ -20,36 +20,34 @@
     </govuk-error-summary>
 }
 <div class="govuk-grid-row noprint">
-    <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h2>
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h3 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h3>
         <ol class="govuk-list govuk-list--number">
             <li>@Html.Raw(Resource.lblPrint1)</li>
             <li>@Html.Raw(Resource.lblPrint2)</li>
             <li>@Html.Raw(Resource.lblPrint3)</li>
         </ol>
-        <govuk-button id="cropReportPrintButton" type="button">
+        <govuk-button class="margin-bottom-forty" id="cropReportPrintButton" type="button">
             @Resource.lblPrintOrSaveAsAPDF
         </govuk-button>
     </div>
 </div>
-<div class="govuk-grid-row noprint margin-bottom-thirty">
+<div class="govuk-grid-row noprint">
     <div class="govuk-grid-column-full">
-
-        <hr>
-
+        <hr class="margin-bottom-forty">
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full nmax_header">
-        <h1 class="govuk-heading-xl">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl margin-bottom-thirty">
             @string.Format(Resource.lblNMaxLimitsForFarm, Model.FarmName)
         </h1>
         <h2 class="govuk-heading-l">@(string.Format(Resource.lblHarvestYearValue, Model.Year))</h2>
-        <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
+        <p class="govuk-body margin-bottom-thirty">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
 
     </div>
 </div>
-<div class="govuk-grid-row margin-bottom-twenty">
+<div class="govuk-grid-row margin-bottom-ten">
     <div class="govuk-grid-column-one-third">
         <p class="govuk-body">
             @Model.Farm.Name, <br>
@@ -88,45 +86,34 @@
             <br />
         </p> *@
     </div>
-
-</div>
-<hr class="seperator_forty">
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-s">@Resource.lblPrivate_beta_disclaimer</h2>
-        <p class="govuk-body">
-            @Resource.lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport
-        </p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line1</li>
-            <li>@Resource.lblPrivate_beta_disclaimer_sub_heading_line2</li>
-        </ul>
-    </div>
 </div>
 @if (Model.NMaxLimitReport != null && Model.NMaxLimitReport.Count > 0)
 {
-    <hr class="seperator_forty" />
-
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-full">
+            <hr class="margin-bottom-thirty" />
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <h2 class="govuk-heading-l">@Resource.lblSummary</h2>
-            <table class="data-table govuk-table">
+            <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblNMaxCompliant</th>
                     </tr>
                 </thead>
-                @foreach (var group in Model.NMaxLimitReport.GroupBy(r => string.IsNullOrWhiteSpace(r.GroupName) ? r.CropTypeName : r.GroupName))
+                @foreach (var nMaxLimit in Model.NMaxLimitReport)
                 {
-                    var groupName = group.Key;
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="col_1 govuk-table__cell">
-                                @(!string.IsNullOrWhiteSpace(groupName) ? string.Format(Resource.LblCropTypeFields, groupName) : group.First().CropTypeName)
+                                @nMaxLimit.GroupName
+                                @* @(!string.IsNullOrWhiteSpace(groupName) ? string.Format(Resource.LblCropTypeFields, groupName) : group.First().CropTypeName) *@
                                 @* @(string.Format(Resource.LblCropTypeFields, (!string.IsNullOrWhiteSpace(nMaxLimit.VegetableGroup)) ? nMaxLimit.VegetableGroup : nMaxLimit.CropTypeName)) *@
                             </td>
-                            <td class="col_2 govuk-table__cell">@(group.First().IsComply ? Resource.lblYes : Resource.lblNo)</td>
+                            <td class="col_2 govuk-table__cell">@(nMaxLimit.IsComply? Resource.lblYes: Resource.lblNo)</td>
                         </tr>
                     </tbody>
                 }
@@ -135,76 +122,62 @@
     </div>
     <div class="govuk-grid-row pagebreak">
         <div class="govuk-grid-column-full">
-
-            <p class="govuk-body margin-bottom-none">
+            <p class="govuk-body margin-bottom-thirty">
                 @Resource.lblNMaxReportSummaryContent
             </p>
-
-            <hr class="seperator_forty" />
-            <div class="pagebreak">&nbsp;</div>
+            <hr class="margin-bottom-thirty" />
+            @*<div class="pagebreak">&nbsp;</div>*@
+             
         </div>
-
     </div>
 
-    <div class="margin-bottom-forty">
-        <div class="margin-bottom-forty">
-
-            <div class="margin-bottom-forty">
-
-                @foreach (var group in Model.NMaxLimitReport.GroupBy(r => string.IsNullOrWhiteSpace(r.GroupName) ? r.CropTypeName : r.GroupName))
+    <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">            
+                @foreach (var nMaxLimit in Model.NMaxLimitReport)
                 {
-                    var groupName = group.Key;
-                    var reports = group.ToList();
-
                     totalCount--;
+                    nMaxLimitCounter = 1;
 
-
-                    @if (reports != null && reports.Count > 0)
-                    {
-                        nMaxLimitCounter = 1;
-                        <h2 class="govuk-heading-l">
-                            @(string.Format(Resource.LblCropTypeFields, (!string.IsNullOrWhiteSpace(groupName)) ? groupName : group.First().CropTypeName))
-                        </h2>
-                        <h3 class="govuk-heading-m">
-                            @string.Format(Resource.lblNMaxLimitForWinterWheatFields, (!string.IsNullOrWhiteSpace(groupName)) ? groupName : string.Format(Resource.LblCropTypeFields, group.First().CropTypeName))
-                        </h3>
-                        <p class="govuk-body">
-                            @string.Format(Resource.lblNitrogenApplicationsToCropTypeContent1, (!string.IsNullOrWhiteSpace(groupName)) ? groupName.ToLower() : group.First().CropTypeName)
-
-                            <!-- @Resource.lblNitrogenApplicationsToCropTypeContent1 -->
-
-                            <span class="strong">
-                                @if (group.First().IsComply)
-                                {
-                                    @Resource.lblCompliance.ToLower()
-                                }
-                                else
-                                {
-                                    @Resource.lblNonCompliance.ToLower()
-                                }
-                            </span>
-                            @Resource.lblNitrogenApplicationsToCropTypeContent2
-                        </p>
-                        <p class="govuk-body">
-                            @string.Format(Resource.lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare, ((!string.IsNullOrWhiteSpace(groupName)) ? group.First().CropTypeName : string.Format(Resource.LblCropTypeFields, group.First().CropTypeName)), group.First().NmaxLimit)
-                        </p>
-                        <table class="new_nmax_table new_nmax_table_crop govuk-table">
+                    <h2 class="govuk-heading-l">
+                        @string.Format(Resource.LblCropTypeFields, nMaxLimit.GroupName)
+                    </h2>
+                    <h3 class="govuk-heading-m">
+                        @string.Format(Resource.lblNMaxLimitForWinterWheatFields, nMaxLimit.GroupName)
+                    </h3>
+                    <p class="govuk-body"> 
+                        @Resource.lblNitrogenApplicationsToCropTypeContent1 
+                        <span class="strong">
+                            @if (nMaxLimit.IsComply)
+                            {
+                                @Resource.lblCompliance.ToLower()
+                            }
+                            else
+                            {
+                                @Resource.lblNonCompliance.ToLower()
+                            }
+                        </span>
+                        @Resource.lblNitrogenApplicationsToCropTypeContent2
+                    </p>
+                    <p class="govuk-body">
+                        @string.Format(Resource.lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare, nMaxLimit.GroupName, nMaxLimit.NmaxLimit)
+                    </p>
+                    <div class="table-container margin-bottom-forty">
+                        <table class="govuk-table">
                             <thead class="govuk-table__head">
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCropArea</th>
-                                    @if (groupName.Equals(Resource.lblGroup1Vegetables)
-                                                            || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables))
+                                    @if (nMaxLimit.GroupName.Equals(Resource.lblGroup1Vegetables) || nMaxLimit.GroupName.Equals(Resource.lblGroup2Vegetables) || nMaxLimit.GroupName.Equals(Resource.lblGroup3Vegetables))
                                     {
                                         <th scope="col" class="govuk-table__header">@Resource.lblCropType</th>
                                     }
                                     <th scope="col" class="govuk-table__header">
-                                        @(group.First().CropTypeName == Resource.lblGrass ? Resource.lblGrassCutOnlyAdjustment : Resource.lblCropYield)
+                                        @(nMaxLimit.CropTypeName == Resource.lblGrass ? Resource.lblGrassCutOnlyAdjustment : Resource.lblCropYield)
                                         <br><span class="nonbold">@Resource.lblPerHa</span>
                                     </th>
 
-                                    @if (group.First().CropTypeName != Resource.lblGrass && !(groupName.Equals(Resource.lblGroup1Vegetables)
-                                                            || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables)))
+                                    @if (nMaxLimit.GroupName != Resource.lblGrass && !(nMaxLimit.GroupName.Equals(Resource.lblGroup1Vegetables)
+                                                            || nMaxLimit.GroupName.Equals(Resource.lblGroup2Vegetables) || nMaxLimit.GroupName.Equals(Resource.lblGroup3Vegetables)))
                                     {
                                         <th scope="col" class="govuk-table__header">
                                             @Resource.lblSoilTypeAdjustment
@@ -231,61 +204,57 @@
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
-
-                                @foreach (var report in reports)
+                                @foreach (var nMaxLimitReportResponse in nMaxLimit.NMaxLimitReportResponse)
                                 {
-                                    foreach (var nMaxLimitReportResponse in report.NMaxLimitReportResponse)
-                                    {
-                                        <tr class="govuk-table__row">
-                                            <td class="govuk-table__cell">@nMaxLimitReportResponse.FieldName</td>
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@nMaxLimitReportResponse.FieldName</td>
+                                        <td class="govuk-table__cell">
+                                            @string.Format("{0:N1}{1}", nMaxLimitReportResponse.CropArea, Resource.lblHectareForReport)
+                                        </td>
+                                        @if (nMaxLimit.GroupName.Equals(Resource.lblGroup1Vegetables)
+                                                                || nMaxLimit.GroupName.Equals(Resource.lblGroup2Vegetables) || nMaxLimit.GroupName.Equals(Resource.lblGroup3Vegetables))
+                                        {
+                                            <td class="govuk-table__cell">@nMaxLimitReportResponse.CropTypeName</td>
                                             <td class="govuk-table__cell">
-                                                @string.Format("{0:N2}{1}",  nMaxLimitReportResponse.CropArea, Resource.lblHectareForReport)
+                                                @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0:N1}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
                                             </td>
-                                            @if (groupName.Equals(Resource.lblGroup1Vegetables)
-                                                                    || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables))
-                                            {
-                                                <td class="govuk-table__cell">@nMaxLimitReportResponse.CropTypeName</td>
-                                                <td class="govuk-table__cell">
-                                                    @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0:N2}{1}",  nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
-                                                </td>
-                                            }
-                                            else if (group.First().CropTypeName != Resource.lblGrass)
-                                            {
-                                                <td class="govuk-table__cell">
-                                                    @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0:N3}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
-                                                </td>
-                                                <td class="govuk-table__cell">@((nMaxLimitReportResponse.SoilTypeAdjustment != null && nMaxLimitReportResponse.SoilTypeAdjustment > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.SoilTypeAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
-                                                <td class="govuk-table__cell">@((nMaxLimitReportResponse.YieldAdjustment != null && nMaxLimitReportResponse.YieldAdjustment > 0) ? string.Format("{0:N0}{1}",  nMaxLimitReportResponse.YieldAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
-                                                <td class="govuk-table__cell">@((nMaxLimitReportResponse.MillingWheat != null && nMaxLimitReportResponse.MillingWheat > 0) ? string.Format("{0}{1}",  nMaxLimitReportResponse.MillingWheat, Resource.lblkg) : Resource.lblHyphen)</td>
-                                            }
-                                            else
-                                            {
-                                                <td class="govuk-table__cell">@((nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts != null && nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts > 0) ? string.Format("{0}{1}",nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts, Resource.lblkg) : Resource.lblHyphen)</td>
-                                            }
-                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.PaperCrumbleOrStrawMulch != null && nMaxLimitReportResponse.PaperCrumbleOrStrawMulch > 0) ? string.Format("{0}{1}",  nMaxLimitReportResponse.PaperCrumbleOrStrawMulch, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        }
+                                        else if (nMaxLimit.CropTypeName != Resource.lblGrass)
+                                        {
                                             <td class="govuk-table__cell">
-                                                @((nMaxLimitReportResponse.AdjustedNMaxLimit != null && nMaxLimitReportResponse.AdjustedNMaxLimit > 0) ? string.Format("{0:N0}{1}", nMaxLimitReportResponse.AdjustedNMaxLimit, Resource.lblkg) : Resource.lblHyphen)
+                                                @(nMaxLimitReportResponse.CropYield != null ? string.Format("{0:N1}{1}", nMaxLimitReportResponse.CropYield, Resource.lblTonnesForReport) : Resource.lblHyphen)
                                             </td>
-                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.MaximumLimitForNApplied == null) ? Resource.lblHyphen : (nMaxLimitReportResponse.MaximumLimitForNApplied > 0 ? string.Format("{0:N0}{1}", nMaxLimitReportResponse.MaximumLimitForNApplied, Resource.lblkg) : nMaxLimitReportResponse.MaximumLimitForNApplied))</td>
-                                        </tr>
-                                    }
-
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.SoilTypeAdjustment != null && nMaxLimitReportResponse.SoilTypeAdjustment > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.SoilTypeAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.YieldAdjustment != null && nMaxLimitReportResponse.YieldAdjustment > 0) ? string.Format("{0:N0}{1}", nMaxLimitReportResponse.YieldAdjustment, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.MillingWheat != null && nMaxLimitReportResponse.MillingWheat > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.MillingWheat, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="govuk-table__cell">@((nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts != null && nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.AdjustmentForThreeOrMoreCuts, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        }
+                                        <td class="govuk-table__cell">@((nMaxLimitReportResponse.PaperCrumbleOrStrawMulch != null && nMaxLimitReportResponse.PaperCrumbleOrStrawMulch > 0) ? string.Format("{0}{1}", nMaxLimitReportResponse.PaperCrumbleOrStrawMulch, Resource.lblkg) : Resource.lblHyphen)</td>
+                                        <td class="govuk-table__cell">
+                                            @((nMaxLimitReportResponse.AdjustedNMaxLimit != null && nMaxLimitReportResponse.AdjustedNMaxLimit > 0) ? string.Format("{0:N0}{1}", nMaxLimitReportResponse.AdjustedNMaxLimit, Resource.lblkg) : Resource.lblHyphen)
+                                        </td>
+                                        <td class="govuk-table__cell">@((nMaxLimitReportResponse.MaximumLimitForNApplied == null) ? Resource.lblHyphen : (nMaxLimitReportResponse.MaximumLimitForNApplied > 0 ? string.Format("{0:N0}{1}", nMaxLimitReportResponse.MaximumLimitForNApplied, Resource.lblkg) : nMaxLimitReportResponse.MaximumLimitForNApplied))</td>
+                                    </tr>
                                 }
+
                                 @{
-                                    var totalMaxLimitForNApplied = reports.Where(r => r.NMaxLimitReportResponse != null).SelectMany(r => r.NMaxLimitReportResponse).Sum(x => x.MaximumLimitForNApplied);
+                                    var totalMaxLimitForNApplied = nMaxLimit.NMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied);
                                 }
 
                                 <tr class="govuk-table__row total_row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotal</th>
                                     <th scope="col" class="govuk-table__header">
-                                        @(reports.Where(r => r.NMaxLimitReportResponse != null).SelectMany(r => r.NMaxLimitReportResponse).Sum(x => x.CropArea) > 0 ? string.Format("{0:N2}{1}", reports.Where(r => r.NMaxLimitReportResponse != null).SelectMany(r => r.NMaxLimitReportResponse).Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
+                                        @(nMaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea) > 0 ? string.Format("{0:N1}{1}", nMaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
                                     </th>
-                                    @if (groupName.Equals(Resource.lblGroup1Vegetables)
-                                                            || groupName.Equals(Resource.lblGroup2Vegetables) || groupName.Equals(Resource.lblGroup3Vegetables))
+                                    @if (nMaxLimit.GroupName.Equals(Resource.lblGroup1Vegetables)
+                                                            || nMaxLimit.GroupName.Equals(Resource.lblGroup2Vegetables) || nMaxLimit.GroupName.Equals(Resource.lblGroup3Vegetables))
                                     {
                                         <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                     }
-                                    else if (reports.Any(r => r.CropTypeName != Resource.lblGrass))
+                                    else if (nMaxLimit.NMaxLimitReportResponse.Any(r => r.CropTypeName != Resource.lblGrass))
                                     {
                                         <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                         <th scope="col" class="govuk-table__header">
@@ -296,134 +265,118 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
                                     <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
-                                    <th scope="col" class="govuk-table__header">@((totalMaxLimitForNApplied > 0) ? string.Format("{0:N0}{1}",  totalMaxLimitForNApplied, Resource.lblkg) : (totalMaxLimitForNApplied == null ? Resource.lblHyphen : totalMaxLimitForNApplied))</th>
+                                    <th scope="col" class="govuk-table__header">@((totalMaxLimitForNApplied > 0) ? string.Format("{0:N0}{1}", totalMaxLimitForNApplied, Resource.lblkg) : (totalMaxLimitForNApplied == null ? Resource.lblHyphen : totalMaxLimitForNApplied))</th>
                                 </tr>
-
                             </tbody>
                         </table>
-                    }
-                    @if (reports.First().NitrogenApplicationsForNMaxReportResponse != null && reports.First().NitrogenApplicationsForNMaxReportResponse.Count > 0)
+                    </div>
+                    @if (nMaxLimit.NitrogenApplicationsForNMaxReportResponse != null && nMaxLimit.NitrogenApplicationsForNMaxReportResponse.Count > 0)
                     {
                         nMaxLimitCounter = 1;
                         <h3 class="govuk-heading-m">
-                            @string.Format(Resource.lblNitrogenApplicationsForCropTypeFields, (!string.IsNullOrWhiteSpace(groupName)) ? groupName : string.Format(Resource.LblCropTypeFields, reports.First().CropTypeName))
+                            @string.Format(Resource.lblNitrogenApplicationsForCropTypeFields, nMaxLimit.GroupName)
                         </h3>
+                    <div class="table-container margin-bottom-forty">
+                            <table class="govuk-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblCropArea</th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblInorganicNRate
+                                            <br><span class="nonbold">@Resource.lblPerHa</span>
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblInorganicNTotal
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblOrganicCropAvailableNRate
+                                            <br><span class="nonbold">@Resource.lblPerHa</span>
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblOrganicCropAvailableNTotal
 
-                        <table class="govuk-table new_nmax_rates_table">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblField</th>
-                                    <th scope="col" class="govuk-table__header">@Resource.lblCropArea</th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblInorganicNRate
-                                        <br><span class="nonbold">@Resource.lblPerHa</span>
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblInorganicNTotal
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblOrganicCropAvailableNRate
-                                        <br><span class="nonbold">@Resource.lblPerHa</span>
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblOrganicCropAvailableNTotal
-
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblNRate
-                                        <br><span class="nonbold">@Resource.lblPerHa</span>
-                                    </th>
-                                    <th scope="col" class="govuk-table__header">
-                                        @Resource.lblNTotal
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-
-                                @foreach (var report in reports)
-                                {
-                                    foreach (var nitrogenApplications in report.NitrogenApplicationsForNMaxReportResponse)
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblNRate
+                                            <br><span class="nonbold">@Resource.lblPerHa</span>
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @Resource.lblNTotal
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var nitrogenApplications in nMaxLimit.NitrogenApplicationsForNMaxReportResponse)
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@nitrogenApplications.FieldName</td>
                                             <td class="govuk-table__cell">
-                                                @string.Format("{0:N2}{1}",  nitrogenApplications.CropArea, Resource.lblHectareForReport)
+                                                @string.Format("{0:N1}{1}", nitrogenApplications.CropArea, Resource.lblHectareForReport)
                                             </td>
 
-                                            <td class="govuk-table__cell">@((nitrogenApplications.InorganicNRate != null && nitrogenApplications.InorganicNRate > 0) ? string.Format("{0:N0}{1}",  nitrogenApplications.InorganicNRate, Resource.lblkg) : Resource.lblHyphen)</td>
-                                            <td class="govuk-table__cell">@((nitrogenApplications.InorganicNTotal != null && nitrogenApplications.InorganicNTotal > 0) ? string.Format("{0:N0}{1}",  nitrogenApplications.InorganicNTotal, Resource.lblkg) : Resource.lblHyphen)</td>
-                                            <td class="govuk-table__cell">@((nitrogenApplications.OrganicCropAvailableNRate != null) ? (nitrogenApplications.OrganicCropAvailableNRate != 0 ? string.Format("{0:N0}{1}",  nitrogenApplications.OrganicCropAvailableNRate, Resource.lblkg) : nitrogenApplications.OrganicCropAvailableNRate) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nitrogenApplications.InorganicNRate != null && nitrogenApplications.InorganicNRate > 0) ? string.Format("{0:N0}{1}", nitrogenApplications.InorganicNRate, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nitrogenApplications.InorganicNTotal != null && nitrogenApplications.InorganicNTotal > 0) ? string.Format("{0:N0}{1}", nitrogenApplications.InorganicNTotal, Resource.lblkg) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nitrogenApplications.OrganicCropAvailableNRate != null) ? (nitrogenApplications.OrganicCropAvailableNRate != 0 ? string.Format("{0:N0}{1}", nitrogenApplications.OrganicCropAvailableNRate, Resource.lblkg) : nitrogenApplications.OrganicCropAvailableNRate) : Resource.lblHyphen)</td>
                                             <td class="govuk-table__cell">
-                                                @((nitrogenApplications.OrganicCropAvailableNTotal != null) ? (nitrogenApplications.OrganicCropAvailableNTotal != 0 ? string.Format("{0:N0}{1}",  nitrogenApplications.OrganicCropAvailableNTotal, Resource.lblkg) : nitrogenApplications.OrganicCropAvailableNTotal) : Resource.lblHyphen)
+                                                @((nitrogenApplications.OrganicCropAvailableNTotal != null) ? (nitrogenApplications.OrganicCropAvailableNTotal != 0 ? string.Format("{0:N0}{1}", nitrogenApplications.OrganicCropAvailableNTotal, Resource.lblkg) : nitrogenApplications.OrganicCropAvailableNTotal) : Resource.lblHyphen)
                                             </td>
                                             <td class="govuk-table__cell">
-                                                @((nitrogenApplications.NRate != null) ? (nitrogenApplications.NRate != 0 ? string.Format("{0:N0}{1}",  nitrogenApplications.NRate, Resource.lblkg) : nitrogenApplications.NRate) : Resource.lblHyphen)
+                                                @((nitrogenApplications.NRate != null) ? (nitrogenApplications.NRate != 0 ? string.Format("{0:N0}{1}", nitrogenApplications.NRate, Resource.lblkg) : nitrogenApplications.NRate) : Resource.lblHyphen)
                                             </td>
-                                            <td class="govuk-table__cell">@((nitrogenApplications.NTotal != null) ? (nitrogenApplications.NTotal != 0 ? string.Format("{0:N0}{1}",  nitrogenApplications.NTotal, Resource.lblkg) : nitrogenApplications.NTotal) : Resource.lblHyphen)</td>
+                                            <td class="govuk-table__cell">@((nitrogenApplications.NTotal != null) ? (nitrogenApplications.NTotal != 0 ? string.Format("{0:N0}{1}", nitrogenApplications.NTotal, Resource.lblkg) : nitrogenApplications.NTotal) : Resource.lblHyphen)</td>
                                         </tr>
                                     }
 
-                                }
-                                @{
-                                    var allNitrogenApps = reports.SelectMany(r => r.NitrogenApplicationsForNMaxReportResponse).ToList();
-                                }
+                                    @{
+                                        var allNitrogenApps = nMaxLimit.NitrogenApplicationsForNMaxReportResponse.ToList();
+                                    }
 
+                                    <tr class="govuk-table__row total_row">
+                                        <th scope="col" class="govuk-table__header">@Resource.lblTotal</th>
 
-                                <tr class="govuk-table__row total_row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTotal</th>
-
-                                    <th scope="col" class="govuk-table__header">
-                                        @(allNitrogenApps.Sum(x => x.CropArea) > 0 ? string.Format("{0:N2}{1}",  allNitrogenApps.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
-                                    </th>
-
-                                    <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
-
-                                    <th scope="col" class="govuk-table__header">
-                                        @(allNitrogenApps.All(x => x.InorganicNTotal == null) ? Resource.lblHyphen : (allNitrogenApps.Sum(x => x.InorganicNTotal) != 0 ? string.Format("{0:N0}{1}",  allNitrogenApps.Sum(x => x.InorganicNTotal), Resource.lblkg) : allNitrogenApps.Sum(x => x.InorganicNTotal)))
-                                    </th>
-
-                                    <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
-
-                                    <th scope="col" class="govuk-table__header">
-                                        @(allNitrogenApps.All(x => x.OrganicCropAvailableNTotal == null) ? Resource.lblHyphen : (allNitrogenApps.Sum(x => x.OrganicCropAvailableNTotal) != 0 ? string.Format("{0:N0}{1}",  allNitrogenApps.Sum(x => x.OrganicCropAvailableNTotal), Resource.lblkg) : allNitrogenApps.Sum(x => x.OrganicCropAvailableNTotal)))
-                                    </th>
-
-                                    <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
-
-                                    <th scope="col" class="govuk-table__header">
-                                        @(allNitrogenApps.All(x => x.NTotal == null) ? Resource.lblHyphen : (allNitrogenApps.Sum(x => x.NTotal) != 0 ? string.Format("{0:N0}{1}",  allNitrogenApps.Sum(x => x.NTotal), Resource.lblkg) : allNitrogenApps.Sum(x => x.NTotal)))
-                                    </th>
-                                </tr>
-
-
-
-
-                            </tbody>
-                        </table>
-                    }
-                    @* <div id="printbreak"></div> *@
+                                        <th scope="col" class="govuk-table__header">
+                                            @(allNitrogenApps.Sum(x => x.CropArea) > 0 ? string.Format("{0:N1}{1}", allNitrogenApps.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
+                                        </th>
+                                        <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @(allNitrogenApps.All(x => x.InorganicNTotal == null) ? Resource.lblHyphen : (allNitrogenApps.Sum(x => x.InorganicNTotal) != 0 ? string.Format("{0:N0}{1}", allNitrogenApps.Sum(x => x.InorganicNTotal), Resource.lblkg) : allNitrogenApps.Sum(x => x.InorganicNTotal)))
+                                        </th>
+                                        <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @(allNitrogenApps.All(x => x.OrganicCropAvailableNTotal == null) ? Resource.lblHyphen : (allNitrogenApps.Sum(x => x.OrganicCropAvailableNTotal) != 0 ? string.Format("{0:N0}{1}", allNitrogenApps.Sum(x => x.OrganicCropAvailableNTotal), Resource.lblkg) : allNitrogenApps.Sum(x => x.OrganicCropAvailableNTotal)))
+                                        </th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblHyphen</th>
+                                        <th scope="col" class="govuk-table__header">
+                                            @(allNitrogenApps.All(x => x.NTotal == null) ? Resource.lblHyphen : (allNitrogenApps.Sum(x => x.NTotal) != 0 ? string.Format("{0:N0}{1}", allNitrogenApps.Sum(x => x.NTotal), Resource.lblkg) : allNitrogenApps.Sum(x => x.NTotal)))
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }                    
                     @if (totalCount != 0)
                     {
                         <div id="printbreak"></div>
                         <div class="pagebreak">&nbsp;</div>
-                    }
-                    @* <div class="pagebreak">&nbsp;</div> *@
+                    } 
                 }
-            </div>
         </div>
     </div>
-    <hr class="seperator_five">
-    @*  <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full"> *@
-    <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
-    <p class="govuk-body">
-        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
-    </p>
-    <p class="govuk-body">
-        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblService)
-    </p>
-    <p class="govuk-body">
-        @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
-    </p>
+    
 }
-
+<div class="govuk-grid-row margin-bottom-forty">
+    <div class="govuk-grid-column-full">
+        <hr class="seperator_five">
+        <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
+        <p class="govuk-body">
+            @Resource.lblAboutRecommendationGuidenceAdviceContent1
+        </p>
+        <p class="govuk-body">
+            @Resource.lblAboutRecommendationGuidenceAdviceContent2
+        </p>
+        <p class="govuk-body">
+            @Resource.lblAboutRecommendationGuidenceAdviceContent3
+        </p>
+    </div>
+</div>

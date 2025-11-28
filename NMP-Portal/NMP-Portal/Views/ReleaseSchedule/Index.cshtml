@@ -10,110 +10,47 @@
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-body">
             <h1 class="govuk-heading-xl">@Resource.lblServiceReleaseSchedule</h1>
-            <p class="govuk-body">@Resource.lblAboutReleaseSchedule</p>
+            <p class="govuk-body">@string.Format(Resource.lblLastUpdatedDate, Resource.lblReleaseScheduleDate)</p>
 
-            <h2 class="govuk-heading-m">@Resource.lblMarchToAugust2025</h2>
+            <h2 class="govuk-heading-m">@Resource.lblReleaseScheduleContentOne</h2>
+            <p class="govuk-body">@Resource.lblReleaseScheduleContentTwo</p>
+            
+            <p class="govuk-body">@Resource.lblReleaseScheduleContentThree</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@Resource.lblReleaseScheduleContentFour</li>
+                <li>@Resource.lblReleaseScheduleContentFive</li>
+                <li>@Resource.lblReleaseScheduleContentSix</li>
+                <li>@Resource.lblReleaseScheduleContentSeven</li>
+                <li>@Resource.lblReleaseScheduleContentEight</li>
+            </ul>
+
+            <p class="govuk-body">@Resource.lblReleaseScheduleContentNine</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@Resource.lblNMax</li>
+                <li>@Resource.lblReleaseScheduleContentTen</li>
+            </ul>
+
+            <h2 class="govuk-heading-m">@Resource.lblReleaseScheduleContentEleven</h2>
+            <h3 class="govuk-heading-s">@Resource.lblReleaseScheduleContentTwelve</h3>
+            <p class="govuk-body">@Resource.lblReleaseScheduleContentThirteen</p>
+            <p class="govuk-body">@Resource.lblReleaseScheduleContentFourteen</p>
+            <h3 class="govuk-heading-s">@Resource.lblReleaseScheduleContentFifteen</h3>
             <p class="govuk-body">
-                    @Resource.lblNMPTBetaTest1
-            </p>
-            @* <h2 class="govuk-heading-m">@Resource.lblMarch</h2>
-            <p class="govuk-body">@Resource.lblArableCoreFunctions</p>
+                @Resource.lblReleaseScheduleContentSixteen</p>
             <ul class="govuk-list govuk-list--bullet">
-            <li>
-            @Resource.lblCreateAPlanAndRecord
-            </li>
-            <li>
-            @Resource.lblIntegratedMANNERNPKCalculations
-            </li>
-            <li>
-            @Resource.lblNVZAndFarmingRulesFor
-            </li>
+                <li>@Resource.lblReleaseScheduleContentSeventeen</li>
+                <li>@Resource.lblReleaseScheduleContentEighteen</li>
+                <li>@Resource.lblReleaseScheduleContentNineteen</li>
+                <li>@Resource.lblReleaseScheduleContentTwenty</li>
             </ul>
-            <h2 class="govuk-heading-m">@Resource.lblApril</h2>
-            <p class="govuk-body">@Resource.lblGrasslandCoreFunctions</p>
-            <ul class="govuk-list govuk-list--bullet">
-            <li>
-            @Resource.lblCreateAPlanAndRecord
-            </li>
-            <li>
-            @Resource.lblIntegratedMANNERNPKCalculations
-            </li>
-            <li>
-            @Resource.lblNVZAndFarmingRulesFor
-            </li>
-            </ul> *@
-            <h2 class="govuk-heading-m">@Resource.lblCurrentFunctions</h2>
-            <p class="govuk-body">@Resource.lblCurrentFunctionContent1</p>
-            <p class="govuk-body">@Resource.lblCurrentFunctionContent2</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    @Resource.lblCreateAPlanAndRecord
-                </li>
-                <li>
-                    @Resource.lblIntegratedMANNERNPKCalculations
-                </li>
-                <li>
-                    @Resource.lblNVZAndFarmingRulesFor
-                </li>
-                <li>
-                    @Resource.lblWaterResourcesRegulation2021Content
-                </li>
-                <li>
-                    @Resource.lblNMaxComplainceModule
-                </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblPlannedUpcomingFunction</h2>
-            <p class="govuk-body">@Resource.lblPlannedUpcomingFunctionContent1</p>
 
-            <h2 class="govuk-heading-m">@Resource.lblJuly</h2>
-            <p class="govuk-body">@Resource.lblCoreFunctionsGrassland</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    @Resource.lblCreateAPlanAndRecord
-                </li>
-                <li>
-                    @Resource.lblIntegratedMANNERNPKCalculations
-                </li>
-                <li>
-                    @Resource.lblNVZAndFarmingRulesFor
-                </li>
-                <li>
-                    @Resource.lblWaterResourcesRegulation2021Content
-                </li>            
-                <li>
-                    @Resource.lblMannerNPKStandAloneFrontEnd
-                </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblAugust</h2>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    @Resource.lblLivestockManureLimitComplianceModule
-                </li>
-                <li>
-                    @Resource.lblExistingManureStorageCapacity
-                </li>
-                <li>
-                    @Resource.lblOrganicManureInventory
-                </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblAugust2025Schedule</h2>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    @Html.Raw(Resource.lblAllModulesLive)
-                </li>
-            </ul>
-            <h2 class="govuk-heading-m">@Resource.lblSept2025</h2>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    @Resource.lblNMPTLaunchesToUsersInScotland
-                </li>
-            </ul>
-            @*  <h2 class="govuk-heading-m">@Resource.lblOctober</h2>
-            <ul class="govuk-list govuk-list--bullet">
-            <li>
-            @Resource.lblNMPTLiveForGeneralUse
-            </li>
-            </ul> *@
+              <p class="govuk-body">
+                @Resource.lblReleaseScheduleContentTwentyOne
+            </p>
+
+            <p class="govuk-body">
+                @Html.Raw(Resource.lblReleaseScheduleContentTwentyTwo)
+            </p>            
         </div>
     </div>
 </div>

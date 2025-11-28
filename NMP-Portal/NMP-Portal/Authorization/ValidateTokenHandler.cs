@@ -28,8 +28,7 @@ namespace NMP.Portal.Authorization
             else
             {
                 HttpClient httpClient = _clientFactory.CreateClient("NMPApi");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token?.AccessToken);
-                //httpClient.DefaultRequestHeaders.Add("AuthKey", ConfigHelper.FedxAuthKey);
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.AccessToken);                
                 var response = httpClient.GetAsync("APIURLHelper.AuthorizeBCIToken").Result;
                 if (response.StatusCode != HttpStatusCode.OK)
                 {

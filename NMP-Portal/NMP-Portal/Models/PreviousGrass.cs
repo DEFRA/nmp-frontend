@@ -4,6 +4,9 @@
     {
         public int ID { get; set; }
         public int FieldID { get; set; }
+        public int CropGroupID { get; set; }
+        public int CropTypeID { get; set; }
+
         public bool? HasGrassInLastThreeYear { get; set; }
         public int? HarvestYear { get; set; }
         public int? GrassManagementOptionID { get; set; }

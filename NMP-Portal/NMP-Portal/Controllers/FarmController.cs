@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,7 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
+        public readonly IHttpContextAccessor _httpContextAccessor;
         public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IReportService reportService, IStorageCapacityService storageCapacityService)
@@ -54,6 +56,7 @@ namespace NMP.Portal.Controllers
             _cropService = cropService;
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
+            _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Index()
         {
@@ -62,7 +65,7 @@ namespace NMP.Portal.Controllers
         }
 
         public async Task<IActionResult> FarmList(string? q)
-        {
+        {            
             _logger.LogTrace($"Farm Controller : FarmList({q}) action called");
             HttpContext?.Session.Remove("FarmData");
             HttpContext?.Session.Remove("AddressList");
@@ -161,6 +164,7 @@ namespace NMP.Portal.Controllers
             (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
             if (error != null && countryList.Count > 0)
             {
+                countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
                 ViewBag.CountryList = countryList.OrderBy(c => c.Name);
             }
             if (HttpContext.Session.Keys.Contains("FarmData"))
@@ -187,6 +191,7 @@ namespace NMP.Portal.Controllers
                 (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
                 if (error != null && countryList.Count > 0)
                 {
+                    countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
                     ViewBag.CountryList = countryList.OrderBy(c => c.Name);
                 }
                 return View("Country", farm);
@@ -371,7 +376,6 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("AddressList"))
             {
                 addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
-
             }
             else
             {
@@ -469,7 +473,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(farm.Address1) && farm.Address1.Length > 50)
             {
-                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1,50));
+                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1, 50));
             }
             if (!string.IsNullOrWhiteSpace(farm.Address2) && farm.Address2.Length > 50)
             {
@@ -481,7 +485,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(farm.Address4) && farm.Address4.Length > 50)
             {
-                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry,50));
+                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
             }
             if (!string.IsNullOrWhiteSpace(farm.Postcode))
             {
@@ -866,11 +870,8 @@ namespace NMP.Portal.Controllers
             }
 
             HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            if (farm.IsCheckAnswer)
-            {
-                return RedirectToAction("CheckAnswer");
-            }
-            return RedirectToAction("LastHarvestYear");
+
+            return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
         public IActionResult CheckAnswer(string? q)
@@ -902,6 +903,25 @@ namespace NMP.Portal.Controllers
                 model.EncryptedIsUpdate = q;
             }
             HttpContext.Session.SetObjectAsJson("FarmData", model);
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmDataBeforeUpdate", model);
+
+            }
+            var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmDataBeforeUpdate");
+
+            bool isDataChanged = false;
+
+            if (previousModel != null)
+            {
+                string oldJson = JsonConvert.SerializeObject(previousModel);
+                string newJson = JsonConvert.SerializeObject(model);
+
+                isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+            }
+            ViewBag.IsDataChange = isDataChanged;
+
             return View(model);
 
         }
@@ -949,7 +969,6 @@ namespace NMP.Portal.Controllers
                         EnglishRules = farm.EnglishRules,
                         NVZFields = farm.NVZFields,
                         FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        LastHarvestYear = farm.LastHarvestYear,
                         CountryID = farm.CountryID,
                         ClimateDataPostCode = farm.ClimateDataPostCode,
                         CreatedByID = userId,
@@ -973,7 +992,7 @@ namespace NMP.Portal.Controllers
                 HttpContext.Session.Remove("AddressList");
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["AddFarmError"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
@@ -1005,7 +1024,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsCheckAnswer = false;
                 HttpContext.Session.SetObjectAsJson("FarmData", model);
-                return RedirectToAction("LastHarvestYear");
+                return RedirectToAction("Organic");
             }
 
         }
@@ -1035,6 +1054,10 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext?.Session.Remove("StorageCapacityData");
             }
+            if (HttpContext.Session.Keys.Contains("FieldData"))
+            {
+                HttpContext?.Session.Remove("FieldData");
+            }
             ViewBag.FieldCount = 0;
 
             FarmViewModel? farmData = null;
@@ -1046,6 +1069,24 @@ namespace NMP.Portal.Controllers
                     farmId = _dataProtector.Unprotect(id);
 
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
+                    var identity = user?.Identity as ClaimsIdentity;
+
+                    var existingCurrentFarmNameClaim = identity.FindFirst("current_farm_name");
+                    if (existingCurrentFarmNameClaim != null)
+                    {
+                        identity.RemoveClaim(existingCurrentFarmNameClaim);
+                    }
+                    _httpContextAccessor.HttpContext?.Session.SetString("current_farm_name", farm.Name ?? "");
+                    _httpContextAccessor.HttpContext?.Session.SetString("current_farm_id", id);
+
+                    identity?.AddClaim(new Claim("current_farm_name", farm.Name ?? ""));
+                    var existingCurrentFarmIdClaim = identity?.FindFirst("current_farm_id");
+                    if (existingCurrentFarmIdClaim != null)
+                    {
+                        identity?.RemoveClaim(existingCurrentFarmIdClaim);
+                    }
+                    identity?.AddClaim(new Claim("current_farm_id", id ?? ""));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1065,7 +1106,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID,null);
+                    (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farm.ID, null);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1117,6 +1158,10 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FarmDataBeforeUpdate"))
+                {
+                    HttpContext?.Session.Remove("FarmDataBeforeUpdate");
+                }
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
@@ -1156,7 +1201,6 @@ namespace NMP.Portal.Controllers
                         farmData.NVZFields = farm.NVZFields;
                         farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        farmData.LastHarvestYear = farm.LastHarvestYear;
                         farmData.CreatedByID = farm.CreatedByID;
                         farmData.CreatedOn = farm.CreatedOn;
                         farmData.CountryID = farm.CountryID;
@@ -1241,7 +1285,6 @@ namespace NMP.Portal.Controllers
                         EnglishRules = farm.EnglishRules,
                         NVZFields = farm.NVZFields,
                         FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        LastHarvestYear = farm.LastHarvestYear,
                         CountryID = farm.CountryID,
                         ClimateDataPostCode = farm.ClimateDataPostCode,
                         CreatedByID = createdByID,
@@ -1333,41 +1376,6 @@ namespace NMP.Portal.Controllers
             return View(farm);
 
         }
-
-        [HttpGet]
-        public IActionResult LastHarvestYear()
-        {
-            _logger.LogTrace($"Farm Controller : LastHarvestYear() action called");
-            FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-
-            return View(model);
-
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult LastHarvestYear(FarmViewModel farm)
-        {
-            _logger.LogTrace($"Farm Controller : LastHarvestYear() post action called");
-            if (farm.LastHarvestYear == null)
-            {
-                ModelState.AddModelError("LastHarvestYear", Resource.MsgSelectAHarvestYearBeforeContinuing);
-            }
-            if (!ModelState.IsValid)
-            {
-                return View("LastHarvestYear", farm);
-            }
-
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            return RedirectToAction("CheckAnswer");
-        }
         [HttpGet]
         public IActionResult Cancel()
         {
@@ -1414,8 +1422,8 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                HttpContext?.Session.Remove("FarmData");
-                return RedirectToAction("FarmList", "Farm");
+                HttpContext?.Session.Remove("FarmData");                
+                return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
 
             }
 

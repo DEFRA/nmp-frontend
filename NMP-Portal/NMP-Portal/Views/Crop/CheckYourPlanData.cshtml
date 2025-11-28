@@ -1,11 +1,20 @@
 ﻿@using NMP.Portal.Resources
+@using NMP.Portal.ServiceResponses
 @using NMP.Portal.ViewModels
 
 @model PlanViewModel
 @{
-    ViewData["Title"] = Resource.lblCheckYourPlanData;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{string.Format(Resource.lblCheckYourYearData, Model.Year, Model.Year - 1)} {Resource.lblHyphen} {title}";
+
 
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
+
+    
+    bool isPreviousPlanExist = ((List<PlanSummaryResponse>)ViewBag.PlanSummaryList)
+                    .Any(x => x.Year == Model.HarvestYear[index + 1].Year);
+
 
 }
 
@@ -30,11 +39,18 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l">
-                @string.Format(Resource.lblCheckYourYearData, Model.Year - 1)
+                @string.Format(Resource.lblCheckYourYearData, Model.Year, Model.Year - 1)
             </h1>
 
             <h3 class="govuk-heading-s">
-                @string.Format(Resource.lblYourYearPlanWasLastUpdatedOn, Model.Year - 1, Model.HarvestYear[index + 1].LastModifiedOn?.ToString("dd MMM yyyy"))
+                @if (isPreviousPlanExist)
+                {
+                    @string.Format(Resource.lblYourYearPlanWasLastUpdatedOn, Model.Year - 1, Model.HarvestYear[index + 1].LastModifiedOn?.ToString("dd MMM yyyy"))
+                }
+                else
+                {
+                    @string.Format(Resource.lblYouCurrentlyDoNotHaveAPlanFor, Model.Year - 1)
+                }
             </h3>
 
             <p class="govuk-body">
@@ -57,14 +73,14 @@
             </p>
 
             @* Normal journey *@
-            @* <p class="govuk-body">
+            <p class="govuk-body">
                 <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true">
                     @string.Format(Resource.lblContinueToCreateAPlanFor, Model.Year)
                 </a>
-            </p> *@
+            </p>
 
             @* copy journey *@
-            @if (Model.HarvestYear.Any(x => x.IsAnyPlan == true))
+           @*  @if (Model.HarvestYear.Any(x => x.IsAnyPlan == true))
             {
                 <p class="govuk-body">
                     <a asp-action="CopyExistingPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true">
@@ -79,7 +95,7 @@
                         @string.Format(Resource.lblContinueToCreateAPlanFor, Model.Year)
                     </a>
                 </p>
-            }
+            } *@
 
             <br>
             <p class="govuk-body cancel-link">

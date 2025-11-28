@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblManageLivestock;
+    ViewData["Title"] = $"{string.Format(Resource.lblLivestockDetailsYear, Model.Year)} {Resource.lblHyphen} {Resource.lblLivestockNumbers} ";
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("Cattle", ViewBag.CattleList),
@@ -26,25 +26,13 @@
     decimal totalPhosphateGoatsDeerAndHorses = 0;
 }
 
-@section BeforeContent {
-    @* <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @string.Format(Resource.lblLivestockDetailsYear, Model.Year)
-        </govuk-breadcrumbs-item>
-
-    </govuk-breadcrumbs> *@
+@section BeforeContent {   
     <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnManageLivestock"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@TempData["ErrorOnManageLivestock"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -54,19 +42,19 @@
 
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
 
         @if (TempData["succesMsgContent1"] != null)
         {
-            <govuk-notification-banner type="Success">
+            <govuk-notification-banner type="NotificationBannerType.Success">
                 <p class="govuk-notification-banner__heading">
                     @TempData["succesMsgContent1"]
                 </p>
-                @if (TempData["succesMsgContent2"] != null)
+                @if (TempData["succesMsgContent2"] != null || TempData["RemoveSuccessMsg"] != null)
                 {
                     <p class="govuk-body">
                         <a asp-action="LivestockGroup" asp-controller="Report" class="govuk-notification-banner__link">
-                            @TempData["succesMsgContent2"]
+                            @(TempData["succesMsgContent2"] != null ? TempData["succesMsgContent2"] : TempData["RemoveSuccessMsg"])
                         </a>
                     </p>
                 }
@@ -106,9 +94,9 @@
         {
             @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblCattle</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table data-table">
+                <h2 class="govuk-heading-m">@Resource.lblCattle</h2>                
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
@@ -120,7 +108,7 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 }
-                                <th scope="col" class="govuk-table__header"></th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -144,7 +132,11 @@
                                             @string.Format("{0:N0}{1}", cattle.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell">
+                                        <a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@cattle.EncryptedID">
+                                            @Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span>
+                                        </a>
+                                    </td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                 </tr>
                                 totalNitrogenCattle = totalNitrogenCattle + cattle.TotalNProduced;
@@ -172,9 +164,9 @@
             }
             @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblPigs</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <h2 class="govuk-heading-m">@Resource.lblPigs</h2>
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPigType</th>
@@ -187,7 +179,7 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 }
-                                <th scope="col" class="govuk-table__header"></th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -215,7 +207,7 @@
                                             @string.Format("{0:N0}{1}", pig.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@pig.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenPigs = totalNitrogenPigs + pig.TotalNProduced;
@@ -242,9 +234,9 @@
             }
             @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <h2 class="govuk-heading-m">@Resource.lblPoultry</h2>
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPoultryType</th>
@@ -257,7 +249,7 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 }
-                                <th scope="col" class="govuk-table__header"></th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -281,7 +273,7 @@
                                         </td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@poultry.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenPoultry = totalNitrogenPoultry + poultry.TotalNProduced;
@@ -306,22 +298,21 @@
             }
             @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <h2 class="govuk-heading-m">@Resource.lblSheep</h2>
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblAverageForTheYear</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenProduced</th>
                                 @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation.Value)
                                 {
                                     <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 }
-                                <th scope="col" class="govuk-table__header"></th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -329,9 +320,9 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
-                                    <td class="govuk-table__cell">@string.Format("{0:N2}",sheep.Units)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N2}", sheep.Units)</td>
                                     <td class="govuk-table__cell">
-                            @string.Format(Resource.lblNutrientKgPerYear,string.Format("{0:N0}", Math.Round(sheep.NByUnit, 0)))
+                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(sheep.NByUnit, 0)))
                                     </td>
                                     @* <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell">
@@ -347,7 +338,7 @@
                                             @string.Format("{0:N0}{1}", sheep.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@sheep.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenSheep = totalNitrogenSheep + sheep.TotalNProduced;
@@ -371,9 +362,9 @@
             }
             @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
             {
-                <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
-                <div class="margin-bottom-thirty">
-                    <table class="govuk-table sortable-table recomendation-table data-table">
+                <h2 class="govuk-heading-m">@Resource.lblGoatsDeerAndHorses</h2>
+                <div class="table-container margin-bottom-thirty">
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
@@ -385,7 +376,7 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 }
-                                <th scope="col" class="govuk-table__header"></th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -393,7 +384,7 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
-                                    <td class="govuk-table__cell">@string.Format("{0:N2}",goatsDeerAndHorse.Units)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N2}", goatsDeerAndHorse.Units)</td>
                                     <td class="govuk-table__cell">
                                         @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(goatsDeerAndHorse.NByUnit, 0)))
                                     </td>
@@ -410,7 +401,7 @@
                                             @string.Format("{0:N0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)
                                         </td>
                                     }
-                                    <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                     @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                 </tr>
                                 totalNitrogenGoatsDeerAndHorses = totalNitrogenGoatsDeerAndHorses + goatsDeerAndHorse.TotalNProduced;
@@ -441,9 +432,9 @@
                 @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)
                 {
                     <govuk-tabs-item id="cattle" label=@Resource.lblCattle>
-                        <h2 class="govuk-heading-l">@Resource.lblCattle</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table data-table">
+                        <h2 class="govuk-heading-m">@Resource.lblCattle</h2>
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header livestock-type">@Resource.lblCattleType</th>
@@ -455,7 +446,7 @@
                                             <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                         }
-                                        <th scope="col" class="govuk-table__header"></th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -463,7 +454,7 @@
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
-                                            <td class="govuk-table__cell">@string.Format("{0:N2}",cattle.Units)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0:N2}", cattle.Units)</td>
                                             <td class="govuk-table__cell">
                                                 @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(cattle.NByUnit, 0)))
                                             </td>
@@ -476,7 +467,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cattle.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@cattle.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@cattle.EncryptedID">@Resource.lblChange</a></td> *@
                                         </tr>
                                         totalNitrogenCattle = totalNitrogenCattle + cattle.TotalNProduced;
@@ -502,9 +493,9 @@
                 @if (ViewBag.PigsList != null && ViewBag.PigsList.Count > 0)
                 {
                     <govuk-tabs-item id="pigs" label=@Resource.lblPigs>
-                        <h2 class="govuk-heading-l">@Resource.lblPigs</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <h2 class="govuk-heading-m">@Resource.lblPigs</h2>
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblPigType</th>
@@ -517,7 +508,7 @@
                                             <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                         }
-                                        <th scope="col" class="govuk-table__header"></th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -525,7 +516,7 @@
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@pig.LivestockTypeName</td>
-                                            <td class="govuk-table__cell">@string.Format("{0:N2}",pig.Units)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0:N2}", pig.Units)</td>
                                             <td class="govuk-table__cell">
                                                 @string.Format("{0:N0}{1}", pig.Occupancy, Resource.lblPercentage)
                                             </td>
@@ -541,7 +532,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell"> @string.Format("{0:N0}{1}", pig.TotalPProduced, Resource.lblkg) </td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@pig.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@pig.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenPigs = totalNitrogenPigs + pig.TotalNProduced;
@@ -568,9 +559,9 @@
                 @if (ViewBag.PoultryList != null && ViewBag.PoultryList.Count > 0)
                 {
                     <govuk-tabs-item id="poultry" label=@Resource.lblPoultry>
-                        <h2 class="govuk-heading-l">@Resource.lblPoultry</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <h2 class="govuk-heading-m">@Resource.lblPoultry</h2>
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblPoultryType</th>
@@ -583,7 +574,7 @@
                                             <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                         }
-                                        <th scope="col" class="govuk-table__header"></th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -591,7 +582,7 @@
                                     {
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@poultry.LivestockTypeName</td>
-                                            <td class="govuk-table__cell">@string.Format("{0:N2}",poultry.Units)</td>
+                                            <td class="govuk-table__cell">@string.Format("{0:N2}", poultry.Units)</td>
                                             <td class="govuk-table__cell">@string.Format("{0:N0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
                                             <td class="govuk-table__cell">
                                                 @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(poultry.NByUnit, 0)))
@@ -605,7 +596,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", poultry.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@poultry.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@poultry.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenPoultry = totalNitrogenPoultry + poultry.TotalNProduced;
@@ -632,9 +623,9 @@
                 @if (ViewBag.SheepList != null && ViewBag.SheepList.Count > 0)
                 {
                     <govuk-tabs-item id="sheep" label=@Resource.lblSheep>
-                        <h2 class="govuk-heading-l">@Resource.lblSheep</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <h2 class="govuk-heading-m">@Resource.lblSheep</h2>
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblSheepType</th>
@@ -646,7 +637,7 @@
                                             <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                             <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                         }
-                                        <th scope="col" class="govuk-table__header"></th>
+                                        <th scope="col" class="govuk-table__header">@Resource.lblAction</th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -667,7 +658,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", sheep.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@sheep.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@sheep.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenSheep = totalNitrogenSheep + sheep.TotalNProduced;
@@ -693,9 +684,9 @@
                 @if (ViewBag.GoatsDeerAndHorsesList != null && ViewBag.GoatsDeerAndHorsesList.Count > 0)
                 {
                     <govuk-tabs-item id="goatsDeerAndHorses" label=@Resource.lblGoatsDeerAndHorses>
-                        <h2 class="govuk-heading-l">@Resource.lblGoatsDeerAndHorses</h2>
-                        <div class="margin-bottom-thirty">
-                            <table class="govuk-table sortable-table recomendation-table data-table">
+                        <h2 class="govuk-heading-m">@Resource.lblGoatsDeerAndHorses</h2>
+                        <div class="table-container margin-bottom-thirty">
+                            <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
                                         <th scope="col" class="govuk-table__header">@Resource.lblOtherType</th>
@@ -728,7 +719,7 @@
                                                 </td>
                                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", goatsDeerAndHorse.TotalPProduced, Resource.lblkg)</td>
                                             }
-                                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                                            <td class="govuk-table__cell"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-id="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblLivestockDetailsYear, Model.Year)</span></a></td>
                                             @*<td class="govuk-table__cell"><a disabled asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-i="@goatsDeerAndHorse.EncryptedID">@Resource.lblChange</a></td>*@
                                         </tr>
                                         totalNitrogenGoatsDeerAndHorses = totalNitrogenGoatsDeerAndHorses + goatsDeerAndHorse.TotalNProduced;

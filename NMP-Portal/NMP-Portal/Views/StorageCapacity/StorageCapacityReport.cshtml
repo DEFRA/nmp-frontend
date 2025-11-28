@@ -2,7 +2,8 @@
 @using System.Globalization
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = string.Format(Resource.ReportTitle, Resource.lblExistingManureStorageCapacityReport, Model.Farm?.Name, Model.Year);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{Resource.lblHowtosaveyourplanasaPDF} {Resource.lblHyphen} {title}";
     decimal totalSlurryCapacityVolume = 0;
     decimal totalSlurrySurfaceArea = 0;
     decimal totalDirtyCapacityVolume = 0;
@@ -14,7 +15,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@(string.IsNullOrWhiteSpace(Model.Farm.Name) ? string.Empty : Model.Farm.Name)</govuk-back-link>
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@Resource.lblBack</govuk-back-link>
 
     </div>
 
@@ -28,8 +29,8 @@
 @if (Model.Farm != null)
 {
     <div class="govuk-grid-row noprint margin-bottom-forty">
-        <div class="govuk-grid-column-two-thirds">
-            <h2 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h2>
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+            <h3 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h3>
             <ol class="govuk-list govuk-list--number">
                 <li>@Html.Raw(Resource.lblPrint1)</li>
                 <li>@Html.Raw(Resource.lblPrint2)</li>
@@ -94,11 +95,12 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m">@Resource.lblSlurryStores</h2>
+        <h2 class="govuk-heading-l">@Resource.lblSlurryStores</h2>
         @if (ViewBag.SlurryStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
-            <table class="govuk-table margin-bottom-forty data-table">
+            <div class="table-container margin-bottom-forty">
+                <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
@@ -137,6 +139,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         }
         else
         {
@@ -148,11 +151,13 @@
                 </div>
             </div>
         }
-        <h2 class="govuk-heading-m">@Resource.lblDirtyWaterStores</h2>
+
+        <h2 class="govuk-heading-l">@Resource.lblDirtyWaterStores</h2>
         @if (ViewBag.DirtyWaterStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
-            <table class="govuk-table margin-bottom-forty data-table">
+            <div class="table-container margin-bottom-forty">
+                <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
@@ -191,6 +196,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         }
         else
         {
@@ -202,11 +208,14 @@
                 </div>
             </div>
         }
-        <h2 class="govuk-heading-m">@Resource.lblSolidManureStores</h2>
+        
+        
+        <h2 class="govuk-heading-l">@Resource.lblSolidManureStores</h2>
         @if (ViewBag.SolidStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentFour</p>
-            <table class="govuk-table margin-bottom-forty data-table">
+            <div class="table-container margin-bottom-forty">
+                <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header storage_name">@Resource.lblName</th>
@@ -250,6 +259,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         }
         else
         {
@@ -264,8 +274,9 @@
         <!-- <p>None entered</p>
          <hr class="separator_thirty"> -->
 
-        <h2 class="govuk-heading-m">Manure storage totals</h2>
-        <table class="govuk-table margin-bottom-forty data-table manure_store_totals">
+        <h3 class="govuk-heading-l">Manure storage totals</h3>
+        <div class="table-container margin-bottom-forty">
+        <table class="govuk-table">
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Resource.lblTotaLiquidCapacity</th>
@@ -292,7 +303,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         @* <hr class="seperator_five"> *@
-        <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
+        <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
         <p class="govuk-body">
             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
         </p>

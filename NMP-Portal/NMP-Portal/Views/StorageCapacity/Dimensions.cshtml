@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblDimensions;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{string.Format(Resource.lblStoreDimenstion, Model.StoreName)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
 }
@@ -25,45 +26,48 @@
     <form asp-action="Dimensions" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsMaterialTypeChange" value="@Model.IsMaterialTypeChange"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStorageTypeChange" value="@Model.IsStorageTypeChange"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCopyExistingManureStorage"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedStoreCapacityId"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsMaterialTypeChange" value="@Model.IsMaterialTypeChange"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStorageTypeChange" value="@Model.IsStorageTypeChange"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCopyExistingManureStorage"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedStoreCapacityId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRemovedRecently"/>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblStoreDimenstion, Model.StoreName)</h1>
-                </legand>
 
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblStoreDimenstion, Model.StoreName)
+                    </govuk-fieldset-legend>
+                </govuk-fieldset>
                 @if (Model.MaterialStateID != (int)NMP.Portal.Enums.MaterialState.SolidManureStorage && Model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.StorageBag)
                 {
                     <govuk-details>
@@ -84,31 +88,41 @@
                                     @Resource.lblForEarthBankedLagoonsYouMustKeep
                                 </p>
                             }
-                            
+
                         </govuk-details-text>
                     </govuk-details>
                 }
                 @if (Model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.CircularTank)
                 {
                     <govuk-input asp-for=@Model.Length type="number" step="any" spellcheck="false">
-                        @if(Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
                         {
-                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon</govuk-input-label>
+                            <govuk-input-label is-page-heading="false">
+                                @Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                            </govuk-input-label>
                         }
                         else
                         {
-                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheLength</govuk-input-label>
+                            <govuk-input-label is-page-heading="false">
+                                @Resource.lblWhatIsTheLength
+                                <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
+                            </govuk-input-label>
                         }
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                     </govuk-input>
                     <govuk-input asp-for=@Model.Width type="number" step="any" spellcheck="false">
                         @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
                         {
-                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon</govuk-input-label>
+                            <govuk-input-label is-page-heading="false">
+                                @Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoonSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                            </govuk-input-label>
                         }
                         else
                         {
-                            <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheWidth</govuk-input-label>
+                            <govuk-input-label is-page-heading="false">
+                                @Resource.lblWhatIsTheWidthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                            </govuk-input-label>
                         }
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                     </govuk-input>
@@ -126,7 +140,9 @@
                                 @Resource.lblCircumference
                                 <govuk-radios-item-conditional>
                                     <govuk-input asp-for="@Model.Circumference" type="number" autocomplete="false">
-                                        <govuk-input-label>@Resource.lblWhatIsTheCircumference</govuk-input-label>
+                                        <govuk-input-label>
+                                            @Resource.lblWhatIsTheCircumferenceSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                                        </govuk-input-label>
                                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                                     </govuk-input>
                                 </govuk-radios-item-conditional>
@@ -135,7 +151,9 @@
                                 @Resource.lblDiameter
                                 <govuk-radios-item-conditional>
                                     <govuk-input asp-for="@Model.Diameter" type="number" autocomplete="false">
-                                        <govuk-input-label>@Resource.lblWhatIsTheDiameter</govuk-input-label>
+                                        <govuk-input-label>
+                                            @Resource.lblWhatIsTheDiameterSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                                        </govuk-input-label>
                                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                                     </govuk-input>
                                 </govuk-radios-item-conditional>
@@ -143,16 +161,20 @@
                         </govuk-radios-fieldset>
                     </govuk-radios>
                 }
-                
+
                 <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
-                    
+
                     @if (Model.StorageTypeID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
                     {
-                        <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheDepth</govuk-input-label>
+                        <govuk-input-label is-page-heading="false">
+                            @Resource.lblWhatIsTheDepthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                        </govuk-input-label>
                     }
                     else
                     {
-                        <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheTotalDepth</govuk-input-label>
+                        <govuk-input-label is-page-heading="false">
+                            @Resource.lblWhatIsTheTotalDepthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                        </govuk-input-label>
                         <govuk-input-hint>@Resource.lblDoNotDeductTheFreeboard</govuk-input-hint>
                     }
                     <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
@@ -163,7 +185,7 @@
                     <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsCovered">
                         <govuk-radios-fieldset>
                             <govuk-radios-fieldset-legend is-page-heading="false">
-                                @string.Format(Resource.lblIsThisCovered,Model.StoreName)
+                                @string.Format(Resource.lblIsThisCovered, Model.StoreName)
                             </govuk-radios-fieldset-legend>
                             <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
                             <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
@@ -179,13 +201,13 @@
                     {
                         @if (Model.IsStoreCapacityExist == true)
                         {
-                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear">
+                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel
                             </a>
                         }
                         else
                         {
-                            @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                            @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                             {
                                 <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                                     @Resource.lblCancel

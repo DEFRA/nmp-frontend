@@ -437,7 +437,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Add fields for {0}</value>
   </data>
   <data name="lblAddYourFields" xml:space="preserve">
-    <value>Add your fields</value>
+    <value>add your fields</value>
   </data>
   <data name="lblAllFarm" xml:space="preserve">
     <value>All farms</value>
@@ -452,19 +452,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Farm summary</value>
   </data>
   <data name="lblToStartCreatingPlanAndRecords" xml:space="preserve">
-    <value>To start creating plans and records,</value>
+    <value>To start creating plans and recording details, </value>
   </data>
   <data name="lblUpdateFarmDetails" xml:space="preserve">
     <value>Update farm details</value>
   </data>
-  <data name="lblUpdateFieldsOrSoilAnalysis" xml:space="preserve">
-    <value>Update fields or soil analysis</value>
-  </data>
   <data name="lblYouHaveAdded" xml:space="preserve">
     <value> You have added {0}</value>
-  </data>
-  <data name="lblFieldsCount" xml:space="preserve">
-    <value>{0} field(s)</value>
   </data>
   <data name="lblFieldMeasurements" xml:space="preserve">
     <value>Field measurements for {0}</value>
@@ -641,7 +635,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Soil pH value</value>
   </data>
   <data name="MsgDateExample" xml:space="preserve">
-    <value>For example, 27 3 2023</value>
+    <value>For example, 27 3 {0}</value>
   </data>
   <data name="MsgEnterADateBeforeContinuing" xml:space="preserve">
     <value>Enter a date before continuing</value>
@@ -665,7 +659,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Cropped area</value>
   </data>
   <data name="lblDateSampleTaken" xml:space="preserve">
-    <value>When was the soil sample taken?</value>
+    <value>When was the soil analysis for {0} taken?</value>
   </data>
   <data name="lblDoesPotashClayForCheckAnswere" xml:space="preserve">
     <value>Does this field contain potash-releasing clay?</value>
@@ -674,13 +668,13 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Field area</value>
   </data>
   <data name="lblIsThisFieldAboveForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field more than 300 metres above sea level?</value>
+    <value>Is the field above 300 metres?</value>
   </data>
   <data name="lblManureNonSpreadingAreaForCheckAnswere" xml:space="preserve">
     <value>Manure non-spreading area</value>
   </data>
   <data name="lblNVZFieldForFieldCheckAnswere" xml:space="preserve">
-    <value>Is this field in a Nitrate Vulnerable Zone (NVZ)?</value>
+    <value>Is the field in an NVZ?</value>
   </data>
   <data name="lblNutrientValueTypeForCheckAnswere" xml:space="preserve">
     <value>How would you like to enter your soil analysis values?</value>
@@ -893,7 +887,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the planting date for {0} in these fields?</value>
   </data>
   <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
-    <value>You can change your planting date later.</value>
+    <value>You can change your sowing date later.</value>
   </data>
   <data name="lblPotato" xml:space="preserve">
     <value>potato </value>
@@ -1256,7 +1250,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>If you do not know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblSampleDate" xml:space="preserve">
-    <value>The date format is '27 3 2023'.</value>
+    <value>The date format is '27 3 {0}'.</value>
   </data>
   <data name="lblAmmonium" xml:space="preserve">
     <value>Ammonium (N)</value>
@@ -1514,7 +1508,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>What is the application method for your {0}?</value>
   </data>
   <data name="lblWhatTypeOfOrganicMaterialAreYouUsing" xml:space="preserve">
-    <value>What type of organic material are you using in this application?</value>
+    <value>What type of organic material are you using?</value>
   </data>
   <data name="lblWhenAreYouApplyingYourManureType" xml:space="preserve">
     <value>When are you applying your {0} ?</value>
@@ -1532,7 +1526,7 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>We could not add your application, try again later</value>
   </data>
   <data name="lblOrganicManureCreatedSuccessfullyForAllField" xml:space="preserve">
-    <value>Organic fertiliser added to fields in this plan</value>
+    <value>Organic material added to fields in this plan</value>
   </data>
   <data name="lblOrganicMaterialApplications" xml:space="preserve">
     <value>Organic material applications</value>
@@ -1592,13 +1586,10 @@ are in a Nitrate Vulnerable Zone (NVZ)?</value>
     <value>Plan or edit an application of organic material to {0}</value>
   </data>
   <data name="lblUpdateThisFieldOrViewRecommendations" xml:space="preserve">
-    <value>Update this field or view recommendations</value>
+    <value>Update field or view recommendations</value>
   </data>
   <data name="MsgAreaMustBeGreaterThanZero" xml:space="preserve">
     <value>Area must be greater than zero</value>
-  </data>
-  <data name="lblForExample" xml:space="preserve">
-    <value>For example, 27 03 2023</value>
   </data>
   <data name="lblKgPerHectare" xml:space="preserve">
     <value>kg per hectare</value>
@@ -1957,14 +1948,14 @@ cubic metres per hectare  not set</value>
   <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
     <value>If you have harvested most of your {0} crops you can set {1} as your last harvest year.</value>
   </data>
-  <data name="lblLastHarvestYear" xml:space="preserve">
-    <value>Last harvest year</value>
+  <data name="lblLastHarvestYearForFieldName" xml:space="preserve">
+    <value>Last harvest year for {0}</value>
   </data>
   <data name="lblToCreatePlansAndGiveRecommendation" xml:space="preserve">
     <value>To create plans and give recommendations we need information about your last harvest year.</value>
   </data>
   <data name="lblWhatIsYourLastHarvestYear" xml:space="preserve">
-    <value>What is your last harvest year?</value>
+    <value>What is your last harvest year for {0}?</value>
   </data>
   <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
     <value>Please select a harvest year before continuing</value>
@@ -2192,7 +2183,7 @@ cubic metres per hectare  not set</value>
     <value>Add soil mineral nitrogen (N) for {0}</value>
   </data>
   <data name="lblWhatWasTheSampleDepth" xml:space="preserve">
-    <value>What was the sample depth?</value>
+    <value>What was the sample depth in centimeters?</value>
   </data>
   <data name="lblSoilMineralNitrogen" xml:space="preserve">
     <value>Soil mineral nitrogen (N)</value>
@@ -2300,7 +2291,7 @@ cubic metres per hectare  not set</value>
     <value>Enter a GAI value before continuing</value>
   </data>
   <data name="MSGEnterAValidCropHeight" xml:space="preserve">
-    <value>Enter a valid numeric crop height before continuing (0-30)</value>
+    <value>Enter a valid numeric crop height before continuing (0-30 cm)</value>
   </data>
   <data name="MsgEnterAValidNumericGAIvalue" xml:space="preserve">
     <value>Enter a valid numeric GAI value before continuing (0-3)</value>
@@ -2384,7 +2375,7 @@ cubic metres per hectare  not set</value>
     <value>NULL</value>
   </data>
   <data name="lblDoYouWantToAddARecentSoilAnalysis" xml:space="preserve">
-    <value>Do you want to add a recent soil analysis for {0}?</value>
+    <value>Soil analysis for {0}</value>
   </data>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
@@ -2492,7 +2483,7 @@ cubic metres per hectare  not set</value>
     <value>We could not change soil analysis data, try again later</value>
   </data>
   <data name="MsgSampleDateExample" xml:space="preserve">
-    <value>For example, 11 February 2023</value>
+    <value>For example, 11 February {0}</value>
   </data>
   <data name="MsgSoilAnalysisChangesCouldNotSaved" xml:space="preserve">
     <value>Your soil analysis changes could not be saved.</value>
@@ -2510,7 +2501,7 @@ cubic metres per hectare  not set</value>
     <value>Update {0}</value>
   </data>
   <data name="hintTheDateFormat" xml:space="preserve">
-    <value>The date format is 21 06 2024.</value>
+    <value>The date format is 21 06 {0}.</value>
   </data>
   <data name="lblBasedOnYourCropSoilTypeAndFarmDetails" xml:space="preserve">
     <value>Based on your crop, soil type and farm details.</value>
@@ -2618,7 +2609,7 @@ cubic metres per hectare  not set</value>
     <value>Type of manure</value>
   </data>
   <data name="lblYieldPerHectare" xml:space="preserve">
-    <value>Target yield (per hectare)</value>
+    <value>Yield (per hectare)</value>
   </data>
   <data name="lblUpdateThisGroup" xml:space="preserve">
     <value>Update this group</value>
@@ -2825,7 +2816,7 @@ cubic metres per hectare  not set</value>
     <value>Creating and following a nutrient management plan will help you comply with these rules.</value>
   </data>
   <data name="lblOpenInANewWindow" xml:space="preserve">
-    <value>(opens in a new window)</value>
+    <value>(opens in a new window).</value>
   </data>
   <data name="lblFarmingRuleOfWaterFifthForEngland" xml:space="preserve">
     <value>rules for farmers and land managers</value>
@@ -2888,7 +2879,7 @@ cubic metres per hectare  not set</value>
     <value>Application date {0}</value>
   </data>
   <data name="lblAvailablePhosphate" xml:space="preserve">
-    <value>Available Phosphate (P205)</value>
+    <value>Available Phosphate (P2O5)</value>
   </data>
   <data name="lblAvailablePotash" xml:space="preserve">
     <value>Available Potash (K2O)</value>
@@ -2987,7 +2978,7 @@ cubic metres per hectare  not set</value>
     <value>Beta</value>
   </data>
   <data name="lblPhaseBannerText" xml:space="preserve">
-    <value>This is a new service. &lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
+    <value>This is a new service. &lt;a class="govuk-link" href="/HelpAndFeedback"&gt;Get help or give your feedback&lt;/a&gt;.</value>
   </data>
   <data name="helpdeskemail" xml:space="preserve">
     <value>helpdesk@rsk-bsl.co.uk</value>
@@ -3101,7 +3092,7 @@ cubic metres per hectare  not set</value>
     <value>September</value>
   </data>
   <data name="lblUseValuesFromRB209" xml:space="preserve">
-    <value>No, use the standard nutrient values from RB209</value>
+    <value>No, use the typical values from the AHDB Nutrient management guide (RB209)</value>
   </data>
   <data name="lblYesUseTheseValues" xml:space="preserve">
     <value>Yes, use these values</value>
@@ -3113,7 +3104,7 @@ cubic metres per hectare  not set</value>
     <value>No, use the values entered on {0}</value>
   </data>
   <data name="lblYesUseTheseStandardNutrientValues" xml:space="preserve">
-    <value>Yes, use these standard nutrient values</value>
+    <value>Yes, use these typical nutrient values</value>
   </data>
   <data name="lblYesUseTheseValuesFromDate" xml:space="preserve">
     <value>Yes, use these values from {0}</value>
@@ -3299,7 +3290,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resource Regulations apply a limit of 250kg of total Nitrogen per individual hectare to the spreading of organic manure for any 12 month rolling period.</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriodDetailWales" xml:space="preserve">
-    <value>The Water Resources Regulations state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that the closed period for {0} planted on non-organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningHeadingEngland" xml:space="preserve">
     <value>This application may take you over the maximum nitrogen rate limit (N-max) for this crop</value>
@@ -3311,7 +3302,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply to this crop, averaged across your whole farm, must not exceed {0}kg of N per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resourcess Regulations state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that the amount of crop available nitrogen from inorganic fertilisers and organic manures that you apply to this crop averaged across your whole farm must not exceed {0}kg per hectare.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the NVZ rules, and you should consider reducing the amount of crop-available nitrogen (N) from inorganic fertilisers and organic manures that you apply.</value>
@@ -3338,7 +3329,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resource Regulations apply a limit of 1,000kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost to orchard land in any rolling four year period.</value>
   </data>
   <data name="MsgNmaxWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources Regulations apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) apply a limit of 500kg of total Nitrogen per individual hectare to the spreading of certified green and green/food compost in any rolling two year period.</value>
   </data>
   <data name="MsgNmaxWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
@@ -3350,7 +3341,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="MsgClosedPeriodWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources Regulations state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that the closed period for {0} planted on organic farms {1} on {2} soil is {3}.</value>
   </data>
   <data name="MsgClosedPeriodWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period.</value>
@@ -3383,7 +3374,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara1Within20DaysWales" xml:space="preserve">
-    <value>The Water Resources Regulations state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state that, between the end of the closed spreading period and the end of February, you must allow at least 3 weeks between each individual application of slurry or poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryEngland" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of slurry.</value>
@@ -3395,10 +3386,10 @@ cubic metres per hectare  not set</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider allowing more time between applications.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara30SlurryWales" xml:space="preserve">
-    <value>The Water Resources Regulations state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state you must not spread more than 30 cubic metres per hectare of slurry in a single application from the end of the closed spreading period until the end of February.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara8PoultryWales" xml:space="preserve">
-    <value>The Water Resources Regulations state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales) state you must not spread more than 8 tonnes per hectare of poultry manure in a single application from the end of the closed spreading period until the end of February.</value>
   </data>
   <data name="ContentHowToolWorks" xml:space="preserve">
     <value>The first step is to set up your farm. The farm will contain your fields, and the fields will have the crops and nutrients applied to them. If you have more than one holding, it's best to add a separate farm for each one.</value>
@@ -3411,9 +3402,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
     <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
-  </data>
-  <data name="contentYourData1" xml:space="preserve">
-    <value>We only gather the data required to provide you with the appropriate recommendations.</value>
   </data>
   <data name="lbldownloadablePdftext" xml:space="preserve">
     <value>It creates downloadable plans in PDF.</value>
@@ -3452,13 +3440,13 @@ cubic metres per hectare  not set</value>
     <value>https://ahdb.org.uk/nutrient-management-guide-rb209</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd30SlurryWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of slurry.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of slurry.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2nd8PoultryWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of poultry manure.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of poultry manure.</value>
   </data>
   <data name="MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider allowing more time between applications.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider allowing more time between applications.</value>
   </data>
   <data name="lblRemoveSoilAnalysisContentFirst" xml:space="preserve">
     <value>Any recommandations for {0} will be based on previous soil analysis, where they exist. Without any soil analysis the recommendations will be based on the RB209 default values instead.</value>
@@ -3500,10 +3488,10 @@ cubic metres per hectare  not set</value>
     <value>About the recommendations, guidance and advice</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>This {0} was developed by the Department for Environment, Food &amp; Rural Affairs (Defra), the Agriculture and Horticulture Development Board (AHDB), ADAS and the RSK group. Nutrient recommendations are derived from RB209 Application Programming Interface (API); RB209 is the intellectual property of AHDB.</value>
+    <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
-    <value>While Defra and partners seek to ensure that the information provided by this {0} is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.</value>
+    <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage, injury, or liabilities howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to this tool, including the information contained in or omitted from this tool.</value>
   </data>
   <data name="lblGetHelpAndFeedback" xml:space="preserve">
     <value>Get help or give feedback</value>
@@ -3523,78 +3511,33 @@ cubic metres per hectare  not set</value>
   <data name="lbl10February" xml:space="preserve">
     <value>10 February</value>
   </data>
-  <data name="lblAboutReleaseSchedule" xml:space="preserve">
-    <value>This is the plan for testing this tool, adding new features and rolling it out across the country.</value>
-  </data>
-  <data name="lblAllModulesLive" xml:space="preserve">
-    <value>NMPT-GB for England and Wales are live on &lt;a href="https://www.gov.uk/" target="_blank"&gt;GOV.UK&lt;/a&gt; and available for general use</value>
-  </data>
   <data name="lblArableCoreFunctions" xml:space="preserve">
     <value>Core functions, arable:</value>
-  </data>
-  <data name="lblCreateAPlanAndRecord" xml:space="preserve">
-    <value>create a plan and record</value>
   </data>
   <data name="lblCreateAPlanandRecordForArableAndGrasslansFarms" xml:space="preserve">
     <value>create a plan and record for arable and grassland farms</value>
   </data>
-  <data name="lblExistingManureStorageCapacity" xml:space="preserve">
-    <value>added function: existing manure storage capacity NVZ compliance module</value>
-  </data>
-  <data name="lblMarchToAugust2025" xml:space="preserve">
-    <value>March to August 2025 - England and Wales private beta test</value>
-  </data>
   <data name="lblGrasslandCoreFunctions" xml:space="preserve">
     <value>Core functions, grassland:</value>
-  </data>
-  <data name="lblIntegratedMANNERNPKCalculations" xml:space="preserve">
-    <value>integrated MANNER-NPK calculations</value>
-  </data>
-  <data name="lblAugust2025Schedule" xml:space="preserve">
-    <value>August 2025 - England and Wales full tool live</value>
-  </data>
-  <data name="lblLivestockManureLimitComplianceModule" xml:space="preserve">
-    <value>added function: livestock manure nitrogen (N) farm limit NVZ compliance module</value>
-  </data>
-  <data name="lblMannerNPKStandAloneFrontEnd" xml:space="preserve">
-    <value>added function: MANNER-NPK stand-alone module</value>
-  </data>
-  <data name="lblNMaxComplainceModule" xml:space="preserve">
-    <value>added function: N-max NVZ compliance module</value>
-  </data>
-  <data name="lblNMPTBetaTest1" xml:space="preserve">
-    <value>A limited number of selected farmers and advisers across England and Wales are invited to test the tool and provide feedback prior to the public release.</value>
-  </data>
-  <data name="lblNMPTLaunchesToUsersInScotland" xml:space="preserve">
-    <value>NMPT-GB launches to users in Scotland</value>
   </data>
   <data name="lblNMPTLiveForGeneralUse" xml:space="preserve">
     <value>tool launches for cross-border farms</value>
   </data>
   <data name="lblServiceReleaseSchedule" xml:space="preserve">
-    <value>Release schedule for this tool</value>
+    <value>Release schedule</value>
   </data>
   <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
     <value>November 2025 - England, Wales and Scotland full service
 live</value>
   </data>
-  <data name="lblNVZAndFarmingRulesFor" xml:space="preserve">
-    <value>NVZ and Farming Rules for Water content and warning messages</value>
-  </data>
   <data name="lblNVZComplianceWarningMessages" xml:space="preserve">
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
-  </data>
-  <data name="lblOrganicManureInventory" xml:space="preserve">
-    <value>added function: organic manure inventory NVZ compliance module</value>
   </data>
   <data name="lblReadScheduleLink" xml:space="preserve">
     <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule for testing and new features&lt;/a&gt;</value>
   </data>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
-  </data>
-  <data name="lblSept2025" xml:space="preserve">
-    <value>September 2025 - Scotland launch phase</value>
   </data>
   <data name="lblCropGroupWithCounter" xml:space="preserve">
     <value>Crop group {0}</value>
@@ -3612,13 +3555,13 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} to {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningPara2England" xml:space="preserve">
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
   </data>
   <data name="MsgClosedPeriodNitrogenExceedWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
   </data>
   <data name="MsgClosedPeriodNRateExceedWarningHeadingWales" xml:space="preserve">
     <value>This application will take you over the maximum application rate for manufactured nitrogen fertiliser to this crop during the closed spreading period</value>
@@ -3627,7 +3570,7 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser to this crop between {0} and {1} must not exceed {2}kg of nitrogen per hectare.</value>
   </data>
   <data name="MsgClosedPeriodNRateExceedWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of inorganic nitrogen fertiliser.</value>
   </data>
   <data name="MsgWinterOilseedRapeNRateExceedWarningHeadingWales" xml:space="preserve">
     <value>This application will take you over the maximum application rate for inorganic nitrogen fertiliser to this crop during the closed spreading period</value>
@@ -3636,7 +3579,7 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
   </data>
   <data name="MsgWinterOilseedRapeNRateExceedWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} to 31 October must not exceed 30kg of nitrogen per hectare.</value>
   </data>
   <data name="lblRemoveThisGroup" xml:space="preserve">
     <value>Remove this group</value>
@@ -3651,7 +3594,7 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider changing your application date.</value>
   </data>
   <data name="Msg31OctoberToEndPeriodFertiliserWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider changing your application date.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider changing your application date.</value>
   </data>
   <data name="MsgClosedPeriodFertiliserWarningHeading" xml:space="preserve">
     <value>The application date you entered is inside your closed spreading period for applying inorganic nitrogen fertiliser</value>
@@ -3660,13 +3603,13 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider applying outside the closed spreading period.</value>
   </data>
   <data name="MsgClosedPeriodFertiliserWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
   </data>
   <data name="MsgWinterGrassNRateExceedWarningPara1England" xml:space="preserve">
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
   </data>
   <data name="MsgWinterGrassNRateExceedWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources Regulations state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on grass between {0} to 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time.</value>
   </data>
   <data name="lblAction" xml:space="preserve">
     <value>Action</value>
@@ -3681,7 +3624,7 @@ live</value>
     <value>The application date you entered is inside your closed spreading period for applying manure with a high readily available nitrogen content</value>
   </data>
   <data name="MsgClosedPeriodWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningHeading" xml:space="preserve">
     <value>This application will take you over the maximum application rate for high readily available nitrogen organic manure during your closed spreading period</value>
@@ -3699,7 +3642,7 @@ live</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources Regulations state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1WinterOilseed" xml:space="preserve">
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on winter oilseed rape between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare.</value>
@@ -3708,16 +3651,16 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the application rate of high readily available nitrogen manures.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the application rate of high readily available nitrogen organic manure.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of high readily available nitrogen organic manure.</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara2Wales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply.</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceedAdditionalWales" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblRemoveCropGroupContent1" xml:space="preserve">
-    <value>This will remove all information about these crops from these fields. It will also remove any fertiliser or organic material applications to the crops.​</value>
+    <value>This will remove crop information, and fertiliser and organic material applications to all fields in this crop group.</value>
   </data>
   <data name="lblRemoveCropGroupContent2" xml:space="preserve">
     <value>Your fields will remain, and you'll be able to use them again in your plans.​</value>
@@ -3756,7 +3699,7 @@ live</value>
     <value>It is an offence to breach the Nitrate Vulnerable Zone rules, and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblItIsAnOffenceToBreachTheWaterResources" xml:space="preserve">
-    <value>It is an offence to breach the Water Resources Regulations, and you should consider reducing the amount of nitrogen from organic manures.</value>
+    <value>It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of nitrogen from organic manures.</value>
   </data>
   <data name="lblCropTypeNameRemoveFromFieldName" xml:space="preserve">
     <value>{0} removed from {1}</value>
@@ -3819,7 +3762,7 @@ live</value>
     <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent3" xml:space="preserve">
-    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This {0} should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool, including the information contained in or omitted from it, should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and take appropriate measures to mitigate run-off and nutrient leaching. Where necessary consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
   <data name="lblAbout_this_service" xml:space="preserve">
     <value>About this tool</value>
@@ -3863,18 +3806,6 @@ live</value>
   <data name="lblMore_information_line2" xml:space="preserve">
     <value>For advice about nutrient planning in general, visit &lt;a href="https://www.triedandtested.org.uk" target="_blank"&gt;Tried and Tested&lt;/a&gt; (external link).</value>
   </data>
-  <data name="lblPrivate_beta_disclaimer" xml:space="preserve">
-    <value>Private beta disclaimer</value>
-  </data>
-  <data name="lblPrivate_beta_disclaimer_sub_heading" xml:space="preserve">
-    <value>Any recommendations and advice given in the private beta version of this tool cannot be used:</value>
-  </data>
-  <data name="lblPrivate_beta_disclaimer_sub_heading_line1" xml:space="preserve">
-    <value>to demonstrate compliance with any regulation or legislation, such as NVZ rules</value>
-  </data>
-  <data name="lblPrivate_beta_disclaimer_sub_heading_line2" xml:space="preserve">
-    <value>as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI)</value>
-  </data>
   <data name="lblSaving_your_data" xml:space="preserve">
     <value>Saving your data</value>
   </data>
@@ -3906,7 +3837,7 @@ live</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P205) and Potash (K20) balance.</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance.</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
@@ -3944,15 +3875,6 @@ live</value>
   <data name="lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation" xml:space="preserve">
     <value>This application may breach more than one Water Resource Regulation.</value>
   </data>
-  <data name="contentYourData2" xml:space="preserve">
-    <value>This tool will never share your data with any other organisations.</value>
-  </data>
-  <data name="contentYourData3" xml:space="preserve">
-    <value>In particular, please note that this tool does not share data with the &lt;a href="https://www.gov.uk/government/organisations/rural-payments-agency" target="_balnk"&gt; Rural Payments Agency&lt;/a&gt; (RPA).</value>
-  </data>
-  <data name="contentYourData4" xml:space="preserve">
-    <value>This tool was developed in conjunction with ADAS, AHDB and RSK.</value>
-  </data>
   <data name="lblDevelopNutrientApplicationPlan" xml:space="preserve">
     <value>You can develop a nutrient application plan during the season. This tool will keep detailed records of cropping, soil analyses, and each fertiliser and manure application.</value>
   </data>
@@ -3972,7 +3894,7 @@ live</value>
     <value>Regulations to follow</value>
   </data>
   <data name="lblWalesWaterResourceRegulations" xml:space="preserve">
-    <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;</value>
+    <value>Wales: &lt;a href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land" target="_blank"&gt;The Water Resources (Control of Agricultural Pollution) Regulations 2021  (Wales)&lt;/a&gt;</value>
   </data>
   <data name="lblGreenAreaIndexForError" xml:space="preserve">
     <value>GreenAreaIndex</value>
@@ -4008,10 +3930,10 @@ live</value>
     <value>All agricultural land in Wales is subject to the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021. These regulations have been introduced to reduce losses of pollutants from agriculture to the environment by setting rules for certain farming practices.</value>
   </data>
   <data name="lblFarmingRuleOfWaterSecondForWale" xml:space="preserve">
-    <value>You must follow rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+    <value>You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
   </data>
   <data name="lblFarmingRuleOfWaterThirdForWale" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
   </data>
   <data name="lblFirstRuleOfNVZForEngland" xml:space="preserve">
     <value>NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England.</value>
@@ -4029,7 +3951,7 @@ live</value>
     <value>If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
   </data>
   <data name="lblTheWaterResourcesRegulations2021" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021</value>
+    <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
   </data>
   <data name="lblThirdRuleOfNVZForEngland" xml:space="preserve">
     <value>Read more about</value>
@@ -4068,7 +3990,7 @@ live</value>
     <value>remove this crop group</value>
   </data>
   <data name="lblUpdateThisCropGroup" xml:space="preserve">
-    <value>Update this crop group</value>
+    <value>update this crop group</value>
   </data>
   <data name="lblViewTheYearCropPlan" xml:space="preserve">
     <value>View the {0} crop plan</value>
@@ -4111,9 +4033,6 @@ live</value>
   </data>
   <data name="lblSoilNitrogenSupplyAnalysisForField" xml:space="preserve">
     <value>Soil Nitrogen Supply (SNS) analysis for {0}</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value>Soil Nitrogen Supply Index</value>
   </data>
   <data name="lblSeason" xml:space="preserve">
     <value>Season</value>
@@ -4346,8 +4265,8 @@ live</value>
   <data name="lblCropFieldAndNutrientApplicationsForOneOrMoreFields" xml:space="preserve">
     <value>Crop, field and nutrient applications, for one or more fields.</value>
   </data>
-  <data name="lblDemonstrateComplianceWithTheNMaxLimitForEachCrop" xml:space="preserve">
-    <value>Demonstrate compliance with the N-max limit for each crop.</value>
+  <data name="NMaxReportHint" xml:space="preserve">
+    <value>Assess compliance with the N-max limit for each crop in your fields.</value>
   </data>
   <data name="lblNMaxReport" xml:space="preserve">
     <value>N-max report</value>
@@ -4466,9 +4385,6 @@ live</value>
   <data name="lblSummary" xml:space="preserve">
     <value>Summary</value>
   </data>
-  <data name="lblPrivate_beta_disclaimer_sub_heading_for_NmaxReport" xml:space="preserve">
-    <value>Any recommendations and advice given in the private beta version of this service cannot be used:</value>
-  </data>
   <data name="lblAdjustedNMaxLimit" xml:space="preserve">
     <value>Adjusted N-max limit</value>
   </data>
@@ -4533,7 +4449,7 @@ live</value>
     <value>To comply with the N-max limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted N-max limit.</value>
   </data>
   <data name="lblNoCropTypesAvailable" xml:space="preserve">
-    <value>No crop types available.</value>
+    <value>You do not have any fields in an NVZ growing crops with an Nmax limit in HY {0}</value>
   </data>
   <data name="lblApplicationMethods" xml:space="preserve">
     <value>application methods</value>
@@ -4638,7 +4554,7 @@ live</value>
     <value>Check your plan data</value>
   </data>
   <data name="lblCheckYourYearData" xml:space="preserve">
-    <value>Check your {0} data</value>
+    <value>Before you start a {0} plan, check your {1} data</value>
   </data>
   <data name="lblCropPlantingDates" xml:space="preserve">
     <value>crop planting dates</value>
@@ -4656,7 +4572,7 @@ live</value>
     <value>yields of any arable crops</value>
   </data>
   <data name="lblYourRecommWillbeBasedOnYourYearData" xml:space="preserve">
-    <value>Your {0} recommendations will be based on your {1} data, so it is important that it is up to date.</value>
+    <value>Your {0} recommendations will be based on your {1} plan. But plans change depending on factors like the weather, so it's important to keep the information in this tool accurate to what you actually did on the farm.</value>
   </data>
   <data name="lblYourYearPlanWasLastUpdatedOn" xml:space="preserve">
     <value>Your {0} plan was last updated on {1}.</value>
@@ -4745,9 +4661,6 @@ live</value>
   <data name="lblAboutTheNutrientManagementPlanningToolGBLine6" xml:space="preserve">
     <value>manure imports and exports</value>
   </data>
-  <data name="lblCoreFunctionsGrassland" xml:space="preserve">
-    <value>Core functions, grassland:</value>
-  </data>
   <data name="lblCropInformation" xml:space="preserve">
     <value>crop information</value>
   </data>
@@ -4763,32 +4676,14 @@ live</value>
   <data name="lblCrossBorderHoldingsContent3" xml:space="preserve">
     <value>This means that NMPT-GB will be using the appropriate calculations and following the relevant regulations for each farm.</value>
   </data>
-  <data name="lblCurrentFunctionContent1" xml:space="preserve">
-    <value>This is what NMPT-GB can currently do in this test phase. This list will grow as we develop the tool.</value>
-  </data>
-  <data name="lblCurrentFunctionContent2" xml:space="preserve">
-    <value>Core functions, arable:</value>
-  </data>
-  <data name="lblCurrentFunctions" xml:space="preserve">
-    <value>Current functions</value>
-  </data>
   <data name="lblLivestockInformation" xml:space="preserve">
     <value>livestock information</value>
-  </data>
-  <data name="lblPlannedUpcomingFunction" xml:space="preserve">
-    <value>Planned upcoming functions</value>
-  </data>
-  <data name="lblPlannedUpcomingFunctionContent1" xml:space="preserve">
-    <value>This is the plan for adding new functions (subject to change as we go through testing).</value>
   </data>
   <data name="lblSoilAnalysisData" xml:space="preserve">
     <value>soil analysis data</value>
   </data>
   <data name="lblSoil_Analysis_line5" xml:space="preserve">
     <value>The tool also accounts for Soil Nitrogen Supply (SNS). You can add SNS data for a field at the end of the planning process.</value>
-  </data>
-  <data name="lblWaterResourcesRegulation2021Content" xml:space="preserve">
-    <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021 content</value>
   </data>
   <data name="lblCubicMeters" xml:space="preserve">
     <value>cubic metres</value>
@@ -4815,19 +4710,19 @@ live</value>
     <value>Which cut or grazing is this inorganic material application for in {0}?</value>
   </data>
   <data name="lblFarmSummaryContent1" xml:space="preserve">
-    <value>Nutrient management planning</value>
+    <value>Create a nutrient management plan</value>
   </data>
   <data name="lblFarmSummaryContent2" xml:space="preserve">
-    <value>Create nutrient management plans, get nutrient recommendations from the AHDB Nutrient Management Guide (RB209), add organic material and inorganic fertiliser applications.</value>
+    <value>Add crops, organic and inorganic material applications, and get nutrient and lime recommendations from the Nutrient Management Guide (RB209)</value>
   </data>
   <data name="lblFarmSummaryContent3" xml:space="preserve">
-    <value>View, create or update a plan</value>
+    <value>View, create or update a nutrient management plan</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
-    <value>Farm and field details for NVZ records</value>
+    <value>Farm and field details for {0} records</value>
   </data>
   <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
     <value>Field records and nutrient management planning</value>
@@ -4845,10 +4740,10 @@ live</value>
     <value>What type of report do you want to create from your {0} data?</value>
   </data>
   <data name="lblFarmSummaryContent4" xml:space="preserve">
-    <value>Reports and outputs</value>
+    <value>Create Nitrate Vulnerable Zone (NVZ) reports</value>
   </data>
   <data name="lblFarmSummaryContent5" xml:space="preserve">
-    <value>Create reports for NVZ compliance (N-max, Livestock manure nitrogen (N) farm limit, organic material inventory and storage) and farm information and planning.</value>
+    <value>Create field and crop level reports, including:</value>
   </data>
   <data name="lblFarmSummaryContent6" xml:space="preserve">
     <value>Create a report</value>
@@ -4868,8 +4763,8 @@ live</value>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
   </data>
-  <data name="lblDemonstrateComplianceWithTheLivestockManure" xml:space="preserve">
-    <value>Demonstrate compliance with the livestock manure nitrogen (N) farm limit for the farm</value>
+  <data name="LivestockManureNitrogenFarmLimitReportHint" xml:space="preserve">
+    <value>Assess compliance with the livestock manure nitrogen (N) limit for the whole farm.</value>
   </data>
   <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit report</value>
@@ -4887,7 +4782,7 @@ live</value>
     <value>Which farm information and planning report do you want to create?</value>
   </data>
   <data name="lblWhichNVZComplianceReport" xml:space="preserve">
-    <value>Which NVZ compliance report do you want to create?</value>
+    <value>Which {0} report do you want to create?</value>
   </data>
   <data name="lblCurrentYearForReport" xml:space="preserve">
     <value>Current year - {0}</value>
@@ -5046,7 +4941,7 @@ live</value>
     <value>When did you {0} this livestock manure?</value>
   </data>
   <data name="lblHowMuchDidYouImport" xml:space="preserve">
-    <value>How much did you {0}?</value>
+    <value>How much did you {0}</value>
   </data>
   <data name="lblEnterTheAmountYouImportedInTonnes" xml:space="preserve">
     <value>Enter the amount you imported in tonnes</value>
@@ -5112,7 +5007,7 @@ live</value>
     <value>Comments about this {0} (optional)</value>
   </data>
   <data name="lblLivestockCommentContent2" xml:space="preserve">
-    <value>You can use this space to record any other comments or details about this manure import. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information.</value>
+    <value>You can use this space to record any other comments or details about this manure {0}. This is optional and for your own records only. Any information recorded here will appear in the report. Do not include any personal or financial information.</value>
   </data>
   <data name="lblOptional" xml:space="preserve">
     <value>(optional)</value>
@@ -5220,7 +5115,7 @@ live</value>
     <value>What type of {0} would you like to add?</value>
   </data>
   <data name="lblDryMatterContent" xml:space="preserve">
-    <value>Dry Matter content:</value>
+    <value>Dry Matter content</value>
   </data>
   <data name="lblUpdateAnOrganicMaterialImportOrExport" xml:space="preserve">
     <value>Update an organic material import or export</value>
@@ -5232,7 +5127,7 @@ live</value>
     <value>{0} kg per cubic metre {1}</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterYourLivestockNumbers" xml:space="preserve">
-    <value>How would you like to enter the number of {0} in {1}?</value>
+    <value>How do you want to enter the numbers for this {0} type?</value>
   </data>
   <data name="lblEnterANumberForEachMonth" xml:space="preserve">
     <value>Enter a number for each month</value>
@@ -5307,7 +5202,7 @@ live</value>
     <value>places</value>
   </data>
   <data name="lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced" xml:space="preserve">
-    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal.</value>
+    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal. Accounting for the occupancy.</value>
   </data>
   <data name="lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem" xml:space="preserve">
     <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals.</value>
@@ -5351,7 +5246,7 @@ live</value>
   <data name="lblAddALivestockType" xml:space="preserve">
     <value>Add a livestock type</value>
   </data>
-  <data name="lblAddMoreLivestock" xml:space="preserve">
+  <data name="lblAddAnotherLivestock" xml:space="preserve">
     <value>Add another livestock category</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
@@ -5562,7 +5457,7 @@ live</value>
     <value>{0}% of this farm is grass.</value>
   </data>
   <data name="lblTotalPhosphateInThisImportOrExport" xml:space="preserve">
-    <value>Total phosphate (P205) in this {0}</value>
+    <value>Total phosphate (P2O5) in this {0}</value>
   </data>
   <data name="lblGrazingLivestockManureTotalN" xml:space="preserve">
     <value>Grazing livestock manure total nitrogen (N)</value>
@@ -5696,8 +5591,8 @@ live</value>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
   </data>
-  <data name="lblDemonstrateComplianceWithRulesForOrganicMaterialStorage" xml:space="preserve">
-    <value>Demonstrate compliance with rules for organic material storage.</value>
+  <data name="ExistingManureStorageCapacityReportHint" xml:space="preserve">
+    <value>Assess compliance with rules for organic manure storage for your farm.</value>
   </data>
   <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
     <value>Which year would you like to create an Existing manure storage capacity report for?</value>
@@ -5887,8 +5782,8 @@ livestock manure.</value>
   <data name="lblLoadingOverlayContentOne" xml:space="preserve">
     <value>Loading...</value>
   </data>
-  <data name="lblEnterYearInformation" xml:space="preserve">
-    <value>Enter {0} information</value>
+  <data name="lblEnterTheDetailsFor" xml:space="preserve">
+    <value>Enter the details for {0}</value>
   </data>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
@@ -5972,7 +5867,7 @@ livestock manure.</value>
     <value>Do you want to use these values for this {0} type?</value>
   </data>
   <data name="lblThePhosphateP205StandardCanNotBeChanged" xml:space="preserve">
-    <value>The Phosphate (P205) standard can not be changed.</value>
+    <value>The Phosphate (P2O5) standard can not be changed.</value>
   </data>
   <data name="lblNoChangeTheOccupancyValue" xml:space="preserve">
     <value>No, change the occupancy value</value>
@@ -6211,7 +6106,7 @@ livestock manure.</value>
   <data name="ReportTitle" xml:space="preserve">
     <value>{0} for {1} {2}</value>
   </data>
-  <data name="lblRemoveStoreName" xml:space="preserve">
+  <data name="lblRemovePropertyName" xml:space="preserve">
     <value>Remove {0}</value>
   </data>
   <data name="lblRemoveContent" xml:space="preserve">
@@ -6248,46 +6143,37 @@ livestock manure.</value>
     <value>This website is fully compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt; Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard.</value>
   </data>
   <data name="lblAccessibilityStatementLine14" xml:space="preserve">
-    <value>This website is partially compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard, due to [insert one of the following: ‘the non-compliances’, ‘the exemptions’ or ‘the non-compliances and exemptions’] listed below.</value>
+    <value>There are no non accessible content issues identified</value>
   </data>
   <data name="lblAccessibilityStatementLine15" xml:space="preserve">
-    <value>This website is not compliant with the &lt;a href="https://www.w3.org/TR/WCAG21/" target="_blank"&gt;Web Content Accessibility Guidelines (WCAG) 2.1&lt;/a&gt; AA standard. The [insert one of the following: ‘non-compliances’, ‘exemptions’ or ‘non-compliances and exemptions’] are listed below.</value>
+    <value>RB209 technical guidance</value>
   </data>
   <data name="lblAccessibilityStatementLine16" xml:space="preserve">
-    <value>*compliance status TBD based on accessibility audit</value>
+    <value>Gov Gateway</value>
   </data>
   <data name="lblAccessibilityStatementLine17" xml:space="preserve">
-    <value>The content listed below is non-accessible for the following reasons.</value>
+    <value>Providing an assisted digital journey for users with guidance from Defra's Inclusion and Experience Specialist</value>
   </data>
   <data name="lblAccessibilityStatementLine18" xml:space="preserve">
-    <value>*TBD based on accessibility audit</value>
+    <value>Maintaining a shared approach to assisted digital support across services</value>
   </data>
   <data name="lblAccessibilityStatementLine19" xml:space="preserve">
-    <value>Our accessibility roadmap shows how and when we plan to improve accessibility on this website.</value>
+    <value>Allowing users to feedback improvements we can make</value>
   </data>
   <data name="lblAccessibilityStatementLine2" xml:space="preserve">
     <value>This tool is run by the Department for the Environment, Food and Rural Affairs (Defra).</value>
   </data>
   <data name="lblAccessibilityStatementLine20" xml:space="preserve">
-    <value>*roadmap TBD based on accessibility audit</value>
+    <value>This statement was prepared on 29/10/2025</value>
   </data>
   <data name="lblAccessibilityStatementLine21" xml:space="preserve">
-    <value>This statement was prepared on 1 August 2025.</value>
+    <value>It was last reviewed on  28/10/2025</value>
   </data>
   <data name="lblAccessibilityStatementLine22" xml:space="preserve">
-    <value>It was last reviewed on 21 August 2025.</value>
+    <value>This website was last tested on 28/10/2025</value>
   </data>
   <data name="lblAccessibilityStatementLine23" xml:space="preserve">
-    <value>This website was last tested on 18 August 2025.</value>
-  </data>
-  <data name="lblAccessibilityStatementLine24" xml:space="preserve">
-    <value>The test was carried out by internal teams, as part of the development process.</value>
-  </data>
-  <data name="lblAccessibilityStatementLine25" xml:space="preserve">
-    <value>You can read the full accessibility test report.</value>
-  </data>
-  <data name="lblAccessibilityStatementLine26" xml:space="preserve">
-    <value>*report to follow</value>
+    <value>The test was carried out by The Digital accessibility centre as part of service standard assurance.</value>
   </data>
   <data name="lblAccessibilityStatementLine3" xml:space="preserve">
     <value>We want as many people as possible to be able to use this tool.</value>
@@ -6337,9 +6223,6 @@ livestock manure.</value>
   <data name="lblContentThatsNotWithinTheScopeOfTheAccessibilityRegulations" xml:space="preserve">
     <value>Content that’s not within the scope of the accessibility regulations</value>
   </data>
-  <data name="lblDisproportionateBurden" xml:space="preserve">
-    <value>Disproportionate burden</value>
-  </data>
   <data name="lblemail" xml:space="preserve">
     <value>email</value>
   </data>
@@ -6354,9 +6237,6 @@ livestock manure.</value>
   </data>
   <data name="lblNonAccessibleContent" xml:space="preserve">
     <value>Non-accessible content</value>
-  </data>
-  <data name="lblNonComplianceWithTheAccessibilityRegulations" xml:space="preserve">
-    <value>Non-compliance with the accessibility regulations</value>
   </data>
   <data name="lblPreparationOfThisAccessibilityStatement" xml:space="preserve">
     <value>Preparation of this accessibility statement</value>
@@ -6419,12 +6299,729 @@ livestock manure.</value>
     <value>Do you want to enter the expected yield for {0} in {1}?</value>
   </data>
   <data name="lblYouCanEnterAYieldLater" xml:space="preserve">
-    <value>you can enter a yield later.</value>
+    <value>You can enter a yield later.</value>
   </data>
   <data name="lblCheckYourCropPlans" xml:space="preserve">
     <value> Check your crop plans</value>
   </data>
   <data name="lblToSeeYourRecommendations" xml:space="preserve">
     <value> to see your recommendations.</value>
+  </data>
+  <data name="lblCropAndFieldManagementReportName" xml:space="preserve">
+    <value>Crop and field management report</value>
+  </data>
+  <data name="lblPageTitleTemplate" xml:space="preserve">
+    <value>{0} - NMPTGB - GOV.UK</value>
+  </data>
+  <data name="lblSessionTimeoutBoxContent" xml:space="preserve">
+    <value>For your security, you’ll be signed out in</value>
+  </data>
+  <data name="lblSessionTimeoutBoxHeading" xml:space="preserve">
+    <value>You’re about to be signed out</value>
+  </data>
+  <data name="lblStaySignedIn" xml:space="preserve">
+    <value>Stay signed in</value>
+  </data>
+  <data name="lblSectionAddFarm" xml:space="preserve">
+    <value>Add Farm</value>
+  </data>
+  <data name="lblAddSlurryStorage" xml:space="preserve">
+    <value>Add slurry storage</value>
+  </data>
+  <data name="lblDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="lblAddASoilAnalysis" xml:space="preserve">
+    <value>Add a soil analysis</value>
+  </data>
+  <data name="lblUpdateSoilAnalysis" xml:space="preserve">
+    <value>Update soil analysis</value>
+  </data>
+  <data name="MsgForPhPhosphorusPotassiumMagnesium" xml:space="preserve">
+    <value>Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg).</value>
+  </data>
+  <data name="lblChangeRainfallAmount" xml:space="preserve">
+    <value>Change rainfall amount</value>
+  </data>
+  <data name="lblMaxApplicationRateForBrasicas" xml:space="preserve">
+    <value>Max application rate for brassicas</value>
+  </data>
+  <data name="lblMaxApplicationRateEverythingExceptWosr" xml:space="preserve">
+    <value>Max application rate (everything except WOSR, Brassicas &amp; Grass)</value>
+  </data>
+  <data name="lblMaxApplicationRateForWinterOilseedRape" xml:space="preserve">
+    <value>Max application rate for winter oilseed rape</value>
+  </data>
+  <data name="MsgApplicationToGrassAtRateOfMoreThan" xml:space="preserve">
+    <value>Application to grass at a rate of more than 40kg n/ha in one go</value>
+  </data>
+  <data name="MsgThisApplicationMayTakeYouOverTheMaximumNitrogenRate" xml:space="preserve">
+    <value>This application may take you over the maximum nitrogen rate limit (N-max) for this crop</value>
+  </data>
+  <data name="MsgClosedSpreadingPeriod" xml:space="preserve">
+    <value>Closed spreading period</value>
+  </data>
+  <data name="MsgOrganicManureNfieldLimit" xml:space="preserve">
+    <value>Organic manure N field limit</value>
+  </data>
+  <data name="MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil" xml:space="preserve">
+    <value>Organic manure N field limit for compost worked into the soil </value>
+  </data>
+  <data name="MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch" xml:space="preserve">
+    <value>Organic manure N field limit for compost applied as a mulch</value>
+  </data>
+  <data name="MsgNMaxLimitMessage" xml:space="preserve">
+    <value>N max limit message</value>
+  </data>
+  <data name="MsgSlurryMaxApplicationRate" xml:space="preserve">
+    <value>Slurry max application rate</value>
+  </data>
+  <data name="MsgPoultryManureMaxApplicationRate" xml:space="preserve">
+    <value>Poultry manure max application rate</value>
+  </data>
+  <data name="MsgClosedPeriodForTheApplicationOfHighNOrganicManureMessage" xml:space="preserve">
+    <value>Closed period for the application of high N organic manure message</value>
+  </data>
+  <data name="MsgClosedSpreadingPeriodApplicationAfter31October" xml:space="preserve">
+    <value>Closed spreading period - application after 31 October</value>
+  </data>
+  <data name="Msg3WeeksBetweenApplications" xml:space="preserve">
+    <value>3 weeks between applications</value>
+  </data>
+  <data name="MsgClosedPeriodAndMaximumApplicationRateForHighN" xml:space="preserve">
+    <value>Closed period and maximum application rate for high N organic manure on a registered organic farm message</value>
+  </data>
+  <data name="lblUpdatePlan" xml:space="preserve">
+    <value>Update plan</value>
+  </data>
+  <data name="lblPlansAndRecordsList" xml:space="preserve">
+    <value>Plans and records list</value>
+  </data>
+  <data name="lblRemoveCropPlan" xml:space="preserve">
+    <value>Remove crop plan</value>
+  </data>
+  <data name="lblUpdateOrganicManure" xml:space="preserve">
+    <value>Update organic manure</value>
+  </data>
+  <data name="lblAddOrganicManure" xml:space="preserve">
+    <value>Add organic manure</value>
+  </data>
+  <data name="lblAddInorganicFeriliser" xml:space="preserve">
+    <value>Add inorganic fertiliser</value>
+  </data>
+  <data name="lblUpdateInorganicFeriliser" xml:space="preserve">
+    <value>Update inorganic fertiliser</value>
+  </data>
+  <data name="lblInUnit" xml:space="preserve">
+    <value>, in {0}</value>
+  </data>
+  <data name="lblUpdateOrganicMaterialStorage" xml:space="preserve">
+    <value>Update organic material storage</value>
+  </data>
+  <data name="AddASoilMineralNitrogenAnalysisResult" xml:space="preserve">
+    <value>Add a soil mineral nitrogen analysis result</value>
+  </data>
+  <data name="lblAvailableSulphur" xml:space="preserve">
+    <value>Available Sulphur (SO3)</value>
+  </data>
+  <data name="MsgCroppedAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
+    <value>Cropped area should not more than 2 decimal</value>
+  </data>
+  <data name="MsgManureNonSpreadingAreaNotMoreThanTwoDecimal" xml:space="preserve">
+    <value>Manure non - spreading area should not more than 2 decimal</value>
+  </data>
+  <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
+    <value>Total area should not more than 2 decimal</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields </value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForFieldInWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1} </value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForTheseFieldWithSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in these fields</value>
+  </data>
+  <data name="lblWhatIsTheExpectedYieldForFieldInSuffix" xml:space="preserve">
+    <value>What is the expected yield for {0} in {1}</value>
+  </data>
+  <data name="lblQuestionMark" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="lblOptionalQues" xml:space="preserve">
+    <value>(optional)?</value>
+  </data>
+  <data name="lblPhosphorusPPerLitreOfSoil" xml:space="preserve">
+    <value>Phosphorus (P) per litre of soil</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffix" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1}</value>
+  </data>
+  <data name="lblWhatWasTheTotalRainfallSinceApplicationSuffix" xml:space="preserve">
+    <value>What was the total rainfall since application</value>
+  </data>
+  <data name="lblWhatIsTheAverageNumberOfSuffix" xml:space="preserve">
+    <value>What is the average number of {0} in {1}</value>
+  </data>
+  <data name="lblWhatIsTheTotalFarmAreaSuffix" xml:space="preserve">
+    <value>What is the total farm area</value>
+  </data>
+  <data name="lblWhatIsTheTotalAreaInAnNVZSuffix" xml:space="preserve">
+    <value>What is the total area in an NVZ</value>
+  </data>
+  <data name="lblWhatPercentageOfTheLandIsFarmedAsGrassSuffix" xml:space="preserve">
+    <value>What percentage of the land is farmed as grass</value>
+  </data>
+  <data name="lblNumberInMonthSuffix" xml:space="preserve">
+    <value>Number in {0} {1}</value>
+  </data>
+  <data name="lblHowMuchDidYouSuffix" xml:space="preserve">
+    <value>How much did you {0}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenStandardForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
+    <value>What is the average total number of this {0} type for {1}</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheAdjustmentValuePerPectareSuffix" xml:space="preserve">
+    <value>What is the adjustment value per hectare</value>
+  </data>
+  <data name="lblWhatIsThePercentageOfOrganicMatterInTheSoilSuffix" xml:space="preserve">
+    <value>What is the percentage of organic matter in the soil</value>
+  </data>
+  <data name="lblPhValueSuffix" xml:space="preserve">
+    <value>pH value </value>
+  </data>
+  <data name="lblWhatIsTheWidthAtTheTopEdgeOfTheLagoonSuffix" xml:space="preserve">
+    <value>What is the width at the top edge of the lagoon</value>
+  </data>
+  <data name="lblWhatIsTheWidthSuffix" xml:space="preserve">
+    <value>What is the width</value>
+  </data>
+  <data name="lblWhatIsTheCircumferenceSuffix" xml:space="preserve">
+    <value>What is the circumference</value>
+  </data>
+  <data name="lblWhatIsTheDiameterSuffix" xml:space="preserve">
+    <value>What is the diameter</value>
+  </data>
+  <data name="lblWhatIsTheDepthSuffix" xml:space="preserve">
+    <value>What is the depth</value>
+  </data>
+  <data name="lblWhatIsTheTotalDepthSuffix" xml:space="preserve">
+    <value>What is the total depth</value>
+  </data>
+  <data name="lblWhatIsTheTotalCapacityOfSuffix" xml:space="preserve">
+    <value>What is the total capacity of {0}</value>
+  </data>
+  <data name="lblWhatIsTheWeightCapacityOfSuffix" xml:space="preserve">
+    <value>What is the weight capacity of {0}</value>
+  </data>
+  <data name="lblReport" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="lblAddLivestockNumber" xml:space="preserve">
+    <value>Add livestock number</value>
+  </data>
+  <data name="lblUpdateALivestockType" xml:space="preserve">
+    <value>Update a livestock type</value>
+  </data>
+  <data name="lblUpdateThisLivestockType" xml:space="preserve">
+    <value>Update this livestock type</value>
+  </data>
+  <data name="lblAddThisLivestock" xml:space="preserve">
+    <value>Add this livestock type</value>
+  </data>
+  <data name="OrganicMaterialInventoryStorageRequirementReport" xml:space="preserve">
+    <value>Organic material inventory and storage requirement report</value>
+  </data>
+  <data name="OrganicMaterialInventoryStorageRequirementReportHint" xml:space="preserve">
+    <value>Assess compliance with rules for manure inventory and storage requirements for your farm.</value>
+  </data>
+  <data name="lblStorageCapacityForTitle" xml:space="preserve">
+    <value>Storage capacity</value>
+  </data>
+  <data name="lblRemoveThisLivestockType" xml:space="preserve">
+    <value>remove this livestock type</value>
+  </data>
+  <data name="lblFromYourManureNitrogenFarmLimitReport" xml:space="preserve">
+    <value> from your manure nitrogen (N) farm limit report.</value>
+  </data>
+  <data name="lblRemoveNLLivetsockContent" xml:space="preserve">
+    <value>This will remove {0} from your manure nitrogen (N) farm limit report.</value>
+  </data>
+  <data name="lblAddMoreLivestock" xml:space="preserve">
+    <value>Add more livestock</value>
+  </data>
+  <data name="lblYouHaveUpdatedLivestock" xml:space="preserve">
+    <value>You have updated livestock</value>
+  </data>
+  <data name="MsgGenericFor" xml:space="preserve">
+    <value>for {0}</value>
+  </data>
+  <data name="lblView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="lblAddedOn" xml:space="preserve">
+    <value>Added on {0}</value>
+  </data>
+  <data name="lblDoYouWantToAddSoilAnalysisFor" xml:space="preserve">
+    <value>Do you want to add soil analysis for {0}?</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseTypicalNutrientValues" xml:space="preserve">
+    <value>Do you want to use these typical nutrient values?</value>
+  </data>
+  <data name="lblNutrientValuesFor" xml:space="preserve">
+    <value>Typical nutrient values for {0}</value>
+  </data>
+  <data name="lblTypicalNutrientValues" xml:space="preserve">
+    <value>These are typical nutrient values.</value>
+  </data>
+  <data name="HeadingClimateConditions" xml:space="preserve">
+    <value>Climate conditions</value>
+  </data>
+  <data name="AddFieldNameQuestion" xml:space="preserve">
+    <value>What is the field name?</value>
+  </data>
+  <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
+    <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
+  </data>
+  <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
+    <value>Enter an quantity between 1 and 9,99,999</value>
+  </data>
+  <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
+    <value>Quantity must be between 1 to 9,99,999</value>
+  </data>
+  <data name="lblOrgenisation" xml:space="preserve">
+    <value>lblOrgenisation</value>
+  </data>
+  <data name="lblMenu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInYear" xml:space="preserve">
+    <value>Was {0} used for grass in {1}, {2}  or {3}?</value>
+  </data>
+  <data name="lblRecommendationNotAvailable" xml:space="preserve">
+    <value>Recommendations not available</value>
+  </data>
+  <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
+    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+  </data>
+  <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
+    <value>Add {0} crop details for {1}</value>
+  </data>
+  <data name="lblAddPreviousCrop" xml:space="preserve">
+    <value>Add previous crop</value>
+  </data>
+  <data name="lblWhatWasTheCropGroup" xml:space="preserve">
+    <value>What was the crop group in {0}?</value>
+  </data>
+  <data name="lblWhatWasTheCropType" xml:space="preserve">
+    <value>What was the crop type in {0}?</value>
+  </data>
+  <data name="lblWasFutureFieldUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has Future Field been used for grass in any of the last 3 years?</value>
+  </data>
+  <data name="lblAddYearCropHistoryToFieldName" xml:space="preserve">
+    <value>Add {0} crop history to {1}</value>
+  </data>
+  <data name="lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear" xml:space="preserve">
+    <value>Has {0} been used for grass in any of the last 3 year?</value>
+  </data>
+  <data name="lblChangeCompany" xml:space="preserve">
+    <value>Change company</value>
+  </data>
+  <data name="lblSignoutnow" xml:space="preserve">
+    <value>Sign out now</value>
+  </data>
+  <data name="lblYou canalso" xml:space="preserve">
+    <value>You can also</value>
+  </data>
+  <data name="HintSoilNitrogenSupplyItems" xml:space="preserve">
+    <value>Include nitrogen in fertiliser and crop available nitrogen in organic materials.</value>
+  </data>
+  <data name="MsgRecommendationsUpdated" xml:space="preserve">
+    <value>Recommendations updated</value>
+  </data>
+  <data name="lblAddCropHistory" xml:space="preserve">
+    <value>Add crop history</value>
+  </data>
+  <data name="lblIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="lblWaterResourcesRegulations" xml:space="preserve">
+    <value>Water Resources Regulations</value>
+  </data>
+  <data name="lblNVZShortForm" xml:space="preserve">
+    <value>NVZ</value>
+  </data>
+  <data name="lblCreateALivestockManureNitrogenFarmLimitReportYear" xml:space="preserve">
+    <value>Create a livestock manure nitrogen (N) farm limit report {0}</value>
+  </data>
+  <data name="lblLivestock" xml:space="preserve">
+    <value>livestock</value>
+  </data>
+  <data name="lblcm" xml:space="preserve">
+    <value>cm</value>
+  </data>
+  <data name="lblCropInYear" xml:space="preserve">
+    <value>Crop in {0}</value>
+  </data>
+  <data name="lblTypicalGrassManagement" xml:space="preserve">
+    <value>Typical grass management</value>
+  </data>
+  <data name="lblHighCloverContent" xml:space="preserve">
+    <value>High clover content</value>
+  </data>
+  <data name="lblLengthOfTheLay" xml:space="preserve">
+    <value>Length of the lay</value>
+  </data>
+  <data name="lblDefaultNutrientValueContentFirst" xml:space="preserve">
+    <value>These values come from the AHDB Nutrient Management Guide (RB209).</value>
+  </data>
+  <data name="lblDefaultNutrientValueContentSecond" xml:space="preserve">
+    <value>Your nutrient values for {0}</value>
+  </data>
+  <data name="lblDefaultNutrientValueContentThird" xml:space="preserve">
+    <value>These values were entered on {0}.</value>
+  </data>
+  <data name="lblDefaultNutrientValueContentFourth" xml:space="preserve">
+    <value>Do you want to use these nutrient values?</value>
+  </data>
+  <data name="lblValuePerTonne" xml:space="preserve">
+    <value>Value per tonne</value>
+  </data>
+  <data name="lblValueTotal" xml:space="preserve">
+    <value>{0} (total)</value>
+  </data>
+  <data name="lblOptions" xml:space="preserve">
+    <value>options</value>
+  </data>
+  <data name="lblRemoveCropTypeFromFieldNameInYear" xml:space="preserve">
+    <value>remove {0} from {1} in {2}</value>
+  </data>
+  <data name="lblUpdateTheCropTypeForFieldName" xml:space="preserve">
+    <value>Update the {0} for {1}</value>
+  </data>
+  <data name="lblRemoveCropFromFieldInYear" xml:space="preserve">
+    <value>remove {0} from {1} in {2}</value>
+  </data>
+  <data name="lblUpdateTheCropForField" xml:space="preserve">
+    <value>Update the {0} for {1}</value>
+  </data>
+  <data name="lblValueKgPerTonne" xml:space="preserve">
+    <value>{0}kg/t</value>
+  </data>
+  <data name="lblValueKgPerHectare" xml:space="preserve">
+    <value>{0}kg/ha</value>
+  </data>
+  <data name="lblAddingOrRemovingFieldsFromACropGroup" xml:space="preserve">
+    <value>Adding or removing fields from a crop group</value>
+  </data>
+  <data name="lblFieldToBeAdded" xml:space="preserve">
+    <value>Fields to be added</value>
+  </data>
+  <data name="lblFieldsToBeAdded" xml:space="preserve">
+    <value>Fields to be added</value>
+  </data>
+  <data name="lblTheseFieldWillBeAddedToThisCropGroup" xml:space="preserve">
+    <value>These fields will be added to this crop group.</value>
+  </data>
+  <data name="lblFieldsToBeRemoved" xml:space="preserve">
+    <value>Fields to be removed</value>
+  </data>
+  <data name="lblTheseFieldWillBeRemovedFromThisCropGroup" xml:space="preserve">
+    <value>These fields will be removed from this crop group.</value>
+  </data>
+  <data name="lblAnyExistingCropsAndOragnicOrInorganicContent" xml:space="preserve">
+    <value>Any existing crops, and organic or inorganic material applications, planned for {0} will be lost from these fields.</value>
+  </data>
+  <data name="lblUpdateThisCropGroupOnButton" xml:space="preserve">
+    <value>Update this crop group</value>
+  </data>
+  <data name="lblCookies" xml:space="preserve">
+    <value>Cookies</value>
+  </data>
+  <data name="lblOnClosingBrowser" xml:space="preserve">
+    <value>On closing browser</value>
+  </data>
+  <data name="lblCookieStatementUpdateOn" xml:space="preserve">
+    <value>This was last updated on 12 November 2025</value>
+  </data>
+  <data name="lblGovernmentServices" xml:space="preserve">
+    <value>Government services</value>
+  </data>
+  <data name="ContentCookiesOfOtherGovServices" xml:space="preserve">
+    <value>Most services we link to are run by different government departments, for example HM Revenue and Customs (HMRC) or the Home Office. These services may set other cookies and, if so, will have their own cookies policy.</value>
+  </data>
+  <data name="lblUsedForStoringTheRelayCookie" xml:space="preserve">
+    <value>Used for storing the relay cookie</value>
+  </data>
+  <data name="CsrfCookieName" xml:space="preserve">
+    <value>x-ms-cpim-csrf</value>
+  </data>
+  <data name="RpCookieName" xml:space="preserve">
+    <value>x-ms-cpim-rp</value>
+  </data>
+  <data name="ContentUsedForStoringMembershipDataForTheResourceProviderTenant" xml:space="preserve">
+    <value>Used for storing membership data for the resource provider tenant</value>
+  </data>
+  <data name="lblContext" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="DcCookieName" xml:space="preserve">
+    <value>x-ms-cpim-dc</value>
+  </data>
+  <data name="CtxCookieName" xml:space="preserve">
+    <value>x-ms-cpim-ctx</value>
+  </data>
+  <data name="ContentUsedForAzureADB2CNetworkRouting" xml:space="preserve">
+    <value>Used for Azure AD B2C network routing</value>
+  </data>
+  <data name="ContentCrossSiteRequestForgeryToken" xml:space="preserve">
+    <value>Cross-Site Request Forgery token used for CRSF protection</value>
+  </data>
+  <data name="CpimCsrfCookieName" xml:space="preserve">
+    <value>x-ms-cpim-csrf</value>
+  </data>
+  <data name="ContentUsedForMaintainingTheRequestState" xml:space="preserve">
+    <value>Used for maintaining the request state, successful authentication</value>
+  </data>
+  <data name="CacheIdCookieName" xml:space="preserve">
+    <value>x-ms-cpim-cache:{id}_n</value>
+  </data>
+  <data name="ContentUsedForMaintainingTheSSOSession" xml:space="preserve">
+    <value>Used for maintaining the SSO session</value>
+  </data>
+  <data name="SSOIdCookieName" xml:space="preserve">
+    <value>x-ms-cpim-sso:{Id}</value>
+  </data>
+  <data name="ContentUsedForTrackingTheTransactionsAndTheCurrentTransaction" xml:space="preserve">
+    <value>Used for tracking the transactions and the current transaction</value>
+  </data>
+  <data name="TransCookieName" xml:space="preserve">
+    <value>x-ms-cpim-trans</value>
+  </data>
+  <data name="ContentUsedToRouteRequestsToTheAppropriateProductionInstance" xml:space="preserve">
+    <value>Used to route requests to the appropriate production instance</value>
+  </data>
+  <data name="SliceCookieName" xml:space="preserve">
+    <value>x-ms-cpim-slice</value>
+  </data>
+  <data name="ContentHoldsUserMembershipDataAcrossTenants" xml:space="preserve">
+    <value>Holds user membership data across tenants</value>
+  </data>
+  <data name="AdminCookieName" xml:space="preserve">
+    <value>x-ms-cpim-admin</value>
+  </data>
+  <data name="lblPurpose" xml:space="preserve">
+    <value>Purpose</value>
+  </data>
+  <data name="lblExpires" xml:space="preserve">
+    <value>Expires</value>
+  </data>
+  <data name="SubHeadingAzureActiveDirectoryB2Ccookies" xml:space="preserve">
+    <value>Azure Active Directory B2C cookies</value>
+  </data>
+  <data name="lblThreeDays" xml:space="preserve">
+    <value>3 days</value>
+  </data>
+  <data name="SubHeadingCookiesThatAreStrictlyNecessary" xml:space="preserve">
+    <value>Cookies that are strictly necessary</value>
+  </data>
+  <data name="ContentEssentialCookieStatementText" xml:space="preserve">
+    <value>These cookies are essential to make this service run and to help us stay in line with data protection laws. You cannot turn these cookies off.</value>
+  </data>
+  <data name="SubHeadingEssentialCookies" xml:space="preserve">
+    <value>Essential cookies</value>
+  </data>
+  <data name="lblNever" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="ContentLetsUsKnowThatYouHaveBeenAskedAboutCookies" xml:space="preserve">
+    <value>Lets us know that you’ve been asked about cookies</value>
+  </data>
+  <data name="CookieChallengeCookieName" xml:space="preserve">
+    <value>cookieChallenge</value>
+  </data>
+  <data name="ContentAbourCookies" xml:space="preserve">
+    <value>Cookies are files saved on your phone, tablet or computer that help run the service.</value>
+  </data>
+  <data name="CrumbCookieName" xml:space="preserve">
+    <value>crumb</value>
+  </data>
+  <data name="ContentHelpsToPreventUnauthorisedRequests" xml:space="preserve">
+    <value>Helps to prevent unauthorised requests</value>
+  </data>
+  <data name="IdmCookieName" xml:space="preserve">
+    <value>idm</value>
+  </data>
+  <data name="ContentLetsUsKnowThatYouHaveLoggedInOrRegistered" xml:space="preserve">
+    <value>Lets us know that you’ve logged in or registered</value>
+  </data>
+  <data name="InteractionCookieName" xml:space="preserve">
+    <value>_interaction</value>
+  </data>
+  <data name="ContentAllowsUsToIdentifyYouAsAnIndividualUserInOurApplications" xml:space="preserve">
+    <value>Allows us to identify you as an individual user in our applications</value>
+  </data>
+  <data name="InteractionSigCookieName" xml:space="preserve">
+    <value>_interaction.sig</value>
+  </data>
+  <data name="SessionCookieName" xml:space="preserve">
+    <value>session</value>
+  </data>
+  <data name="ContentStoreInformationThatYouHaveSubmitted" xml:space="preserve">
+    <value>Stores information that you’ve submitted</value>
+  </data>
+  <data name="lblNvzWarningFor" xml:space="preserve">
+    <value>NVZ warnings for {0}</value>
+  </data>
+  <data name="lblThePlannedApplicationsmayNotComplyWith" xml:space="preserve">
+    <value>The planned applications may not comply with these Nitrate Vulnerable Zone (NVZ) rules:</value>
+  </data>
+  <data name="lblAnNmaxReportIsNotAvailable" xml:space="preserve">
+    <value>An N-max report is not available</value>
+  </data>
+  <data name="lblYouHaveNotPlannedAnyCropsForYear" xml:space="preserve">
+    <value>You have not planned any crops for {0} that require an N-max report.</value>
+  </data>
+  <data name="lblYouCan" xml:space="preserve">
+    <value>You can</value>
+  </data>
+  <data name="lblCheckTheFarmSetUp" xml:space="preserve">
+    <value>check the farm set-up</value>
+  </data>
+  <data name="lblAndChangeWhetherYourWholeFarm" xml:space="preserve">
+    <value>and change whether your whole farm, or some fields, are in a nitrate vulnerable zone (NVZ).</value>
+  </data>
+  <data name="lblNMaxReportsAreOnlyAvailableForFarms" xml:space="preserve">
+    <value>N-max reports are only available for farms that are in a nitrate vulnerable zone (NVZ).</value>
+  </data>
+  <data name="lblYouCurrentlyDoNotHaveAPlanFor" xml:space="preserve">
+    <value>You currently do not have a plan for {0}</value>
+  </data>
+  <data name="MsgEnterTheCroppedArea" xml:space="preserve">
+    <value>Enter the cropped area</value>
+  </data>
+  <data name="ExistingManureStorageCapacityReportHintReword" xml:space="preserve">
+    <value>Calculate the storage capacity of your existing manure stores.</value>
+  </data>
+  <data name="lblYourDataContentOne" xml:space="preserve">
+    <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
+  </data>
+  <data name="lblYourDataContentSecond" xml:space="preserve">
+    <value>This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the  &lt;a href="https://www.gov.uk/government/organisations/rural-payments-agency" target="_blank"&gt; Rural Payments Agency&lt;/a&gt; (RPA) or the Environment Agency (EA).</value>
+  </data>
+  <data name="lblNutrientCanHaveOnlyOneDecimalPlace" xml:space="preserve">
+    <value>Enter the {0} to one decimal place</value>
+  </data>
+  <data name="MsgEnterTheValueAmountUsingIntValueOnly" xml:space="preserve">
+    <value>Enter the {0} amount using integer values only.</value>
+  </data>
+  <data name="lblThereAreCountCutsAndGrazingsInYear" xml:space="preserve">
+    <value>There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one.</value>
+  </data>
+  <data name="lblLastUpdatedDate" xml:space="preserve">
+    <value>Last updated {0}</value>
+  </data>
+  <data name="lblReleaseScheduleContentOne" xml:space="preserve">
+    <value>Public Beta release, December 2025</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
+    <value>The first functionality in the nutrient management planning tool is ready for use by the public in England and Wales. This has had approximately eight months of user testing.</value>
+  </data>
+  <data name="lblReleaseScheduleContentThree" xml:space="preserve">
+    <value>The first public release helps users to;</value>
+  </data>
+  <data name="lblReleaseScheduleContentFour" xml:space="preserve">
+    <value>create a nutrient management plan for arable crops and grassland</value>
+  </data>
+  <data name="lblReleaseScheduleContentFive" xml:space="preserve">
+    <value>get nutrient recommendations from RB209</value>
+  </data>
+  <data name="lblReleaseScheduleContentSix" xml:space="preserve">
+    <value>plan organic and inorganic material applications, which include MANNER-NPK calculations</value>
+  </data>
+  <data name="lblReleaseScheduleContentSeven" xml:space="preserve">
+    <value>see warning messages where applications may breach Nitrate Vulnerable Zone (NVZ) rules</value>
+  </data>
+  <data name="lblReleaseScheduleContentEight" xml:space="preserve">
+    <value>update plans and record what happens at a field level</value>
+  </data>
+  <data name="lblReleaseScheduleContentNine" xml:space="preserve">
+    <value>This version also helps to create NVZ reports for:</value>
+  </data>
+  <data name="lblReleaseScheduleContentTen" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit</value>
+  </data>
+  <data name="lblReleaseScheduleContentEleven" xml:space="preserve">
+    <value>Next releases, early 2026</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
+    <value>Launch in Scotland</value>
+  </data>
+  <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
+    <value>The Scottish version of the nutrient management planning tool is currently in development. This will be released to all users in early 2026, after user testing.</value>
+  </data>
+  <data name="lblReleaseScheduleContentFourteen" xml:space="preserve">
+    <value>This version will give recommendations based on the Scottish Technical Notes. It will help users to create NVZ reports based on Scottish rules.</value>
+  </data>
+  <data name="lblReleaseScheduleContentFifteen" xml:space="preserve">
+    <value>Next available functionality</value>
+  </data>
+  <data name="lblReleaseScheduleContentSixteen" xml:space="preserve">
+    <value>Upcoming releases available in England, Scotland and Wales will include the ability to:</value>
+  </data>
+  <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
+    <value>create an NVZ report for existing manure storage capacity</value>
+  </data>
+  <data name="lblReleaseScheduleContentEighteen" xml:space="preserve">
+    <value>calculate NVZ organic manure storage requirements and manure inventory</value>
+  </data>
+  <data name="lblReleaseScheduleContentNineteen" xml:space="preserve">
+    <value>use MANNER NPK to create quick estimates of nitrogen (N) value and losses</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwenty" xml:space="preserve">
+    <value>import data from existing PLANET files</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwentyOne" xml:space="preserve">
+    <value>The current functionality will continue to be updated based on feedback from our users.</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwentyTwo" xml:space="preserve">
+    <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page)</value>
+  </data>
+  <data name="lblReleaseScheduleDate" xml:space="preserve">
+    <value>25th November 2025</value>
+  </data>
+  <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
+    <value>Add or update fields and soil analysis</value>
+  </data>
+  <data name="lblThisFarmHas" xml:space="preserve">
+    <value>This farm has {0} field(s).</value>
+  </data>
+  <data name="lblLivestockManureNitrogenNFarmLimit" xml:space="preserve">
+    <value>Livestock manure nitrogen (N) farm limit</value>
+  </data>
+  <data name="lblExistingManureStorageCapacity" xml:space="preserve">
+    <value>Existing manure storage capacity</value>
+  </data>
+  <data name="lblOrganicManureInventoryAndStorageRequirement" xml:space="preserve">
+    <value>Organic manure inventory and storage requirement</value>
+  </data>
+  <data name="lblCreateAnNVZReport" xml:space="preserve">
+    <value>Create an NVZ report</value>
+  </data>
+  <data name="lblThisFarmhasNoFields" xml:space="preserve">
+    <value>This farm has no fields.</value>
+  </data>
+  <data name="lblAddAField" xml:space="preserve">
+    <value>Add a field</value>
+  </data>
+  <data name="lblPrivacyNotice" xml:space="preserve">
+    <value>Privacy notice</value>
   </data>
 </root>

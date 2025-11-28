@@ -1,9 +1,8 @@
 ﻿@using NMP.Portal.Resources;
 @using NMP.Portal.ViewModels;
 @model FarmsViewModel
-
 @{
-    ViewData["Title"] = Resource.lblFarmList;
+    ViewData["Title"] = Resource.lblYourFarms;
 }
 
 @if (TempData["Error"] != null)
@@ -15,11 +14,11 @@
 else
 {
     <div class="govuk-grid-row">
-        <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+        <div id="all-plans-table" class="govuk-grid-column-two-thirds-from-desktop">
 
             @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</h3>
                     </div>
@@ -39,9 +38,9 @@ else
                 }
                 <hr class="seperator_five" />
                 <div>
-                    <h2 class="govuk-heading-m">
+                    <p class="govuk-heading-m">
                         @Resource.lblAddANewFarm
-                    </h2>                    
+                    </p>                    
                     <p class="govuk-body">
                         <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
                     </p>

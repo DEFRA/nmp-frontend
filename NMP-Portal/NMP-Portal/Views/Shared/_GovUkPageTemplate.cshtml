@@ -1,61 +1,77 @@
 ﻿@using GovUk.Frontend.AspNetCore
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.Extensions.Options
+@using NMP.Portal.Resources
+@inject IOptions<GovUkFrontendOptions> OptionsAccessor
 @inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
-@inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
-@addTagHelper *, GovUk.Frontend.AspNetCore
+@addTagHelper GovUk.Frontend.AspNetCore.TagHelpers.*, GovUk.Frontend.AspNetCore
 @{
-    ViewData.Add("NoAppendHtmlSnippetsMarker", true);
-    var cspNonce = OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
+    var rebrand = OptionsAccessor.Value.Rebrand;
+
+    PathString assetPath = ViewBag.AssetPath ??
+        Context.Request.PathBase + new PathString("/assets") + (rebrand ? "/rebrand" : "");
+
+    var cspNonce = ViewBag.CspNonce as string ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
-    string themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
+    var themeColor = ViewBag.ThemeColor ?? (rebrand ? "#1d70b8" : "#0b0c0c");
+    var ogImage = ViewBag.OpengraphImageUrl ??
+        $"{Context.Request.Scheme}://{Context.Request.Host}{GetStaticAssetUrl("images/govuk-opengraph-image.png")}";
+
+    static string Classes(params string[] classes)
+    {
+        return string.Join(" ", classes.Where(c => !string.IsNullOrWhiteSpace(c)));
+    }
+
+    string GetStaticAssetUrl(string url)
+    {
+        var result = assetPath + "/" + url;
+
+        if (OptionsAccessor.Value.FrontendPackageHostingOptions.HasFlag(FrontendPackageHostingOptions.HostAssets))
+        {
+            result = QueryHelpers.AddQueryString(result, "v", GovUkFrontendInfo.Version);
+        }
+
+        return result;
+    }
 }
 <!DOCTYPE html>
-<html lang="@htmlLang" class="govuk-template @ViewBag.HtmlClasses">
-
+<html lang="@htmlLang" class="@Classes("govuk-template", rebrand ? "govuk-template--rebranded" : string.Empty, ViewBag.HtmlClasses)">
 <head>
-    <meta charset="utf-8">
-    <title lang="@ViewBag.TitleLang">@ViewBag.Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="@themeColor">
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    <meta charset="utf-8"/>
+    <title lang="@ViewBag.TitleLang">@string.Format(Resource.lblPageTitleTemplate, ViewBag.Title ?? string.Empty)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    @if (rebrand)
+    {
+        <meta name="theme-color" content="@themeColor"/>
+    }
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     @if (IsSectionDefined("HeadIcons"))
     {
         @RenderSection("HeadIcons")
     }
     else
     {
-        <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
-        <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="@themeColor">
-        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
-        <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
-        <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+        <link rel="icon" sizes="48x48" href="@(GetStaticAssetUrl("images/favicon.ico"))"/>
+        <link rel="icon" sizes="any" href="@(GetStaticAssetUrl("images/favicon.svg"))" type="image/svg+xml"/>
+        <link rel="mask-icon" href="@(GetStaticAssetUrl("images/govuk-icon-mask.svg"))" color="@themeColor"/>
+        <link rel="apple-touch-icon" href="@(GetStaticAssetUrl("images/govuk-icon-180.png"))"/>
+        <link rel="manifest" href="@(GetStaticAssetUrl("manifest.json"))"/>
     }
 
-    @if (IsSectionDefined("Head"))
-    {
-        @RenderSection("Head")
-    }
-    else
-    {
-        @PageTemplateHelper.GenerateStyleImports()
-    }
-
-    <meta property="og:image" content="@(ViewBag.OpengraphImageUrl ?? "/assets/images/govuk-opengraph-image.png")">
-    <link rel="stylesheet" asp-append-version="true" href="~/assets/stylesheets/application.css" asp-add-nonce="true" />
-    <script type="text/javascript" nonce="@cspNonce" asp-append-version="true" src="~/assets/javascripts/application.js"></script>
+    @Html.GovUkFrontendStyleImports()    
+    <link rel="stylesheet" asp-append-version="true" href="~/assets/stylesheets/application.css"/>
+    @RenderSection("Head", required: false)
+    <meta property="og:image" content="@(ogImage)"/>
 </head>
-
-<body class="govuk-template__body @ViewBag.BodyClasses">
-    @PageTemplateHelper.GenerateJsEnabledScript(cspNonce)
+<body class="@Classes("govuk-template__body", ViewBag.BodyClasses)">
+    @Html.GovUkFrontendJsEnabledScript(cspNonce)
     @RenderSection("BodyStart", required: false)
 
     @if (IsSectionDefined("SkipLink"))
     {
-        @RenderSection("SkipLink")
+        @RenderSection("SkipLink", required: false)
     }
     else
     {
@@ -63,24 +79,21 @@
     }
 
     @RenderSection("Header", required: false)
-   
-    <div class="govuk-width-container @ViewBag.ContainerClasses">
+
+    <div class="@Classes("govuk-width-container", ViewBag.ContainerClasses)">
         @RenderSection("BeforeContent", required: false)
-        <main class="govuk-main-wrapper @ViewBag.MainClasses" id="main-content" role="main" lang="@ViewBag.MainLang">
+        <main class="@Classes("govuk-main-wrapper", ViewBag.MainClasses)" id="main-content" role="main" lang="@ViewBag.MainLang" prepend-error-summary="false">
+            @if (ViewBag.ErrorSummaryHasBeenRendered != true)
+            {
+                <govuk-error-summary />
+            }
             @RenderBody()
         </main>
     </div>
 
-    @RenderSection("Footer", required: false)
-
-    @if (IsSectionDefined("BodyEnd"))
-    {
-        @RenderSection("BodyEnd")
-    }
-    else
-    {
-        @PageTemplateHelper.GenerateScriptImports(cspNonce)
-    }
+    @RenderSection("Footer", required: false) 
+    @Html.GovUkFrontendScriptImports(cspNonce)    
+    <script type="text/javascript" asp-add-nonce="true" asp-append-version="true" src="~/assets/javascripts/application.js"></script>
+    @RenderSection("BodyEnd")    
 </body>
-
 </html>

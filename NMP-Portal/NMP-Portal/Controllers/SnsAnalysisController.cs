@@ -1605,37 +1605,8 @@ namespace NMP.Portal.Controllers
             {
                 return View("CheckAnswer", model);
             }
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);
-            var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-            //int farmId = model.FarmID;
-            
-            int? lastGroupNumber = null;
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);  // Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value);            
             Error error = new Error();
-            (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-            if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
-            {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(farm.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-
-                if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
-                {
-                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
-                                     int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
-                                    .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
-                                    .FirstOrDefault();
-                    if (lastGroup != null)
-                    {
-                        lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
-                    }
-                }
-
-                
-            }
-            else
-            {
-                TempData["CheckAnswerError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                return RedirectToAction("CheckAnswer");
-            }
             SnsAnalysis sns = new SnsAnalysis
             {
                 CropID=model.CropID,

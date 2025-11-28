@@ -1,9 +1,11 @@
 ﻿@using NMP.Portal.Resources
 @using NMP.Portal.ViewModels
 @model FarmViewModel
-
 @{
-            // ViewData["Title"] = Resource.lblAddAFarm;
+
+    // ViewData["Title"] = string.Format("{0} - {1}", string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode), Resource.lblSectionAddFarm);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode)} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent{
@@ -18,7 +20,7 @@
             <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChangeThisPostcode</a>
         </div>
         <div class="govuk-body">
-            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually</a>
+            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually <span class="govuk-visually-hidden">@($"{Resource.lblEnterAddressManually}")</span></a>
         </div>
         <br />
         <p class="govuk-body cancel-link">
