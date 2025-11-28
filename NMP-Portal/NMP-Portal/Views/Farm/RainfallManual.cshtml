@@ -2,7 +2,8 @@
 @model NMP.Portal.ViewModels.FarmViewModel
 
 @{
-    ViewData["Title"] = Resource.lblRainfallManual;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
@@ -12,47 +13,44 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="RainfallManual" asp-controller="Farm" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
-        @*     <h1 class="govuk-heading-l">
+            @*     <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
             </h1> *@
 
             <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"></govuk-input>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"/>
             </div>
-            <div class="govuk-form-group">
-                <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">                    
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l"> @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)</govuk-input-label>
-                    <govuk-input-hint>@Resource.lblRainfallValueHint</govuk-input-hint>
-                    <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
-                </govuk-input>
-            </div>
-            <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
-                    <br>
-                    <govuk-button type="submit">@Resource.lblContinue</govuk-button>
-                </fieldset>
-            </div>
+            @* <div class="govuk-form-group"> *@
+            <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>
+                </govuk-input-label>
+                <govuk-input-hint>@Resource.lblRainfallValueHint</govuk-input-hint>
+                <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
+            </govuk-input>
+            @* </div> *@
+            <govuk-button type="submit">@Resource.lblContinue</govuk-button>
             <p class="govuk-body cancel-link">
-                 @if (!Model.IsCheckAnswer)
+                @if (!Model.IsCheckAnswer)
                 {
                     <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
                 }

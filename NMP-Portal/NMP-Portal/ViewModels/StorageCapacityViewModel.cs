@@ -10,7 +10,7 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedHarvestYear { get; set; } = string.Empty;
         public string? LastModifiedOn { get; set; }
         public string? FarmName { get; set; } = string.Empty;
-        public bool? IsComingFromPlan { get; set; } = false;
+        public string? IsComingFromPlan { get; set; } 
         public int? ReportOption { get; set; }
         public int? FieldAndPlanReportOption { get; set; }
         public int? NVZReportOption { get; set; }
@@ -41,5 +41,6 @@ namespace NMP.Portal.ViewModels
         public string? EncryptedStoreCapacityId { get; set; } = string.Empty;
         public int? YearToCopyFrom { get; set; }
         public bool? IsDelete { get; set; }
+        public string? IsRemovedRecently { get; set; }
     }
 }

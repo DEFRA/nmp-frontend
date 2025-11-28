@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources;
 @model NMP.Portal.ViewModels.AboutServiceViewModel;
 @{
-    ViewData["Title"] = Resource.lblAbout_this_service;
+    ViewData["Title"] = Resource.lblAboutTheNutrientManagementPlanningToolGB;
 }
 
 @section BeforeContent {
@@ -13,108 +13,48 @@
             @Resource.lblAboutTheNutrientManagementPlanningToolGB
         </h1>
         <h2 class="govuk-heading-m">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine1</h2>
-        <p class="govuk-body">
-            @Resource.lblAbout_this_service_line1
-        </p>
-        <p class="govuk-body">
-            @Resource.lblAboutTheNutrientManagementPlanningToolGBLine2
-        </p>
+        <p class="govuk-body">@Resource.lblAbout_this_service_line1</p>
+        <p class="govuk-body">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine2</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li>
-                @Resource.lblSoilAnalysisData
-            </li>
-            <li>
-                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine3
-            </li>
-            <li>
-                @Resource.lblCropInformation
-            </li>
-            <li>
-                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine4
-            </li>
+            <li>@Resource.lblSoilAnalysisData</li>
+            <li>@Resource.lblAboutTheNutrientManagementPlanningToolGBLine3</li>
+            <li>@Resource.lblCropInformation</li>
+            <li>@Resource.lblAboutTheNutrientManagementPlanningToolGBLine4</li>
         </ul>
-        <div class="govuk-body">
-            <p class="govuk-body">
-                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine5
-            </p>
-        </div>
+        <p class="govuk-body">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine5</p>       
         <ul class="govuk-list govuk-list--bullet">
-            <li>
-                @Resource.lblLivestockInformation
-            </li>
-            <li>
-                @Resource.lblAboutTheNutrientManagementPlanningToolGBLine6
-            </li>
+            <li>@Resource.lblLivestockInformation</li>
+            <li>@Resource.lblAboutTheNutrientManagementPlanningToolGBLine6</li>
+        </ul>
 
-        </ul>
-        <h1 class="govuk-heading-l">@Resource.lblRegulations</h1>
-        <p class="govuk-body">
-            @Resource.lblRegulations_line1
-        </p>
-        <p class="govuk-body">
-            @Resource.lblRegulations_line2
-        </p>
+        <h2 class="govuk-heading-m">@Resource.lblRegulations</h2>
+        <p class="govuk-body">@Resource.lblRegulations_line1</p>
+        <p class="govuk-body">@Resource.lblRegulations_line2</p>
         <ul class ="govuk-list govuk-list--bullet">
-            <li>
-        <p class="govuk-body">
-            @Html.Raw(Resource.lblEnglandNVZWaterFarmingRules)
-        </p>
-        </li>
-            <li>
-        <p class="govuk-body">
-            @Html.Raw(Resource.lblWalesWaterResourceRegulations)
-        </p>
-            </li>
-            <li>
-        <p class="govuk-body">
-            @Html.Raw(Resource.lblEnglandNVZActionProgramme)
-        </p>
-            </li>
+            <li>@Html.Raw(Resource.lblEnglandNVZWaterFarmingRules)</li>
+            <li>@Html.Raw(Resource.lblWalesWaterResourceRegulations)</li>
+            <li>@Html.Raw(Resource.lblEnglandNVZActionProgramme)</li>
         </ul>
-        <h2 class="govuk-heading-s">
-            @Resource.lblSoilAnalysis
-        </h2>
-        <p class="govuk-body">
-            @Resource.lblSoil_Analysis_line1
-        </p>
-        <p class="govuk-body">
-            @Resource.lblSoil_Analysis_line2
-        </p>
-        <p class="govuk-body">
-            @Resource.lblSoil_Analysis_line3
-        </p>
-        <p class="govuk-body">
-            @Resource.lblSoil_Analysis_line4
-        </p>
-        <p class="govuk-body margin-bottom-forty">
-            @Resource.lblSoil_Analysis_line5
-        </p>
-        <h2 class="govuk-heading-s">
-            @Resource.lblCrossBorderHoldings
-        </h2>
-        <p class="govuk-body">
-            @Resource.lblCrossBorderHoldingsContent1
-        </p>
-        <p class="govuk-body">
-            @Resource.lblCrossBorderHoldingsContent2
-        </p>
+        <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
+        <p class="govuk-body">@Resource.lblSoil_Analysis_line1</p>
+        <p class="govuk-body">@Resource.lblSoil_Analysis_line2</p>
+        <p class="govuk-body">@Resource.lblSoil_Analysis_line3</p>
+        <p class="govuk-body">@Resource.lblSoil_Analysis_line4</p>
+        <p class="govuk-body">@Resource.lblSoil_Analysis_line5</p>
 
-        <p class="govuk-body  margin-bottom-forty">
-            @Resource.lblCrossBorderHoldingsContent3
-        </p>
+        <h2 class="govuk-heading-m">@Resource.lblCrossBorderHoldings</h2>
+        <p class="govuk-body">@Resource.lblCrossBorderHoldingsContent1</p>
+        <p class="govuk-body">@Resource.lblCrossBorderHoldingsContent2</p>
+        <p class="govuk-body">@Resource.lblCrossBorderHoldingsContent3</p>
 
-        <h2 class="govuk-heading-s">
-            @Resource.lblSaving_your_data
-        </h2>
-        <p class="govuk-body  margin-bottom-forty">
-            @Resource.lblSaving_your_data_line1
-        </p>
+        <h2 class="govuk-heading-m">@Resource.lblSaving_your_data</h2>
+        <p class="govuk-body">@Resource.lblSaving_your_data_line1</p>
         <form class="form margin-top-forty" asp-action="Index" asp-controller="AboutService" method="post">
-            <div class="govuk-form-group margin-bottom-forty">
+            @* <div class="govuk-form-group margin-bottom-forty"> *@
                 <govuk-checkboxes name="DoNotShowAboutThisService" asp-for="@Model.DoNotShowAboutThisService">
                     <govuk-checkboxes-item checked="@Model.DoNotShowAboutThisService" value="true">@Resource.lblDo_not_show_this_information_again</govuk-checkboxes-item>
                 </govuk-checkboxes>
-            </div>
+            @* </div> *@
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

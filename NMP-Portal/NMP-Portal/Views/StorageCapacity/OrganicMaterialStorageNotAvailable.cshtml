@@ -1,13 +1,15 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblNotEnteredStorage;
-
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{string.Format(Resource.lblYouHaveNotEnteredAnyOrganicMaterialStorageFor, Model.Year)} {Resource.lblHyphen} {title}";
+    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
+       "NVZComplianceReports");
 
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="Year" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnOrganicMaterialStorageNotAvailable"] != null)
 {
@@ -34,7 +36,7 @@
                 </a>
             </p>
             <p class="govuk-body cancel-link">
-                @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                 {
                     <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
                         @Resource.lblCancel

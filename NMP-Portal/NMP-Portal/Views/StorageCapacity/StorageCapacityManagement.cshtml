@@ -1,6 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @{
-    ViewData["Title"] = Resource.lblManagement;
+    
+    ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     bool hasUpdate = false;
     @if (ViewBag.FinalYearList != null)
     {
@@ -29,7 +30,7 @@
 @if (TempData["ErrorOnStorageCapacityManagement"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@TempData["ErrorOnStorageCapacityManagement"]</govuk-error-summary-item>
             </govuk-error-summary>
@@ -39,10 +40,10 @@
 @if (TempData["succesMsgContent1"] != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
             <div class="margin-bottom-thirty">
 
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
                         @TempData["succesMsgContent1"]
                     </p>
@@ -52,7 +53,7 @@
     </div>
 }
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
         <div class="margin-bottom-thirty">
             <span class="name govuk-caption-l">@ViewBag.FarmName</span>
             <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
@@ -60,7 +61,7 @@
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+    <div id="all-plans-table" class="govuk-grid-column-two-thirds-from-desktop">
         @if (ViewBag.FinalYearList != null)
         {
             <table class="govuk-table">

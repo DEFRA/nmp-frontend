@@ -1,7 +1,8 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = Resource.lblManageStoreCapacity;
+    // string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     var dataLists = new List<(string Name, dynamic Data)>
     {
         ("DirtyWater", ViewBag.DirtyWaterList),
@@ -10,7 +11,7 @@
     };
 
     var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
-    var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" :
+    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
 }
 
@@ -21,7 +22,14 @@
     }
     else
     {
-        <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+        if (!string.IsNullOrWhiteSpace(Model.IsComingFromManageToHubPage))
+        {
+            <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+        }
+        else
+        {
+            <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+        }
     }
 }
 @if (TempData["ErrorOnManageStorageCapacity"] != null)
@@ -41,7 +49,7 @@
 
         @if (TempData["succesMsgContent1"] != null)
         {
-            <govuk-notification-banner type="Success">
+            <govuk-notification-banner type="NotificationBannerType.Success">
                 <p class="govuk-notification-banner__heading">
                     @TempData["succesMsgContent1"]
                 </p>
@@ -53,7 +61,7 @@
                 @if (TempData["succesMsgContent2"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" class="govuk-notification-banner__link">
+                        <a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently" class="govuk-notification-banner__link">
                             @TempData["succesMsgContent2"]
                         </a>
                     </p>
@@ -81,30 +89,28 @@
             <h2 class="govuk-heading-m">@Model.Year</h2>
 
         </div>
-        @if (TempData["succesMsgContent1"] == null)
+        @if (TempData["succesMsgContent1"] == null && string.IsNullOrWhiteSpace(Model.IsRemovedRecently))
         {
-            <div class="govuk-inset-text margin-bottom-forty">
+            <div class="govuk-inset-text margin-bottom-thirty">
                 <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
                 <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-v="@ViewBag.IsPlan">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
             </div>
         }
-         
-        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage">
+
+        <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">
             @Resource.lblAddOrganicMaterialStorage
         </a>
     </div>
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-       
-        @if (nonEmptyLists.Count > 0)
-        {
-            <govuk-tabs>
-                <govuk-tabs-item id="slurryStorageList" label=@Resource.lblSlurryStorage>
-                    <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
-                    @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
-                    {
-                        <table class="govuk-table data-table">
+        <govuk-tabs>
+            <govuk-tabs-item id="slurryStorageList" label=@Resource.lblSlurryStorage>
+                <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
+                @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
+                {
+                    <div class="table-container">
+                        <table class="govuk-table">
                             <thead class="govuk-table__head">
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
@@ -120,27 +126,29 @@
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                         <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@slurryStorage.StoreName</span></a></td>
                                     </tr>
 
                                 }
                             </tbody>
                         </table>
-                    }
-                    else
-                    {
-                        <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
-                        <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
-                        </p>
-                    }
-                </govuk-tabs-item>
+                    </div>
+                }
+                else
+                {
+                    <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
+                    <p class="govuk-body">
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSlurryStorage</a>
+                    </p>
+                }
+            </govuk-tabs-item>
 
-                <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
-                    <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
-                    @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
-                    {
-                        <table class="govuk-table data-table">
+            <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
+                <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
+                @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
+                {
+                    <div class="table-container">
+                        <table class="govuk-table">
                             <thead class="govuk-table__head">
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
@@ -156,26 +164,28 @@
                                         <td class="govuk-table__cell">@dirtyWater.StoreName</td>
                                         <td class="govuk-table__cell">@dirtyWater.StorageTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", dirtyWater.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@dirtyWater.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@dirtyWater.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@dirtyWater.StoreName</span></a></td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                    }
-                    else
-                    {
-                        <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyDirtyWaterStorage</p>
-                        <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddDirtyWaterStorage</a>
-                        </p>
-                    }
-                </govuk-tabs-item>
+                    </div>
+                }
+                else
+                {
+                    <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyDirtyWaterStorage</p>
+                    <p class="govuk-body">
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddDirtyWaterStorage</a>
+                    </p>
+                }
+            </govuk-tabs-item>
 
-                <govuk-tabs-item id="solidManureStorageList" label=@Resource.lblSolidManureStorage>
-                    <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
-                    @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
-                    {
-                        <table class="govuk-table data-table">
+            <govuk-tabs-item id="solidManureStorageList" label=@Resource.lblSolidManureStorage>
+                <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
+                @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
+                {
+                    <div class="table-container ">
+                        <table class="govuk-table">
                             <thead class="govuk-table__head">
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
@@ -191,26 +201,28 @@
                                         <td class="govuk-table__cell">@solidManureStorage.StoreName</td>
                                         <td class="govuk-table__cell">@solidManureStorage.SolidManureTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidManureStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange</a></td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@solidManureStorage.StoreName</span></a></td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                    }
-                    else
-                    {
-                        <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
-                        <p class="govuk-body">
-                            <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage">@Resource.lblAddSolidMaterialStorage</a>
-                        </p>
-                    }
-                </govuk-tabs-item>
+                    </div>
+                }
+                else
+                {
+                    <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
+                    <p class="govuk-body">
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSolidMaterialStorage</a>
+                    </p>
+                }
+            </govuk-tabs-item>
 
-                <govuk-tabs-item id="totals" label=@Resource.lblManureStorageTotals>
-                    <h2 class="govuk-heading-m non-standard">@Resource.lblManureStorageTotals</h2>
-                    @if (ViewBag.TotalLiquidCapacity != null && ViewBag.TotalSolidCapacity != null)
-                    {
-                        <table class="govuk-table data-table">
+            <govuk-tabs-item id="totals" label=@Resource.lblManureStorageTotals>
+                <h2 class="govuk-heading-m non-standard">@Resource.lblManureStorageTotals</h2>
+                @if (ViewBag.TotalLiquidCapacity != null && ViewBag.TotalSolidCapacity != null)
+                {
+                    <div class="table-container">
+                        <table class="govuk-table">
                             <tbody>
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header">@Resource.lblTotalLiquidCapacity</th>
@@ -230,15 +242,9 @@
                                 </tr>
                             </tbody>
                         </table>
-
-                    }
-                    
-                </govuk-tabs-item>
-
-            </govuk-tabs>
-        }
-
-
-
+                    </div>
+                }
+            </govuk-tabs-item>
+        </govuk-tabs>
     </div>
 </div>

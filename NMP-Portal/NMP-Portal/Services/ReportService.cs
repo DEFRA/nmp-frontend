@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.ViewModels;
 using System.Net.Http;
@@ -15,8 +16,7 @@ namespace NMP.Portal.Services
     public class ReportService : Service, IReportService
     {
         private readonly ILogger<FarmService> _logger;
-        public ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base
-        (httpContextAccessor, clientFactory)
+        public ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }
@@ -556,7 +556,7 @@ namespace NMP.Portal.Services
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
                 {
 
-                    JObject nutrientsLoadingLiveStocksJObject = responseWrapper.Data["NutrientsLoadingLiveStock"] as JObject;
+                    JObject nutrientsLoadingLiveStocksJObject = responseWrapper.Data as JObject;
                     if (nutrientsLoadingLiveStocksJObject != null)
                     {
                         nutrientsLoadingLiveStocks = nutrientsLoadingLiveStocksJObject.ToObject<NutrientsLoadingLiveStock>();
@@ -588,10 +588,10 @@ namespace NMP.Portal.Services
             return (nutrientsLoadingLiveStocks, error);
         }
 
-        public async Task<(List<NutrientsLoadingLiveStock>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
+        public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
         {
             Error error = new Error();
-            List<NutrientsLoadingLiveStock> nutrientsLoadingLiveStockList = new List<NutrientsLoadingLiveStock>();
+            List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList = new List<NutrientsLoadingLiveStockViewModel>();
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
@@ -603,7 +603,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        var nutrientsLoadingLiveStock = responseWrapper.Data.ToObject<List<NutrientsLoadingLiveStock>>();
+                        var nutrientsLoadingLiveStock = responseWrapper.Data.ToObject<List<NutrientsLoadingLiveStockViewModel>>();
                         if (nutrientsLoadingLiveStock != null)
                         {
                             nutrientsLoadingLiveStockList = nutrientsLoadingLiveStock;
@@ -675,6 +675,133 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return (livestockTypeList, error);
+        }
+
+        public async Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id)
+        {
+            Error error = new Error();
+            NutrientsLoadingLiveStock nutrientsLoadingLiveStock = new NutrientsLoadingLiveStock();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingLiveStockByIdAsyncAPI, id));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (responseWrapper != null && responseWrapper.Data != null)
+                    {
+                        nutrientsLoadingLiveStock = responseWrapper.Data.records.ToObject<NutrientsLoadingLiveStock>();
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingLiveStock, error);
+        }
+
+        public async Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId)
+        {
+            Error error = new Error();
+            string message = string.Empty;
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+                var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteNutrientsLoadingLivestockByIdAPI, nutrientsLoadingLivestockId));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+                {
+                    message = responseWrapper.Data["message"].Value;
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+
+            return (message, error);
+        }
+
+        public async Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStock)
+        {
+            string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStock);
+            NutrientsLoadingLiveStock nutrientsLoadingLiveStocks = null;
+            Error error = new Error();
+            try
+            {
+                HttpClient httpClient = await GetNMPAPIClient();
+
+                var response = await httpClient.PutAsync(APIURLHelper.UpdateNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+
+                    JObject nutrientsLoadingLiveStocksJObject = responseWrapper.Data["NutrientsLoadingLiveStock"] as JObject;
+                    if (nutrientsLoadingLiveStocksJObject != null)
+                    {
+                        nutrientsLoadingLiveStocks = nutrientsLoadingLiveStocksJObject.ToObject<NutrientsLoadingLiveStock>();
+                    }
+
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        error = responseWrapper.Error.ToObject<Error>();
+                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    }
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                error.Message = Resource.MsgServiceNotAvailable;
+                _logger.LogError(hre.Message);
+                throw new Exception(error.Message, hre);
+            }
+            catch (Exception ex)
+            {
+                error.Message = ex.Message;
+                _logger.LogError(ex.Message);
+                throw new Exception(error.Message, ex);
+            }
+            return (nutrientsLoadingLiveStocks, error);
         }
     }
 }

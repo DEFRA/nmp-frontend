@@ -1,31 +1,18 @@
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Joonasw.AspNetCore.SecurityHeaders;
 using Joonasw.AspNetCore.SecurityHeaders.Csp;
-using NMP.Portal.Security;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using NMP.Portal.Authorization;
-using System.Net.Http.Headers;
-using Microsoft.Extensions.DependencyInjection;
-using NMP.Portal.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Identity.Web;
-using NMP.Portal.Helpers;
-using NMP.Portal.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Identity.Web.UI;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
-using Azure.Monitor.OpenTelemetry.AspNetCore;
-using Microsoft.Extensions.Options;
+using NMP.Portal.Security;
+using NMP.Portal.Services;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
@@ -51,13 +38,13 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 builder.Services.AddHttpsRedirection(options => { });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDefraCustomerIdentity(builder);
 
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = options.DefaultPolicy;
 });
-
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -82,22 +69,37 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = "NMP-Portal.Session";
     options.Cookie.HttpOnly = true;  // Prevent JavaScript access
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
-    options.Cookie.SameSite = SameSiteMode.Strict;  // Prevent CSRF
-    options.IdleTimeout = TimeSpan.FromMinutes(30);  // Session timeout
-    
+    options.Cookie.SameSite = SameSiteMode.Strict;// Prevent CSRF
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(20);  // Session timeout
 });
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 
 if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
 {
-    builder.Services.AddOpenTelemetry().UseAzureMonitor();
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(t => t.AddAspNetCoreInstrumentation())
+        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
+        .UseAzureMonitor(options =>
+        {
+            options.ConnectionString = applicationInsightsConnectionString;
+        });
+
+    builder.Services.AddApplicationInsightsTelemetry(options =>
+    {
+        options.ConnectionString = applicationInsightsConnectionString;
+    });
+
 }
+
 
 builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
     builder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.AddApplicationInsights();
+    builder.AddOpenTelemetry();
 });
 
 
@@ -116,7 +118,6 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
@@ -133,6 +134,8 @@ builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
 builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddSingleton<IStorageCapacityService, StorageCapacityService>();
+builder.Services.AddSingleton<IPreviousCroppingService, PreviousCroppingService>();
+builder.Services.AddSingleton<IWarningService, WarningService>();
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.
@@ -140,9 +143,9 @@ builder.Services.AddAntiforgery(options =>
     {
         Name = "NMP-Portal",
         HttpOnly = true,        
-        Path = "/",
+        Path = "/",       
         SecurePolicy = CookieSecurePolicy.Always,
-        SameSite = SameSiteMode.Strict
+        SameSite = SameSiteMode.Strict 
     };
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
@@ -155,10 +158,9 @@ builder.Services.AddMvc(options =>
     options.MaxModelBindingCollectionSize = int.MaxValue;
 });
 
-builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs }));
-
 builder.Services.AddGovUkFrontend(options =>
 {
+    options.Rebrand = true;
     // Un-comment this block if you want to use a CSP nonce instead of hashes
     options.GetCspNonceForRequest = context =>
     {
@@ -169,6 +171,7 @@ builder.Services.AddGovUkFrontend(options =>
 builder.Services.AddCsp(nonceByteAmount: 32);
 
 var app = builder.Build();
+app.UseGovUkFrontend();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -177,9 +180,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    // Configure the HTTP request pipeline.
-    //app.UseExceptionHandler("/Error/404");   
-    //app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    // Configure the HTTP request pipeline.    
     app.Use(async (ctx, next) =>
     {
         await next();
@@ -226,13 +227,7 @@ app.UseCsp(csp =>
     csp.AllowFrames.FromSelf();
     csp.AllowAudioAndVideo.FromSelf();
     csp.AllowFonts.FromSelf();
-    csp.AllowManifest.FromSelf();    
-    //csp.AllowScripts
-    //    .FromSelf()
-    //    .AllowUnsafeInline()
-    //    .From("cdnjs.cloudflare.com")
-    //    .AddNonce();
-    ////.From(pageTemplateHelper.GetCspScriptHashes());
+    csp.AllowManifest.FromSelf();
     csp.AllowImages.FromSelf().From("data:").From("https:");
     csp.AllowWorkers.FromSelf().From("blob:");
 });
@@ -243,8 +238,6 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-// Add the reauthentication middleware
-app.UseMiddleware<ReauthenticationMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

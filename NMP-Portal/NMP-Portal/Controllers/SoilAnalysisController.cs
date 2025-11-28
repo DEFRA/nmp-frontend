@@ -206,6 +206,23 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsCheckAnswer = true;
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisData", model);
+
+                    if (!string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(l))
+                    {
+                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("SoilAnalysisDataBeforeUpdate", model);
+                    }
+                    var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisDataBeforeUpdate");
+
+                    bool isDataChanged = false;
+
+                    if (previousModel != null)
+                    {
+                        string oldJson = JsonConvert.SerializeObject(previousModel);
+                        string newJson = JsonConvert.SerializeObject(model);
+
+                        isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                    }
+                    ViewBag.IsDataChange = isDataChanged;
                 }
             }
             catch (Exception ex)
@@ -252,14 +269,13 @@ namespace NMP.Portal.Controllers
                 //{
                 //    ModelState["Date"].Errors.Clear();
                 //    ModelState["Date"].Errors.Add(Resource.MsgEnterTheDateInNumber);
-                //}
-                if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
-                    dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeAYear) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADay) ||
-                     dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate,Resource.lblTheDate)) ||
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblTheDate)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate)))
                 {
                     ModelState["Date"].Errors.Clear();
                     ModelState["Date"].Errors.Add(Resource.MsgTheDateMustInclude);
@@ -450,7 +466,8 @@ namespace NMP.Portal.Controllers
                     if (model.PH == null && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
                         model.PhosphorusIndex == null && model.MagnesiumIndex == null)
                     {
-                        ModelState.AddModelError("Date", Resource.MsgEnterAtLeastOneValue);
+                        ViewData["IsPostRequest"] = true;
+                        ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
                     if ((!ModelState.IsValid) && ModelState.ContainsKey("PhosphorusIndex"))
                     {
@@ -516,7 +533,8 @@ namespace NMP.Portal.Controllers
                     if (model.PH == null && model.Potassium == null &&
                         model.Phosphorus == null && model.Magnesium == null)
                     {
-                        ModelState.AddModelError("CropType", Resource.MsgEnterAtLeastOneValue);
+                        ViewData["IsPostRequest"] = true;
+                        ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
 
                 }

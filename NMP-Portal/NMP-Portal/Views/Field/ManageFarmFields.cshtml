@@ -2,7 +2,7 @@
 @using NMP.Portal.ViewModels
 @model FarmFieldsViewModel
 @{
-    ViewData["Title"] = Resource.lblManageFarmFields;
+    ViewData["Title"] = $"{string.Format(Resource.lblFarmFields, Model.FarmName)} {Resource.lblHyphen} {Resource.lblDetails}";
 }
 
 @if (ViewBag.Error != null)
@@ -14,24 +14,25 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
-            @Resource.lblAllFarm
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Model.FarmName
-        </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
-            @Resource.lblManageFieldDetailsAndSoilAnalysis
-        </govuk-breadcrumbs-item>
-    </govuk-breadcrumbs>
+        @* <govuk-breadcrumbs class="govuk-breadcrumbs-link">
+             <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+                @Resource.lblAllFarm
+            </govuk-breadcrumbs-item> 
+            <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                @Model.FarmName
+            </govuk-breadcrumbs-item>
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
+                @Resource.lblManageFieldDetailsAndSoilAnalysis
+            </govuk-breadcrumbs-item>
+        </govuk-breadcrumbs> *@
+        <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
     }
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
 
             @if (ViewBag.Success != null && ViewBag.Success == true)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveAdded, Model.FieldName)</h3>
                         <p class="govuk-body">
@@ -51,7 +52,7 @@
             }
             @if (ViewBag.IsDeleted != null && ViewBag.IsDeleted == true)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemovedField, ViewBag.FieldName)</h3>
                     </div>
@@ -66,18 +67,22 @@
                 }
                 else
                 {
-                <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
+                    <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAnotherField</a>
                 }
             </p>
             <h2 class="govuk-heading-m">
                 @Resource.lblCurrentFields
             </h2>
+
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblFieldName</th>
-                        <th scope="col" class="govuk-table__header"> </th>
-                        <th scope="col" class="govuk-table__header"> </th>
+                        <th scope="col" class="govuk-table__header">
+                            <span class="govuk-visually-hidden">
+                                @Resource.lblAction
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
@@ -88,15 +93,17 @@
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@item.Name</td>
                                 <td class="govuk-table__cell">
-                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblFieldAndSoilDetails</a>
+                                    <a asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@item.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
+                                        <span class="govuk-visually-hidden">@Resource.lblView </span>@Resource.lblFieldAndSoilDetails<span class="govuk-visually-hidden"> @string.Format(Resource.MsgGenericFor, item.Name)</span>
+                                    </a>
                                 </td>
                             </tr>
                         }
                     }
-
-
                 </tbody>
             </table>
+
+           
         </div>
     </div>
 }

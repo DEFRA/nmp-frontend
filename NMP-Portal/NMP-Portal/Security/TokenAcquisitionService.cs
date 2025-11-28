@@ -7,11 +7,9 @@ using System.Security.Claims;
 namespace NMP.Portal.Security
 {
     public class TokenAcquisitionService
-    {
-        
+    {        
         private readonly IConfiguration _configuration;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfidentialClientApplication _confidentialClientApplication;
+        private readonly IHttpClientFactory _httpClientFactory;        
         public TokenAcquisitionService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;

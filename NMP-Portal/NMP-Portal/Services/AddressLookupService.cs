@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using NMP.Portal.Models;
-using System.Reflection;
-using System;
-using NMP.Portal.Helpers;
+﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Net;
+using Newtonsoft.Json.Linq;
+using NMP.Portal.Helpers;
+using NMP.Portal.Models;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
+using System.Reflection;
 using System.Runtime.Remoting;
 
 namespace NMP.Portal.Services
@@ -14,7 +15,7 @@ namespace NMP.Portal.Services
     public class AddressLookupService : Service, IAddressLookupService
     {
         private readonly ILogger<AddressLookupService> _logger;
-        public AddressLookupService(ILogger<AddressLookupService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public AddressLookupService(ILogger<AddressLookupService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }

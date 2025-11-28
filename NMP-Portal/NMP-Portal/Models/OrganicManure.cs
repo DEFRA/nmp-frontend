@@ -5,11 +5,11 @@ namespace NMP.Portal.Models
 {
     public class OrganicManure
     {
-        public int ID { get; set; }
+        public int? ID { get; set; }
         public int ManagementPeriodID { get; set; }
         public int ManureTypeID { get; set; }
         public string? ManureTypeName { get; set; }
-        public DateTime ApplicationDate { get; set; }
+        public DateTime? ApplicationDate { get; set; }
         public bool Confirm { get; set; }
         public decimal? N { get; set; }
         public decimal? P2O5 { get; set; }
@@ -41,14 +41,9 @@ namespace NMP.Portal.Models
         public int WindspeedID { get; set; }
         public int RainfallWithinSixHoursID { get; set; }
         public int MoistureID { get; set; }
-        public decimal AutumnCropNitrogenUptake { get; set; }
+        public int AutumnCropNitrogenUptake { get; set; }
         public DateTime SoilDrainageEndDate { get; set; }
         public decimal? AvailableNForNMax { get; set; }
-        public int? Defoliation { get; set; }
-        public string? DefoliationName { get; set; }
-        public int? FieldID { get; set; }
-        public string? FieldName { get; set; }
-        public string? EncryptedCounter { get; set; }
         public int? AvailableNForNextYear { get; set; }
         public int? AvailableNForNextDefoliation { get; set; }
     }

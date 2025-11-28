@@ -1,8 +1,19 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FertiliserManureViewModel
 @{
-    ViewData["Title"] = Resource.lblNutrientValues;
+    var heading = (string.IsNullOrWhiteSpace(Model.EncryptedFertId)) ? Resource.lblHowMuchOfEachNutrientDoYouPlan : Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate;
+
+    string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var count = 0;
+
+    var isFieldsEmpty = false;
+    if (ViewData["IsPostRequest"] != null)
+    {
+        isFieldsEmpty = (Model.N == null && Model.P2O5 == null
+                    && Model.K2O == null && Model.SO3 == null && Model.MgO == null
+                    && Model.Lime == null);
+    }
 }
 
 @section BeforeContent {
@@ -21,48 +32,48 @@
         }
 
         <div hidden="true">
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"></govuk-input>
-            <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"></govuk-input>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"/>
 
             @if (Model != null)
             {
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"></govuk-input>
-                <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"></govuk-input>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"/>
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
                     @for (int i = 0; i < Model.FieldList.Count; i++)
                     {
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"></govuk-input>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"/>
                     }
 
                 }
@@ -70,9 +81,9 @@
                 {
                     @for (int i = 0; i < Model.UpdatedFertiliserIds.Count; i++)
                     {
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].FertiliserId" value="@Model.UpdatedFertiliserIds[i].FertiliserId"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].ManagementPeriodId" value="@Model.UpdatedFertiliserIds[i].ManagementPeriodId"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].Name" value="@Model.UpdatedFertiliserIds[i].Name"></govuk-input>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].FertiliserId" value="@Model.UpdatedFertiliserIds[i].FertiliserId"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].ManagementPeriodId" value="@Model.UpdatedFertiliserIds[i].ManagementPeriodId"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedFertiliserIds[i].Name" value="@Model.UpdatedFertiliserIds[i].Name"/>
                     }
 
                 }
@@ -80,22 +91,22 @@
                 {
                     @for (int i = 0; i < Model.FertiliserManures.Count; i++)
                     {
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ManagementPeriodID" value="@Model.FertiliserManures[i].ManagementPeriodID"></govuk-input>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ManagementPeriodID" value="@Model.FertiliserManures[i].ManagementPeriodID"/>
                         <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationDate" value="@Model.FertiliserManures[i].ApplicationDate"></govuk-date-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].MgO" value="@Model.FertiliserManures[i].MgO"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].NH4N" value="@Model.FertiliserManures[i].NH4N"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].NO3N" value="@Model.FertiliserManures[i].NO3N"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationRate" value="@Model.FertiliserManures[i].ApplicationRate"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].N" value="@Model.FertiliserManures[i].N"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Lime" value="@Model.FertiliserManures[i].Lime"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].P2O5" value="@Model.FertiliserManures[i].P2O5"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].K2O" value="@Model.FertiliserManures[i].K2O"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].SO3" value="@Model.FertiliserManures[i].SO3"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldID" value="@Model.FertiliserManures[i].FieldID"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Defoliation" value="@Model.FertiliserManures[i].Defoliation"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].DefoliationName" value="@Model.FertiliserManures[i].DefoliationName"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldName" value="@Model.FertiliserManures[i].FieldName"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter"></govuk-input>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].MgO" value="@Model.FertiliserManures[i].MgO"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].NH4N" value="@Model.FertiliserManures[i].NH4N"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].NO3N" value="@Model.FertiliserManures[i].NO3N"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].ApplicationRate" value="@Model.FertiliserManures[i].ApplicationRate"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].N" value="@Model.FertiliserManures[i].N"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Lime" value="@Model.FertiliserManures[i].Lime"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].P2O5" value="@Model.FertiliserManures[i].P2O5"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].K2O" value="@Model.FertiliserManures[i].K2O"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].SO3" value="@Model.FertiliserManures[i].SO3"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldID" value="@Model.FertiliserManures[i].FieldID"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Defoliation" value="@Model.FertiliserManures[i].Defoliation"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].DefoliationName" value="@Model.FertiliserManures[i].DefoliationName"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldName" value="@Model.FertiliserManures[i].FieldName"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter"/>
                     }
                 }
                 @if (Model.DoubleCrop != null && Model.DoubleCrop.Count > 0)
@@ -103,45 +114,50 @@
                     @for (int i = 0; i < Model.DoubleCrop.Count; i++)
                     {
 
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropID"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldName"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldID"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"></govuk-input>
-                        <govuk-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"></govuk-input>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropID"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldName"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldID"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
                     }
                 }
             }
         </div>
-        <div class="govuk-grid-column-two-thirds">
-            @if (Model.IsWarningMsgNeedToShow)
-            {
-                @if (Model.IsNitrogenExceedWarning)
+        @if (isFieldsEmpty)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#N">@Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <div class="govuk-form-group @(isFieldsEmpty ? "govuk-form-group--error" : "")">
+            <div class="govuk-grid-column-two-thirds">
+                @if (Model.IsWarningMsgNeedToShow)
                 {
-                    <govuk-notification-banner>
-                        <govuk-notification-banner-title>
-                            @Resource.lblImportant
-                        </govuk-notification-banner-title>
-                        @TempData["NitrogenExceedMessageTitle"]<br />
-                        <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodNitrogenExceedWarningHeading
-                        </p>
-                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
-                        @* @if (Model.ClosedPeriodNitrogenExceedWarningPara1 != null)
-                {
-                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
-
-                } *@
-                        @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
+                    @if (Model.IsNitrogenExceedWarning)
+                    {
+                        @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningHeading))
                         {
-                            <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                            <govuk-notification-banner>
+                                <govuk-notification-banner-title>
+                                    @Resource.lblImportant
+                                </govuk-notification-banner-title>
+                                @TempData["NitrogenExceedMessageTitle"]<br />
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.ClosedPeriodNitrogenExceedWarningHeading
+                                </p>
+                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+
+                                @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
+                                {
+                                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                }
+                            </govuk-notification-banner>
                         }
-                    </govuk-notification-banner>
+
+                    }
                 }
-            }
-            <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    @* @Resource.lblHowMuchOfEachNutrientDoYouPlan *@
+                <h1 class="govuk-heading-l">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                     {
                         @Resource.lblHowMuchOfEachNutrientDoYouPlan
@@ -151,71 +167,100 @@
                         @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
                     }
                 </h1>
-            </legand>
-        </div>
-        <div class="govuk-grid-column-full">
-            @if (Model.FieldList.Count == 1)
-            {
-                if (Model.Recommendation != null)
+            </div>
+            <div class="govuk-grid-column-full">
+                @if (Model.FieldList.Count == 1)
                 {
-                    <govuk-details>
-                        <govuk-details-summary>
-                            @string.Format(Resource.lblShowRecommendationsFor, Model.FieldName)
-                        </govuk-details-summary>
-                        <govuk-details-text>
-                            <table class="govuk-table new-recomendation-table data-table">
-                                <thead class="govuk-table__header">
-                                    <tr class="govuk-table__row">
-                                        <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
-                                        <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
-                                        <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
-                                        <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
-                                        <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
-                                        <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="govuk-table__body">
-                                    <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell">@Resource.lblNitrogen</td>
-                                        <td class="govuk-table__cell">
-                                            @(Model.Recommendation.NIndex == null ? Resource.lblHyphen : Model.Recommendation.NIndex)
-                                        </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropN == null ? Resource.lblHyphen : Model.Recommendation.CropN == 0 ? Model.Recommendation.CropN : string.Format("{0:N0}{1}", Model.Recommendation.CropN, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureN == null ? Resource.lblHyphen : Model.Recommendation.ManureN == 0 ? Model.Recommendation.ManureN : string.Format("{0:N0}{1}",Model.Recommendation.ManureN, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerN == null ? Resource.lblHyphen : Model.Recommendation.FertilizerN < 0 ? 0 : Model.Recommendation.FertilizerN == 0 ? Model.Recommendation.FertilizerN : string.Format("{0:N0}{1}",Model.Recommendation.FertilizerN, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedN == null ? 0 : Model.Recommendation.FertiliserAppliedN == 0 ? Model.Recommendation.FertiliserAppliedN : string.Format("{0:N0}{1}",Model.Recommendation.FertiliserAppliedN, Resource.lblkg))</td>
-                                    </tr>
-                                    <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
-                                        <td class="govuk-table__cell">
-                                            @(Model.Recommendation.PIndex == null ? Resource.lblHyphen : Model.Recommendation.PIndex)
-                                        </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropP2O5 == null ? Resource.lblHyphen : Model.Recommendation.CropP2O5 == 0 ? Model.Recommendation.CropP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.CropP2O5, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureP2O5 == null ? Resource.lblHyphen : Model.Recommendation.ManureP2O5 == 0 ? Model.Recommendation.ManureP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.ManureP2O5, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerP2O5 < 0 ? 0 : Model.Recommendation.FertilizerP2O5 == 0 ? Model.Recommendation.FertilizerP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedP2O5 == null ? 0 : Model.Recommendation.FertiliserAppliedP2O5 == 0 ? Model.Recommendation.FertiliserAppliedP2O5 : string.Format("{0:N0}{1}",Model.Recommendation.FertiliserAppliedP2O5, Resource.lblkg))</td>
-                                    </tr>
-                                    <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
-                                        <td class="govuk-table__cell">
-                                            @(Model.Recommendation.KIndex == null ? Resource.lblHyphen : Model.Recommendation.KIndex)
-                                        </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropK2O == null ? Resource.lblHyphen : Model.Recommendation.CropK2O == 0 ? Model.Recommendation.CropK2O : string.Format("{0:N0}{1}", Model.Recommendation.CropK2O, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureK2O == null ? Resource.lblHyphen : Model.Recommendation.ManureK2O == 0 ? Model.Recommendation.ManureK2O : string.Format("{0:N0}{1}", Model.Recommendation.ManureK2O, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerK2O < 0 ? 0 : Model.Recommendation.FertilizerK2O == 0 ? Model.Recommendation.FertilizerK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerK2O, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedK2O == null ? 0 : Model.Recommendation.FertiliserAppliedK2O == 0 ? Model.Recommendation.FertiliserAppliedK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedK2O, Resource.lblkg))</td>
-                                    </tr>
-                                    <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
-                                        <td class="govuk-table__cell">
-                                            @(Model.Recommendation.SIndex == null ? Resource.lblHyphen : Model.Recommendation.SIndex)
-                                        </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropSO3 == null ? Resource.lblHyphen : Model.Recommendation.CropSO3 == 0 ? Model.Recommendation.CropSO3 : string.Format("{0:N0}{1}",Model.Recommendation.CropSO3, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureSO3 == null ? Resource.lblHyphen : Model.Recommendation.ManureSO3 == 0 ? Model.Recommendation.ManureSO3 : string.Format("{0:N0}{1}", Model.Recommendation.ManureSO3, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerSO3 < 0 ? 0 : Model.Recommendation.FertilizerSO3 == 0 ? Model.Recommendation.FertilizerSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerSO3, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedSO3 == null ? 0 : Model.Recommendation.FertiliserAppliedSO3 == 0 ? Model.Recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
-                                    </tr>
-                                    @* <tr class="govuk-table__row">
+                    if (Model.Recommendation != null)
+                    {                        
+                        <govuk-details>
+                            <govuk-details-summary>
+                                @string.Format(Resource.lblShowRecommendationsFor, Model.FieldName)
+                            </govuk-details-summary>
+                            <govuk-details-text>
+                                <h2 class="govuk-heading-m">
+                                    @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
+                                    {
+                                        @string.Format(Resource.lblRecommendationsForGrass, Model.FertiliserManures?.FirstOrDefault()?.Defoliation, ViewBag.DefoliationSequenceName)
+                                    }
+                                    else
+                                    {
+                                        @Resource.lblRecommendations
+                                    }
+                                </h2>
+                                <table class="govuk-table new-recomendation-table data-table">
+                                    <thead class="govuk-table__header">
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
+                                            <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="govuk-table__body">
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@Resource.lblNitrogen</td>
+                                            <td class="govuk-table__cell">
+                                                @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                {
+                                                    @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
+                                                }
+                                                else
+                                                {
+                                                    @Resource.lblHyphen
+                                                }
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.CropN == null ? Resource.lblHyphen : Model.Recommendation.CropN == 0 ? Model.Recommendation.CropN : string.Format("{0:N0}{1}", Model.Recommendation.CropN, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.NBalance == null ? Resource.lblHyphen : Model.Recommendation.NBalance == 0 ? Model.Recommendation.NBalance : string.Format("{0:N0}", Model.Recommendation.NBalance))
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.ManureN == null ? Resource.lblHyphen : Model.Recommendation.ManureN == 0 ? Model.Recommendation.ManureN : string.Format("{0:N0}{1}", Model.Recommendation.ManureN, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertilizerN == null ? Resource.lblHyphen : Model.Recommendation.FertilizerN < 0 ? 0 : Model.Recommendation.FertilizerN == 0 ? Model.Recommendation.FertilizerN : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerN, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedN == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedN == 0 ? Model.Recommendation.FertiliserAppliedN : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedN, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.PIndex == null ? Resource.lblHyphen : Model.Recommendation.PIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.CropP2O5 == null ? Resource.lblHyphen : Model.Recommendation.CropP2O5 == 0 ? Model.Recommendation.CropP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.CropP2O5, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.PBalance == null ? Resource.lblHyphen : Model.Recommendation.PBalance == 0 ? Model.Recommendation.PBalance : string.Format("{0:N0}", Model.Recommendation.PBalance))
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.ManureP2O5 == null ? Resource.lblHyphen : Model.Recommendation.ManureP2O5 == 0 ? Model.Recommendation.ManureP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.ManureP2O5, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerP2O5 < 0 ? 0 : Model.Recommendation.FertilizerP2O5 == 0 ? Model.Recommendation.FertilizerP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedP2O5 == 0 ? Model.Recommendation.FertiliserAppliedP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedP2O5, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.KIndex == null ? Resource.lblHyphen : Model.Recommendation.KIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.CropK2O == null ? Resource.lblHyphen : Model.Recommendation.CropK2O == 0 ? Model.Recommendation.CropK2O : string.Format("{0:N0}{1}", Model.Recommendation.CropK2O, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.KBalance == null ? Resource.lblHyphen : Model.Recommendation.KBalance == 0 ? Model.Recommendation.KBalance : string.Format("{0:N0}", Model.Recommendation.KBalance))
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.ManureK2O == null ? Resource.lblHyphen : Model.Recommendation.ManureK2O == 0 ? Model.Recommendation.ManureK2O : string.Format("{0:N0}{1}", Model.Recommendation.ManureK2O, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerK2O < 0 ? 0 : Model.Recommendation.FertilizerK2O == 0 ? Model.Recommendation.FertilizerK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerK2O, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedK2O == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedK2O == 0 ? Model.Recommendation.FertiliserAppliedK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedK2O, Resource.lblkg))</td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.SIndex == null ? Resource.lblHyphen : Model.Recommendation.SIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.CropSO3 == null ? Resource.lblHyphen : Model.Recommendation.CropSO3 == 0 ? Model.Recommendation.CropSO3 : string.Format("{0:N0}{1}", Model.Recommendation.CropSO3, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.SBalance == null ? Resource.lblHyphen : Model.Recommendation.SBalance == 0 ? Model.Recommendation.SBalance : string.Format("{0:N0}", Model.Recommendation.SBalance))
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.ManureSO3 == null ? Resource.lblHyphen : Model.Recommendation.ManureSO3 == 0 ? Model.Recommendation.ManureSO3 : string.Format("{0:N0}{1}", Model.Recommendation.ManureSO3, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerSO3 < 0 ? 0 : Model.Recommendation.FertilizerSO3 == 0 ? Model.Recommendation.FertilizerSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerSO3, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedSO3 == 0 ? Model.Recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
+                                        </tr>
+                                        @* <tr class="govuk-table__row">
                             <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
                             <td class="govuk-table__cell">
                             @(Model.Recommendation.SIndex == null ? Resource.lblHyphen : Model.Recommendation.NaIndex)
@@ -225,62 +270,95 @@
                             <td class="govuk-table__cell">@(Model.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerNa2O < 0 ? 0 : Model.Recommendation.FertilizerNa2O == 0 ? Model.Recommendation.FertilizerNa2O : string.Concat(Model.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
                             <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedNa2O == null ? 0 : Model.Recommendation.FertiliserAppliedNa2O == 0 ? Model.Recommendation.FertiliserAppliedNa2O : string.Concat(Model.Recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
                             </tr> *@
-                                    <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
-                                        <td class="govuk-table__cell">
-                                            @(Model.Recommendation.MgIndex == null ? Resource.lblHyphen : Model.Recommendation.MgIndex)
-                                        </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropMgO == null ? Resource.lblHyphen : Model.Recommendation.CropMgO == 0 ? Model.Recommendation.CropMgO : string.Format("{0:N0}{1}", Model.Recommendation.CropMgO, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureMgO == null ? Resource.lblHyphen : Model.Recommendation.ManureMgO == 0 ? Model.Recommendation.ManureMgO : string.Format("{0:N0}{1}", Model.Recommendation.ManureMgO, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : Model.Recommendation.FertilizerMgO < 0 ? 0 : Model.Recommendation.FertilizerMgO == 0 ? Model.Recommendation.FertilizerMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerMgO, Resource.lblkg))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedMgO == null ? 0 : Model.Recommendation.FertiliserAppliedMgO == 0 ? Model.Recommendation.FertiliserAppliedMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedMgO, Resource.lblkg))</td>
-                                    </tr>
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.MgIndex == null ? Resource.lblHyphen : Model.Recommendation.MgIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.CropMgO == null ? Resource.lblHyphen : Model.Recommendation.CropMgO == 0 ? Model.Recommendation.CropMgO : string.Format("{0:N0}{1}", Model.Recommendation.CropMgO, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.MgBalance == null ? Resource.lblHyphen : Model.Recommendation.MgBalance == 0 ? Model.Recommendation.MgBalance : string.Format("{0:N0}", Model.Recommendation.MgBalance))
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.ManureMgO == null ? Resource.lblHyphen : Model.Recommendation.ManureMgO == 0 ? Model.Recommendation.ManureMgO : string.Format("{0:N0}{1}", Model.Recommendation.ManureMgO, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : Model.Recommendation.FertilizerMgO < 0 ? 0 : Model.Recommendation.FertilizerMgO == 0 ? Model.Recommendation.FertilizerMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerMgO, Resource.lblkg))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedMgO == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedMgO == 0 ? Model.Recommendation.FertiliserAppliedMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedMgO, Resource.lblkg))</td>
+                                        </tr>
 
-                                    <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell">@Resource.lblLime</td>
-                                        <td class="govuk-table__cell">
-                                            @(Model.Recommendation.LimeIndex == null ? Resource.lblHyphen : Model.Recommendation.LimeIndex)
-                                        </td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.CropLime == null ? Resource.lblHyphen : Model.Recommendation.CropLime == 0 ? Model.Recommendation.CropLime : string.Format("{0:N0}{1}", Model.Recommendation.CropLime, " ", Resource.lbltonnes))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.ManureLime == null ? Resource.lblHyphen : Model.Recommendation.ManureLime == 0 ? Model.Recommendation.ManureLime : string.Format("{0:N0}{1}", Model.Recommendation.ManureLime, " ", Resource.lbltonnes))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertilizerLime == null ? Resource.lblHyphen : Model.Recommendation.FertilizerLime < 0 ? 0 : Model.Recommendation.FertilizerLime == 0 ? Model.Recommendation.FertilizerLime : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerLime, " ", Resource.lbltonnes))</td>
-                                        <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedLime == null ? 0 : Model.Recommendation.FertiliserAppliedLime == 0 ? Model.Recommendation.FertiliserAppliedLime : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedLime, " ", Resource.lbltonnes))</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@Resource.lblLime</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.LimeIndex == null ? Resource.lblHyphen : Model.Recommendation.LimeIndex)
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.CropLime == null ? Resource.lblHyphen : Model.Recommendation.CropLime == 0 ? Model.Recommendation.CropLime : string.Format("{0:N0} {1}", Model.Recommendation.CropLime,  Resource.lbltonnes))</td>
+                                            <td class="govuk-table__cell">
+                                                @(Model.Recommendation.LimeBalance == null ? Resource.lblHyphen : Model.Recommendation.LimeBalance == 0 ? Model.Recommendation.LimeBalance :string.Format("{0:N0}", Model.Recommendation.LimeBalance))
+                                            </td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.ManureLime == null ? Resource.lblHyphen : Model.Recommendation.ManureLime == 0 ? Model.Recommendation.ManureLime : string.Format("{0:N0} {1}", Model.Recommendation.ManureLime, Resource.lbltonnes))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertilizerLime == null ? Resource.lblHyphen : Model.Recommendation.FertilizerLime < 0 ? 0 : Model.Recommendation.FertilizerLime == 0 ? Model.Recommendation.FertilizerLime : string.Format("{0:N0} {1}", Model.Recommendation.FertilizerLime, Resource.lbltonnes))</td>
+                                            <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedLime == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedLime == 0 ? Model.Recommendation.FertiliserAppliedLime : string.Format("{0:N0} {1}", Model.Recommendation.FertiliserAppliedLime, Resource.lbltonnes))</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                        </govuk-details-text>
-                    </govuk-details>
+                            </govuk-details-text>
+                        </govuk-details>
+                    }
                 }
-            }
 
+            </div>
+            <div class="govuk-grid-column-two-thirds">
+                @if (isFieldsEmpty)
+                {
+                    <govuk-error-message asp-for="@Model.N">
+                        @Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing
+                    </govuk-error-message>
+                }
+                <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">
+                        @Resource.lblNitrogen
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
+                    </govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">
+                        @Resource.lblPhosphateP2O5
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
+                    </govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">
+                        @Resource.lblPotashK2O
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
+                    </govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">
+                        @Resource.lblSulphurSO3
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
+                    </govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">
+                        @Resource.lblMagnesiumMgO
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblOutpurKgPerHectare)</span>
+                    </govuk-input-label>
+                    <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
+                </govuk-input>
+                <govuk-input asp-for=@Model.Lime inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label is-page-heading="false">
+                        @Resource.lblLime
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lbltonnes)</span>
+                    </govuk-input-label>
+                    <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
+                </govuk-input>
+            </div>
         </div>
-        <div class="govuk-grid-column-two-thirds">
-            <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblNitrogen</govuk-input-label>
-                <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblPhosphateP2O5</govuk-input-label>
-                <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblPotashK2O</govuk-input-label>
-                <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblSulphurSO3</govuk-input-label>
-                <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblMagnesiumMgO</govuk-input-label>
-                <govuk-input-suffix>@Resource.lblOutpurKgPerHectare</govuk-input-suffix>
-            </govuk-input>
-            <govuk-input asp-for=@Model.Lime inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblLime</govuk-input-label>
-                <govuk-input-suffix>@Resource.lbltonnes</govuk-input-suffix>
-            </govuk-input>
 
+        <div class="govuk-grid-column-two-thirds">
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
@@ -295,11 +373,7 @@
                     <a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
                 }
             </p>
-
         </div>
-
-
-
 
     </form>
 

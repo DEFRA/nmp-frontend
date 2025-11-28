@@ -11,7 +11,7 @@ namespace NMP.Portal.Services
     public class PKBalanceService : Service, IPKBalanceService
     {
         private readonly ILogger<PKBalanceService> _logger;
-        public PKBalanceService(ILogger<PKBalanceService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public PKBalanceService(ILogger<PKBalanceService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, Security.TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }
@@ -55,89 +55,6 @@ namespace NMP.Portal.Services
                 throw new Exception(error.Message, ex);
             }
             return pKBalance;
-        }
-        public async Task<(PKBalance, Error Error)> AddPKBalance(string pkBalanceData)
-        {
-            string jsonData = JsonConvert.SerializeObject(pkBalanceData);
-            PKBalance pKBalance = null;
-            Error error = new Error();
-            try
-            {
-                HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddFieldAsyncAPI), new StringContent(pkBalanceData, Encoding.UTF8, "application/json"));
-                string result = await response.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
-                {
-
-                    JObject pKBalanceJObject = responseWrapper.Data["PKBalance"] as JObject;
-                    if (pKBalanceJObject != null)
-                    {
-                        pKBalance = pKBalanceJObject.ToObject<PKBalance>();
-                    }
-
-                }
-                else
-                {
-                    if (responseWrapper != null && responseWrapper.Error != null)
-                    {
-                        error = responseWrapper.Error.ToObject<Error>();
-                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                    }
-                }
-            }
-            catch (HttpRequestException hre)
-            {
-                error.Message = Resource.MsgServiceNotAvailable;
-                _logger.LogError(hre.Message);
-            }
-            catch (Exception ex)
-            {
-                error.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
-            return (pKBalance, error);
-        }
-        public async Task<(PKBalance, Error Error)> UpdatePKBalance(string pkBalanceData)
-        {
-            PKBalance pKBalance = null;
-            Error error = new Error();
-            try
-            {
-                HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateFieldAsyncAPI), new StringContent(pkBalanceData, Encoding.UTF8, "application/json"));
-                string result = await response.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
-                {
-
-                    JObject pKBalanceJObject = responseWrapper.Data["PKBalance"] as JObject;
-                    if (pKBalanceJObject != null)
-                    {
-                        pKBalance = pKBalanceJObject.ToObject<PKBalance>();
-                    }
-
-                }
-                else
-                {
-                    if (responseWrapper != null && responseWrapper.Error != null)
-                    {
-                        error = responseWrapper.Error.ToObject<Error>();
-                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                    }
-                }
-            }
-            catch (HttpRequestException hre)
-            {
-                error.Message = Resource.MsgServiceNotAvailable;
-                _logger.LogError(hre.Message);
-            }
-            catch (Exception ex)
-            {
-                error.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
-            return (pKBalance, error);
-        }
+        }        
     }
 }

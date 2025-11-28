@@ -4,7 +4,9 @@
 
 @model SoilAnalysisViewModel
 @{
-    ViewData["Title"] = Resource.lblSoilAnalysis;
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{string.Format(Resource.lblSoilAnalysisForFieldName, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
 
 }
 
@@ -40,7 +42,7 @@
         <div class="govuk-grid-column-two-thirds">
             @if (ViewBag.Success != null && ViewBag.Success == Resource.lblTrue)
             {
-                <govuk-notification-banner type="Success">
+                <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
                         <h3 class="govuk-notification-banner__heading">
                             @string.Format(Resource.lblYouHaveUpdatedASoilAnalysisForFieldName,Model.FieldName)</h3>

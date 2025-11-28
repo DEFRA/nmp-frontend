@@ -4,7 +4,9 @@ using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
+using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,7 +15,7 @@ namespace NMP.Portal.Services
     public class OrganicManureService : Service, IOrganicManureService
     {
         private readonly ILogger<OrganicManureService> _logger;
-        public OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory) : base(httpContextAccessor, clientFactory)
+        public OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }
@@ -1659,9 +1661,9 @@ namespace NMP.Portal.Services
             }
             return (totalN, error);
         }
-        public async Task<(OrganicManure, Error)> FetchOrganicManureById(int id)
+        public async Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureById(int id)
         {
-            OrganicManure organicManure = new OrganicManure();
+            OrganicManureDataViewModel organicManure = new OrganicManureDataViewModel();
             Error error = null;
             try
             {
@@ -1673,7 +1675,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        organicManure = responseWrapper.Data.ToObject<OrganicManure>();
+                        organicManure = responseWrapper.Data.ToObject<OrganicManureDataViewModel>();
                     }
                 }
                 else

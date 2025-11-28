@@ -1,5 +1,6 @@
 ﻿using NMP.Portal.Models;
 using NMP.Portal.ServiceResponses;
+using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Services
 {
@@ -20,8 +21,12 @@ namespace NMP.Portal.Services
 
         Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
 
-        Task<(List<NutrientsLoadingLiveStock>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year);
+        Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year);
         Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes();
-       
+        Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id);
+        Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId);
+
+        Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
+
     }
 }

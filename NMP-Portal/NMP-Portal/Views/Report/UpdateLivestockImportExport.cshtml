@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = Resource.lblImportsExports;
+    ViewData["Title"] = $"{Resource.lblOrganicMaterialImportsAndExports} {Resource.lblHyphen} {Resource.lblImportsExportsOfLivestockManure}";
     var currentYear = DateTime.Now.Year;
     var previousYear = DateTime.Now.Year - 1;
 }
@@ -18,11 +18,11 @@
     </govuk-breadcrumbs>
 }
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
 
         @if (TempData["succesMsgContent"] != null)
         {
-            <govuk-notification-banner type="Success">
+            <govuk-notification-banner type="NotificationBannerType.Success">
                 <p class="govuk-notification-banner__heading">
                     @TempData["succesMsgContent"]
                 </p>
@@ -41,12 +41,10 @@
         <span class="name govuk-caption-l">@Model.FarmName</span>
         <h1 class="govuk-heading-l" id="header">@Resource.lblOrganicMaterialImportsAndExports</h1>
         <p class="govuk-body"><a href="#">@Resource.lblAddAnotherYear</a></p>
-
-
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div id="all-plans-table" class="govuk-grid-column-two-thirds">
+    <div id="all-plans-table" class="govuk-grid-column-two-thirds-from-desktop">
         <table class="govuk-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
