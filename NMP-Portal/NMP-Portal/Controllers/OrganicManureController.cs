@@ -11677,7 +11677,7 @@ namespace NMP.Portal.Controllers
                                 var cropId = cropList.Select(x => x.ID.Value).FirstOrDefault();
                                 (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
 
-                                if (ManagementPeriod != null)
+                                if (ManagementPeriod.Count>0)
                                 {
                                     List<int> defoliationList = ManagementPeriod.Select(x => x.Defoliation.Value).ToList();
 
