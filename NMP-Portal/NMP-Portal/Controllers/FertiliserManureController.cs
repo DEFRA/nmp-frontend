@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
@@ -14,14 +10,8 @@ using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
-using System;
-using System.Diagnostics.Metrics;
 using System.Globalization;
-using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NMP.Portal.Controllers
 {
@@ -1760,10 +1750,32 @@ namespace NMP.Portal.Controllers
                                 .FirstOrDefault(header => header.RecommendationData != null &&
                                 header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
                                                                    rd.ManagementPeriod.ID == manId));
-
+                                
 
                                 if (matchedHeader != null)
                                 {
+                                    if (matchedHeader.Crops != null)
+                                    {
+                                        ViewBag.CropTypeId = matchedHeader.Crops.CropTypeID;
+                                        if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        {
+                                            (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
+                                            if (error == null && defoliationSequence != null)
+                                            {
+                                                int? defoliation = model.FertiliserManures?.FirstOrDefault()?.Defoliation;
+                                                if (defoliation != null)
+                                                {
+                                                    var parts = defoliationSequence.DefoliationSequenceDescription?
+                                                   .Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                                                    var part = parts?[defoliation.Value-1].Trim();
+                                                    ViewBag.DefoliationSequenceName = string.IsNullOrWhiteSpace(part)
+                                                                                        ? string.Empty
+                                                                                        : char.ToUpper(part[0]) + part[1..];
+                                                }
+                                            }
+                                        }
+                                    }
                                     if (matchedHeader.RecommendationData != null)
                                     {
                                         matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
@@ -1799,6 +1811,13 @@ namespace NMP.Portal.Controllers
                                                 MgIndex = recData.Recommendation.MgIndex,
                                                 PIndex = recData.Recommendation.PIndex,
                                                 NaIndex = recData.Recommendation.NaIndex,
+                                                PBalance = recData.Recommendation.PBalance,
+                                                SBalance = recData.Recommendation.SBalance,
+                                                KBalance = recData.Recommendation.KBalance,
+                                                MgBalance = recData.Recommendation.MgBalance,
+                                                LimeBalance = recData.Recommendation.LimeBalance,
+                                                NaBalance = recData.Recommendation.NaBalance,
+                                                NBalance = recData.Recommendation.NBalance,
                                                 FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
                                                 FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
                                                 FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
@@ -1904,7 +1923,7 @@ namespace NMP.Portal.Controllers
                             {
                                 errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPhosphateP2O5));
                             }
-                        }                        
+                        }
                     }
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
@@ -1957,7 +1976,7 @@ namespace NMP.Portal.Controllers
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
                 {
-                    var magnesiumMgOError = ModelState["MgO"]?.Errors.FirstOrDefault()?.ErrorMessage; 
+                    var magnesiumMgOError = ModelState["MgO"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
                     if (magnesiumMgOError != null && magnesiumMgOError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
                     {
@@ -2073,6 +2092,28 @@ namespace NMP.Portal.Controllers
 
                                     if (matchedHeader != null)
                                     {
+                                        if (matchedHeader.Crops != null)
+                                        {
+                                            ViewBag.CropTypeId = matchedHeader.Crops.CropTypeID;
+                                            if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                            {
+                                                (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
+                                                if (error == null && defoliationSequence != null)
+                                                {
+                                                    int? defoliation = model.FertiliserManures?.FirstOrDefault()?.Defoliation;
+                                                    if (defoliation != null)
+                                                    {
+                                                        var parts = defoliationSequence.DefoliationSequenceDescription?
+                                                       .Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                                                        var part = parts?[defoliation.Value - 1].Trim();
+                                                        ViewBag.DefoliationSequenceName = string.IsNullOrWhiteSpace(part)
+                                                                                            ? string.Empty
+                                                                                            : char.ToUpper(part[0]) + part[1..];
+                                                    }
+                                                }
+                                            }
+                                        }
                                         if (matchedHeader.RecommendationData != null)
                                         {
                                             matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
@@ -2108,6 +2149,13 @@ namespace NMP.Portal.Controllers
                                                     MgIndex = recData.Recommendation.MgIndex,
                                                     PIndex = recData.Recommendation.PIndex,
                                                     NaIndex = recData.Recommendation.NaIndex,
+                                                    PBalance = recData.Recommendation.PBalance,
+                                                    SBalance = recData.Recommendation.SBalance,
+                                                    KBalance = recData.Recommendation.KBalance,
+                                                    MgBalance = recData.Recommendation.MgBalance,
+                                                    LimeBalance = recData.Recommendation.LimeBalance,
+                                                    NaBalance = recData.Recommendation.NaBalance,
+                                                    NBalance = recData.Recommendation.NBalance,
                                                     FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
                                                     FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
                                                     FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
@@ -3822,15 +3870,16 @@ namespace NMP.Portal.Controllers
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;
-                                    //totalN = totalN + (totalNitrogen * model.ApplicationRate.Value);
+                                    
                                     (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
                                     (List<int> previousYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
                                     if (error == null)
                                     {
                                         nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                                        //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
+                                        
                                         OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0, currentYearManureTypeIds, previousYearManureTypeIds, null);
+                                        bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0, hasSpecialManure);
 
                                         //correction begin for user story NMPT-1742
                                         decimal totalNitrogenApplied = 0;

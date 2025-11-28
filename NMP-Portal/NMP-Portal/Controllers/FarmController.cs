@@ -376,7 +376,6 @@ namespace NMP.Portal.Controllers
             if (HttpContext.Session.Keys.Contains("AddressList"))
             {
                 addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
-
             }
             else
             {
@@ -1423,8 +1422,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                HttpContext?.Session.Remove("FarmData");
-                //return RedirectToAction("FarmList", "Farm");
+                HttpContext?.Session.Remove("FarmData");                
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
 
             }

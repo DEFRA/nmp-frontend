@@ -40,11 +40,10 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
-        private readonly IReportService _reportService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IReportService _reportService;        
         private readonly IStorageCapacityService _storageCapacityService;
         private readonly IWarningService _warningService;
-        public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
+        public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupService addressLookupService,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
             IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningService warningService)
@@ -58,8 +57,7 @@ namespace NMP.Portal.Controllers
             _fieldService = fieldService;
             _cropService = cropService;
             _organicManureService = organicManureService;
-            _fertiliserManureService = fertiliserManureService;
-            _httpContextAccessor = httpContextAccessor;
+            _fertiliserManureService = fertiliserManureService;            
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
             _warningService = warningService;
@@ -76,9 +74,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -427,7 +425,7 @@ namespace NMP.Portal.Controllers
                         {
                             model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
                         }
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
                     return RedirectToAction("CropAndFieldManagement");
 
@@ -602,7 +600,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         model.CropTypeList = list.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
                                     }
-                                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                                    HttpContext?.Session.SetObjectAsJson("ReportData", model);
                                     ViewBag.CropTypeList = list.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                                 }
                                 else
@@ -669,9 +667,9 @@ namespace NMP.Portal.Controllers
         {
             ReportViewModel model = new ReportViewModel();
             Error error = new Error();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            if (HttpContext.Session.Keys.Contains("ReportData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
             }
             else
             {
@@ -882,10 +880,10 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = null;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
                     model = new ReportViewModel();
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else if (string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j))
                 {
@@ -936,9 +934,8 @@ namespace NMP.Portal.Controllers
                 {
                     return View("ReportType", model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                //if (model.ReportType != null && model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport)
-                //{
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
+                
                 if (model.Year != null)
                 {
                     return RedirectToAction("ExportFieldsOrCropType");
@@ -967,9 +964,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -1408,10 +1405,10 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = null;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
                     model = new ReportViewModel();
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
                 {
@@ -1450,11 +1447,11 @@ namespace NMP.Portal.Controllers
                         model.Country = farm.CountryID;
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (!string.IsNullOrWhiteSpace(r))
                 {
                     model.IsManageImportExport = true;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
             }
             catch (Exception ex)
@@ -1492,7 +1489,7 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                 {
@@ -1520,16 +1517,15 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = null;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
                     model = new ReportViewModel();
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
             }
             catch (Exception ex)
             {
@@ -1556,9 +1552,8 @@ namespace NMP.Portal.Controllers
                 }
                 model.NVZReportOption = null;
                 if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
-                {
-                    //model.ReportType = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                {                    
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
                         return RedirectToAction("ExportFieldsOrCropType");
@@ -1585,10 +1580,10 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = null;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
                     model = new ReportViewModel();
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -1603,7 +1598,7 @@ namespace NMP.Portal.Controllers
                         model.FarmName = farm.Name;
                         model.Country = farm.CountryID;
                     }
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
@@ -1639,17 +1634,17 @@ namespace NMP.Portal.Controllers
                             model.FarmName = farm.Name;
                             model.Country = farm.CountryID;
                         }
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
                     return View(model);
                 }
                 model.FieldAndPlanReportOption = null;
                 model.IsCheckList = false;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
-                    //model.ReportType = (int)NMP.Portal.Enums.ReportType.NMaxReport;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
                         return RedirectToAction("ExportFieldsOrCropType");
@@ -1661,7 +1656,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
                         return RedirectToAction("IsGrasslandDerogation");
@@ -1674,7 +1669,7 @@ namespace NMP.Portal.Controllers
                 string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
                         return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear, isPlan = isComingFromPlan });
@@ -1700,9 +1695,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -1770,7 +1765,7 @@ namespace NMP.Portal.Controllers
                 }
                 ViewBag.Years = yearList.OrderByDescending(x => x);
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -1838,7 +1833,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 model.IsCheckList = false;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                 {
                     return RedirectToAction("IsGrasslandDerogation");
@@ -1873,9 +1868,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -1896,7 +1891,7 @@ namespace NMP.Portal.Controllers
                         model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
                         model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;
 
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockManureNitrogenReportChecklist", model);
                     }
                     else
@@ -1906,7 +1901,7 @@ namespace NMP.Portal.Controllers
                         model.TotalAreaInNVZ = null;
                         model.IsAnyLivestockNumber = null;
                         model.IsAnyLivestockImportExport = null;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
 
 
@@ -1973,7 +1968,7 @@ namespace NMP.Portal.Controllers
                     TempData["DerogationSaveError"] = error.Message;
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
@@ -1991,9 +1986,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -2031,7 +2026,7 @@ namespace NMP.Portal.Controllers
                         ViewBag.IsAnyLivestockImportExportFromFarmDetail = true;
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (!string.IsNullOrWhiteSpace(r))
                 {
@@ -2057,7 +2052,7 @@ namespace NMP.Portal.Controllers
                 //    model.IsAnyLivestockNumber = false;
                 //}
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2137,7 +2132,7 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("LivestockManureNFarmLimitReport");
             }
             catch (Exception ex)
@@ -2155,9 +2150,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -2171,7 +2166,7 @@ namespace NMP.Portal.Controllers
                         model.Country = farm.CountryID;
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2263,7 +2258,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
@@ -2281,16 +2276,16 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
                 model.IsCheckList = false;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (model.IsComingFromSuccessMsg.Value)
                 {
@@ -2310,10 +2305,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
 
             }
-            //if(model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value))
-            //{
-            //    return RedirectToAction("Year");
-            //}
+            
             (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
@@ -2342,19 +2334,17 @@ namespace NMP.Portal.Controllers
         public IActionResult IsAnyLivestockImportExport()
         {
             _logger.LogTrace("Report Controller : IsAnyLivestockImportExport() action called");
-            ReportViewModel model = new ReportViewModel();
+            ReportViewModel? model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2383,7 +2373,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                if (!model.IsAnyLivestockImportExport.Value)
+                if (model.IsAnyLivestockImportExport.HasValue && !model.IsAnyLivestockImportExport.Value)
                 {
                     model.IsCheckAnswer = false;
                     (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportService.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
@@ -2413,7 +2403,7 @@ namespace NMP.Portal.Controllers
                     null : (nutrientsLoadingLiveStockList.Count > 0 ? true : false),
                     };
                     (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportService.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
@@ -2423,12 +2413,9 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("ImportExportOption");
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -2444,9 +2431,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -2463,8 +2450,8 @@ namespace NMP.Portal.Controllers
                         model.IsCheckList = false;
                     }
                 }
-                //ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2493,15 +2480,12 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
                 }
-                //if (model.IsManageImportExport || (!string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage)))
-                //{
-                //    return RedirectToAction("ManureGroup");
-                //}
+                
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
@@ -2518,9 +2502,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -2539,8 +2523,7 @@ namespace NMP.Portal.Controllers
                             Value = f.Id.ToString(),
                             Text = f.Name
                         }).ToList();
-                        ViewBag.ManureTypeList = SelectListItem.ToList();
-                        //ViewBag.ManureTypeList= ManureTypes;
+                        ViewBag.ManureTypeList = SelectListItem.ToList();                        
                     }
                 }
                 if (!string.IsNullOrWhiteSpace(q))
@@ -2561,7 +2544,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2628,9 +2611,9 @@ namespace NMP.Portal.Controllers
                     model.ManureGroupId = model.ManureGroupIdForFilter;
                 }
                 ReportViewModel reportViewModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    reportViewModel = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 if (reportViewModel != null && reportViewModel.ManureTypeId != model.ManureTypeId)
                 {
@@ -2663,15 +2646,15 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
-                {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
+                if (model.ManureTypeId == (int)ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)ManureTypes.OtherLiquidMaterials)
+                {                    
                     return RedirectToAction("OtherMaterialName");
                 }
                 else
                 {
                     model.OtherMaterialName = null;
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
                 if (model.IsDefaultValueChange && model.IsCheckAnswer)
                 {
@@ -2699,16 +2682,16 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2743,7 +2726,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange))
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
@@ -2765,16 +2748,16 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -2811,8 +2794,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     if (model.LivestockQuantity < 1 || model.LivestockQuantity > 999999)
-                    {
-                        //ModelState["LivestockQuantity"].Errors.Add(Resource.MsgEnterAnQuantityBetweenValue);
+                    {                        
                         ModelState.AddModelError("LivestockQuantity", Resource.MsgEnterAnQuantityBetweenValue);
                     }
                 }
@@ -2823,7 +2805,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange))
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
@@ -2894,27 +2876,7 @@ namespace NMP.Portal.Controllers
                             {
                                 harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
                                 model.HarvestYear = harvestYearList;
-                            }
-                            //(List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportService.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
-                            //if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
-                            //{
-                            //    HarvestYear harvestYear = new HarvestYear();
-                            //    foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
-                            //    {
-                            //        harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
-                            //        harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
-                            //        harvestYear.EncryptedYear = _reportDataProtector.Protect(nutrientsLoadingManure.ManureDate.Value.Year.ToString());
-                            //        harvestYearList.Add(harvestYear);
-                            //    }
-
-                            //    harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
-                            //    model.HarvestYear = harvestYearList;
-                            //}
-                            //else
-                            //{
-                            //    TempData["Error"] = error.Message;
-                            //    return RedirectToAction("FarmSummary", "Farm", new { q = q });
-                            //}
+                            }                            
                         }
                         else
                         {
@@ -2928,14 +2890,14 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmSummary", "Farm", new { q = q });
                     }
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
                 else
                 {
                     TempData["Error"] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
-                //ViewBag.IsComingFromOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
+                
                 return View(model);
             }
 
@@ -2948,14 +2910,15 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+
                 Error? error = null;
                 FarmManureTypeResponse? farmManure = null;
                 (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
@@ -2965,7 +2928,7 @@ namespace NMP.Portal.Controllers
                     {
                         (ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                         model.ManureType = manureType;
-                        // (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
+                        
                         if (error == null)
                         {
                             if (farmManureTypeList.Count > 0)
@@ -2995,12 +2958,12 @@ namespace NMP.Portal.Controllers
                             model.ManureType = manureType;
                         }
                         model.IsDefaultNutrient = true;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
                     else
                     {
                         model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockManualNutrientValue");
                     }
                 }
@@ -3068,7 +3031,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 model.IsDefaultNutrient = true;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -3099,8 +3062,7 @@ namespace NMP.Portal.Controllers
                     if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                     {
                         (ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                        model.ManureType = manureType;
-                        // (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
+                        model.ManureType = manureType;                        
                         if (error == null)
                         {
                             if (farmManureTypeList.Count > 0)
@@ -3184,7 +3146,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return View(model);
             }
             if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
@@ -3202,7 +3164,7 @@ namespace NMP.Portal.Controllers
                     model.NO3N = model.ManureType.NO3N;
                 }
 
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("LivestockManualNutrientValue");
             }
             else
@@ -3218,9 +3180,9 @@ namespace NMP.Portal.Controllers
                 model.MgO = null;
                 model.NO3N = null;
                 ReportViewModel reportViewModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
 
                 if (reportViewModel != null && (!string.IsNullOrWhiteSpace(reportViewModel.DefaultNutrientValue)))
@@ -3252,7 +3214,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     ViewBag.FarmManureApiOption = Resource.lblTrue;
                                 }
-                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                                HttpContext.Session.SetObjectAsJson("ReportData", model);
                                 if (reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue && (reportViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || reportViewModel.DefaultNutrientValue != Resource.lblYesUseTheseStandardNutrientValues)
                                     && model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
                                 {
@@ -3270,7 +3232,7 @@ namespace NMP.Portal.Controllers
                         if (reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
                         {
                             ViewBag.RB209ApiOption = Resource.lblTrue;
-                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                            HttpContext.Session.SetObjectAsJson("ReportData", model);
                             if (reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue && (reportViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || reportViewModel.DefaultNutrientValue != Resource.lblYesUseTheseValues)
                                   && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
                             {
@@ -3322,13 +3284,13 @@ namespace NMP.Portal.Controllers
                         {
                             model.IsThisDefaultValueOfRB209 = true;
                             ViewBag.RB209ApiOption = Resource.lblTrue;
-                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                            HttpContext.Session.SetObjectAsJson("ReportData", model);
                             return View(model);
                         }
 
                     }
                 }
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
             }
 
@@ -3343,9 +3305,9 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Organic Manure Controller : LivestockManualNutrientValue() post action called");
             ReportViewModel model = new ReportViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            if (HttpContext.Session.Keys.Contains("ReportData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
             }
             else
             {
@@ -3611,7 +3573,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (model.IsCheckAnswer)
                 {
@@ -3634,15 +3596,15 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -3709,15 +3671,15 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
             {
@@ -3754,26 +3716,24 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
                 model.IsCheckAnswer = false;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedId))
-                {
-                    //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                {                    
                     return RedirectToAction("ManageImportExport", new
                     {
                         q = model.EncryptedFarmId,
                         y = model.EncryptedHarvestYear
                     });
-                }
-                //_httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                }                
             }
             catch (Exception ex)
             {
@@ -3791,9 +3751,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -3804,15 +3764,7 @@ namespace NMP.Portal.Controllers
                 model.IsDefaultValueChange = false;
                 model.IsCancel = null;
                 Error error = null;
-                //if (model.ManureTypeId != null)
-                //{
-                //    (ManureType manureTypeData, error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                //    if (error == null && manureTypeData != null)
-                //    {
-                //        model.ManureGroupId = manureTypeData.ManureGroupId;
-                //        model.ManureGroupIdForFilter = manureTypeData.ManureGroupId;
-                //    }
-                //}
+               
                 if (!string.IsNullOrWhiteSpace(i))
                 {
                     int decryptedId = Convert.ToInt32(_reportDataProtector.Unprotect(i));
@@ -3929,14 +3881,14 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (!string.IsNullOrWhiteSpace(i))
                 {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("LivestockImportExportDataBeforeUpdate", model);
+                    HttpContext?.Session.SetObjectAsJson("LivestockImportExportDataBeforeUpdate", model);
 
                 }
-                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("LivestockImportExportDataBeforeUpdate");
+                var previousModel = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("LivestockImportExportDataBeforeUpdate");
 
                 bool isDataChanged = false;
 
@@ -4118,18 +4070,18 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ManageImportExport(string q, string y, string r, string s)
         {
             _logger.LogTrace($"Report Controller : ManageImportExport() action called");
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("LivestockImportExportDataBeforeUpdate"))
+            if (HttpContext.Session.Keys.Contains("LivestockImportExportDataBeforeUpdate"))
             {
-                HttpContext?.Session.Remove("LivestockImportExportDataBeforeUpdate");
+                HttpContext.Session.Remove("LivestockImportExportDataBeforeUpdate");
             }
             ReportViewModel model = new ReportViewModel();
             if (!string.IsNullOrWhiteSpace(q))
             {
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                    if (HttpContext.Session.Keys.Contains("ReportData"))
                     {
-                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                        model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                         model.ImportExport = null;
                         model.LivestockImportExportDate = null;
                         model.ManureTypeId = null;
@@ -4244,8 +4196,7 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                                 decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.NTotal));
-                                ViewBag.TotalImportsInKg = string.Format("{0:N2}", totalImports);
-                                //ViewBag.ExportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).ToList();
+                                ViewBag.TotalImportsInKg = string.Format("{0:N2}", totalImports);                                
                                 decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.NTotal));
                                 ViewBag.TotalExportsInKg = string.Format("{0:N2}", totalExports);
                                 decimal netTotal = Math.Round((totalImports ?? 0) - (totalExports ?? 0), 0);
@@ -4266,14 +4217,14 @@ namespace NMP.Portal.Controllers
                         if (nutrientsLoadingManuresList.Count == 0)
                         {
                             model.IsManageImportExport = false;
-                            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                            HttpContext.Session.SetObjectAsJson("ReportData", model);
                             return RedirectToAction("IsAnyLivestockImportExport", model);
                         }
                     }
                     else
                     {
                         model.IsManageImportExport = false;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("IsAnyLivestockImportExport", model);
                     }
                 }
@@ -4282,7 +4233,7 @@ namespace NMP.Portal.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             if (!string.IsNullOrWhiteSpace(y))
             {
@@ -4291,7 +4242,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsManageImportExport = true;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            HttpContext.Session.SetObjectAsJson("ReportData", model);
             return View(model);
         }
 
@@ -4302,9 +4253,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4341,20 +4292,20 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    reportModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
                     if (model.IsAnyLivestockNumber == reportModel.IsAnyLivestockNumber)
                     {
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockCheckAnswer");
                     }
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (model.IsAnyLivestockNumber == false)
                 {
@@ -4385,7 +4336,7 @@ namespace NMP.Portal.Controllers
                         IsAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0 ? true : false,
                     };
                     (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportService.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
@@ -4418,9 +4369,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4484,15 +4435,15 @@ namespace NMP.Portal.Controllers
                 }
 
                 ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    reportModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
                     if (model.LivestockGroupId == reportModel.LivestockGroupId && !model.IsLivestockGroupChange)
                     {
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockCheckAnswer");
                     }
                     else
@@ -4501,7 +4452,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockType");
             }
@@ -4520,9 +4471,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4575,11 +4526,11 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockCheckAnswer");
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
                 var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
                 var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
@@ -4589,12 +4540,12 @@ namespace NMP.Portal.Controllers
                 if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
                 {
                     model.AverageOccupancy = null;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockNumberQuestion");
                 }
                 else
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("NonGrazingLivestockAverageNumber");
                 }
             }
@@ -4612,9 +4563,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4664,20 +4615,20 @@ namespace NMP.Portal.Controllers
                 }
 
                 ReportViewModel reportModel = new ReportViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    reportModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    reportModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 if (model.IsLivestockCheckAnswer)
                 {
                     if (model.LivestockNumberQuestion == reportModel.LivestockNumberQuestion && !model.IsLivestockGroupChange)
                     {
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                         return RedirectToAction("LivestockCheckAnswer");
                     }
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.LivestockNumberQuestion == (int)NMP.Portal.Enums.LivestockNumberQuestion.ANumberForEachMonth)
                 {
                     return RedirectToAction("LivestockNumbersMonthly");
@@ -4702,9 +4653,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4713,7 +4664,7 @@ namespace NMP.Portal.Controllers
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
                     ViewBag.LivestockCategory = model.LivestockGroupName;
@@ -4814,12 +4765,12 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockCheckAnswer");
                 }
 
                 model.AverageNumber = null;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockCheckAnswer");
             }
@@ -4838,9 +4789,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4849,7 +4800,7 @@ namespace NMP.Portal.Controllers
                 (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
                     ViewBag.LivestockCategory = model.LivestockGroupName;
@@ -4922,10 +4873,10 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockCheckAnswer");
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("LivestockCheckAnswer");
             }
@@ -4944,9 +4895,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -4981,14 +4932,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgEnterTheAverageTotalNumberOfThis, model.LivestockGroupName, model.Year));
                 }
-                //if (model.AverageOccupancy == null)
-                //{
-                //    ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
-                //}
-                //if (model.NitrogenStandard == null)
-                //{
-                //    ModelState.AddModelError("NitrogenStandard", Resource.MsgEnterTheNitrogenStandardPerAnimal);
-                //}
+                
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
@@ -5015,11 +4959,11 @@ namespace NMP.Portal.Controllers
 
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockCheckAnswer");
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("OccupancyAndStandard");
             }
@@ -5038,9 +4982,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -5091,12 +5035,12 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange && model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
                 {
                     model.NitrogenStandard = defaultNitrogenStandard;
                     model.AverageOccupancy = defaultAverageOccupancy;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     return RedirectToAction("LivestockCheckAnswer");
                 }
                 if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
@@ -5115,7 +5059,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.AverageOccupancy = defaultAverageOccupancy;
                     model.NitrogenStandard = defaultNitrogenStandard;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                     return RedirectToAction("LivestockCheckAnswer");
                 }
@@ -5136,9 +5080,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -5198,7 +5142,6 @@ namespace NMP.Portal.Controllers
                 }
 
                 //calculation for N standard and P2O5 standard on default occupancy change
-
                 (livestockTypes, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                 var defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
                 var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
@@ -5223,7 +5166,7 @@ namespace NMP.Portal.Controllers
                 }
                 //Calculation end
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
                     return RedirectToAction("LivestockCheckAnswer");
@@ -5244,15 +5187,15 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NitrogenStandard()  //pig, poultry
+        public async Task<IActionResult> NitrogenStandard() 
         {
             _logger.LogTrace("Report Controller : NitrogenStandard() action called");
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -5312,7 +5255,7 @@ namespace NMP.Portal.Controllers
                         model.OccupancyAndNitrogenOptions = (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
                 {
@@ -5337,9 +5280,9 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -5421,7 +5364,7 @@ namespace NMP.Portal.Controllers
                     (List<LivestockTypeResponse> livestockType, error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
                     model.LivestockTypeName = livestockType.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Name;
 
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                 }
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
                 {
@@ -5518,14 +5461,13 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 if (!string.IsNullOrWhiteSpace(id))
                 {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("LivestockDataBeforeUpdate", model);
-
+                    HttpContext.Session.SetObjectAsJson("LivestockDataBeforeUpdate", model);
                 }
-                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("LivestockDataBeforeUpdate");
+                var previousModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("LivestockDataBeforeUpdate");
 
                 bool isDataChanged = false;
 
@@ -5541,7 +5483,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Report Controller : Exception in AverageNumber() action : {ex.Message}, {ex.StackTrace}");
-                var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
+                var cattle = (int)Enums.LivestockGroup.Cattle;
                 var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
                 var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
                 var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
@@ -5563,17 +5505,17 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsGrasslandDerogation == false)
                     {
-                        if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+                        if (model.OccupancyAndNitrogenOptions == (int)OccupancyNitrogenOptions.ChangeOccupancy)
                         {
                             TempData["ErrorOnOccupancy"] = ex.Message;
                             return RedirectToAction("Occupancy");
                         }
-                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+                        else if (model.OccupancyAndNitrogenOptions == (int)OccupancyNitrogenOptions.ChangeNitrogen)
                         {
                             TempData["ErrorOnNitrogenStandard"] = ex.Message;
                             return RedirectToAction("NitrogenStandard");
                         }
-                        else if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)
+                        else if (model.OccupancyAndNitrogenOptions == (int)OccupancyNitrogenOptions.UseDefault)
                         {
                             TempData["ErrorOnOccupancyAndStandard"] = ex.Message;
                             return RedirectToAction("OccupancyAndStandard");
@@ -5765,7 +5707,7 @@ namespace NMP.Portal.Controllers
                 {
                     (NutrientsLoadingLiveStock nutrientsLoadingLiveStockData, error) = await _reportService.UpdateNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["ErrorOnLivestockCheckAnswer"] = error.Message;
@@ -5828,17 +5770,17 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Report Controller : ManageLivestock() action called");
             ReportViewModel model = new ReportViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("LivestockDataBeforeUpdate"))
+            if (HttpContext.Session.Keys.Contains("LivestockDataBeforeUpdate"))
             {
-                HttpContext?.Session.Remove("LivestockDataBeforeUpdate");
+                HttpContext.Session.Remove("LivestockDataBeforeUpdate");
             }
             if (!string.IsNullOrWhiteSpace(q))
             {
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                    if (HttpContext.Session.Keys.Contains("ReportData"))
                     {
-                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                        model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
 
                         model.LivestockGroupId = null;
                         model.IsAnyLivestockNumber = null;
@@ -5863,7 +5805,7 @@ namespace NMP.Portal.Controllers
                         model.OccupancyAndNitrogenOptions = null;
                         model.IsLivestockCheckAnswer = false;
                     }
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
                 if (!string.IsNullOrWhiteSpace(model.EncryptedId))
@@ -6020,7 +5962,7 @@ namespace NMP.Portal.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             if (!string.IsNullOrWhiteSpace(y))
             {
@@ -6029,7 +5971,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsManageLivestock = true;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            HttpContext.Session.SetObjectAsJson("ReportData", model);
             return View(model);
         }
 
@@ -6037,16 +5979,16 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : BackLivestockCheckAnswer() action called");
             ReportViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            if (HttpContext.Session.Keys.Contains("ReportData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
             }
             else
             {
                 return RedirectToAction("FarmList", "Farm");
             }
             model.IsLivestockCheckAnswer = false;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+            HttpContext.Session.SetObjectAsJson("ReportData", model);
 
             var cattle = (int)NMP.Portal.Enums.LivestockGroup.Cattle;
             var pigs = (int)NMP.Portal.Enums.LivestockGroup.Pigs;
@@ -6109,9 +6051,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -6257,9 +6199,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -6413,15 +6355,15 @@ namespace NMP.Portal.Controllers
                                     model.IsManureTypeLiquid = manureType.IsLiquid;
                                 }
                                 ReportViewModel reportViewModel = new ReportViewModel();
-                                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                                if (HttpContext.Session.Keys.Contains("ReportData"))
                                 {
-                                    reportViewModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                                    reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                                 }
                                 if (reportViewModel != null && reportViewModel.ManureTypeId != null && reportViewModel.ManureTypeId != model.ManureTypeId)
                                 {
                                     model.IsManureTypeChange = true;
                                 }
-                                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                                 return RedirectToAction("LivestockImportExportDate");
                             }
@@ -6444,7 +6386,7 @@ namespace NMP.Portal.Controllers
                     TempData["ErrorOnManureGroup"] = error.Message;
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
 
                 return RedirectToAction("ManureType");
             }
@@ -6460,9 +6402,9 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Report Controller : BackActionForManureType() action called");
             ReportViewModel? model = new ReportViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            if (HttpContext.Session.Keys.Contains("ReportData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
             }
             else
             {
@@ -6472,14 +6414,14 @@ namespace NMP.Portal.Controllers
             if (model.IsCheckAnswer)
             {
                 model.ManureGroupIdForFilter = model.ManureGroupId;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 (CommonResponse manureGroup, Error error) = await _organicManureService.FetchManureGroupById(model.ManureGroupId.Value);
                 if (error == null)
                 {
                     if (manureGroup != null)
                     {
                         model.ManureGroupName = manureGroup.Name;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                        HttpContext.Session.SetObjectAsJson("ReportData", model);
                     }
                 }
                 else
@@ -6513,9 +6455,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel? model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -6544,7 +6486,6 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("OtherMaterialName", Resource.MsgEnterNameOfTheMaterial);
                 }
 
-
                 (bool farmManureExist, Error error) = await _organicManureService.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(model.FarmId.Value, model.ManureTypeId.Value, model.OtherMaterialName);
                 if (string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -6557,8 +6498,8 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                //model.ManureTypeName = model.OtherMaterialName;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("ReportData", model);
+                
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange))
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
@@ -6580,9 +6521,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel? model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {
@@ -6703,9 +6644,9 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> LivestockManureNFarmLimitReport()
         {
             ReportViewModel model = new ReportViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+            if (HttpContext.Session.Keys.Contains("ReportData"))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
             }
             else
             {
@@ -6798,13 +6739,6 @@ namespace NMP.Portal.Controllers
                      .Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
                      && x.PTotal.HasValue && x.ManureLookupType == Resource.lblImport)
                      .Sum(x => x.PTotal.Value), 0);
-
-                        //  totalNImportedLivestock = (int)Math.Round(
-                        //nutrientsLoadingManureList
-                        //.Where(x => selectedManureTypeIds.Contains(x.ManureTypeID)
-                        //&& x.NTotal.HasValue && x.ManureLookupType == Resource.lblImport)
-                        //.Sum(x => x.NTotal.Value), 0);
-
                         totalImportedGrazingLivestock = nutrientsLoadingManureList
                        .Where(x => !Enum.GetValues(typeof(NonGrazingManureType))
                        .Cast<NonGrazingManureType>()
@@ -7059,7 +6993,7 @@ namespace NMP.Portal.Controllers
                         {
                             ViewBag.AreaReqForNonGrazingLivestock = Math.Round(nutrientsLoadingFarmDetail.LandNotNVZ.Value + (areaReqForNonGrazingLivestock - capacityOfLandOutside) / 170, 2);
                         }
-                        //ViewBag.AreaReqForNonGrazingLivestock = areaReqForNonGrazingLivestock / 250;
+                        
                         ViewBag.TotalAreaReqForLivestock = (ViewBag.AreaReqForNonGrazingLivestock != null &&
                         ViewBag.AreaReqForGrazingLivestock != null) ? Math.Round(ViewBag.AreaReqForGrazingLivestock + ViewBag.AreaReqForNonGrazingLivestock, 2) : 0;
                     }
@@ -7131,9 +7065,9 @@ namespace NMP.Portal.Controllers
             ReportViewModel? model = new ReportViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("ReportData"))
+                if (HttpContext.Session.Keys.Contains("ReportData"))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
                 }
                 else
                 {

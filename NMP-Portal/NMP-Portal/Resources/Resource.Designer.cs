@@ -10801,6 +10801,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Privacy notice.
+        /// </summary>
+        public static string lblPrivacyNotice {
+            get {
+                return ResourceManager.GetString("lblPrivacyNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Purpose.
         /// </summary>
         public static string lblPurpose {
@@ -13557,7 +13566,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This farm has {0} fields..
+        ///   Looks up a localized string similar to This farm has {0} field(s)..
         /// </summary>
         public static string lblThisFarmHas {
             get {

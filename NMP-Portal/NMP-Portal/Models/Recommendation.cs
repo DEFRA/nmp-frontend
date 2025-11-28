@@ -37,6 +37,13 @@ namespace NMP.Portal.Models
         public string? NIndex { get; set; }
         public string? LimeIndex { get; set; }
         public string? Comments { get; set; }
+        public int? NBalance { get; set; }
+        public int? PBalance { get; set; }
+        public int? KBalance { get; set; }
+        public int? MgBalance { get; set; }
+        public int? SBalance { get; set; }
+        public int? NaBalance { get; set; }
+        public int? LimeBalance { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

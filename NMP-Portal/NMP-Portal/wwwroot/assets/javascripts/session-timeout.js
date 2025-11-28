@@ -87,22 +87,16 @@
     }
 
     function startCountdown(seconds) {
-        let remaining = seconds;
-        //updateCountdown(remaining);
+        let remaining = seconds;        
         countdownInterval = setInterval(() => {
-            remaining--;
-            //updateCountdown(remaining);
+            remaining--;            
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 expireSession();
             }
         }, 1000);
     }
-    function updateCountdown(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        // countdownEl.textContent = `${mins} minute${mins !== 1 ? 's' : ''} ${secs} second${secs !== 1 ? 's' : ''}`;
-    }
+    
     function keepAlive() {
         fetch(REFRESH_URL).then(response => {
             if (response.ok) {
