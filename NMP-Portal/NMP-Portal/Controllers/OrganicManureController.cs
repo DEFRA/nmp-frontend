@@ -6981,7 +6981,10 @@ namespace NMP.Portal.Controllers
                                         {
                                             nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
                                             OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0 , currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+
+                                            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, model.ManureTypeId.Value)
+                                                                    || Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
+                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0 , hasSpecialManure);
 
                                             if (totalN > nMaxLimit)
                                             {
@@ -7036,7 +7039,7 @@ namespace NMP.Portal.Controllers
                                         if (isGetCheckAnswer)
                                         {
                                             (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
-                                            //decimal? currentApplicationN = totalNitrogen * model.ApplicationRate.Value;
+                                            
                                             if (error == null)
                                             {
                                                 (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
@@ -7044,9 +7047,11 @@ namespace NMP.Portal.Controllers
                                                 if (error == null)
                                                 {
                                                     nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                                                    //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
+                                                    
                                                     OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                    bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, model.ManureTypeId.Value) || Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0, hasSpecialManure);
+                                                    
                                                     if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
                                                         model.IsNMaxLimitWarning = true;
