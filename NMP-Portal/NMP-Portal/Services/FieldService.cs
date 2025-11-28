@@ -1,25 +1,23 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.Security;
 using NMP.Portal.ServiceResponses;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Text;
-//using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Services
 {
     public class FieldService : Service, IFieldService
     {
         private readonly ILogger<FieldService> _logger;
-        public FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
+        public FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) 
+            : base(httpContextAccessor, clientFactory, tokenRefreshService)
         {
             _logger = logger;
         }
+
         public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
         {
             int fieldCount = 0;
@@ -62,6 +60,7 @@ namespace NMP.Portal.Services
 
             return fieldCount;
         }
+
         public async Task<List<SoilTypesResponse>> FetchSoilTypes()
         {
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
@@ -103,6 +102,7 @@ namespace NMP.Portal.Services
             }
             return soilTypes;
         }
+
         public async Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync()
         {
             List<NutrientResponseWrapper> nutrients = new List<NutrientResponseWrapper>();
@@ -147,6 +147,7 @@ namespace NMP.Portal.Services
 
             return (nutrients, error);
         }
+
         public async Task<List<CropGroupResponse>> FetchCropGroups()
         {
             List<CropGroupResponse> soilTypes = new List<CropGroupResponse>();
@@ -188,6 +189,7 @@ namespace NMP.Portal.Services
             }
             return soilTypes;
         }
+
         public async Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId)
         {
             List<CropTypeResponse> soilTypes = new List<CropTypeResponse>();
@@ -230,6 +232,7 @@ namespace NMP.Portal.Services
 
             return soilTypes;
         }
+
         public async Task<string> FetchCropGroupById(int cropGroupId)
         {
             Error error = null;
@@ -268,6 +271,7 @@ namespace NMP.Portal.Services
             }
             return cropGroup;
         }
+
         public async Task<string> FetchCropTypeById(int cropTypeId)
         {
             Error error = null;
@@ -306,6 +310,7 @@ namespace NMP.Portal.Services
             }
             return cropType;
         }
+
         public async Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
         {
             string jsonData = JsonConvert.SerializeObject(fieldData);
@@ -356,6 +361,7 @@ namespace NMP.Portal.Services
             }
             return (field, error);
         }
+        
         public async Task<bool> IsFieldExistAsync(int farmId, string name)
         {
             bool isFieldExist = false;
@@ -385,6 +391,7 @@ namespace NMP.Portal.Services
 
             return isFieldExist;
         }
+
         public async Task<List<Field>> FetchFieldsByFarmId(int farmId)
         {
             List<Field> fields = new List<Field>();
@@ -467,6 +474,7 @@ namespace NMP.Portal.Services
             }
             return field;
         }
+
         public async Task<List<CropTypeResponse>> FetchAllCropTypes()
         {
             List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
