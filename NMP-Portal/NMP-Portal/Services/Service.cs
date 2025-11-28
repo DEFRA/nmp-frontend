@@ -11,7 +11,7 @@ namespace NMP.Portal.Services
         public readonly IHttpContextAccessor _httpContextAccessor;
         private readonly TokenRefreshService _tokenRefreshService;
 
-        public Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh)
+        protected Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh)
         {
             _httpContextAccessor = httpContextAccessor;
             _clientFactory = clientFactory;

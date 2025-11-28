@@ -7021,4 +7021,7 @@ livestock manure.</value>
   <data name="lblAddAField" xml:space="preserve">
     <value>Add a field</value>
   </data>
+  <data name="lblPrivacyNotice" xml:space="preserve">
+    <value>Privacy notice</value>
+  </data>
 </root>
