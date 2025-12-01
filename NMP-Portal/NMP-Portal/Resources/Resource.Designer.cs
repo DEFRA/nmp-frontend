@@ -1285,15 +1285,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add analysis values for Mixed manure.
-        /// </summary>
-        public static string lblAddAnalysisValuesForMixedManure {
-            get {
-                return ResourceManager.GetString("lblAddAnalysisValuesForMixedManure", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add a new farm.
         /// </summary>
         public static string lblAddANewFarm {

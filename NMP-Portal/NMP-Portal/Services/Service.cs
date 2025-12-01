@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authentication;
-using NMP.Portal.Models;
+﻿using Microsoft.AspNetCore.Authentication;
 using NMP.Portal.Security;
 using System.IdentityModel.Tokens.Jwt;
 namespace NMP.Portal.Services
@@ -33,8 +31,8 @@ namespace NMP.Portal.Services
         private bool JwtExpired(string jwt)
         {
             var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwt);
-            return token.ValidTo < DateTime.UtcNow.AddMinutes(-5);
+            var token = handler.ReadJwtToken(jwt);            
+            return token.ValidTo < DateTime.UtcNow.AddMinutes(10);
         }
 
         public async Task<HttpClient> GetNMPAPIClient()
