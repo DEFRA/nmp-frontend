@@ -2770,9 +2770,6 @@ cubic metres per hectare  not set</value>
   <data name="lblWhatIsTheNameOfTheMaterial" xml:space="preserve">
     <value>What is the name of the {0} material?</value>
   </data>
-  <data name="lblAddAnalysisValuesForMixedManure" xml:space="preserve">
-    <value>Add analysis values for Mixed manure</value>
-  </data>
   <data name="lblMixedManure" xml:space="preserve">
     <value>Mixed manure</value>
   </data>
