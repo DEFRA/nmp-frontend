@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Identity.Client;
-using NMP.Portal.Helpers;
-using NMP.Portal.Models;
 using NMP.Portal.Security;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Principal;
 namespace NMP.Portal.Services
 {
     public abstract class Service : IService
@@ -16,7 +9,7 @@ namespace NMP.Portal.Services
         public readonly IHttpContextAccessor _httpContextAccessor;
         private readonly TokenRefreshService _tokenRefreshService;
 
-        public Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh)
+        protected Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh)
         {
             _httpContextAccessor = httpContextAccessor;
             _clientFactory = clientFactory;
@@ -38,8 +31,8 @@ namespace NMP.Portal.Services
         private bool JwtExpired(string jwt)
         {
             var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwt);
-            return token.ValidTo < DateTime.UtcNow.AddMinutes(-5);
+            var token = handler.ReadJwtToken(jwt);            
+            return token.ValidTo < DateTime.UtcNow.AddMinutes(10);
         }
 
         public async Task<HttpClient> GetNMPAPIClient()
@@ -48,11 +41,11 @@ namespace NMP.Portal.Services
 
             if (JwtExpired(accessToken))
             {
-                accessToken = await _tokenRefreshService.RefreshUserAccessTokenAsync(_httpContextAccessor.HttpContext);
+                accessToken = await _tokenRefreshService.RefreshUserAccessTokenAsync(context: _httpContextAccessor.HttpContext);
             }
 
-            HttpClient httpClient = _clientFactory.CreateClient("NMPApi");
-            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+            HttpClient httpClient = _clientFactory.CreateClient("NMPApi");            
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);            
             return await Task.FromResult(httpClient).ConfigureAwait(false);
 
         }

@@ -439,7 +439,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date format is 21 06 2024..
+        ///   Looks up a localized string similar to The date format is 21 06 {0}..
         /// </summary>
         public static string hintTheDateFormat {
             get {
@@ -1281,15 +1281,6 @@ namespace NMP.Portal.Resources {
         public static string lblAddAnalysisValues {
             get {
                 return ResourceManager.GetString("lblAddAnalysisValues", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add analysis values for Mixed manure.
-        /// </summary>
-        public static string lblAddAnalysisValuesForMixedManure {
-            get {
-                return ResourceManager.GetString("lblAddAnalysisValuesForMixedManure", resourceCulture);
             }
         }
         
@@ -2950,7 +2941,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We can&apos;t find weather data for {0}.You can find rainfall and other weather information by entering a postcode near to {1} Farm..
+        ///   Looks up a localized string similar to We can&apos;t find weather data for {0}. You can find rainfall and other weather information by entering a postcode near to {1} Farm..
         /// </summary>
         public static string lblClimateParagraphFirst {
             get {
@@ -5263,7 +5254,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021.
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales).
         /// </summary>
         public static string lblFarmingRuleOfWaterThirdForWale {
             get {
@@ -5758,15 +5749,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 27 03 2023.
-        /// </summary>
-        public static string lblForExample {
-            get {
-                return ResourceManager.GetString("lblForExample", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to For example, for 10,000 places enter 10.
         /// </summary>
         public static string lblForExampleFor10000PlacesEnter10 {
@@ -6181,7 +6163,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
+        ///   Looks up a localized string similar to Has {0} been used for grass in any of the last 3 years?.
         /// </summary>
         public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
             get {
@@ -6559,8 +6541,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many fields at {0}
-        ///are in a Nitrate Vulnerable Zone (NVZ)?.
+        ///   Looks up a localized string similar to How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?.
         /// </summary>
         public static string lblHowManyFieldsInNVZ {
             get {
@@ -7244,7 +7225,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of nitrogen from organic manures..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of nitrogen from organic manures..
         /// </summary>
         public static string lblItIsAnOffenceToBreachTheWaterResources {
             get {
@@ -7370,7 +7351,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}kg per 1,000 places, per year.
+        ///   Looks up a localized string similar to {0} kg per 1,000 places, per year.
         /// </summary>
         public static string lblKgPer1000PlacesPerYear {
             get {
@@ -8028,7 +8009,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Livestock manure total nitrogen (N) capacity (per year).
+        ///   Looks up a localized string similar to Livestock manure total nitrogen (N) capacity (per year).
         /// </summary>
         public static string lblLivestockReportContentSix {
             get {
@@ -9243,7 +9224,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
+        ///   Looks up a localized string similar to No, enter a different target yield for each fields.
         /// </summary>
         public static string lblNoEnterADifferentTargetYieldForEachFields {
             get {
@@ -9401,16 +9382,6 @@ namespace NMP.Portal.Resources {
         public static string lblNotSet {
             get {
                 return ResourceManager.GetString("lblNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to November 2025 - England, Wales and Scotland full service
-        ///live.
-        /// </summary>
-        public static string lblNov2025EnglandWalesAndScotlandFullServiceLive {
-            get {
-                return ResourceManager.GetString("lblNov2025EnglandWalesAndScotlandFullServiceLive", resourceCulture);
             }
         }
         
@@ -10810,6 +10781,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Privacy notice.
+        /// </summary>
+        public static string lblPrivacyNotice {
+            get {
+                return ResourceManager.GetString("lblPrivacyNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Purpose.
         /// </summary>
         public static string lblPurpose {
@@ -11674,7 +11654,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date format is &apos;27 3 2023&apos;..
+        ///   Looks up a localized string similar to The date format is &apos;27 3 {0}&apos;..
         /// </summary>
         public static string lblSampleDate {
             get {
@@ -13449,7 +13429,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021.
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales).
         /// </summary>
         public static string lblTheWaterResourcesRegulations2021 {
             get {
@@ -13566,7 +13546,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This farm has {0} fields..
+        ///   Looks up a localized string similar to This farm has {0} field(s)..
         /// </summary>
         public static string lblThisFarmHas {
             get {
@@ -15042,7 +15022,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021&lt;/a&gt;.
+        ///   Looks up a localized string similar to Wales: &lt;a href=&quot;https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land&quot; target=&quot;_blank&quot;&gt;The Water Resources (Control of Agricultural Pollution) Regulations 2021  (Wales)&lt;/a&gt;.
         /// </summary>
         public static string lblWalesWaterResourceRegulations {
             get {
@@ -16671,7 +16651,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, Enter the same target yield for these fields.
+        ///   Looks up a localized string similar to Yes, enter the same target yield for these fields.
         /// </summary>
         public static string lblYesEnterTheSameTargetYieldForTheseFields {
             get {
@@ -17328,7 +17308,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider changing your application date..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider changing your application date..
         /// </summary>
         public static string Msg31OctoberToEndPeriodFertiliserWarningPara2Wales {
             get {
@@ -17609,7 +17589,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider applying outside the closed spreading period. Before spreading fertiliser, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
         /// </summary>
         public static string MsgClosedPeriodFertiliserWarningPara2Wales {
             get {
@@ -17672,7 +17652,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} and {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop..
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on brassica crops between {0} to {1} must not exceed 100kg of nitrogen per hectare, and that no more than 50kg of nitrogen per hectare can be applied every 4 weeks, up to the date on which you harvest the crop..
         /// </summary>
         public static string MsgClosedPeriodNitrogenExceedWarningPara1Wales {
             get {
@@ -17690,7 +17670,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of inorganic nitrogen fertiliser..
         /// </summary>
         public static string MsgClosedPeriodNitrogenExceedWarningPara2Wales {
             get {
@@ -17717,7 +17697,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of inorganic nitrogen fertiliser..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of inorganic nitrogen fertiliser..
         /// </summary>
         public static string MsgClosedPeriodNRateExceedWarningPara2Wales {
             get {
@@ -17762,7 +17742,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider applying outside the closed spreading period. Before spreading organic manure, a field inspection should be carried out to consider the risk of causing pollution or damage to the soil..
         /// </summary>
         public static string MsgClosedPeriodWarningPara2Wales {
             get {
@@ -17879,7 +17859,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of crop available nitrogen from inorganic fertilisers and organic manures you apply..
         /// </summary>
         public static string MsgCropNmaxLimitWarningPara2Wales {
             get {
@@ -17924,7 +17904,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 27 3 2023.
+        ///   Looks up a localized string similar to For example, 27 3 {0}.
         /// </summary>
         public static string MsgDateExample {
             get {
@@ -18239,7 +18219,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of slurry..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of slurry..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2nd30SlurryWales {
             get {
@@ -18257,7 +18237,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of poultry manure..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of poultry manure..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2nd8PoultryWales {
             get {
@@ -18266,7 +18246,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider allowing more time between applications..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider allowing more time between applications..
         /// </summary>
         public static string MsgEndPeriodEndFebWarningPara2ndWithin20DaysWales {
             get {
@@ -19175,7 +19155,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg. .
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg..
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceed {
             get {
@@ -19193,7 +19173,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the amount of nitrogen from organic manures..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the amount of nitrogen from organic manures..
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceedAdditionalWales {
             get {
@@ -19607,7 +19587,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later ..
+        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later..
         /// </summary>
         public static string MsgNmptServiceNotAvailable {
             get {
@@ -19886,7 +19866,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 11 February 2023.
+        ///   Looks up a localized string similar to For example, 11 February {0}.
         /// </summary>
         public static string MsgSampleDateExample {
             get {
@@ -20219,7 +20199,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales), and you should consider reducing the application rate of high readily available nitrogen organic manure..
+        ///   Looks up a localized string similar to It is an offence to breach the Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) and you should consider reducing the application rate of high readily available nitrogen organic manure..
         /// </summary>
         public static string MsgStartClosedPeriodEndFebWarningPara2Wales {
             get {
@@ -20570,7 +20550,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on grass between {0} and 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time..
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on grass between {0} to 31 October must not exceed 80kg of nitrogen per hectare, and that no more than 40kg of nitrogen per hectare can be applied at any one time..
         /// </summary>
         public static string MsgWinterGrassNRateExceedWarningPara1Wales {
             get {
@@ -20597,7 +20577,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} and 31 October must not exceed 30kg of nitrogen per hectare..
+        ///   Looks up a localized string similar to The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of inorganic nitrogen fertiliser on winter oilseed rape between {0} to 31 October must not exceed 30kg of nitrogen per hectare..
         /// </summary>
         public static string MsgWinterOilseedRapeNRateExceedWarningPara1Wales {
             get {

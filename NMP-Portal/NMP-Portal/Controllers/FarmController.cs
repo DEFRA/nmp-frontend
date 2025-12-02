@@ -440,16 +440,15 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
                 }
 
-                List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
-                if (HttpContext.Session.Keys.Contains("AddressList"))
-                {
-                    addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
-
-                }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
+            List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
+            if (HttpContext.Session.Keys.Contains("AddressList"))
+            {
+                addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+            }
+            else
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
 
                 if (!ModelState.IsValid)
                 {
@@ -1592,8 +1591,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                HttpContext?.Session.Remove("FarmData");
-                //return RedirectToAction("FarmList", "Farm");
+                HttpContext?.Session.Remove("FarmData");                
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
 
             }
