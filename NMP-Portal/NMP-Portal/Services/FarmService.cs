@@ -32,7 +32,7 @@ namespace NMP.Portal.Services
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                List<Farm> farms = responseWrapper.Data.Farms.ToObject<List<Field>>();
+                List<Farm> farms = responseWrapper.Data.Farms.ToObject<List<Farm>>();
                 if (farms != null && farms.Count > 0)
                 {
                     farmList.AddRange(farms);
