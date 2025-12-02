@@ -125,7 +125,6 @@ namespace NMP.Portal.Services
         public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id)
         {
             bool isFarmExist = false;
-            Error error = new Error();
             string url = string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim(), Id);
             HttpClient httpClient = await GetNMPAPIClient();
             var farmExist = await httpClient.GetAsync(url);

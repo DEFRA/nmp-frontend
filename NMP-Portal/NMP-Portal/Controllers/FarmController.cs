@@ -106,14 +106,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmList() action");
-                //return RedirectToAction("Index", "Error");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmList() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
-                //return RedirectToAction("Index", "Error");
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
             return View(model);
@@ -190,12 +188,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Country() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Country() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
         }
@@ -243,12 +241,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Country() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Country() post action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
             return RedirectToAction("FarmingRules");
@@ -367,12 +365,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in PostCode() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in PostCode() post action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
 
@@ -418,12 +416,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Address() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -485,12 +483,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Address() post action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -609,12 +607,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in ManualAddress() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ManualAddress() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
         }
         [HttpGet]
@@ -668,12 +666,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in ClimatePostCode() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -734,12 +732,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in ClimatePostCode() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
 
@@ -788,12 +786,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Rainfall() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Rainfall() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1130,12 +1128,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in CheckAnswer() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1284,12 +1282,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError($"Farm Controller : HttpRequestException in FarmSummary() action : {hre.Message}, {hre.StackTrace}");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Farm Controller : Exception in FarmSummary() action : {ex.Message}, {ex.StackTrace}");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
 
@@ -1364,14 +1362,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError($"Farm Controller : HttpRequestException in FarmDetails() action : {hre.Message}, {hre.StackTrace}");
-                //TempData["Error"] = hre.Message;
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}");
-                //TempData["Error"] = ex.Message;
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
             return View(farmData);
@@ -1467,12 +1463,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmUpdate() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmUpdate() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1537,13 +1533,13 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmRemove() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError) });
+                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmRemove() action");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
 
             }
 
@@ -1567,7 +1563,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"farm Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
-                return RedirectToAction("HttpStatusCodeHandler", "Error", new { statusCode = (int)HttpStatusCode.InternalServerError });
+                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
         }
