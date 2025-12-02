@@ -31,14 +31,15 @@ namespace NMP.Portal.Services
         private bool JwtExpired(string jwt)
         {
             var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwt);            
-            return token.ValidTo < DateTime.UtcNow.AddMinutes(10);
+            var token = handler.ReadJwtToken(jwt);
+           
+            return token.ValidTo < DateTime.UtcNow.AddMinutes(5);
         }
 
         public async Task<HttpClient> GetNMPAPIClient()
         {
             var accessToken = await GetAccessTokenAsync();
-
+                        
             if (JwtExpired(accessToken))
             {
                 accessToken = await _tokenRefreshService.RefreshUserAccessTokenAsync(context: _httpContextAccessor.HttpContext);
