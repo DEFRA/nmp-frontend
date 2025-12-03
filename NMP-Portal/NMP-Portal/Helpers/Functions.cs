@@ -1,4 +1,7 @@
-﻿namespace NMP.Portal.Helpers
+﻿using Microsoft.AspNetCore.Mvc;
+using NMP.Portal.ViewModels;
+
+namespace NMP.Portal.Helpers
 {
     public static class Functions
     {
@@ -98,5 +101,17 @@
 
             return eligibleCrops.Contains(cropTypeId);
         }
+
+        public static RedirectToActionResult RedirectToErrorHandler(int statusCode)
+        {
+            string errorController = "Error";
+            string httpStatusCodeHandlerAction = "HttpStatusCodeHandler";
+            return new RedirectToActionResult(
+                httpStatusCodeHandlerAction,
+                errorController,
+                new { statusCode }
+            );
+        }
+        
     }
 }
