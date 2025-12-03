@@ -17508,6 +17508,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication failed or session expired..
+        /// </summary>
+        public static string MsgAuthenticationFailedOrSessionExpired {
+            get {
+                return ResourceManager.GetString("MsgAuthenticationFailedOrSessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autumn crop nitrogen (N) uptake not set.
         /// </summary>
         public static string MsgAutumnCropNitrogenUptakeNotSet {

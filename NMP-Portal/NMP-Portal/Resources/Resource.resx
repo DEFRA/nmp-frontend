@@ -5774,9 +5774,6 @@ livestock manure.</value>
   <data name="lblLoadingOverlayContentOne" xml:space="preserve">
     <value>Loading...</value>
   </data>
-  <data name="lblEnterTheDetailsFor" xml:space="preserve">
-    <value>Enter the details for {0}</value>
-  </data>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
@@ -7015,5 +7012,11 @@ livestock manure.</value>
   </data>
   <data name="lblPrivacyNotice" xml:space="preserve">
     <value>Privacy notice</value>
+  </data>
+  <data name="lblEnterTheDetailsFor" xml:space="preserve">
+    <value>Enter the details for {0}</value>
+  </data>
+  <data name="MsgAuthenticationFailedOrSessionExpired" xml:space="preserve">
+    <value>Authentication failed or session expired.</value>
   </data>
 </root>
