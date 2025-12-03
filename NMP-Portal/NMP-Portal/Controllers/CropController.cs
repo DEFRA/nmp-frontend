@@ -4183,11 +4183,34 @@ namespace NMP.Portal.Controllers
 
                                     if (cropCounter == 1)
                                     {
-                                        ViewBag.PotentialCutNameForCrop1 = potentialCuts[(int)crop.PotentialCut - 1];
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                                        {
+                                            if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
+                                            {
+                                                ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                            else
+                                            {
+                                                ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                        }
+
                                     }
                                     else if (cropCounter == 2)
                                     {
-                                        ViewBag.PotentialCutNameForCrop2 = potentialCuts[(int)crop.PotentialCut - 1];
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                                        {
+                                            if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
+                                            {
+                                                ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                            else
+                                            {
+                                                ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                        }
                                     }
                                 }
                                 model.Crops.Add(crop);
@@ -4268,7 +4291,7 @@ namespace NMP.Portal.Controllers
                                             NIndex = recData.Recommendation.NIndex,
                                             CreatedOn = recData.Recommendation.CreatedOn,
                                             ModifiedOn = recData.Recommendation.ModifiedOn,
-                                            PBalance=recData.Recommendation.PBalance,
+                                            PBalance = recData.Recommendation.PBalance,
                                             SBalance = recData.Recommendation.SBalance,
                                             KBalance = recData.Recommendation.KBalance,
                                             MgBalance = recData.Recommendation.MgBalance,

@@ -11,5 +11,6 @@ namespace NMP.Portal.ViewModels
         public string? FieldName { get; set; }
         public int? FieldID { get; set; }
         public string? EncryptedCounter { get; set; }
+        public bool IsGrass { get; set; } = false;
     }
 }
