@@ -632,7 +632,12 @@ namespace NMP.Portal.Controllers
                                     (List<Crop> cropList, error) = await _cropService.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(field), model.HarvestYear.Value);
                                     if (!string.IsNullOrWhiteSpace(error.Message))
                                     {
-
+                                        TempData["FieldGroupError"] = error.Message;
+                                        if (TempData["FieldError"] != null)
+                                        {
+                                            TempData["FieldError"] = null;
+                                        }
+                                        return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
                                     }
                                     if (cropList.Count > 0)
                                     {
@@ -2114,8 +2119,7 @@ namespace NMP.Portal.Controllers
                                                     (crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                                                 }
                                                 int cropOrder = model.DoubleCrop?.FirstOrDefault(x => x.FieldID == Convert.ToInt32(fieldId))?.CropOrder
-                                                   ?? crop?.CropOrder.Value ?? 1;
-
+                                              ?? crop?.CropOrder.Value ?? 1;
                                                 List<int> managementIds = new List<int>();
                                                 if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                                                 {
