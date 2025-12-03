@@ -13274,11 +13274,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one..
+        ///   Looks up a localized string similar to There are {0} cuts and grazings, with nutrient and lime recommendations for each one..
         /// </summary>
-        public static string lblThereAreCountCutsAndGrazingsInYear {
+        public static string lblThereAreCountCutsAndGrazings {
             get {
-                return ResourceManager.GetString("lblThereAreCountCutsAndGrazingsInYear", resourceCulture);
+                return ResourceManager.GetString("lblThereAreCountCutsAndGrazings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are {0} cuts and grazings, plus establishment. With nutrient and lime recommendations for each one..
+        /// </summary>
+        public static string lblThereAreCountCutsAndGrazingsPlusEstablishment {
+            get {
+                return ResourceManager.GetString("lblThereAreCountCutsAndGrazingsPlusEstablishment", resourceCulture);
             }
         }
         

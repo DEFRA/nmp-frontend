@@ -6911,8 +6911,8 @@ livestock manure.</value>
   <data name="MsgEnterTheValueAmountUsingIntValueOnly" xml:space="preserve">
     <value>Enter the {0} amount using integer values only.</value>
   </data>
-  <data name="lblThereAreCountCutsAndGrazingsInYear" xml:space="preserve">
-    <value>There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one.</value>
+  <data name="lblThereAreCountCutsAndGrazings" xml:space="preserve">
+    <value>There are {0} cuts and grazings, with nutrient and lime recommendations for each one.</value>
   </data>
   <data name="lblLastUpdatedDate" xml:space="preserve">
     <value>Last updated {0}</value>
@@ -7021,5 +7021,8 @@ livestock manure.</value>
   </data>
   <data name="lblGroupNameFieldsWithCropTypeName" xml:space="preserve">
     <value>{0} fields ({1})</value>
+  </data>
+  <data name="lblThereAreCountCutsAndGrazingsPlusEstablishment" xml:space="preserve">
+    <value>There are {0} cuts and grazings, plus establishment. With nutrient and lime recommendations for each one.</value>
   </data>
 </root>
