@@ -2,33 +2,17 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Joonasw.AspNetCore.SecurityHeaders;
 using Joonasw.AspNetCore.SecurityHeaders.Csp;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
-using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using NMP.Portal.Authorization;
-using NMP.Portal.Helpers;
-using NMP.Portal.Models;
 using NMP.Portal.Security;
 using NMP.Portal.Services;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using System.Net.Http.Headers;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
@@ -87,8 +71,8 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
     options.Cookie.SameSite = SameSiteMode.Strict;// Prevent CSRF
     options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromMinutes(20);  // Session timeout 
-    //options.IdleTimeout = TimeSpan.FromHours(2);  // 2-hour idle session 
+    options.IdleTimeout = TimeSpan.FromMinutes(60);  // Session timeout
+    options.IOTimeout = Timeout.InfiniteTimeSpan;
 });
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
@@ -135,7 +119,6 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
-//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  // Access current UserName in Repository or other Custom Components
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
@@ -217,15 +200,31 @@ else
 }
 
 app.Use(async (context, next) =>
-{    
+{
     // Do work that doesn't write to the Response.
     if (context.Request.Method is "OPTIONS" or "TRACE" or "HEAD")
     {
         context.Response.StatusCode = 405;
         return;
-    } 
+    }
     await next.Invoke();
     // Do logging or other work that doesn't write to the Response.
+});
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/favicon.ico")
+    {
+        context.Response.Redirect("/assets/rebrand/images/favicon.ico");
+        return;
+    }
+    else if(context.Request.Path == "/favicon.svg")
+    {
+        context.Response.Redirect("/assets/rebrand/images/favicon.svg");
+        return;
+    }
+
+        await next();
 });
 
 app.UseCsp(csp =>
@@ -245,13 +244,7 @@ app.UseCsp(csp =>
     csp.AllowFrames.FromSelf();
     csp.AllowAudioAndVideo.FromSelf();
     csp.AllowFonts.FromSelf();
-    csp.AllowManifest.FromSelf();    
-    //csp.AllowScripts
-    //    .FromSelf()
-    //    .AllowUnsafeInline()
-    //    .From("cdnjs.cloudflare.com")
-    //    .AddNonce();
-    //    .From(pageTemplateHelper.GetCspScriptHashes());
+    csp.AllowManifest.FromSelf();
     csp.AllowImages.FromSelf().From("data:").From("https:");
     csp.AllowWorkers.FromSelf().From("blob:");
 });
@@ -262,8 +255,6 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-// Add the reauthentication middleware
-//app.UseMiddleware<ReauthenticationMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

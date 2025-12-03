@@ -1604,8 +1604,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
                     }
-
-                    //model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+                    
                     return View(model);
                 }
 
@@ -1627,7 +1626,7 @@ namespace NMP.Portal.Controllers
                 model.IsClosedPeriodWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
-                //if (int.TryParse(model.FieldGroup, out int value) || (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count == 1))
+               
                 if (model.FieldList.Count >= 1)
                 {
                     farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
@@ -6833,7 +6832,10 @@ namespace NMP.Portal.Controllers
                                         {
                                             nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
                                             OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut ?? 0, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+
+                                            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, model.ManureTypeId.Value)
+                                                                    || Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
+                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0 , hasSpecialManure);
 
                                             if (totalN > nMaxLimit)
                                             {
@@ -6888,7 +6890,7 @@ namespace NMP.Portal.Controllers
                                         if (isGetCheckAnswer)
                                         {
                                             (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
-                                            //decimal? currentApplicationN = totalNitrogen * model.ApplicationRate.Value;
+                                            
                                             if (error == null)
                                             {
                                                 (List<int> currentYearManureTypeIds, error) = await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
@@ -6896,9 +6898,11 @@ namespace NMP.Portal.Controllers
                                                 if (error == null)
                                                 {
                                                     nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                                                    //string cropInfo1 = await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(crop[0].CropTypeID.Value, crop[0].CropInfo1.Value);
+                                                    
                                                     OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut ?? 0, currentYearManureTypeIds, previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                    bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, model.ManureTypeId.Value) || Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut??0, hasSpecialManure);
+                                                    
                                                     if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
                                                         model.IsNMaxLimitWarning = true;
@@ -8051,7 +8055,6 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
             }
             catch (Exception ex)
             {
@@ -9848,13 +9851,12 @@ namespace NMP.Portal.Controllers
                     }
                     //if manure type change 
                     if (model.IsCheckAnswer)
-                    {
+                    {                        
                         if (orgManureViewModel.ManureTypeId != model.ManureTypeId)
                         {
                             model.IsManureTypeChange = true;
                             if (model.ApplicationRateMethod == (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
-                            {
-                                //model.ApplicationRateMethod = null;
+                            {                                
                                 model.ApplicationRate = null;
                                 foreach (var orgManure in model.OrganicManures)
                                 {
@@ -9883,9 +9885,7 @@ namespace NMP.Portal.Controllers
                             (ManureType manureTypeData, error) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                             if (error == null)
                             {
-                                model.ManureType = manureTypeData;
-                                //if (model.DefaultNutrientValue.HasValue && (!model.DefaultNutrientValue.Value))
-                                //{
+                                model.ManureType = manureTypeData;                                
                                 if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
                                 {
                                     model.DryMatterPercent = model.ManureType.DryMatter;
@@ -10715,18 +10715,22 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+
             if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
             {
                 return RedirectToAction("Defoliation", new { q = model.DefoliationEncryptedCounter });
             }
+
             if (model.IsDoubleCropAvailable)
             {
                 return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
             }
+
             if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
             {
                 return RedirectToAction("ManureGroup");
             }
+
             if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
             {
                 return RedirectToAction("OtherMaterialName");

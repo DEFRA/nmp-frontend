@@ -1,12 +1,11 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.FieldViewModel
-@{
-    //ViewData["Title"] = Resource.lblCropGroup;
+@{    
     ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
     int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
 
     var backAction = "";
-    if (Model.PreviousCroppings.HasGrassInLastThreeYear != null)
+    if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue)
     {
         if (Model.IsCheckAnswer)
         {
@@ -16,11 +15,11 @@
         {
             backAction = "UpdateField";
         }
-        else if (Model.PreviousCroppings.HasGrassInLastThreeYear == true)
+        else if (Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
         {
-            if (Model.IsPreviousYearGrass == false)
+            if (Model.IsPreviousYearGrass.HasValue && Model.IsPreviousYearGrass.Value)
             {
-                if (Model.PreviousCroppings.HasGreaterThan30PercentClover == false)
+                if (Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && !Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
                 {
                     backAction = "SoilNitrogenSupplyItems";
                 }
@@ -42,7 +41,7 @@
     }
     else
     {
-        if (Model.RecentSoilAnalysisQuestion.HasValue&& Model.RecentSoilAnalysisQuestion.Value)
+        if (Model.RecentSoilAnalysisQuestion.HasValue && Model.RecentSoilAnalysisQuestion.Value)
         {
             backAction = "SoilNutrientValue";
         }

@@ -15,5 +15,10 @@ namespace NMP.Portal.Helpers
 
             return value == null ? default : JsonConvert.DeserializeObject<T>(value);
         }
+
+        public static bool Exists(this ISession session, string key)
+        {
+            return session.TryGetValue(key, out _);
+        }
     }
 }

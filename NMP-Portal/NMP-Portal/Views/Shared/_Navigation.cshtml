@@ -9,19 +9,18 @@
 
 
 @if (User.Identity?.IsAuthenticated == true)
-{
-    //var firstName = User.Claims.FirstOrDefault(c => c.Type == "firstName")?.Value;
-   // var lastName = User.Claims.FirstOrDefault(c => c.Type == "lastName")?.Value;
-    //var organisationName = User.Claims.FirstOrDefault(c => c.Type == "organisationName")?.Value;
-    var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name"); //User.Claims.FirstOrDefault(c => c.Type == "current_farm_name")?.Value;
-    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id"); //User.Claims.FirstOrDefault(c => c.Type == "current_farm_id")?.Value;
-   //var name = $"{firstName} {lastName}";
+{   
+    var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name"); 
+    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
     bool isAbout = string.Equals(currentController, "AboutService", StringComparison.OrdinalIgnoreCase);
     bool isAcceptTerms = string.Equals(currentController, "AcceptTerms", StringComparison.OrdinalIgnoreCase);
     bool isAccessibilityStatement = string.Equals(currentController, "AccessibilityStatement", StringComparison.OrdinalIgnoreCase);
+    bool isPrivacyNotice = string.Equals(currentController, "PrivacyNotice", StringComparison.OrdinalIgnoreCase);
+    bool isCookie = string.Equals(currentController, "Cookie", StringComparison.OrdinalIgnoreCase);
+
     bool isAccount = string.Equals(currentController, "Account", StringComparison.OrdinalIgnoreCase);
     bool isError = string.Equals(currentController, "Error", StringComparison.OrdinalIgnoreCase);
     bool isHelpFeedback = string.Equals(currentController, "HelpAndFeedback", StringComparison.OrdinalIgnoreCase);
@@ -31,6 +30,8 @@
         isAbout ||
         isAcceptTerms ||
         isAccessibilityStatement ||
+        isPrivacyNotice ||
+        isCookie ||
         isAccount ||
         isError ||
         isHelpFeedback ||

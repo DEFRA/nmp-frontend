@@ -1285,15 +1285,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add analysis values for Mixed manure.
-        /// </summary>
-        public static string lblAddAnalysisValuesForMixedManure {
-            get {
-                return ResourceManager.GetString("lblAddAnalysisValuesForMixedManure", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add a new farm.
         /// </summary>
         public static string lblAddANewFarm {
@@ -2950,7 +2941,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We can&apos;t find weather data for {0}.You can find rainfall and other weather information by entering a postcode near to {1} Farm..
+        ///   Looks up a localized string similar to We can&apos;t find weather data for {0}. You can find rainfall and other weather information by entering a postcode near to {1} Farm..
         /// </summary>
         public static string lblClimateParagraphFirst {
             get {
@@ -6181,7 +6172,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has {0} been used for grass in any of the the last 3 years?.
+        ///   Looks up a localized string similar to Has {0} been used for grass in any of the last 3 years?.
         /// </summary>
         public static string lblHasBeenUsedForGrassInAnyOfTheLast3Year {
             get {
@@ -6559,8 +6550,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many fields at {0}
-        ///are in a Nitrate Vulnerable Zone (NVZ)?.
+        ///   Looks up a localized string similar to How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?.
         /// </summary>
         public static string lblHowManyFieldsInNVZ {
             get {
@@ -7370,7 +7360,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}kg per 1,000 places, per year.
+        ///   Looks up a localized string similar to {0} kg per 1,000 places, per year.
         /// </summary>
         public static string lblKgPer1000PlacesPerYear {
             get {
@@ -8028,7 +8018,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Livestock manure total nitrogen (N) capacity (per year).
+        ///   Looks up a localized string similar to Livestock manure total nitrogen (N) capacity (per year).
         /// </summary>
         public static string lblLivestockReportContentSix {
             get {
@@ -9243,7 +9233,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No, Enter a different target yield for each fields.
+        ///   Looks up a localized string similar to No, enter a different target yield for each fields.
         /// </summary>
         public static string lblNoEnterADifferentTargetYieldForEachFields {
             get {
@@ -9401,16 +9391,6 @@ namespace NMP.Portal.Resources {
         public static string lblNotSet {
             get {
                 return ResourceManager.GetString("lblNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to November 2025 - England, Wales and Scotland full service
-        ///live.
-        /// </summary>
-        public static string lblNov2025EnglandWalesAndScotlandFullServiceLive {
-            get {
-                return ResourceManager.GetString("lblNov2025EnglandWalesAndScotlandFullServiceLive", resourceCulture);
             }
         }
         
@@ -10806,6 +10786,15 @@ namespace NMP.Portal.Resources {
         public static string lblPrintOrSaveAsAPDF {
             get {
                 return ResourceManager.GetString("lblPrintOrSaveAsAPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Privacy notice.
+        /// </summary>
+        public static string lblPrivacyNotice {
+            get {
+                return ResourceManager.GetString("lblPrivacyNotice", resourceCulture);
             }
         }
         
@@ -13566,7 +13555,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This farm has {0} fields..
+        ///   Looks up a localized string similar to This farm has {0} field(s)..
         /// </summary>
         public static string lblThisFarmHas {
             get {
@@ -16671,7 +16660,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes, Enter the same target yield for these fields.
+        ///   Looks up a localized string similar to Yes, enter the same target yield for these fields.
         /// </summary>
         public static string lblYesEnterTheSameTargetYieldForTheseFields {
             get {
@@ -17524,6 +17513,15 @@ namespace NMP.Portal.Resources {
         public static string MsgAreaNotSet {
             get {
                 return ResourceManager.GetString("MsgAreaNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication failed or session expired..
+        /// </summary>
+        public static string MsgAuthenticationFailedOrSessionExpired {
+            get {
+                return ResourceManager.GetString("MsgAuthenticationFailedOrSessionExpired", resourceCulture);
             }
         }
         
@@ -19166,7 +19164,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg. .
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg..
         /// </summary>
         public static string MsgIfOrganicManureNMaxLimitExceed {
             get {
@@ -19598,7 +19596,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later ..
+        ///   Looks up a localized string similar to NMPT API service is not available at the moment, try again later..
         /// </summary>
         public static string MsgNmptServiceNotAvailable {
             get {

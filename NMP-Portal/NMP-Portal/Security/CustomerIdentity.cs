@@ -24,11 +24,9 @@ using System.Text;
 
 namespace NMP.Portal.Security
 {
-
     public static class CustomerIdentity
     {
         private static IConfiguration? configuration = null;
-
         public static IServiceCollection AddDefraCustomerIdentity(this IServiceCollection services, WebApplicationBuilder builder)
         {
             configuration = builder.Configuration;
@@ -37,38 +35,46 @@ namespace NMP.Portal.Security
 
             services.AddAuthentication(options =>
             {
+                
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-                    .AddMicrosoftIdentityWebApp(options =>
-                    {
-                        options.Instance = builder.Configuration?["CustomerIdentityInstance"] ?? string.Empty;
-                        options.ClientId = builder.Configuration?["CustomerIdentityClientId"];
-                        options.ClientSecret = builder.Configuration?["CustomerIdentityClientSecret"];
-                        options.TenantId = builder.Configuration?["CustomerIdentityTenantId"];
-                        options.Domain = builder.Configuration?["CustomerIdentityDomain"];
-                        var extraQueryParameters = new Dictionary<string, string>();
-                        extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
-                        extraQueryParameters.Add("forceReselection", value: "true");
-                        options.ExtraQueryParameters = extraQueryParameters;
-                        options.CallbackPath = "/signin-oidc";
-                        options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
-                        options.SaveTokens = true;
-                        options.GetClaimsFromUserInfoEndpoint = true;
-                    },
-                    cookieOptions =>
-                    {
-                        // How long your app's cookie is valid
-                        cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(20); // e.g. 8 hours
-                        cookieOptions.SlidingExpiration = true;                        
-                    })
-                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
-                    .AddInMemoryTokenCaches();
+            .AddCookie("NMPCookie", cookieOptions =>
+            {
+                // How long your app's cookie is valid
+                cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
+                cookieOptions.SlidingExpiration = true;
+            })
+            .AddMicrosoftIdentityWebApp(options =>
+            {
+                options.Instance = builder.Configuration?["CustomerIdentityInstance"] ?? string.Empty;
+                options.ClientId = builder.Configuration?["CustomerIdentityClientId"];
+                options.ClientSecret = builder.Configuration?["CustomerIdentityClientSecret"];
+                options.TenantId = builder.Configuration?["CustomerIdentityTenantId"];
+                options.Domain = builder.Configuration?["CustomerIdentityDomain"];
+                var extraQueryParameters = new Dictionary<string, string>();
+                extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
+                extraQueryParameters.Add("forceReselection", value: "true");
+                options.ExtraQueryParameters = extraQueryParameters;
+                options.CallbackPath = "/signin-oidc";
+                options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+            },
+            cookieOptions =>
+            {
+                // How long your app's cookie is valid
+                cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
+                cookieOptions.SlidingExpiration = true;
+            })
+            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
+            .AddInMemoryTokenCaches()            
+            .AddDistributedTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {               
+            {
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;  // Save tokens in the authentication session
                 options.Scope.Add("openid profile offline_access");
@@ -82,17 +88,10 @@ namespace NMP.Portal.Security
                 options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
                 options.Events.OnRemoteFailure += OnRemoteFailure;
-
+                
             });
-            //services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            //{
-            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
-            //    options.SlidingExpiration = true; // Enable sliding expiration
-            //    options.Cookie.MaxAge = options.ExpireTimeSpan;
-
-            //});
             services.AddTokenAcquisition();
-            services.AddInMemoryTokenCaches();
+            //services.AddInMemoryTokenCaches();            
             services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;
@@ -107,8 +106,7 @@ namespace NMP.Portal.Security
             string error = context.Failure?.Message ?? "Unknown";
             string errorCode = GetOidcErrorCode(error);
             logger.LogWarning("OIDC Remote Failure:{Code} | Path:{Path} | Trace:{TraceId} | IP:{IP}",
-                errorCode, path, traceId, ip);
-            context.HttpContext.Items["RemoteFailureError"] = Uri.EscapeDataString(error ?? "unknown");            
+                errorCode, path, traceId, ip);            
             context.Response.Redirect($"/Error/503");
             context.HandleResponse(); // Prevents throwing exception
             await Task.CompletedTask.ConfigureAwait(false);
@@ -160,7 +158,7 @@ namespace NMP.Portal.Security
             string error = context.Exception?.Message ?? "Unknown";
             string errorCode = GetOidcErrorCode(error);
             logger.LogWarning("OIDC Authentication Failed:{Code} | Path:{Path} | Trace:{TraceId} | IP:{IP}",
-                errorCode, path, traceId, ip);            
+                errorCode, path, traceId, ip);
             context.Response.Redirect("/Error/503");
             context.HandleResponse(); // Suppress the exception
             // Don't remove this line
@@ -173,21 +171,25 @@ namespace NMP.Portal.Security
             await Task.CompletedTask.ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// /* var logoutUri = configuration?["CustomerIdentityInstance"] + configuration?["CustomerIdentityDomain"] + "/" + configuration?["CustomerIdentityPolicyId"] + "/signout";
+        //        var postLogoutUri = configuration?["CustomerIdentitySignedOutCallbackPath"]; //context.Properties.RedirectUri;
+        //            if (!string.IsNullOrEmpty(postLogoutUri))
+        //            {
+        //                if (postLogoutUri.StartsWith("/"))
+        //                {
+        //                    var request = context.Request;
+        //        postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+        //                }
+        //    logoutUri += "?post_logout_redirect_uri=" + Uri.EscapeDataString(postLogoutUri);
+        //            }
+        //context.Response.Redirect(logoutUri);
+        //context.HandleResponse(); */
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
-        {
-            /*  var logoutUri = configuration?["CustomerIdentityInstance"] + configuration?["CustomerIdentityDomain"] + "/" + configuration?["CustomerIdentityPolicyId"] + "/signout";
-            var postLogoutUri = configuration?["CustomerIdentitySignedOutCallbackPath"]; //context.Properties.RedirectUri;
-            if (!string.IsNullOrEmpty(postLogoutUri))
-            {
-                if (postLogoutUri.StartsWith("/"))
-                {
-                    var request = context.Request;
-                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
-                }
-                logoutUri += "?post_logout_redirect_uri=" + Uri.EscapeDataString(postLogoutUri);
-            }
-            context.Response.Redirect(logoutUri);
-            context.HandleResponse(); */
+        {            
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -215,7 +217,7 @@ namespace NMP.Portal.Security
         }
 
         private static async Task OnTokenValidated(TokenValidatedContext context)
-        {            
+        {
             var accessToken = context?.TokenEndpointResponse?.AccessToken;
             var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
             var identity = context?.Principal?.Identity as ClaimsIdentity;
@@ -223,24 +225,15 @@ namespace NMP.Portal.Security
             {
                 if (identity != null)
                 {
-                    if (!string.IsNullOrEmpty(accessToken))
-                    {
-                        identity?.AddClaim(new Claim("access_token", accessToken));
-                    }
-                    else
-                    {
+                    if (string.IsNullOrEmpty(accessToken))
+                    { 
                         throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
                     }
 
-                    if (!string.IsNullOrEmpty(refreshToken))
-                    {
-                        identity?.AddClaim(new Claim("refresh_token", refreshToken));
-                    }
-                    else
+                    if (string.IsNullOrEmpty(refreshToken))                    
                     {
                         throw new AuthenticationFailureException(Resource.MsgRrefreshTokenNotReceived);
                     }
-
                 }
                 if (!string.IsNullOrEmpty(accessToken))
                 {
@@ -250,7 +243,6 @@ namespace NMP.Portal.Security
                     if (jsonToken != null)
                     {
                         int userId = 0;
-
                         Guid? userIdentifier = null;
                         string firstName = string.Empty;
                         string lastName = string.Empty;
@@ -267,23 +259,23 @@ namespace NMP.Portal.Security
                                 case "iss":
                                     identity?.AddClaim(new Claim("issuer", claim.Value));
                                     break;
-                                case "exp":
-                                    identity?.AddClaim(new Claim("access_token_expiry", claim.Value));
-                                    break;
+                                //case "exp":
+                                //    identity?.AddClaim(new Claim("access_token_expiry", claim.Value));
+                                //    break;
                                 case "sub":
-                                    userIdentifier = Guid.Parse(claim.Value);                                    
+                                    userIdentifier = Guid.Parse(claim.Value);
                                     break;
                                 case "firstName":
-                                    firstName = claim.Value;                                    
+                                    firstName = claim.Value;
                                     break;
                                 case "lastName":
-                                    lastName = claim.Value;                                    
+                                    lastName = claim.Value;
                                     break;
                                 case "email":
-                                    email = claim.Value;                                    
+                                    email = claim.Value;
                                     break;
                                 case "currentRelationshipId":
-                                    currentRelationShipId = claim.Value;                                    
+                                    currentRelationShipId = claim.Value;
                                     break;
                                 case "enrolmentCount":
                                     identity?.AddClaim(new Claim("enrolmentCount", claim.Value));
@@ -312,10 +304,10 @@ namespace NMP.Portal.Security
                                         {
                                             organisationName = relationShipDetails[2];
                                             organisationId = Guid.Parse(relationShipDetails[1]);
-                                        }                                        
+                                        }
                                         identity?.AddClaim(new Claim("organisationName", organisationName));
                                         identity?.AddClaim(new Claim("organisationId", organisationId.ToString() ?? string.Empty));
-                                    }                                    
+                                    }
                                     break;
                                 case "roles":
                                     List<string> rolesArray = new List<string>();
@@ -334,10 +326,10 @@ namespace NMP.Portal.Security
                                         roleDetails.AddRange(rd.Split(":"));
                                         identity?.AddClaim(new Claim(ClaimTypes.Role, roleDetails[1]));
                                         identity?.AddClaim(new Claim("roleStatus", roleDetails[2]));
-                                    }                                   
+                                    }
                                     break;
 
-                                default:                                    
+                                default:
                                     break;
                             }
                         }
@@ -405,7 +397,7 @@ namespace NMP.Portal.Security
             }
             catch (HttpRequestException ex)
             {
-                var errorViewModel = new ErrorViewModel();                
+                var errorViewModel = new ErrorViewModel();
                 errorViewModel.Message = Resource.MsgNmptServiceNotAvailable;
                 errorViewModel.Stack = string.Empty;
                 context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);

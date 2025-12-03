@@ -2,7 +2,7 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-    ViewData["Title"] = $"{((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))} {Resource.lblHyphen} {title}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -227,7 +227,7 @@
                     }
                 }
             </div>                
-                <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Resource.lblAddAnalysisValuesForMixedManure : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+                    <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
                 
                 <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="false">@Resource.lblDryMatter

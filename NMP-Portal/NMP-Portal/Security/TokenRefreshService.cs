@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using System.Security.Claims;
@@ -19,14 +21,21 @@ namespace NMP.Portal.Security
         public async Task<string> RefreshUserAccessTokenAsync(HttpContext context)
         {
             var refreshToken = await context.GetTokenAsync("refresh_token");
-            if (refreshToken == null)
+            var authProperties = new AuthenticationProperties
             {
-                return null;
+                IsPersistent = true,
+                RedirectUri = context.Request.Path,
+                AllowRefresh = true
+            };
+
+            if (refreshToken == null)
+            {                
+                await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
             }
 
             ClaimsPrincipal? user = context.User;
             var identity = user?.Identity as ClaimsIdentity;
-            var issuer = identity?.FindFirst("issuer")?.Value;
+            string issuer = identity?.FindFirst("issuer")?.Value;
             OAuthTokenResponse tokens;
             using (var client = _httpClientFactory.CreateClient())
             {
@@ -41,27 +50,30 @@ namespace NMP.Portal.Security
                     new KeyValuePair<string, string>("grant_type", "refresh_token"),
                     new KeyValuePair<string, string>("scope", scopes)
                 });
-                Uri uri = new Uri(issuer);
+                Uri uri = new Uri(uriString: issuer);
                 var url = $"https://{uri.Authority}/{_config["CustomerIdentityTenantId"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
 
                 var response = await client.PostAsync(url, formData);
                 var json = await response.Content.ReadAsStringAsync();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 tokens = JsonConvert.DeserializeObject<OAuthTokenResponse>(json);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
                 if(tokens == null || string.IsNullOrEmpty(tokens.AccessToken))
-                {
-                    throw new Exception("Failed to refresh access token.");
-                    //return null;
+                {                    
+                    await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
                 }
                 // Update authentication session
                 var auth = await context.AuthenticateAsync();
-                auth.Properties.UpdateTokenValue("access_token", tokens.AccessToken);
-                auth.Properties.UpdateTokenValue("refresh_token", tokens.RefreshToken);
-                await context.SignInAsync(auth.Principal, auth.Properties);
-
+                if (auth != null && auth.Principal != null && tokens != null && !string.IsNullOrEmpty(tokens.AccessToken))
+                {
+                    auth.Properties?.UpdateTokenValue("access_token", tokens.AccessToken);
+                    auth.Properties?.UpdateTokenValue("refresh_token", tokens.RefreshToken);
+                    await context.SignInAsync(auth.Principal, auth.Properties);
+                }
             }
 
-            return tokens.AccessToken;
+            return tokens?.AccessToken?? string.Empty;
         }
     }
 }
