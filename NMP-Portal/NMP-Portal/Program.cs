@@ -200,15 +200,31 @@ else
 }
 
 app.Use(async (context, next) =>
-{    
+{
     // Do work that doesn't write to the Response.
     if (context.Request.Method is "OPTIONS" or "TRACE" or "HEAD")
     {
         context.Response.StatusCode = 405;
         return;
-    } 
+    }
     await next.Invoke();
     // Do logging or other work that doesn't write to the Response.
+});
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/favicon.ico")
+    {
+        context.Response.Redirect("/assets/rebrand/images/favicon.ico");
+        return;
+    }
+    else if(context.Request.Path == "/favicon.svg")
+    {
+        context.Response.Redirect("/assets/rebrand/images/favicon.svg");
+        return;
+    }
+
+        await next();
 });
 
 app.UseCsp(csp =>
