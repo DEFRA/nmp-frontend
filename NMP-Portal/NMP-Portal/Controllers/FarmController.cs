@@ -106,12 +106,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmList() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmList() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
             return View(model);
@@ -129,10 +129,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Name() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains<string>("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
+            model = GetFarmFromSession();
             return View(model);
         }
 
@@ -149,13 +146,10 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
-            FarmViewModel farmView = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-            }
+            FarmViewModel? farmView = null;
+            farmView = GetFarmFromSession();
 
-            HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -176,24 +170,22 @@ namespace NMP.Portal.Controllers
                     countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
                     ViewBag.CountryList = countryList.OrderBy(c => c.Name);
                 }
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
-                else
+                model = GetFarmFromSession();
+                if (model == null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+
             }
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Country() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Country() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
         }
@@ -232,7 +224,7 @@ namespace NMP.Portal.Controllers
                     farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
                 }
 
-                HttpContext.Session.SetObjectAsJson("FarmData", farm);
+                SetFarmToSession(farm);
                 if (farm.IsCheckAnswer)
                 {
                     return RedirectToAction("CheckAnswer");
@@ -241,12 +233,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Country() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Country() post action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
             return RedirectToAction("FarmingRules");
@@ -258,11 +250,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : FarmingRules() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model == null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -273,7 +262,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FarmingRules(FarmViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -286,14 +275,12 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : PostCode() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model == null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+
             return View(model);
         }
         [HttpPost]
@@ -325,17 +312,15 @@ namespace NMP.Portal.Controllers
                 {
                     return View(farm);
                 }
-                FarmViewModel farmView = null;
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-                }
+                FarmViewModel? farmView = null;
+                farmView = GetFarmFromSession();
+
                 if (farm.IsCheckAnswer)
                 {
                     var updatedFarm = JsonConvert.SerializeObject(farm);
                     HttpContext?.Session.SetString("FarmData", updatedFarm);
 
-                    if (farmView.Postcode == farm.Postcode)
+                    if (farmView != null && farmView.Postcode == farm.Postcode)
                     {
                         farm.IsPostCodeChanged = false;
                         return RedirectToAction("CheckAnswer");
@@ -354,7 +339,7 @@ namespace NMP.Portal.Controllers
                         farm.Rainfall = null;
                     }
                 }
-                HttpContext.Session.SetObjectAsJson("FarmData", farm);
+                SetFarmToSession(farm);
                 //if (farm.IsCheckAnswer)
                 //{
                 //    return RedirectToAction("CheckAnswer");
@@ -365,12 +350,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in PostCode() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in PostCode() post action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
 
@@ -416,12 +401,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Address() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -438,15 +423,15 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
                 }
 
-            List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
-            if (HttpContext.Session.Keys.Contains("AddressList"))
-            {
-                addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
+                List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
+                if (HttpContext.Session.Keys.Contains("AddressList"))
+                {
+                    addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
 
                 if (!ModelState.IsValid)
                 {
@@ -472,7 +457,7 @@ namespace NMP.Portal.Controllers
                 farm.IsManualAddress = false;
                 //farm.Rainfall = farm.Rainfall ?? 600;
 
-                HttpContext.Session.SetObjectAsJson("FarmData", farm);
+                SetFarmToSession(farm);
                 if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
                 {
                     return RedirectToAction("CheckAnswer");
@@ -483,12 +468,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Address() post action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -498,11 +483,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : AddressNotFound() action called");
             FarmViewModel? model = null;
-            if (HttpContext != null && HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model == null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -514,17 +496,11 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : ManualAddress() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-
-
-
             return View(model);
         }
 
@@ -585,11 +561,8 @@ namespace NMP.Portal.Controllers
                     return View("~/Views/Farm/ManualAddress.cshtml", farm);
                 }
 
-                FarmViewModel farmView = null;
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-                }
+                FarmViewModel? farmView = null;
+                farmView = GetFarmFromSession();
                 if (farmView != null)
                 {
                     if (farmView.Postcode != farm.Postcode)
@@ -600,19 +573,19 @@ namespace NMP.Portal.Controllers
                 farm.FullAddress = string.Empty;
                 farm.IsManualAddress = true;
 
-                HttpContext.Session.SetObjectAsJson("FarmData", farm);
+                SetFarmToSession(farm);
 
                 return RedirectToAction("ClimatePostCode");
             }
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in ManualAddress() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ManualAddress() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
         [HttpGet]
@@ -622,11 +595,8 @@ namespace NMP.Portal.Controllers
             try
             {
                 FarmViewModel? model = null;
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
-                else
+                model = GetFarmFromSession();
+                if (model==null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -653,7 +623,7 @@ namespace NMP.Portal.Controllers
                         {
                             model.ClimateDataPostCode = null;
                         }
-                        HttpContext.Session.SetObjectAsJson("FarmData", model);
+                        SetFarmToSession(model);
                         return RedirectToAction("Rainfall");
                     }
                 }
@@ -666,12 +636,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in ClimatePostCode() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -690,10 +660,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
                 {
                     FarmViewModel? farmView = null;
-                    if (HttpContext.Session.Keys.Contains("FarmData"))
-                    {
-                        farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-                    }
+                    farmView=GetFarmFromSession();
                     bool ClimateDataPostCodeChange = false;
                     if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
                     {
@@ -726,18 +693,18 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                HttpContext.Session.SetObjectAsJson("FarmData", model);
+                SetFarmToSession(model);
                 return RedirectToAction("Rainfall");
             }
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in ClimatePostCode() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
 
@@ -749,11 +716,8 @@ namespace NMP.Portal.Controllers
             try
             {
                 FarmViewModel? model = null;
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
-                else
+                model = GetFarmFromSession();
+                if (model == null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -778,7 +742,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.Rainfall = (int)Math.Round(rainfall);
                     }
-                    HttpContext.Session.SetObjectAsJson("FarmData", model);
+                    SetFarmToSession(model);
                 }
 
                 return View(model);
@@ -786,12 +750,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Rainfall() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in Rainfall() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -810,7 +774,7 @@ namespace NMP.Portal.Controllers
                 return View("Rainfall", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -822,11 +786,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : RainfallManual() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -874,7 +835,7 @@ namespace NMP.Portal.Controllers
                 return View("RainfallManual", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -886,11 +847,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : NVZ() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -899,7 +857,7 @@ namespace NMP.Portal.Controllers
                 if (model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                 {
                     model.NVZFields = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
-                    HttpContext.Session.SetObjectAsJson("FarmData", model);
+                    SetFarmToSession(model);
                     return RedirectToAction("Elevation");
                 }
             }
@@ -921,7 +879,7 @@ namespace NMP.Portal.Controllers
                 return View("NVZ", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -934,11 +892,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Elevation() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -960,7 +915,7 @@ namespace NMP.Portal.Controllers
                 return View("Elevation", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -974,17 +929,11 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Organic() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            //model.IsCheckAnswer = false;
-            //string updatedSessionData = JsonConvert.SerializeObject(model);
-            //_httpContextAccessor.HttpContext.Session.SetString("FarmData", updatedSessionData);
             return View(model);
 
         }
@@ -1002,7 +951,7 @@ namespace NMP.Portal.Controllers
                 return View("Organic", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
 
             return RedirectToAction("CheckAnswer");
         }
@@ -1011,11 +960,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : CheckAnswer({q}) action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -1035,7 +981,7 @@ namespace NMP.Portal.Controllers
             {
                 model.EncryptedIsUpdate = q;
             }
-            HttpContext.Session.SetObjectAsJson("FarmData", model);
+            SetFarmToSession(model);
 
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -1128,12 +1074,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in CheckAnswer() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1141,11 +1087,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : BackCheckAnswer() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -1161,7 +1104,7 @@ namespace NMP.Portal.Controllers
             else
             {
                 model.IsCheckAnswer = false;
-                HttpContext.Session.SetObjectAsJson("FarmData", model);
+                SetFarmToSession(model);
                 return RedirectToAction("Organic");
             }
 
@@ -1282,12 +1225,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError($"Farm Controller : HttpRequestException in FarmSummary() action : {hre.Message}, {hre.StackTrace}");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Farm Controller : Exception in FarmSummary() action : {ex.Message}, {ex.StackTrace}");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
 
@@ -1314,7 +1257,6 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
@@ -1354,22 +1296,20 @@ namespace NMP.Portal.Controllers
 
                         bool update = true;
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
-                        HttpContext.Session.SetObjectAsJson("FarmData", farmData);
+                        SetFarmToSession(farmData);
                     }
-
                 }
             }
             catch (HttpRequestException hre)
             {
                 _logger.LogError($"Farm Controller : HttpRequestException in FarmDetails() action : {hre.Message}, {hre.StackTrace}");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
             return View(farmData);
         }
 
@@ -1463,12 +1403,12 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmUpdate() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmUpdate() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1478,11 +1418,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : FarmRemove() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -1521,9 +1458,8 @@ namespace NMP.Portal.Controllers
                     }
                     if (!string.IsNullOrWhiteSpace(message))
                     {
-                        //string success = _dataProtector.Protect("true");
                         string name = _dataProtector.Protect(farm.Name);
-                        HttpContext.Session.Remove("FarmData");
+                        RemoveFarmSession();
 
                         return RedirectToAction("FarmList", new { q = name });
                     }
@@ -1533,13 +1469,13 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmRemove() action");
-                return ErrorRedirect.Redirect((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmRemove() action");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
 
             }
 
@@ -1548,14 +1484,11 @@ namespace NMP.Portal.Controllers
         public IActionResult Cancel()
         {
             _logger.LogTrace("Farm Controller : Cancel() action called");
-            FarmViewModel model = new FarmViewModel();
+            FarmViewModel? model = new FarmViewModel();
             try
             {
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
-                else
+                model = GetFarmFromSession();
+                if (model==null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -1563,7 +1496,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"farm Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
-                return ErrorRedirect.Redirect((int)HttpStatusCode.InternalServerError);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
         }
@@ -1587,11 +1520,31 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                HttpContext?.Session.Remove("FarmData");                
+                HttpContext?.Session.Remove("FarmData");
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
 
             }
 
         }
+
+        private FarmViewModel? GetFarmFromSession()
+        {
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return null;
+        }
+
+        private void SetFarmToSession(FarmViewModel farm)
+        {
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+        }
+
+        private void RemoveFarmSession()
+        {
+            HttpContext.Session.Remove("FarmData");
+        }
+
     }
 }
