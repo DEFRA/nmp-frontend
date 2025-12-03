@@ -16,6 +16,7 @@ using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -65,7 +66,7 @@ namespace NMP.Portal.Controllers
         }
 
         public async Task<IActionResult> FarmList(string? q)
-        {            
+        {
             _logger.LogTrace($"Farm Controller : FarmList({q}) action called");
             HttpContext?.Session.Remove("FarmData");
             HttpContext?.Session.Remove("AddressList");
@@ -101,10 +102,16 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = "false";
                 }
             }
+
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmList() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in FarmList() action : {ex.Message}, {ex.StackTrace}");
-                TempData["Error"] = ex.Message;
+                _logger.LogError(ex, "Farm Controller : Exception in FarmList() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
             return View(model);
@@ -122,10 +129,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Name() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains<string>("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
+            model = GetFarmFromSession();
             return View(model);
         }
 
@@ -142,13 +146,10 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
-            FarmViewModel farmView = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-            }
+            FarmViewModel? farmView = null;
+            farmView = GetFarmFromSession();
 
-            HttpContext?.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -161,19 +162,30 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Country() action called");
             FarmViewModel? model = null;
-            (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-            if (error != null && countryList.Count > 0)
+            try
             {
-                countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
-                ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+                (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+                if (error != null && countryList.Count > 0)
+                {
+                    countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
+                    ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+                }
+                model = GetFarmFromSession();
+                if (model == null)
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
             }
-            if (HttpContext.Session.Keys.Contains("FarmData"))
+            catch (HttpRequestException hre)
             {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in Country() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("FarmList", "Farm");
+                _logger.LogError(ex, "Farm Controller : Exception in Country() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
         }
@@ -182,39 +194,53 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Country(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : Country() post action called");
-            if (farm.CountryID == null)
+            try
             {
-                ModelState.AddModelError("CountryID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
-            }
-            if (!ModelState.IsValid)
-            {
-                (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-                if (error != null && countryList.Count > 0)
+                if (farm.CountryID == null)
                 {
-                    countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
-                    ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+                    ModelState.AddModelError("CountryID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
                 }
-                return View("Country", farm);
+                if (!ModelState.IsValid)
+                {
+                    (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+                    if (error != null && countryList.Count > 0)
+                    {
+                        countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
+                        ViewBag.CountryList = countryList.OrderBy(c => c.Name);
+                    }
+                    return View("Country", farm);
+                }
+                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ||
+                    farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                {
+                    farm.EnglishRules = true;
+                }
+                else
+                {
+                    farm.EnglishRules = false;
+                }
+                if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+                {
+                    farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                }
+
+                SetFarmToSession(farm);
+                if (farm.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
             }
-            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England ||
-                farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+            catch (HttpRequestException hre)
             {
-                farm.EnglishRules = true;
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in Country() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
-            else
+            catch (Exception ex)
             {
-                farm.EnglishRules = false;
-            }
-            if (Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
-            {
-                farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                _logger.LogError(ex, "Farm Controller : Exception in Country() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            if (farm.IsCheckAnswer)
-            {
-                return RedirectToAction("CheckAnswer");
-            }
             return RedirectToAction("FarmingRules");
 
         }
@@ -224,11 +250,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : FarmingRules() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model == null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -239,7 +262,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FarmingRules(FarmViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -252,114 +275,140 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : PostCode() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model == null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostCode(FarmViewModel farm)
         {
-            if (string.IsNullOrWhiteSpace(farm.Postcode))
+            _logger.LogTrace($"Farm Controller : PostCode() post action called");
+            try
             {
-                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
+                if (string.IsNullOrWhiteSpace(farm.Postcode))
+                {
+                    ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
+                }
+
+                if (!string.IsNullOrWhiteSpace(farm.Postcode))
+                {
+                    int id = 0;
+                    if (farm.EncryptedFarmId != null)
+                    {
+                        id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                    }
+                    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
+                    if (IsFarmExist)
+                    {
+                        ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+                    }
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(farm);
+                }
+                FarmViewModel? farmView = null;
+                farmView = GetFarmFromSession();
+
+                if (farm.IsCheckAnswer)
+                {
+                    var updatedFarm = JsonConvert.SerializeObject(farm);
+                    HttpContext?.Session.SetString("FarmData", updatedFarm);
+
+                    if (farmView != null && farmView.Postcode == farm.Postcode)
+                    {
+                        farm.IsPostCodeChanged = false;
+                        return RedirectToAction("CheckAnswer");
+                    }
+                    else
+                    {
+                        farm.IsPostCodeChanged = true;
+                        farm.Rainfall = null;
+                        //return RedirectToAction("Address");
+                    }
+                }
+                if (farmView != null)
+                {
+                    if (farmView.Postcode != farm.Postcode)
+                    {
+                        farm.Rainfall = null;
+                    }
+                }
+                SetFarmToSession(farm);
+                //if (farm.IsCheckAnswer)
+                //{
+                //    return RedirectToAction("CheckAnswer");
+                //}
+                return RedirectToAction("Address");
+
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in PostCode() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in PostCode() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
-            if (!string.IsNullOrWhiteSpace(farm.Postcode))
-            {
-                int id = 0;
-                if (farm.EncryptedFarmId != null)
-                {
-                    id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                }
-                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
-                if (IsFarmExist)
-                {
-                    ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
-                }
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(farm);
-            }
-            FarmViewModel farmView = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-            }
-            if (farm.IsCheckAnswer)
-            {
-                var updatedFarm = JsonConvert.SerializeObject(farm);
-                HttpContext?.Session.SetString("FarmData", updatedFarm);
-
-                if (farmView.Postcode == farm.Postcode)
-                {
-                    farm.IsPostCodeChanged = false;
-                    return RedirectToAction("CheckAnswer");
-                }
-                else
-                {
-                    farm.IsPostCodeChanged = true;
-                    farm.Rainfall = null;
-                    //return RedirectToAction("Address");
-                }
-            }
-            if (farmView != null)
-            {
-                if (farmView.Postcode != farm.Postcode)
-                {
-                    farm.Rainfall = null;
-                }
-            }
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            //if (farm.IsCheckAnswer)
-            //{
-            //    return RedirectToAction("CheckAnswer");
-            //}
-            return RedirectToAction("Address");
 
         }
         [HttpGet]
         public async Task<IActionResult> Address()
         {
             _logger.LogTrace($"Farm Controller : Address() action called");
-            FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
+            try
             {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                FarmViewModel? model = null;
+                if (HttpContext.Session.Keys.Contains("FarmData"))
+                {
+                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                HttpContext.Session.Remove("AddressList");
+
+                List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
+                var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
+
+                if (addressesList.Count > 0 && addressesList.Any())
+                {
+                    ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addresses.Count.ToString());
+                }
+                else
+                {
+                    return RedirectToAction("AddressNotFound");
+                }
+
+                if (addressesList != null && addressesList.Any())
+                {
+                    ViewBag.AddressList = addressesList;
+                    HttpContext.Session.SetObjectAsJson("AddressList", addresses);
+                }
+
+                return View(model);
             }
-            else
+            catch (HttpRequestException hre)
             {
-                return RedirectToAction("FarmList", "Farm");
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in Address() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
-            HttpContext.Session.Remove("AddressList");
-
-            List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
-            var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
-
-            if (addressesList.Count > 0 && addressesList.Any())
-            {
-                ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addresses.Count.ToString());
-            }
-            else
-            {
-                return RedirectToAction("AddressNotFound");
-            }
-
-            if (addressesList != null && addressesList.Any())
-            {
-                ViewBag.AddressList = addressesList;
-                HttpContext.Session.SetObjectAsJson("AddressList", addresses);
-            }
-
-            return View(model);
         }
 
         [HttpPost]
@@ -367,52 +416,66 @@ namespace NMP.Portal.Controllers
         public IActionResult Address(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : Address() post action called");
-            if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            try
             {
-                ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
-            }
-
-            List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
-            if (HttpContext.Session.Keys.Contains("AddressList"))
-            {
-                addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                if (addresses != null && addresses.Count > 0)
+                if (string.IsNullOrWhiteSpace(farm.FullAddress))
                 {
-                    var addressList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
-                    ViewBag.AddressList = addressList;
-                    ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+                    ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
                 }
-                return View(farm);
-            }
 
-            AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
-            if (address != null)
+                List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
+                if (HttpContext.Session.Keys.Contains("AddressList"))
+                {
+                    addresses = HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+                }
+                else
+                {
+                    return RedirectToAction("FarmList", "Farm");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    if (addresses != null && addresses.Count > 0)
+                    {
+                        var addressList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
+                        ViewBag.AddressList = addressList;
+                        ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
+                    }
+                    return View(farm);
+                }
+
+                AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
+                if (address != null)
+                {
+                    farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber != null ? address.BuildingNumber + ", " : string.Empty, address.BuildingName != null ? address.BuildingName + ", " : string.Empty, address.Street);
+                    farm.Address2 = address.Locality;
+                    farm.Address3 = address.Town;
+                    farm.Address4 = address.HistoricCounty;
+                }
+
+
+                farm.IsManualAddress = false;
+                //farm.Rainfall = farm.Rainfall ?? 600;
+
+                SetFarmToSession(farm);
+                if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
+                {
+                    return RedirectToAction("CheckAnswer");
+                }
+
+                return RedirectToAction("ClimatePostCode");
+            }
+            catch (HttpRequestException hre)
             {
-                farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber != null ? address.BuildingNumber + ", " : string.Empty, address.BuildingName != null ? address.BuildingName + ", " : string.Empty, address.Street);
-                farm.Address2 = address.Locality;
-                farm.Address3 = address.Town;
-                farm.Address4 = address.HistoricCounty;
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
-
-
-            farm.IsManualAddress = false;
-            //farm.Rainfall = farm.Rainfall ?? 600;
-
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
-            if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
+            catch (Exception ex)
             {
-                return RedirectToAction("CheckAnswer");
+                _logger.LogError(ex, "Farm Controller : Exception in Address() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
-            return RedirectToAction("ClimatePostCode");
         }
 
 
@@ -420,11 +483,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : AddressNotFound() action called");
             FarmViewModel? model = null;
-            if (HttpContext != null && HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model == null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -436,17 +496,11 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : ManualAddress() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-
-
-
             return View(model);
         }
 
@@ -455,211 +509,254 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : ManualAddress() post action called");
-            if (string.IsNullOrEmpty(farm.Address1))
+            try
             {
-                ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
-            }
-            if (string.IsNullOrEmpty(farm.Address3))
-            {
-                ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
-            }
-            if (string.IsNullOrEmpty(farm.Address4))
-            {
-                ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
-            }
-            if (string.IsNullOrEmpty(farm.Postcode))
-            {
-                ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
-            }
-            if (!string.IsNullOrWhiteSpace(farm.Address1) && farm.Address1.Length > 50)
-            {
-                ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1, 50));
-            }
-            if (!string.IsNullOrWhiteSpace(farm.Address2) && farm.Address2.Length > 50)
-            {
-                ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg, 50));
-            }
-            if (!string.IsNullOrWhiteSpace(farm.Address3) && farm.Address3.Length > 50)
-            {
-                ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity, 50));
-            }
-            if (!string.IsNullOrWhiteSpace(farm.Address4) && farm.Address4.Length > 50)
-            {
-                ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
-            }
-            if (!string.IsNullOrWhiteSpace(farm.Postcode))
-            {
-                int id = 0;
-                if (farm.EncryptedFarmId != null)
+                if (string.IsNullOrEmpty(farm.Address1))
                 {
-                    id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                    ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
                 }
-                bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
-                if (IsFarmExist)
+                if (string.IsNullOrEmpty(farm.Address3))
                 {
-                    ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+                    ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
                 }
-            }
-            if (!ModelState.IsValid)
-            {
-                return View("~/Views/Farm/ManualAddress.cshtml", farm);
-            }
-
-            FarmViewModel farmView = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-            }
-            if (farmView != null)
-            {
-                if (farmView.Postcode != farm.Postcode)
+                if (string.IsNullOrEmpty(farm.Address4))
                 {
-                    farm.Rainfall = null;
+                    ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
                 }
+                if (string.IsNullOrEmpty(farm.Postcode))
+                {
+                    ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
+                }
+                if (!string.IsNullOrWhiteSpace(farm.Address1) && farm.Address1.Length > 50)
+                {
+                    ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1, 50));
+                }
+                if (!string.IsNullOrWhiteSpace(farm.Address2) && farm.Address2.Length > 50)
+                {
+                    ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg, 50));
+                }
+                if (!string.IsNullOrWhiteSpace(farm.Address3) && farm.Address3.Length > 50)
+                {
+                    ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity, 50));
+                }
+                if (!string.IsNullOrWhiteSpace(farm.Address4) && farm.Address4.Length > 50)
+                {
+                    ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
+                }
+                if (!string.IsNullOrWhiteSpace(farm.Postcode))
+                {
+                    int id = 0;
+                    if (farm.EncryptedFarmId != null)
+                    {
+                        id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                    }
+                    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
+                    if (IsFarmExist)
+                    {
+                        ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+                    }
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View("~/Views/Farm/ManualAddress.cshtml", farm);
+                }
+
+                FarmViewModel? farmView = null;
+                farmView = GetFarmFromSession();
+                if (farmView != null)
+                {
+                    if (farmView.Postcode != farm.Postcode)
+                    {
+                        farm.Rainfall = null;
+                    }
+                }
+                farm.FullAddress = string.Empty;
+                farm.IsManualAddress = true;
+
+                SetFarmToSession(farm);
+
+                return RedirectToAction("ClimatePostCode");
             }
-            farm.FullAddress = string.Empty;
-            farm.IsManualAddress = true;
-
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
-
-            return RedirectToAction("ClimatePostCode");
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in ManualAddress() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in ManualAddress() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
         }
         [HttpGet]
         public async Task<IActionResult> ClimatePostCode()
         {
             _logger.LogTrace($"Farm Controller : ClimatePostCode() action called");
-            FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
+            try
             {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            if (model.Rainfall == 0 || model.Rainfall == null)
-            {
-                string firstHalfPostcode = string.Empty;
-                if (!model.Postcode.Contains(" "))
+                FarmViewModel? model = null;
+                model = GetFarmFromSession();
+                if (model==null)
                 {
-                    firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
+                    return RedirectToAction("FarmList", "Farm");
                 }
-                else
-                {
-                    string[] postcode = model.Postcode.Split(' ');
-                    firstHalfPostcode = postcode[0];
-                }
-                var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                if (rainfall != null)
-                {
-                    model.Rainfall = (int)Math.Round(rainfall);
-                }
-                if (model.Rainfall > 0)
-                {
-                    if (model.IsPostCodeChanged)
-                    {
-                        model.ClimateDataPostCode = null;
-                    }
-                    HttpContext.Session.SetObjectAsJson("FarmData", model);
-                    return RedirectToAction("Rainfall");
-                }
-            }
-            else if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
-            {
-                return RedirectToAction("Rainfall");
-            }
-            return View(model);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ClimatePostCode(FarmViewModel model)
-        {
-            if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
-            {
-                ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
-            }
-
-            if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
-            {
-                FarmViewModel? farmView = null;
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    farmView = JsonConvert.DeserializeObject<FarmViewModel>(HttpContext.Session.GetString("FarmData"));
-                }
-                bool ClimateDataPostCodeChange = false;
-                if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
-                {
-                    ClimateDataPostCodeChange = true;
-                }
-                if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
+                if (model.Rainfall == 0 || model.Rainfall == null)
                 {
                     string firstHalfPostcode = string.Empty;
-                    if (!model.ClimateDataPostCode.Contains(" "))
+                    if (!model.Postcode.Contains(" "))
                     {
-                        firstHalfPostcode = model.ClimateDataPostCode.Substring(0, model.ClimateDataPostCode.Length - 3);
+                        firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
                     }
                     else
                     {
-                        string[] climatePostCode = model.ClimateDataPostCode.Split(' ');
-                        firstHalfPostcode = climatePostCode[0];
+                        string[] postcode = model.Postcode.Split(' ');
+                        firstHalfPostcode = postcode[0];
                     }
                     var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
                     if (rainfall != null)
                     {
                         model.Rainfall = (int)Math.Round(rainfall);
                     }
-                    if (model.Rainfall == null || model.Rainfall == 0)
+                    if (model.Rainfall > 0)
                     {
-                        ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                        if (model.IsPostCodeChanged)
+                        {
+                            model.ClimateDataPostCode = null;
+                        }
+                        SetFarmToSession(model);
+                        return RedirectToAction("Rainfall");
                     }
                 }
-            }
-            if (!ModelState.IsValid)
-            {
+                else if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
+                {
+                    return RedirectToAction("Rainfall");
+                }
                 return View(model);
             }
-            HttpContext.Session.SetObjectAsJson("FarmData", model);
-            return RedirectToAction("Rainfall");
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in ClimatePostCode() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClimatePostCode(FarmViewModel model)
+        {
+            _logger.LogTrace($"Farm Controller : ClimatePostCode() action called");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
+                {
+                    ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
+                {
+                    FarmViewModel? farmView = null;
+                    farmView=GetFarmFromSession();
+                    bool ClimateDataPostCodeChange = false;
+                    if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
+                    {
+                        ClimateDataPostCodeChange = true;
+                    }
+                    if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
+                    {
+                        string firstHalfPostcode = string.Empty;
+                        if (!model.ClimateDataPostCode.Contains(" "))
+                        {
+                            firstHalfPostcode = model.ClimateDataPostCode.Substring(0, model.ClimateDataPostCode.Length - 3);
+                        }
+                        else
+                        {
+                            string[] climatePostCode = model.ClimateDataPostCode.Split(' ');
+                            firstHalfPostcode = climatePostCode[0];
+                        }
+                        var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                        if (rainfall != null)
+                        {
+                            model.Rainfall = (int)Math.Round(rainfall);
+                        }
+                        if (model.Rainfall == null || model.Rainfall == 0)
+                        {
+                            ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                        }
+                    }
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                SetFarmToSession(model);
+                return RedirectToAction("Rainfall");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in ClimatePostCode() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
 
         }
         [HttpGet]
         public async Task<IActionResult> Rainfall()
         {
             _logger.LogTrace($"Farm Controller : Rainfall() action called");
-            FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
+            try
             {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            if (model == null)
-            {
-                model = new FarmViewModel();
-            }
-            if (model.Rainfall == 0 || model.Rainfall == null)
-            {
-                string firstHalfPostcode = string.Empty;
-                if (!model.Postcode.Contains(" "))
+                FarmViewModel? model = null;
+                model = GetFarmFromSession();
+                if (model == null)
                 {
-                    firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
+                    return RedirectToAction("FarmList", "Farm");
                 }
-                else
+                if (model == null)
                 {
-                    string[] postcode = model.Postcode.Split(' ');
-                    firstHalfPostcode = postcode[0];
+                    model = new FarmViewModel();
                 }
-                var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                if (rainfall != null)
+                if (model.Rainfall == 0 || model.Rainfall == null)
                 {
-                    model.Rainfall = (int)Math.Round(rainfall);
+                    string firstHalfPostcode = string.Empty;
+                    if (!model.Postcode.Contains(" "))
+                    {
+                        firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
+                    }
+                    else
+                    {
+                        string[] postcode = model.Postcode.Split(' ');
+                        firstHalfPostcode = postcode[0];
+                    }
+                    var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    if (rainfall != null)
+                    {
+                        model.Rainfall = (int)Math.Round(rainfall);
+                    }
+                    SetFarmToSession(model);
                 }
-                HttpContext.Session.SetObjectAsJson("FarmData", model);
-            }
 
-            return View(model);
+                return View(model);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in Rainfall() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in Rainfall() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
 
         }
 
@@ -677,7 +774,7 @@ namespace NMP.Portal.Controllers
                 return View("Rainfall", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -689,11 +786,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : RainfallManual() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -741,7 +835,7 @@ namespace NMP.Portal.Controllers
                 return View("RainfallManual", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -753,11 +847,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : NVZ() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -766,7 +857,7 @@ namespace NMP.Portal.Controllers
                 if (model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
                 {
                     model.NVZFields = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
-                    HttpContext.Session.SetObjectAsJson("FarmData", model);
+                    SetFarmToSession(model);
                     return RedirectToAction("Elevation");
                 }
             }
@@ -788,7 +879,7 @@ namespace NMP.Portal.Controllers
                 return View("NVZ", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -801,11 +892,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Elevation() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -827,7 +915,7 @@ namespace NMP.Portal.Controllers
                 return View("Elevation", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
                 return RedirectToAction("CheckAnswer");
@@ -841,17 +929,11 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : Organic() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            //model.IsCheckAnswer = false;
-            //string updatedSessionData = JsonConvert.SerializeObject(model);
-            //_httpContextAccessor.HttpContext.Session.SetString("FarmData", updatedSessionData);
             return View(model);
 
         }
@@ -869,7 +951,7 @@ namespace NMP.Portal.Controllers
                 return View("Organic", farm);
             }
 
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            SetFarmToSession(farm);
 
             return RedirectToAction("CheckAnswer");
         }
@@ -878,11 +960,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : CheckAnswer({q}) action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -902,7 +981,7 @@ namespace NMP.Portal.Controllers
             {
                 model.EncryptedIsUpdate = q;
             }
-            HttpContext.Session.SetObjectAsJson("FarmData", model);
+            SetFarmToSession(model);
 
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -992,10 +1071,15 @@ namespace NMP.Portal.Controllers
                 HttpContext.Session.Remove("AddressList");
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in CheckAnswer() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
             catch (Exception ex)
             {
-                TempData["AddFarmError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1003,11 +1087,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : BackCheckAnswer() action called");
             FarmViewModel? model = null;
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -1023,7 +1104,7 @@ namespace NMP.Portal.Controllers
             else
             {
                 model.IsCheckAnswer = false;
-                HttpContext.Session.SetObjectAsJson("FarmData", model);
+                SetFarmToSession(model);
                 return RedirectToAction("Organic");
             }
 
@@ -1141,10 +1222,15 @@ namespace NMP.Portal.Controllers
                     }
                 }
             }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError($"Farm Controller : HttpRequestException in FarmSummary() action : {hre.Message}, {hre.StackTrace}");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in FarmSummary() action : {ex.Message}, {ex.StackTrace}");
-                TempData["Error"] = ex.Message;
+                _logger.LogError($"Farm Controller : Exception in FarmSummary() action : {ex.Message}, {ex.StackTrace}");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
 
@@ -1171,7 +1257,6 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
@@ -1211,17 +1296,20 @@ namespace NMP.Portal.Controllers
 
                         bool update = true;
                         farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
-                        HttpContext.Session.SetObjectAsJson("FarmData", farmData);
+                        SetFarmToSession(farmData);
                     }
-
                 }
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError($"Farm Controller : HttpRequestException in FarmDetails() action : {hre.Message}, {hre.StackTrace}");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}");
-                TempData["Error"] = ex.Message;
+                _logger.LogError($"Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
             return View(farmData);
         }
 
@@ -1303,7 +1391,6 @@ namespace NMP.Portal.Controllers
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
                     return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
-                    return View(farm);
                 }
                 string success = _dataProtector.Protect("true");
                 farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
@@ -1313,10 +1400,15 @@ namespace NMP.Portal.Controllers
                 string isUpdate = _dataProtector.Protect("true");
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
             }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmUpdate() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
             catch (Exception ex)
             {
-                TempData["AddFarmError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                _logger.LogError(ex, "Farm Controller : Exception in FarmUpdate() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1326,11 +1418,8 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : FarmRemove() action called");
             FarmViewModel? model = new FarmViewModel();
-            if (HttpContext.Session.Keys.Contains("FarmData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-            }
-            else
+            model = GetFarmFromSession();
+            if (model==null)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
@@ -1343,63 +1432,72 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FarmRemove(FarmViewModel farm)
         {
             _logger.LogTrace($"Farm Controller : FarmRemove() post action called");
-            if (farm.FarmRemove == null)
+            try
             {
-                ModelState.AddModelError("FarmRemove", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-            if (!ModelState.IsValid)
-            {
-                return View("FarmRemove", farm);
-            }
-            if (!farm.FarmRemove.Value)
-            {
-                return RedirectToAction("FarmList");
-            }
-            else
-            {
-                int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                (string message, Error error) = await _farmService.DeleteFarmByIdAsync(id);
-                if (!string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["AddFarmError"] = error.Message;
-                    return View(farm);
-                }
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    //string success = _dataProtector.Protect("true");
-                    string name = _dataProtector.Protect(farm.Name);
-                    HttpContext.Session.Remove("FarmData");
 
-                    return RedirectToAction("FarmList", new { q = name });
+                if (farm.FarmRemove == null)
+                {
+                    ModelState.AddModelError("FarmRemove", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                if (!ModelState.IsValid)
+                {
+                    return View("FarmRemove", farm);
+                }
+                if (!farm.FarmRemove.Value)
+                {
+                    return RedirectToAction("FarmList");
+                }
+                else
+                {
+                    int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+                    (string message, Error error) = await _farmService.DeleteFarmByIdAsync(id);
+                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        TempData["AddFarmError"] = error.Message;
+                        return View(farm);
+                    }
+                    if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        string name = _dataProtector.Protect(farm.Name);
+                        RemoveFarmSession();
+
+                        return RedirectToAction("FarmList", new { q = name });
+                    }
+                }
+                return View(farm);
             }
-            return View(farm);
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmRemove() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Farm Controller : Exception in FarmRemove() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+
+            }
 
         }
         [HttpGet]
         public IActionResult Cancel()
         {
             _logger.LogTrace("Farm Controller : Cancel() action called");
-            FarmViewModel model = new FarmViewModel();
+            FarmViewModel? model = new FarmViewModel();
             try
             {
-                if (HttpContext.Session.Keys.Contains("FarmData"))
-                {
-                    model = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
-                }
-                else
+                model = GetFarmFromSession();
+                if (model==null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
             }
             catch (Exception ex)
             {
                 _logger.LogTrace($"farm Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
-                TempData["AddFarmError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
             return View(model);
         }
 
@@ -1422,11 +1520,31 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                HttpContext?.Session.Remove("FarmData");                
+                HttpContext?.Session.Remove("FarmData");
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
 
             }
 
         }
+
+        private FarmViewModel? GetFarmFromSession()
+        {
+            if (HttpContext.Session.Keys.Contains("FarmData"))
+            {
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+            }
+            return null;
+        }
+
+        private void SetFarmToSession(FarmViewModel farm)
+        {
+            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+        }
+
+        private void RemoveFarmSession()
+        {
+            HttpContext.Session.Remove("FarmData");
+        }
+
     }
 }

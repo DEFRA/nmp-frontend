@@ -223,8 +223,7 @@
     <value>Home page</value>
   </data>
   <data name="lblHowManyFieldsInNVZ" xml:space="preserve">
-    <value>How many fields at {0}
-are in a Nitrate Vulnerable Zone (NVZ)?</value>
+    <value>How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
     <value>If you have more than one holding, it's best to add a separate farm for each.</value>
@@ -1979,7 +1978,7 @@ cubic metres per hectare  not set</value>
     <value>This application will take you over the organic manure nitrogen field limit</value>
   </data>
   <data name="MsgIfOrganicManureNMaxLimitExceed" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg. </value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that the total amount of nitrogen from all organic manures you apply in any 12 month period on any single hectare of your land must not exceed 250kg.</value>
   </data>
   <data name="MsgApplicationDateEnteredIsInsideClosedPeriod" xml:space="preserve">
     <value>The application date you entered is inside your closed spreading period for applying high readily available nitrogen organic manure</value>
@@ -2770,9 +2769,6 @@ cubic metres per hectare  not set</value>
   <data name="lblWhatIsTheNameOfTheMaterial" xml:space="preserve">
     <value>What is the name of the {0} material?</value>
   </data>
-  <data name="lblAddAnalysisValuesForMixedManure" xml:space="preserve">
-    <value>Add analysis values for Mixed manure</value>
-  </data>
   <data name="lblMixedManure" xml:space="preserve">
     <value>Mixed manure</value>
   </data>
@@ -2798,7 +2794,7 @@ cubic metres per hectare  not set</value>
     <value>Farming Rules for Water</value>
   </data>
   <data name="lblHasBeenUsedForGrassInAnyOfTheLast3Year" xml:space="preserve">
-    <value>Has {0} been used for grass in any of the the last 3 years?</value>
+    <value>Has {0} been used for grass in any of the last 3 years?</value>
   </data>
   <data name="lblHasGrassInLastThreeYear" xml:space="preserve">
     <value>Has grass in last three year</value>
@@ -3140,7 +3136,7 @@ cubic metres per hectare  not set</value>
     <value>What is the nearest postcode?</value>
   </data>
   <data name="lblClimateParagraphFirst" xml:space="preserve">
-    <value>We can't find weather data for {0}.You can find rainfall and other weather information by entering a postcode near to {1} Farm.</value>
+    <value>We can't find weather data for {0}. You can find rainfall and other weather information by entering a postcode near to {1} Farm.</value>
   </data>
   <data name="lblClimateParagraphFourth" xml:space="preserve">
     <value>(open in a new window)</value>
@@ -3233,7 +3229,7 @@ cubic metres per hectare  not set</value>
     <value>NMPT API service has blocked your access, try again later.</value>
   </data>
   <data name="MsgNmptServiceNotAvailable" xml:space="preserve">
-    <value>NMPT API service is not available at the moment, try again later .</value>
+    <value>NMPT API service is not available at the moment, try again later.</value>
   </data>
   <data name="MsgRrefreshTokenNotReceived" xml:space="preserve">
     <value>Refresh Token not received</value>
@@ -3525,10 +3521,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblServiceReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
-  </data>
-  <data name="lblNov2025EnglandWalesAndScotlandFullServiceLive" xml:space="preserve">
-    <value>November 2025 - England, Wales and Scotland full service
-live</value>
   </data>
   <data name="lblNVZComplianceWarningMessages" xml:space="preserve">
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
@@ -4128,7 +4120,7 @@ live</value>
     <value>Grass growth class</value>
   </data>
   <data name="lblNoEnterADifferentTargetYieldForEachFields" xml:space="preserve">
-    <value>No, Enter a different target yield for each fields</value>
+    <value>No, enter a different target yield for each fields</value>
   </data>
   <data name="lblTargetDryMatterYieldForField" xml:space="preserve">
     <value>Target dry matter yield for {0}</value>
@@ -4146,7 +4138,7 @@ live</value>
     <value>What is the total target dry matter yield for {0} in {1}?</value>
   </data>
   <data name="lblYesEnterTheSameTargetYieldForTheseFields" xml:space="preserve">
-    <value>Yes, Enter the same target yield for these fields</value>
+    <value>Yes, enter the same target yield for these fields</value>
   </data>
   <data name="lblPageNotFoundPage" xml:space="preserve">
     <value>Page not found – Plan and record nutrient applications – GOV.UK</value>
@@ -5397,7 +5389,7 @@ live</value>
     <value>Area of holding inside or outside of an NVZ</value>
   </data>
   <data name="lblLivestockReportContentSix" xml:space="preserve">
-    <value> Livestock manure total nitrogen (N) capacity (per year)</value>
+    <value>Livestock manure total nitrogen (N) capacity (per year)</value>
   </data>
   <data name="lblLivestockReportContentSeven" xml:space="preserve">
     <value>Area inside an NVZ</value>
@@ -5782,9 +5774,6 @@ livestock manure.</value>
   <data name="lblLoadingOverlayContentOne" xml:space="preserve">
     <value>Loading...</value>
   </data>
-  <data name="lblEnterTheDetailsFor" xml:space="preserve">
-    <value>Enter the details for {0}</value>
-  </data>
   <data name="lblAHDBNutrientManagementGuide" xml:space="preserve">
     <value>The AHDB Nutrient Management Guide (RB209) recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
@@ -5879,7 +5868,7 @@ livestock manure.</value>
     <value>{0}% of the year</value>
   </data>
   <data name="lblKgPer1000PlacesPerYear" xml:space="preserve">
-    <value>{0}kg per 1,000 places, per year</value>
+    <value>{0} kg per 1,000 places, per year</value>
   </data>
   <data name="lblKgPerPlacesPerYear" xml:space="preserve">
     <value>{0}kg per places, per year</value>
@@ -7023,5 +7012,11 @@ livestock manure.</value>
   </data>
   <data name="lblPrivacyNotice" xml:space="preserve">
     <value>Privacy notice</value>
+  </data>
+  <data name="lblEnterTheDetailsFor" xml:space="preserve">
+    <value>Enter the details for {0}</value>
+  </data>
+  <data name="MsgAuthenticationFailedOrSessionExpired" xml:space="preserve">
+    <value>Authentication failed or session expired.</value>
   </data>
 </root>
