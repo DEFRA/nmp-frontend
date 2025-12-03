@@ -169,7 +169,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"/>
                 @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MoistureTypeId"/> *@
                 @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WindspeedID"/> *@
                 @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"/> *@
@@ -338,6 +338,7 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureTypeName" value="@Model.OrganicManures[i].ManureTypeName"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IsGrass" value="@Model.OrganicManures[i].IsGrass" />
 
                     }
                 }
@@ -375,6 +376,21 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
                     }
                 }
+            @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+            {
+                @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                {
+
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
+                }
+            }
             </div>
            
                 <govuk-summary-list>
@@ -385,7 +401,7 @@
                                 @Resource.lblWhichFieldsWouldYouLikeToPlan
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @Model.FieldGroupName
+                                @Model.CropGroupName
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="OrganicManure">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblWhichFieldsWouldYouLikeToPlan</span></govuk-summary-list-row-action>
@@ -561,7 +577,7 @@
                     }
                     @if (Model.IsAnyCropIsGrass.HasValue && Model.IsAnyCropIsGrass.Value)
                     {
-                        @if (Model.GrassCropCount.HasValue && Model.GrassCropCount > 1)
+                        @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1&&Model.NeedToShowSameDefoliationForAll)
                         {
                             <govuk-summary-list-row class=@((!Model.IsSameDefoliationForAll.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -582,23 +598,23 @@
                         @if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value)
                         {
                             bool renderDefoliation = false;
-                            @foreach (var organic in Model.OrganicManures)
+                            @foreach (var defoliation in Model.DefoliationList)
                             {
                                 @if (!renderDefoliation)
                                 {
-                                    <govuk-summary-list-row class=@((!organic.Defoliation.HasValue)?"govuk-error-message":"")>
+                                    <govuk-summary-list-row class=@((!defoliation.Defoliation.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
                                             @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
                                             {
                                                @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
                                             }
                                             else{
-                                                @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, organic.FieldName)
+                                                @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
                                             }
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
 
-                                            @(!string.IsNullOrWhiteSpace(organic.DefoliationName) ? organic.DefoliationName : Resource.lblNotSet)
+                                            @(defoliation.Defoliation.HasValue ? defoliation.DefoliationName : Resource.lblNotSet)
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="OrganicManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblChange
@@ -608,7 +624,7 @@
                                                      @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
                                                   }
                                                   else{
-                                                      @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, organic.FieldName)
+                                                      @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
                                                   }
                                                </span>
                                             </govuk-summary-list-row-action>
@@ -620,19 +636,19 @@
                         }
                         else
                         {
-                            @foreach (var organic in Model.OrganicManures)
+                           @foreach (var defoliation in Model.DefoliationList)
                             {
-                                <govuk-summary-list-row class=@((!organic.Defoliation.HasValue)?"govuk-error-message":"")>
+                                <govuk-summary-list-row class=@((!defoliation.Defoliation.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, organic.FieldName)
+                                        @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
                                     </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>                                        
-                                        @(!string.IsNullOrWhiteSpace(organic.DefoliationName) ? organic.DefoliationName : Resource.lblNotSet)
+                                    <govuk-summary-list-row-value>
+                                        @(defoliation.Defoliation.HasValue? defoliation.DefoliationName : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="OrganicManure" asp-route-q="@organic.EncryptedCounter">@Resource.lblChange
+                                        <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="OrganicManure" asp-route-q="@defoliation.EncryptedCounter">@Resource.lblChange
                                             <span class="govuk-visually-hidden">
-                                               @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, organic.FieldName)
+                                               @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
                                             </span>
                                         </govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>

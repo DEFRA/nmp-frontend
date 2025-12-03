@@ -6,9 +6,9 @@ namespace NMP.Portal.Services
 {
     public interface IFertiliserManureService
     {
-        Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId, int? cropOrder);
+        Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder);
         Task<(List<ManureCropTypeResponse>, Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear);
-        Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId);
+        Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName);
         Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations();
         Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id);
 

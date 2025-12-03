@@ -75,7 +75,7 @@ namespace NMP.Portal.ViewModels
         public string? ApplicationMethodName { get; set; }
         public string? IncorporationMethodName { get; set; }
         public string? IncorporationDelayName { get; set; }
-        public string? FieldGroupName { get; set; }
+        public string? CropGroupName { get; set; }
         public string? CropTypeName { get; set; }
         public DateTime? SoilDrainageEndDate { get; set; }
         public int? TotalRainfall { get; set; }
@@ -179,5 +179,7 @@ namespace NMP.Portal.ViewModels
         public string? StartClosedPeriodEndFebWarningHeader { get; set; } = string.Empty;
         public int StartClosedPeriodEndFebWarningCodeID { get; set; }
         public int StartClosedPeriodEndFebWarningLevelID { get; set; }
+        public List<DefoliationList>? DefoliationList { get; set; }
+        public bool IsDoubleCropValueChange { get; set; } = false;
     }
 }

@@ -78,7 +78,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"/>
@@ -173,6 +173,7 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].EncryptedCounter" value="@Model.OrganicManures[i].EncryptedCounter"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IsGrass" value="@Model.OrganicManures[i].IsGrass" />
 
                     }
                 }
@@ -210,8 +211,23 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
                     }
                 }
-            </div>
-            <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+                @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                    {
+
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
+                    }
+                }
+            </div>                
+                    <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
                 
                 <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="false">@Resource.lblDryMatter

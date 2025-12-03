@@ -39,10 +39,9 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O"/>
@@ -71,7 +70,8 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NeedToShowSameDefoliationForAll" value="@Model.NeedToShowSameDefoliationForAll.ToString().ToLower()" />
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
                     @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -110,7 +110,8 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Defoliation" value="@Model.FertiliserManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].DefoliationName" value="@Model.FertiliserManures[i].DefoliationName"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldName" value="@Model.FertiliserManures[i].FieldName"/>
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].IsGrass" value="@Model.FertiliserManures[i].IsGrass" />
                     }
 
                 }
@@ -125,6 +126,21 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
+                    }
+                }
+                @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                    {
+
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
                     }
                 }
             }
