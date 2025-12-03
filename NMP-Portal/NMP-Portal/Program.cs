@@ -71,7 +71,8 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Only send over HTTPS
     options.Cookie.SameSite = SameSiteMode.Strict;// Prevent CSRF
     options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromMinutes(20);  // Session timeout
+    options.IdleTimeout = TimeSpan.FromMinutes(60);  // Session timeout
+    options.IOTimeout = Timeout.InfiniteTimeSpan;
 });
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
@@ -199,15 +200,31 @@ else
 }
 
 app.Use(async (context, next) =>
-{    
+{
     // Do work that doesn't write to the Response.
     if (context.Request.Method is "OPTIONS" or "TRACE" or "HEAD")
     {
         context.Response.StatusCode = 405;
         return;
-    } 
+    }
     await next.Invoke();
     // Do logging or other work that doesn't write to the Response.
+});
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/favicon.ico")
+    {
+        context.Response.Redirect("/assets/rebrand/images/favicon.ico");
+        return;
+    }
+    else if(context.Request.Path == "/favicon.svg")
+    {
+        context.Response.Redirect("/assets/rebrand/images/favicon.svg");
+        return;
+    }
+
+        await next();
 });
 
 app.UseCsp(csp =>

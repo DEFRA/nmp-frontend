@@ -35,10 +35,17 @@ namespace NMP.Portal.Security
 
             services.AddAuthentication(options =>
             {
+                
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie("NMPCookie", cookieOptions =>
+            {
+                // How long your app's cookie is valid
+                cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
+                cookieOptions.SlidingExpiration = true;
             })
             .AddMicrosoftIdentityWebApp(options =>
             {
@@ -59,11 +66,12 @@ namespace NMP.Portal.Security
             cookieOptions =>
             {
                 // How long your app's cookie is valid
-                cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(20); // e.g. 8 hours
+                cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
                 cookieOptions.SlidingExpiration = true;
             })
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
-            .AddInMemoryTokenCaches();
+            .AddInMemoryTokenCaches()            
+            .AddDistributedTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -80,10 +88,10 @@ namespace NMP.Portal.Security
                 options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
                 options.Events.OnRemoteFailure += OnRemoteFailure;
-
+                
             });
             services.AddTokenAcquisition();
-            services.AddInMemoryTokenCaches();
+            //services.AddInMemoryTokenCaches();            
             services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;
