@@ -1817,7 +1817,7 @@ cubic metres per hectare  not set</value>
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
   <data name="lblWhenAreYouApplyingInOrganicfertiliser" xml:space="preserve">
-    <value>When are you applying inorganic fertiliser on the {0} fields?</value>
+    <value>When are you applying inorganic fertiliser on the {0}?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>Inorganic manure duration</value>
@@ -7020,5 +7020,8 @@ livestock manure.</value>
   </data>
   <data name="lblAddAField" xml:space="preserve">
     <value>Add a field</value>
+  </data>
+  <data name="lblGroupNameFieldsWithCropTypeName" xml:space="preserve">
+    <value>{0} fields ({1})</value>
   </data>
 </root>

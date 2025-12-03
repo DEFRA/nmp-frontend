@@ -6118,6 +6118,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} fields ({1}).
+        /// </summary>
+        public static string lblGroupNameFieldsWithCropTypeName {
+            get {
+                return ResourceManager.GetString("lblGroupNameFieldsWithCropTypeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Guidance.
         /// </summary>
         public static string lblGuidance {
@@ -16104,7 +16113,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0} fields?.
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0}?.
         /// </summary>
         public static string lblWhenAreYouApplyingInOrganicfertiliser {
             get {

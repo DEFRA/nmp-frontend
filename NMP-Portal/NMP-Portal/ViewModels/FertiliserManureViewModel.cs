@@ -8,6 +8,7 @@ namespace NMP.Portal.ViewModels
         public string? FieldGroup { get; set; }
         public string? EncryptedFarmId { get; set; }
         public string? EncryptedHarvestYear { get; set; }
+        public string? CropGroupName { get; set; }
         public int? FarmId { get; set; }
         public int? HarvestYear { get; set; }
         public string? FarmName { get; set; }
@@ -17,9 +18,8 @@ namespace NMP.Portal.ViewModels
         public List<string>? FieldList { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
         public bool IsCheckAnswer { get; set; } = false;
-        public string? FieldGroupName { get; set; }
 
-        public string? CropTypeName { get; set; }
+        //public string? CropTypeName { get; set; }
         public string? InOrgnaicManureDuration { get; set; }
         public List<FertiliserManureDataViewModel>? FertiliserManures { get; set; }
 
@@ -78,7 +78,8 @@ namespace NMP.Portal.ViewModels
         public string? ClosedPeriodNitrogenExceedWarningHeader { get; set; } = string.Empty;
         public int ClosedPeriodNitrogenExceedWarningCodeID { get; set; }
         public int ClosedPeriodNitrogenExceedWarningLevelID { get; set; }
+        public List<DefoliationList>? DefoliationList { get; set; }
 
-
+        public bool IsDoubleCropValueChange { get; set; } = false;
     }
 }

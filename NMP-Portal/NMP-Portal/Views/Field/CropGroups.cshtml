@@ -42,7 +42,7 @@
     }
     else
     {
-        if (Model.RecentSoilAnalysisQuestion.Value == true)
+        if (Model.RecentSoilAnalysisQuestion.HasValue&& Model.RecentSoilAnalysisQuestion.Value)
         {
             backAction = "SoilNutrientValue";
         }
