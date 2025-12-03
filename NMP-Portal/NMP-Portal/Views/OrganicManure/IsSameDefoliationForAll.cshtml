@@ -29,13 +29,26 @@
 }
 
 @section BeforeContent {
+    @if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsDoubleCropValueChange) && (!Model.IsManureTypeChange))
+    {
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
+    }
+    else
     @if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
     {
         <govuk-back-link asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-    <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
+        @if (Model.FieldGroup == Resource.lblSelectSpecificFields)
+        {
+            backAction = "Fields";
+        }
+        else
+        {
+            backAction = "FieldGroup";
+        }
+        <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
 }
 <div class="govuk-grid-row">
