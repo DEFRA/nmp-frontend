@@ -3,7 +3,7 @@
 @{
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-    ViewData["Title"] = $"{string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblHowAreYouGoingToApplyTheManure, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer&&Model.IsApplicationMethodChange?"CheckAnswer":"ManureApplyingDate") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -223,8 +223,7 @@
                         @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOption
-                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblApplicationMethods) *@
+                        @Resource.lblSelectOneOption                        
                     </govuk-radios-hint>
                     @if (ViewBag.ApplicationMethodList != null && ViewBag.ApplicationMethodList.Count > 0)
                     {
