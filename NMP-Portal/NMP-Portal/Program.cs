@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Identity.Web.UI;
+using NMP.Portal.Models;
 using NMP.Portal.Security;
 using NMP.Portal.Services;
 using OpenTelemetry.Metrics;
@@ -119,6 +120,7 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+builder.Services.AddScoped<FarmContext>();
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
@@ -174,6 +176,7 @@ builder.Services.AddCsp(nonceByteAmount: 32);
 var app = builder.Build();
 app.UseGovUkFrontend();
 app.UseMiddleware<SecurityHeadersMiddleware>();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -252,12 +255,18 @@ app.UseCsp(csp =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseMiddleware<FarmContextMiddleware>();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//app.MapControllerRoute(
+//    name: "farmDetails",
+//    pattern: "farm/FarmSummary/{farmId}",
+//    defaults: new { controller = "Farm", action = "FarmSummary" });
 
 app.Run();
 

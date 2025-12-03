@@ -956,9 +956,9 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("CheckAnswer");
         }
         [HttpGet]
-        public IActionResult CheckAnswer(string? q)
+        public IActionResult CheckAnswer(string id,string? q)
         {
-            _logger.LogTrace($"Farm Controller : CheckAnswer({q}) action called");
+            _logger.LogTrace($"Farm Controller : CheckAnswer({id}) action called");
             FarmViewModel? model = null;
             model = GetFarmFromSession();
             if (model==null)
@@ -969,14 +969,12 @@ namespace NMP.Portal.Controllers
             {
                 model = new FarmViewModel();
             }
-
             if (string.IsNullOrWhiteSpace(model.FullAddress))
             {
                 model.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.Address1, model.Address2 != null ? model.Address2 + "," : string.Empty, model.Address3, model.Address4, model.Postcode);
             }
 
-            model.IsCheckAnswer = true;
-            //model.OldPostcode = model.Postcode;
+            model.IsCheckAnswer = true;            
             if (q != null)
             {
                 model.EncryptedIsUpdate = q;
@@ -986,7 +984,6 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q))
             {
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FarmDataBeforeUpdate", model);
-
             }
             var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FarmViewModel>("FarmDataBeforeUpdate");
 
@@ -1110,11 +1107,11 @@ namespace NMP.Portal.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r)
         {
             _logger.LogTrace($"Farm Controller : FarmSummary() action called");
-            string farmId = string.Empty;
+            string fId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
             {
                 ViewBag.Success = _dataProtector.Unprotect(q);
@@ -1147,33 +1144,19 @@ namespace NMP.Portal.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(id))
                 {
-                    farmId = _dataProtector.Unprotect(id);
+                    fId = _dataProtector.Unprotect(id);
 
-                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                    ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
-                    var identity = user?.Identity as ClaimsIdentity;
-
-                    var existingCurrentFarmNameClaim = identity.FindFirst("current_farm_name");
-                    if (existingCurrentFarmNameClaim != null)
-                    {
-                        identity.RemoveClaim(existingCurrentFarmNameClaim);
-                    }
+                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(fId));
+                    
                     _httpContextAccessor.HttpContext?.Session.SetString("current_farm_name", farm.Name ?? "");
                     _httpContextAccessor.HttpContext?.Session.SetString("current_farm_id", id);
 
-                    identity?.AddClaim(new Claim("current_farm_name", farm.Name ?? ""));
-                    var existingCurrentFarmIdClaim = identity?.FindFirst("current_farm_id");
-                    if (existingCurrentFarmIdClaim != null)
-                    {
-                        identity?.RemoveClaim(existingCurrentFarmIdClaim);
-                    }
-                    identity?.AddClaim(new Claim("current_farm_id", id ?? ""));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
                         return RedirectToAction("FarmList");
                     }
-                    (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(farm.ID);
+                   (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(farm.ID);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1208,9 +1191,9 @@ namespace NMP.Portal.Controllers
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                        ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(fId));
                     }
-                    List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(farmId), 0);
+                    List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(fId), 0);
                     planSummaryResponse.RemoveAll(x => x.Year == 0);
                     if (planSummaryResponse.Count() > 0)
                     {

@@ -29,7 +29,6 @@
         case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
             fieldsAbove300m = Resource.lblAllOfTheFields;
             break;
-
     }
 }
 
@@ -44,8 +43,6 @@
     @section BeforeContent {
     <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
     }
-
-
     <h1 class="govuk-heading-l">@Model.Name</h1>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -91,22 +88,9 @@
                     </tr>
                 </tbody>
             </table>
-
-            <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Farm" asp-route-q=@Model.EncryptedIsUpdate>@Resource.lblUpdateFarmInformation</a></p>
-
-            <p class="govuk-body margin-bottom-forty"><a asp-action="FarmRemove" asp-controller="Farm">@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
-
-
-            @* <hr class="big_seperator">
-
-            <h2 class="govuk-heading-m">@Resource.lblBusinessInformation</h2>
-
-            <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyBusinessInformation</p>
-            <p class="govuk-body"><a href="#">@Resource.lblAddBusinessInformation</a></p> *@
-
+            <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Farm" asp-route-id="@Model.EncryptedFarmId" asp-route-q=@Model.EncryptedIsUpdate>@Resource.lblUpdateFarmInformation</a></p>
+            <p class="govuk-body margin-bottom-forty"><a asp-action="FarmRemove" asp-controller="Farm" asp-route-id=@Model.EncryptedFarmId>@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
         </div>
     </div>
-
-
 }
 
