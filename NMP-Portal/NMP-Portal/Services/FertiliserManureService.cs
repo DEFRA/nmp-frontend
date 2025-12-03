@@ -18,7 +18,7 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId, int? cropOrder)
+        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
         {
             List<int> managementIds = new List<int>();
             Error error = null;
@@ -28,24 +28,15 @@ namespace NMP.Portal.Services
                 string url = string.Empty;
                 //if (cropTypeId != null)
                 //{
-                url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds, cropOrder);
+                url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
                 if (cropOrder == null)
                 {
                     url = url.Replace("&cropOrder=", "");
                 }
-                if (cropTypeId == null)
+                if (string.IsNullOrWhiteSpace(cropGroupName))
                 {
-                    url = url.Replace("cropTypeId=&", "");
+                    url = url.Replace("cropGroupName=&", "");
                 }
-                //}
-                //else
-                //{
-                //    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI, harvestYear, fieldIds, cropOrder);
-                //    if (cropTypeId == null)
-                //    {
-                //        url = url.Replace("cropTypeId=&", "");
-                //    }
-                //}
                 var response = await httpClient.GetAsync(url);
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -125,7 +116,7 @@ namespace NMP.Portal.Services
             }
             return (cropTypeList, error);
         }
-        public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId)
+        public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
         {
             List<CommonResponse> fieldResponses = new List<CommonResponse>();
             Error error = null;
@@ -133,9 +124,9 @@ namespace NMP.Portal.Services
             {
                 HttpClient httpClient = await GetNMPAPIClient();
                 string url = string.Empty;
-                if (cropTypeId != null)
+                if (!string.IsNullOrWhiteSpace(cropGroupName))
                 {
-                    url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, farmId);
+                    url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
                 }
                 else
                 {
