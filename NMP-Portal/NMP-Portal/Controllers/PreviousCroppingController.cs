@@ -930,6 +930,15 @@ namespace NMP.Portal.Controllers
             else
             {
                 TempData["Error"] = error.Message;
+                List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
+                ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
+                if (model.CropGroupID != null)
+                {
+                    ViewBag.CropGroupName = await _fieldService.FetchCropGroupById(model.CropGroupID.Value);
+                }
+
+                List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
+                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.SoilNitrogenSupplyItemID)?.Name;
             }
 
 
