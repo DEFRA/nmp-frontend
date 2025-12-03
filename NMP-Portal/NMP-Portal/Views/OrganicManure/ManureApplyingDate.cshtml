@@ -2,29 +2,9 @@
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-    string pageHeader = (Model.FieldList?.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName));
+    string pageHeader = (Model.FieldList?.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName, Model.FieldName));
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
     var backAction = "";
-    // if (Model.IsDoubleCropAvailable)
-    // {
-    //     backAction = "DoubleCrop";
-    // }
-    // else
-    // {
-    //     if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
-    //     {
-    //         backAction = "ManureGroup";
-    //     }
-    //     else if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
-    //     {
-    //         backAction = "OtherMaterialName";
-    //     }
-    //     else
-    //     {
-    //         backAction = "ManureType";
-    //     }
-    // }
-
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsManureTypeChange) && (!Model.IsFieldGroupChange)) ? "CheckAnswer" : "backFromManureApplyingDate") asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>

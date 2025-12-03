@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials);
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {title}";
 }
@@ -230,8 +230,7 @@
                         @string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOption
-                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblIncorporationMethods) *@
+                        @Resource.lblSelectOneOption                       
                     </govuk-radios-hint>
                     @if (ViewBag.IncorporationMethod != null && ViewBag.IncorporationMethod.Count > 0)
                     {
@@ -246,14 +245,10 @@
                                 <govuk-radios-divider>@Resource.lblOr</govuk-radios-divider>
                                 <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
                             }
-
                         }
-
                     }
-
                 </govuk-radios-fieldset>
             </govuk-radios>
-
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="IncorporationMethod">
                 @Resource.lblContinue
             </govuk-button>

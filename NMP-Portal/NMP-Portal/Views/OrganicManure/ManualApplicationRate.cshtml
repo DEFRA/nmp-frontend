@@ -347,16 +347,13 @@
 
                 <govuk-input asp-for="@Model.ApplicationRate" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblEnterTheApplicationRate
-                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
-                </govuk-input-label>
-                      @*<govuk-input-hint>@Resource.lblEnterANumberFrom0To250</govuk-input-hint>*@
-
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
+                    </govuk-input-label> 
                     <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
                 </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="ManualApplicationRate">
                 @Resource.lblContinue
             </govuk-button>
-
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
