@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NMP.Portal.Enums;
 using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Helpers
@@ -112,6 +114,48 @@ namespace NMP.Portal.Helpers
                 new { statusCode }
             );
         }
-        
+
+        public static List<SelectListItem> NormalizeDefoliationText(List<SelectListItem> items)
+        {
+            return items.Select(i =>
+            {
+                var parts = i.Text.Split('-');
+                if (parts.Length == 2)
+                {
+                    var left = parts[0].Trim();
+                    var right = Capitalize(parts[1]);
+                    i.Text = $"{left} - {right}";
+                }
+                return i;
+            }).ToList();
+        }
+
+        public static string Capitalize(string text)
+        {
+            text = text.Trim();
+            return char.ToUpper(text[0]) + text[1..];
+        }
+
+        public static List<SelectListItem> GetCommonDefoliations(List<List<SelectListItem>> groups)
+        {
+            var commonText = groups
+                .Select(l => l.Select(i => i.Text).ToList())
+                .Aggregate((p, n) => p.Intersect(n).ToList());
+
+            return groups
+                .SelectMany(i => i)
+                .Where(i => commonText.Contains(i.Text))
+                .GroupBy(i => i.Text)
+                .Select(g => g.First())
+                .ToList();
+        }
+
+        public static string FormatDefoliationLabel(int num, string[] names)
+        {
+            if (num > 0 && num <= names.Length)
+                return $"{Enum.GetName(typeof(PotentialCut), num)} - {names[num - 1]}";
+
+            return num.ToString();
+        }
     }
 }
