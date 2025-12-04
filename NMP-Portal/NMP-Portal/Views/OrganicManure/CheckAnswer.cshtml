@@ -1169,8 +1169,9 @@
                             </govuk-summary-list-row-actions>
                         }
                     </govuk-summary-list-row>
-
-                    <govuk-summary-list-row class=@((!Model.IncorporationDelay.HasValue)?"govuk-error-message":"")>
+                    @if(Model.IncorporationMethod != (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
+                    {
+                        <govuk-summary-list-row class=@((!Model.IncorporationDelay.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, Model.ManureTypeName)
                         </govuk-summary-list-row-key>
@@ -1188,6 +1189,8 @@
                             </govuk-summary-list-row-actions>
                         }
                     </govuk-summary-list-row>
+                    }
+                    
                    
                     @if (!isAutumnNUptakeZero)
                     {

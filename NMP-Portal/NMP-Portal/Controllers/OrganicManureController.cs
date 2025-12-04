@@ -9592,7 +9592,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"OrganicManure Controller : IsSameDefoliationForAll() action called");
             Error error = new Error();
 
-            OrganicManureViewModel model = new OrganicManureViewModel();
+            OrganicManureViewModel model = new();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
             {
                 model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
@@ -10281,28 +10281,21 @@ namespace NMP.Portal.Controllers
                     foreach (var organicManure in model.OrganicManures)
                     {
                         (ManagementPeriod managementPeriod, Error error) = await _cropService.FetchManagementperiodById(organicManure.ManagementPeriodID);
-
-
                         if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
-
                             if (model.IsOrgManureNfieldLimitWarning)
                             {
                                 WarningMessage warningMessage = new WarningMessage();
-
                                 warningMessage.FieldID = organicManure.FieldID ?? 0;
                                 warningMessage.CropID = managementPeriod.CropID ?? 0;
                                 warningMessage.JoiningID = null;
                                 warningMessage.WarningLevelID = model.NmaxWarningLevelID;
                                 warningMessage.WarningCodeID = model.NmaxWarningCodeID;
-
                                 warningMessage.Header = model.NmaxWarningHeader;
                                 warningMessage.Para1 = model.NmaxWarningHeading;
                                 warningMessage.Para2 = model.NmaxWarningPara1;
                                 warningMessage.Para3 = model.NmaxWarningPara2;
-
                                 warningMessages.Add(warningMessage);
-
                             }
                             if (model.IsNMaxLimitWarning)
                             {
@@ -10313,30 +10306,25 @@ namespace NMP.Portal.Controllers
                                 warningMessage.JoiningID = null;
                                 warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
                                 warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
-
                                 warningMessage.Header = model.CropNmaxLimitWarningHeader;
                                 warningMessage.Para1 = model.CropNmaxLimitWarningHeading;
                                 warningMessage.Para2 = model.CropNmaxLimitWarningPara1;
                                 warningMessage.Para3 = model.CropNmaxLimitWarningPara2;
-
                                 warningMessages.Add(warningMessage);
                             }
 
                             if (model.IsClosedPeriodWarning)
                             {
                                 WarningMessage warningMessage = new WarningMessage();
-
                                 warningMessage.FieldID = organicManure.FieldID ?? 0;
                                 warningMessage.CropID = managementPeriod.CropID ?? 0;
                                 warningMessage.JoiningID = null;
                                 warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
                                 warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
-
                                 warningMessage.Header = model.ClosedPeriodWarningHeader;
                                 warningMessage.Para1 = model.ClosedPeriodWarningHeading;
                                 warningMessage.Para2 = model.ClosedPeriodWarningPara1;
                                 warningMessage.Para3 = model.ClosedPeriodWarningPara2;
-
                                 warningMessages.Add(warningMessage);
                             }
                             if (model.IsEndClosedPeriodFebruaryWarning)
@@ -10348,12 +10336,10 @@ namespace NMP.Portal.Controllers
                                 warningMessage.JoiningID = null;
                                 warningMessage.WarningLevelID = model.EndClosedPeriodEndFebWarningLevelID;
                                 warningMessage.WarningCodeID = model.EndClosedPeriodEndFebWarningCodeID;
-
                                 warningMessage.Header = model.EndClosedPeriodEndFebWarningHeader;
                                 warningMessage.Para1 = model.EndClosedPeriodEndFebWarningHeading;
                                 warningMessage.Para2 = model.EndClosedPeriodEndFebWarningPara1;
                                 warningMessage.Para3 = model.EndClosedPeriodEndFebWarningPara2;
-
                                 warningMessages.Add(warningMessage);
                             }
                             if (model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
@@ -10365,29 +10351,24 @@ namespace NMP.Portal.Controllers
                                 warningMessage.JoiningID = null;
                                 warningMessage.WarningLevelID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID;
                                 warningMessage.WarningCodeID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID;
-
                                 warningMessage.Header = model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader;
                                 warningMessage.Para1 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading;
                                 warningMessage.Para2 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1;
                                 warningMessage.Para3 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2;
-
                                 warningMessages.Add(warningMessage);
                             }
                             if (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                             {
                                 WarningMessage warningMessage = new WarningMessage();
-
                                 warningMessage.FieldID = organicManure.FieldID ?? 0;
                                 warningMessage.CropID = managementPeriod.CropID ?? 0;
                                 warningMessage.JoiningID = null;
                                 warningMessage.WarningLevelID = model.StartClosedPeriodEndFebWarningLevelID;
                                 warningMessage.WarningCodeID = model.StartClosedPeriodEndFebWarningCodeID;
-
                                 warningMessage.Header = model.StartClosedPeriodEndFebWarningHeader;
                                 warningMessage.Para1 = model.StartClosedPeriodEndFebWarningHeading;
                                 warningMessage.Para2 = model.StartClosedPeriodEndFebWarningPara1;
                                 warningMessage.Para3 = model.StartClosedPeriodEndFebWarningPara2;
-
                                 warningMessages.Add(warningMessage);
                             }
                         }
@@ -10400,163 +10381,111 @@ namespace NMP.Portal.Controllers
             }
             return warningMessages;
         }
+
         private async Task<(List<SelectListItem>, Error?)> GetDefoliationList(OrganicManureViewModel model)
         {
-            var defoliationSelectList = new List<SelectListItem>();
-            Error error = null;
-
-            if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
+            if (model.IsSameDefoliationForAll == true)
             {
-                var allDefoliations = new List<List<SelectListItem>>();
-                var orgGrassList = model.OrganicManures.Where(x => x.IsGrass).ToList();
-
-                foreach (var organicManure in orgGrassList)
-                {
-                    int manId = model.OrganicManures
-                        .Where(x => x.FieldID == organicManure.FieldID)
-                        .Select(x => x.ManagementPeriodID)
-                        .FirstOrDefault();
-
-                    (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(manId);
-                    if (!string.IsNullOrWhiteSpace(error.Message) || managementPeriod == null)
-                        return (defoliationSelectList, error);
-
-                    (var cropList, error) = await _cropService.FetchCropPlanByFieldIdAndYear(
-                        organicManure.FieldID!.Value, model.HarvestYear!.Value);
-
-                    if (!string.IsNullOrWhiteSpace(error.Message) || cropList.Count == 0)
-                        return (defoliationSelectList, error);
-
-                    cropList = cropList.Where(x => x.CropTypeID == (int)CropTypes.Grass).ToList();
-                    if (cropList.Count == 0 || cropList.All(x => x.DefoliationSequenceID == null))
-                        continue;
-
-                    var crop = cropList.First();
-                    int? defoliationSeqId = crop.DefoliationSequenceID;
-                    if (crop.ID == null || defoliationSeqId == null)
-                        continue;
-
-                    (var periodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
-                    if (periodList == null || !string.IsNullOrWhiteSpace(error.Message))
-                        continue;
-
-                    var defoliationList = periodList.Select(x => x.Defoliation.Value).ToList();
-
-                    (var defoliationSeq, error) = await _cropService.FetchDefoliationSequencesById(defoliationSeqId.Value);
-                    if (error != null || defoliationSeq == null)
-                        continue;
-
-                    var parts = defoliationSeq.DefoliationSequenceDescription
-                        .Split(',')
-                        .Select(x => x.Trim())
-                        .ToArray();
-
-                    var listWithNames = defoliationList
-                        .Select(d =>
-                        {
-                            var name = d > 0 && d <= parts.Length
-                                ? $"{Enum.GetName(typeof(PotentialCut), d)} - {parts[d - 1]}"
-                                : d.ToString();
-
-                            return new SelectListItem { Text = name, Value = d.ToString() };
-                        })
-                        .ToList();
-
-                    allDefoliations.Add(listWithNames);
-                }
-
-                if (allDefoliations.Count == 0)
-                    return (defoliationSelectList, null);
-
-                var valueLists = allDefoliations.Select(l => l.Select(i => i.Text).ToList()).ToList();
-                var common = valueLists.Aggregate((p, n) => p.Intersect(n).ToList());
-
-                if (common.Count == 0)
-                    return (defoliationSelectList, null);
-
-                defoliationSelectList = allDefoliations
-                    .SelectMany(l => l)
-                    .Where(i => common.Contains(i.Text))
-                    .GroupBy(i => i.Text)
-                    .Select(g => g.First())
-                    .ToList();
-
-                // Normalize formatting
-                foreach (var item in defoliationSelectList)
-                {
-                    var parts = item.Text.Split('-');
-                    if (parts.Length == 2)
-                    {
-                        var left = parts[0].Trim();
-                        var right = char.ToUpper(parts[1].Trim()[0]) + parts[1].Trim().Substring(1);
-                        item.Text = $"{left} - {right}";
-                    }
-                }
-
-                ViewBag.DefoliationList = defoliationSelectList;
-                return (defoliationSelectList, error);
+                return await GetDefoliationListForAll(model);
             }
 
-            // -----------------------------------------------------------------------
-            // SINGLE FIELD MODE
-            // -----------------------------------------------------------------------
-
-            if (model.DefoliationCurrentCounter < 0)
-                return (defoliationSelectList, null);
-
-            int field = model.DefoliationList[model.DefoliationCurrentCounter].FieldID;
-
-            (var singleCropList, error) = await _cropService.FetchCropPlanByFieldIdAndYear(field, model.HarvestYear!.Value);
-            if (!string.IsNullOrWhiteSpace(error.Message) || singleCropList.Count == 0)
-                return (defoliationSelectList, error);
-
-            singleCropList = singleCropList.Where(x => x.CropTypeID == (int)CropTypes.Grass).ToList();
-            var singleSeqId = singleCropList.FirstOrDefault()?.DefoliationSequenceID;
-
-            if (singleSeqId == null)
-                return (defoliationSelectList, null);
-
-            int cropIdSingle = singleCropList.First().ID!.Value;
-
-            (var mgmtList, error) = await _cropService.FetchManagementperiodByCropId(cropIdSingle, false);
-            if (mgmtList == null)
-                return (defoliationSelectList, error);
-
-            var defols = mgmtList.Select(x => x.Defoliation.Value).ToList();
-
-            (var singleSeq, error) = await _cropService.FetchDefoliationSequencesById(singleSeqId.Value);
-            if (singleSeq == null)
-                return (defoliationSelectList, error);
-
-            var seqParts = singleSeq.DefoliationSequenceDescription
-                .Split(',')
-                .Select(p => p.Trim())
-                .ToArray();
-
-            foreach (int d in defols)
-            {
-                var name = (d > 0 && d <= seqParts.Length)
-                    ? $"{Enum.GetName(typeof(PotentialCut), d)} - {seqParts[d - 1]}"
-                    : d.ToString();
-
-                defoliationSelectList.Add(new SelectListItem { Text = name, Value = d.ToString() });
-            }
-
-            // normalise
-            foreach (var item in defoliationSelectList)
-            {
-                var p = item.Text.Split('-');
-                if (p.Length == 2)
-                {
-                    string left = p[0].Trim();
-                    string right = char.ToUpper(p[1].Trim()[0]) + p[1].Trim().Substring(1);
-                    item.Text = $"{left} - {right}";
-                }
-            }
-
-            ViewBag.DefoliationList = defoliationSelectList;
-            return (defoliationSelectList, error);
+            return await GetDefoliationListSingleMode(model);
         }
+
+        private async Task<(List<SelectListItem>, Error?)> GetDefoliationListForAll(OrganicManureViewModel model)
+        {
+            var defoliationGroups = new List<List<SelectListItem>>();
+            var grassFields = model.OrganicManures.Where(x => x.IsGrass).ToList();
+
+            foreach (var manure in grassFields)
+            {
+                var (list, error) = await GetFieldDefoliationList(model.HarvestYear!.Value, manure.FieldID);
+                if (error != null) return (new List<SelectListItem>(), error);
+                if (list.Any()) defoliationGroups.Add(list);
+            }
+
+            if (!defoliationGroups.Any())
+            {
+                return (new List<SelectListItem>(), null);
+            }               
+
+            var common = Functions.GetCommonDefoliations(defoliationGroups);
+            var result = Functions.NormalizeDefoliationText(common);
+            ViewBag.DefoliationList = result;
+            return (result, null);
+        }
+
+        private async Task<(List<SelectListItem>, Error?)> GetDefoliationListSingleMode(OrganicManureViewModel model)
+        {
+            if (model.DefoliationCurrentCounter < 0)
+            {
+                return (new List<SelectListItem>(), null);
+            }
+
+            int fieldId = model.DefoliationList[model.DefoliationCurrentCounter].FieldID;
+
+            var (list, error) = await GetFieldDefoliationList(model.HarvestYear!.Value, fieldId);
+            if (error != null)
+            {
+                return (new List<SelectListItem>(), error);
+            }
+
+            var normalized = Functions.NormalizeDefoliationText(list);
+            ViewBag.DefoliationList = normalized;
+
+            return (normalized, null);
+        }
+
+        //common helper methods
+        private async Task<(List<SelectListItem>, Error?)> GetFieldDefoliationList(int harvestYear, int? fieldId)
+        {
+            var empty = new List<SelectListItem>();
+            if (!fieldId.HasValue) return (empty, null);
+
+            var (cropList, error) = await _cropService.FetchCropPlanByFieldIdAndYear(fieldId.Value, harvestYear);
+
+            if (HasErrorOrNoGrass(cropList, error))
+                return (empty, error);
+
+            var crop = cropList.First(x => x.CropTypeID == (int)CropTypes.Grass);
+            if (!crop.DefoliationSequenceID.HasValue)
+                return (empty, null);
+
+            return await BuildDefoliationSelectList(crop);
+        }
+
+        private static bool HasErrorOrNoGrass(List<Crop> crops, Error? error)
+        {
+            return !string.IsNullOrWhiteSpace(error?.Message)
+                   || crops == null
+                   || !crops.Any(x => x.CropTypeID == (int)CropTypes.Grass);
+        }
+
+        private async Task<(List<SelectListItem>, Error?)> BuildDefoliationSelectList(Crop crop)
+        {
+            var empty = new List<SelectListItem>();
+
+            var (periods, err) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
+            if (periods == null) return (empty, err);
+
+            var defoNumbers = periods.Select(x => x.Defoliation.Value).ToList();
+
+            var (seq, err2) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            if (seq == null) return (empty, err2);
+
+            var names = seq.DefoliationSequenceDescription.Split(',').Select(p => p.Trim()).ToArray();
+
+            var list = defoNumbers.Select(num => new SelectListItem
+            {
+                Text = Functions.FormatDefoliationLabel(num, names),
+                Value = num.ToString()
+            }).ToList();
+
+            return (list, null);
+        }
+
+
+
         private async Task<(string?, Error?)> GetDefoliationName(OrganicManureViewModel model, int defoliation, int defoliationSequenceID)
         {
             string selectedDefoliation = string.Empty;
