@@ -6622,7 +6622,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How to save your plan as a PDF.
+        ///   Looks up a localized string similar to How to save this report as a PDF.
         /// </summary>
         public static string lblHowtosaveyourplanasaPDF {
             get {
@@ -10754,7 +10754,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;..
+        ///   Looks up a localized string similar to Select &lt;strong&gt;Print or save as a PDF&lt;/strong&gt;, or in your desktop browser, open the menu and select, &lt;strong&gt;Print&lt;/strong&gt;..
         /// </summary>
         public static string lblPrint1 {
             get {
@@ -10763,7 +10763,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy..
+        ///   Looks up a localized string similar to Where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;..
         /// </summary>
         public static string lblPrint2 {
             get {
@@ -10772,7 +10772,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF..
+        ///   Looks up a localized string similar to Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the PDF..
         /// </summary>
         public static string lblPrint3 {
             get {
