@@ -263,9 +263,8 @@ namespace NMP.Portal.Controllers
                                 {
                                     cropList = cropList.Where(x => x.CropOrder == 1).ToList();
                                 }
-                                if (cropList.Count > 0 && cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                if (cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                 {
-
                                     (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
                                     var filteredFertiliserManure = model.FertiliserManures
@@ -407,24 +406,19 @@ namespace NMP.Portal.Controllers
 
                     return View("Views/FertiliserManure/FieldGroup.cshtml", model);
                 }
-                if (cropGroupList.Count > 0)
+                if (cropGroupList.Count > 0 && !model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                 {
-                    if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+                    string cropGroupName = cropGroupList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).Select(x => x.CropGroupName).FirstOrDefault();
+                    model.CropGroupName = selectListItem.Where(x => x.Value == cropGroupName).Select(x => x.Text).First();
+                    
+                    List<string> cropOrderList = cropGroupList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).Select(x => x.CropOrder).ToList();
+                    if (cropOrderList.Count == 1)
                     {
-                        string cropGroupName = cropGroupList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).Select(x => x.CropGroupName).FirstOrDefault();
-                        if (selectListItem != null && selectListItem.Count > 0)
-                        {
-                            model.CropGroupName = selectListItem.Where(x => x.Value == cropGroupName).Select(x => x.Text).First();
-                        }
-                        List<string> cropOrderList = cropGroupList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).Select(x => x.CropOrder).ToList();
-                        if (cropOrderList.Count == 1)
-                        {
-                            model.CropOrder = Convert.ToInt32(cropOrderList.FirstOrDefault());
-                        }
-                        else
-                        {
-                            model.CropOrder = 1;
-                        }
+                        model.CropOrder = Convert.ToInt32(cropOrderList.FirstOrDefault());
+                    }
+                    else
+                    {
+                        model.CropOrder = 1;
                     }
                 }
                 model.IsComingFromRecommendation = false;
@@ -432,14 +426,13 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in FieldGroup() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Farm Controller : Exception in FieldGroup() post action : {ex.Message}, {ex.StackTrace}", ex.Message, ex.StackTrace);
                 TempData["FieldGroupError"] = ex.Message;
                 return View("Views/FertiliserManure/FieldGroup.cshtml", model);
             }
             return RedirectToAction("Fields");
-
-
         }
+
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
@@ -609,8 +602,8 @@ namespace NMP.Portal.Controllers
                                     }
                                     return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
                                 }
-
                             }
+
                             bool anyNewManId = false;
 
                             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
@@ -5384,8 +5377,8 @@ namespace NMP.Portal.Controllers
             }
 
             if (!defoliationGroups.Any())
-            { 
-                return (new List<SelectListItem>(), null); 
+            {
+                return (new List<SelectListItem>(), null);
             }
 
             var commonItems = Functions.GetCommonDefoliations(defoliationGroups);
@@ -5400,7 +5393,7 @@ namespace NMP.Portal.Controllers
             if (model.DefoliationCurrentCounter < 0)
             {
                 return (new List<SelectListItem>(), null);
-            }               
+            }
 
             int fieldId = model.DefoliationList[model.DefoliationCurrentCounter].FieldID;
             var (list, error) = await GetFieldDefoliationList(model, fieldId);

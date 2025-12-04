@@ -7,6 +7,22 @@ namespace NMP.Portal.Helpers
 {
     public static class Functions
     {
+        public static string ExtractFirstHalfPostcode(string postcode)
+        {
+            if (string.IsNullOrWhiteSpace(postcode))
+            {
+                return string.Empty;
+            }
+
+            postcode = postcode.Trim();
+            int spaceIndex = postcode.IndexOf(' ');
+
+            return spaceIndex > 0
+                ? postcode[..spaceIndex]
+                : postcode[..^3]; // remove last 3 characters
+        }
+
+
         public static readonly int[] SpecialManureTypes =
         {
             (int)Enums.ManureTypes.StrawMulch,

@@ -10,6 +10,7 @@ using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using Error = NMP.Portal.ServiceResponses.Error;
 
@@ -88,7 +89,7 @@ namespace NMP.Portal.Controllers
             }
 
             catch (HttpRequestException hre)
-            {
+            {                
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmList() action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
@@ -130,9 +131,7 @@ namespace NMP.Portal.Controllers
             {
                 return View(farm);
             }
-            FarmViewModel? farmView = null;
-            farmView = GetFarmFromSession();
-
+            
             SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
@@ -584,13 +583,9 @@ namespace NMP.Portal.Controllers
 
                 if (rainfallNotAvailable)
                 {
-                    string firstHalfPostcode = ExtractFirstHalfPostcode(model.Postcode);
-
-                    decimal? rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                    if (rainfall.HasValue)
-                    {
-                        model.Rainfall = (int)Math.Round(rainfall.Value);
-                    }
+                    string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
+                    decimal rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);                    
+                    model.Rainfall = (int)Math.Round(rainfall);                    
 
                     if (model.Rainfall.HasValue && model.Rainfall > 0)
                     {
@@ -622,18 +617,7 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private string ExtractFirstHalfPostcode(string postcode)
-        {
-            if (string.IsNullOrWhiteSpace(postcode))
-                return string.Empty;
-
-            postcode = postcode.Trim();
-            int spaceIndex = postcode.IndexOf(' ');
-
-            return spaceIndex > 0
-                ? postcode[..spaceIndex]
-                : postcode[..^3]; // remove last 3 characters
-        }
+        
 
 
         [HttpPost]
@@ -1215,12 +1199,12 @@ namespace NMP.Portal.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError($"Farm Controller : HttpRequestException in FarmSummary() action : {hre.Message}, {hre.StackTrace}");
+                _logger.LogError(hre,"Farm Controller: HttpRequestException in FarmSummary() action. Message: {ErrorMessage}, StackTrace: {StackTrace}",hre.Message,hre.StackTrace);                
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Farm Controller : Exception in FarmSummary() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError("Farm Controller : Exception in FarmSummary() action : {ex.Message} {ex.StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
@@ -1293,12 +1277,12 @@ namespace NMP.Portal.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError($"Farm Controller : HttpRequestException in FarmDetails() action : {hre.Message}, {hre.StackTrace}");
+                _logger.LogError("Farm Controller : HttpRequestException in FarmDetails() action : {hre.Message}, {hre.StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError("Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
@@ -1401,7 +1385,6 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in FarmUpdate() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
         }
 
         [HttpGet]
@@ -1425,7 +1408,6 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Farm Controller : FarmRemove() post action called");
             try
             {
-
                 if (farm.FarmRemove == null)
                 {
                     ModelState.AddModelError("FarmRemove", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -1461,21 +1443,19 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmRemove() action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
-
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Farm Controller : Exception in FarmRemove() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
-
             }
-
         }
+
         [HttpGet]
         public IActionResult Cancel()
         {
             _logger.LogTrace("Farm Controller : Cancel() action called");
-            FarmViewModel? model = new FarmViewModel();
+            FarmViewModel? model;
             try
             {
                 model = GetFarmFromSession();
@@ -1513,14 +1493,12 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext?.Session.Remove("FarmData");
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
-
             }
-
         }
 
         private FarmViewModel? GetFarmFromSession()
         {
-            if (HttpContext.Session.Keys.Contains("FarmData"))
+            if (HttpContext.Session.Exists("FarmData"))
             {
                 return HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
             }
