@@ -7,32 +7,29 @@
     var count = 0;
     var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
-    string backAction = string.Empty;
-    if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsDoubleCropValueChange))
-    {
-        backAction = "CheckAnswer";
-    }
-    // else if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
-    // {
-    //     backAction = "DoubleCrop";
-    // }
-    else if (Model.FieldGroup == Resource.lblSelectSpecificFields)
-    {
-        backAction = "Fields";
-    }
-    else
-    {
-        backAction = "FieldGroup";
-    }
+    string backAction = "FieldGroup";
+    
 }
 
 @section BeforeContent {
-    @if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
+    @if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsDoubleCropValueChange))
+    {
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
+    }
+    else @if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
     {
         <govuk-back-link asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
     else
     {
+        @if (Model.FieldGroup == Resource.lblSelectSpecificFields)
+        {
+            backAction = "Fields";
+        }
+        else
+        {
+            backAction = "FieldGroup";
+        }
         <govuk-back-link asp-action="@backAction" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
 }

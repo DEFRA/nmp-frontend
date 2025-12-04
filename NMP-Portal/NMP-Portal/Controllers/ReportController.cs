@@ -316,8 +316,8 @@ namespace NMP.Portal.Controllers
                                             {
                                                 if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                                 {
-                                                    TempData["ErrorOnFieldAndPlanReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                                    return RedirectToAction("FieldAndPlanReports");
+                                                    TempData["ErrorOnReportOptions"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                                    return RedirectToAction("ReportOptions");
                                                 }
                                                 else
                                                 {
@@ -350,8 +350,8 @@ namespace NMP.Portal.Controllers
                                     {
                                         if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                         {
-                                            TempData["ErrorOnFieldAndPlanReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                            return RedirectToAction("FieldAndPlanReports");
+                                            TempData["ErrorOnReportOptions"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                            return RedirectToAction("ReportOptions");
                                         }
                                         else
                                         {
@@ -378,8 +378,8 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                     {
-                        TempData["ErrorOnFieldAndPlanReports"] = ex.Message;
-                        return RedirectToAction("FieldAndPlanReports");
+                        TempData["ErrorOnReportOptions"] = ex.Message;
+                        return RedirectToAction("ReportOptions");
                     }
                     else
                     {
@@ -631,8 +631,8 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                                     {
-                                        TempData["ErrorOnFieldAndPlanReports"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
-                                        return RedirectToAction("FieldAndPlanReports");
+                                        TempData["ErrorOnReportOptions"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                                        return RedirectToAction("ReportOptions");
                                     }
                                     else
                                     {
@@ -1493,7 +1493,17 @@ namespace NMP.Portal.Controllers
 
                 if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
                 {
-                    return RedirectToAction("FieldAndPlanReports", model);
+                    model.NVZReportOption = null;
+                    model.FieldAndPlanReportOption = (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport;
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
+                    if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
+                    {
+                        return RedirectToAction("ExportFieldsOrCropType");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Year");
+                    }
                 }
                 if (model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord)
                 {
