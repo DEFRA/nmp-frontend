@@ -51,6 +51,25 @@ namespace NMP.Portal.Controllers
             _fertiliserManureService = fertiliserManureService;
         }
 
+        private OrganicManureViewModel? GetOrganicManureFromSession()
+        {
+            if (HttpContext.Session.Exists("OrganicManure"))
+            {
+                return HttpContext.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
+            }
+            return null;
+        }
+
+        private void SetOrganicManureToSession(OrganicManureViewModel organicManureViewModel)
+        {
+            HttpContext.Session.SetObjectAsJson("OrganicManure", organicManureViewModel);
+        }
+
+        private void RemoveOrganicManureSession()
+        {
+            HttpContext.Session.Remove("OrganicManure");
+        }
+
         public IActionResult Index()
         {
             _logger.LogTrace($"Organic Manure Controller : Index() action called");
@@ -58,27 +77,25 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult CreateManureCancel(string q, string r)
         {
-            _logger.LogTrace($"Organic Manure Controller : CreateManureCancel({q}, {r}) action called");
-            _httpContextAccessor.HttpContext?.Session.Remove("OrganicManure");
+            _logger.LogTrace("Organic Manure Controller : CreateManureCancel({q}, {r}) action called", q, r);            
+            RemoveOrganicManureSession();
             return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
+        public async Task<IActionResult> FieldGroup(string q, string r, string? s)
         {
-            _logger.LogTrace($"Organic Manure Controller : FieldGroup({q}, {r}, {s}) action called");
-            OrganicManureViewModel model = new OrganicManureViewModel();
+            //q=FarmId,r=harvestYear,s=fieldId
+            _logger.LogTrace("Organic Manure Controller : FieldGroup({q}, {r}, {s}) action called", q, r, s);
+            OrganicManureViewModel? model = GetOrganicManureFromSession() ?? new OrganicManureViewModel();
             Error error = null;
             try
-            {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
-                {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-                }
-                else if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+            {                
+                if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
+
                 if ((!string.IsNullOrWhiteSpace(q)) && (!string.IsNullOrWhiteSpace(r)))
                 {
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -89,14 +106,15 @@ namespace NMP.Portal.Controllers
                     if (error.Message == null)
                     {
                         model.FarmName = farm.Name;
-                        model.isEnglishRules = farm.EnglishRules;
+                        model.IsEnglishRules = farm.EnglishRules;
                         model.FarmCountryId = farm.CountryID;
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        SetOrganicManureToSession(model);                        
                     }
                     else
                     {
                         TempData["FieldGroupError"] = error.Message;
                     }
+
                     if (!string.IsNullOrWhiteSpace(s))
                     {
                         model.FieldList = new List<string>();
@@ -171,7 +189,8 @@ namespace NMP.Portal.Controllers
                             TempData["NutrientRecommendationsError"] = error.Message;
                             return RedirectToAction("Recommendations", "Crop", new { q = q, r = s, s = r });
                         }
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+
+                        SetOrganicManureToSession(model);
 
                         foreach (var organic in model.OrganicManures)
                         {
@@ -224,7 +243,7 @@ namespace NMP.Portal.Controllers
                             }
                             model.GrassCropCount = grassCropCounter;
                             model.IsSameDefoliationForAll = true;
-                            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                            SetOrganicManureToSession(model);
                         }
                         int organicCounter = 1;
                         foreach (var organic in model.OrganicManures)
@@ -244,7 +263,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                        SetOrganicManureToSession(model);
                         return RedirectToAction("ManureGroup");
                     }
 
@@ -277,7 +296,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsFieldGroupChange = true;
             }
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+            SetOrganicManureToSession(model);
             return View("Views/OrganicManure/FieldGroup.cshtml", model);
         }
 
@@ -337,7 +356,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 model.IsComingFromRecommendation = false;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
+                SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -353,15 +372,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Fields()
         {
             _logger.LogTrace($"Organic Manure Controller : Fields() action called");
-            OrganicManureViewModel model = new OrganicManureViewModel();
+            OrganicManureViewModel model = GetOrganicManureFromSession();// new OrganicManureViewModel();
             Error error = null;
             try
-            {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("OrganicManure"))
-                {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<OrganicManureViewModel>("OrganicManure");
-                }
-                else
+            {                
+                if(model == null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
@@ -1629,7 +1644,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error error = null;
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
@@ -1969,7 +1984,7 @@ namespace NMP.Portal.Controllers
 
         private async Task PopulateManureApplyingDateModel(OrganicManureViewModel model)
         {
-            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+            int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
             List<ManureType> manureTypeList = new List<ManureType>();
             Error error = null;
             if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
@@ -2049,7 +2064,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -2164,7 +2179,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -3139,7 +3154,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 if (model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     List<ManureType> manureTypeList = new List<ManureType>();
@@ -3196,7 +3211,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -3375,7 +3390,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error error = null;
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
@@ -3813,7 +3828,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -3872,7 +3887,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -4047,7 +4062,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 string applicableFor = string.Empty;
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -4112,7 +4127,7 @@ namespace NMP.Portal.Controllers
                 if (!ModelState.IsValid)
                 {
                     string applicableFor = string.Empty;
-                    int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                    int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                     List<ManureType> manureTypeList = new List<ManureType>();
                     if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                     {
@@ -4593,7 +4608,7 @@ namespace NMP.Portal.Controllers
                     if (error.Message == null)
                     {
                         model.FarmCountryId = farm.CountryID;
-                        model.isEnglishRules = farm.EnglishRules;
+                        model.IsEnglishRules = farm.EnglishRules;
                     }
                     if (decryptedId > 0)
                     {
@@ -5004,7 +5019,7 @@ namespace NMP.Portal.Controllers
                             model.ManureTypeName = organicManure.ManureTypeName;
                             model.ApplicationRate = organicManure.ApplicationRate;
                             model.SoilDrainageEndDate = organicManure.EndOfDrain.ToLocalTime();
-                            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                            int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
 
                             if (organicManure.AreaSpread != null && organicManure.ManureQuantity != null)
                             {
@@ -6894,7 +6909,7 @@ namespace NMP.Portal.Controllers
             if (farm != null)
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -7051,32 +7066,19 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 8)
                                     {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        //if (!isGetCheckAnswer)
-                                        //{
+                                        model.IsEndClosedPeriodFebruaryWarning = true;                                        
                                         model.EndClosedPeriodEndFebWarningHeader = Resource.MsgPoultryManureMaxApplicationRate;
                                         model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
                                         model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
-
                                         model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryWales;
                                         model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara8PoultryWales;
                                         model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd8PoultryWales;
-                                        //}
-                                        //else
-                                        //{
-                                        //    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryWales;
-                                        //}
                                     }
                                 }
-
                             }
-
                         }
-
                     }
                 }
-
-
             }
             return (model, error);
         }
@@ -7088,7 +7090,7 @@ namespace NMP.Portal.Controllers
             string SlurryOrPoultryManureExistWithinLast20Days = string.Empty;
             bool isWithinClosedPeriod = false;
             string message = string.Empty;
-            int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+            int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
             List<ManureType> manureTypeList = new List<ManureType>();
             if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
             {
@@ -7428,7 +7430,7 @@ namespace NMP.Portal.Controllers
             if (farm != null)
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -9284,7 +9286,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {
@@ -9343,7 +9345,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                 {

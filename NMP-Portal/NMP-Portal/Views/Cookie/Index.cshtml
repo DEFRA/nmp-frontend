@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = Resource.lblCookies;
 }
+@section BeforeContent {
+    <govuk-back-link asp-action="Index" asp-controller="Home">@Resource.lblBack</govuk-back-link>
+}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
