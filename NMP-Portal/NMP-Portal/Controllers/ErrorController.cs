@@ -13,7 +13,6 @@ using System.Net;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-
     public class ErrorController : Controller
     {        
         [Route("Error/{statusCode}")]
@@ -65,7 +64,7 @@ namespace NMP.Portal.Controllers
 
                 case 409:
                     errorViewModel.Code = 409;
-                    errorViewModel.Message = "Conflict. The request conflicts with the current state of the server.";
+                    errorViewModel.Message = "Conflict. The request conflicts with the current state of the server. May be session data are missing.";
                     errorViewModel.StatusCode = statusKey;
                     break;
 
