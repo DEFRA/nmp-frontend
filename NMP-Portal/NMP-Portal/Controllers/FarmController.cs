@@ -1,32 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NMP.Portal.Enums;
 using NMP.Portal.Helpers;
 using NMP.Portal.Models;
 using NMP.Portal.Resources;
 using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
-using System.Security.Cryptography.Xml;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -283,6 +267,7 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostCode(FarmViewModel farm)
@@ -290,76 +275,69 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Farm Controller : PostCode() post action called");
             try
             {
-                if (string.IsNullOrWhiteSpace(farm.Postcode))
-                {
-                    ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
-                }
+                
+                    ValidatePostcode(farm);
 
-                if (!string.IsNullOrWhiteSpace(farm.Postcode))
-                {
-                    int id = 0;
-                    if (farm.EncryptedFarmId != null)
-                    {
-                        id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                    }
-                    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
-                    if (IsFarmExist)
-                    {
-                        ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
-                    }
-                }
-                if (!ModelState.IsValid)
-                {
-                    return View(farm);
-                }
-                FarmViewModel? farmView = null;
-                farmView = GetFarmFromSession();
+                    if (!ModelState.IsValid)
+                        return View(farm);
 
-                if (farm.IsCheckAnswer)
-                {
-                    var updatedFarm = JsonConvert.SerializeObject(farm);
-                    HttpContext?.Session.SetString("FarmData", updatedFarm);
+                    var farmView = GetFarmFromSession();
+                    bool isPostcodeChanged = farmView?.Postcode != farm.Postcode;
 
-                    if (farmView != null && farmView.Postcode == farm.Postcode)
+                    if (farm.IsCheckAnswer)
                     {
-                        farm.IsPostCodeChanged = false;
-                        return RedirectToAction("CheckAnswer");
-                    }
-                    else
-                    {
+                        SetFarmToSession(farm);
+
+                        if (!isPostcodeChanged)
+                        {
+                            farm.IsPostCodeChanged = false;
+                            return RedirectToAction("CheckAnswer");
+                        }
+
                         farm.IsPostCodeChanged = true;
                         farm.Rainfall = null;
-                        //return RedirectToAction("Address");
                     }
-                }
-                if (farmView != null)
-                {
-                    if (farmView.Postcode != farm.Postcode)
+                    else if (isPostcodeChanged)
                     {
                         farm.Rainfall = null;
                     }
-                }
-                SetFarmToSession(farm);
-                //if (farm.IsCheckAnswer)
-                //{
-                //    return RedirectToAction("CheckAnswer");
-                //}
-                return RedirectToAction("Address");
 
+                    SetFarmToSession(farm);
+
+                    return RedirectToAction("Address"); ;
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, "Farm Controller : HttpRequestException in PostCode() action");
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in PostCode()");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Farm Controller : Exception in PostCode() post action");
+                _logger.LogError(ex, "Farm Controller : Exception in PostCode()");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
-
         }
+
+
+        private void ValidatePostcode(FarmViewModel farm)
+        {
+            if (string.IsNullOrWhiteSpace(farm.Postcode))
+            {
+                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
+                return;
+            }
+
+            int farmId = farm.EncryptedFarmId != null
+                ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
+                : 0;
+
+            bool exists = _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
+            if (exists)
+            {
+                ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Address()
         {
@@ -588,41 +566,39 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> ClimatePostCode()
         {
-            _logger.LogTrace($"Farm Controller : ClimatePostCode() action called");
+            _logger.LogTrace("Farm Controller : ClimatePostCode() action called");
+
             try
             {
-                FarmViewModel? model = null;
-                model = GetFarmFromSession();
-                if (model==null)
+                var model = GetFarmFromSession();
+                if (model == null)
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (model.Rainfall == 0 || model.Rainfall == null)
+
+                bool rainfallNotAvailable = !model.Rainfall.HasValue || model.Rainfall <= 0;
+
+                if (rainfallNotAvailable)
                 {
-                    string firstHalfPostcode = string.Empty;
-                    if (!model.Postcode.Contains(" "))
+                    string firstHalfPostcode = ExtractFirstHalfPostcode(model.Postcode);
+
+                    decimal? rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    if (rainfall.HasValue)
                     {
-                        firstHalfPostcode = model.Postcode.Substring(0, model.Postcode.Length - 3);
+                        model.Rainfall = (int)Math.Round(rainfall.Value);
                     }
-                    else
-                    {
-                        string[] postcode = model.Postcode.Split(' ');
-                        firstHalfPostcode = postcode[0];
-                    }
-                    var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                    if (rainfall != null)
-                    {
-                        model.Rainfall = (int)Math.Round(rainfall);
-                    }
-                    if (model.Rainfall > 0)
+
+                    if (model.Rainfall.HasValue && model.Rainfall > 0)
                     {
                         if (model.IsPostCodeChanged)
                         {
                             model.ClimateDataPostCode = null;
                         }
+
                         SetFarmToSession(model);
                         return RedirectToAction("Rainfall");
                     }
@@ -631,6 +607,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("Rainfall");
                 }
+
                 return View(model);
             }
             catch (HttpRequestException hre)
@@ -643,8 +620,22 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
         }
+
+        private string ExtractFirstHalfPostcode(string postcode)
+        {
+            if (string.IsNullOrWhiteSpace(postcode))
+                return string.Empty;
+
+            postcode = postcode.Trim();
+            int spaceIndex = postcode.IndexOf(' ');
+
+            return spaceIndex > 0
+                ? postcode[..spaceIndex]
+                : postcode[..^3]; // remove last 3 characters
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClimatePostCode(FarmViewModel model)
