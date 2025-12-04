@@ -27,7 +27,7 @@
     ViewData["Title"] = $" {title} {Resource.lblHyphen} {Resource.lblReport}";
     var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)) ? "Year" :
         ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
-        ? "FieldAndPlanReports" : "NVZComplianceReports");
+        ? "ReportOptions" : "NVZComplianceReports");
 }
 
 @section BeforeContent {
