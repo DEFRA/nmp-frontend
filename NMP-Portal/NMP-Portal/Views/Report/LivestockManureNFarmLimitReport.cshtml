@@ -125,13 +125,13 @@
         {
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
             {
-                <p class="govuk-body-s">
+                <p class="govuk-body">
                     @string.Format("{0} {1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), string.Format(Resource.lblLivestockReportContentThreeForDerogationOrNonDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing))
                 </p>
             }
             else
             {
-                <p class="govuk-body-s">
+                <p class="govuk-body">
                     @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), string.Format(Resource.lblLivestockReportContentThreeForDerogationOrNonDerogation, ViewBag.FarmLimitForLandOutsideNVZ))
                 </p>
             }
@@ -140,13 +140,13 @@
         {
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
             {
-                <p class="govuk-body-s">
+                <p class="govuk-body">
                     @string.Format("{0} {1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
                 </p>
             }
             else
             {
-                <p class="govuk-body-s">
+                <p class="govuk-body">
                     @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
                 </p>
             }
@@ -438,7 +438,7 @@
                     @Resource.lblLivestockReportContentTwentySeven
                 }
             </h2>
-            <p class="govuk-body-s">                
+            <p class="govuk-body">                
                 @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
                 {
                     @Resource.lblLivestockReportContentSixteen
@@ -533,7 +533,7 @@ else
                     @Resource.lblLivestockReportContentThirty
                 }
             </h2>
-            <p class="govuk-body-s">
+            <p class="govuk-body">
                 @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
                 {
                     @Resource.lblLivestockReportContentTwentyOne
@@ -819,20 +819,20 @@ else
         <h2 class="govuk-heading-s">
             @Resource.lblLivestockReportContentThirtyFive
         </h2>
-        <p class="govuk-body-s">
+        <p class="govuk-body">
             @Resource.lblLivestockReportContentThirtySix
         </p>
 
         <h2 class="govuk-heading-s">
             @Resource.lblAboutRecommendationGuidenceAdvice
         </h2>
-        <p class="govuk-body-s">
+        <p class="govuk-body">
             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
         </p>
-        <p class="govuk-body-s">
+        <p class="govuk-body">
             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblService)
         </p>
-        <p class="govuk-body-s">
+        <p class="govuk-body">
             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
         </p>
 

@@ -226,7 +226,7 @@
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
                                                             <th scope="col" class="govuk-table__header">@Resource.lblIndexPH</th>
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalCropNeed</th>
+                                                            <th id="totalCropNeed" scope="col" class="govuk-table__header">@Resource.lblTotalCropNeed</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
                                                             <th scope="col" class="govuk-table__header">@Resource.lblSupplyFromManures</th>
                                                             <th scope="col" class="govuk-table__header">@Resource.lblFertiliserOrLimeRecommendation</th>
@@ -342,7 +342,7 @@
                                         }
                                         managementTableIndex++;
                                     }
-                                    <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
+                                    <p class="govuk-body margin-bottom-forty">@Resource.lblSourceRb209</p>
                                 </div>
                             </div>
                             <div class="govuk-grid-row">
@@ -507,7 +507,7 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblApplicationRate</th>
-                                                            <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format("{0:N1}{1}", orgManure.ApplicationRate, orgManure.RateUnit) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format("{0:N1} {1}", orgManure.ApplicationRate, orgManure.RateUnit) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblIncorporationMethod</th>

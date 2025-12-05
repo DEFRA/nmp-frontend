@@ -876,3 +876,7 @@ hr.seperator_thirty {
         width: 30%;
         padding-right: 5px;
     }
+
+#totalCropNeed{
+    width:87px !important;
+}
