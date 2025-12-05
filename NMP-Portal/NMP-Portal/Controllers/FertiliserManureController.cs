@@ -49,13 +49,13 @@ namespace NMP.Portal.Controllers
 
         public IActionResult Index()
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : Index() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : Index() action called");
             return View();
         }
 
         public IActionResult CreateFertiliserManureCancel(string q, string r)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : CreateFertiliserManureCancel({q}, {r}) action called");
+            _logger.LogTrace("Fertiliser Manure Controller : CreateFertiliserManureCancel({0}, {1}) action called",q,r);
             _httpContextAccessor.HttpContext?.Session.Remove("FertiliserManure");
             return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
         }
@@ -63,7 +63,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult backActionForInOrganicManure()
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : backActionForInOrganicManure() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : backActionForInOrganicManure() action called");
             FertiliserManureViewModel? model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -116,7 +116,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : FieldGroup({q}, {r}, {s}) action called");
+            _logger.LogTrace("Fertiliser Manure Controller : FieldGroup({0}, {1}, {2}) action called",q,r,s);
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -376,7 +376,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldGroup(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : FieldGroup() post action called");
+            _logger.LogTrace("Fertiliser Manure Controller : FieldGroup() post action called");
             Error error = null;
             if (model.FieldGroup == null)
             {
@@ -426,7 +426,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace("Farm Controller : Exception in FieldGroup() post action : {ex.Message}, {ex.StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace("Farm Controller : Exception in FieldGroup() post action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["FieldGroupError"] = ex.Message;
                 return View("Views/FertiliserManure/FieldGroup.cshtml", model);
             }
@@ -436,7 +436,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : Fields() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : Fields() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -798,7 +798,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in Fields() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Farm Controller : Exception in Fields() action : {0}, {1}", ex.Message, ex.StackTrace);
                 if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
                 {
                     TempData["FieldGroupError"] = ex.Message;
@@ -822,7 +822,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Fields(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : Fields() post action called");
+            _logger.LogTrace("Fertiliser Manure Controller : Fields() post action called");
             Error error = null;
             try
             {
@@ -1023,14 +1023,10 @@ namespace NMP.Portal.Controllers
                                     }
                                     grassCropCounter++;
                                     model.IsAnyCropIsGrass = true;
-
-
                                 }
-
                             }
                         }
                         model.GrassCropCount = grassCropCounter;
-
                     }
                     else
                     {
@@ -1140,18 +1136,16 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in Fields() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Farm Controller : Exception in Fields() post action : {0}, {1}",ex.Message ,ex.StackTrace);
                 TempData["FieldError"] = ex.Message;
                 return View(model);
             }
-
-
         }
 
         [HttpGet]
         public async Task<IActionResult> InOrgnaicManureDuration()
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : InOrgnaicManureDuration() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : InOrgnaicManureDuration() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             Error error = null;
             try
@@ -1187,9 +1181,7 @@ namespace NMP.Portal.Controllers
                         //model.ClosedPeriod = closedPeriod;
                         if (!string.IsNullOrWhiteSpace(closedPeriod))
                         {
-                            int harvestYear = model.HarvestYear ?? 0;
-                            //int startYear = harvestYear;
-                            //int endYear = harvestYear + 1;
+                            int harvestYear = model.HarvestYear ?? 0;                            
                             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
                             Regex regex = new Regex(pattern);
                             if (closedPeriod != null)
@@ -1215,8 +1207,8 @@ namespace NMP.Portal.Controllers
                                     dtfi.Add(9, Resource.lblOctober);
                                     dtfi.Add(10, Resource.lblNovember);
                                     dtfi.Add(11, Resource.lblDecember);
-                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; 
+                                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
                                     DateTime? closedPeriodStartDate = null;
                                     DateTime? closedPeriodEndDate = null;
                                     if (startMonth <= endMonth)
@@ -1251,10 +1243,7 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                             }
-
-
                         }
-
                     }
 
                     Field field = await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId));
@@ -1267,7 +1256,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in InOrgnaicManureDuration() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Farm Controller : Exception in InOrgnaicManureDuration() action : {0}, {1}", ex.Message, ex.StackTrace);
                 if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                 {
                     TempData["FieldError"] = ex.Message;
@@ -1285,30 +1274,8 @@ namespace NMP.Portal.Controllers
                         TempData["InOrgnaicManureDurationError"] = null;
                     }
                     return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
-
                 }
-            }
-            //int counter = 0;
-            //if (model.ApplicationForFertiliserManures == null)
-            //{
-            //    model.ApplicationForFertiliserManures = new List<ApplicationForFertiliserManure>();
-            //    var AppForFertManure = new ApplicationForFertiliserManure
-            //    {
-            //        EncryptedCounter = _fertiliserManureProtector.Protect(counter.ToString()),
-            //        Counter = counter
-            //    };
-            //    model.Counter = counter;
-            //    model.EncryptedCounter = _fertiliserManureProtector.Protect(counter.ToString());
-            //    model.ApplicationForFertiliserManures.Add(AppForFertManure);
-            //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            //}
-            //if (!string.IsNullOrWhiteSpace(q))
-            //{
-            //    int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
-            //    model.Counter = currentCounter;
-            //    model.EncryptedCounter = q;
-            //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-            //}
+            }            
 
             if (model.FieldList.Count == 1)
             {
@@ -1326,7 +1293,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> InOrgnaicManureDuration(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : InOrgnaicManureDuration() post action called");
+            _logger.LogTrace("Fertiliser Manure Controller : InOrgnaicManureDuration() post action called");
             Error? error = null;
             try
             {
@@ -1334,12 +1301,7 @@ namespace NMP.Portal.Controllers
                 {
                     var dateError = ModelState["Date"]?.Errors.Count > 0 ?
                                     ModelState["Date"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                    //if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblDate)))
-                    //{
-                    //    ModelState["Date"]?.Errors.Clear();
-                    //    ModelState["Date"]?.Errors.Add(Resource.MsgEnterTheDateInNumber);
-                    //}
+                    
                     if (dateError != null && (dateError.Equals(Resource.MsgDateMustBeARealDate) ||
                     dateError.Equals(Resource.MsgDateMustIncludeAMonth) ||
                      dateError.Equals(Resource.MsgDateMustIncludeAMonthAndYear) ||
@@ -1348,8 +1310,8 @@ namespace NMP.Portal.Controllers
                      dateError.Equals(Resource.MsgDateMustIncludeADay) ||
                      dateError.Equals(Resource.MsgDateMustIncludeADayAndMonth)))
                     {
-                        ModelState["Date"].Errors.Clear();
-                        ModelState["Date"].Errors.Add(Resource.MsgTheDateMustInclude);
+                        ModelState["Date"]?.Errors.Clear();
+                        ModelState["Date"]?.Errors.Add(Resource.MsgTheDateMustInclude);
                     }
                 }
 
@@ -1382,9 +1344,7 @@ namespace NMP.Portal.Controllers
                             //model.ClosedPeriod = closedPeriod;
                             if (!string.IsNullOrWhiteSpace(closedPeriod))
                             {
-                                int harvestYear = model.HarvestYear ?? 0;
-                                //int startYear = harvestYear;
-                                //int endYear = harvestYear + 1;
+                                int harvestYear = model.HarvestYear ?? 0;                                
                                 string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
                                 Regex regex = new Regex(pattern);
                                 if (closedPeriod != null)
@@ -1445,8 +1405,6 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
-
-
                             }
                         }
                     }
@@ -1517,14 +1475,11 @@ namespace NMP.Portal.Controllers
                     model.IsClosedPeriodWarning = false;
                     model.IsWarningMsgNeedToShow = false;
                 }
-
-
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Farm Controller : Exception in InOrgnaicManureDuration() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Farm Controller : Exception in InOrgnaicManureDuration() post action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["InOrgnaicManureDurationError"] = ex.Message;
                 return View(model);
             }
@@ -1540,7 +1495,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> NutrientValues()
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : NutrientValues() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : NutrientValues() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -1651,9 +1606,7 @@ namespace NMP.Portal.Controllers
                                                 FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
                                                 FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
                                                 FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
-                                            };
-
-                                            //model.Recommendations = rec;
+                                            };                                            
                                         }
                                     }
 
@@ -1664,7 +1617,7 @@ namespace NMP.Portal.Controllers
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogTrace($"Farm Controller : Exception in NutrientValues() action : {ex.Message}, {ex.StackTrace}");
+                        _logger.LogTrace("Farm Controller : Exception in NutrientValues() action : {0}, {1}", ex.Message, ex.StackTrace);
                         TempData["InOrgnaicManureDurationError"] = ex.Message;
                         return RedirectToAction("InOrgnaicManureDuration", model);
                     }
@@ -1673,14 +1626,7 @@ namespace NMP.Portal.Controllers
 
                 model.IsNitrogenExceedWarning = false;
                 model.IsWarningMsgNeedToShow = false;
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                //if (!string.IsNullOrWhiteSpace(q))
-                //{
-                //    int currentCounter = Convert.ToInt32(_fertiliserManureProtector.Unprotect(q));
-                //    model.Counter = currentCounter;
-                //    model.EncryptedCounter = q;
-                //    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
-                //}
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);                
             }
             catch (Exception ex)
             {
@@ -1695,11 +1641,9 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> NutrientValues(FertiliserManureViewModel model)
         {
             _logger.LogTrace($"Fertiliser Manure Controller : NutrientValues() post action called");
-            int index = 0;
-            Error error = null;
+            Error? error = null;
             try
             {
-
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
                 {
                     var totalNitrogenError = ModelState["N"]?.Errors.FirstOrDefault()?.ErrorMessage;
@@ -1723,8 +1667,6 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-
-
                 }
                 if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
                 {
@@ -1828,8 +1770,8 @@ namespace NMP.Portal.Controllers
 
                     if (limeError != null && ModelState["Lime"] != null && limeError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Lime"].RawValue, Resource.lblLime)))
                     {
-                        ModelState["Lime"].Errors.Clear();
-                        ModelState["Lime"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblLime));
+                        ModelState["Lime"]?.Errors.Clear();
+                        ModelState["Lime"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblLime));
                     }
                 }
 
@@ -1839,8 +1781,7 @@ namespace NMP.Portal.Controllers
                     && model.Lime == null)
                 {
                     ModelState.AddModelError("AllNutrientNull", Resource.MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing);
-                    ViewData["IsPostRequest"] = true;
-                    //return View(model);
+                    ViewData["IsPostRequest"] = true;                    
                 }
 
                 if (model.N != null)
@@ -1912,7 +1853,6 @@ namespace NMP.Portal.Controllers
                                     .FirstOrDefault(header => header.RecommendationData != null &&
                                     header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
                                                                        rd.ManagementPeriod.ID == manId));
-
 
                                     if (matchedHeader != null)
                                     {
@@ -1994,23 +1934,19 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
-
                             }
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogTrace($"Farm Controller : Exception in NutrientValues() post action : {ex.Message}, {ex.StackTrace}");
+                            _logger.LogTrace("Farm Controller : Exception in NutrientValues() post action : {0}, {1}", ex.Message, ex.StackTrace);
                             TempData["NutrientValuesError"] = ex.Message;
                             return View(model);
                         }
-
                     }
                     return View(model);
                 }
 
-
                 model.IsNitrogenExceedWarning = false;
-
                 if (model.Lime != null)
                 {
                     model.Lime = Math.Round(model.Lime.Value, 1);
@@ -2027,6 +1963,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
+
                     if (fertiliserManureViewModel != null)
                     {
                         if (model.N != fertiliserManureViewModel.N)
@@ -2130,8 +2067,6 @@ namespace NMP.Portal.Controllers
                                                 }
                                             }
                                         }
-
-
                                     }
                                     else
                                     {
@@ -2167,11 +2102,10 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("CheckAnswer");
         }
 
-
         [HttpGet]
         public async Task<IActionResult> CheckAnswer(string? q, string? r, string? s, string? t, string? u)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : CheckAnswer() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : CheckAnswer() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
 
             Error? error = null;
@@ -2336,7 +2270,6 @@ namespace NMP.Portal.Controllers
                                                     q = model.EncryptedFarmId,
                                                     r = _fieldDataProtector.Protect(fieldId),
                                                     s = model.EncryptedHarvestYear
-
                                                 });
                                             }
                                             else
@@ -2347,7 +2280,6 @@ namespace NMP.Portal.Controllers
                                                     id = model.EncryptedFarmId,
                                                     year = model.EncryptedHarvestYear
                                                 });
-
                                             }
                                         }
                                     }
@@ -2397,7 +2329,6 @@ namespace NMP.Portal.Controllers
                                                         q = model.EncryptedFarmId,
                                                         r = _fieldDataProtector.Protect(fieldId),
                                                         s = model.EncryptedHarvestYear
-
                                                     });
                                                 }
                                                 else
@@ -2423,8 +2354,6 @@ namespace NMP.Portal.Controllers
                                                 string[] defoliationParts = description.Split(',')
                                                                                        .Select(x => x.Trim())
                                                                                        .ToArray();
-
-
                                                 string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
                                                 ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} - {defoliationParts[defoliation.Value - 1]}"
                                                 : $"{defoliation}";
@@ -2464,13 +2393,10 @@ namespace NMP.Portal.Controllers
                                 fertiliserManure.FieldName = model.FieldName;
                                 model.FertiliserManures.Add(fertiliserManure);
                                 counter++;
-
                             }
-                            ;
 
                             model.IsSameDefoliationForAll = true;
-                            model.HarvestYear = decryptedHarvestYear;
-                            //model.DefoliationCurrentCounter = 1;
+                            model.HarvestYear = decryptedHarvestYear;                            
                             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                             model.FarmId = decryptedFarmId;
                             model.EncryptedHarvestYear = s;
@@ -2483,8 +2409,6 @@ namespace NMP.Portal.Controllers
                             model.K2O = fertiliserManure.K2O;
                             model.Date = fertiliserManure.ApplicationDate.Value.ToLocalTime();
                             model.FieldGroup = Resource.lblSelectSpecificFields;
-
-
                             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
                         }
                     }
@@ -2522,13 +2446,7 @@ namespace NMP.Portal.Controllers
                         if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0)
                         {
                             (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
-                        }
-                        //(model, error) = await IsClosedPeriodWarningMessageShow(model, true);
-                        //if (error != null)
-                        //{
-                        //    TempData["NutrientValuesError"] = error.Message;
-                        //    return RedirectToAction("NutrientValues", model);
-                        //}
+                        }                        
                     }
 
                     foreach (var fieldId in model.FieldList)
@@ -2611,13 +2529,11 @@ namespace NMP.Portal.Controllers
                                             if (error == null)
                                             {
                                                 if (managementIds.Count > 0)
-                                                {
-                                                    //(model.IsNitrogenExceedWarning, string nitrogenExceedMessageTitle, string warningMsg, string nitrogenExceedFirstAdditionalMessage, string nitrogenExceedSecondAdditionalMessage, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType);
+                                                {                                                    
                                                     if (model.N != null)
                                                     {
                                                         (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
                                                     }
-
                                                 }
                                             }
                                             else
@@ -2627,8 +2543,6 @@ namespace NMP.Portal.Controllers
                                             }
                                         }
                                     }
-
-
                                 }
                                 else
                                 {
@@ -2655,11 +2569,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     model.IsNitrogenExceedWarning = false;
                                     model.IsWarningMsgNeedToShow = false;
-                                }
-                                //if (model.IsNitrogenExceedWarning)
-                                //{
-                                //    break;
-                                //}
+                                }                                
                             }
                         }
                     }
@@ -2731,9 +2641,7 @@ namespace NMP.Portal.Controllers
 
                 }
                 var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserDataBeforeUpdate");
-
                 bool isDataChanged = false;
-
                 if (previousModel != null)
                 {
                     string oldJson = JsonConvert.SerializeObject(previousModel);
@@ -2773,7 +2681,6 @@ namespace NMP.Portal.Controllers
                             id = model.EncryptedFarmId,
                             year = model.EncryptedHarvestYear
                         });
-
                     }
                 }
             }
@@ -2784,7 +2691,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : CheckAnswer() post action called");
+            _logger.LogTrace("Fertiliser Manure Controller : CheckAnswer() post action called");
             Error error = new Error();
             try
             {
@@ -2813,7 +2720,6 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-
                 }
 
                 if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
@@ -2834,7 +2740,6 @@ namespace NMP.Portal.Controllers
                         {
                             ModelState.AddModelError(string.Concat("DefoliationList[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, defoliation.FieldName), Resource.lblNotSet));
                         }
-
                     }
                 }
 
@@ -2889,11 +2794,8 @@ namespace NMP.Portal.Controllers
                             NO3N = fertiliserManure.NO3N ?? 0,
                         };
                         fertiliserList.Add(fertManure);
-
-
                         warningMessageList = new List<WarningMessage>();
                         warningMessageList = await GetWarningMessages(model);
-
                         FertiliserManure.Add(new
                         {
                             FertiliserManure = fertManure,
@@ -2986,7 +2888,6 @@ namespace NMP.Portal.Controllers
 
                 });
             }
-
             return RedirectToAction("NutrientValues");
         }
 
@@ -3044,38 +2945,22 @@ namespace NMP.Portal.Controllers
                                     if (isWithinClosedPeriod)
                                     {
                                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
-                                        {
-                                            //if (!isGetCheckAnswer)
-                                            //{
+                                        {                                            
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2;
-                                            //}
-                                            //else
-                                            //{
-                                            //    model.IsClosedPeriodWarning = true;
-                                            //    model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            //}
+                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2;                                            
                                         }
                                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
-                                        {
-                                            //if (!isGetCheckAnswer)
-                                            //{
+                                        {                                            
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2Wales;
-                                            //}
-                                            //else
-                                            //{
-                                            //    model.IsClosedPeriodWarning = true;
-                                            //    model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            //}
+                                            model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2Wales;                                            
                                         }
                                     }
                                 }
@@ -3099,43 +2984,25 @@ namespace NMP.Portal.Controllers
                                     if (isWithinWarningPeriod)
                                     {
                                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
-                                        {
-                                            //if (!isGetCheckAnswer)
-                                            //{
+                                        {                                            
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgApplicationAfter31October;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2;
-                                            //}
-                                            //else
-                                            //{
-                                            //    model.IsClosedPeriodWarning = true;
-                                            //    model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            //}
+                                            model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2;                                            
                                         }
                                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
-                                        {
-                                            //if (!isGetCheckAnswer)
-                                            //{
+                                        {                                            
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgApplicationAfter31October;
                                             model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
                                             model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
                                             model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2Wales;
-                                            //}
-                                            //else
-                                            //{
-                                            //    model.IsClosedPeriodWarning = true;
-                                            //    model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
-                                            //}
                                         }
                                     }
-
                                 }
-
                             }
                             else
                             {
@@ -3145,7 +3012,6 @@ namespace NMP.Portal.Controllers
                         else
                         {
                             return (model, error);
-
                         }
                     }
                 }
@@ -3193,7 +3059,6 @@ namespace NMP.Portal.Controllers
                     (int)NMP.Portal.Enums.CropTypes.WildRocket,
                     (int)NMP.Portal.Enums.CropTypes.Swedes,
                     (int)NMP.Portal.Enums.CropTypes.Turnips
-
                 };
                 string closedPeriod = warningMessage.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
                 bool isWithinClosedPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
@@ -3223,48 +3088,31 @@ namespace NMP.Portal.Controllers
                     }
 
                     if (error == null)
-                    {
-                        //nitrogenInFourWeek = nitrogenInFourWeek + Convert.ToDecimal(model.N);
+                    {                        
 
                         if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)  //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                         {
                             if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                             {
-                                model.IsNitrogenExceedWarning = true;
-                                //if (!isGetCheckAnswer)
-                                //{
+                                model.IsNitrogenExceedWarning = true;                                
                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForBrasicas;
                                 model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
-
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1England, startPeriod, endPeriod);
-                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
-                                //}
-                                //else
-                                //{
-                                //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                                //}
+                                model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;                                
                             }
                             if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
                             {
-                                model.IsNitrogenExceedWarning = true;
-                                //if (!isGetCheckAnswer)
-                                //{
+                                model.IsNitrogenExceedWarning = true;                                
                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForBrasicas;
                                 model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                                 model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingWales;
                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
                                 model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2Wales;
-                                //}
-                                //else
-                                //{
-                                //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingWales;
-                                //}
                             }
                         }
-
                     }
                     else
                     {
@@ -3305,37 +3153,22 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                         {
-                            model.IsNitrogenExceedWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
+                            model.IsNitrogenExceedWarning = true;                            
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateEverythingExceptWosr;
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNRateExceedWarningPara1England, startPeriod, endPeriod, maxNitrogenRate);
-                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
-                            //}
-                            //else
-                            //{
-                            //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                            //}
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;                            
                         }
                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
                         {
-                            model.IsNitrogenExceedWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
+                            model.IsNitrogenExceedWarning = true;                            
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateEverythingExceptWosr;
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
-                            model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNRateExceedWarningHeadingWales;
-                            //model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
-                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
-                            //}
-                            //else
-                            //{
-                            //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNRateExceedWarningHeadingWales;
-                            //}
+                            model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNRateExceedWarningHeadingWales;                           
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;                           
                         }
                     }
                 }
@@ -3361,9 +3194,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     (PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endOfOctober, null, false);
-
-                }
-                // (decimal PreviousApplicationsNitrogen, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endOfOctober,null, false);
+                }                
 
                 //warning excel sheet row no. 26
                 if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
@@ -3382,36 +3213,22 @@ namespace NMP.Portal.Controllers
                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                         {
                             model.IsNitrogenExceedWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForWinterOilseedRape;
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1England, startPeriod);
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
-                            //}
-                            //else
-                            //{
-                            //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                            //}
                         }
                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
                         {
-                            model.IsNitrogenExceedWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
+                            model.IsNitrogenExceedWarning = true;                            
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForWinterOilseedRape;
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1Wales, startPeriod);
-                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
-                            //}
-                            //else
-                            //{
-                            //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
-                            //}
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;                           
                         }
                     }
                 }
@@ -3435,7 +3252,7 @@ namespace NMP.Portal.Controllers
                         (nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, start, end, null, false);
 
                     }
-                    // (decimal nitrogenWithinWarningPeriod, error) = await _fertiliserManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, start, end,null, false);
+                    
                     if (model.N.Value > 40 || (nitrogenWithinWarningPeriod + model.N.Value) > 80)
                     {
                         isNitrogenRateExceeded = true;
@@ -3445,37 +3262,23 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
                         {
-                            model.IsNitrogenExceedWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
+                            model.IsNitrogenExceedWarning = true;                            
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgApplicationToGrassAtRateOfMoreThan;
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1England, startPeriod);
-                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
-                            //}
-                            //else
-                            //{
-                            //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                            //}
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;                            
                         }
                         if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
                         {
-                            model.IsNitrogenExceedWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
+                            model.IsNitrogenExceedWarning = true;                            
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgApplicationToGrassAtRateOfMoreThan;
                             model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
                             model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1Wales, startPeriod);
-                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
-                            //}
-                            //else
-                            //{
-                            //    model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
-                            //}
+                            model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;                            
                         }
                     }
                 }
@@ -3493,13 +3296,11 @@ namespace NMP.Portal.Controllers
                 {
                     (previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, null, null);
                 }
-                //(previousApplicationsN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
+                
                 List<Crop> cropsResponse = await _cropService.FetchCropsByFieldId(Convert.ToInt32(fieldId));
                 var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
                 if (crop != null)
-                {
-                    //(totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, false);
-
+                {                   
                     (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop[0].CropTypeID.Value);
                     if (error == null)
                     {
@@ -3508,8 +3309,7 @@ namespace NMP.Portal.Controllers
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
                             if (error == null)
-                            {
-                                //(totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false);
+                            {                                
                                 if (error == null)
                                 {
                                     decimal nMaxLimit = 0;
@@ -3559,7 +3359,6 @@ namespace NMP.Portal.Controllers
                                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
                                                 model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2Wales;
                                             }
-
                                         }
                                     }
                                     else
@@ -3583,8 +3382,6 @@ namespace NMP.Portal.Controllers
                         return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                     }
                 }
-
-
             }
             else
             {
@@ -3598,7 +3395,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateFertiliser(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : UpdateFertiliser() post action called");
+            _logger.LogTrace("Fertiliser Manure Controller : UpdateFertiliser() post action called");
             Error error = new Error();
             try
             {
@@ -3626,7 +3423,6 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-
                 }
 
                 if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
@@ -3647,7 +3443,6 @@ namespace NMP.Portal.Controllers
                         {
                             ModelState.AddModelError(string.Concat("DefoliationList[", i, "].Defoliation"), string.Format("{0} {1}", string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, defoliation.FieldName), Resource.lblNotSet));
                         }
-
                     }
                 }
 
@@ -3773,7 +3568,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Fertiliser Manure Controller : RemoveFertiliser() action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
-            Error error = null;
+            Error? error = null;
             try
             {
                 if (string.IsNullOrWhiteSpace(q))
@@ -3825,8 +3620,7 @@ namespace NMP.Portal.Controllers
                     if (!string.IsNullOrWhiteSpace(r))
                     {
                         ViewBag.EncryptedFieldId = r;
-                        model.FieldList = new List<string>();
-                        model.FieldList.Add(_fieldDataProtector.Unprotect(r));
+                        model.FieldList = [_fieldDataProtector.Unprotect(r)];
                     }
                     if (!string.IsNullOrWhiteSpace(s))
                     {
@@ -3850,7 +3644,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"OrganicManure Controller : Exception in RemoveFertiliser() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("OrganicManure Controller : Exception in RemoveFertiliser() action : {0}, {1}", ex.Message, ex.StackTrace);
                 if (model.IsComingFromRecommendation)
                 {
                     TempData["NutrientRecommendationsError"] = ex.Message;
@@ -3904,25 +3698,11 @@ namespace NMP.Portal.Controllers
             try
             {
                 if (!model.IsDeleteFertliser.Value)
-                {
-                    //if (model.IsComingFromRecommendation)
-                    //{
-                    //    string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-                    //    ViewBag.EncryptedFieldId = encryptedFieldId;
-                    //    if (!string.IsNullOrWhiteSpace(encryptedFieldId))
-                    //    {
-                    //        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear });
-                    //    }
-
-                    //}
-                    //else
-                    //{
-                    return RedirectToAction("CheckAnswer");
-                    // }
+                {                    
+                    return RedirectToAction("CheckAnswer");                   
                 }
                 else
                 {
-
                     List<int> fertiliserIds = new List<int>();
                     if (model.IsComingFromRecommendation && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
                     {
@@ -3942,7 +3722,6 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-
                     }
 
                     if (fertiliserIds.Count > 0)
@@ -3970,8 +3749,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved) }) + Resource.lblInorganicFertiliserApplicationsForSorting); ;
-
+                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved) }) + Resource.lblInorganicFertiliserApplicationsForSorting);
                             }
                         }
                         else
@@ -4008,21 +3786,16 @@ namespace NMP.Portal.Controllers
                             return View(model);
                         }
                     }
-
-
-
                 }
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FertiliserManure", model);
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"OrganicManure Controller : Exception in RemoveFertiliser() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("OrganicManure Controller : Exception in RemoveFertiliser() post action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["RemoveFertiliserError"] = ex.Message;
                 return View(model);
             }
             return View(model);
-
-
         }
 
         [HttpGet]
@@ -4040,11 +3813,10 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Fertiliser Manure Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Fertiliser Manure Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["CheckYourAnswerError"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
@@ -4091,9 +3863,7 @@ namespace NMP.Portal.Controllers
 
                     });
                 }
-
             }
-
         }
 
         [HttpGet]
@@ -4283,11 +4053,8 @@ namespace NMP.Portal.Controllers
                                     model.DefoliationList.Add(defoliationList);
                                     counter++;
                                 }
-
-
                             }
                         }
-
                     }
                 }
                 (List<SelectListItem> defoliationsList, error) = await GetDefoliationList(model);
@@ -4304,7 +4071,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Fertiliser Controller : Exception in Defoliation() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Fertiliser Controller : Exception in Defoliation() action : {0}, {1}", ex.Message, ex.StackTrace);
                 if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
                 {
                     if (model.IsDoubleCropAvailable)
@@ -4327,7 +4094,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Defoliation(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : Defoliation() post action called");
+            _logger.LogTrace("Fertiliser Manure Controller : Defoliation() post action called");
             Error error = null;
             try
             {
@@ -4381,7 +4148,6 @@ namespace NMP.Portal.Controllers
                                                 model.FertiliserManures[index].DefoliationName = selectedDefoliation;
                                             }
                                         }
-
                                     }
                                 }
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(crop.ID.Value, false);
@@ -4545,16 +4311,16 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Fertiliser Controller : Exception in Defoliation() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("Fertiliser Controller : Exception in Defoliation() post action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["DefoliationError"] = ex.Message;
                 return View(model);
             }
-
         }
+
         [HttpGet]
         public IActionResult backActionForDefoliation()
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : backActionForDefoliation() action called");
+            _logger.LogTrace("Fertiliser Manure Controller : BackActionForDefoliation() action called");
             FertiliserManureViewModel? model = new FertiliserManureViewModel();
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FertiliserManure"))
             {
@@ -4661,16 +4427,11 @@ namespace NMP.Portal.Controllers
                                         Text = text,
                                         Value = defoliation.ToString()
                                     });
-
-
                                 }
                                 allDefoliations.Add(allDefoliationWithName);
                             }
                         }
-
-
                     }
-
                 }
             }
 
@@ -4740,7 +4501,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult IsSameDefoliationForAll(FertiliserManureViewModel model)
         {
-            _logger.LogTrace($"Fertiliser Controller : IsSameDefoliationForAll() post action called");
+            _logger.LogTrace("Fertiliser Controller : IsSameDefoliationForAll() post action called");
             if (model.IsSameDefoliationForAll == null)
             {
                 ModelState.AddModelError("IsSameDefoliationForAll", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -4794,7 +4555,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> DoubleCrop(string q)
         {
-            _logger.LogTrace($"Fertiliser Manure Controller : DoubleCrop({q}) action called");
+            _logger.LogTrace("Fertiliser Manure Controller : DoubleCrop({q}) action called");
             FertiliserManureViewModel model = new FertiliserManureViewModel();
             try
             {
@@ -5345,7 +5106,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"OrganicManure Controller : Exception in GetWarningMessages() method : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace("OrganicManure Controller : Exception in GetWarningMessages() method : {0}, {1}", ex.Message, ex.StackTrace);
             }
             return warningMessages;
         }
@@ -5479,8 +5240,8 @@ namespace NMP.Portal.Controllers
                                                           .ToArray();
 
                     selectedDefoliation = (defoliation > 0 && defoliation <= defoliationParts.Length)
-             ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
-             : $"{defoliation}";
+                                         ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
+                                         : $"{defoliation}";
                     var parts = selectedDefoliation.Split('-');
                     if (parts.Length == 2)
                     {
@@ -5494,7 +5255,6 @@ namespace NMP.Portal.Controllers
 
                         selectedDefoliation = $"{left} - {right}";
                     }
-
                 }
             }
             return (selectedDefoliation, error);
