@@ -10754,7 +10754,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select &lt;strong&gt;Print or save as a PDF&lt;/strong&gt;, or in your desktop browser, open the menu and select, &lt;strong&gt;Print&lt;/strong&gt;..
+        ///   Looks up a localized string similar to Select Print or save as a PDF, or in your desktop browser, open the menu and select, Print..
         /// </summary>
         public static string lblPrint1 {
             get {
@@ -10763,7 +10763,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;..
+        ///   Looks up a localized string similar to Where it asks you to choose a printer, select Print to PDF..
         /// </summary>
         public static string lblPrint2 {
             get {
@@ -10772,7 +10772,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the PDF..
+        ///   Looks up a localized string similar to Select Print, then choose where on your computer you want to save the PDF..
         /// </summary>
         public static string lblPrint3 {
             get {

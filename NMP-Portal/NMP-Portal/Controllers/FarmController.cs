@@ -44,14 +44,14 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult Index()
         {
-            _logger.LogTrace($"Farm Controller : Index() action called");
+            _logger.LogTrace("Farm Controller : Index() action called");
             HttpContext.Session.Clear();
             return RedirectToAction("FarmList");
         }
 
         public async Task<IActionResult> FarmList(string? q)
         {
-            _logger.LogTrace($"Farm Controller : FarmList({q}) action called");
+            _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
             HttpContext.Session.Clear();
 
             FarmsViewModel model = new FarmsViewModel();
@@ -100,7 +100,7 @@ namespace NMP.Portal.Controllers
         }
         public IActionResult CreateFarmCancel()
         {
-            _logger.LogTrace($"Farm Controller : CreateFarmCancel() action called");
+            _logger.LogTrace("Farm Controller : CreateFarmCancel() action called");
             RemoveFarmSession();
             RemoveAddressesSession();
             return RedirectToAction("FarmList");
@@ -109,7 +109,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult Name()
         {
-            _logger.LogTrace($"Farm Controller : Name() action called");
+            _logger.LogTrace("Farm Controller : Name() action called");
             FarmViewModel? model = GetFarmFromSession();
             if (model == null)
             {
@@ -123,7 +123,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Name(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : Name() post action called");
+            _logger.LogTrace("Farm Controller : Name() post action called");
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
@@ -141,7 +141,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Country()
         {
-            _logger.LogTrace($"Farm Controller : Country() action called");
+            _logger.LogTrace("Farm Controller : Country() action called");
             FarmViewModel? model = GetFarmFromSession();
 
             try
@@ -177,7 +177,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Country(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : Country() post action called");
+            _logger.LogTrace("Farm Controller : Country() post action called");
             try
             {
                 if (farm.CountryID == null)
@@ -226,7 +226,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult FarmingRules()
         {
-            _logger.LogTrace($"Farm Controller : FarmingRules() action called");
+            _logger.LogTrace("Farm Controller : FarmingRules() action called");
             FarmViewModel? model = GetFarmFromSession();
 
             if (model == null)
@@ -253,7 +253,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult PostCode()
         {
-            _logger.LogTrace($"Farm Controller : PostCode() action called");
+            _logger.LogTrace("Farm Controller : PostCode() action called");
             FarmViewModel? model = GetFarmFromSession();
 
             if (model == null)
@@ -338,7 +338,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Address()
         {
-            _logger.LogTrace($"Farm Controller : Address() action called");
+            _logger.LogTrace("Farm Controller : Address() action called");
             try
             {
                 FarmViewModel? model = GetFarmFromSession();
@@ -378,55 +378,33 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Address(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : Address() post action called");
+            _logger.LogTrace("Farm Controller : Address() post action called");
+
             try
             {
-                if (string.IsNullOrWhiteSpace(farm.FullAddress))
-                {
-                    ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
-                }
-
-                List<AddressLookupResponse> addresses = GetAddressesFromSession() ?? new List<AddressLookupResponse>();
-
-                if (addresses.Count == 0)
-                {
-                    addresses = await _addressLookupService.AddressesAsync(farm.Postcode, 0);
-                }
+                ValidateAddress(farm);
+                var addresses = await LoadAddressesAsync(farm);
 
                 if (!ModelState.IsValid)
                 {
-                    if (addresses != null && addresses.Count > 0)
-                    {
-                        var addressList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
-                        ViewBag.AddressList = addressList;
-                        ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, addressList.Count.ToString());
-                    }
+                    PopulateAddressViewBags(addresses);
                     return View(farm);
                 }
 
-                AddressLookupResponse? address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
-                if (address != null)
-                {
-                    farm.Address1 = string.Format("{0}{1}{2}{3}", address.SubBuildingName != null ? address.SubBuildingName + ", " : string.Empty, address.BuildingNumber != null ? address.BuildingNumber + ", " : string.Empty, address.BuildingName != null ? address.BuildingName + ", " : string.Empty, address.Street);
-                    farm.Address2 = address.Locality;
-                    farm.Address3 = address.Town;
-                    farm.Address4 = address.HistoricCounty;
-                }
-
+                ApplySelectedAddress(farm, addresses);
                 farm.IsManualAddress = false;
 
                 SetFarmToSession(farm);
-                if (!farm.IsPostCodeChanged && farm.IsCheckAnswer)
-                {
-                    return RedirectToAction("CheckAnswer");
-                }
 
-                return RedirectToAction("ClimatePostCode");
+                return (farm.IsPostCodeChanged || !farm.IsCheckAnswer)
+                    ? RedirectToAction("ClimatePostCode")
+                    : RedirectToAction("CheckAnswer");
             }
             catch (HttpRequestException hre)
             {
                 _logger.LogError(hre, "Farm Controller : HttpRequestException in Address() action");
-                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+                return Functions.RedirectToErrorHandler(
+                    (int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
@@ -435,9 +413,50 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        private void ValidateAddress(FarmViewModel farm)
+        {
+            if (string.IsNullOrWhiteSpace(farm.FullAddress))
+            {
+                ModelState.AddModelError("FullAddress", Resource.MsgSelectAddress);
+            }
+        }
+
+        private async Task<List<AddressLookupResponse>> LoadAddressesAsync(FarmViewModel farm)
+        {
+            var addresses = GetAddressesFromSession() ?? new List<AddressLookupResponse>();
+            return addresses.Count > 0
+                ? addresses
+                : await _addressLookupService.AddressesAsync(farm.Postcode, 0);
+        }
+
+        private void PopulateAddressViewBags(List<AddressLookupResponse> addresses)
+        {
+            if (addresses == null || addresses.Count == 0) return;
+
+            var items = addresses.Select(a => new SelectListItem
+            {
+                Value = a.AddressLine,
+                Text = a.AddressLine
+            }).ToList();
+
+            ViewBag.AddressList = items;
+            ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, items.Count.ToString());
+        }
+
+        private void ApplySelectedAddress(FarmViewModel farm, List<AddressLookupResponse> addresses)
+        {
+            var address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
+            if (address == null) return;
+
+            farm.Address1 = $"{Functions.FormatPart(address.SubBuildingName)}{Functions.FormatPart(address.BuildingNumber)}{Functions.FormatPart(address.BuildingName)}{address.Street}";
+            farm.Address2 = address.Locality;
+            farm.Address3 = address.Town;
+            farm.Address4 = address.HistoricCounty;
+        }
+
         public IActionResult AddressNotFound()
         {
-            _logger.LogTrace($"Farm Controller : AddressNotFound() action called");
+            _logger.LogTrace("Farm Controller : AddressNotFound() action called");
             FarmViewModel? model = GetFarmFromSession();
             if (model == null)
             {
@@ -450,7 +469,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult ManualAddress()
         {
-            _logger.LogTrace($"Farm Controller : ManualAddress() action called");
+            _logger.LogTrace("Farm Controller : ManualAddress() action called");
             FarmViewModel? model = null;
             model = GetFarmFromSession();
             if (model == null)
@@ -465,7 +484,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : ManualAddress() post action called");
+            _logger.LogTrace("Farm Controller : ManualAddress() post action called");
             try
             {
                 if (string.IsNullOrEmpty(farm.Address1))
@@ -602,7 +621,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClimatePostCode(FarmViewModel model)
         {
-            _logger.LogTrace($"Farm Controller : ClimatePostCode() action called");
+            _logger.LogTrace("Farm Controller : ClimatePostCode() action called");
             try
             {
                 if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
@@ -656,20 +675,17 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> Rainfall()
         {
-            _logger.LogTrace($"Farm Controller : Rainfall() action called");
+            _logger.LogTrace("Farm Controller : Rainfall() action called");
             try
             {
-                FarmViewModel? model = null;
-                model = GetFarmFromSession();
+                FarmViewModel? model = GetFarmFromSession();
+                
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Rainfall() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                if (model == null)
-                {
-                    model = new FarmViewModel();
-                }
+                
                 if (model.Rainfall == 0 || model.Rainfall == null)
                 {
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
@@ -702,7 +718,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Rainfall(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : Rainfall() post action called");
+            _logger.LogTrace("Farm Controller : Rainfall() post action called");
             if (farm.Rainfall == null)
             {
                 ModelState.AddModelError("Rainfall", Resource.MsgEnterAverageAnnualRainfall);
@@ -722,7 +738,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult RainfallManual()
         {
-            _logger.LogTrace($"Farm Controller : RainfallManual() action called");
+            _logger.LogTrace("Farm Controller : RainfallManual() action called");
             FarmViewModel? model = GetFarmFromSession();
             if (model == null)
             {
@@ -737,7 +753,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RainfallManual(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : RainfallManual() post action called");
+            _logger.LogTrace("Farm Controller : RainfallManual() post action called");
             ValidateRainfall(farm);
             if (!ModelState.IsValid)
             {
@@ -792,7 +808,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> NVZ()
         {
-            _logger.LogTrace($"Farm Controller : NVZ() action called");
+            _logger.LogTrace("Farm Controller : NVZ() action called");
             FarmViewModel? model = GetFarmFromSession();
 
             if (model == null)
@@ -814,7 +830,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NVZ(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : NVZ() post action called");
+            _logger.LogTrace("Farm Controller : NVZ() post action called");
             if (farm.NVZFields == null)
             {
                 ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -835,7 +851,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult Elevation()
         {
-            _logger.LogTrace($"Farm Controller : Elevation() action called");
+            _logger.LogTrace("Farm Controller : Elevation() action called");
             FarmViewModel? model = GetFarmFromSession(); 
              
             if (model == null)
@@ -850,7 +866,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Elevation(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : Elevation() post action called");
+            _logger.LogTrace("Farm Controller : Elevation() post action called");
             if (farm.FieldsAbove300SeaLevel == null)
             {
                 ModelState.AddModelError("FieldsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -873,7 +889,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult Organic()
         {
-            _logger.LogTrace($"Farm Controller : Organic() action called");
+            _logger.LogTrace("Farm Controller : Organic() action called");
             FarmViewModel? model = GetFarmFromSession();            
             if (model == null)
             {
@@ -887,7 +903,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Organic(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : Organic() post action called");
+            _logger.LogTrace("Farm Controller : Organic() post action called");
             if (farm.RegisteredOrganicProducer == null)
             {
                 ModelState.AddModelError("RegisteredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -905,12 +921,12 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult CheckAnswer(string? q)
         {
-            _logger.LogTrace("Farm Controller : CheckAnswer({q}) action called",q);
+            _logger.LogTrace("Farm Controller : CheckAnswer({0}) action called",q);
             FarmViewModel? model = GetFarmFromSession(); 
             
             if (model == null)
             {
-                _logger.LogError("Farm Controller : Session not found in CheckAnswer({q}) action",q);
+                _logger.LogError("Farm Controller : Session not found in CheckAnswer({0}) action",q);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }            
 
@@ -950,7 +966,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : CheckAnswer() post action called");
+            _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
             try
             {
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
@@ -1027,9 +1043,10 @@ namespace NMP.Portal.Controllers
             }
 
         }
+
         public IActionResult BackCheckAnswer()
         {
-            _logger.LogTrace($"Farm Controller : BackCheckAnswer() action called");
+            _logger.LogTrace("Farm Controller : BackCheckAnswer() action called");
             FarmViewModel? model = GetFarmFromSession();
             
             if (model == null)
@@ -1057,7 +1074,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r)
         {
-            _logger.LogTrace($"Farm Controller : FarmSummary() action called");
+            _logger.LogTrace("Farm Controller : FarmSummary() action called");
             HttpContext.Session.Clear();
             string farmId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
@@ -1114,17 +1131,18 @@ namespace NMP.Portal.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, "Farm Controller: HttpRequestException in FarmSummary() action. Message: {ErrorMessage}, StackTrace: {StackTrace}", hre.Message, hre.StackTrace);
+                _logger.LogError(hre, "Farm Controller: HttpRequestException in FarmSummary() action. Message: {0}, StackTrace: {1}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError("Farm Controller : Exception in FarmSummary() action : {ex.Message} {ex.StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError("Farm Controller : Exception in FarmSummary() action : {1} {2}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
 
         }
+
         [HttpGet]
         public async Task<IActionResult> FarmDetails(string id)
         {
@@ -1192,12 +1210,12 @@ namespace NMP.Portal.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError("Farm Controller : HttpRequestException in FarmDetails() action : {hre.Message}, {hre.StackTrace}", hre.Message, hre.StackTrace);
+                _logger.LogError("Farm Controller : HttpRequestException in FarmDetails() action : {0}, {1}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError("Farm Controller : Exception in FarmDetails() action : {ex.Message}, {ex.StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError("Farm Controller : Exception in FarmDetails() action : {1}, {1}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
@@ -1207,7 +1225,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FarmUpdate(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : FarmUpdate() action called");
+            _logger.LogTrace("Farm Controller : FarmUpdate() action called");
             try
             {
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
