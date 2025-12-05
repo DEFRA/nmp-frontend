@@ -884,7 +884,7 @@ hr.seperator_thirty {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
-    font-size: 0.875rem;
+    /*font-size: 0.875rem;*/
     line-height: 1.1428571429;
     margin-top: 0;
     margin-bottom: 15px;
