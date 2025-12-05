@@ -687,9 +687,6 @@ hr.seperator_thirty {
 .livestock-type {
     width: 25%;
 }
-.govuk-body-s {
-    font-size: 17px !important;
-}
 .n-table th {
     width: 33%;
 }
@@ -891,23 +888,12 @@ hr.seperator_thirty {
     line-height: 1.1428571429;
     margin-top: 0;
     margin-bottom: 15px;
+    font-size: 17px !important;
 }
 
 @media print {
     .govuk-body-s {
         font-family: sans-serif;
-    }
-}
-
-@media (min-width: 40.0625em) {
-    .govuk-body-s {
-        font-size: 1rem;
-        line-height: 1.25;
-    }
-}
-
-@media print {
-    .govuk-body-s {
         font-size: 14pt;
         line-height: 1.2;
     }
@@ -915,15 +901,12 @@ hr.seperator_thirty {
 
 @media (min-width: 40.0625em) {
     .govuk-body-s {
+        font-size: 1rem;
+        line-height: 1.25;
         margin-bottom: 20px;
     }
 }
 
-@media (min-width: 40.0625em) {
-    .govuk-body-s {
-        margin-bottom: 20px;
-    }
-}
 
 p + .govuk-heading-l, .govuk-body-m + .govuk-heading-l, .govuk-body + .govuk-heading-l,
 .govuk-body-s + .govuk-heading-l,
