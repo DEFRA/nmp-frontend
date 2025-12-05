@@ -880,3 +880,85 @@ hr.seperator_thirty {
 #totalCropNeed{
     width:87px !important;
 }
+
+.govuk-body-s {
+    color: #0b0c0c;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.1428571429;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+@media print {
+    .govuk-body-s {
+        font-family: sans-serif;
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .govuk-body-s {
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+}
+
+@media print {
+    .govuk-body-s {
+        font-size: 14pt;
+        line-height: 1.2;
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .govuk-body-s {
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .govuk-body-s {
+        margin-bottom: 20px;
+    }
+}
+
+p + .govuk-heading-l, .govuk-body-m + .govuk-heading-l, .govuk-body + .govuk-heading-l,
+.govuk-body-s + .govuk-heading-l,
+.govuk-list + .govuk-heading-l {
+    padding-top: 15px;
+}
+
+@media (min-width: 40.0625em) {
+    p + .govuk-heading-l, .govuk-body-m + .govuk-heading-l, .govuk-body + .govuk-heading-l,
+    .govuk-body-s + .govuk-heading-l,
+    .govuk-list + .govuk-heading-l {
+        padding-top: 20px;
+    }
+}
+
+p + .govuk-heading-m, .govuk-body-m + .govuk-heading-m, .govuk-body + .govuk-heading-m,
+.govuk-body-s + .govuk-heading-m,
+.govuk-list + .govuk-heading-m,
+p + .govuk-heading-s,
+.govuk-body-m + .govuk-heading-s,
+.govuk-body + .govuk-heading-s,
+.govuk-body-s + .govuk-heading-s,
+.govuk-list + .govuk-heading-s {
+    padding-top: 5px;
+}
+
+@media (min-width: 40.0625em) {
+    p + .govuk-heading-m, .govuk-body-m + .govuk-heading-m, .govuk-body + .govuk-heading-m,
+    .govuk-body-s + .govuk-heading-m,
+    .govuk-list + .govuk-heading-m,
+    p + .govuk-heading-s,
+    .govuk-body-m + .govuk-heading-s,
+    .govuk-body + .govuk-heading-s,
+    .govuk-body-s + .govuk-heading-s,
+    .govuk-list + .govuk-heading-s {
+        padding-top: 10px;
+    }
+}
