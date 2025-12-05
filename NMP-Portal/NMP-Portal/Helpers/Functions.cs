@@ -173,5 +173,8 @@ namespace NMP.Portal.Helpers
 
             return num.ToString();
         }
+
+        public static string FormatPart(string? part) =>
+            string.IsNullOrWhiteSpace(part) ? string.Empty : $"{part}, ";
     }
 }
