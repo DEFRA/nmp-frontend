@@ -5344,7 +5344,7 @@ cubic metres per hectare  not set</value>
     <value>not a derogated</value>
   </data>
   <data name="lblComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
-    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit.</value>
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit</value>
   </data>
   <data name="lblTheInformationEnteredIndicatesCompliance" xml:space="preserve">
     <value>The information entered indicates compliance.</value>
@@ -7024,5 +7024,8 @@ livestock manure.</value>
   </data>
   <data name="lblThereAreCountCutsAndGrazingsPlusEstablishment" xml:space="preserve">
     <value>There are {0} cuts and grazings, plus establishment. With nutrient and lime recommendations for each one.</value>
+  </data>
+  <data name="lblNMaxLimitsForYear" xml:space="preserve">
+    <value>N-max limits {0}</value>
   </data>
 </root>

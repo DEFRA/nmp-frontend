@@ -37,14 +37,14 @@
         <hr class="margin-bottom-forty">
     </div>
 </div>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        <span class="govuk-caption-l">@Model.FarmName</span>
         <h1 class="govuk-heading-xl margin-bottom-thirty">
-            @string.Format(Resource.lblNMaxLimitsForFarm, Model.FarmName)
+            @string.Format(Resource.lblNMaxLimitsForYear, Model.Year)
         </h1>
-        <h2 class="govuk-heading-l">@(string.Format(Resource.lblHarvestYearValue, Model.Year))</h2>
-        <p class="govuk-body margin-bottom-thirty">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
-
+        <p class="govuk-body  margin-bottom-thirty">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
     </div>
 </div>
 <div class="govuk-grid-row margin-bottom-ten">
