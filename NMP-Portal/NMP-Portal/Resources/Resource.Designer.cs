@@ -3040,7 +3040,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit..
+        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit.
         /// </summary>
         public static string lblComplianceWithNVZLivestockManureNitrogenFarmLimit {
             get {
@@ -9112,6 +9112,15 @@ namespace NMP.Portal.Resources {
         public static string lblNMaxLimitsForFarm {
             get {
                 return ResourceManager.GetString("lblNMaxLimitsForFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N-max limits {0}.
+        /// </summary>
+        public static string lblNMaxLimitsForYear {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitsForYear", resourceCulture);
             }
         }
         
