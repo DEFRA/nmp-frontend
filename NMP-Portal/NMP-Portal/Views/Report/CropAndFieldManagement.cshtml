@@ -464,7 +464,7 @@
                                                                 <td class="govuk-table__cell">@(fertManure.K2O != null ? (fertManure.K2O == 0 ? fertManure.K2O : string.Format(Resource.lblValueKg, fertManure.K2O.Value)) : Resource.lblHyphen)</td>
                                                                 <td class="govuk-table__cell">@(fertManure.SO3 != null ? (fertManure.SO3 == 0 ? fertManure.SO3 : string.Format(Resource.lblValueKg, fertManure.SO3.Value)) : Resource.lblHyphen)</td>
                                                                 <td class="govuk-table__cell">
-                                                                    @(fertManure.Lime != null ? (fertManure.Lime == 0 ? fertManure.Lime : string.Format(Resource.lblRateWithTonnes.ToLower(), fertManure.Lime)) : Resource.lblHyphen)
+                                                                    @(fertManure.Lime != null ? (fertManure.Lime == 0 ? fertManure.Lime : string.Format(Resource.lblRateWithTonnes.ToLower(), string.Format("{0:N1}", fertManure.Lime))) : Resource.lblHyphen)
                                                                 </td>
                                                             </tr>
                                                         </tbody>
