@@ -132,7 +132,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
             _logger.LogTrace("Fertiliser Manure Controller : FieldGroup({0}, {1}, {2}) action called", q, r, s);
-            FertiliserManureViewModel? model = GetFertiliserManureFromSession();
+            FertiliserManureViewModel? model = GetFertiliserManureFromSession() ?? new FertiliserManureViewModel(); ;
             Error? error = null;
             try
             {
@@ -4207,7 +4207,7 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                 }
-                                if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
+                                if (crop.DefoliationSequenceID != null && model.DefoliationList[0].Defoliation != null)
                                 {
                                     (string selectedDefoliation, error) = await GetDefoliationName(model, model.DefoliationList[0].Defoliation.Value, crop.DefoliationSequenceID.Value);
                                     if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))

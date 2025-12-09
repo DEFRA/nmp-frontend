@@ -3040,7 +3040,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit..
+        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit.
         /// </summary>
         public static string lblComplianceWithNVZLivestockManureNitrogenFarmLimit {
             get {
@@ -9116,6 +9116,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N-max limits {0}.
+        /// </summary>
+        public static string lblNMaxLimitsForYear {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitsForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application may take you over the N-max limit for this crop.
         /// </summary>
         public static string lblNMaxLimitTitle {
@@ -12653,7 +12662,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance..
+        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine)..
         /// </summary>
         public static string lblSourceRb209 {
             get {
