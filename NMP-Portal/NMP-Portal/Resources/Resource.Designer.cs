@@ -7757,7 +7757,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This assessment is based on the NVZ livestock manure farm limit of {0}kg of N per hectare.
+        ///   Looks up a localized string similar to This assessment is based on the NVZ livestock manure farm limit of {0}kg of nitrogen (N) per hectare.
         /// </summary>
         public static string lblLivestockContentTwoForNonDerogation {
             get {
@@ -8171,7 +8171,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to and best practice guidance of 250kg of N per hectare for land outside of an NVZ..
+        ///   Looks up a localized string similar to and best practice guidance of 250kg of nitrogen (N) per hectare for land outside of an NVZ..
         /// </summary>
         public static string lblLivestockReportContentThreeForDerogationOrNonDerogation {
             get {
@@ -8279,7 +8279,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This assessment is based on the derogated NVZ livestock manure N farm limit of {0}kg of N per hectare for grazing livestock, {1}kg of N per hectare for non-grazing livestock .
+        ///   Looks up a localized string similar to This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock .
         /// </summary>
         public static string lblLivestockReportContentTwoForDerogation {
             get {
