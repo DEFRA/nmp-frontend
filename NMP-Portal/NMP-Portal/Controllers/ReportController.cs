@@ -40,7 +40,7 @@ namespace NMP.Portal.Controllers
         private readonly ICropService _cropService;
         private readonly IOrganicManureService _organicManureService;
         private readonly IFertiliserManureService _fertiliserManureService;
-        private readonly IReportService _reportService;        
+        private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
         private readonly IWarningService _warningService;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupService addressLookupService,
@@ -57,7 +57,7 @@ namespace NMP.Portal.Controllers
             _fieldService = fieldService;
             _cropService = cropService;
             _organicManureService = organicManureService;
-            _fertiliserManureService = fertiliserManureService;            
+            _fertiliserManureService = fertiliserManureService;
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
             _warningService = warningService;
@@ -935,7 +935,7 @@ namespace NMP.Portal.Controllers
                     return View("ReportType", model);
                 }
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                
+
                 if (model.Year != null)
                 {
                     return RedirectToAction("ExportFieldsOrCropType");
@@ -1562,7 +1562,7 @@ namespace NMP.Portal.Controllers
                 }
                 model.NVZReportOption = null;
                 if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
-                {                    
+                {
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
@@ -1653,7 +1653,7 @@ namespace NMP.Portal.Controllers
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                 {
-                    
+
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
                     {
@@ -2232,7 +2232,20 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea);
                 }
-
+                if (model.TotalFarmArea != null)
+                {
+                    if (ModelState.ContainsKey("TotalFarmArea") && Math.Round(model.TotalFarmArea.Value, 2) != model.TotalFarmArea)
+                    {
+                        ModelState.AddModelError("TotalFarmArea", string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalFarmArea.ToLower()));
+                    }
+                }
+                if (model.TotalAreaInNVZ != null)
+                {
+                    if (ModelState.ContainsKey("TotalAreaInNVZ") && Math.Round(model.TotalAreaInNVZ.Value, 2) != model.TotalAreaInNVZ)
+                    {
+                        ModelState.AddModelError("TotalAreaInNVZ", string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalAreaInAnNvz));
+                    }
+                }
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -2315,7 +2328,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
 
             }
-            
+
             (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
@@ -2460,7 +2473,7 @@ namespace NMP.Portal.Controllers
                         model.IsCheckList = false;
                     }
                 }
-                
+
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             catch (Exception ex)
@@ -2495,7 +2508,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("LivestockImportExportCheckAnswer");
                 }
-                
+
                 return RedirectToAction("ManureType");
             }
             catch (Exception ex)
@@ -2533,7 +2546,7 @@ namespace NMP.Portal.Controllers
                             Value = f.Id.ToString(),
                             Text = f.Name
                         }).ToList();
-                        ViewBag.ManureTypeList = SelectListItem.ToList();                        
+                        ViewBag.ManureTypeList = SelectListItem.ToList();
                     }
                 }
                 if (!string.IsNullOrWhiteSpace(q))
@@ -2658,7 +2671,7 @@ namespace NMP.Portal.Controllers
 
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.ManureTypeId == (int)ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)ManureTypes.OtherLiquidMaterials)
-                {                    
+                {
                     return RedirectToAction("OtherMaterialName");
                 }
                 else
@@ -2804,7 +2817,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     if (model.LivestockQuantity < 1 || model.LivestockQuantity > 999999)
-                    {                        
+                    {
                         ModelState.AddModelError("LivestockQuantity", Resource.MsgEnterAnQuantityBetweenValue);
                     }
                 }
@@ -2886,7 +2899,7 @@ namespace NMP.Portal.Controllers
                             {
                                 harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
                                 model.HarvestYear = harvestYearList;
-                            }                            
+                            }
                         }
                         else
                         {
@@ -2907,7 +2920,7 @@ namespace NMP.Portal.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
-                
+
                 return View(model);
             }
 
@@ -2938,7 +2951,7 @@ namespace NMP.Portal.Controllers
                     {
                         (ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                         model.ManureType = manureType;
-                        
+
                         if (error == null)
                         {
                             if (farmManureTypeList.Count > 0)
@@ -3072,7 +3085,7 @@ namespace NMP.Portal.Controllers
                     if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
                     {
                         (ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                        model.ManureType = manureType;                        
+                        model.ManureType = manureType;
                         if (error == null)
                         {
                             if (farmManureTypeList.Count > 0)
@@ -3737,13 +3750,13 @@ namespace NMP.Portal.Controllers
                 model.IsCheckAnswer = false;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedId))
-                {                    
+                {
                     return RedirectToAction("ManageImportExport", new
                     {
                         q = model.EncryptedFarmId,
                         y = model.EncryptedHarvestYear
                     });
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -3774,7 +3787,7 @@ namespace NMP.Portal.Controllers
                 model.IsDefaultValueChange = false;
                 model.IsCancel = null;
                 Error error = null;
-               
+
                 if (!string.IsNullOrWhiteSpace(i))
                 {
                     int decryptedId = Convert.ToInt32(_reportDataProtector.Unprotect(i));
@@ -4206,7 +4219,7 @@ namespace NMP.Portal.Controllers
                                     }
                                 }
                                 decimal? totalImports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).Sum(x => x.NTotal));
-                                ViewBag.TotalImportsInKg = string.Format("{0:N2}", totalImports);                                
+                                ViewBag.TotalImportsInKg = string.Format("{0:N2}", totalImports);
                                 decimal? totalExports = (nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblExport.ToUpper()).Sum(x => x.NTotal));
                                 ViewBag.TotalExportsInKg = string.Format("{0:N2}", totalExports);
                                 decimal netTotal = Math.Round((totalImports ?? 0) - (totalExports ?? 0), 0);
@@ -4942,7 +4955,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgEnterTheAverageTotalNumberOfThis, model.LivestockGroupName, model.Year));
                 }
-                
+
                 if (!ModelState.IsValid)
                 {
                     (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportService.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
@@ -5197,7 +5210,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NitrogenStandard() 
+        public async Task<IActionResult> NitrogenStandard()
         {
             _logger.LogTrace("Report Controller : NitrogenStandard() action called");
             ReportViewModel model = new ReportViewModel();
@@ -6508,7 +6521,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                
+
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange))
                 {
@@ -7003,7 +7016,7 @@ namespace NMP.Portal.Controllers
                         {
                             ViewBag.AreaReqForNonGrazingLivestock = Math.Round(nutrientsLoadingFarmDetail.LandNotNVZ.Value + (areaReqForNonGrazingLivestock - capacityOfLandOutside) / 170, 2);
                         }
-                        
+
                         ViewBag.TotalAreaReqForLivestock = (ViewBag.AreaReqForNonGrazingLivestock != null &&
                         ViewBag.AreaReqForGrazingLivestock != null) ? Math.Round(ViewBag.AreaReqForGrazingLivestock + ViewBag.AreaReqForNonGrazingLivestock, 2) : 0;
                     }

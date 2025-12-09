@@ -5137,6 +5137,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the {0} to two decimal place.
+        /// </summary>
+        public static string lblFarmAreaCanHaveOnlyTwoDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblFarmAreaCanHaveOnlyTwoDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall.
         /// </summary>
         public static string lblFarmAvgAnnualRainfall {
@@ -13915,6 +13924,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to total area in an NVZ.
+        /// </summary>
+        public static string lblTotalAreaInAnNvz {
+            get {
+                return ResourceManager.GetString("lblTotalAreaInAnNvz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total area required.
         /// </summary>
         public static string lblTotalAreaRequired {
@@ -15796,7 +15814,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the total target dry matter yield for {0} field in {1}.
+        ///   Looks up a localized string similar to What is the total target dry matter yield for {0} field in {1}?.
         /// </summary>
         public static string lblWhatIsTheTotalTargetDryMatterYieldFor {
             get {
@@ -15814,7 +15832,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the total target dry matter yield for fields in {0}.
+        ///   Looks up a localized string similar to What is the total target dry matter yield for fields in {0}?.
         /// </summary>
         public static string lblWhatIsTheTotalTargetDryMatterYieldForFields {
             get {
