@@ -4843,11 +4843,10 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-                    else
+                    else if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                     {
                         if (model.Crops != null && model.Crops.Count > 0)
                         {
-
                             string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
                             (bool groupNameExist, error) = await _cropService.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                             if (string.IsNullOrWhiteSpace(error.Message) && groupNameExist)
