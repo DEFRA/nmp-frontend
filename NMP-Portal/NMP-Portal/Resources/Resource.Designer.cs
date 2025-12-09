@@ -3040,7 +3040,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit..
+        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit.
         /// </summary>
         public static string lblComplianceWithNVZLivestockManureNitrogenFarmLimit {
             get {
@@ -6109,6 +6109,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} fields ({1}).
+        /// </summary>
+        public static string lblGroupNameFieldsWithCropTypeName {
+            get {
+                return ResourceManager.GetString("lblGroupNameFieldsWithCropTypeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Guidance.
         /// </summary>
         public static string lblGuidance {
@@ -6613,7 +6622,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How to save your plan as a PDF.
+        ///   Looks up a localized string similar to How to save this report as a PDF.
         /// </summary>
         public static string lblHowtosaveyourplanasaPDF {
             get {
@@ -9107,6 +9116,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N-max limits {0}.
+        /// </summary>
+        public static string lblNMaxLimitsForYear {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitsForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application may take you over the N-max limit for this crop.
         /// </summary>
         public static string lblNMaxLimitTitle {
@@ -10745,7 +10763,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;..
+        ///   Looks up a localized string similar to Select Print or save as a PDF, or in your desktop browser, open the menu and select, Print..
         /// </summary>
         public static string lblPrint1 {
             get {
@@ -10754,7 +10772,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy..
+        ///   Looks up a localized string similar to Where it asks you to choose a printer, select Print to PDF..
         /// </summary>
         public static string lblPrint2 {
             get {
@@ -10763,7 +10781,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF..
+        ///   Looks up a localized string similar to Select Print, then choose where on your computer you want to save the PDF..
         /// </summary>
         public static string lblPrint3 {
             get {
@@ -12644,7 +12662,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance..
+        ///   Looks up a localized string similar to Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine)..
         /// </summary>
         public static string lblSourceRb209 {
             get {
@@ -13265,11 +13283,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one..
+        ///   Looks up a localized string similar to There are {0} cuts and grazings, with nutrient and lime recommendations for each one..
         /// </summary>
-        public static string lblThereAreCountCutsAndGrazingsInYear {
+        public static string lblThereAreCountCutsAndGrazings {
             get {
-                return ResourceManager.GetString("lblThereAreCountCutsAndGrazingsInYear", resourceCulture);
+                return ResourceManager.GetString("lblThereAreCountCutsAndGrazings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are {0} cuts and grazings, plus establishment. With nutrient and lime recommendations for each one..
+        /// </summary>
+        public static string lblThereAreCountCutsAndGrazingsPlusEstablishment {
+            get {
+                return ResourceManager.GetString("lblThereAreCountCutsAndGrazingsPlusEstablishment", resourceCulture);
             }
         }
         
@@ -16093,7 +16120,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0} fields?.
+        ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0}?.
         /// </summary>
         public static string lblWhenAreYouApplyingInOrganicfertiliser {
             get {

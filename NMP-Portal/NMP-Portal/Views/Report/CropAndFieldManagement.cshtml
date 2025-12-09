@@ -1,4 +1,5 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Portal.Enums
+@using NMP.Portal.Resources
 @using System.Globalization
 @using NMP.Portal.ServiceResponses
 @model NMP.Portal.ViewModels.ReportViewModel
@@ -226,7 +227,7 @@
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
                                                             <th scope="col" class="govuk-table__header">@Resource.lblIndexPH</th>
-                                                            <th scope="col" class="govuk-table__header">@Resource.lblTotalCropNeed</th>
+                                                            <th id="totalCropNeed" scope="col" class="govuk-table__header">@Resource.lblTotalCropNeed</th>
                                                             <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
                                                             <th scope="col" class="govuk-table__header">@Resource.lblSupplyFromManures</th>
                                                             <th scope="col" class="govuk-table__header">@Resource.lblFertiliserOrLimeRecommendation</th>
@@ -454,17 +455,17 @@
                                                                 @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                                                                 {
                                                                     <td class="govuk-table__cell">
-                                                                        @Resource.lblNotEntered
+                                                                        @($"{Enum.GetName(typeof(PotentialCut), mp.Defoliation)} ({mp.DefoliationSequenceName.ToLower()})")
                                                                     </td>
                                                                 }
                                                                 <td class="govuk-table__cell">
-                                                                    @(fertManure.N != null ? (fertManure.N == 0 ? fertManure.N : string.Format(Resource.lblValueKg, string.Format("{0:N3}", fertManure.N))) : Resource.lblHyphen)
+                                                                    @(fertManure.N != null ? (fertManure.N == 0 ? fertManure.N : string.Format(Resource.lblValueKg, fertManure.N.Value)) : Resource.lblHyphen)
                                                                 </td>
-                                                                <td class="govuk-table__cell">@(fertManure.P2O5 != null ? (fertManure.P2O5 == 0 ? fertManure.P2O5 : string.Format(Resource.lblValueKg, string.Format("{0:N3}", fertManure.P2O5))) : Resource.lblHyphen)</td>
-                                                                <td class="govuk-table__cell">@(fertManure.K2O != null ? (fertManure.K2O == 0 ? fertManure.K2O : string.Format(Resource.lblValueKg, string.Format("{0:N3}", fertManure.K2O))) : Resource.lblHyphen)</td>
-                                                                <td class="govuk-table__cell">@(fertManure.SO3 != null ? (fertManure.SO3 == 0 ? fertManure.SO3 : string.Format(Resource.lblValueKg, string.Format("{0:N3}", fertManure.SO3))) : Resource.lblHyphen)</td>
+                                                                <td class="govuk-table__cell">@(fertManure.P2O5 != null ? (fertManure.P2O5 == 0 ? fertManure.P2O5 : string.Format(Resource.lblValueKg, fertManure.P2O5.Value)) : Resource.lblHyphen)</td>
+                                                                <td class="govuk-table__cell">@(fertManure.K2O != null ? (fertManure.K2O == 0 ? fertManure.K2O : string.Format(Resource.lblValueKg, fertManure.K2O.Value)) : Resource.lblHyphen)</td>
+                                                                <td class="govuk-table__cell">@(fertManure.SO3 != null ? (fertManure.SO3 == 0 ? fertManure.SO3 : string.Format(Resource.lblValueKg, fertManure.SO3.Value)) : Resource.lblHyphen)</td>
                                                                 <td class="govuk-table__cell">
-                                                                    @(fertManure.Lime != null ? (fertManure.Lime == 0 ? fertManure.Lime : string.Format(Resource.lblRateWithTonnes.ToLower(), fertManure.Lime)) : Resource.lblHyphen)
+                                                                    @(fertManure.Lime != null ? (fertManure.Lime == 0 ? fertManure.Lime : string.Format(Resource.lblRateWithTonnes.ToLower(), string.Format("{0:N1}", fertManure.Lime))) : Resource.lblHyphen)
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -507,7 +508,7 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblApplicationRate</th>
-                                                            <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format("{0:N1}{1}", orgManure.ApplicationRate, orgManure.RateUnit) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format("{0:N1} {1}", orgManure.ApplicationRate, orgManure.RateUnit) : Resource.lblNotEntered)</td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblIncorporationMethod</th>

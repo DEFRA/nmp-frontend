@@ -18,30 +18,23 @@ namespace NMP.Portal.ViewModels
         public int? FarmId { get; set; }
         public int? HarvestYear { get; set; }
         public List<string>? FieldList { get; set; }
-
         public int? ManureGroupId { get; set; }
         public int? ManureTypeId { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblEnterTheDateInCorrectFormat))]
         public DateTime? ApplicationDate { get; set; }
         public string? DefaultNutrientValue { get; set; }
-        public bool isEnglishRules { get; set; }
-
+        public bool IsEnglishRules { get; set; }
         public List<OrganicManureDataViewModel>? OrganicManures { get; set; }
         public ManureType ManureType { get; set; }
-
         public string? ManureGroupName { get; set; }
         public string? ManureTypeName { get; set; }
-
         public int? ApplicationRateMethod { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblApplicationRate))]
         [RegularExpression(@"^(?:0(\.\d{1})?|[1-9]{1}\d{0,2}(\.\d{1})?|250(\.0{1})?)$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgForApplicationRate))]
-
-
         public decimal? ApplicationRate { get; set; }
-        public int? ApplicationMethod { get; set; }
-        //public int? ManualApplicationRate { get; set; }
+        public int? ApplicationMethod { get; set; }        
         public decimal? Area { get; set; }
         public decimal? Quantity { get; set; }
         public int? ApplicationRateArable { get; set; }
@@ -64,8 +57,7 @@ namespace NMP.Portal.ViewModels
         public int? RainfallWithinSixHoursID { get; set; }
         public string? RainfallWithinSixHours { get; set; }
         public int? WindspeedID { get; set; }
-        public string? Windspeed { get; set; }
-        
+        public string? Windspeed { get; set; }        
         public bool IsFieldGroupChange { get; set; } = false;
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsApplicationMethodChange { get; set; } = false;
@@ -75,17 +67,14 @@ namespace NMP.Portal.ViewModels
         public string? ApplicationMethodName { get; set; }
         public string? IncorporationMethodName { get; set; }
         public string? IncorporationDelayName { get; set; }
-        public string? FieldGroupName { get; set; }
+        public string? CropGroupName { get; set; }
         public string? CropTypeName { get; set; }
         public DateTime? SoilDrainageEndDate { get; set; }
         public int? TotalRainfall { get; set; }
-
         public string? FarmName { get; set; }
         public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
-
         public int? MoistureTypeId { get; set; }
         public string? MoistureType { get; set; }
-
         public int? RainWithin6Hours { get; set; }
         public bool IsComingFromRecommendation { get; set; } = false;
         public int? ManureGroupIdForFilter { get; set; }
@@ -94,8 +83,7 @@ namespace NMP.Portal.ViewModels
         public bool IsOrgManureNfieldLimitWarning { get; set; } = false;
         public bool IsNMaxLimitWarning { get; set; } = false;
         public bool IsEndClosedPeriodFebruaryWarning { get; set; } = false;
-        public bool IsEndClosedPeriodFebruaryExistWithinThreeWeeks { get; set; } = false;
-        //public bool IsClosedPeriodOrganicAppRateExceedMaxN { get; set; } = false;
+        public bool IsEndClosedPeriodFebruaryExistWithinThreeWeeks { get; set; } = false;        
         public bool IsStartPeriodEndFebOrganicAppRateExceedMaxN150 { get; set; } = false;
         public int? CropOrder { get; set; }
         public string? EncryptedFieldId { get; set; }
@@ -119,12 +107,10 @@ namespace NMP.Portal.ViewModels
         public string? EndClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;
         public string? EndClosedPeriodEndFebWarningPara1 { get; set; } = string.Empty;
         public string? EndClosedPeriodEndFebWarningPara2 { get; set; } = string.Empty;
-
         public string? EndClosedPeriodFebruaryExistWithinThreeWeeksHeading { get; set; } = string.Empty;
         public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 { get; set; } = string.Empty;
         public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 { get; set; } = string.Empty;
         public bool? HighReadilyAvailableNitrogen { get; set; }
-
         public string? StartClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;
         public string? StartClosedPeriodEndFebWarningPara1 { get; set; } = string.Empty;
         public string? StartClosedPeriodEndFebWarningPara2 { get; set; } = string.Empty;
@@ -154,30 +140,25 @@ namespace NMP.Portal.ViewModels
         public int? GrassCropCount { get; set; }
         public bool NeedToShowSameDefoliationForAll { get; set; } = true;
         public bool IsDefaultValueChange { get; set; } = false;
-
-
         public string? NmaxWarningHeader { get; set; }
         public int NmaxWarningCodeID { get; set; }
         public int NmaxWarningLevelID { get; set; }
-
         public string? CropNmaxLimitWarningHeader { get; set; }
         public int CropNmaxLimitWarningCodeID { get; set; }
         public int CropNmaxLimitWarningLevelID { get; set; }
-
         public string? EndClosedPeriodEndFebWarningHeader { get; set; } = string.Empty;
         public int EndClosedPeriodEndFebWarningCodeID { get; set; }
         public int EndClosedPeriodEndFebWarningLevelID { get; set; }
-
         public string? ClosedPeriodWarningHeader { get; set; } = string.Empty;
         public int ClosedPeriodWarningCodeID { get; set; }
         public int ClosedPeriodWarningLevelID { get; set; }
-
         public string? EndClosedPeriodFebruaryExistWithinThreeWeeksHeader { get; set; } = string.Empty;
         public int EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID { get; set; }
         public int EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID { get; set; }
-
         public string? StartClosedPeriodEndFebWarningHeader { get; set; } = string.Empty;
         public int StartClosedPeriodEndFebWarningCodeID { get; set; }
         public int StartClosedPeriodEndFebWarningLevelID { get; set; }
+        public List<DefoliationList>? DefoliationList { get; set; }
+        public bool IsDoubleCropValueChange { get; set; } = false;
     }
 }

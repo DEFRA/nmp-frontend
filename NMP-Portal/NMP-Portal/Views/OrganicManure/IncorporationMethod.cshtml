@@ -1,7 +1,7 @@
 ﻿@using NMP.Portal.Resources
 @model NMP.Portal.ViewModels.OrganicManureViewModel
 @{
-    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials);
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {title}";
 }
@@ -53,7 +53,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"/>
                 <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-date-input>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"/>
@@ -91,7 +91,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName" value="@Model.IncorporationMethodName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"/>
@@ -186,7 +186,7 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].EncryptedCounter" value="@Model.OrganicManures[i].EncryptedCounter"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"/>
-
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IsGrass" value="@Model.OrganicManures[i].IsGrass" />
                     }
                 }
                 @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
@@ -223,6 +223,21 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
                     }
                 }
+                @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                    {
+
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
+                    }
+                }
             </div>
             <govuk-radios asp-for="@Model.IncorporationMethod">
                 <govuk-radios-fieldset>
@@ -230,8 +245,7 @@
                         @string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOption
-                        @* @string.Format(Resource.lblTheseOptionsComeFromMannerNpk, Resource.lblIncorporationMethods) *@
+                        @Resource.lblSelectOneOption                       
                     </govuk-radios-hint>
                     @if (ViewBag.IncorporationMethod != null && ViewBag.IncorporationMethod.Count > 0)
                     {
@@ -246,14 +260,10 @@
                                 <govuk-radios-divider>@Resource.lblOr</govuk-radios-divider>
                                 <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
                             }
-
                         }
-
                     }
-
                 </govuk-radios-fieldset>
             </govuk-radios>
-
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="IncorporationMethod">
                 @Resource.lblContinue
             </govuk-button>

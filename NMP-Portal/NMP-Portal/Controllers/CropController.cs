@@ -2809,7 +2809,8 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.DefaultYield = defaultYieldForCropType;
                 }
-                if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other)
+                if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other
+                    && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
                 {
                     string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
                     ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
@@ -2890,16 +2891,20 @@ namespace NMP.Portal.Controllers
                         s = model.EncryptedHarvestYear
                     });
                 }
-                List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-                var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                List<CropInfoOneResponse> cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
+                List<CropInfoOneResponse> cropInfoOneList = new List<CropInfoOneResponse>();
+                if (model.CropGroupId != null && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Other
+                    && model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                {
+                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
+                    var country = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                    cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).ToList();
 
+                }
                 action = model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals ?
-                 "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
-                 || cropInfoOneList.Count == 1) ?
-                 ((model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
-             "Yield" : "YieldQuestion") : "CropInfoOne");
-
+                     "CropInfoTwo" : (((model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Other)
+                     || cropInfoOneList.Count == 1) ?
+                     ((model.YieldQuestion != (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
+                 "Yield" : "YieldQuestion") : "CropInfoOne");
 
                 if (model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Cereals)
                 {
@@ -4183,11 +4188,34 @@ namespace NMP.Portal.Controllers
 
                                     if (cropCounter == 1)
                                     {
-                                        ViewBag.PotentialCutNameForCrop1 = potentialCuts[(int)crop.PotentialCut - 1];
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                                        {
+                                            if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
+                                            {
+                                                ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                            else
+                                            {
+                                                ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                        }
+
                                     }
                                     else if (cropCounter == 2)
                                     {
-                                        ViewBag.PotentialCutNameForCrop2 = potentialCuts[(int)crop.PotentialCut - 1];
+                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                                        if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                                        {
+                                            if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
+                                            {
+                                                ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                            else
+                                            {
+                                                ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                                            }
+                                        }
                                     }
                                 }
                                 model.Crops.Add(crop);
@@ -4268,7 +4296,7 @@ namespace NMP.Portal.Controllers
                                             NIndex = recData.Recommendation.NIndex,
                                             CreatedOn = recData.Recommendation.CreatedOn,
                                             ModifiedOn = recData.Recommendation.ModifiedOn,
-                                            PBalance=recData.Recommendation.PBalance,
+                                            PBalance = recData.Recommendation.PBalance,
                                             SBalance = recData.Recommendation.SBalance,
                                             KBalance = recData.Recommendation.KBalance,
                                             MgBalance = recData.Recommendation.MgBalance,

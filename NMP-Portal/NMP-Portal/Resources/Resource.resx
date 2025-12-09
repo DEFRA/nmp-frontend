@@ -1816,7 +1816,7 @@ cubic metres per hectare  not set</value>
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
   <data name="lblWhenAreYouApplyingInOrganicfertiliser" xml:space="preserve">
-    <value>When are you applying inorganic fertiliser on the {0} fields?</value>
+    <value>When are you applying inorganic fertiliser on the {0}?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>Inorganic manure duration</value>
@@ -2923,13 +2923,13 @@ cubic metres per hectare  not set</value>
     <value>Previous crop</value>
   </data>
   <data name="lblPrint1" xml:space="preserve">
-    <value>Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;.</value>
+    <value>Select Print or save as a PDF, or in your desktop browser, open the menu and select, Print.</value>
   </data>
   <data name="lblPrint2" xml:space="preserve">
-    <value>In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy.</value>
+    <value>Where it asks you to choose a printer, select Print to PDF.</value>
   </data>
   <data name="lblPrint3" xml:space="preserve">
-    <value>Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF.</value>
+    <value>Select Print, then choose where on your computer you want to save the PDF.</value>
   </data>
   <data name="lblPrintOrSaveAsAPDF" xml:space="preserve">
     <value>Print or save as a PDF</value>
@@ -3409,7 +3409,7 @@ cubic metres per hectare  not set</value>
     <value>How it works</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
-    <value>How to save your plan as a PDF</value>
+    <value>How to save this report as a PDF</value>
   </data>
   <data name="lblRb209NutrientManagementGuide" xml:space="preserve">
     <value>RB209 (Nutrient Management Guide)</value>
@@ -3829,7 +3829,7 @@ cubic metres per hectare  not set</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance.</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
@@ -5344,7 +5344,7 @@ cubic metres per hectare  not set</value>
     <value>not a derogated</value>
   </data>
   <data name="lblComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
-    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit.</value>
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit</value>
   </data>
   <data name="lblTheInformationEnteredIndicatesCompliance" xml:space="preserve">
     <value>The information entered indicates compliance.</value>
@@ -6911,8 +6911,8 @@ livestock manure.</value>
   <data name="MsgEnterTheValueAmountUsingIntValueOnly" xml:space="preserve">
     <value>Enter the {0} amount using integer values only.</value>
   </data>
-  <data name="lblThereAreCountCutsAndGrazingsInYear" xml:space="preserve">
-    <value>There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one.</value>
+  <data name="lblThereAreCountCutsAndGrazings" xml:space="preserve">
+    <value>There are {0} cuts and grazings, with nutrient and lime recommendations for each one.</value>
   </data>
   <data name="lblLastUpdatedDate" xml:space="preserve">
     <value>Last updated {0}</value>
@@ -7018,5 +7018,14 @@ livestock manure.</value>
   </data>
   <data name="MsgAuthenticationFailedOrSessionExpired" xml:space="preserve">
     <value>Authentication failed or session expired.</value>
+  </data>
+  <data name="lblGroupNameFieldsWithCropTypeName" xml:space="preserve">
+    <value>{0} fields ({1})</value>
+  </data>
+  <data name="lblThereAreCountCutsAndGrazingsPlusEstablishment" xml:space="preserve">
+    <value>There are {0} cuts and grazings, plus establishment. With nutrient and lime recommendations for each one.</value>
+  </data>
+  <data name="lblNMaxLimitsForYear" xml:space="preserve">
+    <value>N-max limits {0}</value>
   </data>
 </root>

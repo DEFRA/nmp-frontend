@@ -20,5 +20,6 @@ namespace NMP.Portal.Helpers
         {
             return session.TryGetValue(key, out _);
         }
+                
     }
 }
