@@ -3631,7 +3631,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg of total nitrogen per hectare, and that no more than 50kg of total nitrogen can be applied every 4 weeks.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Grass" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and end of October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Wales" xml:space="preserve">
     <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
@@ -4257,9 +4257,6 @@ cubic metres per hectare  not set</value>
   <data name="lblCropFieldAndNutrientApplicationsForOneOrMoreFields" xml:space="preserve">
     <value>Crop, field and nutrient applications, for one or more fields.</value>
   </data>
-  <data name="NMaxReportHint" xml:space="preserve">
-    <value>Assess compliance with the N-max limit for each crop in your fields.</value>
-  </data>
   <data name="lblNMaxReport" xml:space="preserve">
     <value>N-max report</value>
   </data>
@@ -4713,17 +4710,8 @@ cubic metres per hectare  not set</value>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field or crop information for {0}</value>
   </data>
-  <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
-    <value>Farm and field details for {0} records</value>
-  </data>
-  <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
-    <value>Field records and nutrient management planning</value>
-  </data>
-  <data name="lblIncludesDetailsAboutYourFieldsCropsAndRec" xml:space="preserve">
-    <value>Includes details about your fields, crops and recommendations.</value>
-  </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage</value>
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -4754,9 +4742,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
-  </data>
-  <data name="LivestockManureNitrogenFarmLimitReportHint" xml:space="preserve">
-    <value>Assess compliance with the livestock manure nitrogen (N) limit for the whole farm.</value>
   </data>
   <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit report</value>
@@ -7027,5 +7012,20 @@ livestock manure.</value>
   </data>
   <data name="lblNMaxLimitsForYear" xml:space="preserve">
     <value>N-max limits {0}</value>
+  </data>
+  <data name="lblACropAndNutrientManagementReport" xml:space="preserve">
+    <value>A crop and nutrient management report</value>
+  </data>
+  <data name="lblIncludingNMaxHint" xml:space="preserve">
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+  </data>
+  <data name="lblAnNVZReport" xml:space="preserve">
+    <value>An NVZ report</value>
+  </data>
+  <data name="lblDetailsAboutYourFieldsCropsAndRecommendations" xml:space="preserve">
+    <value>Details about your fields, crops and recommendations</value>
+  </data>
+  <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
+    <value>Field records and nutrient management planning</value>
   </data>
 </root>
