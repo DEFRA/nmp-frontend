@@ -220,7 +220,7 @@
                 <govuk-radios-fieldset>
 
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
+                        @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption                        

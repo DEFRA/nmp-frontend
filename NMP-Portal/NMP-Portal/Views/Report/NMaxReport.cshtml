@@ -131,7 +131,7 @@
         </div>
     </div>
 
-    <div class="govuk-grid-row margin-bottom-forty">
+    <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">            
                 @foreach (var nMaxLimit in Model.NMaxLimitReport)
                 {
@@ -276,7 +276,7 @@
                         <h3 class="govuk-heading-m">
                             @string.Format(Resource.lblNitrogenApplicationsForCropTypeFields, nMaxLimit.GroupName)
                         </h3>
-                    <div class="table-container margin-bottom-forty">
+                    <div class="table-container">
                             <table class="govuk-table">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
@@ -367,7 +367,7 @@
 }
 <div class="govuk-grid-row margin-bottom-forty">
     <div class="govuk-grid-column-full">
-        <hr class="seperator_five">
+        <hr class="seperator_five_report">
         <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
         <p class="govuk-body">
             @Resource.lblAboutRecommendationGuidenceAdviceContent1
