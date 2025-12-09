@@ -11,8 +11,8 @@
 
 @if (User.Identity?.IsAuthenticated == true)
 {
-    var currentFarmName = FarmContext?.FarmName?? string.Empty; //  httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
-    var currentFarmId = FarmContext?.EncryptedFarmId?? string.Empty; // httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
+    var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
+    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
