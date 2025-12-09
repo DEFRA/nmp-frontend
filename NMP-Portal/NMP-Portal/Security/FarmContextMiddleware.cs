@@ -18,15 +18,17 @@ namespace NMP.Portal.Security
 
         public async Task Invoke(HttpContext context, FarmContext farmContext)
         {
-            var encryptedfarmId = context.GetRouteValue("id")?.ToString();
+            var encryptedfarmId = context.GetRouteValue("farmId")?.ToString()?? context.GetRouteValue("id")?.ToString();
 
             if (!string.IsNullOrEmpty(encryptedfarmId))
             {
-                string farmId= _dataProtector.Unprotect(encryptedfarmId);                
+                string farmId = _dataProtector.Unprotect(encryptedfarmId);
                 (var farm, var error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                 farmContext.EncryptedFarmId = encryptedfarmId;
                 farmContext.FarmId = farm.ID;
                 farmContext.FarmName = farm.Name;
+                context.Session.SetString("current_farm_name", farm.Name);
+                context.Session.SetString("current_farm_id", encryptedfarmId);                
             }
 
             await _next(context);

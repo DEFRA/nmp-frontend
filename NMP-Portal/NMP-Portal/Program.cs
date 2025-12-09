@@ -255,18 +255,12 @@ app.UseCsp(csp =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseMiddleware<FarmContextMiddleware>();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<FarmContextMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-//app.MapControllerRoute(
-//    name: "farmDetails",
-//    pattern: "farm/FarmSummary/{farmId}",
-//    defaults: new { controller = "Farm", action = "FarmSummary" });
-
 app.Run();
 
