@@ -1222,6 +1222,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A crop and nutrient management report.
+        /// </summary>
+        public static string lblACropAndNutrientManagementReport {
+            get {
+                return ResourceManager.GetString("lblACropAndNutrientManagementReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string lblAction {
@@ -2082,6 +2091,15 @@ namespace NMP.Portal.Resources {
         public static string lblAnnualRainfall {
             get {
                 return ResourceManager.GetString("lblAnnualRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An NVZ report.
+        /// </summary>
+        public static string lblAnNVZReport {
+            get {
+                return ResourceManager.GetString("lblAnNVZReport", resourceCulture);
             }
         }
         
@@ -4039,6 +4057,15 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details about your fields, crops and recommendations.
+        /// </summary>
+        public static string lblDetailsAboutYourFieldsCropsAndRecommendations {
+            get {
+                return ResourceManager.GetString("lblDetailsAboutYourFieldsCropsAndRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can develop a nutrient application plan during the season. This tool will keep detailed records of cropping, soil analyses, and each fertiliser and manure application..
         /// </summary>
         public static string lblDevelopNutrientApplicationPlan {
@@ -5115,15 +5142,6 @@ namespace NMP.Portal.Resources {
         public static string lblFarmAndFieldDetails {
             get {
                 return ResourceManager.GetString("lblFarmAndFieldDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Farm and field details for {0} records.
-        /// </summary>
-        public static string lblFarmAndFieldDetailsForNVZRecords {
-            get {
-                return ResourceManager.GetString("lblFarmAndFieldDetailsForNVZRecords", resourceCulture);
             }
         }
         
@@ -6919,20 +6937,20 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Includes details about your fields, crops and recommendations..
-        /// </summary>
-        public static string lblIncludesDetailsAboutYourFieldsCropsAndRec {
-            get {
-                return ResourceManager.GetString("lblIncludesDetailsAboutYourFieldsCropsAndRec", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage.
+        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports.
         /// </summary>
         public static string lblIncludesNmaxLivestockManureNitrogen {
             get {
                 return ResourceManager.GetString("lblIncludesNmaxLivestockManureNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports.
+        /// </summary>
+        public static string lblIncludingNMaxHint {
+            get {
+                return ResourceManager.GetString("lblIncludingNMaxHint", resourceCulture);
             }
         }
         
@@ -17290,15 +17308,6 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assess compliance with the livestock manure nitrogen (N) limit for the whole farm..
-        /// </summary>
-        public static string LivestockManureNitrogenFarmLimitReportHint {
-            get {
-                return ResourceManager.GetString("LivestockManureNitrogenFarmLimitReportHint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://www.gov.uk/government/organisations/rural-payments-agency.
         /// </summary>
         public static string lnkRpa {
@@ -20190,7 +20199,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time..
+        ///   Looks up a localized string similar to The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and end of October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time..
         /// </summary>
         public static string MsgStartClosedPeriodEndFebWarningPara1Grass {
             get {
@@ -20636,15 +20645,6 @@ namespace NMP.Portal.Resources {
         public static string MsgYourDataSuccessfullyRemoved {
             get {
                 return ResourceManager.GetString("MsgYourDataSuccessfullyRemoved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Assess compliance with the N-max limit for each crop in your fields..
-        /// </summary>
-        public static string NMaxReportHint {
-            get {
-                return ResourceManager.GetString("NMaxReportHint", resourceCulture);
             }
         }
         
