@@ -5338,10 +5338,10 @@ cubic metres per hectare  not set</value>
     <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
   </data>
   <data name="lblLivestockReportContentTwoForDerogation" xml:space="preserve">
-    <value>This assessment is based on the derogated NVZ livestock manure N farm limit of {0}kg of N per hectare for grazing livestock, {1}kg of N per hectare for non-grazing livestock </value>
+    <value>This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock </value>
   </data>
   <data name="lblLivestockContentTwoForNonDerogation" xml:space="preserve">
-    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of N per hectare</value>
+    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of nitrogen (N) per hectare</value>
   </data>
   <data name="lblKeyInformation" xml:space="preserve">
     <value> Key information</value>
@@ -5362,7 +5362,7 @@ cubic metres per hectare  not set</value>
     <value>This farm does not have a grassland derogation for {0}</value>
   </data>
   <data name="lblLivestockReportContentThreeForDerogationOrNonDerogation" xml:space="preserve">
-    <value>and best practice guidance of 250kg of N per hectare for land outside of an NVZ.</value>
+    <value>and best practice guidance of 250kg of nitrogen (N) per hectare for land outside of an NVZ.</value>
   </data>
   <data name="lblPercentageOfThisFarmIsGrass" xml:space="preserve">
     <value>{0}% of this farm is grass.</value>
