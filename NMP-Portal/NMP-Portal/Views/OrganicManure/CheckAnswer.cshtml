@@ -32,7 +32,7 @@
         Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
     bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
-    
+
     switch (Model.ApplicationRateMethod)
     {
         case 0:
@@ -45,6 +45,7 @@
             howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare); //  string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
             break;
     }
+    var manure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName;
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -659,7 +660,7 @@
 
                     <govuk-summary-list-row class=@((!Model.ApplicationDate.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @(Model.FieldList.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, Model.ManureTypeName) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName))
+                            @(Model.FieldList.Count > 1 ? string.Format(Resource.lblWhenAreYouApplyingManureOnField, manure) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, manure, Model.FieldName))
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ApplicationDate.HasValue) ? Model.ApplicationDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
@@ -667,7 +668,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ManureApplyingDate" asp-controller="OrganicManure">@Resource.lblChange
                                 <span class="govuk-visually-hidden">
-                                   @string.Format(Resource.lblWhenAreYouApplyingYourManureType, Model.ManureTypeName)
+                                   @string.Format(Resource.lblWhenAreYouApplyingYourManureType, manure)
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
@@ -677,7 +678,7 @@
                     {
                         <govuk-summary-list-row class=@((!Model.ApplicationMethod.HasValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
+                                @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, manure)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @((Model.ApplicationMethod.HasValue) ? Model.ApplicationMethodName : Resource.lblNotSet)
@@ -685,7 +686,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblChange
                                     <span class="govuk-visually-hidden">
-                                       @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName)
+                                       @string.Format(Resource.lblHowAreYouGoingToApplyTheManure, manure)
                                     </span>
                                 </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
@@ -1072,7 +1073,7 @@
                     }
                     <govuk-summary-list-row class=@((!Model.ApplicationRateMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureTypeName)
+                            @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, manure)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.ApplicationRateMethod.HasValue) ? howWouldYouEnterApplicationRate : Resource.lblNotSet)
@@ -1080,7 +1081,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblChange
                                 <span class="govuk-visually-hidden">
-                                   @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureTypeName)
+                                   @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, manure)
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
@@ -1153,7 +1154,7 @@
                     
                     <govuk-summary-list-row class=@((!Model.IncorporationMethod.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)
+                            @string.Format(Resource.lblWhatIsTheIncorporationMethod, manure)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.IncorporationMethod.HasValue) ? Model.IncorporationMethodName : Resource.lblNotSet)
@@ -1163,7 +1164,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="IncorporationMethod" asp-controller="OrganicManure">@Resource.lblChange
                                     <span class="govuk-visually-hidden">
-                                       @string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)
+                                       @string.Format(Resource.lblWhatIsTheIncorporationMethod, manure)
                                     </span>
                                 </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
@@ -1173,7 +1174,7 @@
                     {
                         <govuk-summary-list-row class=@((!Model.IncorporationDelay.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, Model.ManureTypeName)
+                            @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, manure)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.IncorporationDelay.HasValue) ? Model.IncorporationDelayName : Resource.lblNotSet)
@@ -1183,7 +1184,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="IncorporationDelay" asp-controller="OrganicManure">@Resource.lblChange
                                     <span class="govuk-visually-hidden">
-                                       @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, Model.ManureTypeName)
+                                       @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncorporation, manure)
                                     </span>
                                 </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>

@@ -391,7 +391,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if(model == null)
+                if (model == null)
                 {
                     _logger.LogTrace("Organic Manure Controller : Fields() action - OrganicManureViewModel is null in session");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
@@ -916,7 +916,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
-                if(organicManureViewModel== null)
+                if (organicManureViewModel == null)
                 {
                     _logger.LogTrace($"Organic Manure Controller : Session expired in Fields() post action");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
@@ -1424,7 +1424,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Organic Manure Controller : ManureGroup() action called");
             OrganicManureViewModel? model = GetOrganicManureFromSession();
-            if (model==null)
+            if (model == null)
             {
                 _logger.LogTrace("Organic Manure Controller : ManureGroup() action : OrganicManureViewModel is null in session");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
@@ -1615,7 +1615,7 @@ namespace NMP.Portal.Controllers
             OrganicManureViewModel model = GetOrganicManureFromSession();
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Organic Manure Controller : ManureApplyingDate() action : OrganicManureViewModel is null in session");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
@@ -4623,6 +4623,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         model.FieldName = filteredList.Select(item => item.Text).FirstOrDefault();
                                         model.FieldList = filteredList.Select(item => item.Value).ToList();
+                                        model.FieldID = filteredList.Select(item =>Convert.ToInt32(item.Value)).FirstOrDefault();
                                     }
                                 }
                                 foreach (string field in model.FieldList)
@@ -7968,15 +7969,17 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("OtherMaterialName", Resource.MsgEnterNameOfTheMaterial);
                 }
-
-
-                (bool farmManureExist, Error error) = await _organicManureService.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(model.FarmId.Value, model.ManureTypeId.Value, model.OtherMaterialName);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                else
                 {
-                    if (farmManureExist)
-                    {
+                    (bool farmManureExist, Error error) =
+                        await _organicManureService.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(
+                            model.FarmId.Value,
+                            model.ManureTypeId.Value,
+                            model.OtherMaterialName
+                        );
+
+                    if (string.IsNullOrWhiteSpace(error.Message) && farmManureExist)
                         ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
-                    }
                 }
                 if (!ModelState.IsValid)
                 {
@@ -10025,7 +10028,7 @@ namespace NMP.Portal.Controllers
                             (Crop crop, error) = await _cropService.FetchCropById(model.DefoliationList[i].CropID);
                             if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
                             {
-                                if (crop.DefoliationSequenceID != null&& model.DefoliationList[i].Defoliation!=null)
+                                if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
                                 {
                                     (string selectedDefoliation, error) = await GetDefoliationName(model, model.DefoliationList[i].Defoliation.Value, crop.DefoliationSequenceID.Value);
                                     if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
