@@ -4843,10 +4843,8 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-                    else if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+                    else if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)&& model.Crops != null && model.Crops.Count > 0)
                     {
-                        if (model.Crops != null && model.Crops.Count > 0)
-                        {
                             string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
                             (bool groupNameExist, error) = await _cropService.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                             if (string.IsNullOrWhiteSpace(error.Message) && groupNameExist)
@@ -4854,7 +4852,6 @@ namespace NMP.Portal.Controllers
                                 ModelState.AddModelError("CropGroupName", Resource.lblThisCropGroupNameAlreadyExists);
                                 return View(model);
                             }
-                        }
                     }
                 }
                 for (int i = 0; i < model.Crops.Count; i++)
