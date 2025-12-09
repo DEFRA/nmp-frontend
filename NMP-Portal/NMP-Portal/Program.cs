@@ -37,6 +37,35 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBodyLengthLimit = int.MaxValue;
     options.BufferBody = true;
 });
+
+var redisCacheConnectionString = builder.Configuration["REDIS_CACHE_CONNECTION_STRING"]?.ToString();
+if (!string.IsNullOrWhiteSpace(redisCacheConnectionString))
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisCacheConnectionString;
+        options.InstanceName = "nmp_ui_";
+    });
+}
+
+var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
+if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
+{
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(t => t.AddAspNetCoreInstrumentation())
+        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
+        .UseAzureMonitor(options =>
+        {
+            options.ConnectionString = applicationInsightsConnectionString;
+        });
+
+    builder.Services.AddApplicationInsightsTelemetry(options =>
+    {
+        options.ConnectionString = applicationInsightsConnectionString;
+    });
+}
+
+
 builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDefraCustomerIdentity(builder);
@@ -62,6 +91,7 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 }).AddMicrosoftIdentityUI();
 
+
 builder.Services.AddDataProtection();
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
 builder.Services.AddSession(options =>
@@ -75,26 +105,6 @@ builder.Services.AddSession(options =>
     options.IOTimeout = Timeout.InfiniteTimeSpan;
 });
 
-var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
-
-if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
-{
-    builder.Services.AddOpenTelemetry()
-        .WithTracing(t => t.AddAspNetCoreInstrumentation())
-        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
-        .UseAzureMonitor(options =>
-        {
-            options.ConnectionString = applicationInsightsConnectionString;
-        });
-
-    builder.Services.AddApplicationInsightsTelemetry(options =>
-    {
-        options.ConnectionString = applicationInsightsConnectionString;
-    });
-
-}
-
-
 builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
@@ -102,8 +112,6 @@ builder.Services.AddLogging(builder =>
     builder.AddApplicationInsights();
     builder.AddOpenTelemetry();
 });
-
-
 
 builder.Services.AddHttpClient("NMPApi", httpClient =>
 {
@@ -223,8 +231,7 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
     }
-
-        await next();
+    await next();
 });
 
 app.UseCsp(csp =>
