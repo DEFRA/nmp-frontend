@@ -3829,7 +3829,7 @@ cubic metres per hectare  not set</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance.</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
