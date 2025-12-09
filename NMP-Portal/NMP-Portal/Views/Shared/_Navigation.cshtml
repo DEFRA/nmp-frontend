@@ -1,5 +1,6 @@
 ﻿@using NMP.Portal.Resources
 @using GovUk.Frontend.AspNetCore
+@inject FarmContext FarmContext
 @inject IHttpContextAccessor httpContextAccessor
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
@@ -9,8 +10,8 @@
 
 
 @if (User.Identity?.IsAuthenticated == true)
-{   
-    var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name"); 
+{
+    var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
     var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
