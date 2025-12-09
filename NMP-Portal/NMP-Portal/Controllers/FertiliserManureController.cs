@@ -2149,7 +2149,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         model.FieldName = filteredList.Select(item => item.Text).FirstOrDefault();
                                         model.FieldList = filteredList.Select(item => item.Value).ToList();
-                                        model.FieldID = fertiliserResponse.Select(x => x.Id.Value).FirstOrDefault();
+                                        model.FieldID = filteredList.Select(x => Convert.ToInt32(x.Value)).FirstOrDefault();
                                     }
                                 }
                                 foreach (string field in model.FieldList)
@@ -4175,6 +4175,7 @@ namespace NMP.Portal.Controllers
                             (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                             if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.DefoliationSequenceID != null)
                             {
+                                int fieldId = crop.FieldID.Value;
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(managementPeriod.CropID.Value, false);
 
                                 if (managementPeriodList.Count > 0)
@@ -4202,7 +4203,7 @@ namespace NMP.Portal.Controllers
                                     if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
                                     {
                                         int index = model.FertiliserManures
-                                        .FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
+                                        .FindIndex(f => f.IsGrass && f.FieldID == fieldId);
 
                                         if (index >= 0)
                                         {
@@ -4220,7 +4221,7 @@ namespace NMP.Portal.Controllers
                                         if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
                                         {
                                             int index = model.FertiliserManures
-                                            .FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
+                                            .FindIndex(f => f.IsGrass && f.FieldID == fieldId);
 
                                             if (index >= 0)
                                             {
