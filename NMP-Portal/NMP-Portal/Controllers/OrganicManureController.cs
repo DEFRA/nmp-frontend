@@ -7969,17 +7969,17 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("OtherMaterialName", Resource.MsgEnterNameOfTheMaterial);
                 }
-
-                if (model.OtherMaterialName != null)
+                else
                 {
-                    (bool farmManureExist, Error error) = await _organicManureService.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(model.FarmId.Value, model.ManureTypeId.Value, model.OtherMaterialName);
-                    if (string.IsNullOrWhiteSpace(error.Message))
-                    {
-                        if (farmManureExist)
-                        {
-                            ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
-                        }
-                    }
+                    (bool farmManureExist, Error error) =
+                        await _organicManureService.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(
+                            model.FarmId.Value,
+                            model.ManureTypeId.Value,
+                            model.OtherMaterialName
+                        );
+
+                    if (string.IsNullOrWhiteSpace(error.Message) && farmManureExist)
+                        ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
                 }
                 if (!ModelState.IsValid)
                 {

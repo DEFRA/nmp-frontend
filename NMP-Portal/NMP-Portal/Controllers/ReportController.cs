@@ -2197,6 +2197,8 @@ namespace NMP.Portal.Controllers
             try
             {
                 Error error = null;
+                string totalFarmAreaKey = "TotalFarmArea";
+                string totalAreaInNVZKey = "TotalAreaInNVZ";
                 if (model.FarmId != null && model.Country == null)
                 {
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -2207,11 +2209,11 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.TotalFarmArea == null)
                 {
-                    ModelState.AddModelError("TotalFarmArea", Resource.MsgEnterTotalFarmArea);
+                    ModelState.AddModelError(totalFarmAreaKey, Resource.MsgEnterTotalFarmArea);
                 }
                 if (model.TotalAreaInNVZ == null && (model.Country != null && model.Country != (int)NMP.Portal.Enums.FarmCountry.Wales))
                 {
-                    ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgEnterTotalAreaInNVZ);
+                    ModelState.AddModelError(totalAreaInNVZKey, Resource.MsgEnterTotalAreaInNVZ);
                 }
                 if (model.IsGrasslandDerogation == true)
                 {
@@ -2222,29 +2224,23 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.TotalFarmArea <= 0)
                 {
-                    ModelState.AddModelError("TotalFarmArea", Resource.MsgTotalFarmAreaShouldBeGreaterThanZero);
+                    ModelState.AddModelError(totalFarmAreaKey, Resource.MsgTotalFarmAreaShouldBeGreaterThanZero);
                 }
                 if (model.TotalAreaInNVZ < 0)
                 {
-                    ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgTotalAreaInNVZShouldNotBeLessThanZero);
+                    ModelState.AddModelError(totalAreaInNVZKey, Resource.MsgTotalAreaInNVZShouldNotBeLessThanZero);
                 }
                 if (model.TotalAreaInNVZ > model.TotalFarmArea)
                 {
-                    ModelState.AddModelError("TotalAreaInNVZ", Resource.MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea);
+                    ModelState.AddModelError(totalAreaInNVZKey, Resource.MsgTotalAreaInNVZShouldNotBeMoreThanTotalFarmArea);
                 }
-                if (model.TotalFarmArea != null)
+                if (model.TotalFarmArea != null && (ModelState.ContainsKey(totalFarmAreaKey) && Math.Round(model.TotalFarmArea.Value, 2) != model.TotalFarmArea))
                 {
-                    if (ModelState.ContainsKey("TotalFarmArea") && Math.Round(model.TotalFarmArea.Value, 2) != model.TotalFarmArea)
-                    {
-                        ModelState.AddModelError("TotalFarmArea", string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalFarmArea.ToLower()));
-                    }
+                    ModelState.AddModelError(totalFarmAreaKey, string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalFarmArea.ToLower()));
                 }
-                if (model.TotalAreaInNVZ != null)
+                if (model.TotalAreaInNVZ != null && (ModelState.ContainsKey(totalAreaInNVZKey) && Math.Round(model.TotalAreaInNVZ.Value, 2) != model.TotalAreaInNVZ))
                 {
-                    if (ModelState.ContainsKey("TotalAreaInNVZ") && Math.Round(model.TotalAreaInNVZ.Value, 2) != model.TotalAreaInNVZ)
-                    {
-                        ModelState.AddModelError("TotalAreaInNVZ", string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalAreaInAnNvz));
-                    }
+                    ModelState.AddModelError(totalAreaInNVZKey, string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalAreaInAnNvz));
                 }
                 if (!ModelState.IsValid)
                 {
