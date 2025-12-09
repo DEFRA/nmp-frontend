@@ -1521,7 +1521,7 @@ namespace NMP.Portal.Controllers
                             {
                                 int manId = model.FertiliserManures.FirstOrDefault().ManagementPeriodID;
 
-                                var matchedHeader = recommendationsHeader?.FirstOrDefault(header => header.RecommendationData != null &&
+                                var matchedHeader = recommendationsHeader.FirstOrDefault(header => header.RecommendationData != null &&
                                 header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
                                                                    rd.ManagementPeriod.ID == manId));
 
@@ -3965,11 +3965,14 @@ namespace NMP.Portal.Controllers
 
                             if (cropList.Count > 0)
                             {
-                                int cropId = cropList.FirstOrDefault().ID.Value;
-                                if (cropList.Count > 0)
+                                var grassCrop = cropList.FirstOrDefault(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                                int cropId = 0;
+                                if(grassCrop != null && grassCrop.ID.HasValue)
                                 {
-                                    cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.ID.Value).First();
+                                    cropId = grassCrop.ID.Value;
                                 }
+                                 
+                                
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
                                 if (!string.IsNullOrWhiteSpace(error.Message))
                                 {
@@ -4503,7 +4506,7 @@ namespace NMP.Portal.Controllers
             FertiliserManureViewModel model = GetFertiliserManureFromSession();
             try
             {
-                if (model== null)
+                if (model == null)
                 {
                     _logger.LogError("Fertiliser Manure Controller : Session not found in DoubleCrop() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
@@ -4744,8 +4747,8 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                FertiliserManureViewModel fertiliserManureViewModel = GetFertiliserManureFromSession()?? new FertiliserManureViewModel();
-               
+                FertiliserManureViewModel fertiliserManureViewModel = GetFertiliserManureFromSession() ?? new FertiliserManureViewModel();
+
                 if (model.DoubleCrop.Any(x => x.FieldID == model.FieldID))
                 {
                     List<Crop> cropList = await _cropService.FetchCropsByFieldId(model.FieldID.Value);
@@ -4856,7 +4859,7 @@ namespace NMP.Portal.Controllers
                     model.GrassCropCount = counter;
                     if (fertiliserManureViewModel != null && fertiliserManureViewModel?.DoubleCrop != null && model?.DoubleCrop != null)
                     {
-                        int grassCount = model.FertiliserManures.Where(x => x.IsGrass).Count();
+                        int grassCount = model.FertiliserManures.Count(x => x.IsGrass);
                         if (model.DoubleCropCurrentCounter - 1 < model.DoubleCrop.Count && model.DefoliationList != null && grassCount != model.DefoliationList.Count())
                         {
                             model.FieldID = model.DoubleCrop[model.DoubleCropCurrentCounter - 1].FieldID;
@@ -4973,8 +4976,8 @@ namespace NMP.Portal.Controllers
                             warningMessage.Para2 = null;
                             warningMessage.Para3 = model.ClosedPeriodWarningPara2;
                             warningMessages.Add(warningMessage);
-                        }                       
-                        
+                        }
+
                         if (model.IsNitrogenExceedWarning)
                         {
                             WarningMessage warningMessage = new WarningMessage();
