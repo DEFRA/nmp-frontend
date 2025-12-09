@@ -243,13 +243,11 @@
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value && Model.GrassCropCount > 1)
                                     {
-                                        @((Model.GrassCropCount != null && Model.GrassCropCount == 1) ?
-                                                                string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName) :
-                                                                Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField)
+                                        @((Model.GrassCropCount != null && Model.GrassCropCount == 1) ? string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName) : Resource.lblWhichCutOrGrazingInThisApplicationForAllField)
                                                 }
                                     else
                                     {
-                                        @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName)
+                                        @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName)
                                     }
                                 </govuk-radios-fieldset-legend>
                                 <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
