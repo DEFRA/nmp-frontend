@@ -4623,6 +4623,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         model.FieldName = filteredList.Select(item => item.Text).FirstOrDefault();
                                         model.FieldList = filteredList.Select(item => item.Value).ToList();
+                                        model.FieldID = filteredList.Select(item =>Convert.ToInt32(item.Value)).FirstOrDefault();
                                     }
                                 }
                                 foreach (string field in model.FieldList)
