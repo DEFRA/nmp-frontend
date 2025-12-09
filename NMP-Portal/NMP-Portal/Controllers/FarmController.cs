@@ -919,7 +919,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CheckAnswer(string? q)
+        public IActionResult CheckAnswer(string id,string? q)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer({0}) action called",q);
             FarmViewModel? model = GetFarmFromSession(); 
@@ -1071,7 +1071,7 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r)
         {
             _logger.LogTrace("Farm Controller : FarmSummary() action called");
