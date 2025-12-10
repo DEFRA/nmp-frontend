@@ -3965,11 +3965,7 @@ namespace NMP.Portal.Controllers
 
                             if (cropList.Count > 0)
                             {
-                                int cropId = cropList.FirstOrDefault().ID.Value;
-                                if (cropList.Count > 0)
-                                {
-                                    cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.ID.Value).First();
-                                }
+                                int cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.ID.Value).First();                                
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
                                 if (!string.IsNullOrWhiteSpace(error.Message))
                                 {
