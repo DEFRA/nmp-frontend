@@ -2,6 +2,7 @@
 {
     public class SoilDetailsResponse
     {
+        public int? SoilTypeId { get; set; }
         public string? SoilTypeName { get; set; }
         public bool? PotashReleasingClay { get; set; }
         public bool? SulphurDeficient { get; set; }
