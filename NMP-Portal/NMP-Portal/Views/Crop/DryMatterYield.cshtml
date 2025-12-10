@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) ? "CheckAnswer" : "DryMatterYield") asp-controller="Crop" asp-route-q="@Model.DryMatterYieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "DryMatterYield") asp-controller="Crop" asp-route-q="@Model.DryMatterYieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="DryMatterYield" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -71,6 +71,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {

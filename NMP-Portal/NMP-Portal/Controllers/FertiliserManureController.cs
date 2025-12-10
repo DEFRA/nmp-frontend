@@ -132,11 +132,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
         {
             _logger.LogTrace("Fertiliser Manure Controller : FieldGroup({0}, {1}, {2}) action called", q, r, s);
-            FertiliserManureViewModel? model = GetFertiliserManureFromSession() ?? new FertiliserManureViewModel(); ;
+            FertiliserManureViewModel? model = GetFertiliserManureFromSession();
             Error? error = null;
             try
             {
-                if (model == null || (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r)))
+                if (model == null && (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r)))
                 {
                     _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
@@ -144,6 +144,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
                 {
+                    model = new FertiliserManureViewModel();
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                     model.EncryptedFarmId = q;
