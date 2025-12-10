@@ -2428,6 +2428,21 @@ namespace NMP.Portal.Controllers
                                 model.Crops.Add(crop);
                             }
 
+                           
+                            //if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
+                            //{
+                            //    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+
+                            //}
+                            if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && model.SowingDateQuestion == null && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
+                            {
+                                model.SowingDateQuestion = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
+
+                            }
+                            model.CropInfo1 = harvestYearPlanResponse.FirstOrDefault().CropInfo1;
+                            model.CropInfo2 = harvestYearPlanResponse.FirstOrDefault().CropInfo2;
+
+                            model.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
                             if (model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
                             {
 
@@ -2462,20 +2477,6 @@ namespace NMP.Portal.Controllers
                                     model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield;
                                 }
                             }
-                            //if (model.Crops != null && model.Crops.All(x => x.Yield != null) && model.YieldQuestion == null && allYieldsAreSame && harvestYearPlanResponse.Count >= 1)
-                            //{
-                            //    model.YieldQuestion = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-
-                            //}
-                            if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && model.SowingDateQuestion == null && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
-                            {
-                                model.SowingDateQuestion = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
-
-                            }
-                            model.CropInfo1 = harvestYearPlanResponse.FirstOrDefault().CropInfo1;
-                            model.CropInfo2 = harvestYearPlanResponse.FirstOrDefault().CropInfo2;
-
-                            model.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
                             model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
                             model.CropType = harvestYearPlanResponse.FirstOrDefault().CropTypeName;
                             model.Variety = harvestYearPlanResponse.FirstOrDefault().CropVariety;
