@@ -951,7 +951,7 @@
                             {
                                 <govuk-summary-list-row class=@((!Model.GrassGrowthClassQuestion.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
+                                        @Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @(Model.GrassGrowthClassQuestion == null ? Resource.lblNotSet : (Model.GrassGrowthClassQuestion == 1 ? Resource.lblYesEnterTheSameTargetYieldForTheseFields : Resource.lblNoEnterADifferentTargetYieldForEachFields))
