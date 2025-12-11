@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Azure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -46,13 +48,23 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : Index() action called");
             HttpContext.Session.Clear();
-            return RedirectToAction("FarmList");
+            var credential = new DefaultAzureCredential();
+            var token = credential.GetToken(
+                new TokenRequestContext(new[] { "https://redis.azure.com/.default" })
+            );
+
+            Console.WriteLine("Token length: " + token.Token.Length);
+            Console.WriteLine("Expires: " + token.ExpiresOn);
+            return Content("Token: " + token.Token ); // RedirectToAction("FarmList");
         }
 
         public async Task<IActionResult> FarmList(string? q)
         {
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
             HttpContext.Session.Clear();
+
+            
+
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
             try
