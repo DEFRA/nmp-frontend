@@ -10,6 +10,7 @@ using NMP.Portal.ServiceResponses;
 using NMP.Portal.Services;
 using NMP.Portal.ViewModels;
 using System.Globalization;
+using System.Reflection;
 using Error = NMP.Portal.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -77,7 +78,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
                     if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId) && !string.IsNullOrWhiteSpace(model.EncryptedFarmId))
                     {
-                        return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId });
+                        return RedirectToAction("FieldSoilAnalysisDetail", "Field", new {  farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
                     }
                     return RedirectToAction("FarmSummary", "Farm", new { Id = id });
                 }
@@ -1817,7 +1818,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FieldSoilAnalysisDetail(string id, string farmId, string? q, string? r, string? s, string? t)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
+        public async Task<IActionResult> FieldSoilAnalysisDetail(string farmId, string fieldId,  string? q, string? r, string? s, string? t)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
         {
             _logger.LogTrace($"Field Controller : FieldSoilAnalysisDetail() action called");
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("SoilAnalysisDataBeforeUpdate"))
@@ -1831,13 +1832,13 @@ namespace NMP.Portal.Controllers
             FieldViewModel model = new FieldViewModel();
             Error error = new Error();
             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
-            int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
-            var field = await _fieldService.FetchFieldByFieldId(fieldId);
-            List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+            int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
+            var field = await _fieldService.FetchFieldByFieldId(decryptedFieldId);
+            List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(decryptedFieldId);
             List<PreviousCroppingData> prevCroppings = new List<PreviousCroppingData>();
             if (!cropPlans.Any())
             {
-                (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, null);
+                (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(decryptedFieldId, null);
                 if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
                 {
                     model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
@@ -1845,7 +1846,7 @@ namespace NMP.Portal.Controllers
             }
             int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : (model.LastHarvestYear ?? 0) + 1;
             model.LastHarvestYear = oldestYearWithPlan - 1;
-            (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
+            (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(decryptedFieldId, oldestYearWithPlan);
 
             if (string.IsNullOrWhiteSpace(error.Message))
             {
@@ -1968,8 +1969,8 @@ namespace NMP.Portal.Controllers
                 model.HarvestYear = null;
                 model.EncryptedHarvestYear = null;
             }
-            model.EncryptedFieldId = id;
-            model.ID = fieldId;
+            model.EncryptedFieldId = fieldId;
+            model.ID = decryptedFieldId;
             model.isEnglishRules = farm.EnglishRules;
             model.SoilOverChalk = field.SoilOverChalk;
             if (farm != null)
@@ -2007,7 +2008,7 @@ namespace NMP.Portal.Controllers
             }
             model.EncryptedFarmId = farmId;
             model.FarmName = farm.Name;
-            List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldService.FetchSoilAnalysisByFieldId(fieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
+            List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldService.FetchSoilAnalysisByFieldId(decryptedFieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
             if (soilAnalysisResponse != null && soilAnalysisResponse.Count > 0)
             {
                 soilAnalysisResponse.ForEach(m => m.EncryptedSoilAnalysisId = _fieldDataProtector.Protect(m.ID.ToString()));
@@ -2242,7 +2243,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UpdateField(string? id, string? farmId)
+        public async Task<IActionResult> UpdateField(string? fieldId, string? farmId)
         {
             _logger.LogTrace($"Field Controller : UpdateField() action called");
             FieldViewModel model = new FieldViewModel();
@@ -2252,18 +2253,18 @@ namespace NMP.Portal.Controllers
                 List<CommonResponse> grassManagements = await _fieldService.GetGrassManagementOptions();
                 List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
 
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(fieldId))
                 {
                     (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
-                    int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(id));
-                    var field = await _fieldService.FetchFieldByFieldId(fieldId);
+                    int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
+                    var field = await _fieldService.FetchFieldByFieldId(decrptedFieldId);
                     //get plans of field
-                    List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(fieldId);
+                    List<Crop> cropPlans = await _cropService.FetchCropsByFieldId(decrptedFieldId);
                     //get oldest plan
                     List<PreviousCroppingData> prevCroppings = new List<PreviousCroppingData>();
                     if (!cropPlans.Any())
                     {
-                        (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, null);
+                        (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(decrptedFieldId, null);
                         if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
                         {
                             model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
@@ -2272,7 +2273,7 @@ namespace NMP.Portal.Controllers
                     int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : (model.LastHarvestYear ?? 0) + 1;// farm.LastHarvestYear to model.LastHarvestYear
 
                     //fetch previous cropping data and extract 3 from this and assing into model.PreviousCroppingsList
-                    (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(fieldId, oldestYearWithPlan);
+                    (prevCroppings, error) = await _previousCroppingService.FetchDataByFieldId(decrptedFieldId, oldestYearWithPlan);
 
                     prevCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan).ToList();
                     model.PreviousCroppingsList = prevCroppings;
@@ -2346,8 +2347,8 @@ namespace NMP.Portal.Controllers
                     var soilType = await _fieldService.FetchSoilTypeById(field.SoilTypeID.Value);
                     model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
                     model.SoilTypeID = field.SoilTypeID;
-                    model.EncryptedFieldId = id;
-                    model.ID = fieldId;
+                    model.EncryptedFieldId = fieldId;
+                    model.ID = decrptedFieldId;
                     model.isEnglishRules = farm.EnglishRules;
                     model.SoilOverChalk = field.SoilOverChalk;
 
@@ -2506,7 +2507,7 @@ namespace NMP.Portal.Controllers
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", model);
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(fieldId))
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldDataBeforeUpdate", model);
 
@@ -2578,7 +2579,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext?.Session.Remove("FieldData");
 
 
-                    return RedirectToAction("FieldSoilAnalysisDetail", new { id = model.EncryptedFieldId, farmId = model.EncryptedFarmId, q = success, r = _fieldDataProtector.Protect(Resource.lblField) });
+                    return RedirectToAction("FieldSoilAnalysisDetail", new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblField) });
                 }
                 else
                 {
@@ -2626,7 +2627,7 @@ namespace NMP.Portal.Controllers
             }
             if (!field.FieldRemove.Value)
             {
-                return RedirectToAction("FieldSoilAnalysisDetail", new { id = field.EncryptedFieldId, farmId = field.EncryptedFarmId });
+                return RedirectToAction("FieldSoilAnalysisDetail", new {  farmId = field.EncryptedFarmId, fieldId = field.EncryptedFieldId });
             }
             else
             {
