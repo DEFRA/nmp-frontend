@@ -53,12 +53,6 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
             HttpContext.Session.Clear();
-
-            HttpContext.Session.SetString("Test", "Hello");
-            var value = HttpContext.Session.GetString("Test");
-
-            return Content("Session stored: " + value);
-
             FarmsViewModel model = new FarmsViewModel();
             Error error = null;
             try

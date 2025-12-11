@@ -43,13 +43,12 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 
-string? azureRedisHost = ""; // builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+// Prepare token provider
+var tokenProvider = new RedisTokenProvider();
 
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
-{
-    // Prepare token provider
-    var tokenProvider = new RedisTokenProvider();
-
+{  
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
         var options = new ConfigurationOptions
@@ -95,9 +94,6 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
             await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
     });
 }
-
-builder.Services.AddDistributedMemoryCache();
-
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
