@@ -43,7 +43,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 
-string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+string? azureRedisHost = ""; // builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
 
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
