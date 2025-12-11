@@ -44,13 +44,13 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
-// Prepare token provider
-var tokenProvider = new RedisTokenProvider();
 
+builder.Services.AddSingleton<RedisTokenProvider>();
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {  
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
+        var tokenProvider = sp.GetRequiredService<RedisTokenProvider>();
         var options = new ConfigurationOptions
         {
             EndPoints = { azureRedisHost },
@@ -90,9 +90,10 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
 
     builder.Services.AddStackExchangeRedisCache(options =>
     {
+        options.ConfigurationOptions = null;
         options.InstanceName = "nmp_ui_";
-        options.ConnectionMultiplexerFactory = async () =>
-            await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
+        //options.ConnectionMultiplexerFactory = async () =>
+        //    await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
     });
 }
 
