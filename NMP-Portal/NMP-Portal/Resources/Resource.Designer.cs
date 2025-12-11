@@ -8279,7 +8279,7 @@ namespace NMP.Portal.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock .
+        ///   Looks up a localized string similar to This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock.
         /// </summary>
         public static string lblLivestockReportContentTwoForDerogation {
             get {
