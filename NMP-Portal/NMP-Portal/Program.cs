@@ -90,7 +90,7 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
 
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.ConfigurationOptions = null;
+        options.Configuration = "AZURE_REDIS_HOST";
         options.InstanceName = "nmp_ui_";
         //options.ConnectionMultiplexerFactory = async () =>
         //    await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
