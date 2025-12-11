@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web.UI;
 using NMP.Portal.Models;
@@ -47,7 +48,7 @@ string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
     // Prepare token provider
-    var tokenProvider = new RedisTokenProvider();    
+    var tokenProvider = new RedisTokenProvider();
 
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
@@ -94,6 +95,9 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
             await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
     });
 }
+
+builder.Services.AddDistributedMemoryCache();
+
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
@@ -315,4 +319,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
+
 
