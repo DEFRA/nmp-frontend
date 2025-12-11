@@ -22,7 +22,7 @@
         public async Task<string> GetTokenAsync()
         {
             // If token is expiring within 5 minutes, refresh it.
-            if (DateTimeOffset.UtcNow >= _currentToken.ExpiresOn - TimeSpan.FromMinutes(5))
+            if (_currentToken.ExpiresOn == DateTimeOffset.MinValue || DateTimeOffset.UtcNow >= _currentToken.ExpiresOn - TimeSpan.FromMinutes(5))
             {
                 await RefreshTokenAsync();
             }
@@ -36,7 +36,7 @@
             try
             {
                 // Double-check to avoid duplicate refresh
-                if (DateTimeOffset.UtcNow < _currentToken.ExpiresOn - TimeSpan.FromMinutes(5))
+                if (_currentToken.ExpiresOn != DateTimeOffset.MinValue && DateTimeOffset.UtcNow < _currentToken.ExpiresOn - TimeSpan.FromMinutes(5))
                     return;
 
                 _currentToken = await _credential.GetTokenAsync(
