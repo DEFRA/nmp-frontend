@@ -41,7 +41,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 
-var azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+string? azureRedisHost = Environment.GetEnvironmentVariable("AZURE_REDIS_HOST");
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
     // 1. Redis endpoint (no keys!)
