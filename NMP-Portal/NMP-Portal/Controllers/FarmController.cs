@@ -352,7 +352,7 @@ namespace NMP.Portal.Controllers
                 List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
                 var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
 
-                if (addressesList == null || addressesList.Count == 0)
+                if (addressesList.Count == 0)
                 {
                     return RedirectToAction("AddressNotFound");
                 }
@@ -919,7 +919,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CheckAnswer(string? q)
+        public IActionResult CheckAnswer(string id,string? q)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer({0}) action called",q);
             FarmViewModel? model = GetFarmFromSession(); 
@@ -1071,7 +1071,7 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r)
         {
             _logger.LogTrace("Farm Controller : FarmSummary() action called");
@@ -1116,17 +1116,7 @@ namespace NMP.Portal.Controllers
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
-                    }
-                    //List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(Convert.ToInt32(farmId), 0);
-                    //planSummaryResponse.RemoveAll(x => x.Year == 0);
-                    //if (planSummaryResponse.Count() > 0)
-                    //{
-                    //    farmData.IsPlanExist = true;
-                    //}
-                    //if (u != null)
-                    //{
-                    //    farmData.EncryptedIsUpdate = u;
-                    //}
+                    }                    
                 }
             }
             catch (HttpRequestException hre)

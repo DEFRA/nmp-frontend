@@ -944,3 +944,6 @@ p + .govuk-heading-s,
         padding-top: 10px;
     }
 }
+hr.seperator_five_report {
+    margin: 10px 0 40px 0;
+}

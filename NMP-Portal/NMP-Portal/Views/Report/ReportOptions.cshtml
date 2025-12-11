@@ -157,16 +157,17 @@
                                 @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
                             }
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@fieldRecordsAndPlan">
-                            @Resource.lblFieldRecordsAndNutrientManagementPlanning
-                            <govuk-radios-item-hint>
-                                @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
-                            </govuk-radios-item-hint>
-                        </govuk-radios-item>
+                        
                         <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
-                            @(string.Format(Resource.lblFarmAndFieldDetailsForNVZRecords, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
+                            @Resource.lblAnNVZReport
                             <govuk-radios-item-hint>
                                 @Resource.lblIncludesNmaxLivestockManureNitrogen
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@fieldRecordsAndPlan">
+                            @Resource.lblACropAndNutrientManagementReport
+                            <govuk-radios-item-hint>
+                                @Resource.lblDetailsAboutYourFieldsCropsAndRecommendations
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                     </govuk-radios-fieldset>

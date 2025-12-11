@@ -136,18 +136,18 @@
                 </p>
             }
         }
-        else  @if (ViewBag.IsAllInNVZ != null)
+        else
         {
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
             {
                 <p class="govuk-body-s">
-                    @string.Format("{0} {1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
+                    @string.Format("{0}{1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
                 </p>
             }
             else
             {
                 <p class="govuk-body-s">
-                    @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
+                    @string.Format("{0}{1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
                 </p>
             }
         }

@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Joonasw.AspNetCore.SecurityHeaders;
@@ -8,12 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Identity.Web.UI;
+using NMP.Portal.Models;
 using NMP.Portal.Security;
 using NMP.Portal.Services;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-using System.Net.Http.Headers;
 using StackExchange.Redis; // Add this at the top of the file
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
@@ -39,14 +41,32 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 
-var azureRedisConnectionString = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"]?.ToString();
-if (!string.IsNullOrWhiteSpace(azureRedisConnectionString))
+var azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
+    // 1. Redis endpoint (no keys!)
+    var redisHost = builder.Configuration[azureRedisHost];
+    // Example: "myredis.redisenterprise.cache.azure.net:10000"
+
+    // 2. Authenticate using Managed Identity
+    var credential = new DefaultAzureCredential();
+
+    // 3. Configure Redis connection
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.ConfigurationOptions = ConfigurationOptions.Parse(azureRedisConnectionString); // Use StackExchange.Redis.ConfigurationOptions        
+        options.ConfigurationOptions = new ConfigurationOptions
+        {
+            EndPoints = { redisHost },
+            Ssl = true,            
+            User = "default", // Required for Redis Enterprise
+            Password = credential.GetToken(
+                new Azure.Core.TokenRequestContext(
+                    new[] { "https://redis.azure.com/.default" }
+                )
+            ).Token
+        };
         options.InstanceName = "nmp_ui_";
-    });
+    });    
 }
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
@@ -127,6 +147,7 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+builder.Services.AddScoped<FarmContext>();
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
@@ -182,6 +203,7 @@ builder.Services.AddCsp(nonceByteAmount: 32);
 var app = builder.Build();
 app.UseGovUkFrontend();
 app.UseMiddleware<SecurityHeadersMiddleware>();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -262,9 +284,9 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<FarmContextMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
 
