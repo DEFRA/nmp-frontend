@@ -54,13 +54,14 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         var options = new ConfigurationOptions
         {
             EndPoints = { azureRedisHost },
+            AbortOnConnectFail = false,
             Ssl = true,
             User = "default",
             Password = tokenProvider.GetTokenAsync().Result
         };
 
         var muxer = ConnectionMultiplexer.Connect(options);
-
+                
         async Task RefreshTokenAsync()
         {
             var newToken = await tokenProvider.GetTokenAsync();
@@ -75,12 +76,12 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         }
 
         muxer.ConnectionFailed += async (_, __) =>
-        {
+        {            
             await RefreshTokenAsync();
         };
 
         muxer.ConnectionRestored += async (_, __) =>
-        {
+        {            
             await RefreshTokenAsync();
         };
 
