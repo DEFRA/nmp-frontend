@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web.UI;
 using NMP.Portal.Models;
 using NMP.Portal.Security;
@@ -46,38 +47,19 @@ string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
     // Prepare token provider
-    var tokenProvider = new RedisTokenProvider();
-    // 1. Redis endpoint (no keys!)
-    var redisHost = azureRedisHost;
-    // Example: "myredis.redisenterprise.cache.azure.net:10000"
+    var tokenProvider = new RedisTokenProvider();    
 
-    // 2. Authenticate using Managed Identity
-    var credential = new DefaultAzureCredential();
-
-    // 3. Configure Redis connection
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {
-        options.ConfigurationOptions = new ConfigurationOptions
-        {
-            EndPoints = { redisHost },
-            Ssl = true,
-            User = "default", // Required for Redis Enterprise
-            Password = tokenProvider.GetTokenAsync().GetAwaiter().GetResult(), // initial token
-            AllowAdmin = false
-        };
-        options.InstanceName = "nmp_ui_";
-    });
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
-        var config = new ConfigurationOptions
+        var options = new ConfigurationOptions
         {
-            EndPoints = { redisHost },
+            EndPoints = { azureRedisHost },
             Ssl = true,
             User = "default",
-            AllowAdmin = false
+            Password = tokenProvider.GetTokenAsync().Result
         };
 
-        var muxer = ConnectionMultiplexer.Connect(config);
+        var muxer = ConnectionMultiplexer.Connect(options);
 
         async Task RefreshTokenAsync()
         {
@@ -87,7 +69,7 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
             {
                 var server = muxer.GetServer(endpoint);
                 // Reconfigure the multiplexer with the new password
-                config.Password = newToken;
+                options.Password = newToken;
                 muxer.Configure();
             }
         }
@@ -105,7 +87,12 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         return muxer;
     });
 
-
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.InstanceName = "nmp_ui_";
+        options.ConnectionMultiplexerFactory = async () =>
+            await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
+    });
 }
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
