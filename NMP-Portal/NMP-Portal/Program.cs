@@ -13,6 +13,7 @@ using NMP.Portal.Services;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using System.Net.Http.Headers;
+using StackExchange.Redis; // Add this at the top of the file
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
@@ -38,12 +39,12 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBody = true;
 });
 
-var redisCacheConnectionString = builder.Configuration["REDIS_CACHE_CONNECTION_STRING"]?.ToString();
-if (!string.IsNullOrWhiteSpace(redisCacheConnectionString))
+var azureRedisConnectionString = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"]?.ToString();
+if (!string.IsNullOrWhiteSpace(azureRedisConnectionString))
 {
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = redisCacheConnectionString;
+        options.ConfigurationOptions = ConfigurationOptions.Parse(azureRedisConnectionString); // Use StackExchange.Redis.ConfigurationOptions        
         options.InstanceName = "nmp_ui_";
     });
 }
@@ -64,7 +65,6 @@ if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
         options.ConnectionString = applicationInsightsConnectionString;
     });
 }
-
 
 builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddHttpContextAccessor();
