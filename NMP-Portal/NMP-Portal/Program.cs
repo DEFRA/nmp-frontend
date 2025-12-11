@@ -45,7 +45,7 @@ string? azureRedisHost = Environment.GetEnvironmentVariable("AZURE_REDIS_HOST");
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
     // 1. Redis endpoint (no keys!)
-    var redisHost = builder.Configuration[azureRedisHost];
+    var redisHost = azureRedisHost;
     // Example: "myredis.redisenterprise.cache.azure.net:10000"
 
     // 2. Authenticate using Managed Identity
