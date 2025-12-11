@@ -2164,10 +2164,6 @@ namespace NMP.Portal.Controllers
                                         model.IsDoubleCropAvailable = true;
                                         model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(field))).Name;
                                     }
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass))
-                                    {
-                                        model.IsAnyCropIsGrass = true;
-                                    }
                                 }
                                 (ManagementPeriod managementPeriod, error) = await _cropService.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
                                 if (model.IsDoubleCropAvailable)

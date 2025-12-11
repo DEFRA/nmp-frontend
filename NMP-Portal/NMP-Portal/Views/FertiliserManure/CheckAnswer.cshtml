@@ -523,28 +523,28 @@
                         <govuk-summary-list-row-value id="nutrient_list">
                             @if ((Model.N.HasValue))
                             {
-                                  <span class="nutrient_row">@Resource.lblNitrogen <span class="figure">@string.Format(Resource.lblValueKgPerHectare,Model.N.Value)</span></span>
+                                  <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.N.Value)</span></span>
                                 
                             }
                             @if ((Model.P2O5.HasValue))
                             {
-                                <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure">@string.Format(Resource.lblValueKgPerHectare,Model.P2O5.Value)</span></span>
+                                <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.P2O5.Value)</span></span>
                             }
                             @if ((Model.K2O.HasValue))
                             {
-                                <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure">@string.Format(Resource.lblValueKgPerHectare,Model.K2O.Value)</span></span>
+                                <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.K2O.Value)</span></span>
                             }
                             @if ((Model.SO3.HasValue))
                             {
-                                <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure">@string.Format(Resource.lblValueKgPerHectare,Model.SO3.Value)</span></span>
+                                <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.SO3.Value)</span></span>
                             }
                             @if ((Model.MgO.HasValue))
                             {
-                                <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure">@string.Format(Resource.lblValueKgPerHectare,Model.MgO.Value)</span></span>
+                                <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.MgO.Value)</span></span>
                             }
                             @if ((Model.Lime.HasValue))
                             {
-                                <span class="nutrient_row">@Resource.lblLime <span class="figure">@($"{Model.Lime.Value}{Resource.lblTonnesForReport}")</span></span>
+                                <span class="nutrient_row">@Resource.lblLime <span class="figure w35">@($"{Model.Lime.Value}{Resource.lblTonnesForReport}")</span></span>
                             }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
