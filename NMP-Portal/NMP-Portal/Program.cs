@@ -42,8 +42,11 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 string? azureRedisHost = Environment.GetEnvironmentVariable("AZURE_REDIS_HOST");
+
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {
+    // Prepare token provider
+    var tokenProvider = new RedisTokenProvider();
     // 1. Redis endpoint (no keys!)
     var redisHost = azureRedisHost;
     // Example: "myredis.redisenterprise.cache.azure.net:10000"
@@ -57,16 +60,52 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         options.ConfigurationOptions = new ConfigurationOptions
         {
             EndPoints = { redisHost },
-            Ssl = true,            
+            Ssl = true,
             User = "default", // Required for Redis Enterprise
-            Password = credential.GetToken(
-                new Azure.Core.TokenRequestContext(
-                    new[] { "https://redis.azure.com/.default" }
-                )
-            ).Token
+            Password = tokenProvider.GetTokenAsync().GetAwaiter().GetResult(), // initial token
+            AllowAdmin = false
         };
         options.InstanceName = "nmp_ui_";
-    });    
+    });
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    {
+        var config = new ConfigurationOptions
+        {
+            EndPoints = { redisHost },
+            Ssl = true,
+            User = "default",
+            AllowAdmin = false
+        };
+
+        var muxer = ConnectionMultiplexer.Connect(config);
+
+        async Task RefreshTokenAsync()
+        {
+            var newToken = await tokenProvider.GetTokenAsync();
+            // Update the password for all endpoints
+            foreach (var endpoint in muxer.GetEndPoints())
+            {
+                var server = muxer.GetServer(endpoint);
+                // Reconfigure the multiplexer with the new password
+                config.Password = newToken;
+                muxer.Configure();
+            }
+        }
+
+        muxer.ConnectionFailed += async (_, __) =>
+        {
+            await RefreshTokenAsync();
+        };
+
+        muxer.ConnectionRestored += async (_, __) =>
+        {
+            await RefreshTokenAsync();
+        };
+
+        return muxer;
+    });
+
+
 }
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
