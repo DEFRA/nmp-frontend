@@ -9137,7 +9137,7 @@ namespace NMP.Portal.Controllers
                         model.IsAnyCropIsGrass = false;
                     }
 
-                    model.GrassCropCount = model.OrganicManures != null ? model.OrganicManures.Where(x => x.IsGrass).Count() : counter;
+                    model.GrassCropCount = model.OrganicManures != null ? model.OrganicManures.Count(x => x.IsGrass) : counter;
                     if (model.IsCheckAnswer && organicManureViewModel != null && organicManureViewModel?.DoubleCrop != null && model?.DoubleCrop != null)
                     {
                         int grassCount = model.OrganicManures.Where(x => x.IsGrass).Count();
