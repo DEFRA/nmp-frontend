@@ -6035,8 +6035,6 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    if (model.IsGrasslandDerogation == false)
-                    {
                         if (model.OccupancyAndNitrogenOptions == (int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
                         {
                             return RedirectToAction("Occupancy");
@@ -6049,11 +6047,6 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("OccupancyAndStandard");
                         }
-                    }
-                    else
-                    {
-                        return RedirectToAction("NitrogenStandard");
-                    }
                 }
             }
 
