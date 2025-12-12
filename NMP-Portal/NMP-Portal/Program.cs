@@ -44,7 +44,7 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
-string? tenantId = "6f504113-6b64-43f2-ade9-242e05780007";
+string? tenantId = "770a2450-0227-4c62-90c7-4e38537f1102";
 
 builder.Services.AddSingleton<RedisTokenProvider>();
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
