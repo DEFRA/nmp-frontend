@@ -44,33 +44,62 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
-
-builder.Services.AddSingleton<RedisTokenProvider>();
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
-{  
+{
+    // 1. Create the Redis multiplexer ONCE
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
-        var configurationOptions = ConfigurationOptions.Parse(azureRedisHost).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential()).GetAwaiter().GetResult(); 
-        configurationOptions.AbortOnConnectFail = false;
-        configurationOptions.Protocol = RedisProtocol.Resp3;        
-        
-        var connectionMultiplexer = ConnectionMultiplexer.Connect(configurationOptions);
+        var credential = new DefaultAzureCredential();
 
-        return connectionMultiplexer;
+        // AAD token provider for Redis Enterprise
+        var options = ConfigurationOptions.Parse(azureRedisHost);
+        options.Protocol = RedisProtocol.Resp3;
+        options.AbortOnConnectFail = false;
+        options.ConnectRetry = 5;           // Retry 5 times
+        options.ConnectTimeout = 15000;     // 15 seconds
+        options.ReconnectRetryPolicy = new ExponentialRetry(5000); // Backoff strategy
+        options.ConfigureForAzureWithTokenCredentialAsync(credential); // ⭐ Critical: auto-refresh AAD token
+
+        return ConnectionMultiplexer.Connect(options);
     });
 
-    builder.Services.AddStackExchangeRedisCache(async options =>
+    // 2. Use Redis cache using DI-bound multiplexer
+    builder.Services.AddStackExchangeRedisCache(options =>
     {
         options.ConnectionMultiplexerFactory = async () =>
         {
-            var redis = builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>();
-
-            return await Task.FromResult(redis);
+            return builder.Services
+                .BuildServiceProvider()
+                .GetRequiredService<IConnectionMultiplexer>();
         };
+
         options.InstanceName = "nmp_ui_";
-        
     });
 }
+//if (!string.IsNullOrWhiteSpace(azureRedisHost))
+//{  
+//    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+//    {
+//        var configurationOptions = ConfigurationOptions.Parse(azureRedisHost).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential()).GetAwaiter().GetResult(); 
+//        configurationOptions.AbortOnConnectFail = false;
+//        configurationOptions.Protocol = RedisProtocol.Resp3;        
+
+//        var connectionMultiplexer = ConnectionMultiplexer.Connect(configurationOptions);
+
+//        return connectionMultiplexer;
+//    });
+
+//    builder.Services.AddStackExchangeRedisCache(async options =>
+//    {
+//        options.ConnectionMultiplexerFactory = async () =>
+//        {
+//            var redis = builder?.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>();
+
+//            return await Task.FromResult(redis);
+//        };
+//        options.InstanceName = "nmp_ui_";        
+//    });
+//}
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
@@ -113,7 +142,6 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
                   .Build();
     options.Filters.Add(new AuthorizeFilter(policy));
 }).AddMicrosoftIdentityUI();
-
 
 builder.Services.AddDataProtection();
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
