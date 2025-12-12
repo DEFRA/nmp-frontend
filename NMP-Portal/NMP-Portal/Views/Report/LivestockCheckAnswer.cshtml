@@ -331,20 +331,19 @@
                                         <govuk-summary-list-row-action asp-action="Occupancy" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAverageOccupancy</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-
-                                <govuk-summary-list-row class=@(!Model.NitrogenStandard.HasValue ? "govuk-error-message":"")>
-                                    <govuk-summary-list-row-key>
-                                        @Resource.lblNitrogenStandardPerAnimalPerYear
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                        @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblNitrogenStandardPerAnimalPerYear</span></govuk-summary-list-row-action>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-
+                                
                             }
+                            <govuk-summary-list-row class=@(!Model.NitrogenStandard.HasValue ? "govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblNitrogenStandardPerAnimalPerYear
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblNitrogenStandardPerAnimalPerYear</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
 
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
