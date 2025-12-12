@@ -98,11 +98,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord)
         {
             _logger.LogTrace("Crop Controller : HarvestYearForPlan({0}, {1}, {2}) action called", q, year, isPlanRecord);
-            PlanViewModel? model = GetCropFromSession();
+            PlanViewModel? model = GetCropFromSession()?? new PlanViewModel();
             Error? error = null;
             try
             {
-                if (model == null || (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(year)))
+                if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(year))
                 {
                     _logger.LogError("Crop Controller : Session not found in HarvestYearForPlan() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
