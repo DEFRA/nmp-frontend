@@ -2377,6 +2377,18 @@ namespace NMP.Portal.Controllers
                                 counter++;
                             }
 
+                            if (model.DefoliationList != null && model.DefoliationList.Count > 0)
+                            {
+                                if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
+                                {
+                                    model.DefoliationCurrentCounter = 1;
+                                }
+                                else
+                                {
+                                    model.DefoliationCurrentCounter = model.DefoliationList.Count - 1;
+                                }
+                                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                            }
                             model.IsSameDefoliationForAll = true;
                             model.HarvestYear = decryptedHarvestYear;
                             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
@@ -2559,18 +2571,6 @@ namespace NMP.Portal.Controllers
                 model.IsCheckAnswer = true;
                 model.IsAnyChangeInField = false;
                 model.IsAnyChangeInSameDefoliationFlag = false;
-                if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-                {
-                    if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
-                    {
-                        model.DefoliationCurrentCounter = 1;
-                    }
-                    else
-                    {
-                        model.DefoliationCurrentCounter = model.DefoliationList.Count - 1;
-                    }
-                    model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-                }
                 if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarning || model.IsNitrogenExceedWarning)
                 {
                     model.IsWarningMsgNeedToShow = true;
@@ -4853,8 +4853,8 @@ namespace NMP.Portal.Controllers
                         model.IsAnyCropIsGrass = false;
                     }
 
-                    model.GrassCropCount = counter;
-                    if (fertiliserManureViewModel != null && fertiliserManureViewModel?.DoubleCrop != null && model?.DoubleCrop != null)
+                    model.GrassCropCount = model.FertiliserManures != null ? model.FertiliserManures.Where(x => x.IsGrass).Count() : counter;
+                    if (model.IsCheckAnswer && fertiliserManureViewModel != null && fertiliserManureViewModel?.DoubleCrop != null && model?.DoubleCrop != null)
                     {
                         int grassCount = model.FertiliserManures.Count(x => x.IsGrass);
                         if (model.DoubleCropCurrentCounter - 1 < model.DoubleCrop.Count && model.DefoliationList != null && grassCount != model.DefoliationList.Count())
