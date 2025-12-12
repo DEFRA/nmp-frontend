@@ -2377,6 +2377,8 @@ namespace NMP.Portal.Controllers
                                 counter++;
                             }
 
+                            model.IsSameDefoliationForAll = true;
+
                             if (model.DefoliationList != null && model.DefoliationList.Count > 0)
                             {
                                 if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
@@ -2389,7 +2391,6 @@ namespace NMP.Portal.Controllers
                                 }
                                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                             }
-                            model.IsSameDefoliationForAll = true;
                             model.HarvestYear = decryptedHarvestYear;
                             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                             model.FarmId = decryptedFarmId;

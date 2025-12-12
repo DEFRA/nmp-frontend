@@ -4873,6 +4873,8 @@ namespace NMP.Portal.Controllers
                                 model.OrganicManures.Add(organic);
 
                             }
+                            model.IsSameDefoliationForAll = true;
+
                             if (model.DefoliationList != null && model.DefoliationList.Count > 0)
                             {
                                 if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
@@ -4885,7 +4887,6 @@ namespace NMP.Portal.Controllers
                                 }
                                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                             }
-                            model.IsSameDefoliationForAll = true;
                             //model.DefoliationCurrentCounter = 1;
                             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                             model.HarvestYear = decryptedHarvestYear;
