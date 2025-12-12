@@ -144,7 +144,10 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
                 {
-                    model = new FertiliserManureViewModel();
+                    if (model == null)
+                    {
+                        model = new FertiliserManureViewModel();
+                    }
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                     model.EncryptedFarmId = q;
@@ -2378,19 +2381,6 @@ namespace NMP.Portal.Controllers
                             }
 
                             model.IsSameDefoliationForAll = true;
-
-                            if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-                            {
-                                if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
-                                {
-                                    model.DefoliationCurrentCounter = 1;
-                                }
-                                else
-                                {
-                                    model.DefoliationCurrentCounter = model.DefoliationList.Count - 1;
-                                }
-                                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-                            }
                             model.HarvestYear = decryptedHarvestYear;
                             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                             model.FarmId = decryptedFarmId;
@@ -2416,6 +2406,20 @@ namespace NMP.Portal.Controllers
                         _logger.LogError("Fertiliser Manure Controller : Session not found in CheckAnswer() action");
                         return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                     }
+                }
+
+
+                if (model.DefoliationList != null && model.DefoliationList.Count > 0)
+                {
+                    if (model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value)
+                    {
+                        model.DefoliationCurrentCounter = 1;
+                    }
+                    else
+                    {
+                        model.DefoliationCurrentCounter = model.DefoliationList.Count;
+                    }
+                    model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
                 }
                 if (model != null && model.FieldList != null)
                 {
@@ -3969,8 +3973,8 @@ namespace NMP.Portal.Controllers
                                 {
                                     cropId = grassCrop.ID.Value;
                                 }
-                                 
-                                
+
+
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
                                 if (!string.IsNullOrWhiteSpace(error.Message))
                                 {
