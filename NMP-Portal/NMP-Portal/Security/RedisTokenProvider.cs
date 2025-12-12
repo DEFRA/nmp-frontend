@@ -9,7 +9,7 @@
     public class RedisTokenProvider
     {
         private readonly TokenCredential _credential;
-        private readonly string[] _scopes = new[] { "https://redis.azure.com/.default" };
+        private readonly string[] _scopes = new[] { "https://management.azure.com/.default" };
 
         private AccessToken _currentToken;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);

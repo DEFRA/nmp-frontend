@@ -50,49 +50,25 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
 {  
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
-        var tokenProvider = sp.GetRequiredService<RedisTokenProvider>();
-        var options = new ConfigurationOptions
-        {
-            EndPoints = { azureRedisHost },
-            AbortOnConnectFail = false,
-            Ssl = true,
-            User = "default",
-            Password = tokenProvider.GetTokenAsync().Result
-        };
+        var configurationOptions = ConfigurationOptions.Parse(azureRedisHost).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential()).GetAwaiter().GetResult(); 
+        configurationOptions.AbortOnConnectFail = false;
+        configurationOptions.Protocol = RedisProtocol.Resp3;        
+        
+        var connectionMultiplexer = ConnectionMultiplexer.Connect(configurationOptions);
 
-        var muxer = ConnectionMultiplexer.Connect(options);
-                
-        async Task RefreshTokenAsync()
-        {
-            var newToken = await tokenProvider.GetTokenAsync();
-            // Update the password for all endpoints
-            foreach (var endpoint in muxer.GetEndPoints())
-            {
-                var server = muxer.GetServer(endpoint);
-                // Reconfigure the multiplexer with the new password
-                options.Password = newToken;
-                muxer.Configure();
-            }
-        }
-
-        muxer.ConnectionFailed += async (_, __) =>
-        {            
-            await RefreshTokenAsync();
-        };
-
-        muxer.ConnectionRestored += async (_, __) =>
-        {            
-            await RefreshTokenAsync();
-        };
-
-        return muxer;
+        return connectionMultiplexer;
     });
 
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {        
-        options.InstanceName = "nmp_ui_";
+    builder.Services.AddStackExchangeRedisCache(async options =>
+    {
         options.ConnectionMultiplexerFactory = async () =>
-            await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
+        {
+            var redis = builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>();
+
+            return await Task.FromResult(redis);
+        };
+        options.InstanceName = "nmp_ui_";
+        
     });
 }
 
@@ -316,5 +292,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
+
 
 
