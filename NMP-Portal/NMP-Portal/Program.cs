@@ -44,6 +44,7 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+string? tenantId = "6f504113-6b64-43f2-ade9-242e05780007";
 
 builder.Services.AddSingleton<RedisTokenProvider>();
 if (!string.IsNullOrWhiteSpace(azureRedisHost))
@@ -55,8 +56,9 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         {
             EndPoints = { azureRedisHost },
             AbortOnConnectFail = false,
+            Protocol = RedisProtocol.Resp3,
             Ssl = true,
-            User = "default",
+            User = $"azure:{tenantId}",//default user for Azure Redis
             Password = tokenProvider.GetTokenAsync().Result
         };
 
@@ -85,14 +87,23 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
             await RefreshTokenAsync();
         };
 
+        IDatabase Database = muxer.GetDatabase();
+        
+
         return muxer;
     });
 
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {        
-        options.InstanceName = "nmp_ui_";
+    builder.Services.AddStackExchangeRedisCache(async options =>
+    {
         options.ConnectionMultiplexerFactory = async () =>
-            await Task.FromResult(builder.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>());
+        {
+            var redis = builder.Services.BuildServiceProvider()
+                        .GetRequiredService<IConnectionMultiplexer>();
+
+            return await Task.FromResult(redis);
+        };
+        options.InstanceName = "nmp_ui_";
+        
     });
 }
 
