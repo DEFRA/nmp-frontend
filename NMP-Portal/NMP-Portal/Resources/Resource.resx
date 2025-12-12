@@ -5338,7 +5338,7 @@ cubic metres per hectare  not set</value>
     <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
   </data>
   <data name="lblLivestockReportContentTwoForDerogation" xml:space="preserve">
-    <value>This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock </value>
+    <value>This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock</value>
   </data>
   <data name="lblLivestockContentTwoForNonDerogation" xml:space="preserve">
     <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of nitrogen (N) per hectare</value>

@@ -5292,7 +5292,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LivestockCheckAnswer(string? id)
+        public async Task<IActionResult> LivestockCheckAnswer(string? livestockId)
         {
             _logger.LogTrace("Report Controller : AverageNumber() action called");
             ReportViewModel model = new ReportViewModel();
@@ -5312,12 +5312,12 @@ namespace NMP.Portal.Controllers
                 var poultry = (int)NMP.Portal.Enums.LivestockGroup.Poultry;
                 var sheep = (int)NMP.Portal.Enums.LivestockGroup.Sheep;
                 var goatsDeerOrHorses = (int)NMP.Portal.Enums.LivestockGroup.GoatsDeerOrHorses;
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(livestockId))
                 {
-                    model.EncryptedNLLivestockID = id;
-                    int livestockId = Convert.ToInt32(_reportDataProtector.Unprotect(id));
+                    model.EncryptedNLLivestockID = livestockId;
+                    int decryptedLivestockId = Convert.ToInt32(_reportDataProtector.Unprotect(livestockId));
 
-                    (NutrientsLoadingLiveStock nutrientsLoadingLiveStock, error) = await _reportService.FetchNutrientsLoadingLiveStockByIdAsync(livestockId);
+                    (NutrientsLoadingLiveStock nutrientsLoadingLiveStock, error) = await _reportService.FetchNutrientsLoadingLiveStockByIdAsync(decryptedLivestockId);
                     if (nutrientsLoadingLiveStock != null)
                     {
                         model.FarmId = nutrientsLoadingLiveStock.FarmID;
@@ -5451,7 +5451,7 @@ namespace NMP.Portal.Controllers
                 }
                 var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
                 var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(livestockId))
                 {
                     if (model.AverageOccupancy != defaultOccupancy || model.NitrogenStandard != defaultNitrogenStandard)
                     {
@@ -5482,7 +5482,7 @@ namespace NMP.Portal.Controllers
 
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
 
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(livestockId))
                 {
                     HttpContext.Session.SetObjectAsJson("LivestockDataBeforeUpdate", model);
                 }
@@ -5801,6 +5801,7 @@ namespace NMP.Portal.Controllers
                     {
                         model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
 
+                        model.EncryptedNLLivestockID = null;
                         model.LivestockGroupId = null;
                         model.IsAnyLivestockNumber = null;
                         model.LivestockTypeId = null;

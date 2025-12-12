@@ -149,7 +149,7 @@
                                                             <tr class="govuk-table__row">
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
-                                                                <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
+                                                                <th id="totalCropNeed" class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
@@ -357,7 +357,7 @@
                                                             <tr class="govuk-table__row">
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
-                                                                <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
+                                                                <th id="totalCropNeed" class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
                                                                 <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
@@ -680,7 +680,7 @@
 
                     <govuk-tabs-item id="cropDetails" label="@(Model.Crops.Count == 2 ? Resource.lblCropDetails : Resource.lblCropFieldAndSoilDetails)">
                         <h2 class="govuk-heading-m non-standard">@string.Format(Resource.lblCropFieldAndSoilDetailsForFieldInYear, Model.FieldName, Model.Crops[0].Year)</h2>
-                        <p class="govuk-body"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId" asp-route-t="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewFieldAndSoilAnalysisInformationForField, Model.FieldName)</a></p>
+                        <p class="govuk-body"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId" asp-route-t="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewFieldAndSoilAnalysisInformationForField, Model.FieldName)</a></p>
                         @foreach (var crop in Model.Crops)
                         {
                             <hr class="seperator_five">

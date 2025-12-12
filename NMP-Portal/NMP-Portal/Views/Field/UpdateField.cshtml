@@ -30,7 +30,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="UpdateField" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

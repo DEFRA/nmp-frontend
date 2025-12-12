@@ -189,6 +189,17 @@
                     <govuk-error-summary-item href="#">@TempData["ErrorCreatePlan"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+            @if(ViewData["ModelStateErrors"]!=null)
+            {
+                     <govuk-error-summary>
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                 <govuk-error-summary-item href="#">@error.ErrorMessage</govuk-error-summary-item>                
+                                }
+                </govuk-error-summary>
+            }
+
+
             <div hidden="true">
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"/>
@@ -229,6 +240,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
                 @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
                 {
@@ -453,7 +465,7 @@
                                 @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.CurrentSward == null ? Resource.lblNotEntered : currentSward)
+                                @(Model.CurrentSward == null ? Resource.lblNotSet : currentSward)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))</span></govuk-summary-list-row-action>
@@ -466,20 +478,17 @@
                     {
                         @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
                         {
-                            @if(Model.GrassSeason != null  && Model.GrassSeason != 0)
-                            {
                                 <govuk-summary-list-row class=@((!Model.GrassSeason.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.GrassSeason == null ? Resource.lblNotEntered : Model.GrassSeasonName)
+                                        @(Model.GrassSeason == null ? Resource.lblNotSet : Model.GrassSeasonName)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="GrassSeason" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year) </span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                            }
                             
                         }
 
@@ -674,9 +683,9 @@
                                             @* @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType) *@
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @if(ViewBag.DefaultYield !=null&&(!crop.Yield.HasValue))
+                                            @if(ViewBag.DefaultYield ==null&&(!crop.Yield.HasValue))
                                             {
-                                                @Resource.lblNotEntered
+                                                @Resource.lblNotSet
                                             }
                                             else{
                                             @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : string.Format("{0:N1}",crop.Yield.Value) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
@@ -743,9 +752,9 @@
                                 }
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @if(ViewBag.DefaultYield !=null&&(!crop.Yield.HasValue))
+                                        @if(ViewBag.DefaultYield ==null&&(!crop.Yield.HasValue))
                                             {
-                                                @Resource.lblNotEntered
+                                                @Resource.lblNotSet
                                             }
                                             else{
                                         @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 : string.Format("{0:N1}",crop.Yield.Value) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
@@ -782,7 +791,7 @@
                                         <govuk-summary-list-row-value>
                                             @if(ViewBag.DefaultYield !=null&&(!crop.Yield.HasValue))
                                             {
-                                                @Resource.lblNotEntered
+                                                @Resource.lblNotSet
                                             }
                                             else{
                                             @(crop.Yield.HasValue ? crop.Yield.Value == 0.0m ? 0 :string.Format("{0:N1}", crop.Yield.Value) + " " + @Resource.lblTonnesPerHectare : Resource.lblNotSet)
@@ -853,7 +862,7 @@
                                 @string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.SwardTypeId == null ? Resource.lblNotEntered : ViewBag.SwardType)
+                                @(Model.SwardTypeId == null ? Resource.lblNotSet : ViewBag.SwardType)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SwardType" asp-controller="Crop">@Resource.lblChange 
@@ -868,7 +877,7 @@
                                 @string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.SwardManagementId == null ? Resource.lblNotEntered : ViewBag.SwardManagementName)
+                                @(Model.SwardManagementId == null ? Resource.lblNotSet : ViewBag.SwardManagementName)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="GrassManagement" asp-controller="Crop">@Resource.lblChange 
@@ -881,7 +890,7 @@
                                 @potentialCutText
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.PotentialCut == null ? Resource.lblNotEntered : potentialCutName)
+                                @(Model.PotentialCut == null ? Resource.lblNotSet : potentialCutName)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="Crop">@Resource.lblChange 
@@ -900,7 +909,7 @@
                                 @if (Model.DefoliationSequenceId == null)
                                 {
                                     <govuk-summary-list-row-value>
-                                        @Resource.lblNotEntered
+                                        @Resource.lblNotSet
                                     </govuk-summary-list-row-value>
                                 }
                                 else
@@ -930,7 +939,7 @@
                                             @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(crop.Yield == null ? Resource.lblNotEntered : (string.Format("{0:N0} {1}",Convert.ToInt32(crop.Yield), Resource.lblTonnesPerHectare)))
+                                            @(crop.Yield == null ? Resource.lblNotSet : (string.Format("{0:N0} {1}",Convert.ToInt32(crop.Yield), Resource.lblTonnesPerHectare)))
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
@@ -942,10 +951,10 @@
                             {
                                 <govuk-summary-list-row class=@((!Model.GrassGrowthClassQuestion.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
+                                        @Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.GrassGrowthClassQuestion == null ? Resource.lblNotEntered : (Model.GrassGrowthClassQuestion == 1 ? Resource.lblYesEnterTheSameTargetYieldForTheseFields : Resource.lblNoEnterADifferentTargetYieldForEachFields))
+                                        @(Model.GrassGrowthClassQuestion == null ? Resource.lblNotSet : (Model.GrassGrowthClassQuestion == 1 ? Resource.lblYesEnterTheSameTargetYieldForTheseFields : Resource.lblNoEnterADifferentTargetYieldForEachFields))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
@@ -959,7 +968,7 @@
                                             @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(crop.Yield == null ? Resource.lblNotEntered : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
+                                            @(crop.Yield == null ? Resource.lblNotSet : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
 
