@@ -19085,18 +19085,9 @@ namespace NMP.Portal.Resources {
         /// <summary>
         ///   Looks up a localized string similar to More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them..
         /// </summary>
-        public static string MsgForIfFieldsAreNotCreated {
+        public static string MsgForIfFieldorPlanAreNotCreated {
             get {
-                return ResourceManager.GetString("MsgForIfFieldsAreNotCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them..
-        /// </summary>
-        public static string MsgForIfPlanIsNotCreated {
-            get {
-                return ResourceManager.GetString("MsgForIfPlanIsNotCreated", resourceCulture);
+                return ResourceManager.GetString("MsgForIfFieldorPlanAreNotCreated", resourceCulture);
             }
         }
         
