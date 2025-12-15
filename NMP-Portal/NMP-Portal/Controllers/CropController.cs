@@ -6516,9 +6516,11 @@ namespace NMP.Portal.Controllers
                 }
                 return View(model);
             }
-            model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+            
             if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1 &&(model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
             {
+                model.GrassGrowthClassCounter = 1;
+                model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
                 SetCropToSession(model);
                 return RedirectToAction("CheckAnswer");
             }
