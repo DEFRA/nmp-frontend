@@ -6852,21 +6852,13 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            if (model.DryMatterYieldCounter == model.Crops.Count)
+            if (model.DryMatterYieldCounter == model.Crops.Count||
+                (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null)))
             {
-
                 SetCropToSession(model);
                 return RedirectToAction("CheckAnswer");
             }
-            else
-            {
-                if (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null))
-                {
-                    SetCropToSession(model);
-                    return RedirectToAction("CheckAnswer");
-                }
                 return View(model);
-            }
         }
 
         [HttpGet]
