@@ -1208,6 +1208,10 @@ namespace NMP.Portal.Controllers
                         SetFarmToSession(farmData);
                     }
                 }
+                else
+                {
+                    return RedirectToAction("FarmList");
+                }
             }
             catch (HttpRequestException hre)
             {
@@ -1353,7 +1357,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (farm.FarmRemove.HasValue && !farm.FarmRemove.Value)
                 {
-                    return RedirectToAction("FarmList");
+                    return RedirectToAction("FarmDetails", new { id = farm.EncryptedFarmId });
                 }
                 else
                 {
