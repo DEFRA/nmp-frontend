@@ -7034,4 +7034,22 @@ livestock manure.</value>
   <data name="lblTotalAreaInAnNvz" xml:space="preserve">
     <value>total area in an NVZ</value>
   </data>
+  <data name="lblAnNMaxIsNotAvailableForYear" xml:space="preserve">
+    <value>An N-max report is not available for {0}</value>
+  </data>
+  <data name="lblYouNeedToEnterDetailsFirstAbout" xml:space="preserve">
+    <value>You need to enter details first about:</value>
+  </data>
+  <data name="lblYourFields" xml:space="preserve">
+    <value>your fields</value>
+  </data>
+  <data name="lblYourCrops" xml:space="preserve">
+    <value>your crops</value>
+  </data>
+  <data name="lblAnyOrganicMaterialOrInorganicFertiliserUsed" xml:space="preserve">
+    <value>any organic material, or inorganic fertiliser used</value>
+  </data>
+  <data name="lblAddfields" xml:space="preserve">
+    <value>Add fields</value>
+  </data>
 </root>
