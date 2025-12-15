@@ -7046,4 +7046,10 @@ livestock manure.</value>
   <data name="lblAddfields" xml:space="preserve">
     <value>Add fields</value>
   </data>
+  <data name="MsgForIfPlanIsNotCreated" xml:space="preserve">
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
+  </data>
+  <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
+  </data>
 </root>
