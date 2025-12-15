@@ -6516,14 +6516,19 @@ namespace NMP.Portal.Controllers
                 }
                 return View(model);
             }
+            
             if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1 &&(model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
             {
-                    return RedirectToAction("CheckAnswer");
+                model.GrassGrowthClassCounter = 1;
+                model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+                SetCropToSession(model);
+                return RedirectToAction("CheckAnswer");
             }
             if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
             {
                 if (model.IsCheckAnswer && planViewModelBeforeUpdate.GrassGrowthClassQuestion == model.GrassGrowthClassQuestion && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
                 {
+                    SetCropToSession(model);
                     return RedirectToAction("CheckAnswer");
                 }
                 else if (model.IsAnyChangeInField)
@@ -6849,19 +6854,13 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            if (model.DryMatterYieldCounter == model.Crops.Count)
+            if (model.DryMatterYieldCounter == model.Crops.Count||
+                (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null)))
             {
-
+                SetCropToSession(model);
                 return RedirectToAction("CheckAnswer");
             }
-            else
-            {
-                if (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null))
-                {
-                    return RedirectToAction("CheckAnswer");
-                }
                 return View(model);
-            }
         }
 
         [HttpGet]
