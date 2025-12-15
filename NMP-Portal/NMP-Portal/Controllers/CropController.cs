@@ -6516,14 +6516,17 @@ namespace NMP.Portal.Controllers
                 }
                 return View(model);
             }
+            model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
             if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1 &&(model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
             {
-                    return RedirectToAction("CheckAnswer");
+                SetCropToSession(model);
+                return RedirectToAction("CheckAnswer");
             }
             if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
             {
                 if (model.IsCheckAnswer && planViewModelBeforeUpdate.GrassGrowthClassQuestion == model.GrassGrowthClassQuestion && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
                 {
+                    SetCropToSession(model);
                     return RedirectToAction("CheckAnswer");
                 }
                 else if (model.IsAnyChangeInField)
@@ -6852,12 +6855,14 @@ namespace NMP.Portal.Controllers
             if (model.DryMatterYieldCounter == model.Crops.Count)
             {
 
+                SetCropToSession(model);
                 return RedirectToAction("CheckAnswer");
             }
             else
             {
                 if (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null))
                 {
+                    SetCropToSession(model);
                     return RedirectToAction("CheckAnswer");
                 }
                 return View(model);
