@@ -48,10 +48,6 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : Index() action called");
             HttpContext.Session.Clear();
-            var credential = new DefaultAzureCredential();
-            var token = credential.GetToken(
-                new TokenRequestContext(new[] { "https://redis.azure.com/.default" })
-            );
             return RedirectToAction("FarmList");
         }
 
@@ -1154,62 +1150,61 @@ namespace NMP.Portal.Controllers
                 {
                     HttpContext.Session.Remove("FarmDataBeforeUpdate");
                 }
-                if (!string.IsNullOrWhiteSpace(id))
-                {
-                    farmId = _dataProtector.Unprotect(id);
-                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                    if (!string.IsNullOrWhiteSpace(error.Message))
-                    {
-                        TempData["Error"] = error.Message;
-                        return RedirectToAction("FarmList");
-                    }
-                    if (farm != null)
-                    {
-                        farmData = new FarmViewModel();
-                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
-                        farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
-                        farmData.ID = farm.ID;
-                        farmData.Name = farm.Name;
-                        farmData.Address1 = farm.Address1;
-                        farmData.Address2 = farm.Address2;
-                        farmData.Address3 = farm.Address3;
-                        farmData.Address4 = farm.Address4;
-                        farmData.Postcode = farm.Postcode;
-                        farmData.CPH = farm.CPH;
-                        farmData.FarmerName = farm.FarmerName;
-                        farmData.BusinessName = farm.BusinessName;
-                        farmData.SBI = farm.SBI;
-                        farmData.STD = farm.STD;
-                        farmData.Telephone = farm.Telephone;
-                        farmData.Mobile = farm.Mobile;
-                        farmData.Email = farm.Email;
-                        farmData.Rainfall = farm.Rainfall;
-                        farmData.TotalFarmArea = farm.TotalFarmArea;
-                        farmData.AverageAltitude = farm.AverageAltitude;
-                        farmData.RegisteredOrganicProducer = farm.RegisteredOrganicProducer;
-                        farmData.MetricUnits = farm.MetricUnits;
-                        farmData.EnglishRules = farm.EnglishRules;
-                        farmData.NVZFields = farm.NVZFields;
-                        farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
-                        farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        farmData.CreatedByID = farm.CreatedByID;
-                        farmData.CreatedOn = farm.CreatedOn;
-                        farmData.CountryID = farm.CountryID;
-                        if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
-                        {
-                            farmData.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
-                        }
-
-                        bool update = true;
-                        farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
-                        SetFarmToSession(farmData);
-                    }
-                }
-                else
+                if (string.IsNullOrWhiteSpace(id))
                 {
                     _logger.LogError("Farm Controller : FarmDetails({id}) action called", id);
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.BadRequest);
                 }
+
+                farmId = _dataProtector.Unprotect(id);
+                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                if (!string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("FarmList");
+                }
+                if (farm != null)
+                {
+                    farmData = new FarmViewModel();
+                    farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
+                    farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
+                    farmData.ID = farm.ID;
+                    farmData.Name = farm.Name;
+                    farmData.Address1 = farm.Address1;
+                    farmData.Address2 = farm.Address2;
+                    farmData.Address3 = farm.Address3;
+                    farmData.Address4 = farm.Address4;
+                    farmData.Postcode = farm.Postcode;
+                    farmData.CPH = farm.CPH;
+                    farmData.FarmerName = farm.FarmerName;
+                    farmData.BusinessName = farm.BusinessName;
+                    farmData.SBI = farm.SBI;
+                    farmData.STD = farm.STD;
+                    farmData.Telephone = farm.Telephone;
+                    farmData.Mobile = farm.Mobile;
+                    farmData.Email = farm.Email;
+                    farmData.Rainfall = farm.Rainfall;
+                    farmData.TotalFarmArea = farm.TotalFarmArea;
+                    farmData.AverageAltitude = farm.AverageAltitude;
+                    farmData.RegisteredOrganicProducer = farm.RegisteredOrganicProducer;
+                    farmData.MetricUnits = farm.MetricUnits;
+                    farmData.EnglishRules = farm.EnglishRules;
+                    farmData.NVZFields = farm.NVZFields;
+                    farmData.FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel;
+                    farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
+                    farmData.CreatedByID = farm.CreatedByID;
+                    farmData.CreatedOn = farm.CreatedOn;
+                    farmData.CountryID = farm.CountryID;
+                    if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+                    {
+                        farmData.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                    }
+
+                    bool update = true;
+                    farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
+                    SetFarmToSession(farmData);
+                }
+
             }
             catch (HttpRequestException hre)
             {
