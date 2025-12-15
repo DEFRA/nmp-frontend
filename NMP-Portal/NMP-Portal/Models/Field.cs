@@ -25,15 +25,18 @@ namespace NMP.Portal.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
         public string? OtherReference { get; set; }
 
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTotalFieldArea))]
+        [Range(0, double.MaxValue,ErrorMessageResourceType = typeof(Resource),
+          ErrorMessageResourceName = nameof(Resource.MsgEnterANumberWhichIsGreaterThanZero))]
         [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgTotalAreaShouldNotMoreThanTwoDecimal))]
         public decimal? TotalArea { get; set; }
 
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCroppedArea))]
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource),
+          ErrorMessageResourceName = nameof(Resource.MsgEnterANumberWhichIsGreaterThanZero))]
         [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCroppedAreaShouldNotMoreThanTwoDecimal))]
         public decimal? CroppedArea { get; set; }
 
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblManureNonSpreadingArea))]
+        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource),
+          ErrorMessageResourceName = nameof(Resource.MsgEnterANumberWhichIsGreaterThanZero))]
         [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgManureNonSpreadingAreaNotMoreThanTwoDecimal))]
         public decimal? ManureNonSpreadingArea { get; set; }
         public bool? SoilReleasingClay { get; set; }
