@@ -4818,9 +4818,6 @@ cubic metres per hectare  not set</value>
   <data name="lblAddCrops" xml:space="preserve">
     <value>Add crops</value>
   </data>
-  <data name="MsgForIfPlanIsNotCreated" xml:space="preserve">
-    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
-  </data>
   <data name="lblNMax" xml:space="preserve">
     <value>N-max</value>
   </data>
@@ -5414,9 +5411,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblPhosphateP2O5Standard" xml:space="preserve">
     <value>Phosphate (P2O5) standard</value>
-  </data>
-  <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
-    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
   <data name="lblAreaRequiredForLivestockManure" xml:space="preserve">
     <value>Area required for livestock manure</value>
