@@ -24,19 +24,9 @@
 {
 
     @section BeforeContent {
-    @* @if (Model.IsComingFromRecommendation)
-        {
-            <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
-                @Resource.lblBack
-            </govuk-back-link>
-        }
-        else
-        { *@
             <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">
                 @Resource.lblBack
             </govuk-back-link>
-
-        @* } *@
     }
     <form asp-action="RemoveOrganicManure" asp-controller="OrganicManure" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
@@ -50,7 +40,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate"></govuk-date-input>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"/>
@@ -79,7 +69,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"/>
@@ -186,7 +176,7 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].EncryptedCounter" value="@Model.OrganicManures[i].EncryptedCounter"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"/>
-
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IsGrass" value="@Model.OrganicManures[i].IsGrass" />
                 }
             }
             @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
@@ -221,6 +211,21 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
+                }
+            }
+            @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+            {
+                @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                {
+
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
                 }
             }
         </div>
@@ -279,20 +284,8 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-                @* @if (Model.IsComingFromRecommendation)
-                {
-                    <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@ViewBag.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
-
-                }
-                else
-                { *@
                     <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a></p>
-
-                @* } *@
-
             </div>
         </div>
     </form>
-
-
 }

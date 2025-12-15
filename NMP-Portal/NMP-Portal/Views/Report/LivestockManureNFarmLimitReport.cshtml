@@ -136,18 +136,18 @@
                 </p>
             }
         }
-        else  @if (ViewBag.IsAllInNVZ != null)
+        else
         {
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
             {
                 <p class="govuk-body-s">
-                    @string.Format("{0} {1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
+                    @string.Format("{0}{1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
                 </p>
             }
             else
             {
                 <p class="govuk-body-s">
-                    @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
+                    @string.Format("{0}{1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
                 </p>
             }
         }
@@ -158,7 +158,7 @@
                 @Resource.lblKeyInformation
             </h3>
             <div class="table-container">
-                <table class="govuk-table">
+                <table class="govuk-table data-table">
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblLivestockManureTotalNitrogenCapacity</td>
@@ -189,7 +189,7 @@
         else
         {
             <div class="table-container margin-bottom-ten">
-                <table class="farm_area_derogated govuk-table">
+                <table class="farm_area_derogated govuk-table data-table">
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header">@Resource.lblAreaRequiredForLivestockManure</th>
@@ -229,7 +229,7 @@
             }
         </h2>
         <div class="table-container">
-            <table class="govuk-table">
+            <table class="data-table n-table govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header">@Resource.lblLivestockReportContentFive</th>
@@ -289,7 +289,7 @@
             }
         </h2>
         <div class="table-container margin-bottom-ten">
-            <table class="govuk-table">
+            <table class="govuk-table data-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header livestock_type">@Resource.lblType</th>
@@ -544,7 +544,7 @@ else
                 }
             </p>
             <div class="table-container margin-bottom-thirty">
-                <table class="govuk-table">
+                <table class="govuk-table data-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header">@Resource.lblType</th>
@@ -640,7 +640,7 @@ else
                     @Resource.lblImportsOfLivestockManure
                 </h3>
                 <div class="table-container margin-bottom-thirty">
-                    <table class="govuk-table">
+                    <table class="govuk-table data-table">
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
@@ -723,7 +723,7 @@ else
                     @Resource.lblExportsOfLivestockManure
                 </h3>
                 <div class="table-container margin-bottom-thirty">
-                    <table class="govuk-table">
+                    <table class="govuk-table data-table">
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblDate</th>

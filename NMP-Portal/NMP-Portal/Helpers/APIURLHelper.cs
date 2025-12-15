@@ -41,8 +41,8 @@ namespace NMP.Portal.Helpers
         public const string FetchSoilAnalysisByFieldIdAsyncAPI = "soil-analyses/fields/{0}?shortSummary={1}";
         public const string FetchCropTypeByFarmIdAndHarvestYearAsyncAPI = "crops/plans/crop-types/{0}?farmId={1}";
         public const string FetchFieldByFarmIdAndHarvestYearAsyncAPI = "crops/plans/fields/{0}?farmId={1}";
-        public const string FetchFieldByFarmIdAndHarvestYearAndCropTypeIdAsyncAPI = "crops/plans/fields/{0}?cropTypeId={1}&farmId={2}";
-        public const string FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI = "crops/plans/management-periods/{0}?cropTypeId={1}&fieldIds={2}&cropOrder={3}";
+        public const string FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI = "crops/plans/fields/{0}?cropGroupName={1}&farmId={2}";
+        public const string FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI = "crops/plans/management-periods/{0}?cropGroupName={1}&fieldIds={2}&cropOrder={3}";
         public const string FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI = "crops/plans/management-periods/{0}?fieldIds={1}";
         public const string FetchManureGroupListAsyncAPI = "manure-groups";
         public const string FetchManureTypeListByGroupIdAsyncAPI = "manure-types/manure-groups/{0}?countryId={1}";
@@ -178,6 +178,7 @@ namespace NMP.Portal.Helpers
 
         public const string UpdateOrganicManureAsyncAPI = "organic-manures";
         public const string FetchCropTypeLinkingsAsyncAPI = "crop-type-linkings";
+        public const string FetchCropPlanByFieldIdAndYearAsyncAPI = "crops/plan/{0}?year={1}";
 
         //Grass API Urls
         public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}/{3}";

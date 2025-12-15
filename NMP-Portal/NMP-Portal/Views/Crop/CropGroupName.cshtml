@@ -61,7 +61,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate" value="@Model.EncryptedIsCropUpdate" />
         <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDate"></govuk-date-input>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCropGroupName" />
-
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CurrentSward" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassSeason" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount" />
@@ -81,6 +81,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropType" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {

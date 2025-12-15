@@ -12,5 +12,7 @@ namespace NMP.Portal.ServiceResponses
 
         [JsonProperty("cropOrder")]
         public string CropOrder { get; set; }
+        [JsonProperty("CropGroupName")]
+        public string CropGroupName { get; set; }
     }
 }

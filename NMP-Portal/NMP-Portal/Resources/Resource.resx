@@ -1816,7 +1816,7 @@ cubic metres per hectare  not set</value>
     <value>Which fields would you like to add inorganic fertiliser applications to?</value>
   </data>
   <data name="lblWhenAreYouApplyingInOrganicfertiliser" xml:space="preserve">
-    <value>When are you applying inorganic fertiliser on the {0} fields?</value>
+    <value>When are you applying inorganic fertiliser on the {0}?</value>
   </data>
   <data name="lblInOrganicManureDuration" xml:space="preserve">
     <value>Inorganic manure duration</value>
@@ -2923,13 +2923,13 @@ cubic metres per hectare  not set</value>
     <value>Previous crop</value>
   </data>
   <data name="lblPrint1" xml:space="preserve">
-    <value>Select the &lt;strong&gt;Print or save as PDF&lt;/strong&gt; button below - or, in your desktop browser, open the menu and select &lt;strong&gt;Print&lt;/strong&gt;.</value>
+    <value>Select Print or save as a PDF, or in your desktop browser, open the menu and select, Print.</value>
   </data>
   <data name="lblPrint2" xml:space="preserve">
-    <value>In the box where it asks you to choose a printer, select &lt;strong&gt;Print to PDF&lt;/strong&gt;. This will create a PDF instead of a printed copy.</value>
+    <value>Where it asks you to choose a printer, select Print to PDF.</value>
   </data>
   <data name="lblPrint3" xml:space="preserve">
-    <value>Select &lt;strong&gt;Print&lt;/strong&gt;, then choose where on your computer you want to save the new PDF.</value>
+    <value>Select Print, then choose where on your computer you want to save the PDF.</value>
   </data>
   <data name="lblPrintOrSaveAsAPDF" xml:space="preserve">
     <value>Print or save as a PDF</value>
@@ -3409,7 +3409,7 @@ cubic metres per hectare  not set</value>
     <value>How it works</value>
   </data>
   <data name="lblHowtosaveyourplanasaPDF" xml:space="preserve">
-    <value>How to save your plan as a PDF</value>
+    <value>How to save this report as a PDF</value>
   </data>
   <data name="lblRb209NutrientManagementGuide" xml:space="preserve">
     <value>RB209 (Nutrient Management Guide)</value>
@@ -3631,7 +3631,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg of total nitrogen per hectare, and that no more than 50kg of total nitrogen can be applied every 4 weeks.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Grass" xml:space="preserve">
-    <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
+    <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and end of October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Wales" xml:space="preserve">
     <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
@@ -3829,7 +3829,7 @@ cubic metres per hectare  not set</value>
     <value>The planting date for {0} should be before 1st February. If your planting date is after 1st February, you should change your crop type to a spring sown crop.</value>
   </data>
   <data name="lblSourceRb209" xml:space="preserve">
-    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine) and takes into account the Phosphate (P2O5) and Potash (K2O) balance.</value>
+    <value>Crop need is calculated using AHDB Nutrient Management Guide (RB209). Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
   </data>
   <data name="MsgEnterAnApplicationRateTo1DecimalPlace" xml:space="preserve">
     <value>Enter an application rate to 1 decimal place maximum.</value>
@@ -4183,10 +4183,10 @@ cubic metres per hectare  not set</value>
     <value>What is the sward type for {0} in {1}?</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldFor" xml:space="preserve">
-    <value>What is the total target dry matter yield for {0} field in {1}</value>
+    <value>What is the total target dry matter yield for {0} field in {1}?</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForFields" xml:space="preserve">
-    <value>What is the total target dry matter yield for fields in {0}</value>
+    <value>What is the total target dry matter yield for fields in {0}?</value>
   </data>
   <data name="RemoveAnOrganicMaterialApplication" xml:space="preserve">
     <value>Remove an organic material application</value>
@@ -4256,9 +4256,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblCropFieldAndNutrientApplicationsForOneOrMoreFields" xml:space="preserve">
     <value>Crop, field and nutrient applications, for one or more fields.</value>
-  </data>
-  <data name="NMaxReportHint" xml:space="preserve">
-    <value>Assess compliance with the N-max limit for each crop in your fields.</value>
   </data>
   <data name="lblNMaxReport" xml:space="preserve">
     <value>N-max report</value>
@@ -4713,17 +4710,8 @@ cubic metres per hectare  not set</value>
   <data name="lblYouHaveNotEnteredAnyField" xml:space="preserve">
     <value>You have not entered any field or crop information for {0}</value>
   </data>
-  <data name="lblFarmAndFieldDetailsForNVZRecords" xml:space="preserve">
-    <value>Farm and field details for {0} records</value>
-  </data>
-  <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
-    <value>Field records and nutrient management planning</value>
-  </data>
-  <data name="lblIncludesDetailsAboutYourFieldsCropsAndRec" xml:space="preserve">
-    <value>Includes details about your fields, crops and recommendations.</value>
-  </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Includes N-max, livestock manure nitrogen (N) farm limit, and organic material storage</value>
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -4754,9 +4742,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblFarmSummaryContent9" xml:space="preserve">
     <value>Update livestock numbers</value>
-  </data>
-  <data name="LivestockManureNitrogenFarmLimitReportHint" xml:space="preserve">
-    <value>Assess compliance with the livestock manure nitrogen (N) limit for the whole farm.</value>
   </data>
   <data name="lblLivestockManureNitrogenFarmLimit" xml:space="preserve">
     <value>Livestock manure nitrogen (N) farm limit report</value>
@@ -4832,9 +4817,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblAddCrops" xml:space="preserve">
     <value>Add crops</value>
-  </data>
-  <data name="MsgForIfPlanIsNotCreated" xml:space="preserve">
-    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
   <data name="lblNMax" xml:space="preserve">
     <value>N-max</value>
@@ -5344,7 +5326,7 @@ cubic metres per hectare  not set</value>
     <value>not a derogated</value>
   </data>
   <data name="lblComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
-    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit.</value>
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit</value>
   </data>
   <data name="lblTheInformationEnteredIndicatesCompliance" xml:space="preserve">
     <value>The information entered indicates compliance.</value>
@@ -5353,10 +5335,10 @@ cubic metres per hectare  not set</value>
     <value>The information you entered does not indicate compliance. You must plan so that you do not exceed the limit.</value>
   </data>
   <data name="lblLivestockReportContentTwoForDerogation" xml:space="preserve">
-    <value>This assessment is based on the derogated NVZ livestock manure N farm limit of {0}kg of N per hectare for grazing livestock, {1}kg of N per hectare for non-grazing livestock </value>
+    <value>This assessment is based on the derogated NVZ livestock manure nitrogen (N) farm limit of {0}kg of nitrogen (N) per hectare for grazing livestock, {1}kg of nitrogen (N) per hectare for non-grazing livestock</value>
   </data>
   <data name="lblLivestockContentTwoForNonDerogation" xml:space="preserve">
-    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of N per hectare</value>
+    <value>This assessment is based on the NVZ livestock manure farm limit of {0}kg of nitrogen (N) per hectare</value>
   </data>
   <data name="lblKeyInformation" xml:space="preserve">
     <value> Key information</value>
@@ -5377,7 +5359,7 @@ cubic metres per hectare  not set</value>
     <value>This farm does not have a grassland derogation for {0}</value>
   </data>
   <data name="lblLivestockReportContentThreeForDerogationOrNonDerogation" xml:space="preserve">
-    <value>and best practice guidance of 250kg of N per hectare for land outside of an NVZ.</value>
+    <value>and best practice guidance of 250kg of nitrogen (N) per hectare for land outside of an NVZ.</value>
   </data>
   <data name="lblPercentageOfThisFarmIsGrass" xml:space="preserve">
     <value>{0}% of this farm is grass.</value>
@@ -5429,9 +5411,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblPhosphateP2O5Standard" xml:space="preserve">
     <value>Phosphate (P2O5) standard</value>
-  </data>
-  <data name="MsgForIfFieldsAreNotCreated" xml:space="preserve">
-    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
   <data name="lblAreaRequiredForLivestockManure" xml:space="preserve">
     <value>Area required for livestock manure</value>
@@ -6911,8 +6890,8 @@ livestock manure.</value>
   <data name="MsgEnterTheValueAmountUsingIntValueOnly" xml:space="preserve">
     <value>Enter the {0} amount using integer values only.</value>
   </data>
-  <data name="lblThereAreCountCutsAndGrazingsInYear" xml:space="preserve">
-    <value>There are {0} cuts and grazings in {1}, with nutrient and lime recommendations for each one.</value>
+  <data name="lblThereAreCountCutsAndGrazings" xml:space="preserve">
+    <value>There are {0} cuts and grazings, with nutrient and lime recommendations for each one.</value>
   </data>
   <data name="lblLastUpdatedDate" xml:space="preserve">
     <value>Last updated {0}</value>
@@ -7018,5 +6997,56 @@ livestock manure.</value>
   </data>
   <data name="MsgAuthenticationFailedOrSessionExpired" xml:space="preserve">
     <value>Authentication failed or session expired.</value>
+  </data>
+  <data name="lblGroupNameFieldsWithCropTypeName" xml:space="preserve">
+    <value>{0} fields ({1})</value>
+  </data>
+  <data name="lblThereAreCountCutsAndGrazingsPlusEstablishment" xml:space="preserve">
+    <value>There are {0} cuts and grazings, plus establishment. With nutrient and lime recommendations for each one.</value>
+  </data>
+  <data name="lblNMaxLimitsForYear" xml:space="preserve">
+    <value>N-max limits {0}</value>
+  </data>
+  <data name="lblACropAndNutrientManagementReport" xml:space="preserve">
+    <value>A crop and nutrient management report</value>
+  </data>
+  <data name="lblIncludingNMaxHint" xml:space="preserve">
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+  </data>
+  <data name="lblAnNVZReport" xml:space="preserve">
+    <value>An NVZ report</value>
+  </data>
+  <data name="lblDetailsAboutYourFieldsCropsAndRecommendations" xml:space="preserve">
+    <value>Details about your fields, crops and recommendations</value>
+  </data>
+  <data name="lblFieldRecordsAndNutrientManagementPlanning" xml:space="preserve">
+    <value>Field records and nutrient management planning</value>
+  </data>
+  <data name="lblFarmAreaCanHaveOnlyTwoDecimalPlace" xml:space="preserve">
+    <value>Enter the {0} to two decimal place</value>
+  </data>
+  <data name="lblTotalAreaInAnNvz" xml:space="preserve">
+    <value>total area in an NVZ</value>
+  </data>
+  <data name="lblAnNMaxIsNotAvailableForYear" xml:space="preserve">
+    <value>An N-max report is not available for {0}</value>
+  </data>
+  <data name="lblYouNeedToEnterDetailsFirstAbout" xml:space="preserve">
+    <value>You need to enter details first about:</value>
+  </data>
+  <data name="lblYourFields" xml:space="preserve">
+    <value>your fields</value>
+  </data>
+  <data name="lblYourCrops" xml:space="preserve">
+    <value>your crops</value>
+  </data>
+  <data name="lblAnyOrganicMaterialOrInorganicFertiliserUsed" xml:space="preserve">
+    <value>any organic material, or inorganic fertiliser used</value>
+  </data>
+  <data name="lblAddfields" xml:space="preserve">
+    <value>Add fields</value>
+  </data>
+  <data name="MsgForIfFieldorPlanAreNotCreated" xml:space="preserve">
+    <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
   </data>
 </root>
