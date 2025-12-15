@@ -1152,7 +1152,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (string.IsNullOrWhiteSpace(id))
                 {
-                    _logger.LogError("Farm Controller : FarmDetails({id}) action called", id);
+                    _logger.LogError("Farm Controller : Id is null in FarmDetails() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.BadRequest);
                 }
 
