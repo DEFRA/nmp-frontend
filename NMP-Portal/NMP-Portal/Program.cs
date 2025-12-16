@@ -14,6 +14,7 @@ using Microsoft.Identity.Web.UI;
 using NMP.Portal.Models;
 using NMP.Portal.Security;
 using NMP.Portal.Services;
+using NMP.Registrar;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using StackExchange.Redis; // Add this at the top of the file
@@ -76,30 +77,6 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         options.InstanceName = "nmp_ui_";
     });
 }
-//if (!string.IsNullOrWhiteSpace(azureRedisHost))
-//{  
-//    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-//    {
-//        var configurationOptions = ConfigurationOptions.Parse(azureRedisHost).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential()).GetAwaiter().GetResult(); 
-//        configurationOptions.AbortOnConnectFail = false;
-//        configurationOptions.Protocol = RedisProtocol.Resp3;        
-
-//        var connectionMultiplexer = ConnectionMultiplexer.Connect(configurationOptions);
-
-//        return connectionMultiplexer;
-//    });
-
-//    builder.Services.AddStackExchangeRedisCache(async options =>
-//    {
-//        options.ConnectionMultiplexerFactory = async () =>
-//        {
-//            var redis = builder?.Services.BuildServiceProvider().GetRequiredService<IConnectionMultiplexer>();
-
-//            return await Task.FromResult(redis);
-//        };
-//        options.InstanceName = "nmp_ui_";        
-//    });
-//}
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
@@ -120,7 +97,9 @@ if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
 
 builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDefraCustomerIdentity(builder);
+Registrar.RegisterDependencies(builder.Services, builder.Configuration);
 
 builder.Services.AddAuthorization(options =>
 {
