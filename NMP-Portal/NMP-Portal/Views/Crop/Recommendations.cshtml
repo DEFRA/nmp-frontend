@@ -914,7 +914,9 @@
                                                     <td class="govuk-table__cell">
                                                         @Resource.lblSnsIndex
                                                     </td>
-                                                    <td class="govuk-table__cell">@string.Format("{0:N0}{1}", crop.SnsAnalysisData.SoilNitrogenSupplyValue, Resource.lblKgPerHectare)</td>
+                                                    <td class="govuk-table__cell">
+                                                        @string.Format(Resource.lblSnsDetail, crop.SnsAnalysisData.SoilNitrogenSupplyIndex, string.Format("{0:N0}", crop.SnsAnalysisData.SoilNitrogenSupplyValue))
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
