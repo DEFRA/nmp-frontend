@@ -1112,11 +1112,11 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                List<CropGroupResponse> cropGroups = new List<CropGroupResponse>();
-                cropGroups = await _fieldService.FetchCropGroups();
+                List<CropGroupResponse> cropGroups  = await _fieldService.FetchCropGroups();
                 if (cropGroups.Count > 0)
                 {
-                    ViewBag.CropGroupList = cropGroups.OrderBy(x => x.CropGroupName);
+                    List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
+                    ViewBag.CropGroupList = cropGroupArables;
                 }
                 return View(field);
             }
