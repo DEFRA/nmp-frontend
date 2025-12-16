@@ -1716,17 +1716,19 @@ namespace NMP.Portal.Controllers
                 List<int> yearList = GetReportYearsList();
                 int maxYear = yearList.Max();
 
+                //fetch plan by farmId
+                List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+                if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+                {
+                    List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+                    yearList.AddRange(maxYearList);
+                }
+
                 if (model.FieldAndPlanReportOption != null)
                 {
                     if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
                         model.ReportTypeName = Resource.lblFieldRecordsAndNutrientManagementPlanning;
-                        List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-                        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
-                        {
-                            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
-                            yearList.AddRange(maxYearList);
-                        }
                     }
                     else if (model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.LivestockNumbersReport)
                     {
@@ -1742,31 +1744,15 @@ namespace NMP.Portal.Controllers
                     if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
                     {
                         model.ReportTypeName = Resource.lblNMax;
-                        List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-                        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
-                        {
-                            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
-                            yearList.AddRange(maxYearList);
-                        }
+                        
                     }
                     else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
                     {
-                        (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetail, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(model.FarmId.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail.Count > 0 && nutrientsLoadingFarmDetail.Any(x => x.CalendarYear > maxYear))
-                        {
-                            List<int> maxYearList = nutrientsLoadingFarmDetail.Where(x => x.CalendarYear > maxYear).Select(x => x.CalendarYear.Value).ToList();
-                            yearList.AddRange(maxYearList);
-                        }
                         model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
                     }
                     else if (model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
                     {
-                        (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, null);
-                        if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
-                        {
-                            List<int> maxYearList = storeCapacities.Where(x => x.Year > maxYear).Select(x => x.Year.Value).ToList();
-                            yearList.AddRange(maxYearList);
-                        }
+                        model.ReportTypeName = Resource.lblExistingManureStorageCapacityReport;
                     }
                 }
                 if (!string.IsNullOrWhiteSpace(q))
