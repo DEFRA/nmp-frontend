@@ -3466,7 +3466,7 @@ cubic metres per hectare  not set</value>
     <value>Crop Group Name</value>
   </data>
   <data name="contentGettingHelp1" xml:space="preserve">
-    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 08456462469.</value>
   </data>
   <data name="contentGettingHelp2" xml:space="preserve">
     <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
@@ -3476,9 +3476,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="contentGivingFeedbackAboutThisService1" xml:space="preserve">
     <value>If you would like to give us feedback about this tool, then please email &lt;a  href="mailto:nmpt@defra.gov.uk"&gt;nmpt@defra.gov.uk&lt;/a&gt;.</value>
-  </data>
-  <data name="lblAboutGetHelpAndFeedback" xml:space="preserve">
-    <value>This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed.</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdvice" xml:space="preserve">
     <value>About the recommendations, guidance and advice</value>
@@ -3750,9 +3747,6 @@ cubic metres per hectare  not set</value>
   <data name="lblExcessWinterRainfallContentThird" xml:space="preserve">
     <value>View the AHDB excess winter rainfall data.</value>
   </data>
-  <data name="lblAboutGetHelpAndFeedback_line2" xml:space="preserve">
-    <value>Check the &lt;a href="/ReleaseSchedule" &gt;release schedule&lt;/a&gt; to see what features have been added to the test version of the tool.</value>
-  </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent3" xml:space="preserve">
     <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool, including the information contained in or omitted from it, should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and take appropriate measures to mitigate run-off and nutrient leaching. Where necessary consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
@@ -3778,13 +3772,13 @@ cubic metres per hectare  not set</value>
     <value>Help with the tool's recommendations</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line1" xml:space="preserve">
-    <value>You can email the helpdesk if you have any issues with the data and recommendations the tool provides. Email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+    <value>You can email the helpdesk at &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 08456462469 if you have any issues with the data and recommendations the tool provides.</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line2" xml:space="preserve">
-    <value>This tool might give slightly different recommendations from the previous version of the tool, PLANET. This is because this new tool uses an updated version of the RB209 API, so it provides the very latest data.</value>
+    <value>This tool might give slightly different recommendations from the previous versions of PLANET. This is because the this Nutrient Management Planning tool uses an updated version of the RB209 API, so it provides the very latest data.</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line3" xml:space="preserve">
-    <value>We will reply to your email as quickly as we can.</value>
+    <value>We will reply to your email or call as quickly as we can.</value>
   </data>
   <data name="lbl_I_accept_to_the_terms_of_use" xml:space="preserve">
     <value>I accept the Terms of Use</value>
@@ -3897,23 +3891,14 @@ cubic metres per hectare  not set</value>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
     <value>For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals.</value>
   </data>
-  <data name="lblHelpIssuesLine1" xml:space="preserve">
+  <data name="lblHelpIssuesLine3" xml:space="preserve">
     <value>technical issues</value>
   </data>
+  <data name="lblHelpIssuesLine1" xml:space="preserve">
+    <value>login or access issues</value>
+  </data>
   <data name="lblHelpIssuesLine2" xml:space="preserve">
-    <value>login issues</value>
-  </data>
-  <data name="lblHelpIssuesLine3" xml:space="preserve">
     <value>service outages</value>
-  </data>
-  <data name="lblMovingDataToLive" xml:space="preserve">
-    <value>Moving your data to the live version of the tool</value>
-  </data>
-  <data name="lblMovingDataToLive_line1" xml:space="preserve">
-    <value>If you wish to take your farm data and plans from the testing version to the live version, please email our team at &lt;a href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
-  </data>
-  <data name="lblMovingDataToLive_line2" xml:space="preserve">
-    <value>We will migrate your data for you when the tool launches, and then your plans will be suitable for regulatory use.</value>
   </data>
   <data name="lblEnterANumberFrom0To250" xml:space="preserve">
     <value>Enter a number from 0 to 250, to 1 decimal place.</value>
