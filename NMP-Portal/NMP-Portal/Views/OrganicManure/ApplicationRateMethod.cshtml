@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
    
-    var enterAnApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate;
-    var calculateBasedOnAreaAndQuantity = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
-    var useDefaultApplicationRate = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
+    var enterAnApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
+    var calculateBasedOnAreaAndQuantity = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+    var useDefaultApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
     // var backaction = (Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.DefaultNutrientValue != null && (!Model.DefaultNutrientValue.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
 
     var backaction = "";
@@ -14,7 +14,7 @@
     }
     else if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
     {
-        // if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+        // if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
         // {
         backaction = "ManualNutrientValues";
         //}
@@ -28,7 +28,7 @@
         backaction = "DefaultNutrientValues";
     }
 
-    bool isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials);
+    bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {title}";
 }

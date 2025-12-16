@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
+using NMP.Commons.ViewModels;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -182,7 +182,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 cropGroups = await _fieldService.FetchCropGroups();
-                List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
+                List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
                 ViewBag.CropGroupList = cropGroupArables;
             }
             catch (Exception ex)
@@ -256,14 +256,14 @@ namespace NMP.Portal.Controllers
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
-                    var country = (farm.CountryID.Value == (int)NMP.Portal.Enums.FarmCountry.England ||
-                        farm.CountryID.Value == (int)NMP.Portal.Enums.FarmCountry.Wales) ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
+                    var country = (farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.England ||
+                        farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.Wales) ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
+                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
 
                     ViewBag.CropTypeList = cropTypeList;
                     if (cropTypeList.Count == 1)
                     {
-                        if (cropTypeList[0].CropTypeId == (int)NMP.Portal.Enums.CropTypes.Other)
+                        if (cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
                         {
                             model.CropTypeID = cropTypeList[0].CropTypeId;
                             model.CropTypeName = cropTypeList[0].CropType;
@@ -303,10 +303,10 @@ namespace NMP.Portal.Controllers
                 (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(farmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
-                    var country = (farm.CountryID.Value == (int)NMP.Portal.Enums.FarmCountry.England ||
-                        farm.CountryID.Value == (int)NMP.Portal.Enums.FarmCountry.Wales) ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
-                    ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Portal.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
+                    var country = (farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.England ||
+                        farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.Wales) ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
+                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
+                    ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
                 }
 
                 return View(model);
@@ -391,11 +391,11 @@ namespace NMP.Portal.Controllers
 
             if (model.PreviousGrassYears?.Count == 3)
             {
-                model.LayDuration = (int)NMP.Portal.Enums.LayDuration.ThreeYearsOrMore;
+                model.LayDuration = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
             }
             else if (model.PreviousGrassYears?.Count <= 2 && model.PreviousGrassYears[0] == model.HarvestYear)
             {
-                model.LayDuration = (int)NMP.Portal.Enums.LayDuration.OneToTwoYears;
+                model.LayDuration = (int)NMP.Commons.Enums.LayDuration.OneToTwoYears;
             }
             else
             {
@@ -446,7 +446,7 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("PreviousCroppingData", model);
-            if (model.GrassManagementOptionID == (int)NMP.Portal.Enums.GrassManagementOption.GrazedOnly)
+            if (model.GrassManagementOptionID == (int)NMP.Commons.Enums.GrassManagementOption.GrazedOnly)
             {
                 return RedirectToAction("HasGreaterThan30PercentClover");
             }
@@ -713,8 +713,8 @@ namespace NMP.Portal.Controllers
             (List<PreviousCroppingData> previousCropList, error) = await _previousCroppingService.FetchDataByFieldId(model.FieldID, null);
             if (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
             {                
-                model.CropGroupID = (int)NMP.Portal.Enums.CropGroup.Grass;
-                model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
+                model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
                 foreach (var year in model.PreviousGrassYears)
                 {
                     //model.HarvestYear = year;
@@ -750,8 +750,8 @@ namespace NMP.Portal.Controllers
                         var newPreviousCropping = new PreviousCropping
                         {
                             ID=id,
-                            CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other,
-                            CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other,
+                            CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                            CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
                             HarvestYear = model.HarvestYear - 1,
                             HasGrassInLastThreeYear = true,
                             FieldID = model.FieldID,
@@ -769,8 +769,8 @@ namespace NMP.Portal.Controllers
                         var newPreviousCropping = new PreviousCropping
                         {
                             ID= id,
-                            CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other,
-                            CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other,
+                            CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                            CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
                             HarvestYear = model.HarvestYear - 2,
                             HasGrassInLastThreeYear = true,
                             FieldID = model.FieldID,
@@ -803,8 +803,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.PreviousGrassYears != null)
                 {
-                    model.CropGroupID = (int)NMP.Portal.Enums.CropGroup.Grass;
-                    model.CropTypeID = (int)NMP.Portal.Enums.CropTypes.Grass;
+                    model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
+                    model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
                     foreach (var year in model.PreviousGrassYears)
                     {
                         //model.HarvestYear = year;
@@ -841,9 +841,9 @@ namespace NMP.Portal.Controllers
                             newPreviousCropping = new PreviousCropping
                             {
                                 ID = id,
-                                CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other,
+                                CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
                                 FieldID = model.FieldID,
-                                CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other,
+                                CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
                                 HarvestYear = model.HarvestYear - 1,
                                 HasGrassInLastThreeYear = true
                             };
@@ -859,9 +859,9 @@ namespace NMP.Portal.Controllers
                             newPreviousCropping = new PreviousCropping
                             {
                                 ID = id,
-                                CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other,
+                                CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
                                 FieldID = model.FieldID,
-                                CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other,
+                                CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
                                 HarvestYear = model.HarvestYear - 2,
                                 HasGrassInLastThreeYear = true
                             };
@@ -879,8 +879,8 @@ namespace NMP.Portal.Controllers
                     newPreviousCropping = new PreviousCropping
                     {
                         ID = id,
-                        CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other,
-                        CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other,
+                        CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                        CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
                         FieldID = model.FieldID,
                         HarvestYear = model.HarvestYear - 1,
                         HasGrassInLastThreeYear = false,
@@ -895,8 +895,8 @@ namespace NMP.Portal.Controllers
                     newPreviousCropping = new PreviousCropping
                     {
                         ID = id,
-                        CropGroupID = (int)NMP.Portal.Enums.CropGroup.Other,
-                        CropTypeID = (int)NMP.Portal.Enums.CropTypes.Other,
+                        CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                        CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
                         FieldID = model.FieldID,
                         HarvestYear = model.HarvestYear - 2,
                         HasGrassInLastThreeYear = false,

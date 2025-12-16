@@ -40,8 +40,7 @@ public class FieldViewModel : Field
     public DateTime? SampleForSoilMineralNitrogen { get; set; }
     public bool? RecentSoilAnalysisQuestion { get; set; }
     public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
-
-    //TODO: Need to review below property uses
+    
     //public bool SoilOverChalk { get; set; } = false;
     public string? EncryptedIsUpdate { get; set; } = string.Empty;
     public bool? FieldRemove { get; set; }

@@ -1,12 +1,12 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @model FieldViewModel
 
 @{
     //ViewData["Title"] = Resource.lblCopyExistingField;
     ViewData["Title"] = $"{Resource.lblDoYouWantToCopyAnExistingField} {Resource.lblHyphen} {Resource.lblAddField}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);   
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);   
 }
 
 @section BeforeContent {

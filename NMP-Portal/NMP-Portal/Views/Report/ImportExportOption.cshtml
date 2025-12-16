@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     string heading = string.Empty;
     string action = string.Empty;
@@ -13,8 +13,8 @@
         heading = Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure;
     }
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
-    var import = (int)NMP.Portal.Enums.ImportExport.Import;
-    var export = (int)NMP.Portal.Enums.ImportExport.Export;
+    var import = (int)NMP.Commons.Enums.ImportExport.Import;
+    var export = (int)NMP.Commons.Enums.ImportExport.Export;
     var backAction = "";
     if (Model.IsCheckAnswer)
     {

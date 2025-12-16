@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.SoilAnalysisViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.SoilAnalysisViewModel
 @{
     string heading = string.Empty;
     @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
@@ -13,8 +13,8 @@
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
     ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
     $"{heading} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {

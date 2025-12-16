@@ -1,6 +1,5 @@
 ﻿using NMP.Commons.Models;
-//TODO: Need to review below references and uses
-//using NMP.Portal.ServiceResponses;
+using NMP.Commons.ServiceResponses;
 
 namespace NMP.Commons.ViewModels;
 public class RecommendationViewModel
@@ -17,9 +16,7 @@ public class RecommendationViewModel
     public string? EncryptedHarvestYear { get; set; }
     public string? EncryptedFieldId { get; set; } = string.Empty;
     public List<OrganicManureDataViewModel> OrganicManures { get; set; }
-    public List<FertiliserManureDataViewModel> FertiliserManures { get; set; }
-
-    //TODO: Need to review below references and uses
-    //public List<NutrientResponseWrapper> Nutrients { get; set; }
+    public List<FertiliserManureDataViewModel> FertiliserManures { get; set; }        
+    public List<NutrientResponseWrapper> Nutrients { get; set; }
     public PKBalance? PKBalance { get; set; }
 }

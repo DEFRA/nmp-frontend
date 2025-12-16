@@ -1,13 +1,13 @@
-﻿﻿@using NMP.Portal.Resources
+﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.PlanViewModel
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear} {Resource.lblHyphen} {title}";
 
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
 }
 

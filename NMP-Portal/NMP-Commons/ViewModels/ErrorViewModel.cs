@@ -1,7 +1,7 @@
+using NMP.Commons.ServiceResponses;
 namespace NMP.Commons.ViewModels;
 
-//TODO: Need to revisit this class later
-public class ErrorViewModel         //: Error
+public class ErrorViewModel : Error
 {
     public string? RequestId { get; set; }
 

@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblForMultipleDefoliation} {Resource.lblHyphen} {title}";
     var count = 0;
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     string backAction = string.Empty;
     if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsManureTypeChange) && (!Model.IsDoubleCropValueChange))
     {
@@ -13,11 +13,11 @@
     }
     else
     {
-        if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+        if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
         {
             backAction = "ManureGroup";
         }
-        if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+        if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
         {
             backAction="OtherMaterialName";
         }

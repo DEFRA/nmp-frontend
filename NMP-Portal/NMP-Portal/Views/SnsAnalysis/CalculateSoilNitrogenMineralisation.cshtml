@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.SnsAnalysisViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.SnsAnalysisViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation, Model.FieldName)} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
 
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer?"CheckAnswer" :"EstimateOfNitrogenMineralisationQuestion") asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>

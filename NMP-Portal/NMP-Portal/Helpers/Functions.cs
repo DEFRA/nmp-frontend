@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NMP.Portal.Enums;
-using NMP.Portal.ViewModels;
+using NMP.Commons.Enums;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Helpers
 {
@@ -25,9 +25,9 @@ namespace NMP.Portal.Helpers
 
         public static readonly int[] SpecialManureTypes =
         {
-            (int)Enums.ManureTypes.StrawMulch,
-            (int)Enums.ManureTypes.PaperCrumbleChemicallyPhysciallyTreated,
-            (int)Enums.ManureTypes.PaperCrumbleBiologicallyTreated
+            (int)ManureTypes.StrawMulch,
+            (int)ManureTypes.PaperCrumbleChemicallyPhysciallyTreated,
+            (int)ManureTypes.PaperCrumbleBiologicallyTreated
         };
 
         public static bool HasSpecialManure(List<int> manureHistory, int? manureTypeId)
@@ -56,7 +56,7 @@ namespace NMP.Portal.Helpers
 
         public static int ApplyCropInfo1Bonus(int? cropInfo1)
         {
-            if (cropInfo1 == (int)Enums.CropInfoOne.Milling)
+            if (cropInfo1 == (int)CropInfoOne.Milling)
             {
                 return 40;
             }
@@ -65,7 +65,7 @@ namespace NMP.Portal.Helpers
 
         public static int ApplyPotentialCutBonus(int potentialCut)
         {
-            if (potentialCut >= (int)Enums.PotentialCut.Three)
+            if (potentialCut >= (int)PotentialCut.Three)
             {
                 return 40;
             }
@@ -76,45 +76,45 @@ namespace NMP.Portal.Helpers
         {
             int[] eligibleCrops =
             {
-                (int)Enums.CropTypes.WinterWheat,
-                (int)Enums.CropTypes.SpringWheat,
-                (int)Enums.CropTypes.WinterBarley,
-                (int)Enums.CropTypes.SpringBarley,
-                (int)Enums.CropTypes.WinterOilseedRape,
-                (int)Enums.CropTypes.SugarBeet,
-                (int)Enums.CropTypes.PotatoVarietyGroup1,
-                (int)Enums.CropTypes.PotatoVarietyGroup2,
-                (int)Enums.CropTypes.PotatoVarietyGroup3,
-                (int)Enums.CropTypes.PotatoVarietyGroup4,
-                (int)Enums.CropTypes.ForageMaize,
-                (int)Enums.CropTypes.WinterBeans,
-                (int)Enums.CropTypes.SpringBeans,
-                (int)Enums.CropTypes.Peas,
-                (int)Enums.CropTypes.Asparagus,
-                (int)Enums.CropTypes.Carrots,
-                (int)Enums.CropTypes.Radish,
-                (int)Enums.CropTypes.Swedes,
-                (int)Enums.CropTypes.CelerySelfBlanching,
-                (int)Enums.CropTypes.Courgettes,
-                (int)Enums.CropTypes.DwarfBeans,
-                (int)Enums.CropTypes.Lettuce,
-                (int)Enums.CropTypes.BulbOnions,
-                (int)Enums.CropTypes.SaladOnions,
-                (int)Enums.CropTypes.Parsnips,
-                (int)Enums.CropTypes.RunnerBeans,
-                (int)Enums.CropTypes.Sweetcorn,
-                (int)Enums.CropTypes.Turnips,
-                (int)Enums.CropTypes.Beetroot,
-                (int)Enums.CropTypes.BrusselSprouts,
-                (int)Enums.CropTypes.Cabbage,
-                (int)Enums.CropTypes.Calabrese,
-                (int)Enums.CropTypes.Cauliflower,
-                (int)Enums.CropTypes.Leeks,
-                (int)Enums.CropTypes.Grass,
-                (int)Enums.CropTypes.WholecropSpringBarley,
-                (int)Enums.CropTypes.WholecropSpringWheat,
-                (int)Enums.CropTypes.WholecropWinterBarley,
-                (int)Enums.CropTypes.WholecropWinterWheat
+                (int)CropTypes.WinterWheat,
+                (int)CropTypes.SpringWheat,
+                (int)CropTypes.WinterBarley,
+                (int)CropTypes.SpringBarley,
+                (int)CropTypes.WinterOilseedRape,
+                (int)CropTypes.SugarBeet,
+                (int)CropTypes.PotatoVarietyGroup1,
+                (int)CropTypes.PotatoVarietyGroup2,
+                (int)CropTypes.PotatoVarietyGroup3,
+                (int)CropTypes.PotatoVarietyGroup4,
+                (int)CropTypes.ForageMaize,
+                (int)CropTypes.WinterBeans,
+                (int)CropTypes.SpringBeans,
+                (int)CropTypes.Peas,
+                (int)CropTypes.Asparagus,
+                (int)CropTypes.Carrots,
+                (int)CropTypes.Radish,
+                (int)CropTypes.Swedes,
+                (int)CropTypes.CelerySelfBlanching,
+                (int)CropTypes.Courgettes,
+                (int)CropTypes.DwarfBeans,
+                (int)CropTypes.Lettuce,
+                (int)CropTypes.BulbOnions,
+                (int)CropTypes.SaladOnions,
+                (int)CropTypes.Parsnips,
+                (int)CropTypes.RunnerBeans,
+                (int)CropTypes.Sweetcorn,
+                (int)CropTypes.Turnips,
+                (int)CropTypes.Beetroot,
+                (int)CropTypes.BrusselSprouts,
+                (int)CropTypes.Cabbage,
+                (int)CropTypes.Calabrese,
+                (int)CropTypes.Cauliflower,
+                (int)CropTypes.Leeks,
+                (int)CropTypes.Grass,
+                (int)CropTypes.WholecropSpringBarley,
+                (int)CropTypes.WholecropSpringWheat,
+                (int)CropTypes.WholecropWinterBarley,
+                (int)CropTypes.WholecropWinterWheat
             };
 
             return eligibleCrops.Contains(cropTypeId);

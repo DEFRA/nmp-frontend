@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @using System.Globalization
 
 @model OrganicManureViewModel
 @{
     var heading = "";
-    if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+    if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         ||
                         (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue) && Model.DefaultFarmManureValueDate.HasValue)
     {
@@ -258,7 +258,7 @@
             </div>
 
 
-            @if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+            @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         ||
                         (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue) && Model.DefaultFarmManureValueDate.HasValue)
             {
@@ -327,7 +327,7 @@
             <govuk-radios asp-for="@Model.DefaultNutrientValue">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="false">
-                        @if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                                                 ||
                                                 (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue) && Model.DefaultFarmManureValueDate.HasValue)
                         {
@@ -356,7 +356,7 @@
                     }
                     else
                     {
-                        @* if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) *@
+                        @* if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) *@
                         @*     <govuk-radios-item value="@Resource.lblYes">@Resource.lblYesUseTheseValues</govuk-radios-item>
                             <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
                         }
@@ -365,7 +365,7 @@
                         <govuk-radios-item value="@Resource.lblYes">@Resource.lblYesUseTheseValues</govuk-radios-item>
 
                         <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">
-                            @(((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) ? Resource.lblIwantToEnterARecentOrganicMaterialAnalysis : Resource.lblNoChangeTheseValues)
+                            @(((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) ? Resource.lblIwantToEnterARecentOrganicMaterialAnalysis : Resource.lblNoChangeTheseValues)
                         </govuk-radios-item>
                     }
                     @* <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item> *@

@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblConditionsAffectingTheLossOfNutrients} {Resource.lblHyphen} {title}";
 
-    var backAction = Model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
+    var backAction = Model.IncorporationMethod == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
     bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
 }
 @section BeforeContent {
@@ -15,13 +15,13 @@
     }
     else
     {
-        @if ((Model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+        @if ((Model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
         {
-            @if (Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
+            @if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
             {
                 <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
             }
-            else if (Model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+            else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
             {
                 <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
             }

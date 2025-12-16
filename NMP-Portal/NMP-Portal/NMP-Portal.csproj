@@ -10,9 +10,25 @@
 
   <ItemGroup>
     <Compile Remove="Businesses\**" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="Models\**" />
+    <Compile Remove="ServiceResponses\**" />
+    <Compile Remove="ViewModels\**" />
     <Content Remove="Businesses\**" />
+    <Content Remove="Enums\**" />
+    <Content Remove="Models\**" />
+    <Content Remove="ServiceResponses\**" />
+    <Content Remove="ViewModels\**" />
     <EmbeddedResource Remove="Businesses\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="ServiceResponses\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Businesses\**" />
+    <None Remove="Enums\**" />
+    <None Remove="Models\**" />
+    <None Remove="ServiceResponses\**" />
+    <None Remove="ViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NMP-Commons\NMP-Commons.csproj" />
     <ProjectReference Include="..\NMP-Registrar\NMP-Registrar.csproj" />
   </ItemGroup>
 

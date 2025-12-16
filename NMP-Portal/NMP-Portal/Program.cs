@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web.UI;
+using NMP.Commons.Models;
 using NMP.Portal.Models;
 using NMP.Portal.Security;
 using NMP.Portal.Services;

@@ -1,17 +1,17 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     var heading = "";
-    if (Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport ||
-                                        Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+    if (Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport ||
+                                        Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
     {
         heading = string.Format(Resource.lblForYearForReport, Model.ReportTypeName);
     }
-    if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+    if (Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
     {
         heading = Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
     }
-    if (Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+    if (Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
     {
         heading = Resource.lblWhichYearWouldYouLikeToCreateExistingManureReport;
     }
@@ -19,7 +19,7 @@
 
     var currentYear = DateTime.Now.Year;
     var nextYear = DateTime.Now.Year + 1;
-    var backAction = (Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+    var backAction = (Model.ReportOption == (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan)
         ? "ReportOptions" : "NVZComplianceReports";
 }
 

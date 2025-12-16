@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName)} {Resource.lblHyphen} {title}";
@@ -216,7 +216,7 @@
             <govuk-radios asp-for="@Model.ManureTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @if(Model.ManureGroupIdForFilter!=(int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial)
+                        @if(Model.ManureGroupIdForFilter!=(int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial)
                         {
                         @string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName)
                         }

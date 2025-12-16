@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PreviousCroppingViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     //ViewData["Title"] = Resource.lblNVZField;
 
     ViewData["Title"] = $"{string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.FieldName, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)} {Resource.lblHyphen} {Resource.lblPreviousCrop}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = "";
 
 }

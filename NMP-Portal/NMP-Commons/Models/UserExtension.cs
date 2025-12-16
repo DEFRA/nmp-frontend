@@ -1,4 +1,4 @@
-﻿namespace NMP.Portal.Models;
+﻿namespace NMP.Commons.Models;
 public class UserExtension
 {
     public UserExtension()

@@ -1,13 +1,13 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ServiceResponses
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ServiceResponses
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
 
 
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
 
-    var EnterDifferentFiguresForEachField = (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
-    var EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+    var EnterDifferentFiguresForEachField = (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
+    var EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     var pageHeading = "";
     if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
     {

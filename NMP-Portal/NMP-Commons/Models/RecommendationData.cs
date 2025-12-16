@@ -1,11 +1,12 @@
-﻿namespace NMP.Commons.Models;
+﻿using NMP.Commons.ViewModels;
 
-//TODO:Neded to revirew OrganicManures property
+namespace NMP.Commons.Models;
+
 public class RecommendationData
 {
     public Recommendation? Recommendation { get; set; }
     public List<RecommendationComment>? RecommendationComments { get; set; }
     public ManagementPeriod? ManagementPeriod { get; set; }
-    //public List<OrganicManureDataViewModel>? OrganicManures { get; set; }
+    public List<OrganicManureDataViewModel>? OrganicManures { get; set; }
     public List<FertiliserManure>? FertiliserManures { get; set; }        
 }

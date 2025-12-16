@@ -1,7 +1,6 @@
-﻿using NMP.Commons.Models;
+﻿using NMP.Commons.Enums;
+using NMP.Commons.Models;
 using NMP.Commons.Resources;
-//TODO: Review the commented using directive below
-//using NMP.Portal.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
 
 namespace NMP.Commons.ViewModels;
@@ -103,10 +102,8 @@ public class PlanViewModel
     public string? EncryptedCropGroupName { get; set; } = string.Empty;
     public int? FarmID { get; set; }
     public bool? CopyExistingPlan { get; set; }
-    public int? CopyYear { get; set; }
-
-    //TODO: Review the commented property below
-    //public OrganicInorganicCopy? OrganicInorganicCopy { get; set; }
+    public int? CopyYear { get; set; }        
+    public OrganicInorganicCopy? OrganicInorganicCopy { get; set; }
     public string? GrassSeasonName { get; set; }
     public bool? IsFieldToBeRemoved { get; set; }
     public bool IsCurrentSwardChange { get; set; } = false;

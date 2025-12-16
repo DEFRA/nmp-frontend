@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Abstractions;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
 using System.Diagnostics;
 using System.Net;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Controllers
 {

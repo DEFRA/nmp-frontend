@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 
-@model NMP.Portal.ViewModels.ReportViewModel
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {

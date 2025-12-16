@@ -1,4 +1,4 @@
-﻿using NMP.Portal.Models;
+﻿using NMP.Commons.Models;
 
 namespace NMP.Portal.Services
 {

@@ -1,12 +1,12 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.FertiliserManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.FertiliserManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{Resource.lblForMultipleDefoliation} {Resource.lblHyphen} {title}";
 
     var count = 0;
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     string backAction = "FieldGroup";
     
 }

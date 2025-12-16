@@ -1,6 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.Resources;
-//using NMP.Portal.ServiceResponses;
+using NMP.Commons.ServiceResponses;
 using System.ComponentModel.DataAnnotations;
 namespace NMP.Commons.ViewModels;
 public class OrganicManureViewModel
@@ -115,10 +115,8 @@ public class OrganicManureViewModel
     public DateTime? ClosedPeriodEndDate { get; set; }
     public string? ClosedPeriodForUI { get; set; } = string.Empty;
     public bool? IsWithinNVZ { get; set; }
-    public string? EncryptedOrgManureId { get; set; } = string.Empty;
-
-    //TODO: need to review below property uses.Need to remove FertiliserAndOrganicManureUpdateResponse reference. 
-    //public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
+    public string? EncryptedOrgManureId { get; set; } = string.Empty;    
+    public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedOrganicIds { get; set; }
     public string? FieldName { get; set; }
     public bool? IsApplicationDateChange { get; set; } = false;
     public bool? IsDeleteOrganic { get; set; }

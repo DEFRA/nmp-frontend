@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
-using NMP.Portal.Models;
+using NMP.Commons.Models;
 using NMP.Portal.Services;
 
 namespace NMP.Portal.Security

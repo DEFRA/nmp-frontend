@@ -3,17 +3,19 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using NMP.Portal.Enums;
+using NMP.Commons.ViewModels;
+using NMP.Commons.Enums;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
+using NMP.Commons.ViewModels;
 using System.Collections.Immutable;
 using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using NMP.Portal.Models;
 
 namespace NMP.Portal.Controllers
 {
@@ -462,7 +464,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 model.DoubleCrop.RemoveAll(x => x.FieldID == Convert.ToInt32(field));
                                             }
-                                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                             {
                                                 model.IsAnyCropIsGrass = true;
                                                 model.DefoliationCurrentCounter = 0;
@@ -563,12 +565,12 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
+                                            cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
                                         }
                                     }
                                     if (cropList.Count > 0)
                                     {
-                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                         {
                                             grassCropCounter++;
                                             (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
@@ -605,7 +607,7 @@ namespace NMP.Portal.Controllers
                                         organicManure.FieldName = (await _fieldService.FetchFieldByFieldId(organicManure.FieldID.Value)).Name;
                                         organicManure.EncryptedCounter = _fieldDataProtector.Protect(organicCounter.ToString());
                                         organicCounter++;
-                                        if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             organicManure.IsGrass = true;
                                         }
@@ -810,27 +812,27 @@ namespace NMP.Portal.Controllers
                                             //check early and late for winter cereals and winter oilseed rape
                                             //if sowing date after 15 sept then late
                                             DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-                                            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                                            if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
                                             {
                                                 if (sowingDate != null)
                                                 {
                                                     int day = sowingDate.Value.Day;
                                                     int month = sowingDate.Value.Month;
-                                                    if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                                                    if (month == (int)NMP.Commons.Enums.Month.September && day > 15)
                                                     {
-                                                        if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                                                        if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal)
                                                         {
-                                                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                                                            cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal;
                                                         }
                                                         else
                                                         {
-                                                            cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                                                            cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape;
                                                         }
                                                     }
                                                 }
                                             }
 
-                                            if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                                            if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
                                             {
 
                                                 model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
@@ -1015,7 +1017,7 @@ namespace NMP.Portal.Controllers
                             {
                                 model.DoubleCrop.RemoveAll(x => x.FieldID == Convert.ToInt32(field));
                             }
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 model.IsAnyCropIsGrass = true;
                                 model.DefoliationCurrentCounter = 0;
@@ -1265,7 +1267,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (cropList.Count > 0)
                             {
-                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                 {
                                     (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
@@ -1315,7 +1317,7 @@ namespace NMP.Portal.Controllers
                                 organic.FieldName = (await _fieldService.FetchFieldByFieldId(organic.FieldID.Value)).Name;
                                 organic.EncryptedCounter = _fieldDataProtector.Protect(organicCounter.ToString());
                                 organicCounter++;
-                                if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
                                     organic.IsGrass = true;
                                 }
@@ -1369,27 +1371,27 @@ namespace NMP.Portal.Controllers
                                 //check early and late for winter cereals and winter oilseed rape
                                 //if sowing date after 15 sept then late
                                 DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-                                if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                                if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
                                 {
                                     if (sowingDate != null)
                                     {
                                         int day = sowingDate.Value.Day;
                                         int month = sowingDate.Value.Month;
-                                        if (month == (int)NMP.Portal.Enums.Month.September && day > 15)
+                                        if (month == (int)NMP.Commons.Enums.Month.September && day > 15)
                                         {
-                                            if (cropCategoryId == (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal)
+                                            if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal)
                                             {
-                                                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal;
+                                                cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal;
                                             }
                                             else
                                             {
-                                                cropCategoryId = (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                                                cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape;
                                             }
                                         }
                                     }
                                 }
 
-                                if (model.ApplicationDate.Value.Month >= (int)NMP.Portal.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Portal.Enums.Month.October)
+                                if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
                                 {
 
                                     model.AutumnCropNitrogenUptake = await _mannerService.FetchCropNUptakeDefaultAsync(cropCategoryId);
@@ -1451,8 +1453,8 @@ namespace NMP.Portal.Controllers
                     if (farmManureTypeList.Count > 0)
                     {
                         var filteredFarmManureTypes = farmManureTypeList
-                        .Where(farmManureType => farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials ||
-                        farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        .Where(farmManureType => farmManureType.ManureTypeID == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials ||
+                        farmManureType.ManureTypeID == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         .ToList();
                         if (filteredFarmManureTypes != null && filteredFarmManureTypes.Count > 0)
                         {
@@ -1513,8 +1515,8 @@ namespace NMP.Portal.Controllers
                         if (farmManureTypeList.Count > 0)
                         {
                             var filteredFarmManureTypes = farmManureTypeList
-                            .Where(farmManureType => farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials ||
-                            farmManureType.ManureTypeID == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                            .Where(farmManureType => farmManureType.ManureTypeID == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials ||
+                            farmManureType.ManureTypeID == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                             .ToList();
                             if (filteredFarmManureTypes != null && filteredFarmManureTypes.Count > 0)
                             {
@@ -1539,7 +1541,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsManureTypeChange = true;
                 }
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                     if (error == null)
@@ -1620,16 +1622,16 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace("Organic Manure Controller : ManureApplyingDate() action : OrganicManureViewModel is null in session");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     return View(model);
                 }
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error error = null;
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -1648,7 +1650,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.ManureTypeName = string.Empty;
                 }
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     model.ManureTypeName = model.OtherMaterialName;
                 }
@@ -1877,7 +1879,7 @@ namespace NMP.Portal.Controllers
                                         if (field.IsWithinNVZ.Value)
                                         {
                                             CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
-                                            if (!(model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
+                                            if (!(model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                             {
                                                 //skip elosed period warning message for crop which has 0 NMax
                                                 Crop crop = null;
@@ -1963,12 +1965,12 @@ namespace NMP.Portal.Controllers
 
         private async Task PopulateManureApplyingDateModel(OrganicManureViewModel model)
         {
-            int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+            int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
             List<ManureType> manureTypeList = new List<ManureType>();
             Error error = null;
-            if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+            if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
             {
-                (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
             }
             else
             {
@@ -2043,11 +2045,11 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -2102,7 +2104,7 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("FarmList", "Farm");
                         }
-                        if ((organicManureViewModel.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+                        if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                         {
                             model.IncorporationDelay = null;
                             model.IncorporationMethod = null;
@@ -2158,11 +2160,11 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -2201,7 +2203,7 @@ namespace NMP.Portal.Controllers
                 }
                 (model.ApplicationMethodName, error) = await _organicManureService.FetchApplicationMethodById(model.ApplicationMethod.Value);
 
-                if ((model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+                if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                 {
                     if (manureTypeList.Count > 0)
                     {
@@ -2274,7 +2276,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
-                    if ((organicManureViewModel.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+                    if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                     {
                         model.IncorporationDelay = null;
                         model.IncorporationMethod = null;
@@ -2323,9 +2325,9 @@ namespace NMP.Portal.Controllers
 
                 (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
 
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
                         (ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                         model.ManureType = manureType;
@@ -2457,9 +2459,9 @@ namespace NMP.Portal.Controllers
 
                     (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
 
-                    if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
-                        if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         {
                             (ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                             model.ManureType = manureType;
@@ -2572,7 +2574,7 @@ namespace NMP.Portal.Controllers
                     //            model.ManureType.K2O = farmManure.K2O;
                     //            model.ManureType.SO3 = farmManure.SO3;
                     //            model.ManureType.MgO = farmManure.MgO;
-                    //            if (model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    //            if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     //            {
                     //                ViewBag.FarmManureApiOption = Resource.lblTrue;
                     //            }
@@ -2942,8 +2944,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.DryMatterPercent != null)
                 {
-                    if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PigSlurry ||
-                        model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.CattleSlurry)
+                    if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
+                        model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
                     {
                         if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
                         {
@@ -3084,7 +3086,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+            if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
             {
                 model.IsAnyNeedToStoreNutrientValueForFuture = true;
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
@@ -3133,14 +3135,14 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
-                if (model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
+                if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     List<ManureType> manureTypeList = new List<ManureType>();
                     Error error = null;
-                    if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
-                        (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                        (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                     }
                     else
                     {
@@ -3190,11 +3192,11 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -3219,20 +3221,20 @@ namespace NMP.Portal.Controllers
 
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
-                if (model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate)
+                if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
                 {
                     model.Area = null;
                     model.Quantity = null;
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     return RedirectToAction("ManualApplicationRate");
                 }
-                else if (model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+                else if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
                 {
                     model.ApplicationRate = null;
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     return RedirectToAction("AreaQuantity");
                 }
-                else if (model.ApplicationRateMethod.Value == (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
+                else if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                 {
                     model.ApplicationRate = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.ApplicationRateArable;
                     model.Area = null;
@@ -3369,12 +3371,12 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error error = null;
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -3490,7 +3492,7 @@ namespace NMP.Portal.Controllers
                                             (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false);
                                             if (error == null)
                                             {
-                                                if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
+                                                if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                                 {
                                                     (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), false);
 
@@ -3504,7 +3506,7 @@ namespace NMP.Portal.Controllers
                                             }
 
                                             //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
-                                            if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
+                                            if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                             {
                                                 (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId));
                                                 if (error == null)
@@ -3545,7 +3547,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.IsWarningMsgNeedToShow = true;
                         (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
-                        ViewBag.IsWales = farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales ? true : false;
+                        ViewBag.IsWales = farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? true : false;
                         _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                         return View(model);
                     }
@@ -3801,17 +3803,17 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if ((model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm))
+            if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
             {
                 return RedirectToAction("ConditionsAffectingNutrients");
             }
             try
             {
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -3839,7 +3841,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace($"Organic Manure Controller : Exception in IncorporationMethod() : {ex.Message}, {ex.StackTrace}");
-                if (model.ApplicationRateMethod != (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
+                if (model.ApplicationRateMethod != (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                 {
                     TempData["ManualApplicationRateError"] = ex.Message;
                     return RedirectToAction("ManualApplicationRate");
@@ -3866,11 +3868,11 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -3912,16 +3914,16 @@ namespace NMP.Portal.Controllers
                     model.IsIncorporationMethodChange = true;
                 }
 
-                if (model.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
+                if (model.IncorporationMethod == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
                 {
-                    //int countryId = model.isEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                    //int countryId = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
 
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                         bool isLiquid = manureType.IsLiquid.Value;
                         string applicableFor = Resource.lblNull;// isLiquid ? Resource.lblL : Resource.lblS;
-                                                                //if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                                                                //if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                                                                 //{
                                                                 //    applicableFor = Resource.lblP;
                                                                 //}
@@ -4006,7 +4008,7 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToAction("FarmList", "Farm");
                     }
-                    if (organicManure.IncorporationMethod != null && organicManure.IncorporationMethod == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
+                    if (organicManure.IncorporationMethod != null && organicManure.IncorporationMethod == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
                     {
                         model.IncorporationDelay = null;
                         model.IncorporationDelayName = string.Empty;
@@ -4041,11 +4043,11 @@ namespace NMP.Portal.Controllers
             try
             {
                 string applicableFor = string.Empty;
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -4057,14 +4059,14 @@ namespace NMP.Portal.Controllers
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     isLiquid = manureType.IsLiquid.Value;
                     applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
-                    if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                    if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                     {
                         applicableFor = Resource.lblP;
                     }
                 }
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                    if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                     {
                         applicableFor = Resource.lblL;
                     }
@@ -4106,11 +4108,11 @@ namespace NMP.Portal.Controllers
                 if (!ModelState.IsValid)
                 {
                     string applicableFor = string.Empty;
-                    int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                    int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                     List<ManureType> manureTypeList = new List<ManureType>();
-                    if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
-                        (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                        (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                     }
                     else
                     {
@@ -4122,7 +4124,7 @@ namespace NMP.Portal.Controllers
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                         isLiquid = manureType.IsLiquid.Value;
                         applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
-                        if (manureType.Id == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                        if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                         {
                             applicableFor = Resource.lblP;
                         }
@@ -4260,11 +4262,11 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.ApplicationDate.Value.Month >= 8)
                     {
-                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Portal.Enums.Month.March, 31);
+                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Commons.Enums.Month.March, 31);
                     }
                     else
                     {
-                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Portal.Enums.Month.March, 31);
+                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Commons.Enums.Month.March, 31);
                     }
                 }
 
@@ -4743,7 +4745,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     defoliation = managementPeriod.Defoliation;
                                     (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
                                         organicManure.IsGrass = true;
                                         model.IsAnyCropIsGrass = true;
@@ -4887,7 +4889,7 @@ namespace NMP.Portal.Controllers
                             model.ApplicationMethod = organicManure.ApplicationMethodID;
                             (model.ApplicationMethodName, error) = await _organicManureService.FetchApplicationMethodById(model.ApplicationMethod.Value);
 
-                            if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                            if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                             {
                                 model.OtherMaterialName = model.ManureTypeName;
                             }
@@ -4937,7 +4939,7 @@ namespace NMP.Portal.Controllers
                                 FarmManureTypeResponse farmManureType = farmManureTypeResponse.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
                                 if (farmManureType != null)
                                 {
-                                    if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) &&
+                                    if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
                                    farmManureType.ManureTypeName.Equals(organicManure.ManureTypeName))
                                     {
                                         if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
@@ -4961,7 +4963,7 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
 
-                                    if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) &&
+                                    if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
                                         farmManureType.ManureTypeName.Equals(organicManure.ManureTypeName))
                                     {
                                         model.ManureGroupId = organicManure.ManureTypeID;
@@ -4996,21 +4998,21 @@ namespace NMP.Portal.Controllers
                             model.ManureTypeName = organicManure.ManureTypeName;
                             model.ApplicationRate = organicManure.ApplicationRate;
                             model.SoilDrainageEndDate = organicManure.EndOfDrain.ToLocalTime();
-                            int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                            int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
 
                             if (organicManure.AreaSpread != null && organicManure.ManureQuantity != null)
                             {
                                 model.Area = organicManure.AreaSpread;
                                 model.Quantity = organicManure.ManureQuantity;
-                                model.ApplicationRateMethod = (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+                                model.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
                             }
                             else if (model.ApplicationRateArable == model.ApplicationRate)
                             {
-                                model.ApplicationRateMethod = (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate;
+                                model.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
                             }
                             else
                             {
-                                model.ApplicationRateMethod = (int)NMP.Portal.Enums.ApplicationRate.EnterAnApplicationRate;
+                                model.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
                             }
                             model.IncorporationDelay = organicManure.IncorporationDelayID;
 
@@ -5216,7 +5218,7 @@ namespace NMP.Portal.Controllers
                                             (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], true);
                                             if (error == null)
                                             {
-                                                if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
+                                                if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                                 {
                                                     (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), true);
                                                     if (error != null)
@@ -5278,7 +5280,7 @@ namespace NMP.Portal.Controllers
                                             }
                                         }
 
-                                        if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
+                                        if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                         {
                                             (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId));
                                             if (error == null)
@@ -5373,7 +5375,7 @@ namespace NMP.Portal.Controllers
 
                                         if (field.IsWithinNVZ.Value)
                                         {
-                                            if (!(model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials))
+                                            if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                             {
                                                 Crop crop = null;
                                                 CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
@@ -5558,7 +5560,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("ApplicationRate", Resource.MsgApplicationRateNotSet);
                 }
-                if (model.ApplicationRateMethod == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
                 {
                     if (model.Area == null)
                     {
@@ -5610,10 +5612,10 @@ namespace NMP.Portal.Controllers
                 if (model.OrganicManures != null)
                 {
                     model.OrganicManures.ForEach(x => x.EndOfDrain = x.SoilDrainageEndDate);
-                    if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
                         model.OrganicManures.ForEach(x => x.ManureTypeName = model.OtherMaterialName);
-                        if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         {
                             model.OrganicManures.ForEach(x => x.ManureTypeID = model.ManureGroupIdForFilter ?? 0);
                         }
@@ -5685,7 +5687,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     var mannerOutput = new
                                                     {
-                                                        runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
+                                                        runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
                                                         postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                         countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
                                                         field = new
@@ -5871,7 +5873,7 @@ namespace NMP.Portal.Controllers
                 {
                     foreach (var orgManure in OrganicManureList)
                     {
-                        int fieldTypeId = (int)NMP.Portal.Enums.FieldType.Arable;
+                        int fieldTypeId = (int)NMP.Commons.Enums.FieldType.Arable;
                         (ManagementPeriod ManData, error) = await _cropService.FetchManagementperiodById(orgManure.ManagementPeriodID);
                         if (ManData != null)
                         {
@@ -5879,8 +5881,8 @@ namespace NMP.Portal.Controllers
                             (Crop crop, error) = (await _cropService.FetchCropById(ManData.CropID.Value));
                             if (crop != null)
                             {
-                                fieldTypeId = (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass) ?
-                                 (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
+                                fieldTypeId = (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass) ?
+                                 (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
                             }
                         }
@@ -5902,7 +5904,7 @@ namespace NMP.Portal.Controllers
                 //{
                 //    OrganicManure = orgManure,
                 //    FarmID = model.FarmId,
-                //    FieldTypeID = (int)NMP.Portal.Enums.FieldType.Arable,
+                //    FieldTypeID = (int)NMP.Commons.Enums.FieldType.Arable,
                 //    SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
                 //}).ToList();
                 var jsonData = new
@@ -6194,7 +6196,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEnterValidDate);
                 }
 
-                if (!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Portal.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Portal.Enums.Month.April))
+                if (!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Commons.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Commons.Enums.Month.April))
                 {
                     ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgSoilDrainageEndDate1stJan30Apr);
                 }
@@ -6461,7 +6463,7 @@ namespace NMP.Portal.Controllers
                 //The planned application would result in more than 250 kg/ha of total N from all applications of any Manure type apart from ‘Green compost’ or ‘Green/food compost’, applied or planned to the field in the last 365 days up to and including the application date of the manure
 
                 //warning excel sheet row 2
-                if (model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.GreenCompost && model.ManureTypeId != (int)NMP.Portal.Enums.ManureTypes.GreenFoodCompost)
+                if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenCompost && model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost)
                 {
                     //passing orgId
                     if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
@@ -6482,21 +6484,21 @@ namespace NMP.Portal.Controllers
                             model.IsOrgManureNfieldLimitWarning = true;
                             //if (!isGetCheckAnswer)
                             //{
-                            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                            if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                             {
                                 model.NmaxWarningHeader = Resource.MsgOrganicManureNfieldLimit;
-                                model.NmaxWarningCodeID = (int)NMP.Portal.Enums.WarningCode.FieldAppLimit;
-                                model.NmaxWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
+                                model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                 model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit;
                                 model.NmaxWarningPara1 = Resource.MsgIfOrganicManureNMaxLimitExceed;
                                 model.NmaxWarningPara2 = Resource.MsgIfOrganicManureNMaxLimitExceedAdditional;
                             }
-                            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             {
                                 model.NmaxWarningHeader = Resource.MsgOrganicManureNfieldLimit;
-                                model.NmaxWarningCodeID = (int)NMP.Portal.Enums.WarningCode.FieldAppLimit;
-                                model.NmaxWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
+                                model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                 model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales;
                                 model.NmaxWarningPara1 = Resource.MsgIfOrganicManureNMaxLimitExceedWales;
@@ -6506,11 +6508,11 @@ namespace NMP.Portal.Controllers
                             //}
                             //else
                             //{
-                            //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                            //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                             //    {
                             //        model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit;
                             //    }
-                            //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             //    {
                             //        model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales;
                             //    }
@@ -6522,15 +6524,15 @@ namespace NMP.Portal.Controllers
                 }
 
                 //warning excel sheet row no. 4
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.GreenCompost || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.GreenFoodCompost)
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.GreenCompost || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost)
                 {
                     var cropTypeIdsForTrigger = new HashSet<int> {
-                        (int)NMP.Portal.Enums.CropTypes.CiderApples,
-                        (int)NMP.Portal.Enums.CropTypes.CulinaryApples,
-                        (int)NMP.Portal.Enums.CropTypes.DessertApples,
-                        (int)NMP.Portal.Enums.CropTypes.Cherries,
-                        (int)NMP.Portal.Enums.CropTypes.Pears,
-                        (int)NMP.Portal.Enums.CropTypes.Plums
+                        (int)NMP.Commons.Enums.CropTypes.CiderApples,
+                        (int)NMP.Commons.Enums.CropTypes.CulinaryApples,
+                        (int)NMP.Commons.Enums.CropTypes.DessertApples,
+                        (int)NMP.Commons.Enums.CropTypes.Cherries,
+                        (int)NMP.Commons.Enums.CropTypes.Pears,
+                        (int)NMP.Commons.Enums.CropTypes.Plums
                     };
 
                     //The planned application would result in more than 500 of total N from all applications of Green compost & Green/food compost applied or planned to the field in the last 730 days up to and including the application date of the manure.
@@ -6559,21 +6561,21 @@ namespace NMP.Portal.Controllers
                                 model.IsOrgManureNfieldLimitWarning = true;
                                 //if (!isGetCheckAnswer)
                                 //{
-                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                 {
                                     model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil;
-                                    model.NmaxWarningCodeID = (int)NMP.Portal.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
+                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                     model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingEngland;
                                     model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1England;
                                     model.NmaxWarningPara2 = Resource.MsgNmaxWarningPara2England;
                                 }
-                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 {
                                     model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil;
-                                    model.NmaxWarningCodeID = (int)NMP.Portal.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
+                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                     model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingWales;
                                     model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1Wales;
@@ -6583,11 +6585,11 @@ namespace NMP.Portal.Controllers
                                 //}
                                 //else
                                 //{
-                                //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                 //    {
                                 //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingEngland;
                                 //    }
-                                //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 //    {
                                 //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingWales;
                                 //    }
@@ -6621,21 +6623,21 @@ namespace NMP.Portal.Controllers
                                 model.IsOrgManureNfieldLimitWarning = true;
                                 //if (!isGetCheckAnswer)
                                 //{
-                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                 {
                                     model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch;
-                                    model.NmaxWarningCodeID = (int)NMP.Portal.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
+                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                     model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000England;
                                     model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1GreaterThan1000England;
                                     model.NmaxWarningPara2 = Resource.MsgNmaxWarningPara2England;
                                 }
-                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 {
                                     model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch;
-                                    model.NmaxWarningCodeID = (int)NMP.Portal.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
+                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                     model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000Wales;
                                     model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1GreaterThan1000Wales;
@@ -6645,11 +6647,11 @@ namespace NMP.Portal.Controllers
                                 //}
                                 //else
                                 //{
-                                //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                 //    {
                                 //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000England;
                                 //    }
-                                //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 //    {
                                 //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000Wales;
                                 //    }
@@ -6698,7 +6700,7 @@ namespace NMP.Portal.Controllers
                     (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop[0].CropTypeID.Value);
                     if (error == null)
                     {
-                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
                         if (nmaxLimitEnglandOrWales != null)
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
@@ -6748,11 +6750,11 @@ namespace NMP.Portal.Controllers
                                                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                                                 //if (!isGetCheckAnswer)
                                                 //{
-                                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                                 {
                                                     model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                    model.CropNmaxLimitWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
-                                                    model.CropNmaxLimitWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                    model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
+                                                    model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                     model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
                                                     model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
@@ -6760,11 +6762,11 @@ namespace NMP.Portal.Controllers
                                                     model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
                                                 }
 
-                                                if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                                 {
                                                     model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                    model.CropNmaxLimitWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
-                                                    model.CropNmaxLimitWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                    model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
+                                                    model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                     model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                     model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
@@ -6775,7 +6777,7 @@ namespace NMP.Portal.Controllers
                                                 //}
                                                 //else
                                                 //{
-                                                //    if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                                 //    {
                                                 //        model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                 //    }
@@ -6813,11 +6815,11 @@ namespace NMP.Portal.Controllers
                                                         model.IsNMaxLimitWarning = true;
                                                         (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
 
-                                                        if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                                         {
                                                             model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                            model.CropNmaxLimitWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
-                                                            model.CropNmaxLimitWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                            model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
+                                                            model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                             model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
                                                             model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
@@ -6825,11 +6827,11 @@ namespace NMP.Portal.Controllers
                                                             model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
                                                         }
 
-                                                        if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                                         {
                                                             model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                            model.CropNmaxLimitWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
-                                                            model.CropNmaxLimitWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                            model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
+                                                            model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                             model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                             model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
@@ -6888,11 +6890,11 @@ namespace NMP.Portal.Controllers
             if (farm != null)
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -6953,11 +6955,11 @@ namespace NMP.Portal.Controllers
                         bool isSlurry = false;
                         bool isPoultryManure = false;
 
-                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PigSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.CattleSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion)
+                        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion)
                         {
                             isSlurry = true;
                         }
-                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                         {
                             isPoultryManure = true;
                         }
@@ -6967,7 +6969,7 @@ namespace NMP.Portal.Controllers
 
                         if (isWithinClosedPeriodAndFebruary == true)
                         {
-                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                             {
                                 //warning excel sheet row no. 19
                                 if (isSlurry)
@@ -6978,8 +6980,8 @@ namespace NMP.Portal.Controllers
                                         //if (!isGetCheckAnswer)
                                         //{
                                         model.EndClosedPeriodEndFebWarningHeader = Resource.MsgSlurryMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb; //81b
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb; //81b
+                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                         model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryEngland;
                                         model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st30SlurryEngland;
@@ -7001,8 +7003,8 @@ namespace NMP.Portal.Controllers
                                         //if (!isGetCheckAnswer)
                                         //{
                                         model.EndClosedPeriodEndFebWarningHeader = Resource.MsgPoultryManureMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb; //81b
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb; //81b
+                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                         model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryEngland;
                                         model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st8PoultryEngland;
@@ -7017,7 +7019,7 @@ namespace NMP.Portal.Controllers
                                 }
 
                             }
-                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             {
                                 if (isSlurry)
                                 {
@@ -7027,8 +7029,8 @@ namespace NMP.Portal.Controllers
                                         //if (!isGetCheckAnswer)
                                         //{
                                         model.EndClosedPeriodEndFebWarningHeader = Resource.MsgSlurryMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
+                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                         model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryWales;
                                         model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara30SlurryWales;
@@ -7047,8 +7049,8 @@ namespace NMP.Portal.Controllers
                                     {
                                         model.IsEndClosedPeriodFebruaryWarning = true;
                                         model.EndClosedPeriodEndFebWarningHeader = Resource.MsgPoultryManureMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
+                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
                                         model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryWales;
                                         model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara8PoultryWales;
                                         model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd8PoultryWales;
@@ -7069,11 +7071,11 @@ namespace NMP.Portal.Controllers
             string SlurryOrPoultryManureExistWithinLast20Days = string.Empty;
             bool isWithinClosedPeriod = false;
             string message = string.Empty;
-            int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+            int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
             List<ManureType> manureTypeList = new List<ManureType>();
-            if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+            if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
             {
-                (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
             }
             else
             {
@@ -7123,21 +7125,21 @@ namespace NMP.Portal.Controllers
                                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                                 //if (!isGetCheckAnswer)
                                 //{
-                                if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                 {
                                     model.ClosedPeriodWarningHeader = Resource.MsgClosedPeriodForTheApplicationOfHighNOrganicManureMessage;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
+                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
 
                                     model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
                                     model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
                                 }
-                                if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 {
                                     model.ClosedPeriodWarningHeader = Resource.MsgClosedPeriodForTheApplicationOfHighNOrganicManureMessage;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
+                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                     model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriodWales;
                                     model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodWarningPara2Wales;
@@ -7145,11 +7147,11 @@ namespace NMP.Portal.Controllers
                                 //}
                                 //else
                                 //{
-                                //    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                 //    {
                                 //        model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
                                 //    }
-                                //    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 //    {
                                 //        model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriodWales;
                                 //    }
@@ -7164,25 +7166,25 @@ namespace NMP.Portal.Controllers
                     //warning excel sheet row no. 12
                     HashSet<int> cropTypeIdsForTrigger = new HashSet<int>
                     {
-                    (int)NMP.Portal.Enums.CropTypes.Asparagus,
-                    (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
-                    (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
-                    (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
-                    (int)NMP.Portal.Enums.CropTypes.Cabbage,
-                    (int)NMP.Portal.Enums.CropTypes.Calabrese,
-                    (int)NMP.Portal.Enums.CropTypes.Cauliflower,
-                    (int)NMP.Portal.Enums.CropTypes.Radish,
-                    (int)NMP.Portal.Enums.CropTypes.WildRocket,
-                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                    (int)NMP.Portal.Enums.CropTypes.Turnips,
-                    (int)NMP.Portal.Enums.CropTypes.BulbOnions,
-                    (int)NMP.Portal.Enums.CropTypes.SaladOnions,
-                    (int)NMP.Portal.Enums.CropTypes.Grass
+                    (int)NMP.Commons.Enums.CropTypes.Asparagus,
+                    (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+                    (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                    (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+                    (int)NMP.Commons.Enums.CropTypes.Cabbage,
+                    (int)NMP.Commons.Enums.CropTypes.Calabrese,
+                    (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+                    (int)NMP.Commons.Enums.CropTypes.Radish,
+                    (int)NMP.Commons.Enums.CropTypes.WildRocket,
+                    (int)NMP.Commons.Enums.CropTypes.Swedes,
+                    (int)NMP.Commons.Enums.CropTypes.Turnips,
+                    (int)NMP.Commons.Enums.CropTypes.BulbOnions,
+                    (int)NMP.Commons.Enums.CropTypes.SaladOnions,
+                    (int)NMP.Commons.Enums.CropTypes.Grass
                     };
 
                     decimal totalNitrogen = 0;
@@ -7222,16 +7224,16 @@ namespace NMP.Portal.Controllers
                                     //if (!isGetCheckAnswer)
                                     //{
                                     model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
+                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                     {
 
                                         model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
                                         model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
                                     }
-                                    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                     {
 
                                         model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriodWales;
@@ -7241,11 +7243,11 @@ namespace NMP.Portal.Controllers
                                     //}
                                     //else
                                     //{
-                                    //    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                     //    {
                                     //        model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
                                     //    }
-                                    //    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                    //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                     //    {
                                     //        model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriodWales;
                                     //    }
@@ -7257,16 +7259,16 @@ namespace NMP.Portal.Controllers
                             }
                             //warning excel sheet row no. 17
                             DateTime endOfOctober = new DateTime((model.HarvestYear ?? 0) - 1, 10, 31);
-                            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
                                 bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
                                 if (isWithinDateRange)
                                 {
                                     model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriodApplicationAfter31October;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
+                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                     {
                                         model.IsClosedPeriodWarning = true;
                                         model.ClosedPeriodWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
@@ -7297,11 +7299,11 @@ namespace NMP.Portal.Controllers
                         bool isSlurry = false;
                         bool isPoultryManure = false;
 
-                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PigSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.CattleSlurry || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion)
+                        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion)
                         {
                             isSlurry = true;
                         }
-                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.PoultryManure)
+                        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                         {
                             isPoultryManure = true;
                         }
@@ -7312,16 +7314,16 @@ namespace NMP.Portal.Controllers
                             //{
 
                             model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = Resource.Msg3WeeksBetweenApplications;
-                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodOrganicManure;
-                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                             {
                                 model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
                                 model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysEngland;
                                 model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = Resource.MsgEndPeriodEndFebWarningPara2Within20DaysEngland;
                             }
-                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             {
                                 model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
                                 model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = Resource.MsgEndPeriodEndFebWarningPara1Within20DaysWales;
@@ -7332,12 +7334,12 @@ namespace NMP.Portal.Controllers
                             //else
                             //{
 
-                            //    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                            //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                             //    {
                             //        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
 
                             //    }
-                            //    if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             //    {
                             //        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
 
@@ -7360,43 +7362,43 @@ namespace NMP.Portal.Controllers
             string warningMsg = string.Empty;
             HashSet<int> cropTypeIdsForTrigger = new HashSet<int>
             {
-                    (int)NMP.Portal.Enums.CropTypes.Asparagus,
-                    (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
-                    (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
-                    (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
-                    (int)NMP.Portal.Enums.CropTypes.Cabbage,
-                    (int)NMP.Portal.Enums.CropTypes.Calabrese,
-                    (int)NMP.Portal.Enums.CropTypes.Cauliflower,
-                    (int)NMP.Portal.Enums.CropTypes.Radish,
-                    (int)NMP.Portal.Enums.CropTypes.WildRocket,
-                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                    (int)NMP.Portal.Enums.CropTypes.Turnips,
-                    (int)NMP.Portal.Enums.CropTypes.BulbOnions,
-                    (int)NMP.Portal.Enums.CropTypes.SaladOnions,
-                    (int)NMP.Portal.Enums.CropTypes.Grass
+                    (int)NMP.Commons.Enums.CropTypes.Asparagus,
+                    (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+                    (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                    (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+                    (int)NMP.Commons.Enums.CropTypes.Cabbage,
+                    (int)NMP.Commons.Enums.CropTypes.Calabrese,
+                    (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+                    (int)NMP.Commons.Enums.CropTypes.Radish,
+                    (int)NMP.Commons.Enums.CropTypes.WildRocket,
+                    (int)NMP.Commons.Enums.CropTypes.Swedes,
+                    (int)NMP.Commons.Enums.CropTypes.Turnips,
+                    (int)NMP.Commons.Enums.CropTypes.BulbOnions,
+                    (int)NMP.Commons.Enums.CropTypes.SaladOnions,
+                    (int)NMP.Commons.Enums.CropTypes.Grass
             };
 
             HashSet<int> brassicaCrops = new HashSet<int>
             {
-                (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
-                    (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
-                    (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
-                    (int)NMP.Portal.Enums.CropTypes.Cabbage,
-                    (int)NMP.Portal.Enums.CropTypes.Calabrese,
-                    (int)NMP.Portal.Enums.CropTypes.Cauliflower,
-                    (int)NMP.Portal.Enums.CropTypes.Radish,
-                    (int)NMP.Portal.Enums.CropTypes.WildRocket,
-                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                    (int)NMP.Portal.Enums.CropTypes.Turnips
+                (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+                    (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                    (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+                    (int)NMP.Commons.Enums.CropTypes.Cabbage,
+                    (int)NMP.Commons.Enums.CropTypes.Calabrese,
+                    (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+                    (int)NMP.Commons.Enums.CropTypes.Radish,
+                    (int)NMP.Commons.Enums.CropTypes.WildRocket,
+                    (int)NMP.Commons.Enums.CropTypes.Swedes,
+                    (int)NMP.Commons.Enums.CropTypes.Turnips
 
             };
 
@@ -7409,11 +7411,11 @@ namespace NMP.Portal.Controllers
             if (farm != null)
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -7482,9 +7484,9 @@ namespace NMP.Portal.Controllers
                                     (List<int> managementIds, error) = await _organicManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldId.ToString(), null, null);
 
                                     //warning excel sheet row no. 15
-                                    if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endOfOctober);
                                             if (isWithinDateRange)
@@ -7506,8 +7508,8 @@ namespace NMP.Portal.Controllers
                                                     if (currentNitrogen > 40 || currentNitrogen + totalN > 150)
                                                     {
                                                         model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                        model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms; //81a
-                                                        model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                        model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms; //81a
+                                                        model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                         model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
                                                         model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1Grass;
@@ -7520,9 +7522,9 @@ namespace NMP.Portal.Controllers
                                         }
                                     }
                                     //warning excel sheet row no. 13
-                                    if ((cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus) || (cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions) || (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions))
+                                    if ((cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus) || (cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions) || (cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions))
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endDateFebruary);
                                             if (isWithinDateRange)
@@ -7541,8 +7543,8 @@ namespace NMP.Portal.Controllers
                                                 if (currentNitrogen + totalN > 150)
                                                 {
                                                     model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
-                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
+                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
 
                                                     model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
@@ -7556,7 +7558,7 @@ namespace NMP.Portal.Controllers
                                     //wales warning
                                     if (cropTypeIdsForTrigger.Contains(cropTypeId))
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                         {
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endDateFebruary);
                                             if (isWithinDateRange)
@@ -7576,8 +7578,8 @@ namespace NMP.Portal.Controllers
                                                 if (currentNitrogen + totalN > 150)
                                                 {
                                                     model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a wales only
-                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a wales only
+                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
 
                                                     model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeadingWales;
@@ -7593,7 +7595,7 @@ namespace NMP.Portal.Controllers
                                     //warning excel sheet row no. 14
                                     if (brassicaCrops.Contains(cropTypeId))
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endDateFebruary);
                                             if (isWithinDateRange)
@@ -7620,8 +7622,8 @@ namespace NMP.Portal.Controllers
                                                         if (currentNitrogen > 50 || currentNitrogen + totalN > 150 || isOrganicManureExistWithin4Weeks)
                                                         {
                                                             model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                            model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
-                                                            model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                            model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
+                                                            model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                             model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
                                                             model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1Brassica;
@@ -7636,9 +7638,9 @@ namespace NMP.Portal.Controllers
 
                                     }
                                     //warning excel sheet row no. 16
-                                    if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+                                    if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endOfOctober);
                                             if (isWithinDateRange)
@@ -7658,8 +7660,8 @@ namespace NMP.Portal.Controllers
                                                 if (currentNitrogen + totalN > 150)
                                                 {
                                                     model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
-                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Manure;
+                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
+                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
                                                     model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
                                                     model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1WinterOilseed;
@@ -7670,7 +7672,7 @@ namespace NMP.Portal.Controllers
                                         }
 
                                     }
-                                    //if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    //if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     //{
                                     //    bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
                                     //    if (isWithinDateRange)
@@ -7706,10 +7708,10 @@ namespace NMP.Portal.Controllers
             if (model.OrganicManures != null)
             {
                 model.OrganicManures.ForEach(x => x.EndOfDrain = x.SoilDrainageEndDate);
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     model.OrganicManures.ForEach(x => x.ManureTypeName = model.OtherMaterialName);
-                    if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
                         model.OrganicManures.ForEach(x => x.ManureTypeID = model.ManureGroupIdForFilter ?? 0);
                         model.OrganicManures.ForEach(x => x.ManureTypeName = model.ManureTypeName);
@@ -7787,7 +7789,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 var mannerOutput = new
                                                 {
-                                                    runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
+                                                    runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
                                                     postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                     countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
                                                     field = new
@@ -8388,7 +8390,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("ApplicationRate", Resource.MsgApplicationRateNotSet);
                 }
-                if (model.ApplicationRateMethod == (int)NMP.Portal.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
                 {
                     if (model.Area == null)
                     {
@@ -8493,10 +8495,10 @@ namespace NMP.Portal.Controllers
                     {
 
                         model.OrganicManures.ForEach(x => x.EndOfDrain = x.SoilDrainageEndDate);
-                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         {
                             model.OrganicManures.ForEach(x => x.ManureTypeName = model.OtherMaterialName);
-                            if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                            if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                             {
                                 model.OrganicManures.ForEach(x => x.ManureTypeID = model.ManureGroupIdForFilter ?? 0);
                             }
@@ -8569,7 +8571,7 @@ namespace NMP.Portal.Controllers
                                                         {
                                                             var mannerOutput = new
                                                             {
-                                                                runType = farmData.EnglishRules ? (int)NMP.Portal.Enums.RunType.MannerEngland : (int)NMP.Portal.Enums.RunType.MannerScotland,
+                                                                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
                                                                 postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                                                                 countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
                                                                 field = new
@@ -8716,7 +8718,7 @@ namespace NMP.Portal.Controllers
                                     foreach (var orgManure in organicManureList)
                                     {
                                         int? fieldID = null;
-                                        int fieldTypeId = (int)NMP.Portal.Enums.FieldType.Arable;
+                                        int fieldTypeId = (int)NMP.Commons.Enums.FieldType.Arable;
                                         (ManagementPeriod ManData, error) = await _cropService.FetchManagementperiodById(orgManure.ManagementPeriodID);
                                         if (ManData != null)
                                         {
@@ -8724,14 +8726,14 @@ namespace NMP.Portal.Controllers
                                             (Crop crop, error) = (await _cropService.FetchCropById(ManData.CropID.Value));
                                             if (crop != null)
                                             {
-                                                fieldTypeId = (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass) ?
-                                                 (int)NMP.Portal.Enums.FieldType.Grass : (int)NMP.Portal.Enums.FieldType.Arable;
+                                                fieldTypeId = (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass) ?
+                                                 (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
                                                 fieldID = crop.FieldID;
                                             }
                                         }
                                         warningMessageList = new List<WarningMessage>();
                                         warningMessageList = await GetWarningMessages(model);
-                                        warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Portal.Enums.WarningCode.NMaxLimit ? orgManure.ID : fieldID);
+                                        warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Commons.Enums.WarningCode.NMaxLimit ? orgManure.ID : fieldID);
                                         OrganicManures.Add(new
                                         {
                                             OrganicManure = orgManure,
@@ -8752,7 +8754,7 @@ namespace NMP.Portal.Controllers
                                     //    {
                                     //        OrganicManure = orgManure,
                                     //        FarmID = model.FarmId,
-                                    //        FieldTypeID = (int)NMP.Portal.Enums.FieldType.Arable,
+                                    //        FieldTypeID = (int)NMP.Commons.Enums.FieldType.Arable,
                                     //        SaveDefaultForFarm = model.IsAnyNeedToStoreNutrientValueForFuture
                                     //    }).ToList()
                                     //};
@@ -8862,11 +8864,11 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("CheckAnswer");
                         }
-                        if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
                             return RedirectToAction("ManureGroup");
                         }
-                        else if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        else if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
                             return RedirectToAction("OtherMaterialName");
                         }
@@ -9078,7 +9080,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 (Crop cropData, error) = await _cropService.FetchCropById(model.DoubleCrop[model.DoubleCropCurrentCounter].CropID);
-                if (string.IsNullOrWhiteSpace(error.Message) && cropData != null && cropData.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass &&
+                if (string.IsNullOrWhiteSpace(error.Message) && cropData != null && cropData.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass &&
                     model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID))
                 {
                     int fieldIdToRemove = model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID;
@@ -9115,7 +9117,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     int index = model.OrganicManures
                                     .FindIndex(f => f.FieldID == crop.FieldID);
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && index >= 0)
+                                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && index >= 0)
                                     {
                                         model.OrganicManures[index].IsGrass = true;
                                         counter++;
@@ -9267,11 +9269,11 @@ namespace NMP.Portal.Controllers
             }
             try
             {
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -9326,11 +9328,11 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                int countryId = model.IsEnglishRules ? (int)NMP.Portal.Enums.RB209Country.England : (int)NMP.Portal.Enums.RB209Country.Scotland;
+                int countryId = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
-                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Portal.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                    (manureTypeList, error) = await _organicManureService.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
                 }
                 else
                 {
@@ -9409,7 +9411,7 @@ namespace NMP.Portal.Controllers
                         if (orgManureViewModel.ManureTypeId != model.ManureTypeId)
                         {
                             model.IsManureTypeChange = true;
-                            if (model.ApplicationRateMethod == (int)NMP.Portal.Enums.ApplicationRate.UseDefaultApplicationRate)
+                            if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                             {
                                 model.ApplicationRate = null;
                                 foreach (var orgManure in model.OrganicManures)
@@ -9518,7 +9520,7 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
 
 
-                if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("OrganicManure", model);
                     return RedirectToAction("OtherMaterialName");
@@ -9595,10 +9597,10 @@ namespace NMP.Portal.Controllers
                 foreach (var organic in model.OrganicManures.Where(x => x.IsGrass))
                 {
                     (List<Crop> cropList, error) = await _cropService.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(organic.FieldID), model.HarvestYear.Value);
-                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                     {
-                        var cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.ID.Value).FirstOrDefault();
-                        int? defoliationSequenceID = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.DefoliationSequenceID).FirstOrDefault();
+                        var cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).Select(x => x.ID.Value).FirstOrDefault();
+                        int? defoliationSequenceID = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).Select(x => x.DefoliationSequenceID).FirstOrDefault();
                         (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
 
                         if (ManagementPeriod != null)
@@ -9826,11 +9828,11 @@ namespace NMP.Portal.Controllers
                         {
                             return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
                         }
-                        if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
                             return RedirectToAction("ManureGroup");
                         }
-                        if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
                             return RedirectToAction("OtherMaterialName");
                         }
@@ -9903,7 +9905,7 @@ namespace NMP.Portal.Controllers
                                 int cropId = cropList.FirstOrDefault().ID.Value;
                                 if (cropList.Count > 0)
                                 {
-                                    cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.ID.Value).First();
+                                    cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).Select(x => x.ID.Value).First();
                                 }
                                 (List<ManagementPeriod> managementPeriodList, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
                                 if (!string.IsNullOrWhiteSpace(error.Message))
@@ -10239,12 +10241,12 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
             }
 
-            if (model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+            if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
             {
                 return RedirectToAction("ManureGroup");
             }
 
-            if (model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+            if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
             {
                 return RedirectToAction("OtherMaterialName");
             }

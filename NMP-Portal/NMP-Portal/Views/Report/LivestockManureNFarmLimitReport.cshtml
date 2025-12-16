@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.ReportViewModel
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.ReportTitle, Resource.lblLivestockManureNitrogenFarmLimit, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
     int nutrientsLoadingLiveStockListGrazingCount = 0;
@@ -567,7 +567,7 @@ else
                             <td class="col_1 govuk-table__cell">@nutrientsLoadingLiveStockNonGrazing.LiveStockType</td>
                             <td class="col_2 govuk-table__cell">@string.Format("{0:N2}", nutrientsLoadingLiveStockNonGrazing.Units)</td>
                             <td class="col_2 govuk-table__cell">@(nutrientsLoadingLiveStockNonGrazing.Occupancy != null ? string.Format("{0:N0}{1}", nutrientsLoadingLiveStockNonGrazing.Occupancy, Resource.lblPercentage) : Resource.lblHyphen)</td>
-                            @if (nutrientsLoadingLiveStockNonGrazing.LiveStockTypeID != (int)NMP.Portal.Enums.Livestock.VealCalf)
+                            @if (nutrientsLoadingLiveStockNonGrazing.LiveStockTypeID != (int)NMP.Commons.Enums.Livestock.VealCalf)
                             {
                                 <td class="col_2 govuk-table__cell">
                                     @string.Format("{0:N1}{1}", (Math.Floor(nutrientsLoadingLiveStockNonGrazing.NitrogenStandard * 10) / 10), Resource.lblkg)
