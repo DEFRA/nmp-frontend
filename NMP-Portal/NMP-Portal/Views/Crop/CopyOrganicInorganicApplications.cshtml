@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Enums
-@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications} {Resource.lblHyphen} {title}";

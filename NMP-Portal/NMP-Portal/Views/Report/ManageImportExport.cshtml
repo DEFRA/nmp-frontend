@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.ReportViewModel
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblOrganicMaterialImportsAndExportsYear, Model.Year)} {Resource.lblHyphen} {Resource.lblImportsExportsOfLivestockManure}";
     var currentYear = DateTime.Now.Year;

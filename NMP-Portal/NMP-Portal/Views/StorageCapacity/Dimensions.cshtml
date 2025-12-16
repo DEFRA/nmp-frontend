@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.StorageCapacityViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{string.Format(Resource.lblStoreDimenstion, Model.StoreName)} {Resource.lblHyphen} {title}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
@@ -68,7 +68,7 @@
                         @string.Format(Resource.lblStoreDimenstion, Model.StoreName)
                     </govuk-fieldset-legend>
                 </govuk-fieldset>
-                @if (Model.MaterialStateID != (int)NMP.Portal.Enums.MaterialState.SolidManureStorage && Model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                @if (Model.MaterialStateID != (int)NMP.Commons.Enums.MaterialState.SolidManureStorage && Model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                 {
                     <govuk-details>
                         <govuk-details-summary>
@@ -76,13 +76,13 @@
                         </govuk-details-summary>
                         <govuk-details-text>
                             <p class="govuk-body">@Resource.lblFreeboardIsTheDistanceBetweenTheTopOfTheTank</p>
-                            @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank || Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                            @if (Model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank || Model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
                             {
                                 <p class="govuk-body">
                                     @Resource.lblForASteelOrConcreteStore
                                 </p>
                             }
-                            @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                            @if (Model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                             {
                                 <p class="govuk-body">
                                     @Resource.lblForEarthBankedLagoonsYouMustKeep
@@ -92,10 +92,10 @@
                         </govuk-details-text>
                     </govuk-details>
                 }
-                @if (Model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                @if (Model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.CircularTank)
                 {
                     <govuk-input asp-for=@Model.Length type="number" step="any" spellcheck="false">
-                        @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        @if (Model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                         {
                             <govuk-input-label is-page-heading="false">
                                 @Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon
@@ -112,7 +112,7 @@
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                     </govuk-input>
                     <govuk-input asp-for=@Model.Width type="number" step="any" spellcheck="false">
-                        @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        @if (Model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                         {
                             <govuk-input-label is-page-heading="false">
                                 @Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoonSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
@@ -127,7 +127,7 @@
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                     </govuk-input>
                 }
-                @if (Model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                @if (Model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
                 {
 
                     <govuk-radios asp-for="@Model.IsCircumference">
@@ -164,7 +164,7 @@
 
                 <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
 
-                    @if (Model.StorageTypeID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    @if (Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         <govuk-input-label is-page-heading="false">
                             @Resource.lblWhatIsTheDepthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
@@ -180,7 +180,7 @@
                     <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
                 </govuk-input>
 
-                @if (Model.MaterialStateID != (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                @if (Model.MaterialStateID != (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
                     <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsCovered">
                         <govuk-radios-fieldset>

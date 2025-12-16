@@ -3,16 +3,17 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using NMP.Portal.Enums;
+using NMP.Commons.Enums;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
+using NMP.Commons.ViewModels;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+using NMP.Portal.Models;
 
 namespace NMP.Portal.Controllers
 {
@@ -205,7 +206,7 @@ namespace NMP.Portal.Controllers
                                 model.FieldName = (await _fieldService.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
                                 model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
                             }
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 model.IsAnyCropIsGrass = true;
                                 model.DefoliationCurrentCounter = 0;
@@ -267,7 +268,7 @@ namespace NMP.Portal.Controllers
                                     (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
                                     if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
                                     {
-                                        if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && crop.DefoliationSequenceID != null)
+                                        if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && crop.DefoliationSequenceID != null)
                                         {
                                             model.IsAnyCropIsGrass = true;
                                         }
@@ -285,7 +286,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     cropList = cropList.Where(x => x.CropOrder == 1).ToList();
                                 }
-                                if (cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                if (cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                 {
                                     (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
@@ -320,7 +321,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     fertiliser.EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString());
                                     fertiliserCounter++;
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
                                         fertiliser.IsGrass = true;
                                     }
@@ -530,7 +531,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             model.DoubleCrop.RemoveAll(x => x.FieldID == Convert.ToInt32(field));
                                         }
-                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                         {
                                             model.IsAnyCropIsGrass = true;
                                             model.DefoliationCurrentCounter = 0;
@@ -645,12 +646,12 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).ToList();
+                                            cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
                                         }
                                     }
                                     if (cropList.Count > 0)
                                     {
-                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                         {
                                             grassCropCounter++;
                                             (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
@@ -693,7 +694,7 @@ namespace NMP.Portal.Controllers
                                         fertiliser.FieldName = (await _fieldService.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
                                         fertiliser.EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString());
                                         fertiliserCounter++;
-                                        if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             fertiliser.IsGrass = true;
                                         }
@@ -911,7 +912,7 @@ namespace NMP.Portal.Controllers
                             {
                                 model.DoubleCrop.RemoveAll(x => x.FieldID == Convert.ToInt32(field));
                             }
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
                                 model.IsAnyCropIsGrass = true;
                                 model.DefoliationCurrentCounter = 0;
@@ -1011,7 +1012,7 @@ namespace NMP.Portal.Controllers
                             }
                             if (cropList.Count > 0)
                             {
-                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                 {
                                     (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
@@ -1062,7 +1063,7 @@ namespace NMP.Portal.Controllers
                                 fertiliser.FieldName = (await _fieldService.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
                                 fertiliser.EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString());
                                 fertiliserCounter++;
-                                if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
                                     fertiliser.IsGrass = true;
                                 }
@@ -1534,7 +1535,7 @@ namespace NMP.Portal.Controllers
                                     if (matchedHeader.Crops != null)
                                     {
                                         ViewBag.CropTypeId = matchedHeader.Crops.CropTypeID;
-                                        if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
                                             if (error == null && defoliationSequence != null)
@@ -1854,7 +1855,7 @@ namespace NMP.Portal.Controllers
                                         if (matchedHeader.Crops != null)
                                         {
                                             ViewBag.CropTypeId = matchedHeader.Crops.CropTypeID;
-                                            if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                            if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                             {
                                                 (DefoliationSequenceResponse defoliationSequence, error) = await _cropService.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
                                                 if (error == null && defoliationSequence != null)
@@ -2286,7 +2287,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     defoliation = managementPeriod.Defoliation;
                                     (Crop crop, error) = await _cropService.FetchCropById(managementPeriod.CropID.Value);
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
                                         fertiliserManure.IsGrass = true;
                                         model.IsAnyCropIsGrass = true;
@@ -2892,25 +2893,25 @@ namespace NMP.Portal.Controllers
                                 //warning excel sheet row no. 23
                                 HashSet<int> filterCrops = new HashSet<int>
                                 {
-                                    (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape,
-                                    (int)NMP.Portal.Enums.CropTypes.Asparagus,
-                                    (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
-                                    (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
-                                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
-                                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
-                                    (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
-                                    (int)NMP.Portal.Enums.CropTypes.Cabbage,
-                                    (int)NMP.Portal.Enums.CropTypes.Calabrese,
-                                    (int)NMP.Portal.Enums.CropTypes.Cauliflower,
-                                    (int)NMP.Portal.Enums.CropTypes.Radish,
-                                    (int)NMP.Portal.Enums.CropTypes.WildRocket,
-                                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                                    (int)NMP.Portal.Enums.CropTypes.Turnips,
-                                    (int)NMP.Portal.Enums.CropTypes.BulbOnions,
-                                    (int)NMP.Portal.Enums.CropTypes.SaladOnions,
-                                    (int)NMP.Portal.Enums.CropTypes.Grass
+                                    (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
+                                    (int)NMP.Commons.Enums.CropTypes.Asparagus,
+                                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+                                    (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+                                    (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+                                    (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
+                                    (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                                    (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+                                    (int)NMP.Commons.Enums.CropTypes.Cabbage,
+                                    (int)NMP.Commons.Enums.CropTypes.Calabrese,
+                                    (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+                                    (int)NMP.Commons.Enums.CropTypes.Radish,
+                                    (int)NMP.Commons.Enums.CropTypes.WildRocket,
+                                    (int)NMP.Commons.Enums.CropTypes.Swedes,
+                                    (int)NMP.Commons.Enums.CropTypes.Turnips,
+                                    (int)NMP.Commons.Enums.CropTypes.BulbOnions,
+                                    (int)NMP.Commons.Enums.CropTypes.SaladOnions,
+                                    (int)NMP.Commons.Enums.CropTypes.Grass
                                 };
 
 
@@ -2922,28 +2923,28 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (isWithinClosedPeriod)
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
-                                            model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
-                                            model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                            model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliser;
+                                            model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
                                             model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2;
                                         }
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                         {
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgClosedSpreadingPeriod;
-                                            model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
-                                            model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                            model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliser;
+                                            model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
                                             model.ClosedPeriodWarningPara2 = Resource.MsgClosedPeriodFertiliserWarningPara2Wales;
                                         }
                                     }
                                 }
                                 //warning excel sheet row no. 28
-                                if (cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                if (cropTypeResponse.CropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeResponse.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
                                     //31 october and end of closed period
                                     string warningPeriod = string.Empty;
@@ -2961,21 +2962,21 @@ namespace NMP.Portal.Controllers
 
                                     if (isWithinWarningPeriod)
                                     {
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgApplicationAfter31October;
-                                            model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
-                                            model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                            model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliser;
+                                            model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
                                             model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2;
                                         }
-                                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                         {
                                             model.IsClosedPeriodWarning = true;
                                             model.ClosedPeriodWarningHeader = Resource.MsgApplicationAfter31October;
-                                            model.ClosedPeriodWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliser;
-                                            model.ClosedPeriodWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                            model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliser;
+                                            model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                             model.ClosedPeriodWarningHeading = Resource.MsgClosedPeriodFertiliserWarningHeading;
                                             model.ClosedPeriodWarningPara2 = Resource.Msg31OctoberToEndPeriodFertiliserWarningPara2Wales;
                                         }
@@ -3022,20 +3023,20 @@ namespace NMP.Portal.Controllers
 
                 HashSet<int> brassicaCrops = new HashSet<int>
                 {
-                    (int)NMP.Portal.Enums.CropTypes.ForageRape,
-                    (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted,
-                    (int)NMP.Portal.Enums.CropTypes.KaleGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.SwedesGrazed,
-                    (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted,
-                    (int)NMP.Portal.Enums.CropTypes.BrusselSprouts,
-                    (int)NMP.Portal.Enums.CropTypes.Cabbage,
-                    (int)NMP.Portal.Enums.CropTypes.Calabrese,
-                    (int)NMP.Portal.Enums.CropTypes.Cauliflower,
-                    (int)NMP.Portal.Enums.CropTypes.Radish,
-                    (int)NMP.Portal.Enums.CropTypes.WildRocket,
-                    (int)NMP.Portal.Enums.CropTypes.Swedes,
-                    (int)NMP.Portal.Enums.CropTypes.Turnips
+                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+                    (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
+                    (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                    (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+                    (int)NMP.Commons.Enums.CropTypes.Cabbage,
+                    (int)NMP.Commons.Enums.CropTypes.Calabrese,
+                    (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+                    (int)NMP.Commons.Enums.CropTypes.Radish,
+                    (int)NMP.Commons.Enums.CropTypes.WildRocket,
+                    (int)NMP.Commons.Enums.CropTypes.Swedes,
+                    (int)NMP.Commons.Enums.CropTypes.Turnips
                 };
                 string closedPeriod = warningMessage.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
                 bool isWithinClosedPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
@@ -3069,22 +3070,22 @@ namespace NMP.Portal.Controllers
 
                         if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)  //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                         {
-                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                             {
                                 model.IsNitrogenExceedWarning = true;
                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForBrasicas;
-                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1England, startPeriod, endPeriod);
                                 model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                             }
-                            if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             {
                                 model.IsNitrogenExceedWarning = true;
                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForBrasicas;
-                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingWales;
                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNitrogenExceedWarningPara1Wales, startPeriod, endPeriod);
                                 model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2Wales;
@@ -3098,11 +3099,11 @@ namespace NMP.Portal.Controllers
                 }
 
                 //warning excel sheet row no. 24
-                if ((cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions) && isWithinClosedPeriod)
+                if ((cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions) && isWithinClosedPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
                     int maxNitrogenRate = 0;
-                    if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Asparagus)
+                    if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus)
                     {
                         if (totalNitrogen > 50)
                         {
@@ -3110,7 +3111,7 @@ namespace NMP.Portal.Controllers
                             maxNitrogenRate = 50;
                         }
                     }
-                    if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
+                    if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions)
                     {
                         if (totalNitrogen > 40)
                         {
@@ -3118,7 +3119,7 @@ namespace NMP.Portal.Controllers
                             maxNitrogenRate = 40;
                         }
                     }
-                    if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.SaladOnions)
+                    if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions)
                     {
                         if (totalNitrogen > 40)
                         {
@@ -3128,22 +3129,22 @@ namespace NMP.Portal.Controllers
                     }
                     if (isNitrogenRateExceeded)
                     {
-                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                         {
                             model.IsNitrogenExceedWarning = true;
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateEverythingExceptWosr;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgClosedPeriodNRateExceedWarningPara1England, startPeriod, endPeriod, maxNitrogenRate);
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                         }
-                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                         {
                             model.IsNitrogenExceedWarning = true;
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateEverythingExceptWosr;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
                         }
@@ -3174,7 +3175,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 //warning excel sheet row no. 26
-                if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
+                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
 
@@ -3185,22 +3186,22 @@ namespace NMP.Portal.Controllers
 
                     if (isNitrogenRateExceeded)
                     {
-                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                         {
                             model.IsNitrogenExceedWarning = true;
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForWinterOilseedRape;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1England, startPeriod);
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                         }
-                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                         {
                             model.IsNitrogenExceedWarning = true;
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.lblMaxApplicationRateForWinterOilseedRape;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterOilseedRapeNRateExceedWarningPara1Wales, startPeriod);
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
@@ -3208,7 +3209,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 //warning excel sheet row no. 27
-                if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass && isWithinWarningPeriod)
+                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass && isWithinWarningPeriod)
                 {
                     bool isNitrogenRateExceeded = false;
                     string startString = $"{startPeriod} {startDate.Year}";
@@ -3234,22 +3235,22 @@ namespace NMP.Portal.Controllers
 
                     if (isNitrogenRateExceeded)
                     {
-                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                         {
                             model.IsNitrogenExceedWarning = true;
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgApplicationToGrassAtRateOfMoreThan;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1England, startPeriod);
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNitrogenExceedWarningPara2England;
                         }
-                        if (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                         {
                             model.IsNitrogenExceedWarning = true;
                             model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgApplicationToGrassAtRateOfMoreThan;
-                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
-                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                            model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodFertiliserMaxAppRate;
+                            model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                             model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgWinterOilseedRapeNRateExceedWarningHeadingWales;
                             model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgWinterGrassNRateExceedWarningPara1Wales, startPeriod);
                             model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgClosedPeriodNRateExceedWarningPara2Wales;
@@ -3278,7 +3279,7 @@ namespace NMP.Portal.Controllers
                     (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureService.FetchCropTypeLinkingByCropTypeId(crop[0].CropTypeID.Value);
                     if (error == null)
                     {
-                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
                         if (nmaxLimitEnglandOrWales != null)
                         {
                             (FieldDetailResponse fieldDetail, error) = await _fieldService.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
@@ -3314,21 +3315,21 @@ namespace NMP.Portal.Controllers
                                             model.IsNitrogenExceedWarning = true;
                                             (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
 
-                                            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+                                            if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                             {
                                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
-                                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
+                                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
                                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
                                                 model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
                                             }
 
-                                            if (farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                            if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                             {
                                                 model.ClosedPeriodNitrogenExceedWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Portal.Enums.WarningCode.NMaxLimit;
-                                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Portal.Enums.WarningLevel.Fertiliser;
+                                                model.ClosedPeriodNitrogenExceedWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
+                                                model.ClosedPeriodNitrogenExceedWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Fertiliser;
                                                 model.ClosedPeriodNitrogenExceedWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
                                                 model.ClosedPeriodNitrogenExceedWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
                                                 model.ClosedPeriodNitrogenExceedWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2Wales;
@@ -3466,7 +3467,7 @@ namespace NMP.Portal.Controllers
 
                                 warningMessageList = new List<WarningMessage>();
                                 warningMessageList = await GetWarningMessages(model);
-                                warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Portal.Enums.WarningCode.NMaxLimit ? fertID : fertiliserManure.FieldID);
+                                warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Commons.Enums.WarningCode.NMaxLimit ? fertID : fertiliserManure.FieldID);
                                 FertiliserManure.Add(new
                                 {
                                     FertiliserManure = fertManure,
@@ -3967,7 +3968,7 @@ namespace NMP.Portal.Controllers
 
                             if (cropList.Count > 0)
                             {
-                                var grassCrop = cropList.FirstOrDefault(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass);
+                                var grassCrop = cropList.FirstOrDefault(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass);
                                 int cropId = 0;
                                 if(grassCrop != null && grassCrop.ID.HasValue)
                                 {
@@ -4349,10 +4350,10 @@ namespace NMP.Portal.Controllers
             foreach (var fertiliser in fertiliserGrassList)
             {
                 (List<Crop> cropList, error) = await _cropService.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fertiliser.FieldID), model.HarvestYear.Value);
-                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                 {
-                    var cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.ID.Value).FirstOrDefault();
-                    int? defoliationSequenceID = cropList.Where(x => x.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass).Select(x => x.DefoliationSequenceID).FirstOrDefault();
+                    var cropId = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).Select(x => x.ID.Value).FirstOrDefault();
+                    int? defoliationSequenceID = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).Select(x => x.DefoliationSequenceID).FirstOrDefault();
                     (List<ManagementPeriod> ManagementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropId, false);
 
                     if (ManagementPeriod != null)
@@ -4797,7 +4798,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 (Crop cropData, error) = await _cropService.FetchCropById(model.DoubleCrop[model.DoubleCropCurrentCounter].CropID);
-                if (string.IsNullOrWhiteSpace(error.Message) && cropData != null && cropData.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass &&
+                if (string.IsNullOrWhiteSpace(error.Message) && cropData != null && cropData.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass &&
                     model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID))
                 {
                     int fieldIdToRemove = model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID;
@@ -4836,7 +4837,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     int index = model.FertiliserManures
                                     .FindIndex(f => f.FieldID == crop.FieldID);
-                                    if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && index >= 0)
+                                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && index >= 0)
                                     {
                                         model.FertiliserManures[index].IsGrass = true;
                                         counter++;

@@ -1,14 +1,14 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
 
     string heading = string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
-                             Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
+                             Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
                              Resource.lblExporting);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 
     // var backAction = "";
     // @if (Model.ManureGroupIdForFilter == null)

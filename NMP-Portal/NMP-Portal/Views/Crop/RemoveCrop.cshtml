@@ -1,6 +1,6 @@
-﻿﻿@using NMP.Portal.Resources
+﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
-@using NMP.Portal.ViewModels
+@using NMP.Commons.ViewModels
 
 @model PlanViewModel
 @{
@@ -18,8 +18,8 @@
     ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
 
 
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 
 }
 @if (Model != null)

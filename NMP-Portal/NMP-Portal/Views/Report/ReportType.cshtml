@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
 
-    var cropAndFieldManagementReport = (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport;
-    var nMaxReport = (int)NMP.Portal.Enums.ReportType.NMaxReport;
+    var cropAndFieldManagementReport = (int)NMP.Commons.Enums.ReportType.CropAndFieldManagementReport;
+    var nMaxReport = (int)NMP.Commons.Enums.ReportType.NMaxReport;
 }
 
 @section BeforeContent {

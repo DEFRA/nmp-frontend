@@ -1,14 +1,14 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.RecommendationViewModel
+@model NMP.Commons.ViewModels.RecommendationViewModel
 @{
 
     string title = Resource.lblRecommendations;
     ViewData["Title"] = $"{string.Format(Resource.lblFieldPlanYear, Model.FieldName, Model.Crops[0].Year)} {Resource.lblHyphen} {title}";
 
 
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    int CerealsGroupId = (int)NMP.Portal.Enums.CropGroup.Cereals;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
+    int CerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
     var lastUpdate = string.Empty;
     if (Model != null && Model.Recommendations != null)
     {
@@ -118,7 +118,7 @@
                                         <h2 id="cropone" class="govuk-heading-m">
                                             @string.Format(Resource.lblNutrientAndLimeRecommendationsForCropInField, crop.CropTypeName, Model.FieldName)
                                         </h2>
-                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             <p>
                                                 @ViewBag.GrassHeadingCropOne
@@ -135,12 +135,12 @@
                                             var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
                                             @foreach (var recommendation in rec)
                                             {
-                                                @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
+                                                @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
                                                 {
                                                     <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h2>
                                                 }
                                                 <div class="table-container">
-                                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                                     {
                                                         <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
                                                     }
@@ -160,7 +160,7 @@
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                                 <td class="govuk-table__cell">
-                                                                    @if (crop.CropGroupID != (int)NMP.Portal.Enums.CropGroup.Grass)
+                                                                    @if (crop.CropGroupID != (int)NMP.Commons.Enums.CropGroup.Grass)
                                                                     {
                                                                         @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
                                                                     }
@@ -264,7 +264,7 @@
                                         <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
 
 
-                                        @*                                         @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @*                                         @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
                                         { *@
                                         @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                         {
@@ -278,7 +278,7 @@
                                                     {
                                                         @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                         {
-                                                            if (recCom.Nutrient != (int)NMP.Portal.Enums.Nutrients.Sodium)
+                                                            if (recCom.Nutrient != (int)NMP.Commons.Enums.Nutrients.Sodium)
                                                             {
                                                                 <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
                                                                 <p class="govuk-body">
@@ -325,7 +325,7 @@
                                             @string.Format(Resource.lblNutrientAndLimeRecommendationsForCropInField, crop.CropTypeName, Model.FieldName)
                                         </h3>
 
-                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             <p>
                                                 @ViewBag.GrassHeadingCropTwo
@@ -342,13 +342,13 @@
                                             @foreach (var recommendation in rec)
                                             {
                                                 @* Recommendation *@
-                                                @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
+                                                @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
                                                 {
                                                     <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h2>
                                                 }
 
                                                 <div class="table-container">
-                                                    @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                                     {
                                                         <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
                                                     }
@@ -368,7 +368,7 @@
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                                                 <td class="govuk-table__cell">
-                                                                    @if (crop.CropGroupID != (int)NMP.Portal.Enums.CropGroup.Grass)
+                                                                    @if (crop.CropGroupID != (int)NMP.Commons.Enums.CropGroup.Grass)
                                                                     {
                                                                         @(string.IsNullOrWhiteSpace(recommendation.NIndex) ? Resource.lblHyphen : recommendation.NIndex)
                                                                     }
@@ -469,7 +469,7 @@
                                         }
                                         <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
 
-                                        @*    @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @*    @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
                                         { *@
                                         @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                         {
@@ -483,7 +483,7 @@
                                                     {
                                                         @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                         {
-                                                            if (recCom.Nutrient != (int)NMP.Portal.Enums.Nutrients.Sodium)
+                                                            if (recCom.Nutrient != (int)NMP.Commons.Enums.Nutrients.Sodium)
                                                             {
                                                                 <h4 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h4>
                                                                 <p class="govuk-body">
@@ -697,7 +697,7 @@
                                             <td class="govuk-table__cell">@crop.CropTypeName</td>
                                         </tr>
 
-                                        @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             <tr class="govuk-table__row">
                                                 <th class="govuk-table__cell" scope="row">@Resource.lblVarietyForRecommendation</th>
@@ -712,7 +712,7 @@
 
 
                                         </tr>
-                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(crop.EstablishmentName)))
+                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(crop.EstablishmentName)))
                                         {
                                             <tr class="govuk-table__row">
                                                 <th class="govuk-table__cell" scope="row">@Resource.lblSward</th>
@@ -726,8 +726,8 @@
                                             <th class="govuk-table__cell" scope="row">@Resource.lblPlantingDate</th>
                                             <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
                                         </tr>
-                                        @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass &&
-                                                                    crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Other)
+                                        @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass &&
+                                                                    crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
                                         {
                                             <tr class="govuk-table__row">
                                                 <th class="govuk-table__cell" scope="row">
@@ -745,7 +745,7 @@
                                                 <td class="govuk-table__cell">@(crop.CropInfo2Name != null ? crop.CropInfo2Name : Resource.lblNotEntered)</td>
                                             </tr>
                                         }
-                                        @if (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             <tr class="govuk-table__row">
                                                 <th class="govuk-table__cell" scope="row">@Resource.lblSwardType</th>
@@ -764,7 +764,7 @@
                                         }
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__cell" scope="row">
-                                                @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
                                                 {
                                                     @Resource.lblEstimatedYield
                                                 }
@@ -781,11 +781,11 @@
 
                             <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-r="@crop.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId" asp-route-v="@crop.EncryptedFieldId" asp-route-w="@crop.EncryptedCropOrder">@string.Format(Resource.lblChangeLinkForRecommendation, crop.CropTypeName, Model.FieldName)</a></p>
                             @* <p class="govuk-body"><a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@crop.EncryptedCropTypeName" asp-route-s="@crop.EncryptedFieldName" asp-route-t="@crop.EncryptedFieldId" asp-route-u="@crop.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId"  asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropTypeFromFieldName, crop.CropTypeName, Model.FieldName)</a></p> *@
-                            @if (crop.CropTypeID != (int)NMP.Portal.Enums.CropTypes.Grass)
+                            @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
                                 @if (crop.IsSnsExist != true)
                                 {
-                                    <p class="govuk-body"><a asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId" asp-route-f="@crop.EncryptedFieldName">@string.Format(Resource.lblAddASoilMineralNitrogenAnalysisResultForCrop, (crop.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Other ? crop.OtherCropName : crop.CropTypeName))</a></p>
+                                    <p class="govuk-body"><a asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-c="@crop.EncryptedCropId" asp-route-f="@crop.EncryptedFieldName">@string.Format(Resource.lblAddASoilMineralNitrogenAnalysisResultForCrop, (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Other ? crop.OtherCropName : crop.CropTypeName))</a></p>
                                 }
                                 else
                                 {
@@ -861,7 +861,7 @@
                                                         <td class="govuk-table__cell">
                                                             @Resource.lblSeason
                                                         </td>
-                                                        <td class="govuk-table__cell">@(crop.SnsAnalysisData.SeasonId == (int)NMP.Portal.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring)</td>
+                                                        <td class="govuk-table__cell">@(crop.SnsAnalysisData.SeasonId == (int)NMP.Commons.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring)</td>
                                                     </tr>
                                                 }
                                                 @if (crop.SnsAnalysisData.CropHeight.HasValue)

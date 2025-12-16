@@ -1,18 +1,18 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.StorageCapacityViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     var heading = (!string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId) ? Resource.lblUpdateManureStorage : string.Format(Resource.lblAddStorageFor, Model.Year));
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    int squareOrRectangularTank = (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank;
-    int circularTank = (int)NMP.Portal.Enums.StorageTypes.CircularTank;
-    int earthBankedLagoon = (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon;
-    int storageBag = (int)NMP.Portal.Enums.StorageTypes.StorageBag;
+    int squareOrRectangularTank = (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank;
+    int circularTank = (int)NMP.Commons.Enums.StorageTypes.CircularTank;
+    int earthBankedLagoon = (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon;
+    int storageBag = (int)NMP.Commons.Enums.StorageTypes.StorageBag;
 
-    int dirtyWaterStorage = (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage;
-    int slurryStorage = (int)NMP.Portal.Enums.MaterialState.SlurryStorage;
-    int solidManureStorage = (int)NMP.Portal.Enums.MaterialState.SolidManureStorage;
+    int dirtyWaterStorage = (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage;
+    int slurryStorage = (int)NMP.Commons.Enums.MaterialState.SlurryStorage;
+    int solidManureStorage = (int)NMP.Commons.Enums.MaterialState.SolidManureStorage;
 
     var weightCapacity = Math.Round((Model.Length * Model.Width * Model.Depth) * (Model.SolidManureDensity) ?? 0);
 }
@@ -240,7 +240,7 @@
                             { *@
                             <govuk-summary-list-row class=@(Model.Depth == null ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @if (Model.StorageTypeID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                                    @if (Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                                     {
                                         @Resource.lblWhatIsTheDepth
                                     }
@@ -255,7 +255,7 @@
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">
                                         @Resource.lblChange<span class="govuk-visually-hidden">
-                                            @((Model.StorageTypeID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage) ? Resource.lblWhatIsTheDepth : Resource.lblWhatIsTheTotalDepth)
+                                            @((Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage) ? Resource.lblWhatIsTheDepth : Resource.lblWhatIsTheTotalDepth)
                                         </span>
                                     </govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>

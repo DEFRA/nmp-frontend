@@ -1,9 +1,9 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
     string heading = string.Format(Resource.lblLivestockCommentContent1,
-                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower());
     ViewData["Title"] = $"{heading} {Resource.lblHyphen}  {action} {Resource.lblImportsExportsOfLivestockManure}";
 }
@@ -138,11 +138,11 @@
                 <govuk-textarea asp-for="@Model.Comment" rows="5">
                     <govuk-textarea-label is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblLivestockCommentContent1,
-                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                     </govuk-textarea-label>
                     <govuk-textarea-hint>
-                    @string.Format(Resource.lblLivestockCommentContent2, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                    @string.Format(Resource.lblLivestockCommentContent2, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                     </govuk-textarea-hint>
                 </govuk-textarea>

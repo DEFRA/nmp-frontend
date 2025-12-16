@@ -1,32 +1,32 @@
-﻿﻿@using NMP.Portal.Resources
+﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.PlanViewModel
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{string.Format(Resource.lblUpdateCropGroupNameForHarvestYear, Model.CropGroupName, Model.Year)} {Resource.lblHyphen} {title}";
 
-    var varietyNameHeading = ((Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
-                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
-                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
-                            Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4) ? Resource.lblWhatIsThePotatoVarietyName : Resource.lblVarietyNameWithOptional);
+    var varietyNameHeading = ((Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup1 ||
+                            Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup2 ||
+                            Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup3 ||
+                            Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup4) ? Resource.lblWhatIsThePotatoVarietyName : Resource.lblVarietyNameWithOptional);
 }
 @section BeforeContent {
     <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
 }
 
 @{
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     var sowingDateQuestion = "";
     switch (Model.SowingDateQuestion)
     {
-        case (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater:
+        case (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater:
             sowingDateQuestion = Resource.lblNoIWillEnterTheDateLater;
             break;
-        case (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields:
+        case (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields:
             sowingDateQuestion = Resource.lblYesIHaveASingleDateForAllTheseFields;
             break;
-        case (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields:
+        case (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields:
             sowingDateQuestion = Resource.lblYesIHaveDifferentDatesForEachOfTheseFields;
             break;
     }
@@ -166,7 +166,7 @@
                     </govuk-summary-list-row>
 
                 }
-                @if (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
+                @if (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
                 {
                     bool renderSowingDate = false;
                     @foreach (var crop in Model.Crops)
@@ -188,7 +188,7 @@
                         }
                     }
                 }
-                else if (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
+                else if (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
                 {
                     @foreach (var crop in Model.Crops)
                     {
@@ -215,7 +215,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                else  @if (Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                else  @if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                 {
                     bool renderSowingDate = false;
                     @foreach (var crop in Model.Crops)
@@ -238,7 +238,7 @@
                         }
                     }
                 }
-                else if (Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+                else if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                 {
                     @foreach (var crop in Model.Crops)
                     {
@@ -255,7 +255,7 @@
                         </govuk-summary-list-row>
                     }
                 }
-                else if (Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
+                else if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
                 {
                     bool renderSowingDate = false;
                     @foreach (var crop in Model.Crops)

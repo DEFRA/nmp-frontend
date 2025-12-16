@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {title}";
@@ -7,7 +7,7 @@
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
     if (Model.IsNMaxLimitWarning) trueWarningCount++;
     if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
-    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
@@ -278,11 +278,11 @@
                     {
                         <div class="govuk-notification-banner__content">
                             <p class="govuk-notification-banner__heading">
-                                @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                 {
                                     @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
                                 }
-                                @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 {
                                     @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
                                 }
@@ -307,11 +307,11 @@
                             </ul>
                             <govuk-details>
                                 <govuk-details-summary>
-                                    @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                     {
                                         @Resource.lblMoreAboutTheseNVZRules
                                     }
-                                    @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                     {
                                         @Resource.lblMoreAboutTheseWaterResourceRegulation
                                     }
@@ -340,11 +340,11 @@
                                     }
                                 </govuk-details-text>
                             </govuk-details>
-                            @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                             {
                                 <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheNitrateVulnerableZone</p>
                             }
-                            @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             {
                                 <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheWaterResources</p>
                             }

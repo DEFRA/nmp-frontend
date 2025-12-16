@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReportYear, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
 
@@ -220,8 +220,8 @@
                             </div>
                             <div class="govuk-task-list__status" id="TotalFarmArea">
 
-                                @if ((Model.IsGrasslandDerogation == false && Model.TotalFarmArea != null && (Model.Country != (int)NMP.Portal.Enums.FarmCountry.Wales ? Model.TotalAreaInNVZ != null : Model.TotalAreaInNVZ==null))
-                                                            || (Model.IsGrasslandDerogation == true && Model.TotalFarmArea != null && (Model.Country != (int)NMP.Portal.Enums.FarmCountry.Wales ? Model.TotalAreaInNVZ != null : Model.TotalAreaInNVZ == null) && Model.GrassPercentage != null))
+                                @if ((Model.IsGrasslandDerogation == false && Model.TotalFarmArea != null && (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales ? Model.TotalAreaInNVZ != null : Model.TotalAreaInNVZ==null))
+                                                            || (Model.IsGrasslandDerogation == true && Model.TotalFarmArea != null && (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales ? Model.TotalAreaInNVZ != null : Model.TotalAreaInNVZ == null) && Model.GrassPercentage != null))
                                 {
                                     @Resource.lblCompleted
                                 }

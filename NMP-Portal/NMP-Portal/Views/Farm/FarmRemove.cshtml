@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @model FarmViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblRemoveFarm, Model.Name)} {Resource.lblHyphen} {Resource.lblFarmRemove}";
-    var yesRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var noRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yesRemoveFarm = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var noRemoveFarm = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @if (TempData["Error"] != null)

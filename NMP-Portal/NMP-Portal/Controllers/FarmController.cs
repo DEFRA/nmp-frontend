@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
+using NMP.Commons.ViewModels;
 using System.Net;
-using Error = NMP.Portal.ServiceResponses.Error;
+using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
@@ -158,7 +158,7 @@ namespace NMP.Portal.Controllers
                 (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
                 if (error != null && countryList.Count > 0)
                 {
-                    countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
+                    countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                     ViewBag.CountryList = countryList.OrderBy(c => c.Name);
                 }
 
@@ -193,17 +193,17 @@ namespace NMP.Portal.Controllers
                     (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
                     if (error != null && countryList.Count > 0)
                     {
-                        countryList.RemoveAll(x => x.ID == (int)NMP.Portal.Enums.FarmCountry.Scotland);
+                        countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                         ViewBag.CountryList = countryList.OrderBy(c => c.Name);
                     }
                     return View("Country", farm);
                 }
 
-                farm.EnglishRules = farm.CountryID == (int)NMP.Portal.Enums.FarmCountry.Scotland ? false : true;
+                farm.EnglishRules = farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? false : true;
 
-                if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID.Value))
+                if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID.Value))
                 {
-                    farm.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                    farm.Country = Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID);
                 }
 
                 SetFarmToSession(farm);
@@ -821,9 +821,9 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            if (model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
-                model.NVZFields = (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ;
+                model.NVZFields = (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ;
                 SetFarmToSession(model);
                 return RedirectToAction("Elevation");
             }
@@ -974,8 +974,8 @@ namespace NMP.Portal.Controllers
             try
             {
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
-                farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
+                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below :
+                farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
 
                 Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
 
@@ -1195,9 +1195,9 @@ namespace NMP.Portal.Controllers
                     farmData.CreatedByID = farm.CreatedByID;
                     farmData.CreatedOn = farm.CreatedOn;
                     farmData.CountryID = farm.CountryID;
-                    if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID))
+                    if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID))
                     {
-                        farmData.Country = Enum.GetName(typeof(NMP.Portal.Enums.FarmCountry), farm.CountryID);
+                        farmData.Country = Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID);
                     }
 
                     bool update = true;
@@ -1227,8 +1227,8 @@ namespace NMP.Portal.Controllers
             try
             {
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.below :
-                        farm.FieldsAbove300SeaLevel == (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Portal.Enums.AverageAltitude.above : 0;
+                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below :
+                        farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
 
                 Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
                 int farmId = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));

@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources;
+﻿@using NMP.Commons.Resources;
 @using System.Globalization
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 
 @{
     var heading="";
@@ -22,14 +22,14 @@
     bool needToShowIncorporationsBtn = true;
     @if (Model.ApplicationMethod != null)
     {
-        needToShowIncorporationsBtn = (Model.ApplicationMethod.Value == (int)NMP.Portal.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod.Value == (int)NMP.Portal.Enums.ApplicationMethod.ShallowInjection57cm) ? false : true;
+        needToShowIncorporationsBtn = (Model.ApplicationMethod.Value == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod.Value == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm) ? false : true;
     }
     bool needToShowIncorporationDelayBtn = true;
     if (Model.IncorporationMethod != null)
     {
-        needToShowIncorporationDelayBtn = (Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated ||
-        Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.ShallowInjection ||
-        Model.IncorporationMethod.Value == (int)NMP.Portal.Enums.IncorporationMethod.DeepInjection) ? false : true;
+        needToShowIncorporationDelayBtn = (Model.IncorporationMethod.Value == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ||
+        Model.IncorporationMethod.Value == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection ||
+        Model.IncorporationMethod.Value == (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection) ? false : true;
     }
     bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
 
@@ -45,7 +45,7 @@
             howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare); //  string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable);
             break;
     }
-    var manure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName;
+    var manure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName;
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -510,13 +510,13 @@
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                     {
-                        @if (!(Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
+                        @if (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
                         {
                             <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
+                                    @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @((Model.OtherMaterialName != null) ? Model.OtherMaterialName : Resource.lblNotSet)
@@ -524,7 +524,7 @@
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="OrganicManure">@Resource.lblChange
                                         <span class="govuk-visually-hidden">
-                                            @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
+                                            @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
                                         </span>
                                     </govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
@@ -707,7 +707,7 @@
                         </govuk-summary-list-row>
                     }
 
-                    @if (!(Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
+                    @if (!(Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
                     {
                         <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
@@ -730,9 +730,9 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-                    @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                     {
-                        @if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        @if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
                             @if (Model.DefaultNutrientValue == Resource.lblYes)
                             {
@@ -1170,7 +1170,7 @@
                             </govuk-summary-list-row-actions>
                         }
                     </govuk-summary-list-row>
-                    @if(Model.IncorporationMethod != (int)NMP.Portal.Enums.IncorporationMethod.NotIncorporated)
+                    @if(Model.IncorporationMethod != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
                     {
                         <govuk-summary-list-row class=@((!Model.IncorporationDelay.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>

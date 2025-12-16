@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.FieldViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = Resource.lblCropType;
     ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";

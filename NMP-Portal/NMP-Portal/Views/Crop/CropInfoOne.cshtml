@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     var heading = "";
     if (ViewBag.CropInfoOneQuestion != null)
@@ -9,17 +9,17 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
-    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    int LessThan60days = (int)NMP.Portal.Enums.PotatoCropInfo1.LessThan60days;
-    int GreaterThan120days = (int)NMP.Portal.Enums.PotatoCropInfo1.GreaterThan120days;
-    int PotatoVarietyGroup1 = (int)NMP.Portal.Enums.CropType.PotatoVarietyGroup1;
-    int PotatoVarietyGroup4 = (int)NMP.Portal.Enums.CropType.PotatoVarietyGroup4;
+    int PotatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
+    int LessThan60days = (int)NMP.Commons.Enums.PotatoCropInfo1.LessThan60days;
+    int GreaterThan120days = (int)NMP.Commons.Enums.PotatoCropInfo1.GreaterThan120days;
+    int PotatoVarietyGroup1 = (int)NMP.Commons.Enums.CropType.PotatoVarietyGroup1;
+    int PotatoVarietyGroup4 = (int)NMP.Commons.Enums.CropType.PotatoVarietyGroup4;
 }
 
 @section BeforeContent {
-    @if (Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields||
-        Model.YieldQuestion == (int)NMP.Portal.Enums.YieldQuestion.NoDoNotEnterAYield)
+    @if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields||
+        Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
     {
         <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"YieldQuestion")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }

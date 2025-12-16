@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Enums
-@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @using System.Globalization
 @model PlanViewModel
 @{
@@ -126,7 +126,7 @@
                                                 <th scope="col" class="govuk-table__header field-name">@Resource.lblPlantingDate</th>
                                                 <th scope="col" class="govuk-table__header field-name">@Resource.lblYieldPerHectare</th>
                                                 <th scope="col" class="govuk-table__header">
-                                                    @if (harvestYearPlan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                    @if (harvestYearPlan.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                                     {
                                                         @Resource.lblManagement
                                                     }
@@ -167,7 +167,7 @@
                                                             }
                                                         </td>
                                                         <td class="govuk-table__cell">
-                                                            @if (harvestYearPlan.CropTypeID == (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                            @if (harvestYearPlan.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                                             {
                                                                 @(string.IsNullOrWhiteSpace(field.Management) ? Resource.lblNotEntered : field.Management)
                                                             }

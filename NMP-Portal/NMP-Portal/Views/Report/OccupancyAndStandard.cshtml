@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{Resource.lblOccupancyAndNitrogenStandard}  {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 
@@ -166,7 +166,7 @@
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblNitrogenNStandard</th>
                             <td class="govuk-table__cell">
-                                @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich)
+                                @if (Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich)
                                 {
                                     @string.Format(Resource.lblKgPerPlacesPerYear, ViewBag.NitrogenStandard)
                                 }
@@ -181,7 +181,7 @@
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header">@Resource.lblPhosphateP2O5Standard</th>
                                 <td class="govuk-table__cell">
-                                    @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs)
+                                    @if (Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs)
                                     {
                                         @string.Format(Resource.lblKgPerPlacesPerYear, ViewBag.PhosphateStandard)
                                     }
@@ -207,9 +207,9 @@
                                 @Resource.lblThePhosphateP205StandardCanNotBeChanged
                             }
                         </govuk-radios-hint>
-                        <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.UseDefault)">@Resource.lblYesUseTheseValues</govuk-radios-item>
-                        <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeOccupancy)">@Resource.lblNoChangeTheOccupancyValue</govuk-radios-item>
-                        <govuk-radios-item value="@((int)NMP.Portal.Enums.OccupancyNitrogenOptions.ChangeNitrogen)">@Resource.lblNoChangeTheNitrogenNStandardValue</govuk-radios-item>
+                        <govuk-radios-item value="@((int)NMP.Commons.Enums.OccupancyNitrogenOptions.UseDefault)">@Resource.lblYesUseTheseValues</govuk-radios-item>
+                        <govuk-radios-item value="@((int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy)">@Resource.lblNoChangeTheOccupancyValue</govuk-radios-item>
+                        <govuk-radios-item value="@((int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen)">@Resource.lblNoChangeTheNitrogenNStandardValue</govuk-radios-item>
                     </govuk-radios-fieldset>
                 </govuk-radios>
 

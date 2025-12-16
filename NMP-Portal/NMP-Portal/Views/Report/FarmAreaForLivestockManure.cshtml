@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{Resource.lblFarmArea} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
 
@@ -156,7 +156,7 @@
                         <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
 
                     </govuk-input>
-                    @if (Model.Country != (int)NMP.Portal.Enums.FarmCountry.Wales)
+                    @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
                     {
                         <govuk-input asp-for=@Model.TotalAreaInNVZ type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label>

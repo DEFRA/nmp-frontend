@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
+using NMP.Commons.Models;
 using NMP.Portal.Security;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.ServiceResponses;
 using System;
 using System.Net;
 using System.Reflection;
