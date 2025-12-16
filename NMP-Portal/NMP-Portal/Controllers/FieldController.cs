@@ -1115,7 +1115,7 @@ namespace NMP.Portal.Controllers
                 List<CropGroupResponse> cropGroups  = await _fieldService.FetchCropGroups();
                 if (cropGroups.Count > 0)
                 {
-                    List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
+                    List<CropGroupResponse> cropGroupArables = cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
                     ViewBag.CropGroupList = cropGroupArables;
                 }
                 return View(field);
@@ -1123,7 +1123,7 @@ namespace NMP.Portal.Controllers
 
             if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("FieldData"))
             {
-                FieldViewModel fieldData = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+                FieldViewModel fieldData = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldData");
                 if (fieldData.CropGroupId != field.CropGroupId)
                 {
                     field.CropType = string.Empty;
@@ -1134,9 +1134,9 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("FieldData", field);
 
+            field.CropGroup = await _fieldService.FetchCropGroupById(field.CropGroupId.Value);
+            HttpContext.Session.SetObjectAsJson("FieldData", field);
             return RedirectToAction("CropTypes");
         }
 
