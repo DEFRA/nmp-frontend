@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
-using NMP.Portal.Resources;
+using NMP.Commons.Resources;
 using NMP.Portal.Services;
 
 namespace NMP.Portal.Controllers;

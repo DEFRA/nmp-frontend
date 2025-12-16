@@ -1,5 +1,4 @@
 ﻿using NMP.Commons.Enums;
-using NMP.Portal.Resources;
 
 namespace NMP.Portal.Helpers
 {
