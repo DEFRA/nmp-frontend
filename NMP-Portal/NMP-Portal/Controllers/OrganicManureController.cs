@@ -8843,10 +8843,11 @@ namespace NMP.Portal.Controllers
 
             try
             {
-                if (string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0)
+                if (string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0
+     && (model.IsManureTypeChange || model.IsAnyChangeInField || model.IsFieldGroupChange))
                 {
+                    model.DoubleCropCurrentCounter = 0;
                     model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
-
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson("OrganicManure", model);
                 }
                 else if (!string.IsNullOrWhiteSpace(q) && (model.DoubleCrop != null && model.DoubleCrop.Count > 0))
@@ -9792,7 +9793,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                if (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0)))
+                if (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsManureTypeChange || model.IsAnyChangeInField || model.IsFieldGroupChange)))
                 {
                     model.DefoliationCurrentCounter = 0;
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());

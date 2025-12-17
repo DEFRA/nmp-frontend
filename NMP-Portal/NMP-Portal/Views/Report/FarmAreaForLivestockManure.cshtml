@@ -99,7 +99,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"/>
 
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber" value="@Model.IsAnyLivestockNumber.ToString().ToLower()" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"/>

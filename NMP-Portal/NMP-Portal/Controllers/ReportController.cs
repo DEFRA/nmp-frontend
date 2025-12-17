@@ -2062,7 +2062,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgDerogationForYearMustBeCompleted, model.Year));
                 }
-                if (model.TotalFarmArea == null || model.TotalAreaInNVZ == null)
+                if (model.TotalFarmArea == null || (model.Country == (int)NMP.Commons.Enums.FarmCountry.England && model.TotalAreaInNVZ == null))
                 {
                     ModelState.AddModelError(string.Empty, string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, model.Year));
                 }
@@ -2231,6 +2231,13 @@ namespace NMP.Portal.Controllers
                     nutrientsLoadingManures = nutrientsLoadingManures.Where(x => x.ManureDate.Value.Date.Year == model.Year).ToList();
                     ViewBag.NutrientLivestockData = nutrientsLoadingManures;
                 }
+
+                if(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)
+                {
+                    model.TotalAreaInNVZ = model.TotalFarmArea;
+                }
+
+
                 var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
                 {
                     FarmID = model.FarmId,
