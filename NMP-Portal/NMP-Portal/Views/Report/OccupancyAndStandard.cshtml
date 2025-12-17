@@ -199,7 +199,7 @@
                 <govuk-radios asp-for="@Model.OccupancyAndNitrogenOptions">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false">
-                            @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName)
+                            @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName.ToLower())
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>
                             @if (Model.IsGrasslandDerogation == true)

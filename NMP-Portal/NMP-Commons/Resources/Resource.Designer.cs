@@ -745,7 +745,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About derogation.
+        ///   Looks up a localized string similar to About grassland derogation.
         /// </summary>
         public static string lblAboutDerogation {
             get {
@@ -6811,7 +6811,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you have harvested most of your {0} crops you can set {1} as your last harvest year..
+        ///   Looks up a localized string similar to If you have harvested your crop for {0}, then use {1} as your last harvest year..
         /// </summary>
         public static string lblIfYouHaveHarvestedMostOfYourCrops {
             get {
@@ -15940,7 +15940,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is your last harvest year for {0}?.
+        ///   Looks up a localized string similar to What is the last harvest year for {0}?.
         /// </summary>
         public static string lblWhatIsYourLastHarvestYear {
             get {
