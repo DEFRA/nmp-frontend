@@ -145,15 +145,15 @@
 
             <h1 class="govuk-heading-l">@string.Format(Resource.lblLastHarvestYearForFieldName, Model.Name)</h1>
             <p class="govuk-body">@Resource.lblToCreatePlansAndGiveRecommendation</p>
-            <p class="govuk-body">@string.Format(Resource.lblIfYouHaveHarvestedMostOfYourCrops, year, year)</p>
+            <p class="govuk-body">@string.Format(Resource.lblIfYouHaveHarvestedMostOfYourCrops, ViewBag.LastHarvestYear, ViewBag.LastHarvestYear)</p>
 
             <govuk-radios class="govuk-radios" asp-for="@Model.LastHarvestYear">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>
                         @string.Format(Resource.lblWhatIsYourLastHarvestYear,Model.Name)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@ViewBag.SecondLastHarvestYear">@ViewBag.SecondLastHarvestYear</govuk-radios-item>
                     <govuk-radios-item value="@ViewBag.LastHarvestYear">@ViewBag.LastHarvestYear</govuk-radios-item>
+                    <govuk-radios-item value="@ViewBag.SecondLastHarvestYear">@ViewBag.SecondLastHarvestYear</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">

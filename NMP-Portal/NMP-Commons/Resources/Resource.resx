@@ -1944,9 +1944,6 @@ cubic metres per hectare  not set</value>
   <data name="MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing" xml:space="preserve">
     <value>Enter at least one value before continuing</value>
   </data>
-  <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
-    <value>If you have harvested most of your {0} crops you can set {1} as your last harvest year.</value>
-  </data>
   <data name="lblLastHarvestYearForFieldName" xml:space="preserve">
     <value>Last harvest year for {0}</value>
   </data>
@@ -1954,7 +1951,7 @@ cubic metres per hectare  not set</value>
     <value>To create plans and give recommendations we need information about your last harvest year.</value>
   </data>
   <data name="lblWhatIsYourLastHarvestYear" xml:space="preserve">
-    <value>What is your last harvest year for {0}?</value>
+    <value>What is the last harvest year for {0}?</value>
   </data>
   <data name="MsgSelectAHarvestYearBeforeContinuing" xml:space="preserve">
     <value>Please select a harvest year before continuing</value>
@@ -4792,7 +4789,7 @@ cubic metres per hectare  not set</value>
     <value>Which year would you like to create a Livestock manure nitrogen (N) farm limit report for?</value>
   </data>
   <data name="lblAboutDerogation" xml:space="preserve">
-    <value>About derogation</value>
+    <value>About grassland derogation</value>
   </data>
   <data name="lblGrasslandDerogationsForLivestockManureInNitrateVulnerableZone" xml:space="preserve">
     <value>Grassland derogations for livestock manure in nitrate vulnerable zones</value>
@@ -7048,5 +7045,8 @@ livestock manure.</value>
   </data>
   <data name="MsgForIfFieldorPlanAreNotCreated" xml:space="preserve">
     <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
+  </data>
+  <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
+    <value>If you have harvested your crop for {0}, then use {1} as your last harvest year.</value>
   </data>
 </root>

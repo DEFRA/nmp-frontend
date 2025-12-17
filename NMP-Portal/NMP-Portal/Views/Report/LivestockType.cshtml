@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
@@ -138,10 +138,10 @@
                 <govuk-radios class="govuk-radios" asp-for="@Model.LivestockTypeId">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName)
+                            @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>
-                            @string.Format(Resource.SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater, Model.LivestockGroupName)
+                            @string.Format(Resource.SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater, Model.LivestockGroupName.ToLower())
                         </govuk-radios-hint>
                         @if (ViewBag.LivestockTypes != null && ViewBag.LivestockTypes.Count > 0)
                         {
