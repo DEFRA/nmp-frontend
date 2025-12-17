@@ -5070,14 +5070,14 @@ cubic metres per hectare  not set</value>
   <data name="lblDidYouHaveAnyLivestockOn" xml:space="preserve">
     <value>Did you have any livestock on {0} in {1}?</value>
   </data>
-  <data name="lblIncludeCattleSheepPigsGoats" xml:space="preserve">
-    <value>Include cattle, sheep, goats, deer, horses, pigs and poultry.</value>
+  <data name="lblIncludeCattleSheepPigsPoultryGoats" xml:space="preserve">
+    <value>Include cattle, sheep, pigs, poultry, goats, deer and horses.</value>
   </data>
   <data name="lblIsAnyLivestock" xml:space="preserve">
     <value>Is any livestock</value>
   </data>
   <data name="lblWhatTypeOfLivestockWouldYouLikeToAddFor" xml:space="preserve">
-    <value>What type of Livestock would you like to add for {0}?</value>
+    <value>What type of livestock would you like to add for {0}?</value>
   </data>
   <data name="lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial" xml:space="preserve">
     <value>Do you want to add an import or an export organic material?</value>
@@ -5140,7 +5140,7 @@ cubic metres per hectare  not set</value>
     <value>Number in {0} {1}?</value>
   </data>
   <data name="lblMonthlyTotalsForThis" xml:space="preserve">
-    <value>Monthly totals for {0} in {1}</value>
+    <value>Monthly totals for this {0} type in {1}</value>
   </data>
   <data name="lblDeletLivestockImportExportContentOne" xml:space="preserve">
     <value>This will remove all the data about this import. You will not be able to get it back.</value>
@@ -5221,7 +5221,7 @@ cubic metres per hectare  not set</value>
     <value>Add a livestock type</value>
   </data>
   <data name="lblAddAnotherLivestock" xml:space="preserve">
-    <value>Add another livestock category</value>
+    <value>Add another livestock type</value>
   </data>
   <data name="lblAverageForTheYear" xml:space="preserve">
     <value>Average number for the year</value>
@@ -7048,5 +7048,8 @@ livestock manure.</value>
   </data>
   <data name="MsgForIfFieldorPlanAreNotCreated" xml:space="preserve">
     <value>More information is needed to get a report. You need to add your field and crop information, and any organic material or inorganic fertiliser applied to them.</value>
+  </data>
+  <data name="lblSelectOneOptionYouCanAddMoreLivestock" xml:space="preserve">
+    <value>Select one option. You can add more livestock types later.</value>
   </data>
 </root>
