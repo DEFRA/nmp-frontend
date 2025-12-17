@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $" {string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    ViewData["Title"] = $" {string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory?.ToLower(), Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 
 }
 
@@ -133,8 +133,8 @@
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.LivestockNumberQuestion">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory, Model.Year)                            
-                            
+                            @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategory?.ToLower(), Model.Year)
+
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>
                             <p class="govuk-body">

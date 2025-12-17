@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    ViewData["Title"] = $"{string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 }
 
 @section BeforeContent {
@@ -131,7 +131,7 @@
 
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory, Model.Year)
+                        @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)
                     </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                     <p class="govuk-body">@string.Format(Resource.lblNitrogenStandard, Model.NitrogenStandard)</p>
@@ -141,7 +141,7 @@
                     }
                     <govuk-input asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
-                            @string.Format(Resource.lblWhatIsTheAverageNumberOfSuffix, ViewBag.LivestockCategory, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
+                            @string.Format(Resource.lblWhatIsTheAverageNumberOfSuffix, ViewBag.LivestockCategory?.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory?.ToLower())</span>@Resource.lblQuestionMark
                         </govuk-input-label>
                         <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
                     </govuk-input>
