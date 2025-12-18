@@ -1,6 +1,6 @@
-﻿using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
-using NMP.Portal.ViewModels;
+﻿using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Services
 {

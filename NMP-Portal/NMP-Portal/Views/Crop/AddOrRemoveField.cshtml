@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     ViewData["Title"] = $"{Resource.lblAddingOrRemovingFieldsFromACropGroup} {Resource.lblHyphen} {Resource.lblUpdatePlan}";
 
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {

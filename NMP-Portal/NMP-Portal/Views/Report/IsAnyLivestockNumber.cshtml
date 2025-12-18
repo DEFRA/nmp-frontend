@@ -1,9 +1,9 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var action = "";
     if (Model.IsLivestockCheckAnswer)
     {
@@ -156,7 +156,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-hint>@Resource.lblIncludeCattleSheepPigsGoats <br /> <br /> @Resource.lblSelectOneOption</govuk-radios-hint>
+                        <govuk-radios-hint>@Resource.lblIncludeCattleSheepPigsPoultryGoats <br /> <br /> @Resource.lblSelectOneOption</govuk-radios-hint>
                         <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                         <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
                     </govuk-radios-fieldset>

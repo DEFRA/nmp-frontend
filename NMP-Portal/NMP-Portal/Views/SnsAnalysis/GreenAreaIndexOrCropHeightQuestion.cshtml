@@ -1,9 +1,9 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.SnsAnalysisViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.SnsAnalysisViewModel
 @{
     ViewData["Title"] = $"{Resource.lblDoYouWantToEnterGAIOrCropHeight} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
-    var greenAreaIndex = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI;
-    var cropHeight = (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight;
+    var greenAreaIndex = (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.GAI;
+    var cropHeight = (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CalculateNitrogenInCurrentCropQuestion")" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>

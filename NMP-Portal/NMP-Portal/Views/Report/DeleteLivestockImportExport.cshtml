@@ -1,13 +1,13 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @model ReportViewModel
 @{
     string title = string.Format(Resource.lblRemoveAnOrganicMaterial,
-                                Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
+                                Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
                                 Resource.lblExport.ToLower());
     ViewData["Title"] = $"{title} {Resource.lblHyphen}  {Resource.lblUpdate} {Resource.lblImportsExportsOfLivestockManure}";
-    var yesRemove = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var noRemove = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yesRemove = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var noRemove = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @if (TempData["DeleteLivestockImportExportError"] != null)
@@ -113,7 +113,7 @@
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblRemoveAnOrganicMaterial,
-                        Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
+                        Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
                         Resource.lblExport.ToLower())
                 </govuk-fieldset-legend>
                 <p class="govuk-body">@Resource.lblDeletLivestockImportExportContentOne</p>

@@ -1,9 +1,9 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     var suffixUnit = "";
     string heading = string.Empty;
-    @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
     {
         heading = string.Format(Resource.lblEnterTheValuesForYour, Model.OtherMaterialName);
     }
@@ -32,9 +32,9 @@
     }
     else
     {
-        if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+        if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
         {
-            if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+            if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
             {
                 backAction = "LivestockDefaultNutrientValue";
             }

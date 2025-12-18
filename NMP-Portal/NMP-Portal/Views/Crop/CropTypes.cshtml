@@ -1,8 +1,8 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
-    int otherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    int otherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
+    int PotatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
     var heading = "";
     if (Model.CropGroupId == otherGroupId)
     {

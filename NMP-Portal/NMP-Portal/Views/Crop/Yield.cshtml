@@ -1,8 +1,8 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
-    int EnterASingleFigureForAllTheseFields = (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     var backAction = "";
     var pageHeading = "";
     @if (ViewBag.IsYieldOptional != null)
@@ -25,7 +25,7 @@
     {
         backAction = "Yield";
     }
-    else if (Model.SowingDateQuestion != (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
+    else if (Model.SowingDateQuestion != (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
     {
         backAction = "SowingDate";
     }

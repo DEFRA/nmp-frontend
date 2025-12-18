@@ -1,6 +1,6 @@
-﻿﻿@using NMP.Portal.Resources;
+﻿﻿@using NMP.Commons.Resources;
 @using System.Globalization
-@model NMP.Portal.ViewModels.SnsAnalysisViewModel
+@model NMP.Commons.ViewModels.SnsAnalysisViewModel
 
 @{
     ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
@@ -99,7 +99,7 @@
 
                     @if (Model.SnsCategoryId != null)
                     {
-                        @if (!(Model.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Vegetables))
+                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables))
                         {
                             <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt030CM.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -164,7 +164,7 @@
                             </govuk-summary-list-row>
 
                         }
-                        @if (Model.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals || Model.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                        @if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals || Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
                         {
                             <govuk-summary-list-row class=@((!Model.IsCalculateNitrogen.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -180,7 +180,7 @@
 
                             @if (Model.IsCalculateNitrogen == true)
                             {
-                                if (Model.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterCereals)
+                                if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals)
                                 {
                                     <govuk-summary-list-row class=@((!Model.NumberOfShoots.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
@@ -198,27 +198,27 @@
                                             @Resource.lblWhenWasThisMeasured
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.SeasonId != 0 ? (Model.SeasonId == (int)NMP.Portal.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring) : Resource.lblNotSet)
+                                            @(Model.SeasonId != 0 ? (Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring) : Resource.lblNotSet)
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                 }
-                                if (Model.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.WinterOilseedRape)
+                                if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
                                 {
                                     <govuk-summary-list-row class=@((Model.GreenAreaIndexOrCropHeight==0)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
                                             @Resource.lblDoYouWantToEnterGAIOrCropHeight
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.GreenAreaIndexOrCropHeight != 0 ? (Model.GreenAreaIndexOrCropHeight == (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI ? Resource.lblGreenAreaIndex : Resource.lblCropHeight) : Resource.lblNotSet)
+                                            @(Model.GreenAreaIndexOrCropHeight != 0 ? (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.GAI ? Resource.lblGreenAreaIndex : Resource.lblCropHeight) : Resource.lblNotSet)
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="GreenAreaIndexOrCropHeightQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToEnterGAIOrCropHeight</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
-                                    if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.CropHeight)
+                                    if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight)
                                     {
                                         <govuk-summary-list-row class=@((!Model.CropHeight.HasValue)?"govuk-error-message":"")>
                                             <govuk-summary-list-row-key>
@@ -236,14 +236,14 @@
                                                 @Resource.lblWhenWasThisMeasured
                                             </govuk-summary-list-row-key>
                                             <govuk-summary-list-row-value>
-                                                @(Model.SeasonId != 0 ? (Model.SeasonId == (int)NMP.Portal.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring) : Resource.lblNotSet)
+                                                @(Model.SeasonId != 0 ? (Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring) : Resource.lblNotSet)
                                             </govuk-summary-list-row-value>
                                             <govuk-summary-list-row-actions>
                                                 <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
                                             </govuk-summary-list-row-actions>
                                         </govuk-summary-list-row>
                                     }
-                                    if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Portal.Enums.GreenAreaIndexOrCropHeight.GAI)
+                                    if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.GAI)
                                     {
                                         <govuk-summary-list-row class=@((!Model.GreenAreaIndex.HasValue)?"govuk-error-message":"")>
                                             <govuk-summary-list-row-key>
@@ -261,7 +261,7 @@
                                 }
                             }
                         }
-                        @if (!(Model.SnsCategoryId == (int)NMP.Portal.Enums.SNSCategories.Vegetables))
+                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables))
                         {
                             <govuk-summary-list-row class=@((!Model.IsEstimateOfNitrogenMineralisation.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>

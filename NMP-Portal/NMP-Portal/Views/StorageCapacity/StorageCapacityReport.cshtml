@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.StorageCapacityViewModel
+@model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{Resource.lblHowtosaveyourplanasaPDF} {Resource.lblHyphen} {title}";
@@ -123,7 +123,7 @@
                             <td class="govuk-table__cell">
                                 @(slurryStorage.SurfaceArea != null ? string.Format("{0:N0} {1}", slurryStorage.SurfaceArea, Resource.lblMetresSquared) : Resource.lblHyphen)
                             </td>
-                            <td class="govuk-table__cell">@(slurryStorage.IsCovered != null ? slurryStorage.IsCovered == Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True) ? Resource.lblYes : Resource.lblNo : Resource.lblHyphen)</td>
+                            <td class="govuk-table__cell">@(slurryStorage.IsCovered != null ? slurryStorage.IsCovered == Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True) ? Resource.lblYes : Resource.lblNo : Resource.lblHyphen)</td>
                         </tr>
 
                     }
@@ -180,7 +180,7 @@
                             <td class="govuk-table__cell">
                                 @(dirtyWaterStore.SurfaceArea != null ? string.Format("{0:N0} {1}", dirtyWaterStore.SurfaceArea, Resource.lblMetresSquared) : Resource.lblHyphen)
                             </td>
-                            <td class="govuk-table__cell">@(dirtyWaterStore.IsCovered != null ? dirtyWaterStore.IsCovered == Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True) ? Resource.lblYes : Resource.lblNo : Resource.lblHyphen)</td>
+                            <td class="govuk-table__cell">@(dirtyWaterStore.IsCovered != null ? dirtyWaterStore.IsCovered == Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True) ? Resource.lblYes : Resource.lblNo : Resource.lblHyphen)</td>
                         </tr>
 
                     }

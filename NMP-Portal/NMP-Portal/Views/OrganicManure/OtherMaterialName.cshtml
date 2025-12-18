@@ -1,8 +1,8 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {title}";
     
     int trueWarningCount = 0;
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
@@ -219,7 +219,7 @@
                 }
             </div>
                 <govuk-input asp-for="@Model.OtherMaterialName">
-                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
+                    <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
                 </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="OtherMaterialName">
                 @Resource.lblContinue

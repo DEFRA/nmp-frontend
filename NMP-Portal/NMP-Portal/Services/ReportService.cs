@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Portal.Security;
-using NMP.Portal.ServiceResponses;
-using NMP.Portal.ViewModels;
+using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json.Nodes;

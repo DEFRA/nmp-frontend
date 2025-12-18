@@ -1,19 +1,19 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
-    var YesIHaveASingleDateForAllTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
-    var NoIWillEnterTheDateLater = (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
-    var YesIHaveDifferentDatesForEachOfTheseFields = (int)NMP.Portal.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields;
-    // int PotatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    var YesIHaveASingleDateForAllTheseFields = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
+    var NoIWillEnterTheDateLater = (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
+    var YesIHaveDifferentDatesForEachOfTheseFields = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields;
+    // int PotatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     var heading = "";
-    @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+    @if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
     {
-        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
+        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
     }
     else
     {
-        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
+        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
     }
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
@@ -24,11 +24,11 @@
     {
         action = "CheckAnswer";
     }
-    else if (Model.CurrentSward == (int)NMP.Portal.Enums.CurrentSward.NewSward)
+    else if (Model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward)
     {
         action = "GrassSeason";
     }
-    else if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+    else if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
     {
         action = "CurrentSward";
     }
@@ -161,7 +161,7 @@
             <govuk-radios asp-for="@Model.SowingDateQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @if (Model.CropGroupId != (int)NMP.Portal.Enums.CropGroup.Grass)
+                        @if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
                         {
                             @(string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType))
                         }

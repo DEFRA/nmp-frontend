@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
 
     ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var action = "IsAnyLivestockNumber";
     if (Model.IsLivestockCheckAnswer)
     {
@@ -155,6 +155,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
                         </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@Resource.lblSelectOneOptionYouCanAddMoreLivestock</govuk-radios-hint>
                         @if (ViewBag.LivestockGroups != null && ViewBag.LivestockGroups.Count > 0)
                         {
                             foreach (var livestockGroup in ViewBag.LivestockGroups)

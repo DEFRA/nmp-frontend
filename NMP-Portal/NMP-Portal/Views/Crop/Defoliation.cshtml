@@ -1,30 +1,30 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
 
-    var bachAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
+    var bachAction = (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SwardType";
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     int potentialCutId = 0;
 
     var pageHeading = "";
-    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazedOnly)
+    if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly)
     {
         pageHeading = string.Format(Resource.lblHowManyGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
     }
-    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForSilageOnly)
+    if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
     {
         pageHeading = string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
     }
-    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.CutForHayOnly)
+    if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly)
     {
         pageHeading = string.Format(Resource.lblHowManyCutsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
     }
-    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndSilage)
+    if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage)
     {
         pageHeading = string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
     }
-    if (Model.SwardManagementId == (int)NMP.Portal.Enums.SwardManagement.GrazingAndHay)
+    if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay)
     {
         pageHeading = string.Format(Resource.lblHowManyCutsAndGrazingsWillYouHaveInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields));
     }

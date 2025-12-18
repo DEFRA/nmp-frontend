@@ -1,8 +1,8 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Resource.lblAdd;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {action}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {action}";
 
 }
 @section BeforeContent {
@@ -120,7 +120,7 @@
                 }
             </div>
             <govuk-input asp-for="@Model.OtherMaterialName">
-                <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
             </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="OtherMaterialName">
                 @Resource.lblContinue

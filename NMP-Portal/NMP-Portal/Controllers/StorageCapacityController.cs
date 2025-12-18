@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
-using NMP.Portal.Enums;
+using NMP.Commons.Enums;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
+using NMP.Commons.ViewModels;
 using System;
 using System.Diagnostics.Metrics;
 using System.Linq;
@@ -17,7 +17,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using Error = NMP.Portal.ServiceResponses.Error;
+using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
@@ -148,13 +148,13 @@ namespace NMP.Portal.Controllers
                             if (materialStateList != null && materialStateList.Count > 0)
                             {
                                 if (storeCapacityList
-                                .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage))
+                                .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage))
                                 {
                                     ViewBag.DirtyWaterList = storeCapacityList
-                                    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)
+                                    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
                                     .Select(x => new
                                     {
-                                        MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)?.Name,
+                                        MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)?.Name,
                                         x.StoreName,
                                         x.Length,
                                         x.Width,
@@ -175,13 +175,13 @@ namespace NMP.Portal.Controllers
                                 }
 
                                 if (storeCapacityList
-                                .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage))
+                                .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage))
                                 {
                                     ViewBag.SlurryStorageList = storeCapacityList
-                                .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                                .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                                 .Select(x => new
                                 {
-                                    MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)?.Name,
+                                    MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)?.Name,
                                     x.StoreName,
                                     x.Length,
                                     x.Width,
@@ -203,13 +203,13 @@ namespace NMP.Portal.Controllers
 
 
                                 if (storeCapacityList
-                              .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage))
+                              .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage))
                                 {
                                     ViewBag.SolidManureStorageList = storeCapacityList
-                                .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                                .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                                 .Select(x => new
                                 {
-                                    MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)?.Name,
+                                    MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)?.Name,
                                     x.StoreName,
                                     x.Length,
                                     x.Width,
@@ -230,13 +230,13 @@ namespace NMP.Portal.Controllers
                                 }
 
                                 //ViewBag.TotalLiquidCapacity = storeCapacityList
-                                //    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume);
+                                //    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume);
 
                                 //ViewBag.TotalSolidCapacity = storeCapacityList
-                                //    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume);
+                                //    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume);
 
                                 //ViewBag.TotalSolidWeightCapacity = storeCapacityList
-                                //    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight);
+                                //    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight);
 
                                 //ViewBag.TotalSurfaceCapacity = storeCapacityList
                                 //    .Where(x => x.Year == model.Year).Sum(x => x.SurfaceArea);
@@ -248,20 +248,20 @@ namespace NMP.Portal.Controllers
                     }
 
                     ViewBag.TotalLiquidCapacity = storeCapacityList.Count>0? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume):0;
+                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume):0;
 
                     ViewBag.TotalSolidCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume):0;
+                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume):0;
 
                     ViewBag.TotalSolidWeightCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight):0;
+                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight):0;
 
                     ViewBag.TotalSurfaceCapacity = storeCapacityList.Count > 0 ? storeCapacityList
                         .Where(x => x.Year == model.Year).Sum(x => x.SurfaceArea):0;
 
-                    ViewBag.EncryptedSolidStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Portal.Enums.MaterialState.SolidManureStorage));
-                    ViewBag.EncryptedSlurryStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Portal.Enums.MaterialState.SlurryStorage));
-                    ViewBag.EncryptedDirtyWaterStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage));
+                    ViewBag.EncryptedSolidStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SolidManureStorage));
+                    ViewBag.EncryptedSlurryStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SlurryStorage));
+                    ViewBag.EncryptedDirtyWaterStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage));
                     (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
                     if (string.IsNullOrWhiteSpace(u))
                     {
@@ -484,9 +484,9 @@ namespace NMP.Portal.Controllers
                     }
                     return View(model);
                 }
-                var dirtyWater = (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage;
-                var slurry = (int)NMP.Portal.Enums.MaterialState.SlurryStorage;
-                var solid = (int)NMP.Portal.Enums.MaterialState.SolidManureStorage;
+                var dirtyWater = (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage;
+                var slurry = (int)NMP.Commons.Enums.MaterialState.SlurryStorage;
+                var solid = (int)NMP.Commons.Enums.MaterialState.SolidManureStorage;
 
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
@@ -676,8 +676,8 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("FarmList", "Farm");
                 }
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage ||
-                    model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
+                    model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                 {
                     (List<StorageTypeResponse> storageTypes, Error error) = await _storageCapacityService.FetchStorageTypes();
                     if (error == null)
@@ -729,8 +729,8 @@ namespace NMP.Portal.Controllers
                 Error error = null;
                 if (!ModelState.IsValid)
                 {
-                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage ||
-                   model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
+                   model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                     {
                         (List<StorageTypeResponse> storageTypes, error) = await _storageCapacityService.FetchStorageTypes();
                         if (error == null)
@@ -767,8 +767,8 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage ||
-                   model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
+                   model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                 {
                     (StorageTypeResponse storageTypeResponse, error) = await _storageCapacityService.FetchStorageTypeById(model.StorageTypeID.Value);
                     if (error == null)
@@ -786,7 +786,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
-                if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                 {
                     model.Length = null;
                     model.Width = null;
@@ -846,9 +846,9 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : Dimension() post action called");
             try
             {
-                if (model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                 {
-                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         if (model.Length == null)
                         {
@@ -865,7 +865,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank || model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank || model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                         {
                             if (model.Length == null)
                             {
@@ -884,7 +884,7 @@ namespace NMP.Portal.Controllers
                                 ModelState.AddModelError("IsCovered", string.Format(Resource.MsgSelectIfYourStorageIsCovered, model.StoreName));
                             }
                         }
-                        if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                        if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
                         {
                             if (model.IsCircumference == null)
                             {
@@ -937,7 +937,7 @@ namespace NMP.Portal.Controllers
 
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
                     if (model.IsCheckAnswer)
                     {
@@ -948,9 +948,9 @@ namespace NMP.Portal.Controllers
                     }
                     return RedirectToAction("WeightCapacity");
                 }
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage || model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                 {
-                    if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                    if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                     {
                         if (model.IsCheckAnswer)
                         {
@@ -1285,7 +1285,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("FarmList", "Farm");
                     }
 
-                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         model.CapacityVolume = model.Length * model.Width * model.Depth;
                         model.SurfaceArea = model.Length * model.Width;
@@ -1351,8 +1351,8 @@ namespace NMP.Portal.Controllers
                         model.MaterialStateName = materialState.Name;
                     }
 
-                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage ||
-                   model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
+                   model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                     {
                         (StorageTypeResponse storageTypeResponse, error) = await _storageCapacityService.FetchStorageTypeById(model.StorageTypeID.Value);
                         if (error == null)
@@ -1360,7 +1360,7 @@ namespace NMP.Portal.Controllers
                             model.StorageTypeName = storageTypeResponse.Name;
                             model.FreeBoardHeight = storageTypeResponse.FreeBoardHeight;
                         }
-                        if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                        if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                         {
                             model.StorageBagCapacity = storeCapacity.CapacityVolume;
                         }
@@ -1379,14 +1379,14 @@ namespace NMP.Portal.Controllers
                     model.EncryptedStoreCapacityId = id;
 
                 }
-                if (model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                 {
                     model.IsSlopeEdge = null;
                     model.BankSlopeAngleID = null;
                     model.BankSlopeAngleName = null;
                     model.Slope = null;
                 }
-                if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                 {
                     model.IsSlopeEdge = model.BankSlopeAngleID != null ? true : false;
                     if (model.BankSlopeAngleID != null)
@@ -1400,7 +1400,7 @@ namespace NMP.Portal.Controllers
                     }
 
                 }
-                else if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                else if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                 {
                     model.SurfaceArea = null;
                     model.Length = null;
@@ -1412,7 +1412,7 @@ namespace NMP.Portal.Controllers
                     model.IsCovered = null;
 
                 }
-                else if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
                     model.IsCovered = null;
                 }
@@ -1472,9 +1472,9 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("StorageTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-                if (model.StorageTypeID != (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                 {
-                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         if (model.Length == null)
                         {
@@ -1491,7 +1491,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank || model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                        if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank || model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                         {
                             if (model.Length == null)
                             {
@@ -1510,7 +1510,7 @@ namespace NMP.Portal.Controllers
                                 ModelState.AddModelError("IsCovered", string.Format(Resource.MsgIsCoveredNotSet, model.StoreName));
                             }
                         }
-                        if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.CircularTank)
+                        if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
                         {
                             if (model.IsCircumference == null)
                             {
@@ -1550,16 +1550,16 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage && model.CapacityWeight == null)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage && model.CapacityWeight == null)
                 {
                     ModelState.AddModelError("CapacityWeight", string.Format(Resource.MsgWhatIsTheWeightCapacityOfNotSet, model.StoreName));
                 }
 
-                if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag && model.StorageBagCapacity == null)
+                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag && model.StorageBagCapacity == null)
                 {
                     ModelState.AddModelError("StorageBagCapacity", string.Format(Resource.MsgWhatIsTheTotalCapacityOfNotSet, model.StoreName));
                 }
-                if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                 {
                     if (model.IsSlopeEdge == null)
                     {
@@ -1580,7 +1580,7 @@ namespace NMP.Portal.Controllers
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
 
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
                     model.SolidManureTypeID = model.StorageTypeID;
                     model.StorageTypeID = null;
@@ -1632,15 +1632,15 @@ namespace NMP.Portal.Controllers
                     string successMsg = string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Resource.lblYouHaveAddedManureStorage : Resource.lblYouHaveUpdatedManureStorage;
 
                     var tabId = "";
-                    if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                     {
                         tabId = "slurryStorageList";
                     }
-                    else if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)
+                    else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
                     {
                         tabId = "dirtyWaterList";
                     }
-                    else if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                    else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         tabId = "solidManureStorageList";
                     }
@@ -1686,17 +1686,17 @@ namespace NMP.Portal.Controllers
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
             if (string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId))
             {
-                if (model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
                     return RedirectToAction("WeightCapacity");
                 }
                 else
                 {
-                    if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.StorageBag)
+                    if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                     {
                         return RedirectToAction("StorageBagCapacity");
                     }
-                    else if (model.StorageTypeID == (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon)
+                    else if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                     {
                         if (model.IsSlopeEdge == false)
                         {
@@ -1747,11 +1747,11 @@ namespace NMP.Portal.Controllers
 
             switch (typeId)
             {
-                case (int)NMP.Portal.Enums.StorageTypes.SquareOrRectangularTank:
+                case (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank:
                     capacity = l * w * effDepth;
                     surfaceArea = l * w;
                     break;
-                case (int)NMP.Portal.Enums.StorageTypes.CircularTank:
+                case (int)NMP.Commons.Enums.StorageTypes.CircularTank:
                     if (model.IsCircumference == true)
                     {
                         diameter = circumference / (decimal)Math.PI;
@@ -1760,7 +1760,7 @@ namespace NMP.Portal.Controllers
                     capacity = (decimal)Math.PI * r * r * effDepth;
                     surfaceArea = (decimal)Math.PI * r * r;
                     break;
-                case (int)NMP.Portal.Enums.StorageTypes.EarthBankedLagoon:
+                case (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon:
                     if (model.IsSlopeEdge == false)
                     {
                         capacity = l * w * effDepth;
@@ -1777,7 +1777,7 @@ namespace NMP.Portal.Controllers
                     }
 
                     break;
-                case (int)NMP.Portal.Enums.StorageTypes.StorageBag:
+                case (int)NMP.Commons.Enums.StorageTypes.StorageBag:
                     capacity = model.StorageBagCapacity ?? 0m;
                     surfaceArea = null;
                     break;
@@ -1814,17 +1814,17 @@ namespace NMP.Portal.Controllers
                             model.EncryptedFarmID = q;
                             model.EncryptedHarvestYear = y;
 
-                            List<StoreCapacityResponse> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage).ToList();
+                            List<StoreCapacityResponse> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).ToList();
                             if (solidStoreCapacities.Count > 0)
                             {
                                 ViewBag.SolidStoreCapacities = solidStoreCapacities;
                             }
-                            List<StoreCapacityResponse> dirtyWaterStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage).ToList();
+                            List<StoreCapacityResponse> dirtyWaterStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage).ToList();
                             if (dirtyWaterStoreCapacities.Count > 0)
                             {
                                 ViewBag.DirtyWaterStoreCapacities = dirtyWaterStoreCapacities;
                             }
-                            List<StoreCapacityResponse> slurryStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage).ToList();
+                            List<StoreCapacityResponse> slurryStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).ToList();
                             if (slurryStoreCapacities.Count > 0)
                             {
                                 ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
@@ -2242,11 +2242,11 @@ namespace NMP.Portal.Controllers
                     var tabId = "slurryStorageList";
                     if (storageCapacityList != null && storageCapacityList.Select(x => x.MaterialStateID).Distinct().Count() == 1)
                     {
-                        if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage)
+                        if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
                         {
                             tabId = "dirtyWaterList";
                         }
-                        else if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SolidManureStorage)
+                        else if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                         {
                             tabId = "solidManureStorageList";
                         }

@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.ViewModels;
-@using NMP.Portal.Resources;
-@model NMP.Portal.ViewModels.FieldViewModel
+﻿@using NMP.Commons.ViewModels;
+@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.FieldViewModel
 
 @{
     ViewData["Title"] = ((Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate))) ? $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblAddField}";

@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @model FarmViewModel
 
 @{
@@ -42,7 +42,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             }
             </div>
-            @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.England)
+            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
             {
                 <h1 class="govuk-heading-l">@Resource.lblRegulations_for_England</h1>
                 <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
@@ -74,7 +74,7 @@
                 </p>
                
             }
-            else @if (Model != null && Model.CountryID == (int)NMP.Portal.Enums.FarmCountry.Wales)
+            else @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
                 <h1 class="govuk-heading-l">@Resource.lblTheWaterResourcesRegulations2021</h1>
                 <p class="govuk-body">

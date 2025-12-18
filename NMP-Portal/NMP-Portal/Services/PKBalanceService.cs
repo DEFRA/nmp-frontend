@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using System.Text;
 
 namespace NMP.Portal.Services

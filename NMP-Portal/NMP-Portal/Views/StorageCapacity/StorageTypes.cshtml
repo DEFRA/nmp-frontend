@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.StorageCapacityViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{string.Format(Resource.WhatKindOfStorageIsStoreName, Model.StoreName)} {Resource.lblHyphen} {title}";
@@ -73,8 +73,8 @@
                             @string.Format(Resource.WhatKindOfStorageIsStoreName,Model.StoreName)
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                        @if (Model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.DirtyWaterStorage ||
-                                            Model.MaterialStateID == (int)NMP.Portal.Enums.MaterialState.SlurryStorage)
+                        @if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
+                                            Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                         {
                             @if (ViewBag.StorageTypes != null && ViewBag.StorageTypes.Count > 0)
                             {

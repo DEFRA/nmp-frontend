@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblVarietyNameWithOptional} {Resource.lblHyphen} {title}";
 
-    int potatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    int potatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
 }
 
 @section BeforeContent {
@@ -122,10 +122,10 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"/>
             @* @if (Model.CropGroupId == potatoGroupId ||
                 ((!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)) &&
-                (Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup1 ||
-                Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup2 ||
-                Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup3 ||
-                Model.CropTypeID == (int)NMP.Portal.Enums.CropTypes.PotatoVarietyGroup4)))
+                (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup1 ||
+                Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup2 ||
+                Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup3 ||
+                Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup4)))
                 {
                     <govuk-input asp-for="@Model.Variety">
                         <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsThePotatoVarietyName</govuk-input-label>

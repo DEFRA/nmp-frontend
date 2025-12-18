@@ -1,9 +1,9 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PreviousCroppingViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     //ViewData["Title"] = Resource.lblCropGroup;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.HarvestYear)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
-    int grassGroupId = (int)NMP.Portal.Enums.CropGroup.Grass;
+    int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
 
     var backAction = "";
     if (Model.HasGrassInLastThreeYear != null)

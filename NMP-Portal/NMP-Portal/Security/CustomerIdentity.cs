@@ -1,29 +1,19 @@
-﻿using AspNetCoreGeneratedDocument;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
-using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
-using NMP.Portal.Services;
-using OpenTelemetry.Trace;
-using System.Configuration;
-using System.Diagnostics.Metrics;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Text;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Security
 {
