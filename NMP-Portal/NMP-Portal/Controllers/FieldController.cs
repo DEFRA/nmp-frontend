@@ -2515,6 +2515,7 @@ namespace NMP.Portal.Controllers
                 var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldDataBeforeUpdate");
 
                 bool isDataChanged = false;
+                string action = "Action";
 
                 if (previousModel != null)
                 {
@@ -2522,17 +2523,17 @@ namespace NMP.Portal.Controllers
                     var newJson = JObject.FromObject(model);
 
                     (oldJson["PreviousCroppings"] as JObject)?
-                        .Property("Action")?
+                        .Property(action)?
                         .Remove();
 
                     (newJson["PreviousCroppings"] as JObject)?
-                        .Property("Action")?
+                        .Property(action)?
                         .Remove();
 
-                    oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property("Action"))
+                    oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
                     .Where(p => p != null).ToList().ForEach(p => p!.Remove());
 
-                    newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property("Action"))
+                    newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
                         .Where(p => p != null).ToList().ForEach(p => p!.Remove());
 
                     isDataChanged = !JToken.DeepEquals(oldJson, newJson);
