@@ -1,7 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate} {Resource.lblHyphen} {Resource.lblReport}";
+    string title = Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate;
+    ViewData["Title"] = $"{title} {Resource.lblHyphen} {Resource.lblReport}";
 
     var cropFieldManagementReport = (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport;
     var livestockNumbersReport = (int)NMP.Commons.Enums.FieldAndPlanReportOption.LivestockNumbersReport;
@@ -134,7 +135,7 @@
                 <govuk-radios asp-for="@Model.FieldAndPlanReportOption">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate
+                            @title
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@cropFieldManagementReport">
                             @Resource.lblFieldRecordsAndNutrientManagementPlanning
