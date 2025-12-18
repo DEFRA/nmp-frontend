@@ -13346,6 +13346,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The planned applications may not comply with these Water Resources Regulations:.
+        /// </summary>
+        public static string lblThePlannedApplicationsMayNotComplyWithTheseWater {
+            get {
+                return ResourceManager.GetString("lblThePlannedApplicationsMayNotComplyWithTheseWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are {0} cuts and grazings, with nutrient and lime recommendations for each one..
         /// </summary>
         public static string lblThereAreCountCutsAndGrazings {
@@ -15153,6 +15162,15 @@ namespace NMP.Commons.Resources {
         public static string lblWaterResourcesRegulations {
             get {
                 return ResourceManager.GetString("lblWaterResourcesRegulations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Water Resources Regulations warnings for {0}.
+        /// </summary>
+        public static string lblWaterResourcesRegulationsWarningsFor {
+            get {
+                return ResourceManager.GetString("lblWaterResourcesRegulationsWarningsFor", resourceCulture);
             }
         }
         

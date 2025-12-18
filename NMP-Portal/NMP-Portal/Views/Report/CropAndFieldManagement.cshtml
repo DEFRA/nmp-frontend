@@ -582,10 +582,10 @@
                         @if (isWarningExistForThisField)
                         {
                             <h2 class="govuk-heading-m">
-                                @string.Format(Resource.lblNvzWarningFor, field.Name)
+                                @string.Format(Model.CropAndFieldReport.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, field.Name)
                             </h2>
 
-                            <p class="govuk-body">@Resource.lblThePlannedApplicationsmayNotComplyWith</p>
+                            <p class="govuk-body">@(Model.CropAndFieldReport.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblThePlannedApplicationsmayNotComplyWith : Resource.lblThePlannedApplicationsMayNotComplyWithTheseWater)</p>
 
                             <ul class="govuk-list govuk-list--bullet">
                                 @foreach (var warning in ViewBag.WarningCodes)
