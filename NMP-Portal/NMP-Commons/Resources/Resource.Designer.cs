@@ -9089,6 +9089,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) standard for this {0} type.
+        /// </summary>
+        public static string lblNitrogenNStandardForThistype {
+            get {
+                return ResourceManager.GetString("lblNitrogenNStandardForThistype", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} nitrogen (N) vegetables.
         /// </summary>
         public static string lblNitrogenNVegetables {
@@ -9769,6 +9778,15 @@ namespace NMP.Commons.Resources {
         public static string lblOccupancyAndStandard {
             get {
                 return ResourceManager.GetString("lblOccupancyAndStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Occupancy for this {0} type.
+        /// </summary>
+        public static string lblOccupancyForThistype {
+            get {
+                return ResourceManager.GetString("lblOccupancyForThistype", resourceCulture);
             }
         }
         
@@ -14437,6 +14455,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Typical values for this livestock type.
+        /// </summary>
+        public static string lblTypicalValuesForThisLivestockType {
+            get {
+                return ResourceManager.GetString("lblTypicalValuesForThisLivestockType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Units.
         /// </summary>
         public static string lblUnits {
@@ -15688,6 +15715,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the nitrogen (N) standard for this {0} type in {1}.
+        /// </summary>
+        public static string lblWhatIsTheNitrogenNStandardForThis {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNitrogenNStandardForThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the nitrogen (N) standard for this livestock type in {0}?.
         /// </summary>
         public static string lblWhatIsTheNitrogenNStandardForThisLivestock {
@@ -15720,6 +15756,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblWhatIsTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}.
+        /// </summary>
+        public static string lblWhatIsTheOccupancyForThis {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheOccupancyForThis", resourceCulture);
             }
         }
         
@@ -18849,7 +18894,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the percentage of land that is farmed as grass?.
+        ///   Looks up a localized string similar to Enter the percentage of land that is farmed as grass.
         /// </summary>
         public static string MsgEnterThePercentageOfTheLandIsFarmedAsGrass {
             get {
