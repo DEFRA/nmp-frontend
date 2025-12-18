@@ -1,7 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{Resource.lblOccupancyAndNitrogenStandard}  {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    string heading = Resource.lblOccupancyAndNitrogenStandard;
+    ViewData["Title"] = $"{heading}  {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 
 }
 
@@ -129,7 +130,7 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l"> @Resource.lblOccupancyAndNitrogenStandard</h1>
+                <h1 class="govuk-heading-l"> @heading</h1>
                 <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                 <govuk-details>
                     <govuk-details-summary>
