@@ -4,10 +4,10 @@
 
     ViewData["Title"] = $"{string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm)} {Resource.lblHyphen} {Resource.lblReport}";
 
-    var nmaxReport = (int)NMP.Commons.Enums.NVZReportOption.NmaxReport;
-    var livestockManureNFarmLimitReport = (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport;
-    var existingManureStorageCapacityReport = (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport;
-    var organicMaterialInventoryAndStorageRequirementReport = (int)NMP.Commons.Enums.NVZReportOption.OrganicMaterialInventoryAndStorageRequirementReport;
+    var nmaxReport = (int)NMP.Commons.Enums.NvzReportOption.NmaxReport;
+    var livestockManureNFarmLimitReport = (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport;
+    var existingManureStorageCapacityReport = (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport;
+    var organicMaterialInventoryAndStorageRequirementReport = (int)NMP.Commons.Enums.NvzReportOption.OrganicMaterialInventoryAndStorageRequirementReport;
 }
 
 @section BeforeContent {

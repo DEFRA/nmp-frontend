@@ -100,7 +100,7 @@ builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDefraCustomerIdentity(builder);
-Registrar.RegisterDependencies(builder.Services, builder.Configuration);
+Registrar.RegisterDependencies(builder.Services);
 
 builder.Services.AddAuthorization(options =>
 {

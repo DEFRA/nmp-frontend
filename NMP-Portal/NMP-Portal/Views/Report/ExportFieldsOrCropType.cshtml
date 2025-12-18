@@ -14,7 +14,7 @@
     {
         title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
     }
-    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
     {
         title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year);
     }
@@ -227,7 +227,7 @@ else
                             </p>
                         }
                     }
-                    else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport){
+                    else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport){
                     <h2 class="govuk-heading-l">  @string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Year)</h2>
                     <div class="margin-bottom-forty">
                         <p class="govuk-body">
@@ -291,7 +291,7 @@ else
                     </govuk-button>
                 }
                 else
-                @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                 {
                     <govuk-checkboxes asp-for="CropTypeList">
                         <govuk-checkboxes-fieldset>

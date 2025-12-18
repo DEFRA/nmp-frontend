@@ -7,11 +7,11 @@ namespace NMP.Businesses
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterBusinesses(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterBusinesses(this IServiceCollection services)
         {
-            return AddBusinesses(services, configuration);
+            return AddBusinesses(services);
         }
-        private static IServiceCollection AddBusinesses(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddBusinesses(this IServiceCollection services)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
 

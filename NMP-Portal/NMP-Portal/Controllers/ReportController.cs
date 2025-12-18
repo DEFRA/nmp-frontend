@@ -122,7 +122,7 @@ namespace NMP.Portal.Controllers
                             ViewBag.fieldList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
                         }
                     }
-                    else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                    else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                     {
                         (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
                         if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
@@ -421,7 +421,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CropAndFieldManagement");
 
                 }
-                else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                 {
                     //fetch crop type
                     (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
@@ -1642,7 +1642,7 @@ namespace NMP.Portal.Controllers
                 model.FieldAndPlanReportOption = null;
                 model.IsCheckList = false;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                 {
 
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -1655,7 +1655,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("Year");
                     }
                 }
-                if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
@@ -1668,7 +1668,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
-                if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
                     if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
@@ -1732,16 +1732,16 @@ namespace NMP.Portal.Controllers
                 }
                 else if (model.NVZReportOption != null)
                 {
-                    if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                    if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                     {
                         model.ReportTypeName = Resource.lblNMax;
                         
                     }
-                    else if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                    else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                     {
                         model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
                     }
-                    else if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                    else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                     {
                         model.ReportTypeName = Resource.lblExistingManureStorageCapacityReport;
                     }
@@ -1783,7 +1783,7 @@ namespace NMP.Portal.Controllers
                 }
                 List<int> yearList = GetReportYearsList();
                 int maxYear = yearList.Max();
-                if ((model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport) ||
+                if ((model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport) ||
                     (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport))
                 {
                     List<PlanSummaryResponse> PlanYearList = await _cropService.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
@@ -1795,7 +1795,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.NVZReportOption != null)
                 {
-                    if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                    if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                     {
                         (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetail, Error error) = await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(model.FarmId.Value);
                         if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail.Count > 0 && nutrientsLoadingFarmDetail.Any(x => x.CalendarYear > maxYear))
@@ -1804,7 +1804,7 @@ namespace NMP.Portal.Controllers
                             yearList.AddRange(maxYearList);
                         }
                     }
-                    else if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                    else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                     {
                         (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, null);
                         if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
@@ -1821,11 +1821,11 @@ namespace NMP.Portal.Controllers
                 }
                 model.IsCheckList = false;
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+                if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
                     return RedirectToAction("IsGrasslandDerogation");
                 }
-                if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+                if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
                     //(List<StoreCapacity> storeCapacityList, Error error) = await _reportService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
 

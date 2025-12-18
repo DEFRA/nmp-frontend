@@ -823,7 +823,7 @@ namespace NMP.Portal.Controllers
 
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
-                model.NVZFields = (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ;
+                model.NVZFields = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
                 SetFarmToSession(model);
                 return RedirectToAction("Elevation");
             }

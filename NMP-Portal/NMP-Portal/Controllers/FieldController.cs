@@ -173,8 +173,8 @@ namespace NMP.Portal.Controllers
                     model.isEnglishRules = farm.EnglishRules;
                     model.FarmName = farm.Name;
                     //model.LastHarvestYear = farm.LastHarvestYear;  //if there is no plan created.
-                    model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                    model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
 
                 }
                 if (!string.IsNullOrWhiteSpace(r))
@@ -374,8 +374,8 @@ namespace NMP.Portal.Controllers
             string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (field.IsCheckAnswer)
@@ -1715,7 +1715,7 @@ namespace NMP.Portal.Controllers
                     {
                         //ID= model.ID,
                         SoilTypeID = model.SoilTypeID,
-                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NVZProgram.NotInNVZ,
+                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
                         Name = model.Name,
                         LPIDNumber = model.LPIDNumber,
                         NationalGridReference = model.NationalGridReference,
@@ -1975,8 +1975,8 @@ namespace NMP.Portal.Controllers
             model.SoilOverChalk = field.SoilOverChalk;
             if (farm != null)
             {
-                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
             }
             else
             {
@@ -2353,12 +2353,11 @@ namespace NMP.Portal.Controllers
                     model.SoilOverChalk = field.SoilOverChalk;
 
                     model.EncryptedFarmId = farmId;
-                    model.FarmName = farm.Name;
-                    //model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
+                    model.FarmName = farm.Name;                    
                     if (farm != null)
                     {
-                        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+                        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
                     }
                     else
                     {
@@ -2550,7 +2549,7 @@ namespace NMP.Portal.Controllers
                     Field = new Field
                     {
                         SoilTypeID = model.SoilTypeID,
-                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NVZProgram.NotInNVZ,
+                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
                         Name = model.Name,
                         LPIDNumber = model.LPIDNumber,
                         NationalGridReference = model.NationalGridReference,
