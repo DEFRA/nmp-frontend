@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.ReportViewModel
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     string action = string.Empty;
     string heading = string.Empty;
@@ -20,7 +20,7 @@
     string importExport = "";
     @if (Model.IsImport == null)
     {
-        importExport = Enum.GetName(typeof(NMP.Portal.Enums.ImportExport), Model.ImportExport);
+        importExport = Enum.GetName(typeof(NMP.Commons.Enums.ImportExport), Model.ImportExport);
     }
     var IsAnyLivestockImportExport = "";
     @if (Model.IsAnyLivestockImportExport != null)
@@ -214,7 +214,7 @@
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key class=@((!Model.ManureTypeId.HasValue) ? "govuk-error-message" : "")>
                                 @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
-                                Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
+                                Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
                                 Resource.lblExporting)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
@@ -224,25 +224,25 @@
                             <govuk-summary-list-row-action asp-action="ManureGroup" asp-controller="Report">
                                 @Resource.lblChange<span class="govuk-visually-hidden">
                                     @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
-                                                                        Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImporting :
+                                                                        Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
                                                                         Resource.lblExporting)
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                        @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
-                            @if (!(Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
+                            @if (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
                             {
                                 <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
+                                        @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @((Model.OtherMaterialName != null) ? Model.OtherMaterialName : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -250,7 +250,7 @@
                         }
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@((!Model.LivestockImportExportDate.HasValue) ? "govuk-error-message" : "")>
-                            @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                            @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                                                                                                                  </govuk-summary-list-row-key>
                                                                                                                  <govuk-summary-list-row-value>
@@ -259,7 +259,7 @@
                                                                                                                  <govuk-summary-list-row-actions>
                                                                                                                      <govuk-summary-list-row-action asp-action="LivestockImportExportDate" asp-controller="Report">
                                                                                                                          @Resource.lblChange<span class="govuk-visually-hidden">
-                                    @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                    @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                                                                                                                                  </span>
                                                                                                                              </govuk-summary-list-row-action>
@@ -267,7 +267,7 @@
                                                                                                                      </govuk-summary-list-row>
                                                                                                                      <govuk-summary-list-row>
                                                                                                                          <govuk-summary-list-row-key class=@((!Model.LivestockQuantity.HasValue) ? "govuk-error-message" : "")>
-                            @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                            @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                                                                                                                             </govuk-summary-list-row-key>
                                                                                                                                             <govuk-summary-list-row-value>
@@ -276,13 +276,13 @@
                                                                                                                                             <govuk-summary-list-row-actions>
                                                                                                                                                 <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">
                                                                                                                                                     @Resource.lblChange<span class="govuk-visually-hidden">
-                                    @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                    @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (!(Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials))
+                    @if (!(Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
                         {
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)? "govuk-error-message" : "")>
@@ -302,9 +302,9 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                                         }
-                        @if (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                        @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
-                            @if (Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials)
+                            @if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                             {
                                 @if (Model.DefaultNutrientValue == Resource.lblYes)
                                 {
@@ -618,7 +618,7 @@
 
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.ReceiverName) ? "govuk-error-message" : "")>
-                            @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                            @(Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblWhoAreYouImportingThisLivestockManureFrom :
                                                         Resource.lblWhoAreYouExportingThisLivestockManureTo)
                                                                                                         </govuk-summary-list-row-key>
@@ -636,7 +636,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="LivestockReceiver" asp-controller="Report">
                                 @Resource.lblChange<span class="govuk-visually-hidden">
-                                    @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                    @(Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblWhoAreYouImportingThisLivestockManureFrom :
                                                                         Resource.lblWhoAreYouExportingThisLivestockManureTo)
                                 </span>
@@ -646,7 +646,7 @@
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblLivestockCommentContent1,
-                                                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
@@ -656,7 +656,7 @@
                             <govuk-summary-list-row-action asp-action="LivestockComment" asp-controller="Report">
                                 @Resource.lblChange<span class="govuk-visually-hidden">
                                     @string.Format(Resource.lblLivestockCommentContent1,
-                                                                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                                 </span>
                             </govuk-summary-list-row-action>
@@ -666,7 +666,7 @@
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblTotalNitrogenInThisImportOrExport,
-                                                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
@@ -679,7 +679,7 @@
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @string.Format(Resource.lblTotalPhosphateInThisImportOrExport,
-                                                        Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                                                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
@@ -696,7 +696,7 @@
                         @Resource.lblYouCanAlso
                         <a asp-action="DeleteLivestockImportExport" asp-controller="Report">
                             @string.Format(Resource.lblRemoveThis,
-                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+                            Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
 
                 </a>
             </p>
@@ -707,7 +707,7 @@
                         @if (Model.ImportExport != null)
                         {
                             @(
-                                            Model.ImportExport == (int)NMP.Portal.Enums.ImportExport.Import ? string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()) :
+                                            Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()) :
                                             string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblExport.ToLower())
                                             )
                                         }

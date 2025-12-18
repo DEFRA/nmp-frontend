@@ -1,7 +1,7 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName.ToLower(), Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
 
 }
 
@@ -130,20 +130,20 @@
             <div class="govuk-grid-column-two-thirds">
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThisSuffix, Model.LivestockGroupName, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces))</span>@Resource.lblQuestionMark
+                        @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThisSuffix, Model.LivestockGroupName.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces))</span>@Resource.lblQuestionMark
                     </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
 
                     <govuk-input asp-for=@Model.AverageNumberOfPlaces type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false"></govuk-input-label>
 
-                        @if (Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Poultry &&
-                                            Model.LivestockTypeId != (int)NMP.Portal.Enums.Livestock.OneOstrich)
+                        @if (Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Poultry &&
+                                            Model.LivestockTypeId != (int)NMP.Commons.Enums.Livestock.OneOstrich)
                         {
                             <govuk-input-hint>@Resource.lblForExampleFor10000PlacesEnter10</govuk-input-hint>
                         }
 
-                        <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Portal.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Portal.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
+                        <govuk-input-suffix>@((Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? Resource.lblPlaces : Resource.lblThousandPlaces)</govuk-input-suffix>
                     </govuk-input>
                 </govuk-fieldset>
 

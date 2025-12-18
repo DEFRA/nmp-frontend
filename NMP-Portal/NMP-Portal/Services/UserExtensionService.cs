@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
-using NMP.Portal.Resources;
+using NMP.Commons.Resources;
 using System.Text;
 using NMP.Portal.Security;
+using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
 
 namespace NMP.Portal.Services;
 public class UserExtensionService : Service, IUserExtensionService

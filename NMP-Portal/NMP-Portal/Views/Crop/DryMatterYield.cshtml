@@ -1,7 +1,7 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
-    var heading = (Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[Model.DryMatterYieldCounter].FieldName, Model.Crops[Model.DryMatterYieldCounter].Year));
+    var heading = (Model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[Model.DryMatterYieldCounter].FieldName, Model.Crops[Model.DryMatterYieldCounter].Year));
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
@@ -120,7 +120,7 @@
                         <govuk-radios asp-for="@Model.Crops[i].Yield">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                    @(Model.GrassGrowthClassQuestion == (int)NMP.Portal.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year))
+                                    @(Model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year))
                                 </govuk-radios-fieldset-legend>
                                 <govuk-radios-hint>@Resource.lblThisShouldBeWithinTheFollowingRange</govuk-radios-hint>
                                 @if (ViewBag.YieldRanges != null)

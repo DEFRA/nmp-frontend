@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.FieldViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.FieldViewModel
 @{
     //ViewData["Title"] = Resource.lblLayDuration;
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])} {Resource.lblHyphen} {title}";
-    var oneToTwoYears = (int)NMP.Portal.Enums.LayDuration.OneToTwoYears;
-    var threeYearsOrMore = (int)NMP.Portal.Enums.LayDuration.ThreeYearsOrMore;
+    var oneToTwoYears = (int)NMP.Commons.Enums.LayDuration.OneToTwoYears;
+    var threeYearsOrMore = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
     {

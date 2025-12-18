@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @model FarmViewModel
 @{
     ViewData["Title"] = $"{Model.Name} {Resource.lblHyphen} {Resource.lblDetails}";
@@ -8,25 +8,25 @@
     var fieldsInNVZ = "";
     switch (Model.NVZFields)
     {
-        case (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NVZFields.NoFieldsInNVZ:
             fieldsInNVZ = Resource.lblNoneOfTheFields;
             break;
-        case (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ:
             fieldsInNVZ = Resource.lblSomeOfTheFields;
             break;
-        case (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ:
             fieldsInNVZ = Resource.lblAllOfTheFields;
             break;
     }
     switch (Model.FieldsAbove300SeaLevel)
     {
-        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
+        case (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
             fieldsAbove300m = Resource.lblNoneOfTheFields;
             break;
-        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
+        case (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
             fieldsAbove300m = Resource.lblSomeOfTheFields;
             break;
-        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
+        case (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
             fieldsAbove300m = Resource.lblAllOfTheFields;
             break;
     }

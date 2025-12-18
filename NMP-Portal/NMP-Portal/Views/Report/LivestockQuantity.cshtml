@@ -1,7 +1,7 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
-    string heading = (string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+    string heading = (string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
     string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
@@ -146,7 +146,7 @@
                 </govuk-fieldset-legend>
                 <govuk-input asp-for=@Model.LivestockQuantity type="number" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false" min="0" max="999999">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                        @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                        @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                 Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, unit)</span>@Resource.lblQuestionMark
                     </govuk-input-label>
                     <govuk-input-hint>

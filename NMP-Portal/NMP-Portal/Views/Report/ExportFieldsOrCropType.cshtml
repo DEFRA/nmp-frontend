@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     var title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
     @if (ViewBag.NoPlan != null)
@@ -10,11 +10,11 @@
     {
         title = ViewBag.NoField;
     }
-    else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+    else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
     {
         title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
     }
-    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
     {
         title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year);
     }
@@ -26,7 +26,7 @@
 
     ViewData["Title"] = $" {title} {Resource.lblHyphen} {Resource.lblReport}";
     var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)) ? "Year" :
-        ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
+        ((Model.ReportOption == (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan)
         ? "ReportOptions" : "NVZComplianceReports");
 }
 
@@ -185,14 +185,14 @@ else
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard" />
 
-            @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport && Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+            @if (Model.ReportType != null && Model.ReportType == (int)NMP.Commons.Enums.ReportType.CropAndFieldManagementReport && Model.CropTypeList != null && Model.CropTypeList.Count > 0)
             {
                 @for (int i = 0; i < Model.CropTypeList.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]" />
                 }
             }
-            else @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.NMaxReport)
+            else @if (Model.ReportType != null && Model.ReportType == (int)NMP.Commons.Enums.ReportType.NMaxReport)
             {
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
@@ -208,7 +208,7 @@ else
 
                 @if (ViewBag.NoPlan != null || ViewBag.NoField != null)
                 {
-                    @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                    @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
                         @if (ViewBag.NoPlan != null)
                         {
@@ -227,7 +227,7 @@ else
                             </p>
                         }
                     }
-                    else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport){
+                    else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport){
                     <h2 class="govuk-heading-l">  @string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Year)</h2>
                     <div class="margin-bottom-forty">
                         <p class="govuk-body">
@@ -262,7 +262,7 @@ else
             }
             else
             {
-                @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
 
                     <govuk-checkboxes asp-for="FieldList">
@@ -291,7 +291,7 @@ else
                     </govuk-button>
                 }
                 else
-                @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+                @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
                 {
                     <govuk-checkboxes asp-for="CropTypeList">
                         <govuk-checkboxes-fieldset>

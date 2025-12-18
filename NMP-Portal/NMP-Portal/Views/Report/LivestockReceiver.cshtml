@@ -1,7 +1,7 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
-    string heading = (Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+    string heading = (Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                         Resource.lblWhoAreYouImportingThisLivestockManureFrom :
                                         Resource.lblWhoAreYouExportingThisLivestockManureTo);
     string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
@@ -139,7 +139,7 @@
         <div class="govuk-grid-column-two-thirds">
             <govuk-fieldset>
                 <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                    @(Model.ImportExport.Value == (int)NMP.Portal.Enums.ImportExport.Import ?
+                    @(Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                         Resource.lblWhoAreYouImportingThisLivestockManureFrom :
                                         Resource.lblWhoAreYouExportingThisLivestockManureTo)
                 </govuk-fieldset-legend>

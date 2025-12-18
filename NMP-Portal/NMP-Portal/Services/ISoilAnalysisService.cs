@@ -1,5 +1,5 @@
-﻿using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
+﻿using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
 
 namespace NMP.Portal.Services
 {

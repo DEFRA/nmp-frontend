@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{Resource.lblFarmArea} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
 
@@ -99,7 +99,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName"/>
 
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber" value="@Model.IsAnyLivestockNumber.ToString().ToLower()" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId"/>
@@ -156,7 +156,7 @@
                         <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
 
                     </govuk-input>
-                    @if (Model.Country != (int)NMP.Portal.Enums.FarmCountry.Wales)
+                    @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
                     {
                         <govuk-input asp-for=@Model.TotalAreaInNVZ type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label>

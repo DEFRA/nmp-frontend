@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Portal.Security;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.ServiceResponses;
 using System.Text;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Services
 {

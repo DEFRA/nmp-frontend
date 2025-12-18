@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PreviousCroppingViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     //ViewData["Title"] = Resource.lblLayDuration;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
-    var oneToTwoYears = (int)NMP.Portal.Enums.LayDuration.OneToTwoYears;
-    var threeYearsOrMore = (int)NMP.Portal.Enums.LayDuration.ThreeYearsOrMore;
+    var oneToTwoYears = (int)NMP.Commons.Enums.LayDuration.OneToTwoYears;
+    var threeYearsOrMore = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
     var backAction = "";
     if (Model.IsCheckAnswer)
     {

@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources;
-@model NMP.Portal.ViewModels.FarmViewModel
+﻿@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.FarmViewModel
 
 @{
     //ViewData["Title"] = Resource.lblCheckAnswer;
@@ -11,25 +11,25 @@
 
     switch (Model.NVZFields)
     {
-        case (int)NMP.Portal.Enums.NVZFields.NoFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NVZFields.NoFieldsInNVZ:
             fieldsInNVZ = Resource.lblNoneOfTheFieldsAreInAnNVZ;
             break;
-        case (int)NMP.Portal.Enums.NVZFields.SomeFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ:
             fieldsInNVZ = Resource.lblSomeOfTheFieldsAreInAnNVZ;
             break;
-        case (int)NMP.Portal.Enums.NVZFields.AllFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ:
             fieldsInNVZ = Resource.lblAllTheFieldsAreInAnNVZ;
             break;
     }
     switch (Model.FieldsAbove300SeaLevel)
     {
-        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
+        case (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m:
             fieldsAbove300m = Resource.lblNoneOfTheFieldsAreAbove300m;
             break;
-        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
+        case (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.SomeFieldsAbove300m:
             fieldsAbove300m = Resource.lblSomeOfTheFieldsAreAbove300m;
             break;
-        case (int)NMP.Portal.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
+        case (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m:
             fieldsAbove300m = Resource.lblAllTheFieldsAreAbove300m;
             break;
 
@@ -161,7 +161,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
-                    @if (Model.CountryID != (int)NMP.Portal.Enums.FarmCountry.Wales)
+                    @if (Model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Wales)
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>

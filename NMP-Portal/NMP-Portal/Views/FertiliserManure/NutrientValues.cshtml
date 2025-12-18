@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.FertiliserManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.FertiliserManureViewModel
 @{
     var heading = (string.IsNullOrWhiteSpace(Model.EncryptedFertId)) ? Resource.lblHowMuchOfEachNutrientDoYouPlan : Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate;
 
@@ -195,7 +195,7 @@
                             </govuk-details-summary>
                             <govuk-details-text>
                                 <h2 class="govuk-heading-m">
-                                    @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
+                                    @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
                                     {
                                         @string.Format(Resource.lblRecommendationsForGrass, Model.FertiliserManures?.FirstOrDefault()?.Defoliation, ViewBag.DefoliationSequenceName)
                                     }
@@ -220,7 +220,7 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                             <td class="govuk-table__cell">
-                                                @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId != (int)NMP.Commons.Enums.CropTypes.Grass)
                                                 {
                                                     @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
                                                 }

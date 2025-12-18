@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PreviousCroppingViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     //ViewData["Title"] = Resource.lblHasGrassInLastThreeYear;
     ViewData["Title"] = $"{string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = "";
     if (Model.IsCheckAnswer)
     {
