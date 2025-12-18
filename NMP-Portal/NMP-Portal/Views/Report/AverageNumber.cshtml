@@ -1,7 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    string title = $"{string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
+    ViewData["Title"] = title;
 }
 
 @section BeforeContent {
@@ -128,10 +129,9 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)
+                        @title
                     </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblSelectedLivestockType, Model.LivestockTypeName)</p>
                     <p class="govuk-body">@string.Format(Resource.lblNitrogenStandard, Model.NitrogenStandard)</p>
