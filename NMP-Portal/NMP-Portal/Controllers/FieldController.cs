@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Enums;
-using NMP.Portal.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
-using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
+using NMP.Portal.Helpers;
+using NMP.Portal.Services;
 using System.Globalization;
 using System.Reflection;
 using Error = NMP.Commons.ServiceResponses.Error;
@@ -110,7 +111,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction("UpdateField", new
                     {
-                        id = model.EncryptedFieldId,
+                        fieldId = model.EncryptedFieldId,
                         farmId = model.EncryptedFarmId
                     });
                 }
@@ -132,7 +133,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         return RedirectToAction("CopyExistingField", "Field", new { q = id });
-                    }                    
+                    }
                 }
                 else
                 {
@@ -173,8 +174,8 @@ namespace NMP.Portal.Controllers
                     model.isEnglishRules = farm.EnglishRules;
                     model.FarmName = farm.Name;
                     //model.LastHarvestYear = farm.LastHarvestYear;  //if there is no plan created.
-                    model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                    model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
 
                 }
                 if (!string.IsNullOrWhiteSpace(r))
@@ -374,8 +375,8 @@ namespace NMP.Portal.Controllers
             string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
             (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
 
             _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("FieldData", field);
             if (field.IsCheckAnswer)
@@ -639,7 +640,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilReleasingClay", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            
+
             field.IsSoilReleasingClay = true;
             if (!ModelState.IsValid)
             {
@@ -698,7 +699,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return View(field);
@@ -735,7 +736,7 @@ namespace NMP.Portal.Controllers
             {
                 var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
                                 ModelState["SoilAnalyses.Date"].Errors[0].ErrorMessage.ToString() : null;
-                                
+
                 if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate)) ||
                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate)) ||
@@ -752,7 +753,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateBeforeContinuing);
             }
-           
+
             if (DateTime.TryParseExact(model.SoilAnalyses.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
             {
                 ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterTheDateInNumber);
@@ -828,7 +829,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            
+
             return View(model);
         }
 
@@ -1333,7 +1334,7 @@ namespace NMP.Portal.Controllers
                         }
                         if (string.IsNullOrWhiteSpace(model.CropType))
                         {
-                            ModelState.AddModelError("CropTypeID", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));                            
+                            ModelState.AddModelError("CropTypeID", string.Format("{0} {1}", string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, model.LastHarvestYear), Resource.lblNotSet));
                         }
                     }
 
@@ -1358,7 +1359,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
-                                
+
 
                 if (model.RecentSoilAnalysisQuestion.Value)
                 {
@@ -1476,9 +1477,9 @@ namespace NMP.Portal.Controllers
 
                     return View("CheckAnswer", model);
                 }
-                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value); 
+                int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
                 var farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-                
+
                 if (model.SoilAnalyses.Potassium != null || model.SoilAnalyses.Phosphorus != null || (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) || model.SoilAnalyses.PhosphorusIndex != null)
                 {
                     model.PKBalance.PBalance = 0;
@@ -1715,7 +1716,7 @@ namespace NMP.Portal.Controllers
                     {
                         //ID= model.ID,
                         SoilTypeID = model.SoilTypeID,
-                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NVZProgram.NotInNVZ,
+                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
                         Name = model.Name,
                         LPIDNumber = model.LPIDNumber,
                         NationalGridReference = model.NationalGridReference,
@@ -1975,8 +1976,8 @@ namespace NMP.Portal.Controllers
             model.SoilOverChalk = field.SoilOverChalk;
             if (farm != null)
             {
-                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
             }
             else
             {
@@ -2354,11 +2355,10 @@ namespace NMP.Portal.Controllers
 
                     model.EncryptedFarmId = farmId;
                     model.FarmName = farm.Name;
-                    //model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                     if (farm != null)
                     {
-                        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
-                        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ ? true : false;
+                        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+                        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
                     }
                     else
                     {
@@ -2515,13 +2515,28 @@ namespace NMP.Portal.Controllers
                 var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<FieldViewModel>("FieldDataBeforeUpdate");
 
                 bool isDataChanged = false;
+                string action = "Action";
 
                 if (previousModel != null)
                 {
-                    string oldJson = JsonConvert.SerializeObject(previousModel);
-                    string newJson = JsonConvert.SerializeObject(model);
+                    var oldJson = JObject.FromObject(previousModel);
+                    var newJson = JObject.FromObject(model);
 
-                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                    (oldJson["PreviousCroppings"] as JObject)?
+                        .Property(action)?
+                        .Remove();
+
+                    (newJson["PreviousCroppings"] as JObject)?
+                        .Property(action)?
+                        .Remove();
+
+                    oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
+                    .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+
+                    newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
+                        .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+
+                    isDataChanged = !JToken.DeepEquals(oldJson, newJson);
                 }
                 ViewBag.IsDataChange = isDataChanged;
 
@@ -2550,7 +2565,7 @@ namespace NMP.Portal.Controllers
                     Field = new Field
                     {
                         SoilTypeID = model.SoilTypeID,
-                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NVZProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NVZProgram.NotInNVZ,
+                        NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
                         Name = model.Name,
                         LPIDNumber = model.LPIDNumber,
                         NationalGridReference = model.NationalGridReference,
@@ -2823,7 +2838,7 @@ namespace NMP.Portal.Controllers
                             return RedirectToAction("CheckAnswer");
                         }
                     }
-                }                
+                }
             }
 
             HttpContext.Session.SetObjectAsJson("FieldData", model);

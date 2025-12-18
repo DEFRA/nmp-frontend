@@ -99,7 +99,7 @@
 
                     @if (Model.SnsCategoryId != null)
                     {
-                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables))
+                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables))
                         {
                             <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt030CM.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -164,7 +164,7 @@
                             </govuk-summary-list-row>
 
                         }
-                        @if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals || Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
+                        @if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                         {
                             <govuk-summary-list-row class=@((!Model.IsCalculateNitrogen.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -180,7 +180,7 @@
 
                             @if (Model.IsCalculateNitrogen == true)
                             {
-                                if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals)
+                                if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
                                 {
                                     <govuk-summary-list-row class=@((!Model.NumberOfShoots.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
@@ -205,7 +205,7 @@
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                 }
-                                if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
+                                if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                                 {
                                     <govuk-summary-list-row class=@((Model.GreenAreaIndexOrCropHeight==0)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
@@ -261,7 +261,7 @@
                                 }
                             }
                         }
-                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables))
+                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables))
                         {
                             <govuk-summary-list-row class=@((!Model.IsEstimateOfNitrogenMineralisation.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>

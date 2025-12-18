@@ -6,12 +6,12 @@ using System.Reflection;
 namespace NMP.Services;
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
-        return AddServices(services, configuration);
+        return AddServices(services);
     }
 
-    private static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddServices(this IServiceCollection services)
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
 

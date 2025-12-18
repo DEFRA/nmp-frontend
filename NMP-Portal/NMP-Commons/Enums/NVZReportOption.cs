@@ -1,5 +1,5 @@
 ﻿namespace NMP.Commons.Enums;
-public enum NVZReportOption
+public enum NvzReportOption
 {
     NmaxReport=1,
     LivestockManureNFarmLimitReport=2,

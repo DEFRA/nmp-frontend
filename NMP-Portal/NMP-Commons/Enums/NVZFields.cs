@@ -1,5 +1,5 @@
 ﻿namespace NMP.Commons.Enums;
-public enum NVZFields
+public enum NvzFields
 {
     NoFieldsInNVZ = 0,
     SomeFieldsInNVZ = 1,

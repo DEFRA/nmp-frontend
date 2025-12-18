@@ -7049,6 +7049,12 @@ livestock manure.</value>
   <data name="lblIfYouHaveHarvestedMostOfYourCrops" xml:space="preserve">
     <value>If you have harvested your crop for {0}, then use {1} as your last harvest year.</value>
   </data>
+  <data name="lblWaterResourcesRegulationsWarningsFor" xml:space="preserve">
+    <value>Water Resources Regulations warnings for {0}</value>
+  </data>
+  <data name="lblThePlannedApplicationsMayNotComplyWithTheseWater" xml:space="preserve">
+    <value>The planned applications may not comply with these Water Resources Regulations:</value>
+  </data>
   <data name="lblSelectOneOptionYouCanAddMoreLivestock" xml:space="preserve">
     <value>Select one option. You can add more livestock types later.</value>
   </data>

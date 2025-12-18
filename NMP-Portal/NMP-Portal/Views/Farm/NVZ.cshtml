@@ -3,15 +3,9 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)} {Resource.lblHyphen} {title}";
-    var AllFieldsInNVZ = (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ;
-    var SomeFieldsInNVZ = (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ;
-    var NoFieldsInNVZ = (int)NMP.Commons.Enums.NVZFields.NoFieldsInNVZ;
-    // if (Model.IsRainfalManual != null)
-    // {
-    //     backAction = Model.IsRainfalManual == true ? "RainfallManual" : "Rainfall";
-    // }
-    
-    
+    var AllFieldsInNVZ = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
+    var SomeFieldsInNVZ = (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+    var NoFieldsInNVZ = (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ;    
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
