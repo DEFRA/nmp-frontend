@@ -1393,7 +1393,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add another livestock category.
+        ///   Looks up a localized string similar to Add another livestock type.
         /// </summary>
         public static string lblAddAnotherLivestock {
             get {
@@ -6919,11 +6919,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include cattle, sheep, goats, deer, horses, pigs and poultry..
+        ///   Looks up a localized string similar to Include cattle, sheep, pigs, poultry, goats, deer and horses..
         /// </summary>
-        public static string lblIncludeCattleSheepPigsGoats {
+        public static string lblIncludeCattleSheepPigsPoultryGoats {
             get {
-                return ResourceManager.GetString("lblIncludeCattleSheepPigsGoats", resourceCulture);
+                return ResourceManager.GetString("lblIncludeCattleSheepPigsPoultryGoats", resourceCulture);
             }
         }
         
@@ -8819,7 +8819,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Monthly totals for {0} in {1}.
+        ///   Looks up a localized string similar to Monthly totals for this {0} type in {1}.
         /// </summary>
         public static string lblMonthlyTotalsForThis {
             get {
@@ -11956,6 +11956,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear {
             get {
                 return ResourceManager.GetString("lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one option. You can add more livestock types later..
+        /// </summary>
+        public static string lblSelectOneOptionYouCanAddMoreLivestock {
+            get {
+                return ResourceManager.GetString("lblSelectOneOptionYouCanAddMoreLivestock", resourceCulture);
             }
         }
         
@@ -16012,7 +16021,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What type of Livestock would you like to add for {0}?.
+        ///   Looks up a localized string similar to What type of livestock would you like to add for {0}?.
         /// </summary>
         public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
             get {

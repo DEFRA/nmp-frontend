@@ -155,6 +155,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @string.Format(Resource.lblWhatTypeOfLivestockWouldYouLikeToAddFor, Model.Year)
                         </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@Resource.lblSelectOneOptionYouCanAddMoreLivestock</govuk-radios-hint>
                         @if (ViewBag.LivestockGroups != null && ViewBag.LivestockGroups.Count > 0)
                         {
                             foreach (var livestockGroup in ViewBag.LivestockGroups)
