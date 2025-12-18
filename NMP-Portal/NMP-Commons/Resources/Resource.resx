@@ -3454,7 +3454,7 @@ cubic metres per hectare  not set</value>
     <value>Sulphur (S) deficiency status</value>
   </data>
   <data name="lblHowValuesAreEntered" xml:space="preserve">
-    <value>How values are entered (e.g. Index values)</value>
+    <value>How values are entered (e.g. Index values)?</value>
   </data>
   <data name="lblWhatWouldYouLikeToCallThisCropGroup" xml:space="preserve">
     <value>What would you like to call this crop group (optional)?</value>
@@ -4354,12 +4354,12 @@ cubic metres per hectare  not set</value>
     <value>these fields</value>
   </data>
   <data name="lblWhichCropsWouldYouLikeToCreateNMaxReportFor" xml:space="preserve">
-    <value>Which crops would you like to create a {0} N-max report for?</value>
+    <value>Which crops would you like to create a {0} {1} report for?</value>
   </data>
   <data name="lblHarvestYearValue" xml:space="preserve">
     <value>Harvest year {0}</value>
   </data>
-  <data name="lblNMaxCompliant" xml:space="preserve">
+  <data name="lblNmaxCompliant" xml:space="preserve">
     <value>N-max compliant</value>
   </data>
   <data name="lblNMaxLimitsForFarm" xml:space="preserve">
@@ -4372,7 +4372,7 @@ cubic metres per hectare  not set</value>
     <value>Summary</value>
   </data>
   <data name="lblAdjustedNMaxLimit" xml:space="preserve">
-    <value>Adjusted N-max limit</value>
+    <value>Adjusted {0} limit</value>
   </data>
   <data name="lblCropArea" xml:space="preserve">
     <value>Crop area</value>
@@ -4417,13 +4417,13 @@ cubic metres per hectare  not set</value>
     <value>Nitrogen (N) applications to this crop indicate </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent2" xml:space="preserve">
-    <value>with the N-max limit, based on the information you entered.</value>
+    <value>with the {0} limit, based on the information you entered.</value>
   </data>
   <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
-    <value>N-max limit for {0} before adjustments: {1}kg per hectare.</value>
+    <value>{0} limit for {1} before adjustments: {2}kg per hectare.</value>
   </data>
   <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
-    <value>N-max limit for {0} </value>
+    <value>{0} limit for {1} </value>
   </data>
   <data name="lblTotal" xml:space="preserve">
     <value>Total</value>
@@ -4432,7 +4432,7 @@ cubic metres per hectare  not set</value>
     <value>Per ha</value>
   </data>
   <data name="lblNMaxReportSummaryContent" xml:space="preserve">
-    <value>To comply with the N-max limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted N-max limit.</value>
+    <value>To comply with the {0} limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted {1} limit.</value>
   </data>
   <data name="lblNoCropTypesAvailable" xml:space="preserve">
     <value>You do not have any fields in an NVZ growing crops with an Nmax limit in HY {0}</value>
@@ -4708,7 +4708,7 @@ cubic metres per hectare  not set</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+    <value>Including {0}, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -5230,7 +5230,7 @@ cubic metres per hectare  not set</value>
     <value>Cattle type</value>
   </data>
   <data name="lblCreateALivestockManureNitrogenFarmLimitReport" xml:space="preserve">
-    <value>Create a Livestock manure nitrogen (N) farm limit report for {0}</value>
+    <value>Continue to create a Livestock manure nitrogen (N) farm limit report for {0}</value>
   </data>
   <data name="lblGoatsDeerAndHorses" xml:space="preserve">
     <value>Goats, Deer and Horses</value>
@@ -6849,10 +6849,10 @@ livestock manure.</value>
     <value>The planned applications may not comply with these Nitrate Vulnerable Zone (NVZ) rules:</value>
   </data>
   <data name="lblAnNmaxReportIsNotAvailable" xml:space="preserve">
-    <value>An N-max report is not available</value>
+    <value>An {0} report is not available</value>
   </data>
   <data name="lblYouHaveNotPlannedAnyCropsForYear" xml:space="preserve">
-    <value>You have not planned any crops for {0} that require an N-max report.</value>
+    <value>You have not planned any crops for {0} that require an {1} report.</value>
   </data>
   <data name="lblYouCan" xml:space="preserve">
     <value>You can</value>
@@ -6864,7 +6864,7 @@ livestock manure.</value>
     <value>and change whether your whole farm, or some fields, are in a nitrate vulnerable zone (NVZ).</value>
   </data>
   <data name="lblNMaxReportsAreOnlyAvailableForFarms" xml:space="preserve">
-    <value>N-max reports are only available for farms that are in a nitrate vulnerable zone (NVZ).</value>
+    <value>{0} reports are only available for farms that are in a nitrate vulnerable zone (NVZ).</value>
   </data>
   <data name="lblYouCurrentlyDoNotHaveAPlanFor" xml:space="preserve">
     <value>You currently do not have a plan for {0}</value>
@@ -7026,7 +7026,7 @@ livestock manure.</value>
     <value>total area in an NVZ</value>
   </data>
   <data name="lblAnNMaxIsNotAvailableForYear" xml:space="preserve">
-    <value>An N-max report is not available for {0}</value>
+    <value>An {0} report is not available for {1}</value>
   </data>
   <data name="lblYouNeedToEnterDetailsFirstAbout" xml:space="preserve">
     <value>You need to enter details first about:</value>
@@ -7051,5 +7051,29 @@ livestock manure.</value>
   </data>
   <data name="lblSelectOneOptionYouCanAddMoreLivestock" xml:space="preserve">
     <value>Select one option. You can add more livestock types later.</value>
+  </data>
+  <data name="lblMaximumNitrogenLimitReport" xml:space="preserve">
+    <value>Maximum nitrogen (N) limit report</value>
+  </data>
+  <data name="lblMaximumNitrogenLimitsYear" xml:space="preserve">
+    <value>Maximum Nitrogen (N) limits {0}</value>
+  </data>
+  <data name="lblMaximumNitrogenLimit" xml:space="preserve">
+    <value>Maximum Nitrogen (N) limit</value>
+  </data>
+  <data name="lblMaximumNitrogen" xml:space="preserve">
+    <value>Maximum Nitrogen (N)</value>
+  </data>
+  <data name="lblMaximum" xml:space="preserve">
+    <value>maximum</value>
+  </data>
+  <data name="lblComplianceIndicated" xml:space="preserve">
+    <value>Compliance indicated</value>
+  </data>
+  <data name="lblNitrogenWithoutN" xml:space="preserve">
+    <value>nitrogen</value>
+  </data>
+  <data name="lblGoatsDeerAndHorsesSmallCase" xml:space="preserve">
+    <value>Goats, deer and horses</value>
   </data>
 </root>

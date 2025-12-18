@@ -2,9 +2,10 @@
 @using System.Globalization
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.ReportTitle, Resource.lblNMaxReport, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
+    ViewData["Title"] = $"{string.Format(Resource.ReportTitle, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMaxReport : Resource.lblMaximumNitrogenLimit, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
     int nMaxLimitCounter = 1;
     int totalCount = Model.NMaxLimitReport.Count;
+    string reportName = (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England)?Resource.lblNMax:Resource.lblMaximumNitrogen;
 }
 
 @section BeforeContent {
@@ -42,7 +43,7 @@
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-l">@Model.FarmName</span>
         <h1 class="govuk-heading-xl margin-bottom-thirty">
-            @string.Format(Resource.lblNMaxLimitsForYear, Model.Year)
+            @(string.Format(((Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)?Resource.lblMaximumNitrogenLimitsYear:Resource.lblNMaxLimitsForYear),Model.Year))
         </h1>
         <p class="govuk-body  margin-bottom-thirty">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
     </div>
@@ -101,7 +102,9 @@
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th scope="col" class="govuk-table__header">@Resource.lblCrop</th>
-                        <th scope="col" class="govuk-table__header">@Resource.lblNMaxCompliant</th>
+                        <th scope="col" class="govuk-table__header">@((Model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales?
+                                                    Resource.lblComplianceIndicated : Resource.lblNmaxCompliant))
+                    </th>
                     </tr>
                 </thead>
                 @foreach (var nMaxLimit in Model.NMaxLimitReport)
@@ -123,7 +126,8 @@
     <div class="govuk-grid-row pagebreak">
         <div class="govuk-grid-column-full">
             <p class="govuk-body margin-bottom-thirty">
-                @Resource.lblNMaxReportSummaryContent
+                        @string.Format(Resource.lblNMaxReportSummaryContent, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? $"{Resource.lblMaximum} {Resource.lblNitrogenWithoutN}" : Resource.lblNMax),
+                        (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? $"{Resource.lblMaximum} {Resource.lblNitrogenWithoutN}" : Resource.lblNMax))
             </p>
             <hr class="margin-bottom-thirty" />
             @*<div class="pagebreak">&nbsp;</div>*@
@@ -142,7 +146,7 @@
                         @string.Format(Resource.LblCropTypeFields, nMaxLimit.GroupName)
                     </h2>
                     <h3 class="govuk-heading-m">
-                        @string.Format(Resource.lblNMaxLimitForWinterWheatFields, nMaxLimit.GroupName)
+                        @string.Format(Resource.lblNMaxLimitForWinterWheatFields, reportName, nMaxLimit.GroupName)
                     </h3>
                     <p class="govuk-body"> 
                         @Resource.lblNitrogenApplicationsToCropTypeContent1 
@@ -156,10 +160,10 @@
                                 @Resource.lblNonCompliance.ToLower()
                             }
                         </span>
-                        @Resource.lblNitrogenApplicationsToCropTypeContent2
+                    @string.Format(Resource.lblNitrogenApplicationsToCropTypeContent2, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? $"{Resource.lblMaximum} {Resource.lblNitrogenWithoutN}" : Resource.lblNMax))
                     </p>
                     <p class="govuk-body">
-                        @string.Format(Resource.lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare, nMaxLimit.GroupName, nMaxLimit.NmaxLimit)
+                        @string.Format(Resource.lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare,reportName, nMaxLimit.GroupName, nMaxLimit.NmaxLimit)
                     </p>
                     <div class="table-container margin-bottom-forty">
                     <table class="govuk-table data-table">
@@ -197,7 +201,7 @@
                                         <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
                                     </th>
                                     <th scope="col" class="govuk-table__header">
-                                        @Resource.lblAdjustedNMaxLimit
+                                        @string.Format(Resource.lblAdjustedNMaxLimit,(Model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales? Resource.lblN:Resource.lblNMax))
                                         <br><span class="nonbold">@string.Format("{0} {1}", Resource.lblN, Resource.lblPerHa)</span>
                                     </th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblMaximumLimitForNApplied</th>

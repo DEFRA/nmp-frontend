@@ -1734,7 +1734,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
                     {
-                        model.ReportTypeName = Resource.lblNMax;
+                        model.ReportTypeName =model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales?Resource.lblMaximumNitrogenLimit: Resource.lblNMax;
                         
                     }
                     else if (model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)

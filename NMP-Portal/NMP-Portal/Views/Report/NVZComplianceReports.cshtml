@@ -65,6 +65,7 @@
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
 
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"/>
@@ -156,7 +157,7 @@
                             @(string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@nmaxReport">
-                            @Resource.lblNMaxReport
+                            @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMaxReport)                            
                         </govuk-radios-item>
                         <govuk-radios-item value="@livestockManureNFarmLimitReport">
                             @Resource.lblLivestockManureNitrogenFarmLimit
