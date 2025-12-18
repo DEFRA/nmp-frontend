@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
-using System.Diagnostics.Eventing.Reader;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Controllers
 {

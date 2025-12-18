@@ -1,13 +1,13 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))} {Resource.lblHyphen} {title}";
 
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
 
-    var valueNewSward = (int)NMP.Portal.Enums.CurrentSward.NewSward;
-    var valueExistingSward = (int)NMP.Portal.Enums.CurrentSward.ExistingSward;
+    var valueNewSward = (int)NMP.Commons.Enums.CurrentSward.NewSward;
+    var valueExistingSward = (int)NMP.Commons.Enums.CurrentSward.ExistingSward;
 }
 
 @section BeforeContent {
@@ -74,6 +74,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {

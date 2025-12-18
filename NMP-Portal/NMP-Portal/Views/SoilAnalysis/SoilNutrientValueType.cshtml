@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.SoilAnalysisViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.SoilAnalysisViewModel
 @{
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
     ? $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
     $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var AsAnIndex = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var AsAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @section BeforeContent {
@@ -61,7 +61,7 @@
 
             @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
             {
-                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
 
             }
             else

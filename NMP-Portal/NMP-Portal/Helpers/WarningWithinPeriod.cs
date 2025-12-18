@@ -1,8 +1,8 @@
 ﻿using Microsoft.Identity.Client;
-using NMP.Portal.Enums;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Enums;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -17,10 +17,10 @@ namespace NMP.Portal.Helpers
             string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
-            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
-                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
-            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass;
-            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable;
+            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
+                                     fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
+            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
+            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
 
             if (isSandyShallowSoil && isFieldTypeGrass)
@@ -83,10 +83,10 @@ namespace NMP.Portal.Helpers
             string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
-            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
-                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
-            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass;
-            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable;
+            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
+                                     fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
+            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
+            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
 
             if (isFieldTypeGrass)
@@ -99,8 +99,8 @@ namespace NMP.Portal.Helpers
             {
                 switch (cropTypeId)
                 {
-                    //case (int)NMP.Portal.Enums.CropTypes.Asparagus:             //Asparagus
-                    //case (int)NMP.Portal.Enums.CropTypes.BulbOnions:            //Bulb Onions
+                    //case (int)NMP.Commons.Enums.CropTypes.Asparagus:             //Asparagus
+                    //case (int)NMP.Commons.Enums.CropTypes.BulbOnions:            //Bulb Onions
                     //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                     //    {
                     //        closedPeriod = null;
@@ -115,7 +115,7 @@ namespace NMP.Portal.Helpers
                     //    }
                     //    break;
 
-                    //case (int)NMP.Portal.Enums.CropTypes.SaladOnions:            //Salad Onions
+                    //case (int)NMP.Commons.Enums.CropTypes.SaladOnions:            //Salad Onions
 
                     //    if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
                     //    {
@@ -135,18 +135,18 @@ namespace NMP.Portal.Helpers
                     //    break;
 
                     ////Brassica is a crop group. under this below crop type comes..
-                    //case (int)NMP.Portal.Enums.CropTypes.ForageRape:
-                    //case (int)NMP.Portal.Enums.CropTypes.ForageSwedes:
-                    //case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
-                    //case (int)NMP.Portal.Enums.CropTypes.StubbleTurnips:
-                    //case (int)NMP.Portal.Enums.CropTypes.Swedes:
-                    //case (int)NMP.Portal.Enums.CropTypes.Turnips:
-                    //case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
-                    //case (int)NMP.Portal.Enums.CropTypes.Cabbage:
-                    //case (int)NMP.Portal.Enums.CropTypes.Calabrese:
-                    //case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
-                    //case (int)NMP.Portal.Enums.CropTypes.Radish:
-                    //case (int)NMP.Portal.Enums.CropTypes.WildRocket:
+                    //case (int)NMP.Commons.Enums.CropTypes.ForageRape:
+                    //case (int)NMP.Commons.Enums.CropTypes.ForageSwedes:
+                    //case (int)NMP.Commons.Enums.CropTypes.KaleGrazed:
+                    //case (int)NMP.Commons.Enums.CropTypes.StubbleTurnips:
+                    //case (int)NMP.Commons.Enums.CropTypes.Swedes:
+                    //case (int)NMP.Commons.Enums.CropTypes.Turnips:
+                    //case (int)NMP.Commons.Enums.CropTypes.BrusselSprouts:
+                    //case (int)NMP.Commons.Enums.CropTypes.Cabbage:
+                    //case (int)NMP.Commons.Enums.CropTypes.Calabrese:
+                    //case (int)NMP.Commons.Enums.CropTypes.Cauliflower:
+                    //case (int)NMP.Commons.Enums.CropTypes.Radish:
+                    //case (int)NMP.Commons.Enums.CropTypes.WildRocket:
                     //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                     //    {
                     //        closedPeriod = null;
@@ -162,7 +162,7 @@ namespace NMP.Portal.Helpers
 
                     //    break;
 
-                    //case (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
+                    //case (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
 
                     //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                     //    {
@@ -382,18 +382,18 @@ namespace NMP.Portal.Helpers
             string message = string.Empty;
             int day = applicationDate.Day;
             int month = applicationDate.Month;
-            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
             {
-                if (month > (int)NMP.Portal.Enums.Month.October)
+                if (month > (int)NMP.Commons.Enums.Month.October)
                 {
                     message = string.Format(Resource.MsgForGrassAndOilseedRapeClosedPeriodForFertiliser, cropType);
                 }
             }
-            else if (cropTypeId != (int)NMP.Portal.Enums.CropTypes.Asparagus && cropTypeId != (int)NMP.Portal.Enums.CropTypes.BrusselSprouts && cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cabbage &&
-                cropTypeId != (int)NMP.Portal.Enums.CropTypes.Cauliflower && cropTypeId != (int)NMP.Portal.Enums.CropTypes.Calabrese &&
-                cropTypeId != (int)NMP.Portal.Enums.CropTypes.BulbOnions && cropTypeId != (int)NMP.Portal.Enums.CropTypes.SaladOnions)
+            else if (cropTypeId != (int)NMP.Commons.Enums.CropTypes.Asparagus && cropTypeId != (int)NMP.Commons.Enums.CropTypes.BrusselSprouts && cropTypeId != (int)NMP.Commons.Enums.CropTypes.Cabbage &&
+                cropTypeId != (int)NMP.Commons.Enums.CropTypes.Cauliflower && cropTypeId != (int)NMP.Commons.Enums.CropTypes.Calabrese &&
+                cropTypeId != (int)NMP.Commons.Enums.CropTypes.BulbOnions && cropTypeId != (int)NMP.Commons.Enums.CropTypes.SaladOnions)
             {
-                if ((month >= (int)NMP.Portal.Enums.Month.September) || ((month == (int)NMP.Portal.Enums.Month.January && day <= 15)))
+                if ((month >= (int)NMP.Commons.Enums.Month.September) || ((month == (int)NMP.Commons.Enums.Month.January && day <= 15)))
                 {
                     message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, Resource.lblOneSepToFifteenJan);
                 }
@@ -404,28 +404,28 @@ namespace NMP.Portal.Helpers
         {
             string message = string.Empty;
 
-            if (cropType == (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape)
+            if (cropType == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
             {
                 if (totalNitrogen > 30.0m)
                 {
                     message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, Resource.lblOneSep, Resource.lblThirtyFirstOct, 30);
                 }
             }
-            else if (cropType == (int)NMP.Portal.Enums.CropTypes.Asparagus)
+            else if (cropType == (int)NMP.Commons.Enums.CropTypes.Asparagus)
             {
                 if (totalNitrogen > 50.0m)
                 {
                     message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, Resource.lblOneSep, Resource.lblFifteenJan, 50);
                 }
             }
-            else if (cropType == (int)NMP.Portal.Enums.CropTypes.SaladOnions || cropType == (int)NMP.Portal.Enums.CropTypes.BulbOnions)
+            else if (cropType == (int)NMP.Commons.Enums.CropTypes.SaladOnions || cropType == (int)NMP.Commons.Enums.CropTypes.BulbOnions)
             {
                 if (totalNitrogen > 40.0m)
                 {
                     message = string.Format(Resource.MsgForMaxNitrogenForFertiliserExceptBrassicas, cropTypeName, Resource.lblOneSep, Resource.lblFifteenJan, 40);
                 }
             }
-            else if (cropType == (int)NMP.Portal.Enums.CropTypes.Grass)
+            else if (cropType == (int)NMP.Commons.Enums.CropTypes.Grass)
             {
                 if (totalNitrogen > 80.0m)
                 {
@@ -531,10 +531,10 @@ namespace NMP.Portal.Helpers
             string? WarningPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
-            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.LightSand ||
-                                     fieldDetail.SoilTypeID == (int)NMP.Portal.Enums.SoilTypeEngland.Shallow;
-            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Grass;
-            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Portal.Enums.FieldType.Arable;
+            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
+                                     fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
+            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
+            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
 
             DateTime endDateFebruary = new DateTime(harvestYear, 2, 28);
@@ -550,8 +550,8 @@ namespace NMP.Portal.Helpers
             {
                 switch (cropTypeId)
                 {
-                    case (int)NMP.Portal.Enums.CropTypes.Asparagus:             //Asparagus
-                    case (int)NMP.Portal.Enums.CropTypes.BulbOnions:            //Bulb Onions
+                    case (int)NMP.Commons.Enums.CropTypes.Asparagus:             //Asparagus
+                    case (int)NMP.Commons.Enums.CropTypes.BulbOnions:            //Bulb Onions
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
                             WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
@@ -566,7 +566,7 @@ namespace NMP.Portal.Helpers
                         }
                         break;
 
-                    case (int)NMP.Portal.Enums.CropTypes.SaladOnions:            //Salad Onions
+                    case (int)NMP.Commons.Enums.CropTypes.SaladOnions:            //Salad Onions
 
                         if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
                         {
@@ -586,20 +586,20 @@ namespace NMP.Portal.Helpers
                         break;
 
                     //Brassica is a crop group. under this below crop type comes..
-                    case (int)NMP.Portal.Enums.CropTypes.ForageRape:
-                    case (int)NMP.Portal.Enums.CropTypes.ForageSwedesRootsLifted:
-                    case (int)NMP.Portal.Enums.CropTypes.KaleGrazed:
-                    case (int)NMP.Portal.Enums.CropTypes.StubbleTurnipsGrazed:
-                    case (int)NMP.Portal.Enums.CropTypes.SwedesGrazed:
-                    case (int)NMP.Portal.Enums.CropTypes.TurnipsRootLifted:
-                    case (int)NMP.Portal.Enums.CropTypes.BrusselSprouts:
-                    case (int)NMP.Portal.Enums.CropTypes.Cabbage:
-                    case (int)NMP.Portal.Enums.CropTypes.Calabrese:
-                    case (int)NMP.Portal.Enums.CropTypes.Cauliflower:
-                    case (int)NMP.Portal.Enums.CropTypes.Radish:
-                    case (int)NMP.Portal.Enums.CropTypes.WildRocket:
-                    case (int)NMP.Portal.Enums.CropTypes.Swedes:
-                    case (int)NMP.Portal.Enums.CropTypes.Turnips:
+                    case (int)NMP.Commons.Enums.CropTypes.ForageRape:
+                    case (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted:
+                    case (int)NMP.Commons.Enums.CropTypes.KaleGrazed:
+                    case (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed:
+                    case (int)NMP.Commons.Enums.CropTypes.SwedesGrazed:
+                    case (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted:
+                    case (int)NMP.Commons.Enums.CropTypes.BrusselSprouts:
+                    case (int)NMP.Commons.Enums.CropTypes.Cabbage:
+                    case (int)NMP.Commons.Enums.CropTypes.Calabrese:
+                    case (int)NMP.Commons.Enums.CropTypes.Cauliflower:
+                    case (int)NMP.Commons.Enums.CropTypes.Radish:
+                    case (int)NMP.Commons.Enums.CropTypes.WildRocket:
+                    case (int)NMP.Commons.Enums.CropTypes.Swedes:
+                    case (int)NMP.Commons.Enums.CropTypes.Turnips:
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
                             WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
@@ -615,7 +615,7 @@ namespace NMP.Portal.Helpers
 
                         break;
 
-                    case (int)NMP.Portal.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
+                    case (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
 
                         if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
                         {
@@ -643,7 +643,7 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodForFertiliser(int cropTypeId)
         {
             string? closedPeriod = null;
-            if (cropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass)
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
             {
                 closedPeriod = string.Format(Resource.lbl15SeptemberTo15January, Resource.lblSeptember, Resource.lblJanuary);
 

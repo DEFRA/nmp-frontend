@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.FertiliserManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.FertiliserManureViewModel
 @{
     var heading = (string.IsNullOrWhiteSpace(Model.EncryptedFertId)) ? Resource.lblHowMuchOfEachNutrientDoYouPlan : Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate;
 
@@ -36,12 +36,11 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"/>
@@ -68,7 +67,8 @@
             {
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NeedToShowSameDefoliationForAll" value="@Model.NeedToShowSameDefoliationForAll.ToString().ToLower()" />
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
                     @for (int i = 0; i < Model.FieldList.Count; i++)
@@ -106,7 +106,8 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].Defoliation" value="@Model.FertiliserManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].DefoliationName" value="@Model.FertiliserManures[i].DefoliationName"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].FieldName" value="@Model.FertiliserManures[i].FieldName"/>
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter"/>
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].EncryptedCounter" value="@Model.FertiliserManures[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FertiliserManures[i].IsGrass" value="@Model.FertiliserManures[i].IsGrass" />
                     }
                 }
                 @if (Model.DoubleCrop != null && Model.DoubleCrop.Count > 0)
@@ -120,6 +121,21 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
+                    }
+                }
+                @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                    {
+
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
                     }
                 }
             }
@@ -179,7 +195,7 @@
                             </govuk-details-summary>
                             <govuk-details-text>
                                 <h2 class="govuk-heading-m">
-                                    @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Portal.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
+                                    @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
                                     {
                                         @string.Format(Resource.lblRecommendationsForGrass, Model.FertiliserManures?.FirstOrDefault()?.Defoliation, ViewBag.DefoliationSequenceName)
                                     }
@@ -193,7 +209,7 @@
                                         <tr class="govuk-table__row">
                                             <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
                                             <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
-                                            <th class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
+                                            <th id="totalCropNeed" class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
                                             <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
                                             <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
                                             <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
@@ -204,7 +220,7 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
                                             <td class="govuk-table__cell">
-                                                @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId != (int)NMP.Portal.Enums.CropTypes.Grass)
+                                                @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId != (int)NMP.Commons.Enums.CropTypes.Grass)
                                                 {
                                                     @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
                                                 }

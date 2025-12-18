@@ -1,23 +1,23 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year)} {Resource.lblHyphen} {title}";
     var backAction = "";
-    if(Model.CurrentSward==(int)NMP.Portal.Enums.CurrentSward.ExistingSward)
+    if(Model.CurrentSward==(int)NMP.Commons.Enums.CurrentSward.ExistingSward)
     {
         backAction = "CurrentSward";
     }
     else
     {
-        backAction = (Model.SowingDateQuestion == (int)NMP.Portal.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
+        backAction = (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SowingDate";
     }
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :backAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : backAction) asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SwardType" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -81,6 +81,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {

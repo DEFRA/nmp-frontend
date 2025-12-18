@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NMP.Portal.Enums;
+using NMP.Commons.ServiceResponses;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Portal.Security;
-using NMP.Portal.ServiceResponses;
-using NMP.Portal.ViewModels;
-using System.Security.Cryptography;
+using NMP.Commons.ViewModels;
 using System.Text;
 
 namespace NMP.Portal.Services
@@ -62,7 +59,7 @@ namespace NMP.Portal.Services
             }
             return (cropTypeList, error);
         }
-        public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropTypeId(int harvestYear, int farmId, string? cropTypeId)
+        public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
         {
             List<CommonResponse> fieldResponses = new List<CommonResponse>();
             Error error = null;
@@ -70,9 +67,9 @@ namespace NMP.Portal.Services
             {
                 HttpClient httpClient = await GetNMPAPIClient();
                 string url = string.Empty;
-                if (cropTypeId != null)
+                if (!string.IsNullOrWhiteSpace(cropGroupName))
                 {
-                    url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, farmId);
+                    url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
                 }
                 else
                 {
@@ -115,7 +112,7 @@ namespace NMP.Portal.Services
             return (fieldResponses, error);
         }
 
-        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeId(int harvestYear, string fieldIds, string? cropTypeId, int? cropOrder)
+        public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
         {
             List<int> managementIds = new List<int>();
             Error error = null;
@@ -127,9 +124,9 @@ namespace NMP.Portal.Services
             {
                 HttpClient httpClient = await GetNMPAPIClient();
                 string url = string.Empty;
-                if (cropTypeId != null)
+                if (!string.IsNullOrWhiteSpace(cropGroupName))
                 {
-                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropTypeIdAsyncAPI, harvestYear, cropTypeId, fieldIds,cropOrder);
+                    url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
                 }
                 else
                 {
@@ -231,7 +228,7 @@ namespace NMP.Portal.Services
                     {
                         var manureTypes = responseWrapper.Data.ToObject<List<ManureType>>();
                         manureTypeList.AddRange(manureTypes);
-                        manureTypeList.OrderBy(m=>m.SortOrder).ToList();
+                        manureTypeList.OrderBy(m => m.SortOrder).ToList();
                     }
                 }
                 else
@@ -440,7 +437,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, methodId,applicableFor));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, methodId, applicableFor));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -705,7 +702,7 @@ namespace NMP.Portal.Services
                 {
                     if (responseWrapper != null && responseWrapper.Data != null)
                     {
-                        totalRainfall = responseWrapper.Data.rainfallPostApplication!=null? responseWrapper.Data.rainfallPostApplication.value.ToObject<int>():0;
+                        totalRainfall = responseWrapper.Data.rainfallPostApplication != null ? responseWrapper.Data.rainfallPostApplication.value.ToObject<int>() : 0;
                     }
                 }
                 else
@@ -870,7 +867,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainTypeByIdAsyncAPI,rainTypeId));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainTypeByIdAsyncAPI, rainTypeId));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1307,7 +1304,7 @@ namespace NMP.Portal.Services
             return (manureTypeIds, error);
         }
 
-        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId,  bool confirm, int? fertiliserId, int? organicManureId)
+        public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId)
         {
             Error error = null;
             decimal totalN = 0;
@@ -1668,7 +1665,7 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOrganicManureByIdAPI,id));
+                var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOrganicManureByIdAPI, id));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode)
@@ -1755,7 +1752,7 @@ namespace NMP.Portal.Services
                 HttpClient httpClient = await GetNMPAPIClient();
 
                 var content = new StringContent(organicManureIds, Encoding.UTF8, "application/json");
-                var url =APIURLHelper.DeleteOrganicManureByAPI;
+                var url = APIURLHelper.DeleteOrganicManureByAPI;
 
 
                 var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)

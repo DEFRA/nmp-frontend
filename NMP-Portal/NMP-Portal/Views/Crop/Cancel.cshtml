@@ -1,7 +1,7 @@
-﻿@using NMP.Portal.ViewModels;
-@using NMP.Portal.Resources;
+﻿@using NMP.Commons.ViewModels;
+@using NMP.Commons.Resources;
 @using System.Text
-@model NMP.Portal.ViewModels.PlanViewModel
+@model NMP.Commons.ViewModels.PlanViewModel
 
 @{
 
@@ -71,6 +71,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {

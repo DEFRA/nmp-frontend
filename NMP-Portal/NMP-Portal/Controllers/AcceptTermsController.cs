@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
+using NMP.Commons.Resources;
 using NMP.Portal.Services;
-using NMP.Portal.ViewModels;
 
 namespace NMP.Portal.Controllers;
 public class AcceptTermsController : Controller

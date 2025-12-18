@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @model FieldViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblRemoveField, Model.Name)} {Resource.lblHyphen} {Resource.lblField} {Resource.lblRemove} ";
-    var yesRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var noRemoveFarm = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yesRemoveFarm = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var noRemoveFarm = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 
 @if (TempData["Error"] != null)
@@ -16,7 +16,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblBack</govuk-back-link>
     }
 
     <form asp-action="FieldRemove" asp-controller="Field" method="post" autocomplete="off">

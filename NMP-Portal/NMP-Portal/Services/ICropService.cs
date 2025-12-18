@@ -1,5 +1,6 @@
-﻿using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
+﻿using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Services
 {
@@ -47,5 +48,6 @@ namespace NMP.Portal.Services
 
         Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
         Task<(bool, Error)> MergeCrop(string cropData);
+        Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId,int year);
     }
 }

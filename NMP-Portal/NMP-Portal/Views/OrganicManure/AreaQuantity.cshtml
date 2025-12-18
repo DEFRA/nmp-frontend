@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.OrganicManureViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {title}";
@@ -7,7 +7,7 @@
     if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
     if (Model.IsNMaxLimitWarning) trueWarningCount++;
     if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
-    var isOtherManure = (Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
@@ -39,7 +39,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"/>
                 <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationDate" value="@Model.ApplicationDate"></govuk-date-input>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"/>
@@ -75,7 +75,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable"/>
@@ -171,7 +171,7 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].EncryptedCounter" value="@Model.OrganicManures[i].EncryptedCounter"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"/>
-
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IsGrass" value="@Model.OrganicManures[i].IsGrass" />
                     }
                 }
                 @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
@@ -206,6 +206,21 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropName"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropOrder"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
+                    }
+                }
+                @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                    {
+
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
                     }
                 }
             </div>
@@ -263,11 +278,11 @@
                     {
                         <div class="govuk-notification-banner__content">
                             <p class="govuk-notification-banner__heading">
-                                @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                 {
                                     @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
                                 }
-                                @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                 {
                                     @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
                                 }
@@ -292,11 +307,11 @@
                             </ul>
                             <govuk-details>
                                 <govuk-details-summary>
-                                    @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                     {
                                         @Resource.lblMoreAboutTheseNVZRules
                                     }
-                                    @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                     {
                                         @Resource.lblMoreAboutTheseWaterResourceRegulation
                                     }
@@ -325,11 +340,11 @@
                                     }
                                 </govuk-details-text>
                             </govuk-details>
-                            @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.England)
+                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                             {
                                 <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheNitrateVulnerableZone</p>
                             }
-                            @if (Model.FarmCountryId == (int)NMP.Portal.Enums.FarmCountry.Wales)
+                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
                             {
                                 <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheWaterResources</p>
                             }

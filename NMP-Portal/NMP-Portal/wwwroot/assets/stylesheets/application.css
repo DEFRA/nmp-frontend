@@ -337,16 +337,6 @@ a:focus, .govuk-link:focus {
     padding-bottom: 2% !important;
 }
 
-@media print {
-    .pagebreak {
-        page-break-after: always;
-        clear: both;
-    }
-
-    .noprint {
-        display: none;
-    }
-}
 
 #printbreak {
     height: 10px;
@@ -388,6 +378,15 @@ a:focus, .govuk-link:focus {
 }
 
 @media print {
+    .pagebreak {
+        page-break-after: always;
+        clear: both;
+    }
+
+    .noprint {
+        display: none;
+    }
+
     .govuk-heading-xl {
         font-size: 22pt !important;
         line-height: 1.15;
@@ -440,12 +439,12 @@ a:focus, .govuk-link:focus {
     }
 
     .govuk-heading-s {
-        font-size: 10pt !important;
+        font-size: 14pt !important;
         line-height: 1.15;
     }
 
     .govuk-heading-m {
-        font-size: 13pt !important;
+        font-size: 18pt !important;
         line-height: 1.15;
         margin-bottom: 10pt !important;
     }
@@ -481,6 +480,12 @@ a:focus, .govuk-link:focus {
         margin-bottom: -10px !important;
         padding-top: 10px !important;
         border-bottom: 10px solid black !important;
+    }
+
+    .govuk-body-s {
+        font-family: sans-serif;
+        font-size: 14pt !important;
+        line-height: 1.2;
     }
 }
 
@@ -687,9 +692,6 @@ hr.seperator_thirty {
 .livestock-type {
     width: 25%;
 }
-.govuk-body-s {
-    font-size: 17px !important;
-}
 .n-table th {
     width: 33%;
 }
@@ -873,6 +875,79 @@ hr.seperator_thirty {
 
     #nutrient_list .nutrient_row .figure {
         float: right;
-        width: 30%;
         padding-right: 5px;
     }
+        #nutrient_list .nutrient_row .figure.w31 {
+            width: 31%;
+        }
+
+        #nutrient_list .nutrient_row .figure.w35 {
+            width: 35%;
+        }
+
+#totalCropNeed{
+    width:87px !important;
+}
+
+.govuk-body-s {
+    color: #0b0c0c;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    line-height: 1.1428571429;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 17px !important;
+}
+
+
+@media (min-width: 40.0625em) {
+    .govuk-body-s {
+        font-size: 1rem;
+        line-height: 1.25;
+        margin-bottom: 20px;
+    }
+}
+
+
+p + .govuk-heading-l, .govuk-body-m + .govuk-heading-l, .govuk-body + .govuk-heading-l,
+.govuk-body-s + .govuk-heading-l,
+.govuk-list + .govuk-heading-l {
+    padding-top: 15px;
+}
+
+@media (min-width: 40.0625em) {
+    p + .govuk-heading-l, .govuk-body-m + .govuk-heading-l, .govuk-body + .govuk-heading-l,
+    .govuk-body-s + .govuk-heading-l,
+    .govuk-list + .govuk-heading-l {
+        padding-top: 20px;
+    }
+}
+
+p + .govuk-heading-m, .govuk-body-m + .govuk-heading-m, .govuk-body + .govuk-heading-m,
+.govuk-body-s + .govuk-heading-m,
+.govuk-list + .govuk-heading-m,
+p + .govuk-heading-s,
+.govuk-body-m + .govuk-heading-s,
+.govuk-body + .govuk-heading-s,
+.govuk-body-s + .govuk-heading-s,
+.govuk-list + .govuk-heading-s {
+    padding-top: 5px;
+}
+
+@media (min-width: 40.0625em) {
+    p + .govuk-heading-m, .govuk-body-m + .govuk-heading-m, .govuk-body + .govuk-heading-m,
+    .govuk-body-s + .govuk-heading-m,
+    .govuk-list + .govuk-heading-m,
+    p + .govuk-heading-s,
+    .govuk-body-m + .govuk-heading-s,
+    .govuk-body + .govuk-heading-s,
+    .govuk-body-s + .govuk-heading-s,
+    .govuk-list + .govuk-heading-s {
+        padding-top: 10px;
+    }
+}
+hr.seperator_five_report {
+    margin: 10px 0 40px 0;
+}

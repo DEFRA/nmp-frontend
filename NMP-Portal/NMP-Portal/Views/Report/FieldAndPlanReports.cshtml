@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{Resource.lblWhichFarmInformationAndPlanningReportDoYouWantToCreate} {Resource.lblHyphen} {Resource.lblReport}";
 
-    var cropFieldManagementReport = (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport;
-    var livestockNumbersReport = (int)NMP.Portal.Enums.FieldAndPlanReportOption.LivestockNumbersReport;
-    var importsAndExportsReport = (int)NMP.Portal.Enums.FieldAndPlanReportOption.ImportsAndExportsReport;
+    var cropFieldManagementReport = (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport;
+    var livestockNumbersReport = (int)NMP.Commons.Enums.FieldAndPlanReportOption.LivestockNumbersReport;
+    var importsAndExportsReport = (int)NMP.Commons.Enums.FieldAndPlanReportOption.ImportsAndExportsReport;
 }
 
 @section BeforeContent {
@@ -139,7 +139,7 @@
                         <govuk-radios-item value="@cropFieldManagementReport">
                             @Resource.lblFieldRecordsAndNutrientManagementPlanning
                             <govuk-radios-item-hint>
-                                @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
+                                @Resource.lblCropFieldAndNutrientApplicationsForOneOrMoreFields
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                         <govuk-radios-item value="@livestockNumbersReport" disabled="true">

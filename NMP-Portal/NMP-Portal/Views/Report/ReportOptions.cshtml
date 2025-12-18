@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     var heading = (Model.Year == null ? Resource.lblWhatTypeOfReportDoYouWantToCreate : string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year));
 
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
-    var fieldRecordsAndPlan = (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan;
-    var farmAndFieldDetailsForNVZRecord = (int)NMP.Portal.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord;
+    var fieldRecordsAndPlan = (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan;
+    var farmAndFieldDetailsForNVZRecord = (int)NMP.Commons.Enums.ReportOption.FarmAndFieldDetailsForNVZRecord;
 }
 
 @section BeforeContent {
@@ -157,16 +157,17 @@
                                 @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
                             }
                         </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@fieldRecordsAndPlan">
-                            @Resource.lblFieldRecordsAndNutrientManagementPlanning
-                            <govuk-radios-item-hint>
-                                @Resource.lblIncludesDetailsAboutYourFieldsCropsAndRec
-                            </govuk-radios-item-hint>
-                        </govuk-radios-item>
+                        
                         <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
-                            @(string.Format(Resource.lblFarmAndFieldDetailsForNVZRecords, (Model.Country != null && Model.Country == (int)NMP.Portal.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
+                            @Resource.lblAnNVZReport
                             <govuk-radios-item-hint>
                                 @Resource.lblIncludesNmaxLivestockManureNitrogen
+                            </govuk-radios-item-hint>
+                        </govuk-radios-item>
+                        <govuk-radios-item value="@fieldRecordsAndPlan">
+                            @Resource.lblACropAndNutrientManagementReport
+                            <govuk-radios-item-hint>
+                                @Resource.lblDetailsAboutYourFieldsCropsAndRecommendations
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                     </govuk-radios-fieldset>

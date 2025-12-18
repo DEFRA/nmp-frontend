@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@using NMP.Portal.ViewModels
+@using NMP.Commons.ViewModels
 
 @model FieldViewModel
 @{
@@ -153,7 +153,7 @@
                                 {
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@Resource.lblLengthOfTheLay</td>
-                                        <td class="govuk-table__cell">@(Model.PreviousCroppings.LayDuration.Value == (int)NMP.Portal.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore)</td>
+                                        <td class="govuk-table__cell">@(Model.PreviousCroppings.LayDuration.Value == (int)NMP.Commons.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore)</td>
                                     </tr>
                                 }
                             }
@@ -185,7 +185,7 @@
 
                 </tbody>
             </table>
-            <p class="govuk-body margin-bottom-forty"><a asp-action="UpdateField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblChangeFieldDetails</a></p>
+            <p class="govuk-body margin-bottom-forty"><a asp-action="UpdateField" asp-controller="Field" asp-route-fieldId="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">@Resource.lblChangeFieldDetails</a></p>
             <p class="govuk-body margin-bottom-forty">@string.Format(Resource.MsgRemoveField, Model.Name)</p>
             <p class="govuk-body margin-bottom-forty"><a asp-action="FieldRemove" asp-controller="Field">@string.Format(Resource.lblRemoveField, Model.Name)</a></p>
 

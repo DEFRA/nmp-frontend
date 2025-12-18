@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.ViewModels;
-@using NMP.Portal.Resources;
-@model NMP.Portal.ViewModels.SoilAnalysisViewModel
+﻿@using NMP.Commons.ViewModels;
+@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.SoilAnalysisViewModel
 
 @{
     ViewData["Title"] = ((Model != null && !string.IsNullOrEmpty(Model.EncryptedSoilAnalysisId))) ? $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" : $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";

@@ -1,26 +1,19 @@
-﻿using AspNetCoreGeneratedDocument;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
+using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.Resources;
-using NMP.Portal.ServiceResponses;
-using NMP.Portal.Services;
-using OpenTelemetry.Trace;
-using System.Diagnostics.Metrics;
+using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Text;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Security
 {
@@ -35,7 +28,7 @@ namespace NMP.Portal.Security
 
             services.AddAuthentication(options =>
             {
-                
+
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -70,8 +63,7 @@ namespace NMP.Portal.Security
                 cookieOptions.SlidingExpiration = true;
             })
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
-            .AddInMemoryTokenCaches()            
-            .AddDistributedTokenCaches();
+            .AddDistributedTokenCaches();                        
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -87,11 +79,10 @@ namespace NMP.Portal.Security
                 options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
                 options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
-                options.Events.OnRemoteFailure += OnRemoteFailure;
-                
+                options.Events.OnRemoteFailure += OnRemoteFailure;                
             });
             services.AddTokenAcquisition();
-            //services.AddInMemoryTokenCaches();            
+            services.AddDistributedTokenCaches();            
             services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;

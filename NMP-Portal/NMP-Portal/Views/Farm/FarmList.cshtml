@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources;
-@using NMP.Portal.ViewModels;
+﻿@using NMP.Commons.Resources;
+@using NMP.Commons.ViewModels;
 @model FarmsViewModel
 @{
     ViewData["Title"] = Resource.lblYourFarms;
@@ -30,10 +30,10 @@ else
             </h1>
             @if (Model != null && Model.Farms.Count > 0)
             {
-                @foreach (var farmList in Model.Farms)
+                @foreach (var farm in Model.Farms)
                 {
                     <p class="govuk-body">
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@farmList.EncryptedFarmId">@farmList.Name</a>
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@farm.EncryptedFarmId">@farm.Name</a>
                     </p>
                 }
                 <hr class="seperator_five" />

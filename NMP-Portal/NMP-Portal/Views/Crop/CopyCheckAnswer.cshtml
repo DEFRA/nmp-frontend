@@ -1,18 +1,18 @@
-﻿﻿@using NMP.Portal.Resources
+﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
-@model NMP.Portal.ViewModels.PlanViewModel
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {title}";
 
-    var yes = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Portal.Enums.TrueFalse.False);
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var organicInorganicCopy = "";
     var selection = "";
 
-    bool hasOrganic = (Model.OrganicInorganicCopy & NMP.Portal.Enums.OrganicInorganicCopy.OrganicMaterial) == NMP.Portal.Enums.OrganicInorganicCopy.OrganicMaterial;
-    bool hasInorganic = (Model.OrganicInorganicCopy & NMP.Portal.Enums.OrganicInorganicCopy.InorganicFertiliser) == NMP.Portal.Enums.OrganicInorganicCopy.InorganicFertiliser;
-    bool isNone = Model.OrganicInorganicCopy == NMP.Portal.Enums.OrganicInorganicCopy.None;
+    bool hasOrganic = (Model.OrganicInorganicCopy & NMP.Commons.Enums.OrganicInorganicCopy.OrganicMaterial) == NMP.Commons.Enums.OrganicInorganicCopy.OrganicMaterial;
+    bool hasInorganic = (Model.OrganicInorganicCopy & NMP.Commons.Enums.OrganicInorganicCopy.InorganicFertiliser) == NMP.Commons.Enums.OrganicInorganicCopy.InorganicFertiliser;
+    bool isNone = Model.OrganicInorganicCopy == NMP.Commons.Enums.OrganicInorganicCopy.None;
 
     if (hasOrganic && hasInorganic)
     {
@@ -91,7 +91,8 @@
 
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyYear"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicInorganicCopy"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
                 @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
                 {

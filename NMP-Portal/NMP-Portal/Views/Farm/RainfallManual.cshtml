@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources;
-@model NMP.Portal.ViewModels.FarmViewModel
+﻿@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.FarmViewModel
 
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;

@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Abstractions;
 using NMP.Portal.Helpers;
-using NMP.Portal.Models;
-using NMP.Portal.ServiceResponses;
+using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
 using System.Diagnostics;
 using System.Net;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-
     public class ErrorController : Controller
     {        
         [Route("Error/{statusCode}")]
@@ -65,7 +65,7 @@ namespace NMP.Portal.Controllers
 
                 case 409:
                     errorViewModel.Code = 409;
-                    errorViewModel.Message = "Conflict. The request conflicts with the current state of the server.";
+                    errorViewModel.Message = "Conflict. The request conflicts with the current state of the server. May be session data are missing.";
                     errorViewModel.StatusCode = statusKey;
                     break;
 

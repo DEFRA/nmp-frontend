@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.ReportViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
 @{
     var title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
     @if (ViewBag.NoPlan != null)
@@ -10,11 +10,11 @@
     {
         title = ViewBag.NoField;
     }
-    else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+    else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
     {
         title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
     }
-    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
+    else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
     {
         title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year);
     }
@@ -26,8 +26,8 @@
 
     ViewData["Title"] = $" {title} {Resource.lblHyphen} {Resource.lblReport}";
     var backAction = ((Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)) ? "Year" :
-        ((Model.ReportOption == (int)NMP.Portal.Enums.ReportOption.FieldRecordsAndPlan)
-        ? "FieldAndPlanReports" : "NVZComplianceReports");
+        ((Model.ReportOption == (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan)
+        ? "ReportOptions" : "NVZComplianceReports");
 }
 
 @section BeforeContent {
@@ -185,14 +185,14 @@ else
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard" />
 
-            @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.CropAndFieldManagementReport && Model.CropTypeList != null && Model.CropTypeList.Count > 0)
+            @if (Model.ReportType != null && Model.ReportType == (int)NMP.Commons.Enums.ReportType.CropAndFieldManagementReport && Model.CropTypeList != null && Model.CropTypeList.Count > 0)
             {
                 @for (int i = 0; i < Model.CropTypeList.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]" />
                 }
             }
-            else @if (Model.ReportType != null && Model.ReportType == (int)NMP.Portal.Enums.ReportType.NMaxReport)
+            else @if (Model.ReportType != null && Model.ReportType == (int)NMP.Commons.Enums.ReportType.NMaxReport)
             {
                 @if (Model.FieldList != null && Model.FieldList.Count > 0)
                 {
@@ -208,124 +208,150 @@ else
 
                 @if (ViewBag.NoPlan != null || ViewBag.NoField != null)
                 {
-                    @if (ViewBag.NoPlan != null)
+                    @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                     {
-                        <h2 class="govuk-heading-l">@ViewBag.NoPlan</h2>
+                        @if (ViewBag.NoPlan != null)
+                        {
+                            <h2 class="govuk-heading-l">@ViewBag.NoPlan</h2>
+                            <p class="govuk-body">
+                                @Resource.MsgForIfFieldorPlanAreNotCreated
+                            </p>
+                        }
+                        else
+                        {
+                            <h2 class="govuk-heading-l">
+                                @ViewBag.NoField
+                            </h2>
+                            <p class="govuk-body">
+                                @Resource.MsgForIfFieldorPlanAreNotCreated
+                            </p>
+                        }
+                    }
+                    else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport){
+                    <h2 class="govuk-heading-l">  @string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Year)</h2>
+                    <div class="margin-bottom-forty">
                         <p class="govuk-body">
-                            @Resource.MsgForIfPlanIsNotCreated
+                            @Resource.lblYouNeedToEnterDetailsFirstAbout
+                            <ul class="govuk-list govuk-list--bullet">
+                                @if (ViewBag.NoField != null)
+                                {
+                                    <li>@Resource.lblYourFields</li>
+                                }
+                                <li>@Resource.lblYourCrops</li>
+                                <li>@Resource.lblAnyOrganicMaterialOrInorganicFertiliserUsed</li>
+                            </ul>
                         </p>
-                        <div class="margin-bottom-forty">
-                            <a class="govuk-button add-button" asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@ViewBag.EncryptedYear" asp-route-isPlanRecord="true">
-                                @Resource.lblAddCrops
-                            </a>
-                        </div>
+                    </div>
+                }
+
+                <div class="margin-bottom-forty">
+                    @if (ViewBag.NoField != null)
+                    {
+                        <a class="govuk-button add-button" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
+                            @Resource.lblAddfields
+                        </a>
                     }
                     else
+                    @if (ViewBag.NoPlan != null)
                     {
-                        <h2 class="govuk-heading-l">
-                            @ViewBag.NoField
-                        </h2>
-                        <p class="govuk-body">
-                            @Resource.MsgForIfFieldsAreNotCreated
-                        </p>
-                        <div class="margin-bottom-forty">
-                            <a class="govuk-button add-button" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">
-                                @Resource.lblAddField
-                            </a>
-                        </div>
+                        <a class="govuk-button add-button" asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@ViewBag.EncryptedYear" asp-route-isPlanRecord="true">
+                            @Resource.lblAddCrops
+                        </a>
                     }
+                </div>
+            }
+            else
+            {
+                @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+                {
+
+                    <govuk-checkboxes asp-for="FieldList">
+                        <govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                @string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year)
+                            </govuk-checkboxes-fieldset-legend>
+
+                            <govuk-checkboxes-hint>
+                                @Resource.lblSelectAllThatApply
+                            </govuk-checkboxes-hint>
+                            @if (ViewBag.fieldList != null)
+                            {
+                                @foreach (var item in ViewBag.fieldList)
+                                {
+                                    <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
+                                }
+                            }
+
+                            <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                            <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
+                        </govuk-checkboxes-fieldset>
+                    </govuk-checkboxes>
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+                }
+                else
+                @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                {
+                    <govuk-checkboxes asp-for="CropTypeList">
+                        <govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                @string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year)
+                            </govuk-checkboxes-fieldset-legend>
+
+                            <govuk-checkboxes-hint>
+                                @Resource.lblSelectAllThatApply
+                            </govuk-checkboxes-hint>
+                            @if (ViewBag.CropTypeList != null)
+                            {
+                                @foreach (var item in ViewBag.CropTypeList)
+                                {
+
+                                    <govuk-checkboxes-item value="@item.Value">
+                                        @item.Text
+                                        @if (item.Text == Resource.lblGroup1Vegetables)
+                                        {
+                                            <govuk-checkboxes-item-hint>@ViewBag.Group1VegetablesHint</govuk-checkboxes-item-hint>
+                                        }
+                                        @if (item.Text == Resource.lblGroup2Vegetables)
+                                        {
+                                            <govuk-checkboxes-item-hint>@ViewBag.Group2VegetablesHint</govuk-checkboxes-item-hint>
+                                        }
+                                        @if (item.Text == Resource.lblGroup3Vegetables)
+                                        {
+                                            <govuk-checkboxes-item-hint>@ViewBag.Group3VegetablesHint</govuk-checkboxes-item-hint>
+                                        }
+                                    </govuk-checkboxes-item>
+
+                                }
+                            }
+
+                            <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                            <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
+                        </govuk-checkboxes-fieldset>
+                    </govuk-checkboxes>
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+                }
+            }
+            <p class="govuk-body cancel-link">
+                @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                {
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                        @Resource.lblCancel
+                    </a>
                 }
                 else
                 {
-                    @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Portal.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
-                    {
-                        
-                            <govuk-checkboxes asp-for="FieldList">
-                                <govuk-checkboxes-fieldset>
-                                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                        @string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year)
-                                    </govuk-checkboxes-fieldset-legend>
-
-                                    <govuk-checkboxes-hint>
-                                        @Resource.lblSelectAllThatApply
-                                    </govuk-checkboxes-hint>
-                                    @if (ViewBag.fieldList != null)
-                                    {
-                                        @foreach (var item in ViewBag.fieldList)
-                                        {
-                                            <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
-                                        }
-                                    }
-
-                                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                                    <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
-                                </govuk-checkboxes-fieldset>
-                            </govuk-checkboxes>
-                            <govuk-button type="submit" class="margin-bottom-forty">
-                                @Resource.lblContinue
-                            </govuk-button>
-                    }
-                    else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Portal.Enums.NVZReportOption.NmaxReport)
-                    {
-                            <govuk-checkboxes asp-for="CropTypeList">
-                                <govuk-checkboxes-fieldset>
-                                    <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                        @string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year)
-                                    </govuk-checkboxes-fieldset-legend>
-
-                                    <govuk-checkboxes-hint>
-                                        @Resource.lblSelectAllThatApply
-                                    </govuk-checkboxes-hint>
-                                    @if (ViewBag.CropTypeList != null)
-                                    {
-                                        @foreach (var item in ViewBag.CropTypeList)
-                                        {
-
-                                            <govuk-checkboxes-item value="@item.Value">
-                                                @item.Text
-                                                @if (item.Text == Resource.lblGroup1Vegetables)
-                                                {
-                                                    <govuk-checkboxes-item-hint>@ViewBag.Group1VegetablesHint</govuk-checkboxes-item-hint>
-                                                }
-                                                @if (item.Text == Resource.lblGroup2Vegetables)
-                                                {
-                                                    <govuk-checkboxes-item-hint>@ViewBag.Group2VegetablesHint</govuk-checkboxes-item-hint>
-                                                }
-                                                @if (item.Text == Resource.lblGroup3Vegetables)
-                                                {
-                                                    <govuk-checkboxes-item-hint>@ViewBag.Group3VegetablesHint</govuk-checkboxes-item-hint>
-                                                }
-                                            </govuk-checkboxes-item>
-
-                                        }
-                                    }
-
-                                    <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-                                    <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
-                                </govuk-checkboxes-fieldset>
-                            </govuk-checkboxes>
-                            <govuk-button type="submit" class="margin-bottom-forty">
-                                @Resource.lblContinue
-                            </govuk-button>
-                    }
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                        @Resource.lblCancel
+                    </a>
                 }
-                <p class="govuk-body cancel-link">
-                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
-                    {
-                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
-
-            </div>
+            </p>
 
         </div>
-    </form>
+
+    </div>
+</form>
 }

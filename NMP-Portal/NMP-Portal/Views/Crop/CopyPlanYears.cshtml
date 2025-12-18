@@ -1,5 +1,5 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)} {Resource.lblHyphen} {title}";
@@ -63,6 +63,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicInorganicCopy" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
                 @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
                 {
                     @for (int i = 0; i < Model.HarvestYear.Count; i++)

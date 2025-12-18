@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using GovUk.Frontend.AspNetCore;
 using Joonasw.AspNetCore.SecurityHeaders;
@@ -7,11 +8,17 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web.UI;
+using NMP.Commons.Models;
+using NMP.Portal.Models;
 using NMP.Portal.Security;
 using NMP.Portal.Services;
+using NMP.Registrar;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using StackExchange.Redis; // Add this at the top of the file
 using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,9 +44,63 @@ builder.Services.Configure<FormOptions>(options =>
     options.BufferBodyLengthLimit = int.MaxValue;
     options.BufferBody = true;
 });
+
+string? azureRedisHost = builder.Configuration["AZURE_REDIS_HOST"]?.ToString();
+if (!string.IsNullOrWhiteSpace(azureRedisHost))
+{
+    // 1. Create the Redis multiplexer ONCE
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    {
+        var credential = new DefaultAzureCredential();
+
+        // AAD token provider for Redis Enterprise
+        var options = ConfigurationOptions.Parse(azureRedisHost);
+        options.Protocol = RedisProtocol.Resp3;
+        options.AbortOnConnectFail = false;
+        options.ConnectRetry = 5;           // Retry 5 times
+        options.ConnectTimeout = 15000;     // 15 seconds
+        options.ReconnectRetryPolicy = new ExponentialRetry(5000); // Backoff strategy
+        options.ConfigureForAzureWithTokenCredentialAsync(credential); // ⭐ Critical: auto-refresh AAD token
+
+        return ConnectionMultiplexer.Connect(options);
+    });
+
+    // 2. Use Redis cache using DI-bound multiplexer
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.ConnectionMultiplexerFactory = async () =>
+        {
+            return builder.Services
+                .BuildServiceProvider()
+                .GetRequiredService<IConnectionMultiplexer>();
+        };
+
+        options.InstanceName = "nmp_ui_";
+    });
+}
+
+var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
+if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
+{
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(t => t.AddAspNetCoreInstrumentation())
+        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
+        .UseAzureMonitor(options =>
+        {
+            options.ConnectionString = applicationInsightsConnectionString;
+        });
+
+    builder.Services.AddApplicationInsightsTelemetry(options =>
+    {
+        options.ConnectionString = applicationInsightsConnectionString;
+    });
+}
+
 builder.Services.AddHttpsRedirection(options => { });
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDefraCustomerIdentity(builder);
+Registrar.RegisterDependencies(builder.Services, builder.Configuration);
 
 builder.Services.AddAuthorization(options =>
 {
@@ -75,26 +136,6 @@ builder.Services.AddSession(options =>
     options.IOTimeout = Timeout.InfiniteTimeSpan;
 });
 
-var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
-
-if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
-{
-    builder.Services.AddOpenTelemetry()
-        .WithTracing(t => t.AddAspNetCoreInstrumentation())
-        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
-        .UseAzureMonitor(options =>
-        {
-            options.ConnectionString = applicationInsightsConnectionString;
-        });
-
-    builder.Services.AddApplicationInsightsTelemetry(options =>
-    {
-        options.ConnectionString = applicationInsightsConnectionString;
-    });
-
-}
-
-
 builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
@@ -102,8 +143,6 @@ builder.Services.AddLogging(builder =>
     builder.AddApplicationInsights();
     builder.AddOpenTelemetry();
 });
-
-
 
 builder.Services.AddHttpClient("NMPApi", httpClient =>
 {
@@ -119,6 +158,7 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+builder.Services.AddScoped<FarmContext>();
 builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
@@ -175,6 +215,7 @@ var app = builder.Build();
 app.UseGovUkFrontend();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -223,8 +264,7 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
     }
-
-        await next();
+    await next();
 });
 
 app.UseCsp(csp =>
@@ -255,9 +295,11 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<FarmContextMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
+
+
 

@@ -1,11 +1,11 @@
-﻿@using NMP.Portal.Resources
-@using NMP.Portal.ViewModels
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
 @using System.Globalization
 
 @model OrganicManureViewModel
 @{
     var heading = "";
-    if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+    if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         ||
                         (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue) && Model.DefaultFarmManureValueDate.HasValue)
     {
@@ -64,7 +64,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules"/>
 
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethod"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationRateMethod"/>
@@ -108,7 +108,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationMethodName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationDelayName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IncorporationMethodName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroupName"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2OAvailable" value="@Model.ManureType.K2OAvailable"/>
@@ -202,7 +202,7 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].EncryptedCounter" value="@Model.OrganicManures[i].EncryptedCounter"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].Defoliation" value="@Model.OrganicManures[i].Defoliation"/>
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].DefoliationName" value="@Model.OrganicManures[i].DefoliationName"/>
-
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].IsGrass" value="@Model.OrganicManures[i].IsGrass" />
                     }
 
                 }
@@ -240,10 +240,25 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].EncryptedCounter"/>
                     }
                 }
+                @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
+                {
+                    @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                    {
+
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].FieldID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].ManagementPeriodID" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Counter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].DefoliationName" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].EncryptedCounter" />
+                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
+                    }
+                }
             </div>
 
 
-            @if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+            @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         ||
                         (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue) && Model.DefaultFarmManureValueDate.HasValue)
             {
@@ -312,7 +327,7 @@
             <govuk-radios asp-for="@Model.DefaultNutrientValue">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="false">
-                        @if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials)
+                        @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                                                 ||
                                                 (ViewBag.FarmManureApiOption != null && ViewBag.FarmManureApiOption == Resource.lblTrue) && Model.DefaultFarmManureValueDate.HasValue)
                         {
@@ -341,7 +356,7 @@
                     }
                     else
                     {
-                        @* if ((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) *@
+                        @* if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) *@
                         @*     <govuk-radios-item value="@Resource.lblYes">@Resource.lblYesUseTheseValues</govuk-radios-item>
                             <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
                         }
@@ -350,7 +365,7 @@
                         <govuk-radios-item value="@Resource.lblYes">@Resource.lblYesUseTheseValues</govuk-radios-item>
 
                         <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">
-                            @(((Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Portal.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) ? Resource.lblIwantToEnterARecentOrganicMaterialAnalysis : Resource.lblNoChangeTheseValues)
+                            @(((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) ? Resource.lblIwantToEnterARecentOrganicMaterialAnalysis : Resource.lblNoChangeTheseValues)
                         </govuk-radios-item>
                     }
                     @* <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item> *@

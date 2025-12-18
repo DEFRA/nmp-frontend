@@ -133,29 +133,29 @@ namespace NMP.Portal.Services
 
             switch (cropCategoryId)
             {
-                case (int)NMP.Portal.Enums.CropCategory.Grass:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.Grass;
+                case (int)NMP.Commons.Enums.CropCategory.Grass:
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.Grass;
                     break;
-                case (int)NMP.Portal.Enums.CropCategory.EarlySownWinterCereal:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.EarlySownWinterCereal;
+                case (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal:
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.EarlySownWinterCereal;
                     break;
-                case (int)NMP.Portal.Enums.CropCategory.LateSownWinterCereal:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.LateSownWinterCereal;
+                case (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal:
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.LateSownWinterCereal;
                     break;
-                case (int)NMP.Portal.Enums.CropCategory.EarlyStablishedWinterOilseedRape:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.EarlyStablishedWinterOilseedRape;
+                case (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape:
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.EarlyStablishedWinterOilseedRape;
                     break;
-                case (int)NMP.Portal.Enums.CropCategory.LateStablishedWinterOilseedRape:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.LateStablishedWinterOilseedRape;
+                case (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape:
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.LateStablishedWinterOilseedRape;
                     break;
-                case (int)NMP.Portal.Enums.CropCategory.Other:
-                case (int)NMP.Portal.Enums.CropCategory.Potatoes:
-                case (int)NMP.Portal.Enums.CropCategory.Sugerbeet:
-                case (int)NMP.Portal.Enums.CropCategory.SpringCerealOilseedRape:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.Other;
+                case (int)NMP.Commons.Enums.CropCategory.Other:
+                case (int)NMP.Commons.Enums.CropCategory.Potatoes:
+                case (int)NMP.Commons.Enums.CropCategory.Sugerbeet:
+                case (int)NMP.Commons.Enums.CropCategory.SpringCerealOilseedRape:
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.Other;
                     break;
                 default:
-                    cropUptakeFactor = (int)NMP.Portal.Enums.CropUptakeFactor.Other;
+                    cropUptakeFactor = (int)NMP.Commons.Enums.CropUptakeFactor.Other;
                     break;
             }
 

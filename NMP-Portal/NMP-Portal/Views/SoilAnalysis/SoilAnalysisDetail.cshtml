@@ -1,6 +1,6 @@
-﻿@using NMP.Portal.Resources
+﻿@using NMP.Commons.Resources
 @using System.Globalization
-@using NMP.Portal.ViewModels
+@using NMP.Commons.ViewModels
 
 @model SoilAnalysisViewModel
 @{
@@ -29,7 +29,7 @@
         <govuk-breadcrumbs-item asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">
             @Resource.lblFields
         </govuk-breadcrumbs-item>
-        <govuk-breadcrumbs-item asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
+            <govuk-breadcrumbs-item asp-controller="Field" asp-action="FieldSoilAnalysisDetail" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">
             @Model.FieldName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">

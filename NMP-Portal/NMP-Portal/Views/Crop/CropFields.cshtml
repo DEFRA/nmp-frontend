@@ -1,10 +1,10 @@
-﻿@using NMP.Portal.Resources
-@model NMP.Portal.ViewModels.PlanViewModel
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
 @{
-    int OtherGroupId = (int)NMP.Portal.Enums.CropGroup.Other;
-    int potatoGroupId = (int)NMP.Portal.Enums.CropGroup.Potatoes;
+    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
+    int potatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
     var heading = "";
-    if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+    if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
     {
         heading = Resource.lblWhichFieldsWouldYouLikeToAddToThisGrass;
     }
@@ -21,7 +21,7 @@
     {
         action = "CheckAnswer";
     }
-    else if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+    else if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
     {
         action = "CropGroups";
     }
@@ -93,6 +93,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
 
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {
@@ -131,7 +132,7 @@
            
             <govuk-checkboxes name="FieldList" asp-for="@Model.FieldList" data-module="govuk-checkboxes">
                 <govuk-checkboxes-fieldset>
-                    @if (Model.CropGroupId == (int)NMP.Portal.Enums.CropGroup.Grass)
+                    @if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
                     {
                         <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @Resource.lblWhichFieldsWouldYouLikeToAddToThisGrass
