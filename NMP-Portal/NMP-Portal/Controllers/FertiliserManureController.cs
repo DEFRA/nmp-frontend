@@ -3850,7 +3850,7 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                if (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0)))
+                if (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsAnyChangeInField || model.IsCropGroupChange)))
                 {
                     model.DefoliationCurrentCounter = 0;
                     model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
@@ -4515,8 +4515,10 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                if (string.IsNullOrWhiteSpace(q) && model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                if (string.IsNullOrWhiteSpace(q) && model.FertiliserManures != null && model.FertiliserManures.Count > 0
+      && (model.IsAnyChangeInField || model.IsCropGroupChange))
                 {
+                    model.DoubleCropCurrentCounter = 0;
                     model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
                     SetFertiliserManureToSession(model);
                 }
