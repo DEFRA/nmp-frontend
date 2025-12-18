@@ -2,7 +2,8 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
 
-    ViewData["Title"] = $"{string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm)} {Resource.lblHyphen} {Resource.lblReport}";
+    string heading = string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm);
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
 
     var nmaxReport = (int)NMP.Commons.Enums.NvzReportOption.NmaxReport;
     var livestockManureNFarmLimitReport = (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport;
@@ -65,6 +66,7 @@
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
 
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N"/>
@@ -153,10 +155,10 @@
                 <govuk-radios asp-for="@Model.NVZReportOption">                    
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend class="govuk-fieldset__legend--l" is-page-heading="true">
-                            @(string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
+                            @heading
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@nmaxReport">
-                            @Resource.lblNMaxReport
+                            @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMaxReport)                            
                         </govuk-radios-item>
                         <govuk-radios-item value="@livestockManureNFarmLimitReport">
                             @Resource.lblLivestockManureNitrogenFarmLimit

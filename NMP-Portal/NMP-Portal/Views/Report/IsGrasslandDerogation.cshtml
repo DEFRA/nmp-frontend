@@ -1,7 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblDoesFarmHaveAGrasslandDerogation, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
+    string title = string.Format(Resource.lblDoesFarmHaveAGrasslandDerogation, Model.FarmName, Model.Year);
+    ViewData["Title"] = $"{title} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
@@ -54,7 +55,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
@@ -153,7 +154,7 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblDoesFarmHaveAGrasslandDerogation, Model.FarmName, Model.Year)
+                    @title
                 </h1>
 
                 <govuk-details>
