@@ -2,13 +2,22 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
     var title = string.Format(Resource.lblWhichFieldsWouldYouLikeToCreateA2025CropAndFieldManagementReportFor, Model.Year);
-    @if (ViewBag.NoPlan != null)
+    @if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport && (ViewBag.NoPlan != null || ViewBag.NoField != null))
     {
-        title = ViewBag.NoPlan;
+        @if (ViewBag.NoPlan != null)
+        {
+            title = ViewBag.NoPlan;
+        }
+        else if (ViewBag.NoField != null)
+        {
+            title = ViewBag.NoField;
+        }
+
     }
-    else if (ViewBag.NoField != null)
+    else 
+    @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport && (ViewBag.NoPlan != null || ViewBag.NoField != null))
     {
-        title = ViewBag.NoField;
+        title=string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit, Model.Year);
     }
     else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
     {
@@ -16,12 +25,12 @@
     }
     else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
     {
-        title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year);
+        title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit);
     }
 
     if (ViewBag.NMaxReportNotAvailable != null && ViewBag.NMaxReportNotAvailable)
     {
-        title = Resource.lblAnNmaxReportIsNotAvailable;
+        title = string.Format(Resource.lblAnNmaxReportIsNotAvailable, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit);
     }
 
     ViewData["Title"] = $" {title} {Resource.lblHyphen} {Resource.lblReport}";
@@ -49,16 +58,17 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-heading-l">
-                @Resource.lblAnNmaxReportIsNotAvailable
+                @(string.Format(Resource.lblAnNmaxReportIsNotAvailable, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
             </h2>
             <p class="govuk-body">
                 @if (ViewBag.FarmOrFieldNotInNVZ != null && ViewBag.FarmOrFieldNotInNVZ)
                 {
-                    @Resource.lblNMaxReportsAreOnlyAvailableForFarms
+                    @(string.Format(Resource.lblNMaxReportsAreOnlyAvailableForFarms, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
+                    
                 }
                 else
                 {
-                    @string.Format(Resource.lblYouHaveNotPlannedAnyCropsForYear, Model.Year)
+                    @(string.Format(Resource.lblYouHaveNotPlannedAnyCropsForYear, Model.Year,Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
                 }
             </p>
             <p class="govuk-body  margin-bottom-thirty">
@@ -106,7 +116,7 @@ else
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportType" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" />
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers" />
@@ -228,7 +238,9 @@ else
                         }
                     }
                     else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport){
-                    <h2 class="govuk-heading-l">  @string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Year)</h2>
+                    <h2 class="govuk-heading-l">
+                        @(string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit, Model.Year))                        
+                        </h2>
                     <div class="margin-bottom-forty">
                         <p class="govuk-body">
                             @Resource.lblYouNeedToEnterDetailsFirstAbout
@@ -296,7 +308,7 @@ else
                     <govuk-checkboxes asp-for="CropTypeList">
                         <govuk-checkboxes-fieldset>
                             <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                @string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year)
+                                @(string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
                             </govuk-checkboxes-fieldset-legend>
 
                             <govuk-checkboxes-hint>

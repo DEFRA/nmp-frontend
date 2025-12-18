@@ -48,7 +48,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" value="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
@@ -161,7 +161,7 @@
                         <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
                             @Resource.lblAnNVZReport
                             <govuk-radios-item-hint>
-                                @Resource.lblIncludesNmaxLivestockManureNitrogen
+                                @(string.Format(Resource.lblIncludesNmaxLivestockManureNitrogen, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
                             </govuk-radios-item-hint>
                         </govuk-radios-item>
                         <govuk-radios-item value="@fieldRecordsAndPlan">

@@ -34,7 +34,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
@@ -141,7 +141,7 @@
                             @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>
-                            @string.Format(Resource.SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater, Model.LivestockGroupName.ToLower())
+                            @string.Format(Resource.SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater,(Model.LivestockGroupId==(int)NMP.Commons.Enums.LivestockGroup.GoatsDeerOrHorses?Resource.lblLivestock: Model.LivestockGroupName.ToLower()))
                         </govuk-radios-hint>
                         @if (ViewBag.LivestockTypes != null && ViewBag.LivestockTypes.Count > 0)
                         {

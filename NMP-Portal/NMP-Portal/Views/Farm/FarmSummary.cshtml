@@ -12,7 +12,7 @@
     </govuk-error-summary>
 }
 @if (Model != null)
-{    
+{
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
@@ -50,7 +50,7 @@
                     <p class="govuk-body">@Resource.lblThisFarmhasNoFields</p>
                 }
 
-            </div>            
+            </div>
             <ul class="menu-list govuk-list">
                 <li>
                     <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFarmDetails</a>
@@ -64,7 +64,7 @@
                 else
                 {
                     <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAField</a>
-                }                
+                }
             </ul>
             <div>
                 <hr class="seperator_thirty">
@@ -98,7 +98,7 @@
                 </p>
 
                 <ul class="govuk-list govuk-list--bullet">
-                    <li>@Resource.lblNMax</li>
+                    <li>@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMax)</li>
                     <li>@Resource.lblLivestockManureNitrogenNFarmLimit</li>
                     <li>@Resource.lblExistingManureStorageCapacity</li>
                     <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li>
