@@ -4057,6 +4057,7 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {
                     model = ResetReportDataFromSession(false);
+                    HttpContext.Session.SetObjectAsJson("ReportData", model);
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
                 if (!string.IsNullOrWhiteSpace(model.EncryptedId))
@@ -6520,6 +6521,7 @@ namespace NMP.Portal.Controllers
                             else if (model.IsCheckList)
                             {
                                 model = ResetReportDataFromSession(false);
+                                HttpContext.Session.SetObjectAsJson("ReportData", model);
                                 return RedirectToAction("LivestockManureNitrogenReportChecklist", new { r = successMsg });
                             }
                             else
