@@ -4,6 +4,6 @@ namespace NMP.Portal.Services
 {
     public interface IWarningService
     {
-        Task<(List<WarningCodeResponse>, Error)> FetchWarningCodeByFieldIdAndYear(string fieldIds, int harvestYear);
+        Task<(List<WarningHeaderResponse>, Error)> FetchWarningHeaderByFieldIdAndYear(string fieldIds, int harvestYear);
     }
 }
