@@ -22,7 +22,7 @@ namespace NMP.Securities
 
         public async Task<string> RefreshUserAccessTokenAsync(HttpContext context)
         {
-            var refreshToken = await context.GetTokenAsync("refresh_token");
+            var refreshToken = await context.GetTokenAsync($"refresh_token");
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true,

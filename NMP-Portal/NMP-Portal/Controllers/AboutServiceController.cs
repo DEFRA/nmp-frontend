@@ -1,23 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NMP.Commons.Models;
-using NMP.Portal.Services;
+using NMP.Application;
 using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Controllers
 {
-    public class AboutServiceController : Controller
+    public class AboutServiceController(ILogger<AboutServiceController> logger ,IAboutServiceLogic aboutServiceLogic) : Controller
     {
-        
-        private readonly IUserExtensionService _userExtensionService;
-        public AboutServiceController(IUserExtensionService userExtensionService)
-        {            
-            _userExtensionService = userExtensionService;
-        }
+        private readonly ILogger<AboutServiceController> _logger = logger;
+        private readonly IAboutServiceLogic _aboutServiceLogic = aboutServiceLogic;
         public async Task<IActionResult> Index()
         {
-            AboutServiceViewModel model = new AboutServiceViewModel();
-            (UserExtension userExtension, _) = await _userExtensionService.FetchUserExtensionAsync();
-            if (userExtension != null && userExtension.DoNotShowAboutThisService)
+            _logger.LogTrace("Index action called in AboutServiceController.");
+            AboutServiceViewModel model = new();
+            model.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService();
+            if (model.DoNotShowAboutThisService)
             {
                 return RedirectToAction("Accept", "AcceptTerms");
             }
@@ -29,18 +25,11 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(AboutServiceViewModel model)
         {
-            if (ModelState.IsValid)
+            _logger.LogTrace("AboutServiceController : Index() post action called");
+            if (ModelState.IsValid && model.DoNotShowAboutThisService)
             {
-                if (model.DoNotShowAboutThisService)
-                {
-                    // Save to Database
-                    AboutService aboutService = model;
-                    (UserExtension userExtension, _) = await _userExtensionService.UpdateShowAboutServiceAsync(aboutService);
-                    if (userExtension != null)
-                    {
-                        //saved in DB
-                    }                    
-                }
+                // Save to Database
+                await _aboutServiceLogic.UpdateShowAboutServiceAsync(model.DoNotShowAboutThisService);                                                  
             }
 
             return RedirectToAction("Accept", "AcceptTerms");
