@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
-using NMP.Securities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 namespace NMP.Services;

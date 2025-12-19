@@ -4,11 +4,9 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NMP.Commons.Models;
-using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
-using NMP.Securities;
 using System.Text;
 namespace NMP.Services;
 

@@ -19,11 +19,6 @@ namespace NMP.Portal.Controllers
             _logger = logger;
         }
 
-        //public IActionResult afterlogin(string returnUrl = "")
-        //{
-        //    return Redirect(returnUrl ?? "/");
-        //}
-
         public async Task<IActionResult> Logout()
         {
             _logger.LogTrace("Account Controller : Logout action called");

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.OAuth;
+using NMP.Core;
 using NMP.Core.Attributes;
 
 namespace NMP.Services;
@@ -57,6 +57,7 @@ public class TokenRefreshService
             var url = $"https://{uri.Authority}/{_config["CustomerIdentityTenantId"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
 
             var response = await client.PostAsync(url, formData);
+            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             tokens = JsonConvert.DeserializeObject<OAuthTokenResponse>(json);
