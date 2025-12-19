@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NMP.Commons.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace NMP.Core.Interfaces
     public interface IService
     {
         Task<HttpResponseMessage> PostJsonDataAsync(string url, object? model = null);
-        Task<HttpResponseMessage> GetDataAsync(string url);
+        Task<HttpResponseMessage> GetDataAsync(string url);        
     }
 }
