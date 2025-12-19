@@ -2407,7 +2407,7 @@ namespace NMP.Portal.Controllers
                         GrassPercentage = model.GrassPercentage,
                         ContingencyPlan = false,
                         IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0,
-                        IsAnyLivestockNumber =nutrientsLoadingLiveStockList.Count > 0,
+                        IsAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0,
                     };
                     (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportService.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -4025,37 +4025,7 @@ namespace NMP.Portal.Controllers
             if (nutrientsLoadingManureData != null && string.IsNullOrWhiteSpace(error.Message))
             {
                 string successMsg = _reportDataProtector.Protect(string.Format(Resource.MsgImportExportSuccessMsgContent1, string.IsNullOrWhiteSpace(model.EncryptedId) ? Resource.lblAdded : Resource.lblUpdated, model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
-                model.ImportExport = null;
-                model.LivestockImportExportDate = null;
-                model.ManureTypeId = null;
-                model.ManureTypeName = null;
-                model.DefaultFarmManureValueDate = null;
-                model.DefaultNutrientValue = null;
-                model.LivestockQuantity = null;
-                model.ReceiverName = null;
-                model.Postcode = null;
-                model.Address1 = null;
-                model.Address3 = null;
-                model.Address2 = null;
-                model.Address4 = null;
-                model.Comment = null;
-                model.IsImport = null;
-                model.IsCheckAnswer = false;
-                model.IsManureTypeChange = false;
-                model.IsAnyLivestockImportExport = null;
-                model.ManureGroupId = null;
-                model.ManureGroupIdForFilter = null;
-                model.ManureGroupName = null;
-                model.ManureType = new ManureType();
-                model.N = null;
-                model.NH4N = null;
-                model.DryMatterPercent = null;
-                model.NO3N = null;
-                model.SO3 = null;
-                model.K2O = null;
-                model.MgO = null;
-                model.P2O5 = null;
-                model.UricAcid = null;
+                model = ResetReportDataFromSession(false);
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
                 return RedirectToAction("ManageImportExport", new
                 {
@@ -4086,41 +4056,7 @@ namespace NMP.Portal.Controllers
             {
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {
-                    if (HttpContext.Session.Keys.Contains("ReportData"))
-                    {
-                        model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                        model.ImportExport = null;
-                        model.LivestockImportExportDate = null;
-                        model.ManureTypeId = null;
-                        model.ManureTypeName = null;
-                        model.DefaultFarmManureValueDate = null;
-                        model.DefaultNutrientValue = null;
-                        model.LivestockQuantity = null;
-                        model.ReceiverName = null;
-                        model.Postcode = null;
-                        model.Address1 = null;
-                        model.Address3 = null;
-                        model.Address2 = null;
-                        model.Address4 = null;
-                        model.Comment = null;
-                        model.IsImport = null;
-                        model.IsCheckAnswer = false;
-                        model.IsManureTypeChange = false;
-                        model.ManureGroupId = null;
-                        model.ManureGroupIdForFilter = null;
-                        model.ManureGroupName = null;
-                        model.IsAnyLivestockImportExport = null;
-                        model.ManureType = new ManureType();
-                        model.N = null;
-                        model.NH4N = null;
-                        model.DryMatterPercent = null;
-                        model.NO3N = null;
-                        model.SO3 = null;
-                        model.K2O = null;
-                        model.MgO = null;
-                        model.P2O5 = null;
-                        model.UricAcid = null;
-                    }
+                    model = ResetReportDataFromSession(false);
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
                 if (!string.IsNullOrWhiteSpace(model.EncryptedId))
@@ -5784,34 +5720,7 @@ namespace NMP.Portal.Controllers
             {
                 if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
                 {
-                    if (HttpContext.Session.Keys.Contains("ReportData"))
-                    {
-                        model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-
-                        model.EncryptedNLLivestockID = null;
-                        model.LivestockGroupId = null;
-                        model.IsAnyLivestockNumber = null;
-                        model.LivestockTypeId = null;
-                        model.LivestockNumberQuestion = null;
-                        model.AverageNumber = null;
-                        model.NumbersInJanuary = null;
-                        model.NumbersInFebruary = null;
-                        model.NumbersInMarch = null;
-                        model.NumbersInApril = null;
-                        model.NumbersInMay = null;
-                        model.NumbersInJune = null;
-                        model.NumbersInJuly = null;
-                        model.NumbersInAugust = null;
-                        model.NumbersInSeptember = null;
-                        model.NumbersInOctober = null;
-                        model.NumbersInNovember = null;
-                        model.NumbersInDecember = null;
-                        model.AverageNumberOfPlaces = null;
-                        model.AverageOccupancy = null;
-                        model.NitrogenStandard = null;
-                        model.OccupancyAndNitrogenOptions = null;
-                        model.IsLivestockCheckAnswer = false;
-                    }
+                    model = ResetReportDataFromSession(true);
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
                     ViewBag.IsManageImportExport = _reportDataProtector.Protect(Resource.lblTrue);
                 }
@@ -6610,41 +6519,7 @@ namespace NMP.Portal.Controllers
                             }
                             else if (model.IsCheckList)
                             {
-                                if (HttpContext.Session.Keys.Contains("ReportData"))
-                                {
-                                    model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-                                    model.ImportExport = null;
-                                    model.LivestockImportExportDate = null;
-                                    model.ManureTypeId = null;
-                                    model.ManureTypeName = null;
-                                    model.DefaultFarmManureValueDate = null;
-                                    model.DefaultNutrientValue = null;
-                                    model.LivestockQuantity = null;
-                                    model.ReceiverName = null;
-                                    model.Postcode = null;
-                                    model.Address1 = null;
-                                    model.Address3 = null;
-                                    model.Address2 = null;
-                                    model.Address4 = null;
-                                    model.Comment = null;
-                                    model.IsImport = null;
-                                    model.IsCheckAnswer = false;
-                                    model.IsManureTypeChange = false;
-                                    model.ManureGroupId = null;
-                                    model.ManureGroupIdForFilter = null;
-                                    model.ManureGroupName = null;
-                                    model.IsAnyLivestockImportExport = null;
-                                    model.ManureType = new ManureType();
-                                    model.N = null;
-                                    model.NH4N = null;
-                                    model.DryMatterPercent = null;
-                                    model.NO3N = null;
-                                    model.SO3 = null;
-                                    model.K2O = null;
-                                    model.MgO = null;
-                                    model.P2O5 = null;
-                                    model.UricAcid = null;
-                                }
+                                model = ResetReportDataFromSession(false);
                                 return RedirectToAction("LivestockManureNitrogenReportChecklist", new { r = successMsg });
                             }
                             else
@@ -7172,34 +7047,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    if (HttpContext.Session.Keys.Contains("ReportData"))
-                                    {
-                                        model = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-
-                                        model.EncryptedNLLivestockID = null;
-                                        model.LivestockGroupId = null;
-                                        model.IsAnyLivestockNumber = null;
-                                        model.LivestockTypeId = null;
-                                        model.LivestockNumberQuestion = null;
-                                        model.AverageNumber = null;
-                                        model.NumbersInJanuary = null;
-                                        model.NumbersInFebruary = null;
-                                        model.NumbersInMarch = null;
-                                        model.NumbersInApril = null;
-                                        model.NumbersInMay = null;
-                                        model.NumbersInJune = null;
-                                        model.NumbersInJuly = null;
-                                        model.NumbersInAugust = null;
-                                        model.NumbersInSeptember = null;
-                                        model.NumbersInOctober = null;
-                                        model.NumbersInNovember = null;
-                                        model.NumbersInDecember = null;
-                                        model.AverageNumberOfPlaces = null;
-                                        model.AverageOccupancy = null;
-                                        model.NitrogenStandard = null;
-                                        model.OccupancyAndNitrogenOptions = null;
-                                        model.IsLivestockCheckAnswer = false;
-                                    }
+                                    model = ResetReportDataFromSession(true);
                                     HttpContext.Session.SetObjectAsJson("ReportData", model);
                                     return RedirectToAction("LivestockManureNitrogenReportChecklist", "Report", new
                                     {
@@ -7230,6 +7078,87 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+
+        private ReportViewModel ResetReportDataFromSession(bool isLivestock)
+        {
+            if (!HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                return null;
+            }
+
+            var model = HttpContext.Session
+                .GetObjectFromJson<ReportViewModel>("ReportData");
+
+            if (model == null)
+            {
+                return null;
+            }
+
+            if (isLivestock)
+            {
+                model.EncryptedNLLivestockID = null;
+                model.LivestockGroupId = null;
+                model.IsAnyLivestockNumber = null;
+                model.LivestockTypeId = null;
+                model.LivestockNumberQuestion = null;
+                model.AverageNumber = null;
+                model.NumbersInJanuary = null;
+                model.NumbersInFebruary = null;
+                model.NumbersInMarch = null;
+                model.NumbersInApril = null;
+                model.NumbersInMay = null;
+                model.NumbersInJune = null;
+                model.NumbersInJuly = null;
+                model.NumbersInAugust = null;
+                model.NumbersInSeptember = null;
+                model.NumbersInOctober = null;
+                model.NumbersInNovember = null;
+                model.NumbersInDecember = null;
+                model.AverageNumberOfPlaces = null;
+                model.AverageOccupancy = null;
+                model.NitrogenStandard = null;
+                model.OccupancyAndNitrogenOptions = null;
+                model.IsLivestockCheckAnswer = false;
+                model.LivestockGroupName = null;
+                model.LivestockTypeName = null;
+            }
+            else
+            {
+                model.ImportExport = null;
+                model.LivestockImportExportDate = null;
+                model.ManureTypeId = null;
+                model.ManureTypeName = null;
+                model.DefaultFarmManureValueDate = null;
+                model.DefaultNutrientValue = null;
+                model.LivestockQuantity = null;
+                model.ReceiverName = null;
+                model.Postcode = null;
+                model.Address1 = null;
+                model.Address3 = null;
+                model.Address2 = null;
+                model.Address4 = null;
+                model.Comment = null;
+                model.IsImport = null;
+                model.IsCheckAnswer = false;
+                model.IsManureTypeChange = false;
+                model.ManureGroupId = null;
+                model.ManureGroupIdForFilter = null;
+                model.ManureGroupName = null;
+                model.IsAnyLivestockImportExport = null;
+                model.ManureType = new ManureType();
+                model.N = null;
+                model.NH4N = null;
+                model.DryMatterPercent = null;
+                model.NO3N = null;
+                model.SO3 = null;
+                model.K2O = null;
+                model.MgO = null;
+                model.P2O5 = null;
+                model.UricAcid = null;
+            }
+            return model;
+        }
+
     }
 
 }
