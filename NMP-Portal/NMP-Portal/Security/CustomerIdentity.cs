@@ -249,10 +249,7 @@ namespace NMP.Portal.Security
                             {
                                 case "iss":
                                     identity?.AddClaim(new Claim("issuer", claim.Value));
-                                    break;
-                                //case "exp":
-                                //    identity?.AddClaim(new Claim("access_token_expiry", claim.Value));
-                                //    break;
+                                    break;                                
                                 case "sub":
                                     userIdentifier = Guid.Parse(claim.Value);
                                     break;
@@ -345,12 +342,13 @@ namespace NMP.Portal.Security
                         string jsonData = JsonConvert.SerializeObject(userData);
                         if (configuration != null)
                         {
+                            const string dafaultlocalUrl = $"http://localhost:3000/";
                             using HttpClient httpClient = new HttpClient();
                             httpClient.Timeout = TimeSpan.FromMinutes(5);
-                            httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? "http://localhost:3000/");
-                            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                            httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? dafaultlocalUrl);
+                            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);                            
                             var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-
+                            response.EnsureSuccessStatusCode();
                             if (response.IsSuccessStatusCode)
                             {
                                 string result = await response.Content.ReadAsStringAsync();
@@ -360,24 +358,16 @@ namespace NMP.Portal.Security
                                     userId = responseWrapper?.Data?["UserID"];
                                     identity?.AddClaim(new Claim("userId", userId.ToString()));
                                 }
-                                else
-                                {
-                                    if (responseWrapper != null && responseWrapper?.Error != null)
-                                    {
-                                        throw new Exception(Resource.MsgNmptServiceNotAvailable);
-                                    }
-                                }
-
                             }
                             else if (response.StatusCode == HttpStatusCode.Forbidden)
                             {
-                                throw new Exception(Resource.MsgNmptApiServiceBlockedAccess);
+                                throw new HttpRequestException(Resource.MsgNmptApiServiceBlockedAccess);
                             }
                         }
                     }
                     else
                     {
-                        throw new Exception(Resource.MsgInvalidAuthentication);
+                        throw new AuthenticationFailureException(Resource.MsgInvalidAuthentication);
                     }
                 }
                 else
