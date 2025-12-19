@@ -5293,7 +5293,7 @@ cubic metres per hectare  not set</value>
     <value>What percentage of the land is farmed as grass?</value>
   </data>
   <data name="MsgEnterThePercentageOfTheLandIsFarmedAsGrass" xml:space="preserve">
-    <value>Enter the percentage of land that is farmed as grass?</value>
+    <value>Enter the percentage of land that is farmed as grass</value>
   </data>
   <data name="MsgGrassPercentageMustBeBetween80And100" xml:space="preserve">
     <value>Grass percentage must be between 80 and 100.</value>
@@ -7081,5 +7081,20 @@ livestock manure.</value>
   </data>
   <data name="lblGoatsDeerAndHorsesSmallCase" xml:space="preserve">
     <value>Goats, deer and horses</value>
+  </data>
+  <data name="lblTypicalValuesForThisLivestockType" xml:space="preserve">
+    <value>Typical values for this livestock type</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThis" xml:space="preserve">
+    <value>What is the occupancy for this {0} type in {1}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThis" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+  </data>
+  <data name="lblNitrogenNStandardForThistype" xml:space="preserve">
+    <value>Nitrogen (N) standard for this {0} type</value>
+  </data>
+  <data name="lblOccupancyForThistype" xml:space="preserve">
+    <value>Occupancy for this {0} type</value>
   </data>
 </root>

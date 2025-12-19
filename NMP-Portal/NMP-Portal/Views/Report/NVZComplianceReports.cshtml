@@ -2,7 +2,8 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
 
-    ViewData["Title"] = $"{string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm)} {Resource.lblHyphen} {Resource.lblReport}";
+    string heading = string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm);
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
 
     var nmaxReport = (int)NMP.Commons.Enums.NvzReportOption.NmaxReport;
     var livestockManureNFarmLimitReport = (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport;
@@ -154,7 +155,7 @@
                 <govuk-radios asp-for="@Model.NVZReportOption">                    
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend class="govuk-fieldset__legend--l" is-page-heading="true">
-                            @(string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm))
+                            @heading
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-item value="@nmaxReport">
                             @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMaxReport)                            

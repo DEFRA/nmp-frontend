@@ -1,7 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
+    string heading = string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year);
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
 
     var cropAndFieldManagementReport = (int)NMP.Commons.Enums.ReportType.CropAndFieldManagementReport;
     var nMaxReport = (int)NMP.Commons.Enums.ReportType.NMaxReport;
@@ -132,7 +133,7 @@
                     <govuk-radios asp-for="@Model.ReportType">
                         <govuk-radios-fieldset>
                             <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                @string.Format(Resource.lblWhatKindOfReportDoYouWantToSaveOrPrintFromYourData, Model.Year)
+                            @heading
                             </govuk-radios-fieldset-legend>
                             <govuk-radios-hint>
                                 @Resource.lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear

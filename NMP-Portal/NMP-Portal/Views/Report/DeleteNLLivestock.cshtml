@@ -2,7 +2,8 @@
 @using NMP.Commons.ViewModels
 @model ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblRemovePropertyName, Model.LivestockGroupName)} {Resource.lblHyphen}  {Resource.lblUpdate} {Resource.lblLivestockNumbers}";
+    string title = string.Format(Resource.lblRemovePropertyName, Model.LivestockGroupName);
+    ViewData["Title"] = $"{title} {Resource.lblHyphen}  {Resource.lblUpdate} {Resource.lblLivestockNumbers}";
     var yesRemove = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var noRemove = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
@@ -129,7 +130,7 @@
                 </div>
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblRemovePropertyName,Model.LivestockGroupName)
+                        @title
                 </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblRemoveNLLivetsockContent, Model.LivestockGroupName.ToLower())</p>
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteNLLivestock">
