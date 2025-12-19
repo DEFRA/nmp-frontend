@@ -1,7 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
-using NMP.Core.Interfaces;
-namespace NMP.Core.Services;
+namespace NMP.Core.Interfaces;
 
 public interface IFarmService:IService
 {
