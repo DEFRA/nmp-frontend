@@ -5808,7 +5808,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                if (model.IsCurrentSwardChange&&!model.IsCropTypeChange)
+                if (model.IsCurrentSwardChange&&(!model.IsCropTypeChange&&!model.IsCropGroupChange))
                 {
                     (List<DefoliationSequenceResponse> defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? true : false);
                     if (error == null)
