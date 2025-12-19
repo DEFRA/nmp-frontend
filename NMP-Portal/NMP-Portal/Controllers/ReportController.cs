@@ -668,10 +668,10 @@ namespace NMP.Portal.Controllers
             }
             string fieldIds = string.Join(",", model.FieldList);
 
-            (List<WarningCodeResponse> warningCodeResponses, error) = await _warningService.FetchWarningCodeByFieldIdAndYear(fieldIds, model.Year.Value);
+            (List<WarningHeaderResponse> warningHeaderResponses, error) = await _warningService.FetchWarningHeaderByFieldIdAndYear(fieldIds, model.Year.Value);
             if (string.IsNullOrWhiteSpace(error.Message))
             {
-                ViewBag.WarningCodes = warningCodeResponses;
+                ViewBag.WarningHeaders = warningHeaderResponses;
             }
             else
             {
