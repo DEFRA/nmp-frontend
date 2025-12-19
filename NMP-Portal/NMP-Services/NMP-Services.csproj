@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NMP-Core\NMP-Core.csproj" />
-    <ProjectReference Include="..\NMP-Securities\NMP-Securities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -823,7 +823,7 @@ namespace NMP.Portal.Controllers
 
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
-                model.NVZFields = (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ;
+                model.NVZFields = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
                 SetFarmToSession(model);
                 return RedirectToAction("Elevation");
             }
@@ -1116,6 +1116,7 @@ namespace NMP.Portal.Controllers
                     {
                         farmData = new FarmViewModel();
                         farmData.Name = farm.Name;
+                        farmData.CountryID = farm.CountryID.Value;
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;

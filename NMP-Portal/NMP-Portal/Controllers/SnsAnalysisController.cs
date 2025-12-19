@@ -166,7 +166,7 @@ namespace NMP.Portal.Controllers
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
             model.SnsCategoryId = snsCategoryId;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("SnsData", model);
-            if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables)
+            if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
             {
                 return RedirectToAction("SampleDepth");
             }
@@ -314,7 +314,7 @@ namespace NMP.Portal.Controllers
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CropTypeId??0);
             model.SnsCategoryId = snsCategoryId;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson("SnsData", model);
-            if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
+            if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
             {
                 return RedirectToAction("CalculateNitrogenInCurrentCropQuestion");
             }
@@ -322,7 +322,7 @@ namespace NMP.Portal.Controllers
             //{
             //    return RedirectToAction("CheckAnswer");
             //}
-            else if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.OtherArableAndPotatoes)
+            else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
             {
                 return RedirectToAction("EstimateOfNitrogenMineralisationQuestion");
             }
@@ -514,7 +514,7 @@ namespace NMP.Portal.Controllers
                 //sns logic
                 var postMeasurementData = new MeasurementData();
                 int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
-                if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals)
+                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
                 {
                     if (model.SoilOrganicMatter != null)
                     {
@@ -548,7 +548,7 @@ namespace NMP.Portal.Controllers
                     };
 
                 }
-                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight && snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
+                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight && snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                 {
                     model.GreenAreaIndex = null;
                     if (model.SoilOrganicMatter != null)
@@ -590,7 +590,7 @@ namespace NMP.Portal.Controllers
                         }
                     };
                 }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                 {
                     model.CropHeight = null;
                     if (model.SoilOrganicMatter != null)
@@ -624,7 +624,7 @@ namespace NMP.Portal.Controllers
                         }
                     };
                 }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.OtherArableAndPotatoes)
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
                 {
                     if (model.SoilOrganicMatter != null)
                     {
@@ -652,7 +652,7 @@ namespace NMP.Portal.Controllers
                     };
 
                 }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables)
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
                 {
                     postMeasurementData = new MeasurementData
                     {
@@ -945,11 +945,11 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCalculateNitrogen == true)
             {
-                if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals)
+                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
                 {
                     return RedirectToAction("NumberOfShoots");
                 }
-                if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape)
+                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                 {
                     return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
                 }
@@ -1347,12 +1347,12 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("CheckAnswer");
             }
-            if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape ||
-                snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.OtherArableAndPotatoes)
+            if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape ||
+                snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
             {
                 return RedirectToAction("SoilMineralNitrogenAnalysisResults");
             }
-            else if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables)
+            else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
             {
                 return RedirectToAction("SampleDepth");
             }
@@ -1396,12 +1396,12 @@ namespace NMP.Portal.Controllers
             }
             int snsCategoryId = await _fieldService.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
 
-            if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.WinterOilseedRape ||
-                snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.OtherArableAndPotatoes)
+            if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape ||
+                snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
             {
                 return RedirectToAction("SoilMineralNitrogenAnalysisResults");
             }
-            else if (snsCategoryId == (int)NMP.Commons.Enums.SNSCategories.Vegetables)
+            else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
             {
                 return RedirectToAction("SampleDepth");
             }

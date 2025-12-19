@@ -1,23 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NMP.Application;
+using NMP.Commons.Models;
+using NMP.Core.Attributes;
+using NMP.Core.Interfaces;
 
 namespace NMP.Businesses
 {
-    public class AboutServiceLogic : IAboutServiceLogic
+    [Business(ServiceLifetime.Transient)]
+    public class AboutServiceLogic(ILogger<AboutServiceLogic> logger, IUserExtensionService userExtensionService) : IAboutServiceLogic
     {
+        private readonly ILogger<AboutServiceLogic> _logger = logger;
+        private readonly IUserExtensionService _userExtensionService = userExtensionService;
 
-        public AboutServiceLogic() { }
-        public bool HasDoNotShowAboutThisService()
+        public async Task<bool> CheckDoNotShowAboutThisService()
         {
-            throw new NotImplementedException();
+            _logger.LogTrace("AboutServiceLogic : HasDoNotShowAboutThisService() called");
+            UserExtension? userExtension = await _userExtensionService.FetchUserExtensionAsync();
+            return userExtension != null && userExtension.DoNotShowAboutThisService;
         }
 
-        public bool UpdateShowAboutServiceAsync(bool doNotShowAboutThisService)
+        public async Task<bool> UpdateShowAboutServiceAsync(bool doNotShowAboutThisService)
         {
-            throw new NotImplementedException();
+            _logger.LogTrace("AboutServiceLogic : UpdateShowAboutServiceAsync() called");
+            AboutService aboutService = new() { DoNotShowAboutThisService = doNotShowAboutThisService };
+            UserExtension? userExtension = await _userExtensionService.UpdateShowAboutServiceAsync(aboutService);
+            return userExtension != null && userExtension.DoNotShowAboutThisService;
         }
     }
 }

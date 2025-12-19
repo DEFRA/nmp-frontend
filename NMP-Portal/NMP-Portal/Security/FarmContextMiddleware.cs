@@ -22,12 +22,12 @@ namespace NMP.Portal.Security
 
             if (!string.IsNullOrEmpty(encryptedfarmId))
             {
-                string farmId = _dataProtector.Unprotect(encryptedfarmId);
-                (var farm, var error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                string farmId = _dataProtector.Unprotect(encryptedfarmId);                
+                (var farm, _) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                 farmContext.EncryptedFarmId = encryptedfarmId;
                 farmContext.FarmId = farm.ID;
-                farmContext.FarmName = farm.Name;
-                context.Session.SetString("current_farm_name", farm.Name);
+                farmContext.FarmName = farm.Name?? "Unknown";
+                context.Session.SetString("current_farm_name", farm.Name ?? "Unknown");
                 context.Session.SetString("current_farm_id", encryptedfarmId);                
             }
 

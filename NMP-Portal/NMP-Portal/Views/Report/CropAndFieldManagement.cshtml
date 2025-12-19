@@ -565,34 +565,25 @@
                             }
                         }
                     }
-                    @if (ViewBag.WarningCodes != null)
+                    @if (ViewBag.WarningHeaders != null)
                     {
-                        @* bool isWarningExistForThisField = false;
-                        @foreach (var warning in ViewBag.WarningCodes)
-                        {
-                            @if (warning.FieldId == crop.FieldID)
-                            {
-                                isWarningExistForThisField=true;
-                                break;
-                            }
-                        } *@
-                        var warnings = from w in (List<WarningCodeResponse>)ViewBag.WarningCodes where w.FieldId == crop.FieldID select w;
+                        var warnings = from w in (List<WarningHeaderResponse>)ViewBag.WarningHeaders where w.FieldId == crop.FieldID select w;
                         bool isWarningExistForThisField = warnings.Any();
 
                         @if (isWarningExistForThisField)
                         {
                             <h2 class="govuk-heading-m">
-                                @string.Format(Resource.lblNvzWarningFor, field.Name)
+                                @string.Format(Model.CropAndFieldReport.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, field.Name)
                             </h2>
 
-                            <p class="govuk-body">@Resource.lblThePlannedApplicationsmayNotComplyWith</p>
+                            <p class="govuk-body">@(Model.CropAndFieldReport.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblThePlannedApplicationsmayNotComplyWith : Resource.lblThePlannedApplicationsMayNotComplyWithTheseWater)</p>
 
                             <ul class="govuk-list govuk-list--bullet">
-                                @foreach (var warning in ViewBag.WarningCodes)
+                                @foreach (var warning in ViewBag.WarningHeaders)
                                 {
                                     @if (warning.FieldId == crop.FieldID)
                                     {
-                                        <li>@warning.WarningCode</li>
+                                        <li>@warning.WarningHeader</li>
                                     }
                                 }
                             </ul>

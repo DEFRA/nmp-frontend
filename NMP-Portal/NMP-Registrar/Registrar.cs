@@ -12,10 +12,10 @@ namespace NMP.Registrar
 {
     public static class Registrar 
     {
-        public static IServiceCollection RegisterDependencies(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterDependencies(IServiceCollection services)
         {
-            services.RegisterBusinesses(configuration);
-            services.RegisterServices(configuration);
+            services.RegisterBusinesses();
+            services.RegisterServices();
             return services;
         }        
     }

@@ -68,7 +68,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" />
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers" />
@@ -322,26 +322,26 @@
 
                                 <govuk-summary-list-row class=@(!Model.AverageOccupancy.HasValue ? "govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @Resource.lblWhatIsTheAverageOccupancy
+                                        @string.Format(Resource.lblWhatIsTheOccupancyForThis, Model.LivestockGroupName.ToLower(), Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @(Model.AverageOccupancy.HasValue ? (string.Concat(Model.AverageOccupancy, Resource.lblPercentage)) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="Occupancy" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAverageOccupancy</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="Occupancy" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheOccupancyForThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                                 
                             }
                             <govuk-summary-list-row class=@(!Model.NitrogenStandard.HasValue ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblNitrogenStandardPerAnimalPerYear
+                                    @string.Format(Resource.lblWhatIsTheNitrogenNStandardForThis, Model.LivestockGroupName.ToLower(), Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblNitrogenStandardPerAnimalPerYear</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNitrogenNStandardForThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
