@@ -4,36 +4,33 @@ using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Commons.Resources;
-using NMP.Portal.Services;
+using NMP.Application;
+
 
 namespace NMP.Portal.Controllers;
-public class AcceptTermsController : Controller
+public class AcceptTermsController(ILogger<AcceptTermsController> logger, IAcceptTermsLogic acceptTermsLogic) : Controller
 {
-    private readonly ILogger<AcceptTermsController> _logger;
-    private readonly IUserExtensionService _userExtensionService;
-    public AcceptTermsController(ILogger<AcceptTermsController> logger, IUserExtensionService userExtensionService)
-    {
-        _logger = logger;
-        _userExtensionService = userExtensionService;
-    }
+    private readonly ILogger<AcceptTermsController> _logger = logger;
+    private readonly IAcceptTermsLogic _acceptTermsLogic = acceptTermsLogic;
 
     [AllowAnonymous]
     public IActionResult Index()
-    {   
+    {
+        _logger.LogTrace("Index action called in AcceptTermsController.");
         return View();
     }
 
     [HttpGet]
     public async Task<IActionResult> Accept()
     {
+        _logger.LogTrace("AcceptTermsController : Accept() get action called");
         TermsOfUseViewModel model = new TermsOfUseViewModel();
-        int userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-        (UserExtension userExtension, Error error) = await _userExtensionService.FetchUserExtensionAsync();
-        if (userExtension != null && userExtension.IsTermsOfUseAccepted)
+        model.IsTermsOfUseAccepted = await _acceptTermsLogic.IsUserTermsOfUseAccepted();         
+        if (model.IsTermsOfUseAccepted)
         {            
-            return RedirectToAction("FarmList", "Farm");
-                   
+            return RedirectToAction("FarmList", "Farm");                   
         }
+
         return View("Accept", model);
     }
 
@@ -47,18 +44,13 @@ public class AcceptTermsController : Controller
         }
 
         if (ModelState.IsValid)
-        {
-            TermsOfUse termsOfUse = model;
-            (UserExtension userExtension, Error error) = await _userExtensionService.UpdateTermsOfUseAsync(termsOfUse);
-            if (userExtension != null && userExtension.IsTermsOfUseAccepted)
+        {            
+            await _acceptTermsLogic.UpdateTermsOfUseAsync(model);
+            if (model.IsTermsOfUseAccepted)
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-            {
-                ViewBag.Error = error.Message;
-            }
-
+            
             return View("Accept", model);
         }
         else

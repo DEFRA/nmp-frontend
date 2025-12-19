@@ -13,10 +13,10 @@ namespace NMP.Portal.Services
         {
             _logger = logger;
         }
-        public async Task<(List<WarningCodeResponse>, Error)> FetchWarningCodeByFieldIdAndYear(
+        public async Task<(List<WarningHeaderResponse>, Error)> FetchWarningHeaderByFieldIdAndYear(
     string fieldIds, int harvestYear)
         {
-            var warningCodes = new List<WarningCodeResponse>();
+            var warningHeaders = new List<WarningHeaderResponse>();
             var error = new Error();
 
             try
@@ -41,11 +41,11 @@ namespace NMP.Portal.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var warningList = responseWrapper?.Data?.ToObject<List<WarningCodeResponse>>();
+                    var warningList = responseWrapper?.Data?.ToObject<List<WarningHeaderResponse>>();
 
                     if (warningList != null)
                     {
-                        warningCodes.AddRange(warningList);
+                        warningHeaders.AddRange(warningList);
                     }
                 }
                 else
@@ -72,7 +72,7 @@ namespace NMP.Portal.Services
                 throw new InvalidOperationException(error.Message, ex);
             }
 
-            return (warningCodes, error);
+            return (warningHeaders, error);
         }
 
     }

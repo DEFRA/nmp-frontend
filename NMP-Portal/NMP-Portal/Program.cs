@@ -171,7 +171,7 @@ builder.Services.AddSingleton<IMannerService, MannerService>();
 builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>();
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
-builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
+//builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
 builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddSingleton<IStorageCapacityService, StorageCapacityService>();
@@ -299,7 +299,8 @@ app.UseMiddleware<FarmContextMiddleware>();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.Run();
+
+await app.RunAsync();
 
 
 

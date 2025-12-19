@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace NMP.Securities;
-internal class OAuthTokenResponse
+namespace NMP.Core;
+public class OAuthTokenResponse
 {
     [JsonProperty("access_token")]
     public string AccessToken { get; set; } = string.Empty;

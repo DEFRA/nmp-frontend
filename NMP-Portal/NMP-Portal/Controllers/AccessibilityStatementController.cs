@@ -16,6 +16,7 @@ namespace NMP.Portal.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            _logger.LogTrace("Accessed Accessibility Statement page.");
             return View();
         }
     }

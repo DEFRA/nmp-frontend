@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using NMP.Core.Interfaces;
-using NMP.Securities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
-
 namespace NMP.Services;
+
 
 public abstract class Service : IService
 {
@@ -32,7 +31,7 @@ public abstract class Service : IService
         return token;
     }
 
-    private bool JwtExpired(string jwt)
+    private static bool JwtExpired(string jwt)
     {
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(jwt);

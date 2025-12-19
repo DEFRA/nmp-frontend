@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMP-Services", "NMP-Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMP-Commons", "NMP-Commons\NMP-Commons.csproj", "{0D5F0458-DB73-4E27-A794-5DF72A0C2655}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMP-Application", "NMP-Application\NMP-Application.csproj", "{EBC4BE9A-86C9-461C-81DC-47A9D0B997CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{0D5F0458-DB73-4E27-A794-5DF72A0C2655}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D5F0458-DB73-4E27-A794-5DF72A0C2655}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D5F0458-DB73-4E27-A794-5DF72A0C2655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC4BE9A-86C9-461C-81DC-47A9D0B997CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC4BE9A-86C9-461C-81DC-47A9D0B997CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC4BE9A-86C9-461C-81DC-47A9D0B997CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC4BE9A-86C9-461C-81DC-47A9D0B997CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
