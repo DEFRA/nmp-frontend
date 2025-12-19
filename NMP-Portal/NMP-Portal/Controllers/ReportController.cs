@@ -2406,8 +2406,8 @@ namespace NMP.Portal.Controllers
                         Derogation = model.IsGrasslandDerogation,
                         GrassPercentage = model.GrassPercentage,
                         ContingencyPlan = false,
-                        IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0 ? true : false,
-                        IsAnyLivestockNumber =nutrientsLoadingLiveStockList.Count > 0 ? true : false,
+                        IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0,
+                        IsAnyLivestockNumber =nutrientsLoadingLiveStockList.Count > 0,
                     };
                     (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportService.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -4338,8 +4338,8 @@ namespace NMP.Portal.Controllers
                         Derogation = model.IsGrasslandDerogation,
                         GrassPercentage = model.GrassPercentage,
                         ContingencyPlan = false,
-                        IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0 ? true : false,
-                        IsAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0 ? true : false,
+                        IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0,
+                        IsAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0,
                     };
                     (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportService.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                     HttpContext.Session.SetObjectAsJson("ReportData", model);
