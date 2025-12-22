@@ -1,0 +1,44 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using NMP.Commons.ServiceResponses;
+using NMP.Core.Interfaces;
+using NMP.Core.Attributes;
+namespace NMP.Services;
+
+[Service(ServiceLifetime.Scoped)]
+public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IAddressLookupService
+{
+    private readonly ILogger<AddressLookupService> _logger = logger;
+
+    public async Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset)
+    {
+        List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.AddressLookupAPI, postcode, offset));
+        if (response.IsSuccessStatusCode)
+        {
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    AddressLookupResponseWrapper addressLookupResponseWrapper = responseWrapper.Data.ToObject<AddressLookupResponseWrapper>();
+                    addresses.AddRange(addressLookupResponseWrapper.Results);
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    Error error = responseWrapper.Error.ToObject<Error>();
+                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                }
+            }
+        }
+
+        return addresses;
+    }
+}

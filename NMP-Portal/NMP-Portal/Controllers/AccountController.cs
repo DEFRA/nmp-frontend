@@ -10,14 +10,9 @@ using NMP.Portal.Helpers;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-    public class AccountController : Controller
+    public class AccountController(ILogger<AccountController> logger) : Controller
     {
-        private readonly ILogger _logger;
-        public AccountController(ILogger<AccountController> logger)
-        {
-
-            _logger = logger;
-        }
+        private readonly ILogger _logger = logger;
 
         public async Task<IActionResult> Logout()
         {

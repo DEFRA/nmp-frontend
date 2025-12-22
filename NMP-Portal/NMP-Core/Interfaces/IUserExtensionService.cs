@@ -1,6 +1,5 @@
 ﻿using NMP.Commons.Models;
 namespace NMP.Core.Interfaces;
-
 public interface IUserExtensionService : IService
 {
     Task<UserExtension?> FetchUserExtensionAsync();
