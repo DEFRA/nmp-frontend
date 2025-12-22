@@ -32,18 +32,18 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     }
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
     {
-        WarningResponse warning = new WarningResponse();
         string requestUrl = string.Format(APIURLHelper.FetchWarningByCountryIdAndWarningKeyAsyncAPI, countryId, warningKey);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadAsStringAsync();
         var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (responseWrapper?.Data != null)
+        if (responseWrapper?.Data is null)
         {
-            warning = responseWrapper.Data.ToObject<WarningResponse>();
+            return new WarningResponse();
         }
-         return warning;
+        return responseWrapper.Data.ToObject<WarningResponse>();
     }
+
 
 }
