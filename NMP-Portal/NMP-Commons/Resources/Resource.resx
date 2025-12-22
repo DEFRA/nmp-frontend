@@ -7097,4 +7097,7 @@ livestock manure.</value>
   <data name="lblOccupancyForThistype" xml:space="preserve">
     <value>Occupancy for this {0} type</value>
   </data>
+  <data name="lblSoilAnalysesDate" xml:space="preserve">
+    <value>SoilAnalyses.Date</value>
+  </data>
 </root>

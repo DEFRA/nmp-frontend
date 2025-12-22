@@ -12401,6 +12401,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SoilAnalyses.Date.
+        /// </summary>
+        public static string lblSoilAnalysesDate {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysesDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil analysis.
         /// </summary>
         public static string lblSoilAnalysis {
