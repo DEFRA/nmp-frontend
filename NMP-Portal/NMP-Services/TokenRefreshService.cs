@@ -6,20 +6,14 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using NMP.Core;
 using NMP.Core.Attributes;
-
+using Microsoft.Extensions.DependencyInjection;
 namespace NMP.Services;
 
-[Service(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped)]
-public class TokenRefreshService
+[Service(ServiceLifetime.Scoped)]
+public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfiguration config)
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IConfiguration _config;
-
-    public TokenRefreshService(IHttpClientFactory httpClientFactory, IConfiguration config)
-    {
-        _httpClientFactory = httpClientFactory;
-        _config = config;
-    }
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly IConfiguration _config = config;
 
     public async Task<string> RefreshUserAccessTokenAsync(HttpContext context)
     {

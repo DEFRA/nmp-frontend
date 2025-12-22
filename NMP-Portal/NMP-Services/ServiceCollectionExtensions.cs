@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NMP.Core.Attributes;
 using System.Reflection;
-
 namespace NMP.Services;
 public static class ServiceCollectionExtensions
 {
