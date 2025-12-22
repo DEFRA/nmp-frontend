@@ -2905,15 +2905,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CheckAnswer.
-        /// </summary>
-        public static string lblCheckAnswerActionName {
-            get {
-                return ResourceManager.GetString("lblCheckAnswerActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Check inorganic fertiliser details for fields.
         /// </summary>
         public static string lblCheckInorganicFertiliserDetailsForFields {
@@ -14694,15 +14685,6 @@ namespace NMP.Commons.Resources {
         public static string lblUpdateField {
             get {
                 return ResourceManager.GetString("lblUpdateField", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UpdateField.
-        /// </summary>
-        public static string lblUpdateFieldActionName {
-            get {
-                return ResourceManager.GetString("lblUpdateFieldActionName", resourceCulture);
             }
         }
         
