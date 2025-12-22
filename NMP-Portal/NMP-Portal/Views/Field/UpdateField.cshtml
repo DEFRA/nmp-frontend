@@ -115,7 +115,7 @@
                         @Model.Name
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblFieldName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblFieldName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @*   <govuk-summary-list-row>
