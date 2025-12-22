@@ -1,80 +1,65 @@
-using Azure;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using NMP.Commons.Models;
+using NMP.Application;
 using NMP.Commons.Resources;
-using NMP.Commons.ServiceResponses;
-using System.Diagnostics;
-using System.Net.Http;
-
-namespace NMP.Portal.Controllers
+namespace NMP.Portal.Controllers;
+[AllowAnonymous]
+public class HomeController : Controller
 {
-    [AllowAnonymous]
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+    private readonly IHomeLogic _homeLogic;
+
+    public HomeController(ILogger<HomeController> logger, IHomeLogic homeLogic)
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IDataProtector _dataProtector;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpClientFactory _httpClientFactory;
-        public HomeController(ILogger<HomeController> logger, IDataProtectionProvider dataProtectionProvider, IHttpClientFactory httpClientFactory, IConfiguration configuration)
-        {
-            _logger = logger;
-            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.HomeController");
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
-        }
+        _logger = logger;
+        _homeLogic = homeLogic;
+    }
 
-        public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index()
+    {
+        _logger.LogTrace($"Home Controller : Index() action called");
+        try
         {
-            _logger.LogTrace($"Home Controller : Index() action called");
-            try
+            var isDefraCustomerIdentityWorking = await _homeLogic.IsDefraCustomerIdentifyConfigurationWorkingAsync();
+            if (isDefraCustomerIdentityWorking)
             {
-                HttpClient client = _httpClientFactory.CreateClient("DefraIdentityConfiguration");
-                var uri = new Uri($"{_configuration["CustomerIdentityInstance"]}{_configuration["CustomerIdentityDomain"]}/{_configuration["CustomerIdentityPolicyId"]}/v2.0/.well-known/openid-configuration");
-                var response = await client.GetAsync(uri);
-                if (response != null && response.IsSuccessStatusCode)
-                {
-                    ViewBag.IsDefraCustomerIdentifyConfigurationWorking = response.IsSuccessStatusCode;
-                }
-                else
-                {
-                    ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
-                    ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
-                }
-
-
+                ViewBag.IsDefraCustomerIdentifyConfigurationWorking = isDefraCustomerIdentityWorking;
             }
-            catch (Exception ex)
+            else
             {
                 ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
                 ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
             }
-            try
+        }
+        catch (Exception ex)
+        {
+            ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
+            ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
+        }
+
+        try
+        {
+            var isNmptServiceWorking = await _homeLogic.IsNmptServiceWorkingAsync();
+            if (isNmptServiceWorking)
             {
-                HttpClient nmptServiceClient = _httpClientFactory.CreateClient("NMPApi");
-                var serviceresponse = await nmptServiceClient.GetAsync(new Uri($"{_configuration["NMPApiUrl"]}"));
-                if (serviceresponse != null && serviceresponse.IsSuccessStatusCode)
-                {
-                    ViewBag.IsNmptServiceWorking = serviceresponse.IsSuccessStatusCode;
-                }
-                else if (serviceresponse != null && serviceresponse.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                {
-                    ViewBag.IsNmptServiceWorking = false;
-                    ViewBag.ServiceError = Resource.MsgNmptApiServiceBlockedAccess;
-                }
-                else
-                {
-                    ViewBag.IsNmptServiceWorking = false;
-                    ViewBag.ServiceError = Resource.MsgNmptServiceNotAvailable;
-                }
-            }
-            catch (Exception ex)
+                ViewBag.IsNmptServiceWorking = isNmptServiceWorking;
+            }                
+            else
             {
                 ViewBag.IsNmptServiceWorking = false;
                 ViewBag.ServiceError = Resource.MsgNmptServiceNotAvailable;
             }
-            return View();
         }
+        catch (HttpRequestException httpEx) when (httpEx.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            ViewBag.IsNmptServiceWorking = false;
+            ViewBag.ServiceError = Resource.MsgNmptApiServiceBlockedAccess;
+        }
+        catch (Exception)
+        {
+            ViewBag.IsNmptServiceWorking = false;
+            ViewBag.ServiceError = Resource.MsgNmptServiceNotAvailable;
+        }
+        return View();
     }
 }
