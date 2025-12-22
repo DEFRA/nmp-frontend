@@ -13,65 +13,42 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
 {
     private readonly ILogger<WarningService> _logger = logger;
 
-    public async Task<(List<WarningHeaderResponse>, Error)> FetchWarningHeaderByFieldIdAndYear(string fieldIds, int harvestYear)
+    public async Task<List<WarningHeaderResponse>> FetchWarningHeaderByFieldIdAndYear(string fieldIds, int harvestYear)
     {
         var warningHeaders = new List<WarningHeaderResponse>();
-        var error = new Error();
+        string requestUrl = string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, fieldIds, harvestYear);
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
 
-        try
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(
-                string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, fieldIds, harvestYear));
-
             string result = await response.Content.ReadAsStringAsync();
-
-            ResponseWrapper? responseWrapper = null;
-
-            try
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            }
-            catch
-            {
-                // invalid JSON
-                responseWrapper = null;
-            }
-
-            if (response.IsSuccessStatusCode)
-            {
-                var warningList = responseWrapper?.Data?.ToObject<List<WarningHeaderResponse>>();
-
-                if (warningList != null)
-                {
-                    warningHeaders.AddRange(warningList);
-                }
-            }
-            else
-            {
-                var apiError = responseWrapper?.Error?.ToObject<Error>();
-
-                if (apiError != null)
-                {
-                    error = apiError;
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                warningHeaders.AddRange(responseWrapper?.Data?.ToObject<List<WarningHeaderResponse>>());
             }
         }
-        catch (HttpRequestException hre)
-        {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new HttpRequestException(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new InvalidOperationException(error.Message, ex);
-        }
-
-        return (warningHeaders, error);
+        return warningHeaders;
     }
-
+    public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
+    {
+        WarningResponse warning = new WarningResponse();
+        string requestUrl = string.Format(APIURLHelper.FetchWarningByCountryIdAndWarningKeyAsyncAPI, countryId, warningKey);
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        
+        if (response.IsSuccessStatusCode)
+        {
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                warning = responseWrapper.Data.ToObject<WarningResponse>();
+            }
+        }
+        return warning;
+    }
 }
