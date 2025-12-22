@@ -21,15 +21,13 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
 
-        if (response.IsSuccessStatusCode)
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (responseWrapper != null && responseWrapper.Data != null)
         {
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                warningHeaders.AddRange(responseWrapper?.Data?.ToObject<List<WarningHeaderResponse>>());
-            }
+            warningHeaders.AddRange(responseWrapper?.Data?.ToObject<List<WarningHeaderResponse>>());
         }
+
         return warningHeaders;
     }
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
@@ -39,16 +37,13 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
-        
-        if (response.IsSuccessStatusCode)
+        var result = await response.Content.ReadAsStringAsync();
+        var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (responseWrapper?.Data != null)
         {
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                warning = responseWrapper.Data.ToObject<WarningResponse>();
-            }
+            warning = responseWrapper.Data.ToObject<WarningResponse>();
         }
-        return warning;
+         return warning;
     }
+
 }
