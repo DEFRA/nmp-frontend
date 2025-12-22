@@ -89,15 +89,25 @@ namespace NMP.Portal.Controllers
                 int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
                 if (model.IsCheckAnswer)
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
                 else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
-                    return RedirectToAction("UpdateField", new
+                    return RedirectToAction(Resource.lblUpdateFieldActionName, new
                     {
                         fieldId = model.EncryptedFieldId,
                         farmId = model.EncryptedFarmId
                     });
+                }
+                else if (HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    ReportViewModel? reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    if (reportViewModel != null)
+                    {
+                        RemoveFieldDataFromSession();
+                        return RedirectToAction("ExportFieldsOrCropType", "Report");
+                    }
+                    return RedirectToAction("FarmSummary", "Farm", new { id = id });
                 }
                 else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
                 {
@@ -203,11 +213,11 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             if (field.CopyExistingField != null && (field.CopyExistingField.Value))
@@ -370,12 +380,12 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("NVZField");
@@ -426,12 +436,12 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName); 
             }
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("ElevationField");
@@ -480,12 +490,12 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("SoilType");
@@ -587,7 +597,7 @@ namespace NMP.Portal.Controllers
                     field.IsSoilReleasingClay = false;
                     field.SoilReleasingClay = null;
                     SetFieldDataToSession(field);
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
 
                 if (soilType != null && soilType.KReleasingClay)
@@ -603,7 +613,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
                 {
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
             }
             catch (Exception ex)
@@ -662,11 +672,11 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(field);
             if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
             return RedirectToAction("RecentSoilAnalysisQuestion");
         }
@@ -705,7 +715,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer && (!model.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             return RedirectToAction("SoilDate");
@@ -730,40 +740,9 @@ namespace NMP.Portal.Controllers
         public IActionResult SoilDate(FieldViewModel model)
         {
             _logger.LogTrace($"Field Controller : SoilDateAndPHLevel() post action called");
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Date"))
-            {
-                var dateError = ModelState["SoilAnalyses.Date"].Errors.Count > 0 ?
-                                ModelState["SoilAnalyses.Date"].Errors[0].ErrorMessage.ToString() : null;
-
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate)) ||
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblTheDate)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblTheDate)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblTheDate)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate)))
-                {
-                    ModelState["SoilAnalyses.Date"].Errors.Clear();
-                    ModelState["SoilAnalyses.Date"].Errors.Add(Resource.MsgTheDateMustInclude);
-                }
-            }
-            if (model.SoilAnalyses.Date == null)
-            {
-                ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterADateBeforeContinuing);
-            }
-
-            if (DateTime.TryParseExact(model.SoilAnalyses.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
-            {
-                ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterTheDateInNumber);
-            }
-
-            if (model.SoilAnalyses.Date != null)
-            {
-                if (model.SoilAnalyses.Date.Value.Date.Year < 1601 || model.SoilAnalyses.Date.Value.Date.Year > DateTime.Now.AddYears(1).Year)
-                {
-                    ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgEnterTheDateInNumber);
-                }
-            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblSoilAnalysesDate))
+            { NormalizeDateModelStateErrors(); }
+            ValidateSoilAnalysisDate(model);
 
             if (!ModelState.IsValid)
             {
@@ -773,10 +752,58 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(model);
             if (model.IsCheckAnswer && (!model.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             return RedirectToAction("SoilNutrientValueType");
+        }
+
+        private void NormalizeDateModelStateErrors()
+        {
+
+            var error = ModelState[Resource.lblSoilAnalysesDate]?.Errors.FirstOrDefault()?.ErrorMessage;
+            if (string.IsNullOrEmpty(error))
+                return;
+
+            var invalidDateMessages = new HashSet<string>
+    {
+        string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate),
+        string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate),
+        string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate),
+        string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblTheDate),
+        string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblTheDate),
+        string.Format(Resource.MsgDateMustIncludeADay, Resource.lblTheDate),
+        string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate)
+    };
+
+            if (invalidDateMessages.Contains(error))
+            {
+                ModelState[Resource.lblSoilAnalysesDate]?.Errors.Clear();
+                ModelState[Resource.lblSoilAnalysesDate]?.Errors.Add(Resource.MsgTheDateMustInclude);
+            }
+
+        }
+
+        private void ValidateSoilAnalysisDate(FieldViewModel model)
+        {
+            var date = model.SoilAnalyses.Date;
+
+            if (date == null)
+            {
+                ModelState.AddModelError(Resource.lblSoilAnalysesDate, Resource.MsgEnterADateBeforeContinuing);
+                return;
+            }
+
+            if (DateTime.TryParseExact(model.SoilAnalyses.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _) || IsOutOfAllowedRange(date.Value))
+            {
+                ModelState.AddModelError(Resource.lblSoilAnalysesDate, Resource.MsgEnterTheDateInNumber);
+            }
+        }
+
+        private static bool IsOutOfAllowedRange(DateTime date)
+        {
+            var year = date.Year;
+            return year < 1601 || year > DateTime.Now.AddYears(1).Year;
         }
 
         [HttpGet]
@@ -1028,7 +1055,7 @@ namespace NMP.Portal.Controllers
                 SetFieldDataToSession(model);
                 if (model.IsCheckAnswer)
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
             }
             catch (Exception ex)
@@ -1150,7 +1177,7 @@ namespace NMP.Portal.Controllers
                         SetFieldDataToSession(model);
                         if (model.IsCheckAnswer)
                         {
-                            return RedirectToAction("CheckAnswer");
+                            return RedirectToAction(Resource.lblCheckAnswerActionName);
                         }
                     }
                 }
@@ -1186,13 +1213,13 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(field);
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
-            return RedirectToAction("CheckAnswer");
+            return RedirectToAction(Resource.lblCheckAnswerActionName);
         }
 
 
@@ -1451,7 +1478,7 @@ namespace NMP.Portal.Controllers
                     List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
                     ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
 
-                    return View("CheckAnswer", model);
+                    return View(Resource.lblCheckAnswerActionName, model);
                 }
 
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
@@ -1500,7 +1527,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
 
                 List<PreviousCroppingData> previousCropping = new List<PreviousCroppingData>();
@@ -1729,13 +1756,13 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
             }
             catch (Exception ex)
             {
                 TempData["AddFieldError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
         }
 
@@ -1790,7 +1817,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("ManageFarmFields");
         }
 
-        
+
 
         [HttpGet]
         public async Task<IActionResult> FieldSoilAnalysisDetail(string farmId, string fieldId, string? q, string? r, string? s, string? t)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
@@ -1931,7 +1958,7 @@ namespace NMP.Portal.Controllers
             model.Name = field.Name;
             model.TotalArea = field.TotalArea ?? 0;
             model.CroppedArea = field.CroppedArea ?? 0;
-            model.ManureNonSpreadingArea = field.ManureNonSpreadingArea ?? 0;             
+            model.ManureNonSpreadingArea = field.ManureNonSpreadingArea ?? 0;
             model.SoilReleasingClay = field.SoilReleasingClay ?? false;
             model.IsWithinNVZ = field.IsWithinNVZ ?? false;
             model.IsAbove300SeaLevel = field.IsAbove300SeaLevel ?? false;
@@ -2159,7 +2186,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.IsCheckAnswer)
                     {
-                        return RedirectToAction("CheckAnswer");
+                        return RedirectToAction(Resource.lblCheckAnswerActionName);
                     }
                     return RedirectToAction("LastHarvestYear");
                 }
@@ -2182,7 +2209,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Field Controller : SoilOverChalk() action : No field data found in session.");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            
+
             return View(model);
         }
 
@@ -2204,12 +2231,12 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("RecentSoilAnalysisQuestion");
@@ -2355,12 +2382,12 @@ namespace NMP.Portal.Controllers
                 {
                     model = LoadFieldDataFromSession();
 
-                    if (model==null)
+                    if (model == null)
                     {
                         _logger.LogTrace($"Field Controller : UpdateField() post action : No field data found in session.");
                         return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                     }
-                    
+
                     if (model != null)
                     {
                         if (model.PreviousCroppings.GrassManagementOptionID != null)
@@ -2574,13 +2601,13 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["UpdateFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
             }
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
         }
 
@@ -2589,12 +2616,12 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Field Controller : FieldRemove() action called");
             FieldViewModel? model = LoadFieldDataFromSession();
-            if (model== null)
+            if (model == null)
             {
                 _logger.LogTrace($"Field Controller : FieldRemove() action : No field data found in session.");
                 return RedirectToAction("ManageFarmFields", "Farm");
             }
-            
+
             return View(model);
         }
 
@@ -2643,7 +2670,7 @@ namespace NMP.Portal.Controllers
         public IActionResult CopyExistingField(string q)
         {
             _logger.LogTrace($"Field Controller : CopyExistingField() action called");
-            FieldViewModel model = LoadFieldDataFromSession()?? new FieldViewModel();
+            FieldViewModel model = LoadFieldDataFromSession() ?? new FieldViewModel();
             if (string.IsNullOrWhiteSpace(q))
             {
                 _logger.LogTrace("Field Controller : farm id not found in query string");
@@ -2678,7 +2705,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (field.CopyExistingField != null && !(field.CopyExistingField.Value))
@@ -2733,11 +2760,11 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             return RedirectToAction("AddField", new { q = field.EncryptedFarmId });
         }
-        
+
         [HttpGet]
         public IActionResult HasGrassInLastThreeYear()
         {
@@ -2807,7 +2834,7 @@ namespace NMP.Portal.Controllers
                     SetFieldDataToSession(model);
                     if (!model.IsLastHarvestYearChange)
                     {
-                        return RedirectToAction("CheckAnswer");
+                        return RedirectToAction(Resource.lblCheckAnswerActionName);
                     }
                 }
             }
@@ -2833,7 +2860,7 @@ namespace NMP.Portal.Controllers
                 SetFieldDataToSession(model);
                 if (model.IsCheckAnswer && (!model.IsLastHarvestYearChange))
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
 
                 return RedirectToAction("CropGroups");
@@ -2931,7 +2958,7 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             return RedirectToAction("GrassManagementOptions");
         }
@@ -2943,12 +2970,12 @@ namespace NMP.Portal.Controllers
             Error error = new Error();
 
             FieldViewModel model = LoadFieldDataFromSession();
-            if (model== null)
+            if (model == null)
             {
                 _logger.LogTrace("Field Controller : field data not found in session");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            
+
             List<CommonResponse> commonResponses = await _fieldService.GetGrassManagementOptions();
             ViewBag.GrassManagementOptions = commonResponses;
             SetFieldDataToSession(model);
@@ -2978,11 +3005,11 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("HasGreaterThan30PercentClover");
@@ -2993,7 +3020,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public Task<IActionResult> HasGreaterThan30PercentClover()
         {
-            _logger.LogTrace($"Field Controller : HasGreaterThan30PercentClover() action called");            
+            _logger.LogTrace($"Field Controller : HasGreaterThan30PercentClover() action called");
 
             FieldViewModel? model = LoadFieldDataFromSession();
             if (model == null)
@@ -3001,7 +3028,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("Field Controller : field data not found in session");
                 return Task.FromResult<IActionResult>(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
             }
-            
+
             SetFieldDataToSession(model);
             return Task.FromResult<IActionResult>(View(model));
         }
@@ -3026,7 +3053,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
@@ -3040,10 +3067,10 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
                 {
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
 
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             else
             {
@@ -3057,15 +3084,15 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Field Controller : SoilNitrogenSupplyItems() action called");
             FieldViewModel? model = LoadFieldDataFromSession();
 
-            if (model==null)
+            if (model == null)
             {
                 _logger.LogTrace("Field Controller : field data not found in session");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            
+
             List<CommonResponse> commonResponses = await _fieldService.GetSoilNitrogenSupplyItems();
             ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderBy(x => x.Id);
-            
+
             return View(model);
         }
 
@@ -3091,7 +3118,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (model.IsPreviousYearGrass == false && model.CropGroupId == null)
@@ -3101,24 +3128,24 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
-            return RedirectToAction("CheckAnswer");
+            return RedirectToAction(Resource.lblCheckAnswerActionName);
         }
 
         [HttpGet]
         public async Task<IActionResult> LayDuration()
         {
             _logger.LogTrace($"Field Controller : LayDuration() action called");
-            FieldViewModel? model =LoadFieldDataFromSession();
+            FieldViewModel? model = LoadFieldDataFromSession();
 
-            if (model== null)
+            if (model == null)
             {
                 _logger.LogTrace("Field Controller : field data not found in session");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            
+
             SetFieldDataToSession(model);
             return View(model);
         }
@@ -3140,11 +3167,11 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return Task.FromResult<IActionResult>(RedirectToAction("CheckAnswer"));
+                return Task.FromResult<IActionResult>(RedirectToAction(Resource.lblCheckAnswerActionName));
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
-                return Task.FromResult<IActionResult>(RedirectToAction("UpdateField"));
+                return Task.FromResult<IActionResult>(RedirectToAction(Resource.lblUpdateFieldActionName));
             }
 
             return Task.FromResult<IActionResult>(RedirectToAction("GrassManagementOptions"));
@@ -3157,7 +3184,7 @@ namespace NMP.Portal.Controllers
             FieldViewModel model = LoadFieldDataFromSession();
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Field Controller : field data not found in session");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
@@ -3165,9 +3192,9 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex,"Field Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "Field Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["AddFieldError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             return View(model);
@@ -3190,11 +3217,11 @@ namespace NMP.Portal.Controllers
             {
                 if (string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
                 else
                 {
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
             }
             else
