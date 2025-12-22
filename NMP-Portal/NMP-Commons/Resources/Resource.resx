@@ -5044,7 +5044,7 @@ cubic metres per hectare  not set</value>
     <value>Add another import or export</value>
   </data>
   <data name="MsgImportExportSuccessMsgContent3" xml:space="preserve">
-    <value>Create a livestock manure nitrogen (n) farm limit report for {0}</value>
+    <value>Create a Livestock manure nitrogen (N) farm limit report for {0}</value>
   </data>
   <data name="lblAdded" xml:space="preserve">
     <value>added</value>
@@ -7099,11 +7099,5 @@ livestock manure.</value>
   </data>
   <data name="lblSoilAnalysesDate" xml:space="preserve">
     <value>SoilAnalyses.Date</value>
-  </data>
-  <data name="lblCheckAnswerActionName" xml:space="preserve">
-    <value>CheckAnswer</value>
-  </data>
-  <data name="lblUpdateFieldActionName" xml:space="preserve">
-    <value>UpdateField</value>
   </data>
 </root>

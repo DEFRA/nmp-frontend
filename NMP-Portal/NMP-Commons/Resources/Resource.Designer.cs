@@ -2905,15 +2905,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CheckAnswer.
-        /// </summary>
-        public static string lblCheckAnswerActionName {
-            get {
-                return ResourceManager.GetString("lblCheckAnswerActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Check inorganic fertiliser details for fields.
         /// </summary>
         public static string lblCheckInorganicFertiliserDetailsForFields {
@@ -14698,15 +14689,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UpdateField.
-        /// </summary>
-        public static string lblUpdateFieldActionName {
-            get {
-                return ResourceManager.GetString("lblUpdateFieldActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Update inorganic fertiliser.
         /// </summary>
         public static string lblUpdateInorganicFeriliser {
@@ -19497,7 +19479,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a livestock manure nitrogen (n) farm limit report for {0}.
+        ///   Looks up a localized string similar to Create a Livestock manure nitrogen (N) farm limit report for {0}.
         /// </summary>
         public static string MsgImportExportSuccessMsgContent3 {
             get {
