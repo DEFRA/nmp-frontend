@@ -89,15 +89,25 @@ namespace NMP.Portal.Controllers
                 int fieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
                 if (model.IsCheckAnswer)
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
                 else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
-                    return RedirectToAction("UpdateField", new
+                    return RedirectToAction(Resource.lblUpdateFieldActionName, new
                     {
                         fieldId = model.EncryptedFieldId,
                         farmId = model.EncryptedFarmId
                     });
+                }
+                else if (HttpContext.Session.Keys.Contains("ReportData"))
+                {
+                    ReportViewModel? reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                    if (reportViewModel != null)
+                    {
+                        RemoveFieldDataFromSession();
+                        return RedirectToAction("ExportFieldsOrCropType", "Report");
+                    }
+                    return RedirectToAction("FarmSummary", "Farm", new { id = id });
                 }
                 else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
                 {
@@ -203,7 +213,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
@@ -370,7 +380,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
@@ -426,7 +436,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName); 
             }
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
@@ -480,7 +490,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
@@ -587,7 +597,7 @@ namespace NMP.Portal.Controllers
                     field.IsSoilReleasingClay = false;
                     field.SoilReleasingClay = null;
                     SetFieldDataToSession(field);
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
 
                 if (soilType != null && soilType.KReleasingClay)
@@ -662,7 +672,7 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(field);
             if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
@@ -705,7 +715,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer && (!model.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             return RedirectToAction("SoilDate");
@@ -742,7 +752,7 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(model);
             if (model.IsCheckAnswer && (!model.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             return RedirectToAction("SoilNutrientValueType");
@@ -1045,7 +1055,7 @@ namespace NMP.Portal.Controllers
                 SetFieldDataToSession(model);
                 if (model.IsCheckAnswer)
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
             }
             catch (Exception ex)
@@ -1167,7 +1177,7 @@ namespace NMP.Portal.Controllers
                         SetFieldDataToSession(model);
                         if (model.IsCheckAnswer)
                         {
-                            return RedirectToAction("CheckAnswer");
+                            return RedirectToAction(Resource.lblCheckAnswerActionName);
                         }
                     }
                 }
@@ -1203,13 +1213,13 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(field);
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
                 return RedirectToAction("UpdateField");
             }
-            return RedirectToAction("CheckAnswer");
+            return RedirectToAction(Resource.lblCheckAnswerActionName);
         }
 
 
@@ -1468,7 +1478,7 @@ namespace NMP.Portal.Controllers
                     List<CommonResponse> soilNitrogenSupplyItems = await _fieldService.GetSoilNitrogenSupplyItems();
                     ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
 
-                    return View("CheckAnswer", model);
+                    return View(Resource.lblCheckAnswerActionName, model);
                 }
 
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
@@ -1517,7 +1527,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
 
                 List<PreviousCroppingData> previousCropping = new List<PreviousCroppingData>();
@@ -1746,13 +1756,13 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["AddFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
             }
             catch (Exception ex)
             {
                 TempData["AddFieldError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
         }
 
@@ -2176,7 +2186,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.IsCheckAnswer)
                     {
-                        return RedirectToAction("CheckAnswer");
+                        return RedirectToAction(Resource.lblCheckAnswerActionName);
                     }
                     return RedirectToAction("LastHarvestYear");
                 }
@@ -2221,7 +2231,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
@@ -2695,7 +2705,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (field.CopyExistingField != null && !(field.CopyExistingField.Value))
@@ -2750,7 +2760,7 @@ namespace NMP.Portal.Controllers
 
             if (field.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             return RedirectToAction("AddField", new { q = field.EncryptedFarmId });
         }
@@ -2824,7 +2834,7 @@ namespace NMP.Portal.Controllers
                     SetFieldDataToSession(model);
                     if (!model.IsLastHarvestYearChange)
                     {
-                        return RedirectToAction("CheckAnswer");
+                        return RedirectToAction(Resource.lblCheckAnswerActionName);
                     }
                 }
             }
@@ -2850,7 +2860,7 @@ namespace NMP.Portal.Controllers
                 SetFieldDataToSession(model);
                 if (model.IsCheckAnswer && (!model.IsLastHarvestYearChange))
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
 
                 return RedirectToAction("CropGroups");
@@ -2948,7 +2958,7 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             return RedirectToAction("GrassManagementOptions");
         }
@@ -2995,7 +3005,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
@@ -3043,7 +3053,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
@@ -3060,7 +3070,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("UpdateField");
                 }
 
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
             else
             {
@@ -3108,7 +3118,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             if (model.IsPreviousYearGrass == false && model.CropGroupId == null)
@@ -3121,7 +3131,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("UpdateField");
             }
 
-            return RedirectToAction("CheckAnswer");
+            return RedirectToAction(Resource.lblCheckAnswerActionName);
         }
 
         [HttpGet]
@@ -3157,7 +3167,7 @@ namespace NMP.Portal.Controllers
             SetFieldDataToSession(model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
             {
-                return Task.FromResult<IActionResult>(RedirectToAction("CheckAnswer"));
+                return Task.FromResult<IActionResult>(RedirectToAction(Resource.lblCheckAnswerActionName));
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
@@ -3184,7 +3194,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Field Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["AddFieldError"] = ex.Message;
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(Resource.lblCheckAnswerActionName);
             }
 
             return View(model);
@@ -3207,7 +3217,7 @@ namespace NMP.Portal.Controllers
             {
                 if (string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(Resource.lblCheckAnswerActionName);
                 }
                 else
                 {

@@ -17,21 +17,21 @@
         }
         else if (Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
         {
-            if (Model.IsPreviousYearGrass.HasValue && Model.IsPreviousYearGrass.Value)
+            // if (Model.IsPreviousYearGrass.HasValue && Model.IsPreviousYearGrass.Value)
+            // {
+            if (Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && !Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
             {
-                if (Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && !Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
-                {
-                    backAction = "SoilNitrogenSupplyItems";
-                }
-                else
-                {
-                    backAction = "HasGreaterThan30PercentClover";
-                }
+                backAction = "SoilNitrogenSupplyItems";
             }
             else
             {
-                backAction = "RecentSoilAnalysisQuestion";
+                backAction = "HasGreaterThan30PercentClover";
             }
+            // }
+            // else
+            // {
+            //     backAction = "RecentSoilAnalysisQuestion";
+            // }
         }
         else
         {
