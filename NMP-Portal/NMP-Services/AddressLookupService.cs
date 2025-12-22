@@ -14,18 +14,20 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
 
     public async Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset)
     {
-        List<AddressLookupResponse> addresses = new List<AddressLookupResponse>();
+        List<AddressLookupResponse> addresses = new();
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(APIURLHelper.AddressLookupAPI, postcode, offset));
+        var requisteUrl = string.Format(APIURLHelper.AddressLookupAPI, postcode, offset);
+        var response = await httpClient.GetAsync(requisteUrl);
         if (response.IsSuccessStatusCode)
         {
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                AddressLookupResponseWrapper? addressLookupResponseWrapper = responseWrapper?.Data?.ToObject<AddressLookupResponseWrapper>();
+                if (addressLookupResponseWrapper != null && addressLookupResponseWrapper.Results != null)
                 {
-                    AddressLookupResponseWrapper addressLookupResponseWrapper = responseWrapper.Data.ToObject<AddressLookupResponseWrapper>();
                     addresses.AddRange(addressLookupResponseWrapper.Results);
                 }
             }
@@ -33,8 +35,8 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    Error error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    Error? error = responseWrapper?.Error?.ToObject<Error>();
+                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
                 }
             }
         }

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Commons.ServiceResponses.Error;
+using NMP.Application;
 
 namespace NMP.Portal.Controllers
 {
@@ -27,7 +28,7 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _reportDataProtector;
         private readonly IDataProtector _farmDataProtector;
         private readonly IDataProtector _storageCapacityProtector;
-        private readonly IAddressLookupService _addressLookupService;
+        private readonly IAddressLookupLogic _addressLookupLogic;
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
@@ -40,7 +41,7 @@ namespace NMP.Portal.Controllers
         private readonly IDataProtector _cropProtector;
         public StorageCapacityController(ILogger<StorageCapacityController> logger,
             IDataProtectionProvider dataProtectionProvider,
-            IAddressLookupService addressLookupService,
+            IAddressLookupLogic addressLookupLogic,
             IUserFarmService userFarmService,
             IFarmService farmService,
             IFieldService fieldService,
@@ -55,7 +56,7 @@ namespace NMP.Portal.Controllers
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
             _storageCapacityProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.StorageCapacityController");
-            _addressLookupService = addressLookupService;
+            _addressLookupLogic = addressLookupLogic;
             _userFarmService = userFarmService;
             _farmService = farmService;
             _fieldService = fieldService;

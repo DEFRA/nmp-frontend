@@ -16,6 +16,7 @@ using System.Globalization;
 using Enums = NMP.Commons.Enums;
 using NMP.Application;
 using Error = NMP.Commons.ServiceResponses.Error;
+using NMP.Application;
 
 namespace NMP.Portal.Controllers
 {
@@ -25,7 +26,7 @@ namespace NMP.Portal.Controllers
         private readonly ILogger<ReportController> _logger;
         private readonly IDataProtector _reportDataProtector;
         private readonly IDataProtector _farmDataProtector;
-        private readonly IAddressLookupService _addressLookupService;
+        private readonly IAddressLookupLogic _addressLookupLogic;
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
@@ -35,7 +36,7 @@ namespace NMP.Portal.Controllers
         private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
         private readonly IWarningLogic _warningLogic;
-        public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupService addressLookupService,
+        public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
             IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningLogic warningLogic)
@@ -43,7 +44,7 @@ namespace NMP.Portal.Controllers
             _logger = logger;
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _addressLookupService = addressLookupService;
+            _addressLookupLogic = addressLookupLogic;
             _userFarmService = userFarmService;
             _farmService = farmService;
             _fieldService = fieldService;
