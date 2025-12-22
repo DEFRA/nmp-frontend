@@ -1263,10 +1263,8 @@ namespace NMP.Portal.Controllers
                             {
                                 cropList = cropList.Where(x => x.CropOrder == 1).ToList();
                             }
-                            if (cropList.Count > 0)
+                            if (cropList.Count > 0&& cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
-                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                                {
                                     (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
                                     var filteredFertiliserManure = model.OrganicManures
@@ -1283,7 +1281,7 @@ namespace NMP.Portal.Controllers
                                     grassCropCounter++;
                                     model.IsAnyCropIsGrass = true;
                                 }
-                            }
+                            
                         }
                         model.GrassCropCount = grassCropCounter;
                     }

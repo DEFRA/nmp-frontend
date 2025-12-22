@@ -330,10 +330,12 @@ namespace NMP.Portal.Controllers
                         }
                         if (model.IsDoubleCropAvailable)
                         {
+                            SetFertiliserManureToSession(model);
                             return RedirectToAction("DoubleCrop");
                         }
                         if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                         {
+                            SetFertiliserManureToSession(model);
                             return RedirectToAction("Defoliation");
                         }
                         else
@@ -344,6 +346,7 @@ namespace NMP.Portal.Controllers
                             SetFertiliserManureToSession(model);
                         }
 
+                        SetFertiliserManureToSession(model);
                         return RedirectToAction("InOrgnaicManureDuration");
                     }
                 }
@@ -372,6 +375,8 @@ namespace NMP.Portal.Controllers
                     {
                         TempData["FieldError"] = null;
                     }
+
+                    SetFertiliserManureToSession(model);
                     return RedirectToAction("HarvestYearOverview", "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
                 }
             }
@@ -387,6 +392,8 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["FieldError"] = null;
                 }
+
+                SetFertiliserManureToSession(model);
                 return RedirectToAction("HarvestYearOverview", "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
             }
 
@@ -745,6 +752,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
+                            SetFertiliserManureToSession(model);
                             TempData["CheckYourAnswerError"] = error.Message;
                             return RedirectToAction("CheckAnswer");
                         }
@@ -778,10 +786,12 @@ namespace NMP.Portal.Controllers
                         model.IsAnyChangeInSameDefoliationFlag = false;
                         SetFertiliserManureToSession(model);
                     }
+                    SetFertiliserManureToSession(model);
                     return RedirectToAction("CheckAnswer");
                 }
                 if (model.IsDoubleCropAvailable)
                 {
+                    SetFertiliserManureToSession(model);
                     return RedirectToAction("DoubleCrop");
                 }
                 else
@@ -796,6 +806,7 @@ namespace NMP.Portal.Controllers
                     model.FieldName = model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldName).First();
                     if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
                     {
+                        SetFertiliserManureToSession(model);
                         return RedirectToAction("IsSameDefoliationForAll");
                     }
                     model.IsSameDefoliationForAll = true;
@@ -805,6 +816,7 @@ namespace NMP.Portal.Controllers
                 SetFertiliserManureToSession(model);
                 if (model.FieldGroup != null && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
                 {
+                    SetFertiliserManureToSession(model);
                     return RedirectToAction("InOrgnaicManureDuration");
                 }
             }
