@@ -13,6 +13,7 @@ using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
 using System.Net;
 using Error = NMP.Commons.ServiceResponses.Error;
+using NMP.Application;
 
 namespace NMP.Portal.Controllers
 {
@@ -21,7 +22,7 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
-        private readonly IAddressLookupService _addressLookupService;
+        private readonly IAddressLookupLogic _addressLookupLogic;
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
@@ -29,13 +30,13 @@ namespace NMP.Portal.Controllers
         private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
         public readonly IHttpContextAccessor _httpContextAccessor;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupLogic addressLookupLogic,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IReportService reportService, IStorageCapacityService storageCapacityService)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _addressLookupService = addressLookupService;
+            _addressLookupLogic = addressLookupLogic;
             _userFarmService = userFarmService;
             _farmService = farmService;
             _fieldService = fieldService;
@@ -353,7 +354,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 RemoveAddressesSession();
-                List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
+
+                List<AddressLookupResponse> addresses = await _addressLookupLogic.AddressesAsync(model.Postcode, 0);
                 var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
 
                 if (addressesList.Count == 0)
@@ -430,7 +432,7 @@ namespace NMP.Portal.Controllers
             var addresses = GetAddressesFromSession() ?? new List<AddressLookupResponse>();
             return addresses.Count > 0
                 ? addresses
-                : await _addressLookupService.AddressesAsync(farm.Postcode, 0);
+                : await _addressLookupLogic.AddressesAsync(farm.Postcode, 0);
         }
 
         private void PopulateAddressViewBags(List<AddressLookupResponse> addresses)

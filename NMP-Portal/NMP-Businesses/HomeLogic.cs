@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NMP.Application;
+using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 namespace NMP.Businesses;
+
+[Business(ServiceLifetime.Transient)]
 public class HomeLogic : IHomeLogic
 {
     private readonly ILogger _logger;

@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Core.Interfaces;
+using NMP.Core.Attributes;
 namespace NMP.Services;
 
+[Service(ServiceLifetime.Scoped)]
 public class HomeService(ILogger<HomeService> logger, IHttpClientFactory clientFactory, IConfiguration configuration) : IHomeService
 {
     private readonly ILogger<HomeService> _logger = logger;
