@@ -19479,7 +19479,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a livestock manure nitrogen (n) farm limit report for {0}.
+        ///   Looks up a localized string similar to Create a Livestock manure nitrogen (N) farm limit report for {0}.
         /// </summary>
         public static string MsgImportExportSuccessMsgContent3 {
             get {
