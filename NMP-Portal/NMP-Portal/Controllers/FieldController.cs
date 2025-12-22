@@ -217,7 +217,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             if (field.CopyExistingField != null && (field.CopyExistingField.Value))
@@ -385,7 +385,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("NVZField");
@@ -441,7 +441,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("ElevationField");
@@ -495,7 +495,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("SoilType");
@@ -613,7 +613,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
                 {
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
             }
             catch (Exception ex)
@@ -676,7 +676,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
             return RedirectToAction("RecentSoilAnalysisQuestion");
         }
@@ -1217,7 +1217,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
             return RedirectToAction(Resource.lblCheckAnswerActionName);
         }
@@ -2236,7 +2236,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(field.EncryptedIsUpdate))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("RecentSoilAnalysisQuestion");
@@ -2601,13 +2601,13 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["UpdateFieldError"] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
             }
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
         }
 
@@ -3009,7 +3009,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction("HasGreaterThan30PercentClover");
@@ -3067,7 +3067,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
                 {
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
 
                 return RedirectToAction(Resource.lblCheckAnswerActionName);
@@ -3128,7 +3128,7 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
             {
-                return RedirectToAction("UpdateField");
+                return RedirectToAction(Resource.lblUpdateFieldActionName);
             }
 
             return RedirectToAction(Resource.lblCheckAnswerActionName);
@@ -3171,7 +3171,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
             {
-                return Task.FromResult<IActionResult>(RedirectToAction("UpdateField"));
+                return Task.FromResult<IActionResult>(RedirectToAction(Resource.lblUpdateFieldActionName));
             }
 
             return Task.FromResult<IActionResult>(RedirectToAction("GrassManagementOptions"));
@@ -3221,7 +3221,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("UpdateField");
+                    return RedirectToAction(Resource.lblUpdateFieldActionName);
                 }
             }
             else
