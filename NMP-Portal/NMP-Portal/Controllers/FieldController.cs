@@ -2196,7 +2196,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex,"Field Controller : Exception in RecentSoilAnalysisQuestion() post action : {0}, {1}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "Field Controller : Exception in RecentSoilAnalysisQuestion() post action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["Error"] = ex.Message;
                 return View(model);
             }
@@ -2807,7 +2807,7 @@ namespace NMP.Portal.Controllers
             {
                 isAnyChangeInHasGrassLastThreeYearFlag = true;
             }
-                if (model.IsCheckAnswer && fieldData != null)
+            if (model.IsCheckAnswer && fieldData != null)
             {
                 if (isAnyChangeInHasGrassLastThreeYearFlag)
                 {
@@ -2890,13 +2890,8 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("Field Controller : field data not found in session");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-
-            List<int> previousYears = new List<int>();
             int lastHarvestYear = model.LastHarvestYear ?? 0;
-            previousYears.Add(lastHarvestYear);
-            previousYears.Add(lastHarvestYear - 1);
-            previousYears.Add(lastHarvestYear - 2);
-
+            List<int> previousYears = GetLastThreeYears(lastHarvestYear);     
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
@@ -2914,45 +2909,47 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
+        
+        private static List<int> GetLastThreeYears(int lastHarvestYear)
+        {
+            return new List<int>
+    {
+        lastHarvestYear,
+        lastHarvestYear - 1,
+        lastHarvestYear - 2
+    };
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
         {
             _logger.LogTrace("Field Controller : GrassLastThreeHarvestYear() post action called");
-            int lastHarvestYear = 0;
+
             if (model.PreviousGrassYears == null)
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
             }
 
-            SetFieldDataToSession(model);
+            int lastHarvestYear = model.LastHarvestYear ?? 0;
 
             if (!ModelState.IsValid)
             {
-                List<int> previousYears = new List<int>();
-                lastHarvestYear = model.LastHarvestYear ?? 0;
-                previousYears.Add(lastHarvestYear);
-                previousYears.Add(lastHarvestYear - 1);
-                previousYears.Add(lastHarvestYear - 2);
-                ViewBag.PreviousCroppingsYear = previousYears;
+                ViewBag.PreviousCroppingsYear = GetLastThreeYears(lastHarvestYear);
                 return View(model);
             }
 
-            //below condition is for select all
+            // Select all case
             if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
             {
-                List<int> previousYears = new List<int>();
-                lastHarvestYear = model.LastHarvestYear ?? 0;
-                previousYears.Add(lastHarvestYear);
-                previousYears.Add(lastHarvestYear - 1);
-                previousYears.Add(lastHarvestYear - 2);
-                model.PreviousGrassYears = previousYears;
+                model.PreviousGrassYears = GetLastThreeYears(lastHarvestYear);
             }
 
-            lastHarvestYear = model.LastHarvestYear ?? 0;
-            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
+            model.IsPreviousYearGrass = model.PreviousGrassYears?.Contains(lastHarvestYear) == true;
 
-            SetFieldDataToSession(model);
+            ResetCropIfPreviousYearGrassChanged(model);
+
 
             if (model.PreviousGrassYears?.Count == 3)
             {
@@ -2966,13 +2963,33 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("LayDuration");
             }
+
             SetFieldDataToSession(model);
-            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
+
+            if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && !model.IsLastHarvestYearChange)
             {
                 return RedirectToAction(CheckAnswerActionName);
             }
+
             return RedirectToAction("GrassManagementOptions");
         }
+
+        private void ResetCropIfPreviousYearGrassChanged(FieldViewModel model)
+        {
+            FieldViewModel? fieldData = LoadFieldDataFromSession();
+
+            if (fieldData?.IsPreviousYearGrass != model.IsPreviousYearGrass &&
+                model.IsPreviousYearGrass == true)
+            {
+                model.CropGroupId = null;
+                model.CropGroup = string.Empty;
+                model.CropTypeID = null;
+                model.CropType = string.Empty;
+            }
+
+            SetFieldDataToSession(model);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GrassManagementOptions()
