@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Net;
 using System.Xml.Linq;
 using Error = NMP.Commons.ServiceResponses.Error;
+using NMP.Commons.Helpers;
 
 namespace NMP.Portal.Controllers
 {
