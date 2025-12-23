@@ -30,8 +30,8 @@ namespace NMP.Portal.Controllers
         private readonly ISoilService _soilService;
         private readonly ICropService _cropService;
         private readonly IPreviousCroppingService _previousCroppingService;
-        public const string CheckAnswerActionName = "CheckAnswer";
-        public const string UpdateFieldActionName = "UpdateField";
+        private const string CheckAnswerActionName = "CheckAnswer";
+        private const string UpdateFieldActionName = "UpdateField";
 
         public FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
              IFarmService farmService, ISoilService soilService, IFieldService fieldService, ICropService cropService, IPreviousCroppingService previousCroppingService)
@@ -438,7 +438,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction(CheckAnswerActionName); 
+                return RedirectToAction(CheckAnswerActionName);
             }
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
@@ -2799,11 +2799,16 @@ namespace NMP.Portal.Controllers
             }
 
             FieldViewModel? fieldData = LoadFieldDataFromSession();
-            if (model.IsCheckAnswer && fieldData != null)
+            bool isAnyChangeInHasGrassLastThreeYearFlag = false;
+            if (fieldData != null && fieldData.PreviousCroppings != null &&
+                   model.PreviousCroppings != null &&
+                   fieldData.PreviousCroppings.HasGrassInLastThreeYear != model.PreviousCroppings.HasGrassInLastThreeYear)
             {
-                if (fieldData.PreviousCroppings != null &&
-                    model.PreviousCroppings != null &&
-                    fieldData.PreviousCroppings.HasGrassInLastThreeYear != model.PreviousCroppings.HasGrassInLastThreeYear)
+                isAnyChangeInHasGrassLastThreeYearFlag = true;
+            }
+                if (model.IsCheckAnswer && fieldData != null)
+            {
+                if (isAnyChangeInHasGrassLastThreeYearFlag)
                 {
                     model.IsHasGrassInLastThreeYearChange = true;
                     if ((model.PreviousCroppings.HasGrassInLastThreeYear != null && (!model.PreviousCroppings.HasGrassInLastThreeYear.Value)))
@@ -2849,10 +2854,6 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                model.CropGroupId = null;
-                model.CropGroup = string.Empty;
-                model.CropTypeID = null;
-                model.CropType = string.Empty;
                 model.PreviousCroppings.HarvestYear = null;
                 model.PreviousCroppings.GrassManagementOptionID = null;
                 model.PreviousCroppings.HasGreaterThan30PercentClover = null;
@@ -2864,7 +2865,14 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction(CheckAnswerActionName);
                 }
-
+                if (isAnyChangeInHasGrassLastThreeYearFlag)
+                {
+                    model.CropGroupId = null;
+                    model.CropGroup = string.Empty;
+                    model.CropTypeID = null;
+                    model.CropType = string.Empty;
+                    SetFieldDataToSession(model);
+                }
                 return RedirectToAction("CropGroups");
             }
         }

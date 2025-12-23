@@ -13726,7 +13726,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This date is outside the selected calender year..
+        ///   Looks up a localized string similar to This date is outside the selected calendar year..
         /// </summary>
         public static string lblThisDateIsOutsideTheSelectedCalenderYear {
             get {
@@ -18633,7 +18633,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999.
+        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999 as an integer value only..
         /// </summary>
         public static string MsgEnterAnQuantityBetweenValue {
             get {
