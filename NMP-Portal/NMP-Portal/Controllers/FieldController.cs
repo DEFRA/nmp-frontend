@@ -32,7 +32,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
     private const string _farmSummaryActionName = "FarmSummary";
-    private const string _addFieldActionName= "AddField";
+    private const string _addFieldActionName = "AddField";
     private const string _recentSoilAnalysisQuestion = "RecentSoilAnalysisQuestion";
 
     public async Task<IActionResult> Index()
@@ -81,15 +81,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             int fieldCount = await _fieldLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return await Task.FromResult(RedirectToAction(_checkAnswerActionName));
             }
             else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
             {
-                return RedirectToAction(_updateFieldActionName, new
+                return await Task.FromResult(RedirectToAction(_updateFieldActionName, new
                 {
                     fieldId = model.EncryptedFieldId,
                     farmId = model.EncryptedFarmId
-                });
+                }));
             }
             else if (HttpContext.Session.Keys.Contains("ReportData"))
             {
@@ -97,41 +97,41 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (reportViewModel != null)
                 {
                     RemoveFieldDataFromSession();
-                    return RedirectToAction("ExportFieldsOrCropType", "Report");
+                    return await Task.FromResult(RedirectToAction("ExportFieldsOrCropType", "Report"));
                 }
-                return RedirectToAction(_farmSummaryActionName, "Farm", new { id = id });
+                return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id }));
             }
             else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
             {
                 RemoveFieldDataFromSession();
-                return RedirectToAction("HarvestYearOverview", "Crop", new
+                return await Task.FromResult(RedirectToAction("HarvestYearOverview", "Crop", new
                 {
                     id = model.EncryptedFarmId,
                     year = model.EncryptedHarvestYear
-                });
+                }));
             }
             else if (fieldCount > 0)
             {
                 if (model != null && model.CopyExistingField != null && model.CopyExistingField.Value)
                 {
-                    return RedirectToAction("CopyFields", "Field");
+                    return await Task.FromResult(RedirectToAction("CopyFields", "Field"));
                 }
                 else
                 {
-                    return RedirectToAction("CopyExistingField", "Field", new { q = id });
+                    return await Task.FromResult(RedirectToAction("CopyExistingField", "Field", new { q = id }));
                 }
             }
             else
             {
                 RemoveFieldDataFromSession();
-                return RedirectToAction(_farmSummaryActionName, "Farm", new { id = id });
+                return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id }));
             }
         }
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Field Controller : Exception in BackActionForAddField() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["AddFieldError"] = ex.Message;
-            return View(_addFieldActionName, model);
+            return await Task.FromResult(View(_addFieldActionName, model));
         }
     }
 
@@ -140,7 +140,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : AddField({Q}) action called", q);
         FieldViewModel model = LoadFieldDataFromSession() ?? new FieldViewModel();
-        Error error = null;
+        Error? error = null;
         try
         {
             if (string.IsNullOrWhiteSpace(q))
@@ -233,7 +233,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilTypeID = fieldResponse.Field.SoilTypeID;
                 List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypes();
                 SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == model.SoilTypeID);
-                
+
                 if (soilType != null && soilType.KReleasingClay)
                 {
                     model.IsSoilReleasingClay = true;
@@ -1259,7 +1259,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Field Controller : Exception in CheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Field Controller : Exception in CheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["Error"] = ex.Message;
             return RedirectToAction("CropTypes");
         }
@@ -1808,7 +1808,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> ManageFarmFields(FieldViewModel field)
     {
         _logger.LogTrace("Field Controller : ManageFarmFields() post action called");
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             await Task.FromResult(RedirectToAction("ManageFarmFields"));
         }
@@ -1819,7 +1819,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> FieldSoilAnalysisDetail(string farmId, string fieldId, string? q, string? r, string? s, string? t)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
     {
         _logger.LogTrace("Field Controller : FieldSoilAnalysisDetail() action called");
-        
+
         if (HttpContext.Session.Exists("SoilAnalysisDataBeforeUpdate"))
         {
             HttpContext.Session.Remove("SoilAnalysisDataBeforeUpdate");
@@ -2187,6 +2187,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 {
                     return RedirectToAction(_checkAnswerActionName);
                 }
+
                 return RedirectToAction("LastHarvestYear");
             }
         }
@@ -2257,13 +2258,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
                 int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
                 var field = await _fieldLogic.FetchFieldByFieldId(decrptedFieldId);
-                
+
                 //get plans of field
                 List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(decrptedFieldId);
-                
+
                 //get oldest plan
                 List<PreviousCroppingData> prevCroppings = new List<PreviousCroppingData>();
-                
+
                 if (!cropPlans.Any())
                 {
                     (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decrptedFieldId, null);
@@ -2280,7 +2281,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
                 prevCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan).ToList();
                 model.PreviousCroppingsList = prevCroppings;
-                
+
                 //get previous grasses which harvest year is less than oldest plan.
                 List<PreviousCroppingData> grassCroppings = prevCroppings.Where(x => x.HarvestYear < oldestYearWithPlan && x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
                 model.PreviousGrassYears = new List<int>();
@@ -2485,7 +2486,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                         foreach (var pc in model.PreviousCroppingsList)
                         {
                             if (!model.PreviousGrassYears.Contains(pc.HarvestYear ?? 0) && pc.HarvestYear != model.LastHarvestYear)
-                            {                                
+                            {
                                 pc.Action = (int)NMP.Commons.Enums.Action.Insert;
                                 pc.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other;
                                 pc.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other;
@@ -2595,7 +2596,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
             (Field fieldResponse, Error error1) = await _fieldLogic.UpdateFieldAsync(fieldData, fieldId);
-            
+
             if (error1.Message == null && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect(Resource.lblTrue);
@@ -2808,7 +2809,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             isAnyChangeInHasGrassLastThreeYearFlag = true;
         }
-            if (model.IsCheckAnswer && fieldData != null)
+        if (model.IsCheckAnswer && fieldData != null)
         {
             if (isAnyChangeInHasGrassLastThreeYearFlag)
             {
@@ -2879,6 +2880,18 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
+
+    private static List<int> GetLastThreeYears(int lastHarvestYear)
+    {
+        return new List<int>
+        {
+            lastHarvestYear,
+            lastHarvestYear - 1,
+            lastHarvestYear - 2
+        };
+    }
+
+
     [HttpGet]
     public async Task<IActionResult> GrassLastThreeHarvestYear()
     {
@@ -2888,16 +2901,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         FieldViewModel? model = LoadFieldDataFromSession();
         if (model == null)
         {
-            _logger.LogTrace("Field Controller : GrassLastThreeHarvestYear() field data not found in session");
+            _logger.LogTrace("Field Controller : field data not found in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
-
-        List<int> previousYears = new List<int>();
         int lastHarvestYear = model.LastHarvestYear ?? 0;
-        previousYears.Add(lastHarvestYear);
-        previousYears.Add(lastHarvestYear - 1);
-        previousYears.Add(lastHarvestYear - 2);
-
+        List<int> previousYears = GetLastThreeYears(lastHarvestYear);
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
         {
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
@@ -2915,45 +2923,36 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return View(model);
     }
 
+
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
     {
         _logger.LogTrace("Field Controller : GrassLastThreeHarvestYear() post action called");
-        int lastHarvestYear = 0;
+
         if (model.PreviousGrassYears == null)
         {
             ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
         }
 
-        SetFieldDataToSession(model);
+        int lastHarvestYear = model.LastHarvestYear ?? 0;
 
         if (!ModelState.IsValid)
         {
-            List<int> previousYears = new List<int>();
-            lastHarvestYear = model.LastHarvestYear ?? 0;
-            previousYears.Add(lastHarvestYear);
-            previousYears.Add(lastHarvestYear - 1);
-            previousYears.Add(lastHarvestYear - 2);
-            ViewBag.PreviousCroppingsYear = previousYears;
+            ViewBag.PreviousCroppingsYear = GetLastThreeYears(lastHarvestYear);
             return View(model);
         }
 
-        //below condition is for select all
+        // Select all case
         if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
         {
-            List<int> previousYears = new List<int>();
-            lastHarvestYear = model.LastHarvestYear ?? 0;
-            previousYears.Add(lastHarvestYear);
-            previousYears.Add(lastHarvestYear - 1);
-            previousYears.Add(lastHarvestYear - 2);
-            model.PreviousGrassYears = previousYears;
+            model.PreviousGrassYears = GetLastThreeYears(lastHarvestYear);
         }
 
-        lastHarvestYear = model.LastHarvestYear ?? 0;
-        model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
+        model.IsPreviousYearGrass = model.PreviousGrassYears?.Contains(lastHarvestYear) == true;
 
-        SetFieldDataToSession(model);
+        ResetCropIfPreviousYearGrassChanged(model);
 
         if (model.PreviousGrassYears?.Count == 3)
         {
@@ -2967,18 +2966,38 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             return RedirectToAction("LayDuration");
         }
+
         SetFieldDataToSession(model);
-        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
+
+        if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && !model.IsLastHarvestYearChange)
         {
             return RedirectToAction(_checkAnswerActionName);
         }
+
         return RedirectToAction("GrassManagementOptions");
     }
+
+    private void ResetCropIfPreviousYearGrassChanged(FieldViewModel model)
+    {
+        FieldViewModel? fieldData = LoadFieldDataFromSession();
+
+        if (fieldData?.IsPreviousYearGrass != model.IsPreviousYearGrass &&
+            model.IsPreviousYearGrass == true)
+        {
+            model.CropGroupId = null;
+            model.CropGroup = string.Empty;
+            model.CropTypeID = null;
+            model.CropType = string.Empty;
+        }
+
+        SetFieldDataToSession(model);
+    }
+
 
     [HttpGet]
     public async Task<IActionResult> GrassManagementOptions()
     {
-        _logger.LogTrace($"Field Controller : GrassManagementOptions() action called");        
+        _logger.LogTrace($"Field Controller : GrassManagementOptions() action called");
         FieldViewModel? model = LoadFieldDataFromSession();
 
         if (model == null)
@@ -2986,8 +3005,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : GrassManagementOptions: field data not found in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
-                
-        ViewBag.GrassManagementOptions = await _fieldLogic.GetGrassManagementOptions(); 
+
+        ViewBag.GrassManagementOptions = await _fieldLogic.GetGrassManagementOptions();
         SetFieldDataToSession(model);
         return View(model);
     }
@@ -3029,8 +3048,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return RedirectToAction("HasGreaterThan30PercentClover");
     }
-
-
 
     [HttpGet]
     public Task<IActionResult> HasGreaterThan30PercentClover()
@@ -3258,18 +3275,19 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : LastHarvestYear() action called");
         FieldViewModel? model = LoadFieldDataFromSession();
-        
-        if(model == null)
+
+        if (model == null)
         {
             _logger.LogTrace("Field Controller : LastHarvestYear() : field data not found in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-        }        
+        }
 
         DateTime currentDate = System.DateTime.Now;
-        DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1,00,00,00, DateTimeKind.Unspecified);
-        DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31,00,00,00,DateTimeKind.Unspecified);
+        DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1, 00, 00, 00, DateTimeKind.Unspecified);
+        DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31, 00, 00, 00, DateTimeKind.Unspecified);
         int secondLastHarvestYear = System.DateTime.Now.Year - 1;
         int lastHarvestYear = System.DateTime.Now.Year;
+
         if (currentDate.Date >= startOfCurrentHarvestYear.Date && currentDate.Date <= endOfCurrentHarvestYear.Date) // Between April and February
         {
             secondLastHarvestYear = currentDate.Year - 1;
@@ -3304,7 +3322,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!ModelState.IsValid)
         {
             DateTime currentDate = System.DateTime.Now;
-            DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1,00,00,00,DateTimeKind.Unspecified);
+            DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1, 00, 00, 00, DateTimeKind.Unspecified);
             DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31, 00, 00, 00, DateTimeKind.Unspecified);
             int secondLastHarvestYear = System.DateTime.Now.Year - 1;
             int lastHarvestYear = System.DateTime.Now.Year;
@@ -3330,7 +3348,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         FieldViewModel? fieldViewModel = LoadFieldDataFromSession() ?? new FieldViewModel();
-        
+
         if (fieldViewModel.LastHarvestYear != model.LastHarvestYear)
         {
             model.IsLastHarvestYearChange = true;
