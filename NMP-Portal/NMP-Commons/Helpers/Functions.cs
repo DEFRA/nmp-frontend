@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NMP.Commons.Enums;
-using NMP.Commons.ViewModels;
-
-namespace NMP.Portal.Helpers
+namespace NMP.Commons.Helpers
 {
     public static class Functions
     {
