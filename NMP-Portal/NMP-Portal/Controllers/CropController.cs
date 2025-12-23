@@ -1758,7 +1758,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Id);
 
                 string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
-                ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
+                ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
                 if (cropInfoOneQuestion == null)
                 {
                     model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone).CropInfo1Name;
@@ -1811,7 +1811,8 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-
+                    string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+                    ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
                     ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
                     return View(model);
                 }
@@ -2471,7 +2472,7 @@ namespace NMP.Portal.Controllers
                 if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
                 {
                     string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
-                    ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
+                    ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
                     if (cropInfoOneQuestion == null)
                     {
                         List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
@@ -4666,7 +4667,7 @@ namespace NMP.Portal.Controllers
                     if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other)
                     {
                         cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
-                        ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
+                        ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
                     }
 
                     TempData["ErrorCreatePlan"] = ex.Message;
@@ -5001,7 +5002,7 @@ namespace NMP.Portal.Controllers
                 decimal? firstYield = null;
                 DateTime? firstSowingDate = null;
                 if (string.IsNullOrWhiteSpace(s))
-                {                    
+                {
                     (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                     if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
                     {
@@ -5175,7 +5176,7 @@ namespace NMP.Portal.Controllers
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 model.EncryptedIsCropUpdate = _cropDataProtector.Protect(Resource.lblTrue);
                 string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
-                ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
+                ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
@@ -5277,8 +5278,8 @@ namespace NMP.Portal.Controllers
                 string? cropInfoOneQuestion = string.Empty;
                 if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
                 {
-                    cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
-                    ViewBag.CropInfoOneQuestion = cropInfoOneQuestion;
+                    cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);                    
+                    ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
                 }
                 if (model.CropInfo1 == null && model.CropGroupId != otherGroupId && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
                 {
@@ -5797,7 +5798,7 @@ namespace NMP.Portal.Controllers
                 if (model.IsCheckAnswer)
                 {
                     PlanViewModel planViewModel = GetCropFromSession()?? new PlanViewModel();
-                    
+
                     if (planViewModel.CurrentSward == model.CurrentSward && !model.IsAnyChangeInField)
                     {
                         return RedirectToAction("CheckAnswer");
@@ -5823,7 +5824,7 @@ namespace NMP.Portal.Controllers
                                 if (model.IsCheckAnswer)
                                 {
                                     model.GrassGrowthClassCounter = 0;
-                                    SetCropToSession(model);    
+                                    SetCropToSession(model);
                                 }
                             }
                         }
@@ -5903,11 +5904,11 @@ namespace NMP.Portal.Controllers
             try
             {
                 if (model == null)
-                { 
+                {
                     _logger.LogTrace("Crop Controller : GrassSeason() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 List<GrassSeasonResponse> grassSeasons = await _cropService.FetchGrassSeasons();
                 grassSeasons.RemoveAll(g => g.SeasonId == 0);
                 ViewBag.GrassSeason = grassSeasons.OrderByDescending(x => x.SeasonId);
@@ -5941,7 +5942,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 PlanViewModel planViewModel = GetCropFromSession()?? new PlanViewModel();
-                
+
                 if (model.IsCheckAnswer && planViewModel.GrassSeason == model.GrassSeason && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
@@ -5974,7 +5975,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace("Crop Controller : SwardType() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropService.FetchSwardTypes();
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -6013,7 +6014,7 @@ namespace NMP.Portal.Controllers
             }
 
             PlanViewModel planViewModel = GetCropFromSession()?? new PlanViewModel();
-            
+
             if (model.IsCheckAnswer && planViewModel.SwardTypeId == model.SwardTypeId && !model.IsAnyChangeInField)
             {
                 return RedirectToAction("CheckAnswer");
@@ -6044,7 +6045,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace("Crop Controller : GrassManagement() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 (List<SwardManagementResponse> swardManagementResponses, Error error) = await _cropService.FetchSwardManagementBySwardTypeId(model.SwardTypeId ?? 0);
                 if (error != null)
                 {
@@ -6084,13 +6085,13 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
-                
+
                 if (model.IsCheckAnswer && planViewModel.SwardManagementId == model.SwardManagementId && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
                 }
                 else if (!model.IsAnyChangeInField)
-                {                    
+                {
                     model.PotentialCut = null;
                     model.DefoliationSequenceId = null;
                     model.GrassGrowthClassQuestion = null;
@@ -6120,7 +6121,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace("Crop Controller : Defoliation() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 (List<PotentialCutResponse> potentialCuts, Error error) = await _cropService.FetchPotentialCutsBySwardTypeIdAndSwardManagementId(model.SwardTypeId ?? 0, model.SwardManagementId ?? 0);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -6162,7 +6163,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 PlanViewModel planViewModel = GetCropFromSession()?? new PlanViewModel();
-                
+
                 if (model.IsCheckAnswer && planViewModel.PotentialCut == model.PotentialCut && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
@@ -6191,13 +6192,13 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Crop Controller : DefoliationSequence() action called");
             PlanViewModel model = GetCropFromSession();
             try
-            {                
+            {
                 if (model==null)
                 {
                     _logger.LogTrace("Crop Controller : DefoliationSequence() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
                 (defoliationSequenceResponses, Error error) = await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? true : false);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
@@ -6296,8 +6297,8 @@ namespace NMP.Portal.Controllers
                     ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
                     return View(model);
                 }
-                PlanViewModel planViewModel = GetCropFromSession()?? new PlanViewModel();
-                
+                PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+
                 if (model.IsCheckAnswer && planViewModel.DefoliationSequenceId == model.DefoliationSequenceId && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction("CheckAnswer");
@@ -6338,12 +6339,12 @@ namespace NMP.Portal.Controllers
             PlanViewModel model = GetCropFromSession();
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Crop Controller : GrassGrowthClass() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 List<int> fieldIds = new List<int>();
                 List<int> grassGrowthClassIds = new List<int>();
 
@@ -6423,7 +6424,7 @@ namespace NMP.Portal.Controllers
                             }
 
                         }
-                        
+
                         return RedirectToAction("DefoliationSequence");
                     }
 
@@ -6475,7 +6476,7 @@ namespace NMP.Portal.Controllers
             List<int> grassGrowthClassIds = new List<int>();
             Error error = new Error();
             List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
-            PlanViewModel planViewModelBeforeUpdate =GetCropFromSession()?? new PlanViewModel();            
+            PlanViewModel planViewModelBeforeUpdate = GetCropFromSession() ?? new PlanViewModel();
             if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1)
             {
                 if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
@@ -6516,8 +6517,8 @@ namespace NMP.Portal.Controllers
                 }
                 return View(model);
             }
-            
-            if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1 &&(model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
+
+            if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1 && (model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
             {
                 model.GrassGrowthClassCounter = 1;
                 model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
@@ -6563,7 +6564,7 @@ namespace NMP.Portal.Controllers
             {
                 model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Count;
             }
-            
+
             for (int i = 0; i < model.Crops.Count; i++)
             {
                 if (model.FieldID == model.Crops[i].FieldID.Value)
@@ -6595,7 +6596,7 @@ namespace NMP.Portal.Controllers
 
             model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
 
-            PlanViewModel planViewModel = GetCropFromSession()?? new PlanViewModel();            
+            PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
             if (model.GrassGrowthClassQuestion != planViewModel.GrassGrowthClassQuestion)
             {
                 model.DryMatterYieldCounter = 0;
@@ -6644,11 +6645,11 @@ namespace NMP.Portal.Controllers
 
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Crop Controller : DryMatterYield() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }                
+                }
 
                 foreach (var crop in model.Crops)
                 {
@@ -6757,7 +6758,7 @@ namespace NMP.Portal.Controllers
 
                     (grassGrowthClasses, error) = await _cropService.FetchGrassGrowthClass(fieldIds);
                     (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-                    
+
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["GrassGrowthClassError"] = error.Message;
@@ -6810,7 +6811,7 @@ namespace NMP.Portal.Controllers
                         {
                             model.FieldID = model.Crops[i + 1].FieldID.Value;
                             (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[i + 1].GrassGrowthClassId);
-                            
+
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 TempData["DryMatterYieldError"] = error.Message;
@@ -6827,24 +6828,24 @@ namespace NMP.Portal.Controllers
                 }
 
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
-                SetCropToSession(model);                
+                SetCropToSession(model);
                 if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange) && (!model.IsCurrentSwardChange))
                 {
                     SetCropToSession(model);
                     return RedirectToAction("CheckAnswer");
-                }                
+                }
             }
             else if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
             {
                 model.DryMatterYieldCounter = 1;
                 for (int i = 0; i < model.Crops.Count; i++)
                 {
-                    model.Crops[i].Yield = model.Crops[0].Yield;                    
+                    model.Crops[i].Yield = model.Crops[0].Yield;
                 }
 
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
                 SetCropToSession(model);
-                
+
                 if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
                 {
                     SetCropToSession(model);
@@ -6854,13 +6855,13 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("CheckAnswer");
             }
 
-            if (model.DryMatterYieldCounter == model.Crops.Count||
+            if (model.DryMatterYieldCounter == model.Crops.Count ||
                 (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null)))
             {
                 SetCropToSession(model);
                 return RedirectToAction("CheckAnswer");
             }
-                return View(model);
+            return View(model);
         }
 
         [HttpGet]
@@ -6870,7 +6871,7 @@ namespace NMP.Portal.Controllers
             PlanViewModel? model = GetCropFromSession();
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Crop Controller : Cancel() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
@@ -6882,7 +6883,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("Crop Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
                 TempData["ErrorCreatePlan"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
-            }            
+            }
         }
 
         [HttpPost]
@@ -6899,15 +6900,15 @@ namespace NMP.Portal.Controllers
                 return View("Cancel", model);
             }
             if (!model.IsCancel.Value)
-            {                
-                return RedirectToAction("CheckAnswer");                
+            {
+                return RedirectToAction("CheckAnswer");
             }
             else
             {
                 RemoveCropSession();
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropService.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                
+
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && (model.IsComingFromRecommendation == null))
                 {
                     if (string.IsNullOrWhiteSpace(error.Message))
@@ -6973,18 +6974,18 @@ namespace NMP.Portal.Controllers
                     model.EncryptedFarmId = q;
                     model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(year));
                 }
-                
+
                 model.FarmName = farm.Name;
                 List<PlanSummaryResponse> planSummaryResponse = await _cropService.FetchPlanSummaryByFarmId(farmId, 0);
                 planSummaryResponse.RemoveAll(x => x.Year == 0);
                 planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
                 model.EncryptedHarvestYearList = new List<string>();
-                
+
                 foreach (var planSummary in planSummaryResponse)
                 {
                     model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
                 }
-                
+
                 if (!string.IsNullOrWhiteSpace(year))
                 {
                     model.EncryptedHarvestYear = year;
@@ -6993,7 +6994,7 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.PlanSummaryList = planSummaryResponse;
                 (int? topPrevCroppingYear, error) = await _previousCroppingService.FetchPreviousCroppingYearByFarmdId(farmId);
-                
+
                 if (string.IsNullOrWhiteSpace(error.Message) && topPrevCroppingYear > 0)
                 {
                     DateTime currentDate = DateTime.Now;
@@ -7100,8 +7101,8 @@ namespace NMP.Portal.Controllers
         public IActionResult CopyExistingPlan(string q)
         {
             _logger.LogTrace($"Crop Controller : CopyExistingPlan() action called");
-            PlanViewModel model =  GetCropFromSession()?? new PlanViewModel();
-            
+            PlanViewModel model = GetCropFromSession() ?? new PlanViewModel();
+
             if (string.IsNullOrWhiteSpace(q))
             {
                 return RedirectToAction("FarmList", "Farm");
@@ -7155,12 +7156,12 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Crop Controller : CopyPlanYears() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                
+
                 foreach (var year in model.HarvestYear)
                 {
                     (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropService.FetchHarvestYearPlansByFarmId(year.Year, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
@@ -7222,11 +7223,11 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }               
+                }
 
                 return View(model);
             }
@@ -7265,11 +7266,11 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
-                if (model==null)
+                if (model == null)
                 {
                     _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called - CropData session is null");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }                
+                }
 
                 model.IsCheckAnswer = true;
                 SetCropToSession(model);
@@ -7340,12 +7341,12 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called");
             PlanViewModel? model = GetCropFromSession();
-            if (model==null)
+            if (model == null)
             {
                 _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called - CropData session is null");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            
+
             model.IsCheckAnswer = false;
             SetCropToSession(model);
             return RedirectToAction("CopyOrganicInorganicApplications");

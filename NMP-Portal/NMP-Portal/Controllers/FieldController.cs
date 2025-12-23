@@ -2806,7 +2806,7 @@ namespace NMP.Portal.Controllers
             {
                 isAnyChangeInHasGrassLastThreeYearFlag = true;
             }
-                if (model.IsCheckAnswer && fieldData != null)
+            if (model.IsCheckAnswer && fieldData != null)
             {
                 if (isAnyChangeInHasGrassLastThreeYearFlag)
                 {
@@ -2952,7 +2952,14 @@ namespace NMP.Portal.Controllers
             model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
 
             SetFieldDataToSession(model);
-
+            if (model.IsPreviousYearGrass.HasValue && model.IsPreviousYearGrass.Value)
+            {
+                model.CropGroupId = null;
+                model.CropGroup = string.Empty;
+                model.CropTypeID = null;
+                model.CropType = string.Empty;
+                SetFieldDataToSession(model);
+            }
             if (model.PreviousGrassYears?.Count == 3)
             {
                 model.PreviousCroppings.LayDuration = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
