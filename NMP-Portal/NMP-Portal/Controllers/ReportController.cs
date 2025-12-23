@@ -14,6 +14,7 @@ using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
 using System.Globalization;
 using Enums = NMP.Commons.Enums;
+using NMP.Application;
 using Error = NMP.Commons.ServiceResponses.Error;
 using NMP.Application;
 
@@ -34,11 +35,11 @@ namespace NMP.Portal.Controllers
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
-        private readonly IWarningService _warningService;
+        private readonly IWarningLogic _warningLogic;
         public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningService warningService)
+            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningLogic warningLogic)
         {
             _logger = logger;
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
@@ -52,7 +53,7 @@ namespace NMP.Portal.Controllers
             _fertiliserManureService = fertiliserManureService;
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
-            _warningService = warningService;
+            _warningLogic = warningLogic;
         }
         public IActionResult Index()
         {
@@ -669,16 +670,8 @@ namespace NMP.Portal.Controllers
             }
             string fieldIds = string.Join(",", model.FieldList);
 
-            (List<WarningHeaderResponse> warningHeaderResponses, error) = await _warningService.FetchWarningHeaderByFieldIdAndYear(fieldIds, model.Year.Value);
-            if (string.IsNullOrWhiteSpace(error.Message))
-            {
-                ViewBag.WarningHeaders = warningHeaderResponses;
-            }
-            else
-            {
-                TempData["ErrorOnSelectField"] = error.Message;
-                return RedirectToAction("ExportFieldsOrCropType");
-            }
+            List<WarningHeaderResponse> warningHeaderResponses = await _warningLogic.FetchWarningHeaderByFieldIdAndYearAsync(fieldIds, model.Year.Value);
+            ViewBag.WarningHeaders = warningHeaderResponses;
 
             (CropAndFieldReportResponse cropAndFieldReportResponse, error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
             if (string.IsNullOrWhiteSpace(error.Message))

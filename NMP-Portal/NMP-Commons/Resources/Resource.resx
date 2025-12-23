@@ -6390,13 +6390,13 @@ livestock manure.</value>
     <value>Available Sulphur (SO3)</value>
   </data>
   <data name="MsgCroppedAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
-    <value>Cropped area should not more than 2 decimal</value>
+    <value>Cropped area should not have more than 2 decimal places</value>
   </data>
   <data name="MsgManureNonSpreadingAreaNotMoreThanTwoDecimal" xml:space="preserve">
-    <value>Manure non - spreading area should not more than 2 decimal</value>
+    <value>Manure non - spreading area should not have more than 2 decimal places</value>
   </data>
   <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
-    <value>Total area should not more than 2 decimal</value>
+    <value>Total area should not have more than 2 decimal places</value>
   </data>
   <data name="lblWhatIsTheExpectedYieldWithSuffix" xml:space="preserve">
     <value>What is the expected yield for {0} in these fields </value>
@@ -7099,5 +7099,8 @@ livestock manure.</value>
   </data>
   <data name="lblSoilAnalysesDate" xml:space="preserve">
     <value>SoilAnalyses.Date</value>
+  </data>
+  <data name="lblYouCanChangeThisLater" xml:space="preserve">
+    <value>You can change this later.</value>
   </data>
 </root>
