@@ -2909,74 +2909,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult GrassLastThreeHarvestYear(FieldViewModel model)
-        //{
-        //    _logger.LogTrace("Field Controller : GrassLastThreeHarvestYear() post action called");
-        //    int lastHarvestYear = 0;
-        //    if (model.PreviousGrassYears == null)
-        //    {
-        //        ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        List<int> previousYears = new List<int>();
-        //        lastHarvestYear = model.LastHarvestYear ?? 0;
-        //        previousYears.Add(lastHarvestYear);
-        //        previousYears.Add(lastHarvestYear - 1);
-        //        previousYears.Add(lastHarvestYear - 2);
-        //        ViewBag.PreviousCroppingsYear = previousYears;
-        //        return View(model);
-        //    }
-
-        //    //below condition is for select all
-        //    if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
-        //    {
-        //        List<int> previousYears = new List<int>();
-        //        lastHarvestYear = model.LastHarvestYear ?? 0;
-        //        previousYears.Add(lastHarvestYear);
-        //        previousYears.Add(lastHarvestYear - 1);
-        //        previousYears.Add(lastHarvestYear - 2);
-        //        model.PreviousGrassYears = previousYears;
-        //    }
-
-        //    lastHarvestYear = model.LastHarvestYear ?? 0;
-        //    model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
-
-        //    FieldViewModel? fieldData = LoadFieldDataFromSession();
-        //    if (fieldData != null && fieldData.IsPreviousYearGrass.HasValue && model.IsPreviousYearGrass.HasValue &&
-        //           fieldData.IsPreviousYearGrass != model.IsPreviousYearGrass &&
-        //           (model.IsPreviousYearGrass.HasValue && model.IsPreviousYearGrass.Value))
-        //    {
-        //        model.CropGroupId = null;
-        //        model.CropGroup = string.Empty;
-        //        model.CropTypeID = null;
-        //        model.CropType = string.Empty;
-        //    }
-        //    SetFieldDataToSession(model);
-
-        //    if (model.PreviousGrassYears?.Count == 3)
-        //    {
-        //        model.PreviousCroppings.LayDuration = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
-        //    }
-        //    else if (model.PreviousGrassYears?.Count <= 2 && model.PreviousGrassYears[0] == model.LastHarvestYear)
-        //    {
-        //        model.PreviousCroppings.LayDuration = (int)NMP.Commons.Enums.LayDuration.OneToTwoYears;
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("LayDuration");
-        //    }
-        //    SetFieldDataToSession(model);
-        //    if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
-        //    {
-        //        return RedirectToAction(CheckAnswerActionName);
-        //    }
-        //    return RedirectToAction("GrassManagementOptions");
-        //}
-
+        
         private static List<int> GetLastThreeYears(int lastHarvestYear)
         {
             return new List<int>

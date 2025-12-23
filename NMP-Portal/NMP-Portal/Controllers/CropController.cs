@@ -1751,17 +1751,8 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                //List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-                //var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-                //var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-                //ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Id);
                 List<CropInfoOneResponse> cropInfoOneList = await GetCropInfoOneList(model);
                 await PopulateCropInfoOneViewData(model, cropInfoOneList);
-                //string? cropInfoOneQuestion = await _cropService.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
-                //if (!string.IsNullOrWhiteSpace(cropInfoOneQuestion))
-                //{
-                //    ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
-                //}
                 if(cropInfoOneList!=null&&cropInfoOneList.Any(x => x.CropInfo1Name == Resource.lblNone))
                 {
                     model.CropInfo1Name = cropInfoOneList?
