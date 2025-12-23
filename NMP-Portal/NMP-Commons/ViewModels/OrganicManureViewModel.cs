@@ -96,9 +96,9 @@ public class OrganicManureViewModel
     public string? CropNmaxLimitWarningPara2 { get; set; }
     public int? FarmCountryId { get; set; }
     public string? ClosedPeriod { get; set; } = string.Empty;
-    public string? ClosedPeriodWarningHeading { get; set; } = string.Empty;
     public string? ClosedPeriodWarningPara1 { get; set; } = string.Empty;
     public string? ClosedPeriodWarningPara2 { get; set; } = string.Empty;
+    public string? ClosedPeriodWarningPara3 { get; set; } = string.Empty;
     public string? SlurryOrPoultryManureExistWithinLast20Days {  get; set; } = string.Empty;
     public bool? IsWithinClosedPeriod { get; set; }
     public string? EndClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;

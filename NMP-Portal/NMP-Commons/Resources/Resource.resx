@@ -4924,7 +4924,7 @@ cubic metres per hectare  not set</value>
     <value>Nutrient values for {0}</value>
   </data>
   <data name="lblThisDateIsOutsideTheSelectedCalenderYear" xml:space="preserve">
-    <value>This date is outside the selected calender year.</value>
+    <value>This date is outside the selected calendar year.</value>
   </data>
   <data name="lblLivestockQuantityWIthoutSpace" xml:space="preserve">
     <value>LivestockQuantity</value>
@@ -5044,7 +5044,7 @@ cubic metres per hectare  not set</value>
     <value>Add another import or export</value>
   </data>
   <data name="MsgImportExportSuccessMsgContent3" xml:space="preserve">
-    <value>Create a livestock manure nitrogen (n) farm limit report for {0}</value>
+    <value>Create a Livestock manure nitrogen (N) farm limit report for {0}</value>
   </data>
   <data name="lblAdded" xml:space="preserve">
     <value>added</value>
@@ -6390,13 +6390,13 @@ livestock manure.</value>
     <value>Available Sulphur (SO3)</value>
   </data>
   <data name="MsgCroppedAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
-    <value>Cropped area should not more than 2 decimal</value>
+    <value>Cropped area should not have more than 2 decimal places</value>
   </data>
   <data name="MsgManureNonSpreadingAreaNotMoreThanTwoDecimal" xml:space="preserve">
-    <value>Manure non - spreading area should not more than 2 decimal</value>
+    <value>Manure non - spreading area should not have more than 2 decimal places</value>
   </data>
   <data name="MsgTotalAreaShouldNotMoreThanTwoDecimal" xml:space="preserve">
-    <value>Total area should not more than 2 decimal</value>
+    <value>Total area should not have more than 2 decimal places</value>
   </data>
   <data name="lblWhatIsTheExpectedYieldWithSuffix" xml:space="preserve">
     <value>What is the expected yield for {0} in these fields </value>
@@ -6555,7 +6555,7 @@ livestock manure.</value>
     <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
   </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
-    <value>Enter an quantity between 1 and 9,99,999</value>
+    <value>Enter an quantity between 1 and 9,99,999 as an integer value only.</value>
   </data>
   <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
     <value>Quantity must be between 1 to 9,99,999</value>
@@ -7100,10 +7100,7 @@ livestock manure.</value>
   <data name="lblSoilAnalysesDate" xml:space="preserve">
     <value>SoilAnalyses.Date</value>
   </data>
-  <data name="lblCheckAnswerActionName" xml:space="preserve">
-    <value>CheckAnswer</value>
-  </data>
-  <data name="lblUpdateFieldActionName" xml:space="preserve">
-    <value>UpdateField</value>
+  <data name="lblYouCanChangeThisLater" xml:space="preserve">
+    <value>You can change this later.</value>
   </data>
 </root>

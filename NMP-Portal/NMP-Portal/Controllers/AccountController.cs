@@ -19,7 +19,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Account Controller : Logout action called");
             base.SignOut();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext?.Session.Clear();
+            HttpContext.Session.Clear();
             return RedirectToAction("SignOut", "Account", new { Area = "MicrosoftIdentity" });
         }
 

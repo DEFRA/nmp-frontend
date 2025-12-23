@@ -2905,15 +2905,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CheckAnswer.
-        /// </summary>
-        public static string lblCheckAnswerActionName {
-            get {
-                return ResourceManager.GetString("lblCheckAnswerActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Check inorganic fertiliser details for fields.
         /// </summary>
         public static string lblCheckInorganicFertiliserDetailsForFields {
@@ -13735,7 +13726,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This date is outside the selected calender year..
+        ///   Looks up a localized string similar to This date is outside the selected calendar year..
         /// </summary>
         public static string lblThisDateIsOutsideTheSelectedCalenderYear {
             get {
@@ -14694,15 +14685,6 @@ namespace NMP.Commons.Resources {
         public static string lblUpdateField {
             get {
                 return ResourceManager.GetString("lblUpdateField", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UpdateField.
-        /// </summary>
-        public static string lblUpdateFieldActionName {
-            get {
-                return ResourceManager.GetString("lblUpdateFieldActionName", resourceCulture);
             }
         }
         
@@ -17083,6 +17065,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can change this later..
+        /// </summary>
+        public static string lblYouCanChangeThisLater {
+            get {
+                return ResourceManager.GetString("lblYouCanChangeThisLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change your sowing date later..
         /// </summary>
         public static string lblYouCanChangeYourPlantingDateLater {
@@ -18156,7 +18147,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cropped area should not more than 2 decimal.
+        ///   Looks up a localized string similar to Cropped area should not have more than 2 decimal places.
         /// </summary>
         public static string MsgCroppedAreaShouldNotMoreThanTwoDecimal {
             get {
@@ -18642,7 +18633,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999.
+        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999 as an integer value only..
         /// </summary>
         public static string MsgEnterAnQuantityBetweenValue {
             get {
@@ -19497,7 +19488,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a livestock manure nitrogen (n) farm limit report for {0}.
+        ///   Looks up a localized string similar to Create a Livestock manure nitrogen (N) farm limit report for {0}.
         /// </summary>
         public static string MsgImportExportSuccessMsgContent3 {
             get {
@@ -19704,7 +19695,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manure non - spreading area should not more than 2 decimal.
+        ///   Looks up a localized string similar to Manure non - spreading area should not have more than 2 decimal places.
         /// </summary>
         public static string MsgManureNonSpreadingAreaNotMoreThanTwoDecimal {
             get {
@@ -20586,7 +20577,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total area should not more than 2 decimal.
+        ///   Looks up a localized string similar to Total area should not have more than 2 decimal places.
         /// </summary>
         public static string MsgTotalAreaShouldNotMoreThanTwoDecimal {
             get {

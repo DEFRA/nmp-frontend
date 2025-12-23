@@ -14,7 +14,9 @@ using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
 using System.Globalization;
 using Enums = NMP.Commons.Enums;
+using NMP.Application;
 using Error = NMP.Commons.ServiceResponses.Error;
+using NMP.Application;
 
 namespace NMP.Portal.Controllers
 {
@@ -24,7 +26,7 @@ namespace NMP.Portal.Controllers
         private readonly ILogger<ReportController> _logger;
         private readonly IDataProtector _reportDataProtector;
         private readonly IDataProtector _farmDataProtector;
-        private readonly IAddressLookupService _addressLookupService;
+        private readonly IAddressLookupLogic _addressLookupLogic;
         private readonly IUserFarmService _userFarmService;
         private readonly IFarmService _farmService;
         private readonly IFieldService _fieldService;
@@ -33,16 +35,16 @@ namespace NMP.Portal.Controllers
         private readonly IFertiliserManureService _fertiliserManureService;
         private readonly IReportService _reportService;
         private readonly IStorageCapacityService _storageCapacityService;
-        private readonly IWarningService _warningService;
-        public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupService addressLookupService,
+        private readonly IWarningLogic _warningLogic;
+        public ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
             IUserFarmService userFarmService, IFarmService farmService,
             IFieldService fieldService, ICropService cropService, IOrganicManureService organicManureService,
-            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningService warningService)
+            IFertiliserManureService fertiliserManureService, IReportService reportService, IStorageCapacityService storageCapacityService, IWarningLogic warningLogic)
         {
             _logger = logger;
             _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
             _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _addressLookupService = addressLookupService;
+            _addressLookupLogic = addressLookupLogic;
             _userFarmService = userFarmService;
             _farmService = farmService;
             _fieldService = fieldService;
@@ -51,7 +53,7 @@ namespace NMP.Portal.Controllers
             _fertiliserManureService = fertiliserManureService;
             _reportService = reportService;
             _storageCapacityService = storageCapacityService;
-            _warningService = warningService;
+            _warningLogic = warningLogic;
         }
         public IActionResult Index()
         {
@@ -668,16 +670,8 @@ namespace NMP.Portal.Controllers
             }
             string fieldIds = string.Join(",", model.FieldList);
 
-            (List<WarningHeaderResponse> warningHeaderResponses, error) = await _warningService.FetchWarningHeaderByFieldIdAndYear(fieldIds, model.Year.Value);
-            if (string.IsNullOrWhiteSpace(error.Message))
-            {
-                ViewBag.WarningHeaders = warningHeaderResponses;
-            }
-            else
-            {
-                TempData["ErrorOnSelectField"] = error.Message;
-                return RedirectToAction("ExportFieldsOrCropType");
-            }
+            List<WarningHeaderResponse> warningHeaderResponses = await _warningLogic.FetchWarningHeaderByFieldIdAndYearAsync(fieldIds, model.Year.Value);
+            ViewBag.WarningHeaders = warningHeaderResponses;
 
             (CropAndFieldReportResponse cropAndFieldReportResponse, error) = await _fieldService.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
             if (string.IsNullOrWhiteSpace(error.Message))

@@ -159,7 +159,7 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
 });
 
 builder.Services.AddScoped<FarmContext>();
-builder.Services.AddSingleton<IAddressLookupService, AddressLookupService>();
+
 builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
 builder.Services.AddSingleton<IFarmService, FarmService>();
 builder.Services.AddSingleton<IFieldService, FieldService>();
@@ -171,12 +171,10 @@ builder.Services.AddSingleton<IMannerService, MannerService>();
 builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>();
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
-//builder.Services.AddSingleton<IUserExtensionService, UserExtensionService>();
 builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddSingleton<IStorageCapacityService, StorageCapacityService>();
 builder.Services.AddSingleton<IPreviousCroppingService, PreviousCroppingService>();
-builder.Services.AddSingleton<IWarningService, WarningService>();
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.

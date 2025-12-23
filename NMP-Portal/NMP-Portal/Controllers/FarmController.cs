@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Azure.Identity;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,10 +7,11 @@ using NMP.Portal.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
-using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
 using System.Net;
 using Error = NMP.Commons.ServiceResponses.Error;
+using NMP.Application;
+using NMP.Commons.Helpers;
 
 namespace NMP.Portal.Controllers
 {
@@ -21,28 +20,18 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FarmController> _logger;
         private readonly IDataProtector _dataProtector;
-        private readonly IAddressLookupService _addressLookupService;
-        private readonly IUserFarmService _userFarmService;
-        private readonly IFarmService _farmService;
-        private readonly IFieldService _fieldService;
-        private readonly ICropService _cropService;
-        private readonly IReportService _reportService;
-        private readonly IStorageCapacityService _storageCapacityService;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
-            IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService, ICropService cropService, IReportService reportService, IStorageCapacityService storageCapacityService)
+        private readonly IAddressLookupLogic _addressLookupLogic;       
+        private readonly IFarmLogic _farmLogic;
+        private readonly IFieldLogic _fieldLogic;            
+        
+        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
+            IFarmLogic farmLogic, IFieldLogic fieldLogic)
         {
             _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _addressLookupService = addressLookupService;
-            _userFarmService = userFarmService;
-            _farmService = farmService;
-            _fieldService = fieldService;
-            _cropService = cropService;
-            _reportService = reportService;
-            _storageCapacityService = storageCapacityService;
-            _httpContextAccessor = httpContextAccessor;
+            _addressLookupLogic = addressLookupLogic;            
+            _farmLogic = farmLogic;
+            _fieldLogic = fieldLogic;
         }
         public IActionResult Index()
         {
@@ -64,7 +53,7 @@ namespace NMP.Portal.Controllers
             {
                 string orgId = HttpContext.User.FindFirst("organisationId").Value;
                 Guid.TryParse(orgId, out Guid organisationId);
-                (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
+                (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
@@ -155,7 +144,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogError("Farm Controller : Session not found in Country() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+                (List<Country> countryList, Error error) = await _farmLogic.FetchCountryAsync();
                 if (error != null && countryList.Count > 0)
                 {
                     countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
@@ -190,7 +179,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+                    (List<Country> countryList, Error error) = await _farmLogic.FetchCountryAsync();
                     if (error != null && countryList.Count > 0)
                     {
                         countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
@@ -332,7 +321,7 @@ namespace NMP.Portal.Controllers
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
 
-            bool exists = _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
+            bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
             if (exists)
             {
                 ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
@@ -353,7 +342,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 RemoveAddressesSession();
-                List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
+
+                List<AddressLookupResponse> addresses = await _addressLookupLogic.AddressesAsync(model.Postcode, 0);
                 var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
 
                 if (addressesList.Count == 0)
@@ -430,7 +420,7 @@ namespace NMP.Portal.Controllers
             var addresses = GetAddressesFromSession() ?? new List<AddressLookupResponse>();
             return addresses.Count > 0
                 ? addresses
-                : await _addressLookupService.AddressesAsync(farm.Postcode, 0);
+                : await _addressLookupLogic.AddressesAsync(farm.Postcode, 0);
         }
 
         private void PopulateAddressViewBags(List<AddressLookupResponse> addresses)
@@ -530,7 +520,7 @@ namespace NMP.Portal.Controllers
                     {
                         id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
                     }
-                    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
+                    bool IsFarmExist = await _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, id);
                     if (IsFarmExist)
                     {
                         ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
@@ -588,7 +578,7 @@ namespace NMP.Portal.Controllers
                 if (rainfallNotAvailable)
                 {
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
-                    decimal rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    decimal rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
                     model.Rainfall = (int)Math.Round(rainfall);
 
                     if (model.Rainfall.HasValue && model.Rainfall > 0)
@@ -646,7 +636,7 @@ namespace NMP.Portal.Controllers
                     {
                         string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.ClimateDataPostCode);
 
-                        var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                        var rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
                         if (rainfall != null)
                         {
                             model.Rainfall = (int)Math.Round(rainfall);
@@ -694,7 +684,7 @@ namespace NMP.Portal.Controllers
                 {
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
 
-                    decimal? rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    decimal? rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
                     if (rainfall != null)
                     {
                         model.Rainfall = (int)Math.Round(rainfall.Value);
@@ -1021,7 +1011,7 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);
+                (Farm farmResponse, Error error) = await _farmLogic.AddFarmAsync(farmData);
 
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1102,7 +1092,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
-                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1120,7 +1110,7 @@ namespace NMP.Portal.Controllers
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                        ViewBag.FieldCount = await _fieldLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                     }
                 }
             }
@@ -1158,7 +1148,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 farmId = _dataProtector.Unprotect(id);
-                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["Error"] = error.Message;
@@ -1236,7 +1226,7 @@ namespace NMP.Portal.Controllers
 
                 int createdByID = 0;
                 DateTime createdOn = DateTime.Now;
-                (Farm farmDetail, Error apiError) = await _farmService.FetchFarmByIdAsync(farmId);
+                (Farm farmDetail, Error apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
                 if (!string.IsNullOrWhiteSpace(apiError.Message))
                 {
                     TempData["Error"] = apiError.Message;
@@ -1291,7 +1281,7 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmService.UpdateFarmAsync(farmData);
+                (Farm farmResponse, Error error) = await _farmLogic.UpdateFarmAsync(farmData);
 
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1356,7 +1346,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                    (string message, Error error) = await _farmService.DeleteFarmByIdAsync(id);
+                    (string message, Error error) = await _farmLogic.DeleteFarmByIdAsync(id);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["AddFarmError"] = error.Message;
@@ -1398,7 +1388,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"farm Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace(ex,"farm Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
