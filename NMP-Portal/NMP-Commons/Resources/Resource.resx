@@ -4924,7 +4924,7 @@ cubic metres per hectare  not set</value>
     <value>Nutrient values for {0}</value>
   </data>
   <data name="lblThisDateIsOutsideTheSelectedCalenderYear" xml:space="preserve">
-    <value>This date is outside the selected calender year.</value>
+    <value>This date is outside the selected calendar year.</value>
   </data>
   <data name="lblLivestockQuantityWIthoutSpace" xml:space="preserve">
     <value>LivestockQuantity</value>
@@ -6555,7 +6555,7 @@ livestock manure.</value>
     <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
   </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
-    <value>Enter an quantity between 1 and 9,99,999</value>
+    <value>Enter an quantity between 1 and 9,99,999 as an integer value only.</value>
   </data>
   <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
     <value>Quantity must be between 1 to 9,99,999</value>
