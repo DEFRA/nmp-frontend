@@ -1,9 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 namespace NMP.Businesses;
+
+[Business(ServiceLifetime.Transient)]
 public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) : IFieldLogic
 {
     private readonly ILogger<FieldLogic> _logger = logger;
