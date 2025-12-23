@@ -2924,8 +2924,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
             }
-
-            SetFieldDataToSession(model);
+                        
 
             if (!ModelState.IsValid)
             {
@@ -2951,9 +2950,15 @@ namespace NMP.Portal.Controllers
 
             lastHarvestYear = model.LastHarvestYear ?? 0;
             model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
-
+            bool isAnyChangeInPreviousYearGrass = false;
+            FieldViewModel? fieldData = LoadFieldDataFromSession();
+            if (fieldData != null && fieldData.IsPreviousYearGrass.HasValue && model.IsPreviousYearGrass.HasValue &&
+                   fieldData.IsPreviousYearGrass != model.IsPreviousYearGrass)
+            {
+                isAnyChangeInPreviousYearGrass = true;
+            }
             SetFieldDataToSession(model);
-            if (model.IsPreviousYearGrass.HasValue && model.IsPreviousYearGrass.Value)
+            if (model.IsPreviousYearGrass.HasValue && model.IsPreviousYearGrass.Value && isAnyChangeInPreviousYearGrass)
             {
                 model.CropGroupId = null;
                 model.CropGroup = string.Empty;
