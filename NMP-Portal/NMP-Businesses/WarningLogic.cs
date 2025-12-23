@@ -7,9 +7,9 @@ using NMP.Core.Interfaces;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class WarningLogic(ILogger<FarmLogic> logger, IWarningService warningService) : IWarningLogic
+public class WarningLogic(ILogger<WarningLogic> logger, IWarningService warningService) : IWarningLogic
 {
-    private readonly ILogger<FarmLogic> _logger = logger;
+    private readonly ILogger<WarningLogic> _logger = logger;
     private readonly IWarningService _warningService = warningService;
     public async Task<List<WarningHeaderResponse>> FetchWarningHeaderByFieldIdAndYearAsync(string fieldIds, int harvestYear)
     {
