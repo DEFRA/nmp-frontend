@@ -221,4 +221,5 @@ internal static class APIURLHelper
     public const string UpdateNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
     public const string FetchWarningCodesByFieldIdAndYearAsyncAPI = "warning-message/{0}?harvestYear={1}";
     public const string FetchPreviousCroppingYearByFarmIdAsyncAPI = "previous-cropping-year/{0}";
+    public const string FetchWarningByCountryIdAndWarningKeyAsyncAPI = "warning/{0}?WarningKey={1}";
 }

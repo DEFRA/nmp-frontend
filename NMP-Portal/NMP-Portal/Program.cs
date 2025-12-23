@@ -171,12 +171,10 @@ builder.Services.AddSingleton<IMannerService, MannerService>();
 builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>();
 builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
 builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
-
 builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddSingleton<IStorageCapacityService, StorageCapacityService>();
 builder.Services.AddSingleton<IPreviousCroppingService, PreviousCroppingService>();
-builder.Services.AddSingleton<IWarningService, WarningService>();
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.

@@ -228,12 +228,12 @@
                     @if (Model.IsClosedPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodWarningHeading
+                            @Model.ClosedPeriodWarningPara1
                         </p>
-                        <p class="govuk-body">@Model.ClosedPeriodWarningPara1</p>
-                        if (@Model.ClosedPeriodWarningPara2 != null)
+                        <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
+                        if (@Model.ClosedPeriodWarningPara3 != null)
                         {
-                            <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
+                            <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
                         }
                     }
                     @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
