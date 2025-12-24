@@ -30,6 +30,13 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         return await _fieldService.FetchAllCropTypes();
     }
 
+    public async Task<List<CropGroupResponse>> FetchArableCropGroups()
+    {
+        _logger.LogTrace("Fetching arable crop groups");
+        var cropGroups = await _fieldService.FetchCropGroups();
+        return cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
+    }
+
     public async Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year)
     {
         _logger.LogTrace("Fetching crop and field report for FieldId: {FieldId}, Year: {Year}", fieldId, year);
@@ -156,10 +163,10 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         return await _fieldService.GetSoilNitrogenSupplyItems();
     }
 
-    public async Task<bool> IsFieldExistAsync(int farmId, string name)
+    public async Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null)
     {
         _logger.LogTrace("Checking if field exists with Name: {FieldName} in FarmId: {FarmId}", name, farmId);
-        return await _fieldService.IsFieldExistAsync(farmId, name);
+        return await _fieldService.IsFieldExistAsync(farmId, name,  fieldId);
     }
 
     public async Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId)

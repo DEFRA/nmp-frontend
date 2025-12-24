@@ -8,11 +8,12 @@ public interface IFieldLogic
     Task<List<SoilTypesResponse>> FetchSoilTypes();
     Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync();
     Task<List<CropGroupResponse>> FetchCropGroups();
+    Task<List<CropGroupResponse>> FetchArableCropGroups();
     Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId);
     Task<string> FetchCropGroupById(int cropGroupId);
     Task<string> FetchCropTypeById(int cropTypeId);
     Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName);
-    Task<bool> IsFieldExistAsync(int farmId, string name);
+    Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null);
     Task<List<Field>> FetchFieldsByFarmId(int farmId);
     Task<Field> FetchFieldByFieldId(int fieldId);
     Task<List<CropTypeResponse>> FetchAllCropTypes();

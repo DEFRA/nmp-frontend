@@ -20,6 +20,7 @@ internal static class APIURLHelper
     public const string FetchCropTypeByIdAsyncAPI = "vendors/rb209/Arable/CropType/{0}";
     public const string AddFieldAsyncAPI = "fields/farms/{0}";
     public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?name={1}";
+    public const string IsFieldExistByFieldIdAsyncAPI = "fields/farms/{0}/exists?name={1}&fieldId={2}";
     public const string FetchFieldsByFarmIdAsyncAPI = "fields/farms/{0}";
     public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
     public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";

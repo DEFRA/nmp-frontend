@@ -40,6 +40,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _tempDataErrorKey = "Error";
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _harvestYearForPlanActionName = "HarvestYearForPlan";
+    private const string _cropDataBeforeUpdateSessionKey = "CropDataBeforeUpdate";
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
@@ -2547,6 +2548,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.IsBasePlan = isBasePlan;
             }
             model.IsAnyChangeInField = false;
+
+            if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
+                !string.IsNullOrWhiteSpace(t) && !string.IsNullOrWhiteSpace(u))
+            {
+                HttpContext.Session.SetObjectAsJson(_cropDataBeforeUpdateSessionKey, model);
+            }
             SetCropToSession(model);
 
             if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(t) && !string.IsNullOrWhiteSpace(u))
@@ -2554,7 +2561,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 SetCropToSession(model);
             }
 
-            var previousModel = HttpContext.Session.GetObjectFromJson<PlanViewModel>("CropDataBeforeUpdate");
+            var previousModel = HttpContext.Session.GetObjectFromJson<PlanViewModel>(_cropDataBeforeUpdateSessionKey);
 
             bool isDataChanged = false;
 
@@ -3154,9 +3161,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 HttpContext.Session.Remove("FertiliserDataBeforeUpdate");
             }
-            if (HttpContext.Session.Exists("CropDataBeforeUpdate"))
+            if (HttpContext.Session.Exists(_cropDataBeforeUpdateSessionKey))
             {
-                HttpContext.Session.Remove("CropDataBeforeUpdate");
+                HttpContext.Session.Remove(_cropDataBeforeUpdateSessionKey);
             }
             if (HttpContext.Session.Exists("ReportData"))
             {
@@ -3765,9 +3772,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 HttpContext.Session.Remove("FertiliserDataBeforeUpdate");
             }
-            if (HttpContext.Session.Exists("CropDataBeforeUpdate"))
+            if (HttpContext.Session.Exists(_cropDataBeforeUpdateSessionKey))
             {
-                HttpContext.Session.Remove("CropDataBeforeUpdate");
+                HttpContext.Session.Remove(_cropDataBeforeUpdateSessionKey);
             }
 
             //string q, 

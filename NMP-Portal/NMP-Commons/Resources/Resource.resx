@@ -2266,7 +2266,7 @@ cubic metres per hectare  not set</value>
     <value>Sample depth</value>
   </data>
   <data name="lblSoilMineralNitrogenForError" xml:space="preserve">
-    <value>Soil mineral nitrogen (N)</value>
+    <value>SoilMineralNitrogen</value>
   </data>
   <data name="lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation" xml:space="preserve">
     <value>Would you like to add an estimate of nitrogen (N) mineralisation during the growing season?</value>
@@ -3892,7 +3892,7 @@ cubic metres per hectare  not set</value>
     <value>Total area</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
-    <value>For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals.</value>
+    <value>For Potassium(K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
   </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
@@ -7102,5 +7102,11 @@ livestock manure.</value>
   </data>
   <data name="lblYouCanChangeThisLater" xml:space="preserve">
     <value>You can change this later.</value>
+  </data>
+  <data name="MsgValidationForPotasium" xml:space="preserve">
+    <value>The value must be an integer between 0 and 9 except when the value is 2 in which case you must add it as 2+ or 2-</value>
+  </data>
+  <data name="MsgValidationForSoilMineralNitrogen" xml:space="preserve">
+    <value>Please enter the value for soil mineral nitrogen (N) as a whole number</value>
   </data>
 </root>
