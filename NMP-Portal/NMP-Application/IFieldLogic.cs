@@ -8,6 +8,7 @@ public interface IFieldLogic
     Task<List<SoilTypesResponse>> FetchSoilTypes();
     Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync();
     Task<List<CropGroupResponse>> FetchCropGroups();
+    Task<List<CropGroupResponse>> FetchArableCropGroups();
     Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId);
     Task<string> FetchCropGroupById(int cropGroupId);
     Task<string> FetchCropTypeById(int cropTypeId);
