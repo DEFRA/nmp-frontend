@@ -1266,25 +1266,25 @@ namespace NMP.Portal.Controllers
                             {
                                 cropList = cropList.Where(x => x.CropOrder == 1).ToList();
                             }
-                            if (cropList.Count > 0&& cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
-                                    (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
+                                (List<ManagementPeriod> managementPeriod, error) = await _cropService.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
-                                    var filteredFertiliserManure = model.OrganicManures
-                                                                    .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
-                                                                    fm.Defoliation == null).ToList();
-                                    if (filteredFertiliserManure != null && filteredFertiliserManure.Count == managementPeriod.Count)
-                                    {
-                                        var managementPeriodIdsToRemove = managementPeriod
-                                       .Skip(1)
-                                       .Select(mp => mp.ID.Value)
-                                       .ToList();
-                                        model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
-                                    }
-                                    grassCropCounter++;
-                                    model.IsAnyCropIsGrass = true;
+                                var filteredFertiliserManure = model.OrganicManures
+                                                                .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
+                                                                fm.Defoliation == null).ToList();
+                                if (filteredFertiliserManure != null && filteredFertiliserManure.Count == managementPeriod.Count)
+                                {
+                                    var managementPeriodIdsToRemove = managementPeriod
+                                   .Skip(1)
+                                   .Select(mp => mp.ID.Value)
+                                   .ToList();
+                                    model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
                                 }
-                            
+                                grassCropCounter++;
+                                model.IsAnyCropIsGrass = true;
+                            }
+
                         }
                         model.GrassCropCount = grassCropCounter;
                     }
@@ -4624,7 +4624,7 @@ namespace NMP.Portal.Controllers
                                     {
                                         model.FieldName = filteredList.Select(item => item.Text).FirstOrDefault();
                                         model.FieldList = filteredList.Select(item => item.Value).ToList();
-                                        model.FieldID = filteredList.Select(item =>Convert.ToInt32(item.Value)).FirstOrDefault();
+                                        model.FieldID = filteredList.Select(item => Convert.ToInt32(item.Value)).FirstOrDefault();
                                     }
                                 }
                                 foreach (string field in model.FieldList)
@@ -6481,43 +6481,16 @@ namespace NMP.Portal.Controllers
                         if (totalN > 250)
                         {
                             model.IsOrgManureNfieldLimitWarning = true;
-                            //if (!isGetCheckAnswer)
-                            //{
-                            if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                            {
-                                model.NmaxWarningHeader = Resource.MsgOrganicManureNfieldLimit;
-                                model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
-                                model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit;
-                                model.NmaxWarningPara1 = Resource.MsgIfOrganicManureNMaxLimitExceed;
-                                model.NmaxWarningPara2 = Resource.MsgIfOrganicManureNMaxLimitExceedAdditional;
-                            }
-                            if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                            {
-                                model.NmaxWarningHeader = Resource.MsgOrganicManureNfieldLimit;
-                                model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
-                                model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                            WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString());
 
-                                model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales;
-                                model.NmaxWarningPara1 = Resource.MsgIfOrganicManureNMaxLimitExceedWales;
-                                model.NmaxWarningPara2 = Resource.MsgIfOrganicManureNMaxLimitExceedAdditionalWales;
-                            }
+                            model.NmaxWarningHeader = warning.Header;
+                            model.NmaxWarningCodeID = warning.WarningCodeID;
+                            model.NmaxWarningLevelID = warning.WarningLevelID;
 
-                            //}
-                            //else
-                            //{
-                            //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                            //    {
-                            //        model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimit;
-                            //    }
-                            //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                            //    {
-                            //        model.NmaxWarningHeading = Resource.lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales;
-                            //    }
-
-                            //}
-
+                            model.NmaxWarningPara1 = warning.Para1;
+                            model.NmaxWarningPara2 = warning.Para2;
+                            model.NmaxWarningPara3 = warning.Para3;
                         }
                     }
                 }
@@ -6558,43 +6531,15 @@ namespace NMP.Portal.Controllers
                             if (totalN > 500)
                             {
                                 model.IsOrgManureNfieldLimitWarning = true;
-                                //if (!isGetCheckAnswer)
-                                //{
-                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                {
-                                    model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil;
-                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString());
 
-                                    model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingEngland;
-                                    model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1England;
-                                    model.NmaxWarningPara2 = Resource.MsgNmaxWarningPara2England;
-                                }
-                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                {
-                                    model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostWorkedIntoTheSoil;
-                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                model.NmaxWarningHeader = warning.Header;
+                                model.NmaxWarningCodeID = warning.WarningCodeID;
+                                model.NmaxWarningLevelID = warning.WarningLevelID;
 
-                                    model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingWales;
-                                    model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1Wales;
-                                    model.NmaxWarningPara2 = Resource.MsgIfOrganicManureNMaxLimitExceedAdditionalWales;
-                                }
-
-                                //}
-                                //else
-                                //{
-                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                //    {
-                                //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingEngland;
-                                //    }
-                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                //    {
-                                //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingWales;
-                                //    }
-
-                                //}
-
+                                model.NmaxWarningPara1 = warning.Para1;
+                                model.NmaxWarningPara2 = warning.Para2;
+                                model.NmaxWarningPara3 = warning.Para3;
                             }
 
                         }
@@ -6620,43 +6565,16 @@ namespace NMP.Portal.Controllers
                             if (totalN > 1000)
                             {
                                 model.IsOrgManureNfieldLimitWarning = true;
-                                //if (!isGetCheckAnswer)
-                                //{
-                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                {
-                                    model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch;
-                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                    model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000England;
-                                    model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1GreaterThan1000England;
-                                    model.NmaxWarningPara2 = Resource.MsgNmaxWarningPara2England;
-                                }
-                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                {
-                                    model.NmaxWarningHeader = Resource.MsgOrganicManureNFieldLimitForCompostAppliedAsAMulch;
-                                    model.NmaxWarningCodeID = (int)NMP.Commons.Enums.WarningCode.FieldAppLimit;
-                                    model.NmaxWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString());
 
-                                    model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000Wales;
-                                    model.NmaxWarningPara1 = Resource.MsgNmaxWarningPara1GreaterThan1000Wales;
-                                    model.NmaxWarningPara2 = Resource.MsgIfOrganicManureNMaxLimitExceedAdditionalWales;
-                                }
+                                model.NmaxWarningHeader = warning.Header;
+                                model.NmaxWarningCodeID = warning.WarningCodeID;
+                                model.NmaxWarningLevelID = warning.WarningLevelID;
 
-                                //}
-                                //else
-                                //{
-                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                //    {
-                                //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000England;
-                                //    }
-                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                //    {
-                                //        model.NmaxWarningHeading = Resource.MsgNmaxWarningHeadingGreaterThan1000Wales;
-                                //    }
-
-
-                                //}
+                                model.NmaxWarningPara1 = warning.Para1;
+                                model.NmaxWarningPara2 = warning.Para2;
+                                model.NmaxWarningPara3 = warning.Para3;
                             }
 
                         }
@@ -6747,46 +6665,17 @@ namespace NMP.Portal.Controllers
                                             {
                                                 model.IsNMaxLimitWarning = true;
                                                 (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
-                                                //if (!isGetCheckAnswer)
-                                                //{
-                                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                                {
-                                                    model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                    model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
-                                                    model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                                    model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
-                                                    model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
-                                                    model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
-                                                    model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
-                                                }
+                                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
-                                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                                {
-                                                    model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                    model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
-                                                    model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                model.CropNmaxLimitWarningHeader = warning.Header;
+                                                model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
+                                                model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
-                                                    model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
-                                                    model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
-                                                    model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
-                                                    model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2Wales;
-                                                }
-
-                                                //}
-                                                //else
-                                                //{
-                                                //    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                                //    {
-                                                //        model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
-                                                //    }
-                                                //    else
-                                                //    {
-                                                //        model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
-
-
-                                                //    }
-                                                //}
+                                                model.CropNmaxLimitWarningPara1 = warning.Para1;
+                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, nMaxLimit) : null;
+                                                model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
+                                                model.CropNmaxLimitWarningPara3 = warning.Para3;
 
                                             }
                                         }
@@ -6814,29 +6703,16 @@ namespace NMP.Portal.Controllers
                                                         model.IsNMaxLimitWarning = true;
                                                         (Farm farm, error) = await _farmService.FetchFarmByIdAsync(model.FarmId.Value);
 
-                                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                                        {
-                                                            model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                            model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
-                                                            model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                        WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
-                                                            model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingEngland;
-                                                            model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1England, nMaxLimit);
-                                                            model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
-                                                            model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2England;
-                                                        }
+                                                        model.CropNmaxLimitWarningHeader = warning.Header;
+                                                        model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
+                                                        model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
-                                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                                        {
-                                                            model.CropNmaxLimitWarningHeader = Resource.MsgNMaxLimitMessage;
-                                                            model.CropNmaxLimitWarningCodeID = (int)NMP.Commons.Enums.WarningCode.NMaxLimit;
-                                                            model.CropNmaxLimitWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-
-                                                            model.CropNmaxLimitWarningHeading = Resource.MsgCropNmaxLimitWarningHeadingWales;
-                                                            model.CropNmaxLimitWarningPara1 = string.Format(Resource.MsgCropNmaxLimitWarningPara1Wales, nMaxLimit);
-                                                            model.CropNmaxLimitWarningPara1Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
-                                                            model.CropNmaxLimitWarningPara2 = Resource.MsgCropNmaxLimitWarningPara2Wales;
-                                                        }
+                                                        model.CropNmaxLimitWarningPara1 = warning.Para1;
+                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, nMaxLimit) : null;
+                                                        model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
+                                                        model.CropNmaxLimitWarningPara3 = warning.Para3;
 
                                                     }
                                                 }
@@ -6968,94 +6844,46 @@ namespace NMP.Portal.Controllers
 
                         if (isWithinClosedPeriodAndFebruary == true)
                         {
-                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+
+                            //warning excel sheet row no. 19
+                            if (isSlurry)
                             {
-                                //warning excel sheet row no. 19
-                                if (isSlurry)
+                                if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 30)
                                 {
-                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 30)
-                                    {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        //if (!isGetCheckAnswer)
-                                        //{
-                                        model.EndClosedPeriodEndFebWarningHeader = Resource.MsgSlurryMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb; //81b
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                        model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryEngland;
-                                        model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st30SlurryEngland;
-                                        model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd30SlurryEngland;
-                                        //}
-                                        //else
-                                        //{
-                                        //    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryEngland;
-                                        //}
+                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString());
 
-                                    }
-                                }
-                                //warning excel sheet row no. 20
-                                if (isPoultryManure)
-                                {
-                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 8)
-                                    {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        //if (!isGetCheckAnswer)
-                                        //{
-                                        model.EndClosedPeriodEndFebWarningHeader = Resource.MsgPoultryManureMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb; //81b
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                    model.IsEndClosedPeriodFebruaryWarning = true;
 
-                                        model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryEngland;
-                                        model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara1st8PoultryEngland;
-                                        model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd8PoultryEngland;
-                                        //}
-                                        //else
-                                        //{
-                                        //    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryEngland;
-                                        //}
+                                    model.EndClosedPeriodEndFebWarningHeader = warning.Header;
+                                    model.EndClosedPeriodEndFebWarningCodeID = warning.WarningCodeID; //81b
+                                    model.EndClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
 
-                                    }
-                                }
+                                    model.EndClosedPeriodEndFebWarningPara1 = warning.Para1;
+                                    model.EndClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                    model.EndClosedPeriodEndFebWarningPara3 = warning.Para3;
 
-                            }
-                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                            {
-                                if (isSlurry)
-                                {
-                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 30)
-                                    {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        //if (!isGetCheckAnswer)
-                                        //{
-                                        model.EndClosedPeriodEndFebWarningHeader = Resource.MsgSlurryMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
 
-                                        model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryWales;
-                                        model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara30SlurryWales;
-                                        model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd30SlurryWales;
-                                        //}
-                                        //else
-                                        //{
-                                        //    model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading30SlurryWales;
-                                        //}
-
-                                    }
-                                }
-                                if (isPoultryManure)
-                                {
-                                    if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 8)
-                                    {
-                                        model.IsEndClosedPeriodFebruaryWarning = true;
-                                        model.EndClosedPeriodEndFebWarningHeader = Resource.MsgPoultryManureMaxApplicationRate;
-                                        model.EndClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppLimitBetweenEndClosedSpreadingPeriodAndEndFeb;
-                                        model.EndClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-                                        model.EndClosedPeriodEndFebWarningHeading = Resource.MsgEndPeriodEndFebWarningHeading8PoultryWales;
-                                        model.EndClosedPeriodEndFebWarningPara1 = Resource.MsgEndPeriodEndFebWarningPara8PoultryWales;
-                                        model.EndClosedPeriodEndFebWarningPara2 = Resource.MsgEndPeriodEndFebWarningPara2nd8PoultryWales;
-                                    }
                                 }
                             }
+                            //warning excel sheet row no. 20
+                            if (isPoultryManure)
+                            {
+                                if (model.ApplicationRate.HasValue && model.ApplicationRate.Value > 8)
+                                {
+                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.PoultryManureMaxApplicationRate.ToString());
+
+                                    model.IsEndClosedPeriodFebruaryWarning = true;
+                                    model.EndClosedPeriodEndFebWarningHeader = warning.Header;
+                                    model.EndClosedPeriodEndFebWarningCodeID = warning.WarningCodeID; //81b
+                                    model.EndClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                                    model.EndClosedPeriodEndFebWarningPara1 = warning.Para1;
+                                    model.EndClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                    model.EndClosedPeriodEndFebWarningPara3 = warning.Para3;
+
+                                }
+                            }
+
                         }
                     }
                 }
@@ -7121,28 +6949,13 @@ namespace NMP.Portal.Controllers
                             isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
                             if (isWithinClosedPeriod)
                             {
-                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId??0,NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriod.ToString());
+                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriod.ToString());
 
-                                if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
-                                {
-                                    model.ClosedPeriodWarningHeader = warning.Header;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-
-
-                                    model.ClosedPeriodWarningPara1 = warning.Para1;
-                                    model.ClosedPeriodWarningPara3 = warning.Para3;
-                                }
-                                if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                {
-                                    model.ClosedPeriodWarningHeader = warning.Header;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-
-                                    model.ClosedPeriodWarningPara1 = warning.Para1;
-                                    model.ClosedPeriodWarningPara3 = warning.Para3;
-                                }
-
+                                model.ClosedPeriodWarningHeader = warning.Header;
+                                model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                                model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
+                                model.ClosedPeriodWarningPara1 = warning.Para1;
+                                model.ClosedPeriodWarningPara3 = warning.Para3;
                                 model.IsClosedPeriodWarning = true;
                             }
                         }
@@ -7207,23 +7020,12 @@ namespace NMP.Portal.Controllers
                                 {
                                     model.IsClosedPeriodWarning = true;
                                     WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriodOrganicFarm.ToString());
-                                    
+
                                     model.ClosedPeriodWarningHeader = warning.Header;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-
-                                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
-                                    {
-
-                                        model.ClosedPeriodWarningPara1 = warning.Para1;
-                                        model.ClosedPeriodWarningPara3 = warning.Para3;
-                                    }
-                                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                    {
-
-                                        model.ClosedPeriodWarningPara1 = warning.Para1;
-                                        model.ClosedPeriodWarningPara3 = warning.Para3;
-                                    }
+                                    model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                                    model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
+                                    model.ClosedPeriodWarningPara1 = warning.Para1;
+                                    model.ClosedPeriodWarningPara3 = warning.Para3;
                                 }
 
                             }
@@ -7234,15 +7036,13 @@ namespace NMP.Portal.Controllers
                                 bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
                                 if (isWithinDateRange)
                                 {
-
-                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
-
-                                    model.ClosedPeriodWarningHeader = warning.Header;
-                                    model.ClosedPeriodWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
-                                    model.ClosedPeriodWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-
                                     if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                     {
+                                        WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
+
+                                        model.ClosedPeriodWarningHeader = warning.Header;
+                                        model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                                        model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
                                         model.IsClosedPeriodWarning = true;
                                         model.ClosedPeriodWarningPara1 = warning.Para1;
                                         model.ClosedPeriodWarningPara3 = warning.Para3;
@@ -7287,37 +7087,11 @@ namespace NMP.Portal.Controllers
                             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.AllowWeeksBetweenSlurryPoultryApplications.ToString());
 
                             model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
-                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = (int)NMP.Commons.Enums.WarningCode.ClosedPeriodOrganicManure;
-                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
-
-                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
-                            {
-                                model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = warning.Para1;
-                                model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para2;
-                                model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para3;
-                            }
-                            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                            {
-                                model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = warning.Para1;
-                                model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para2;
-                                model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para3;
-
-                            }
-                            //}
-                            //else
-                            //{
-
-                            //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
-                            //    {
-                            //        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysEngland;
-
-                            //    }
-                            //    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                            //    {
-                            //        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading = Resource.MsgEndPeriodEndFebWarningHeadingWithin20DaysWales;
-
-                            //    }
-                            //}
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
                         }
                     }
 
@@ -7459,6 +7233,8 @@ namespace NMP.Portal.Controllers
                                     //warning excel sheet row no. 15
                                     if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
+
+
                                         if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
                                             bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, model.ClosedPeriodStartDate, endOfOctober);
@@ -7480,13 +7256,14 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     if (currentNitrogen > 40 || currentNitrogen + totalN > 150)
                                                     {
-                                                        model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                        model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms; //81a
-                                                        model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                        WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateGrass.ToString());
 
-                                                        model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
-                                                        model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1Grass;
-                                                        model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgStartClosedPeriodEndFebWarningPara2;
+                                                        model.StartClosedPeriodEndFebWarningHeader = warning.Header;
+                                                        model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID; //81a
+                                                        model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                                                        model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
+                                                        model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                                        model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
                                                         model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
                                                     }
 
@@ -7515,14 +7292,14 @@ namespace NMP.Portal.Controllers
                                                 // (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endDateFebruary, false);
                                                 if (currentNitrogen + totalN > 150)
                                                 {
-                                                    model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
-                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRate.ToString());
 
-
-                                                    model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
-                                                    model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1;
-                                                    model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgStartClosedPeriodEndFebWarningPara2;
+                                                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
+                                                    model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a
+                                                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                                                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
+                                                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
                                                     model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
                                                 }
                                             }
@@ -7550,14 +7327,14 @@ namespace NMP.Portal.Controllers
                                                 // (totalN, error) = await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementIds[0], model.ClosedPeriodStartDate.Value, endDateFebruary, false);
                                                 if (currentNitrogen + totalN > 150)
                                                 {
-                                                    model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a wales only
-                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRate.ToString());
 
-
-                                                    model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeadingWales;
-                                                    model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1Wales;
-                                                    model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgStartClosedPeriodEndFebWarningPara2Wales;
+                                                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
+                                                    model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a wales only
+                                                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                                                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
+                                                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
                                                     model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
                                                 }
                                             }
@@ -7594,13 +7371,14 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         if (currentNitrogen > 50 || currentNitrogen + totalN > 150 || isOrganicManureExistWithin4Weeks)
                                                         {
-                                                            model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                            model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
-                                                            model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                            WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateWeeks.ToString());
 
-                                                            model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
-                                                            model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1Brassica;
-                                                            model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgStartClosedPeriodEndFebWarningPara2;
+                                                            model.StartClosedPeriodEndFebWarningHeader = warning.Header;
+                                                            model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a
+                                                            model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                                                            model.StartClosedPeriodEndFebWarningPara1 = warning.Header;
+                                                            model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                                            model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
                                                             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
                                                         }
 
@@ -7632,31 +7410,22 @@ namespace NMP.Portal.Controllers
 
                                                 if (currentNitrogen + totalN > 150)
                                                 {
-                                                    model.StartClosedPeriodEndFebWarningHeader = Resource.MsgClosedPeriodAndMaximumApplicationRateForHighN;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = (int)NMP.Commons.Enums.WarningCode.ManAppRateForHighRANManDuringClosedPeriodsOrganicFarms;  //81a
-                                                    model.StartClosedPeriodEndFebWarningLevelID = (int)NMP.Commons.Enums.WarningLevel.Manure;
+                                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateOSR.ToString());
 
-                                                    model.StartClosedPeriodEndFebWarningHeading = Resource.MsgStartClosedPeriodEndFebWarningHeading;
-                                                    model.StartClosedPeriodEndFebWarningPara1 = Resource.MsgStartClosedPeriodEndFebWarningPara1WinterOilseed;
-                                                    model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgStartClosedPeriodEndFebWarningPara2;
+                                                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
+                                                    model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a
+                                                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+
+                                                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
+                                                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
+                                                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
                                                     model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
                                                 }
                                             }
                                         }
 
                                     }
-                                    //if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                    //{
-                                    //    bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
-                                    //    if (isWithinDateRange)
-                                    //    {
-                                    //        model.StartClosedPeriodEndFebWarningHeading = Resource.MsgApplicationDateEnteredIsInsideClosedPeriod;
-                                    //        model.StartClosedPeriodEndFebWarningPara2 = Resource.MsgClosedPeriodWarningPara2England;
-                                    //        model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
-                                    //    }
-
-                                    //}
-
+                                    
                                 }
                             }
                         }
@@ -10251,9 +10020,9 @@ namespace NMP.Portal.Controllers
                                 warningMessage.WarningLevelID = model.NmaxWarningLevelID;
                                 warningMessage.WarningCodeID = model.NmaxWarningCodeID;
                                 warningMessage.Header = model.NmaxWarningHeader;
-                                warningMessage.Para1 = model.NmaxWarningHeading;
-                                warningMessage.Para2 = model.NmaxWarningPara1;
-                                warningMessage.Para3 = model.NmaxWarningPara2;
+                                warningMessage.Para1 = model.NmaxWarningPara1;
+                                warningMessage.Para2 = model.NmaxWarningPara2;
+                                warningMessage.Para3 = model.NmaxWarningPara3;
                                 warningMessages.Add(warningMessage);
                             }
                             if (model.IsNMaxLimitWarning)
@@ -10266,9 +10035,9 @@ namespace NMP.Portal.Controllers
                                 warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
                                 warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
                                 warningMessage.Header = model.CropNmaxLimitWarningHeader;
-                                warningMessage.Para1 = model.CropNmaxLimitWarningHeading;
-                                warningMessage.Para2 = model.CropNmaxLimitWarningPara1;
-                                warningMessage.Para3 = model.CropNmaxLimitWarningPara2;
+                                warningMessage.Para1 = model.CropNmaxLimitWarningPara1;
+                                warningMessage.Para2 = model.CropNmaxLimitWarningPara2;
+                                warningMessage.Para3 = model.CropNmaxLimitWarningPara3;
                                 warningMessages.Add(warningMessage);
                             }
 
@@ -10296,9 +10065,9 @@ namespace NMP.Portal.Controllers
                                 warningMessage.WarningLevelID = model.EndClosedPeriodEndFebWarningLevelID;
                                 warningMessage.WarningCodeID = model.EndClosedPeriodEndFebWarningCodeID;
                                 warningMessage.Header = model.EndClosedPeriodEndFebWarningHeader;
-                                warningMessage.Para1 = model.EndClosedPeriodEndFebWarningHeading;
-                                warningMessage.Para2 = model.EndClosedPeriodEndFebWarningPara1;
-                                warningMessage.Para3 = model.EndClosedPeriodEndFebWarningPara2;
+                                warningMessage.Para1 = model.EndClosedPeriodEndFebWarningPara1;
+                                warningMessage.Para2 = model.EndClosedPeriodEndFebWarningPara2;
+                                warningMessage.Para3 = model.EndClosedPeriodEndFebWarningPara3;
                                 warningMessages.Add(warningMessage);
                             }
                             if (model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
@@ -10311,9 +10080,9 @@ namespace NMP.Portal.Controllers
                                 warningMessage.WarningLevelID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID;
                                 warningMessage.WarningCodeID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID;
                                 warningMessage.Header = model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader;
-                                warningMessage.Para1 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading;
-                                warningMessage.Para2 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1;
-                                warningMessage.Para3 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2;
+                                warningMessage.Para1 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1;
+                                warningMessage.Para2 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2;
+                                warningMessage.Para3 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3;
                                 warningMessages.Add(warningMessage);
                             }
                             if (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
@@ -10325,9 +10094,9 @@ namespace NMP.Portal.Controllers
                                 warningMessage.WarningLevelID = model.StartClosedPeriodEndFebWarningLevelID;
                                 warningMessage.WarningCodeID = model.StartClosedPeriodEndFebWarningCodeID;
                                 warningMessage.Header = model.StartClosedPeriodEndFebWarningHeader;
-                                warningMessage.Para1 = model.StartClosedPeriodEndFebWarningHeading;
-                                warningMessage.Para2 = model.StartClosedPeriodEndFebWarningPara1;
-                                warningMessage.Para3 = model.StartClosedPeriodEndFebWarningPara2;
+                                warningMessage.Para1 = model.StartClosedPeriodEndFebWarningPara1;
+                                warningMessage.Para2 = model.StartClosedPeriodEndFebWarningPara2;
+                                warningMessage.Para3 = model.StartClosedPeriodEndFebWarningPara3;
                                 warningMessages.Add(warningMessage);
                             }
                         }

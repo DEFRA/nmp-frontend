@@ -33,19 +33,19 @@ namespace NMP.Commons.Enums
         [EnumMember(Value = "HIGHNORGANICMANUREMAXRATEWEEKS")]
         HighNOrganicManureMaxRateWeeks,
 
-        [EnumMember(Value = "HIGHNORGANICMANUREMAXRATEGRASS")]
+        [EnumMember(Value = "HIGHNORGANICMANUREMAXRATEGRASS")] //scotland data not in db
         HighNOrganicManureMaxRateGrass,
 
         [EnumMember(Value = "HIGHNORGANICMANUREMAXRATEOSR")]
         HighNOrganicManureMaxRateOSR,
 
-        [EnumMember(Value = "HIGHNORGANICMANUREDATEONLY")]
+        [EnumMember(Value = "HIGHNORGANICMANUREDATEONLY")] //scotland data not in db
         HighNOrganicManureDateOnly,
 
-        [EnumMember(Value = "SLURRYMAXRATE")]
+        [EnumMember(Value = "SLURRYMAXRATE")]  //scotland data not in db
         SlurryMaxRate,
 
-        [EnumMember(Value = "POULTRYMANUREMAXAPPLICATIONRATE")]
+        [EnumMember(Value = "POULTRYMANUREMAXAPPLICATIONRATE")]  //scotland data not in db
         PoultryManureMaxApplicationRate,
 
         [EnumMember(Value = "ALLOWWEEKSBETWEENSLURRYPOULTRYAPPLICATIONS")]
