@@ -59,12 +59,12 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"/>
                 
                 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeading" value="@Model.ClosedPeriodWarningHeading"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara2" value="@Model.ClosedPeriodWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara1" value="@Model.ClosedPeriodWarningPara1"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara3" value="@Model.ClosedPeriodWarningPara3"/>
                 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningHeading" value="@Model.ClosedPeriodNitrogenExceedWarningHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara1" value="@Model.ClosedPeriodNitrogenExceedWarningPara1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara2" value="@Model.ClosedPeriodNitrogenExceedWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara3" value="@Model.ClosedPeriodNitrogenExceedWarningPara3"/>
 
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeader" value="@Model.ClosedPeriodWarningHeader"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningCodeID" value="@Model.ClosedPeriodWarningCodeID"/>
@@ -172,10 +172,10 @@
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
 
-                    @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningHeading))
+                    @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodWarningHeading
+                            @Model.ClosedPeriodWarningPara1
                         </p>
                     }
                     @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
@@ -193,7 +193,7 @@
                     @if (Model.IsNitrogenExceedWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodNitrogenExceedWarningHeading
+                            @Model.ClosedPeriodNitrogenExceedWarningPara1
                         </p>
                     }
 

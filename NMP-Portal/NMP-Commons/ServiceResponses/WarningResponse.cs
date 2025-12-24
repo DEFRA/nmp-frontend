@@ -30,5 +30,11 @@ namespace NMP.Commons.ServiceResponses
         [JsonProperty("para3")]
         public string? Para3 { get; set; }
 
+        [JsonProperty("warningCodeID")]
+        public int WarningCodeID { get; set; }
+
+        [JsonProperty("warningLevelID")]
+        public int WarningLevelID { get; set; }
+
     }
 }

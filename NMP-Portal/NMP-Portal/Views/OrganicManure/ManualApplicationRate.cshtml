@@ -237,42 +237,42 @@
                         @if (Model.IsOrgManureNfieldLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Model.NmaxWarningHeading
+                                @Model.NmaxWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.NmaxWarningPara1</p>
-                            @if (Model.NmaxWarningPara2 != null)
+                            <p class="govuk-body">@Model.NmaxWarningPara2</p>
+                            @if (Model.NmaxWarningPara3 != null)
                             {
-                                <p class="govuk-body">@Model.NmaxWarningPara2</p>
+                                <p class="govuk-body">@Model.NmaxWarningPara3</p>
                             }
                         }
                         @if (Model.IsNMaxLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Model.CropNmaxLimitWarningHeading
+                                @Model.CropNmaxLimitWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1Additional</p>
-                            @if (Model.CropNmaxLimitWarningPara2 != null)
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
+                            @if (Model.CropNmaxLimitWarningPara3 != null)
                             {
-                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
                             }
                         }
                         @if (Model.IsEndClosedPeriodFebruaryWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Model.EndClosedPeriodEndFebWarningHeading
+                                @Model.EndClosedPeriodEndFebWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara1</p>
                             <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara2</p>
+                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara3</p>
                         }
                         @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Model.StartClosedPeriodEndFebWarningHeading
+                                @Model.StartClosedPeriodEndFebWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara1</p>
+                            <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara2</p>
                             <p class="govuk-body">
-                                @Model.StartClosedPeriodEndFebWarningPara2
+                                @Model.StartClosedPeriodEndFebWarningPara3
                             </p>
                         }
                     }
@@ -292,19 +292,19 @@
                             <ul class="govuk-list govuk-list--bullet">
                                 @if (Model.IsOrgManureNfieldLimitWarning)
                                 {
-                                    <li>@Model.NmaxWarningHeading</li>
+                                    <li>@Model.NmaxWarningPara1</li>
                                 }
                                 @if (Model.IsNMaxLimitWarning)
                                 {
-                                    <li>@Model.CropNmaxLimitWarningHeading</li>
+                                    <li>@Model.CropNmaxLimitWarningPara1</li>
                                 }
                                 @if (Model.IsEndClosedPeriodFebruaryWarning)
                                 {
-                                    <li>@Model.EndClosedPeriodEndFebWarningHeading</li>
+                                    <li>@Model.EndClosedPeriodEndFebWarningPara1</li>
                                 }
                                 @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                 {
-                                    <li>@Model.StartClosedPeriodEndFebWarningHeading</li>
+                                    <li>@Model.StartClosedPeriodEndFebWarningPara1</li>
                                 }
                             </ul>
                             <govuk-details>
@@ -322,24 +322,24 @@
                                 <govuk-details-text>
                                     @if (Model.IsOrgManureNfieldLimitWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Model.NmaxWarningHeading</h2>
-                                        <p class="govuk-body">@Model.NmaxWarningPara1</p>
+                                        <h2 class="govuk-heading-s">@Model.NmaxWarningPara1</h2>
+                                        <p class="govuk-body">@Model.NmaxWarningPara2</p>
                                     }
                                     @if (Model.IsNMaxLimitWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningHeading</h2>
-                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
-                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara1Additional</p>
+                                        <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningPara1</h2>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
-                                        <h2 class="govuk-heading-s">@Model.EndClosedPeriodEndFebWarningHeading</h2>
-                                        <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara1</p>
+                                        <h2 class="govuk-heading-s">@Model.EndClosedPeriodEndFebWarningPara1</h2>
+                                        <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara2</p>
                                     }
                                     @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                                     {
-                                        <h2 class="govuk-heading-s">@Model.StartClosedPeriodEndFebWarningHeading</h2>
-                                        <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara1</p>
+                                        <h2 class="govuk-heading-s">@Model.StartClosedPeriodEndFebWarningPara1</h2>
+                                        <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara2</p>
 
                                     }
                                 </govuk-details-text>

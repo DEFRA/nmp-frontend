@@ -250,24 +250,24 @@
                         @if (Model.IsOrgManureNfieldLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Model.NmaxWarningHeading
+                                @Model.NmaxWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.NmaxWarningPara1</p>
-                            @if (Model.NmaxWarningPara2 != null)
+                            <p class="govuk-body">@Model.NmaxWarningPara2</p>
+                            @if (Model.NmaxWarningPara3 != null)
                             {
-                                <p class="govuk-body">@Model.NmaxWarningPara2</p>
+                                <p class="govuk-body">@Model.NmaxWarningPara3</p>
                             }
                         }
                         @if (Model.IsNMaxLimitWarning)
                         {
                             <p class="govuk-notification-banner__heading">
-                                @Model.CropNmaxLimitWarningHeading
+                                @Model.CropNmaxLimitWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1</p>
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara1Additional</p>
-                            @if (Model.CropNmaxLimitWarningPara2 != null)
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
+                            @if (Model.CropNmaxLimitWarningPara3 != null)
                             {
-                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
                             }
                         }
                     </govuk-notification-banner>
