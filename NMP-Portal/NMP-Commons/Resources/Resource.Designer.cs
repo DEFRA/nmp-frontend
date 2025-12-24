@@ -12581,7 +12581,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Soil mineral nitrogen (N).
+        ///   Looks up a localized string similar to SoilMineralNitrogen.
         /// </summary>
         public static string lblSoilMineralNitrogenForError {
             get {
@@ -13726,7 +13726,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This date is outside the selected calender year..
+        ///   Looks up a localized string similar to This date is outside the selected calendar year..
         /// </summary>
         public static string lblThisDateIsOutsideTheSelectedCalenderYear {
             get {
@@ -18633,7 +18633,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999.
+        ///   Looks up a localized string similar to Enter an quantity between 1 and 9,99,999 as an integer value only..
         /// </summary>
         public static string MsgEnterAnQuantityBetweenValue {
             get {
@@ -19047,7 +19047,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals..
+        ///   Looks up a localized string similar to For Potassium(K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-..
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint3 {
             get {
@@ -20609,6 +20609,24 @@ namespace NMP.Commons.Resources {
         public static string MsgUricAcid {
             get {
                 return ResourceManager.GetString("MsgUricAcid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value must be an integer between 0 and 9 except when the value is 2 in which case you must add it as 2+ or 2-.
+        /// </summary>
+        public static string MsgValidationForPotasium {
+            get {
+                return ResourceManager.GetString("MsgValidationForPotasium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the value for soil mineral nitrogen (N) as a whole number.
+        /// </summary>
+        public static string MsgValidationForSoilMineralNitrogen {
+            get {
+                return ResourceManager.GetString("MsgValidationForSoilMineralNitrogen", resourceCulture);
             }
         }
         

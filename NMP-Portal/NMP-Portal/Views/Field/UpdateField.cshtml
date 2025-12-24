@@ -223,7 +223,10 @@
                         @Model.SoilType
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
+                        @if (ViewBag.IsAnyPlan != null && (!ViewBag.IsAnyPlan))
+                        {
                         <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblSoilTypeForCheckAnswer)</span></govuk-summary-list-row-action>
+                        }
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (Model.SoilReleasingClay != null)

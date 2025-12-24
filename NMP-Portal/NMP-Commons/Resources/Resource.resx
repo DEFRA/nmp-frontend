@@ -2266,7 +2266,7 @@ cubic metres per hectare  not set</value>
     <value>Sample depth</value>
   </data>
   <data name="lblSoilMineralNitrogenForError" xml:space="preserve">
-    <value>Soil mineral nitrogen (N)</value>
+    <value>SoilMineralNitrogen</value>
   </data>
   <data name="lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation" xml:space="preserve">
     <value>Would you like to add an estimate of nitrogen (N) mineralisation during the growing season?</value>
@@ -3892,7 +3892,7 @@ cubic metres per hectare  not set</value>
     <value>Total area</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
-    <value>For potassium (K), the index should be 2+ or 2- (not 2 on its own), with no decimals.</value>
+    <value>For Potassium(K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
   </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
@@ -4924,7 +4924,7 @@ cubic metres per hectare  not set</value>
     <value>Nutrient values for {0}</value>
   </data>
   <data name="lblThisDateIsOutsideTheSelectedCalenderYear" xml:space="preserve">
-    <value>This date is outside the selected calender year.</value>
+    <value>This date is outside the selected calendar year.</value>
   </data>
   <data name="lblLivestockQuantityWIthoutSpace" xml:space="preserve">
     <value>LivestockQuantity</value>
@@ -6555,7 +6555,7 @@ livestock manure.</value>
     <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
   </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
-    <value>Enter an quantity between 1 and 9,99,999</value>
+    <value>Enter an quantity between 1 and 9,99,999 as an integer value only.</value>
   </data>
   <data name="lblQuantityMustBeBetweenOneTo9999999" xml:space="preserve">
     <value>Quantity must be between 1 to 9,99,999</value>
@@ -7102,5 +7102,11 @@ livestock manure.</value>
   </data>
   <data name="lblYouCanChangeThisLater" xml:space="preserve">
     <value>You can change this later.</value>
+  </data>
+  <data name="MsgValidationForPotasium" xml:space="preserve">
+    <value>The value must be an integer between 0 and 9 except when the value is 2 in which case you must add it as 2+ or 2-</value>
+  </data>
+  <data name="MsgValidationForSoilMineralNitrogen" xml:space="preserve">
+    <value>Please enter the value for soil mineral nitrogen (N) as a whole number</value>
   </data>
 </root>
