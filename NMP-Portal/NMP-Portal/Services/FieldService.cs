@@ -369,10 +369,10 @@ namespace NMP.Portal.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name));
-                string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
-                if (responseWrapperFarmExist.Data["exists"] == true)
+                var fieldExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name));
+                string resultFieldExist = await fieldExist.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapperFieldExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFieldExist);
+                if (responseWrapperFieldExist.Data["exists"] == true)
                 {
                     isFieldExist = true;
                 }

@@ -190,7 +190,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("Name", Resource.MsgEnterTheFieldName);
         }
 
-        bool isFieldAlreadyexist = await _fieldLogic.IsFieldExistAsync(model.FarmID, model.Name);
+        bool isFieldAlreadyexist = await _fieldLogic.IsFieldExistAsync(model.FarmID, model.Name,string.IsNullOrWhiteSpace(model.EncryptedFieldId)?null:model.ID);
         if (isFieldAlreadyexist)
         {
             ModelState.AddModelError("Name", Resource.MsgFieldAlreadyExist);
