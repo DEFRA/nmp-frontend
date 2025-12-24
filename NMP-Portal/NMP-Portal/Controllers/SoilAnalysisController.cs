@@ -457,7 +457,7 @@ namespace NMP.Portal.Controllers
                             if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
                                                    (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
                             {
-                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                                ModelState.AddModelError("PotassiumIndexValue", Resource.MsgValidationForPotasium);
                             }
                         }
 
