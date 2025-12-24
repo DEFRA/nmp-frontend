@@ -359,15 +359,16 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         return (field, error);
     }
-    
-    public async Task<bool> IsFieldExistAsync(int farmId, string name)
+
+    public async Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null)
     {
         bool isFieldExist = false;
         Error error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var farmExist = await httpClient.GetAsync(string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name));
+            string url = fieldId == null ? string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name): string.Format(APIURLHelper.IsFieldExistByFieldIdAsyncAPI,farmId, name, fieldId);
+            var farmExist = await httpClient.GetAsync(url);
             string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
             if (responseWrapperFarmExist.Data["exists"] == true)

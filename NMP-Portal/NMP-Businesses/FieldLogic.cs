@@ -163,10 +163,10 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         return await _fieldService.GetSoilNitrogenSupplyItems();
     }
 
-    public async Task<bool> IsFieldExistAsync(int farmId, string name)
+    public async Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null)
     {
         _logger.LogTrace("Checking if field exists with Name: {FieldName} in FarmId: {FarmId}", name, farmId);
-        return await _fieldService.IsFieldExistAsync(farmId, name);
+        return await _fieldService.IsFieldExistAsync(farmId, name,  fieldId);
     }
 
     public async Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId)

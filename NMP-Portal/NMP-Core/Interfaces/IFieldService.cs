@@ -11,7 +11,7 @@ public interface IFieldService : IService
     Task<string> FetchCropGroupById(int cropGroupId);
     Task<string> FetchCropTypeById(int cropTypeId);
     Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId,string farmName);
-    Task<bool> IsFieldExistAsync(int farmId, string name);
+    Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId=null);
     Task<List<Field>> FetchFieldsByFarmId(int farmId);
     Task<Field> FetchFieldByFieldId(int fieldId);
     Task<List<CropTypeResponse>> FetchAllCropTypes();
