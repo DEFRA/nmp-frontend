@@ -876,7 +876,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                         if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
                                                (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
                         {
-                            ModelState.AddModelError("PotassiumIndexValue", Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                            ModelState.AddModelError("PotassiumIndexValue", Resource.MsgValidationForPotasium);
                         }
                     }
 
@@ -1254,7 +1254,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
             ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
-            model.IsHasGrassInLastThreeYearChange = false;
+            model.IsHasGrassInLastThreeYearChange = false;           
             SetFieldDataToSession(model);
         }
         catch (Exception ex)
@@ -2272,9 +2272,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     {
                         model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
                     }
+                    ViewBag.IsAnyPlan = false;
                 }
 
-                int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : (model.LastHarvestYear ?? 0) + 1;// farm.LastHarvestYear to model.LastHarvestYear
+                    int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : (model.LastHarvestYear ?? 0) + 1;// farm.LastHarvestYear to model.LastHarvestYear
 
                 //fetch previous cropping data and extract 3 from this and assing into model.PreviousCroppingsList
                 (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decrptedFieldId, oldestYearWithPlan);

@@ -1456,7 +1456,7 @@ namespace NMP.Portal.Controllers
                 if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogen"].AttemptedValue, Resource.lblSoilMineralNitrogenForError)))
                 {
                     ModelState["SoilMineralNitrogen"].Errors.Clear();
-                    ModelState["SoilMineralNitrogen"].Errors.Add(Resource.MsgEnterValidNumericValueBeforeContinuing);
+                    ModelState["SoilMineralNitrogen"].Errors.Add(Resource.MsgValidationForSoilMineralNitrogen);
                 }
             }
             if (model.SampleDepth == null)
