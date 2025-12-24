@@ -152,7 +152,7 @@
                 {
                     @if (Model.IsNitrogenExceedWarning)
                     {
-                        @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningHeading))
+                        @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
                         {
                             <govuk-notification-banner>
                                 <govuk-notification-banner-title>
@@ -160,13 +160,13 @@
                                 </govuk-notification-banner-title>
                                 @TempData["NitrogenExceedMessageTitle"]<br />
                                 <p class="govuk-notification-banner__heading">
-                                    @Model.ClosedPeriodNitrogenExceedWarningHeading
+                                    @Model.ClosedPeriodNitrogenExceedWarningPara1
                                 </p>
-                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
 
-                                @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
+                                @if (Model.ClosedPeriodNitrogenExceedWarningPara3 != null)
                                 {
-                                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
                                 }
                             </govuk-notification-banner>
                         }

@@ -87,13 +87,13 @@ public class OrganicManureViewModel
     public string? OtherMaterialName { get; set; }
     public DateTime? DefaultFarmManureValueDate { get; set; }
     public bool? IsThisDefaultValueOfRB209 { get; set; }
-    public string? NmaxWarningHeading { get; set; }
     public string? NmaxWarningPara1 { get; set; }
     public string? NmaxWarningPara2 { get; set; }
-    public string? CropNmaxLimitWarningHeading { get; set; }
+    public string? NmaxWarningPara3 { get; set; }
     public string? CropNmaxLimitWarningPara1 { get; set; }
-    public string? CropNmaxLimitWarningPara1Additional { get; set; }
     public string? CropNmaxLimitWarningPara2 { get; set; }
+    public string? CropNmaxLimitWarningPara2Additional { get; set; }
+    public string? CropNmaxLimitWarningPara3 { get; set; }
     public int? FarmCountryId { get; set; }
     public string? ClosedPeriod { get; set; } = string.Empty;
     public string? ClosedPeriodWarningPara1 { get; set; } = string.Empty;
@@ -101,16 +101,16 @@ public class OrganicManureViewModel
     public string? ClosedPeriodWarningPara3 { get; set; } = string.Empty;
     public string? SlurryOrPoultryManureExistWithinLast20Days {  get; set; } = string.Empty;
     public bool? IsWithinClosedPeriod { get; set; }
-    public string? EndClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;
     public string? EndClosedPeriodEndFebWarningPara1 { get; set; } = string.Empty;
     public string? EndClosedPeriodEndFebWarningPara2 { get; set; } = string.Empty;
-    public string? EndClosedPeriodFebruaryExistWithinThreeWeeksHeading { get; set; } = string.Empty;
+    public string? EndClosedPeriodEndFebWarningPara3 { get; set; } = string.Empty;
     public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 { get; set; } = string.Empty;
     public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 { get; set; } = string.Empty;
+    public string? EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 { get; set; } = string.Empty;
     public bool? HighReadilyAvailableNitrogen { get; set; }
-    public string? StartClosedPeriodEndFebWarningHeading { get; set; } = string.Empty;
     public string? StartClosedPeriodEndFebWarningPara1 { get; set; } = string.Empty;
     public string? StartClosedPeriodEndFebWarningPara2 { get; set; } = string.Empty;
+    public string? StartClosedPeriodEndFebWarningPara3 { get; set; } = string.Empty;
     public DateTime? ClosedPeriodStartDate { get; set; }
     public DateTime? ClosedPeriodEndDate { get; set; }
     public string? ClosedPeriodForUI { get; set; } = string.Empty;
