@@ -7035,19 +7035,17 @@ namespace NMP.Portal.Controllers
                             if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
                                 bool isWithinDateRange = warningMessage.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, model.ClosedPeriodEndDate);
-                                if (isWithinDateRange)
+                                if (isWithinDateRange && (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England))
                                 {
-                                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
-                                    {
-                                        WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
+                                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
 
-                                        model.ClosedPeriodWarningHeader = warning.Header;
-                                        model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
-                                        model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
-                                        model.IsClosedPeriodWarning = true;
-                                        model.ClosedPeriodWarningPara1 = warning.Para1;
-                                        model.ClosedPeriodWarningPara3 = warning.Para3;
-                                    }
+                                    model.ClosedPeriodWarningHeader = warning.Header;
+                                    model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                                    model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
+                                    model.IsClosedPeriodWarning = true;
+                                    model.ClosedPeriodWarningPara1 = warning.Para1;
+                                    model.ClosedPeriodWarningPara3 = warning.Para3;
+
                                 }
                             }
                         }
@@ -7426,7 +7424,7 @@ namespace NMP.Portal.Controllers
                                         }
 
                                     }
-                                    
+
                                 }
                             }
                         }
