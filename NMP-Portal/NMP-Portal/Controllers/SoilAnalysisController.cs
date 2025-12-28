@@ -7,26 +7,26 @@ using NMP.Portal.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
-using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
 using System.Globalization;
 using NMP.Commons.Helpers;
+using NMP.Application;
 
 namespace NMP.Portal.Controllers
 {
     [Authorize]
-    public class SoilAnalysisController(ILogger<SoilAnalysisController> logger, IDataProtectionProvider dataProtectionProvider, IFarmService farmService, ISoilService soilService,
-        IFieldService fieldService, ISoilAnalysisService soilAnalysisService, IPKBalanceService pKBalanceService) : Controller
+    public class SoilAnalysisController(ILogger<SoilAnalysisController> logger, IDataProtectionProvider dataProtectionProvider, IFarmLogic farmLogic, ISoilLogic soilLogic,
+        IFieldLogic fieldLogic, ISoilAnalysisLogic soilAnalysisLogic, IPKBalanceLogic pKBalanceLogic) : Controller
     {
         private readonly ILogger<SoilAnalysisController> _logger = logger;
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IDataProtector _soilAnalysisDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.SoilAnalysisController");
         private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
-        private readonly IFarmService _farmService = farmService;
-        private readonly IFieldService _fieldService = fieldService;
-        private readonly ISoilAnalysisService _soilAnalysisService = soilAnalysisService;
-        private readonly ISoilService _soilService = soilService;
-        private readonly IPKBalanceService _pKBalanceService = pKBalanceService;
+        private readonly IFarmLogic _farmLogic = farmLogic;
+        private readonly IFieldLogic _fieldLogic = fieldLogic;
+        private readonly ISoilAnalysisLogic _soilAnalysisLogic = soilAnalysisLogic;
+        private readonly ISoilLogic _soilLogic = soilLogic;
+        private readonly IPKBalanceLogic _pKBalanceLogic = pKBalanceLogic;
         private const string _changeSoilAnalysisError = "ChangeSoilAnalysisError";
         private const string _changeSoilAnalysisActionName ="ChangeSoilAnalysis";
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
@@ -71,19 +71,19 @@ namespace NMP.Portal.Controllers
                 else if (!string.IsNullOrWhiteSpace(i))
                 {
                     _logger.LogTrace("SoilAnalysisController: farms/{J} called.", j);
-                    (Farm farm, Error error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
+                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
 
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
                         int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(j));
                         _logger.LogTrace("SoilAnalysisController: fields/{FieldId} called.", fieldId);
-                        var field = await _fieldService.FetchFieldByFieldId(fieldId);
+                        var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
                         model.FieldName = field.Name;
                         model.FarmName = farm.Name;
                         model.FieldID = fieldId;
                         int decryptedSoilId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                         _logger.LogTrace("SoilAnalysisController: soil-analyses/{DecryptedSoilId} called", decryptedSoilId);
-                        (SoilAnalysis soilAnalysis, error) = await _soilAnalysisService.FetchSoilAnalysisById(decryptedSoilId);
+                        (SoilAnalysis soilAnalysis, error) = await _soilAnalysisLogic.FetchSoilAnalysisById(decryptedSoilId);
                         
                         if (error == null)
                         {
@@ -477,7 +477,7 @@ namespace NMP.Portal.Controllers
                    model.Magnesium != null)
                     {
                         _logger.LogTrace($"SoilAnalysisController: vendors/rb209/Field/Nutrients called.");
-                        (List<NutrientResponseWrapper> nutrients, error) = await _fieldService.FetchNutrientsAsync();
+                        (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
                         if (error == null && nutrients.Count > 0)
                         {
                             int phosphorusId = 1;
@@ -492,7 +492,7 @@ namespace NMP.Portal.Controllers
                                     phosphorusId = phosphorusNutrient.nutrientId;
                                 }
 
-                                (string PhosphorusIndexValue, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.Phosphorus, (int)PhosphorusMethodology.Olsens);
+                                (string PhosphorusIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(phosphorusId, model.Phosphorus, (int)PhosphorusMethodology.Olsens);
                                 if (!string.IsNullOrWhiteSpace(PhosphorusIndexValue) && error == null)
                                 {
                                     model.PhosphorusIndex = Convert.ToInt32(PhosphorusIndexValue.Trim());
@@ -511,7 +511,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     magnesiumId = magnesiumNutrient.nutrientId;
                                 }
-                                (string MagnesiumIndexValue, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.Magnesium, (int)MagnesiumMethodology.None);
+                                (string MagnesiumIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(magnesiumId, model.Magnesium, (int)MagnesiumMethodology.None);
                                 if (!string.IsNullOrWhiteSpace(MagnesiumIndexValue) && error == null)
                                 {
                                     model.MagnesiumIndex = Convert.ToInt32(MagnesiumIndexValue.Trim());
@@ -529,7 +529,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     potassiumId = potassiumNutrient.nutrientId;
                                 }
-                                (string PotassiumIndexValue, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.Potassium, (int)PotassiumMethodology.None);
+                                (string PotassiumIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(potassiumId, model.Potassium, (int)PotassiumMethodology.None);
                                 if (!string.IsNullOrWhiteSpace(PotassiumIndexValue) && error == null)
                                 {
                                     model.PotassiumIndexValue = PotassiumIndexValue.Trim();
@@ -682,7 +682,7 @@ namespace NMP.Portal.Controllers
                 if (model.Potassium != null || model.Phosphorus != null ||
                    (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) || model.PhosphorusIndex != null)
                 {
-                    PKBalance pKBalance = await _pKBalanceService.FetchPKBalanceByYearAndFieldId(model.Date.Value.Year, model.FieldID.Value);
+                    PKBalance pKBalance = await _pKBalanceLogic.FetchPKBalanceByYearAndFieldId(model.Date.Value.Year, model.FieldID.Value);
                     if (pKBalance == null)
                     {
                         model.PKBalance = new PKBalance();
@@ -750,12 +750,12 @@ namespace NMP.Portal.Controllers
                 {
                     int soilAnalysisId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
                     jsonData = JsonConvert.SerializeObject(soilData);                    
-                    (soilAnalysis, error) = await _soilAnalysisService.UpdateSoilAnalysisAsync(soilAnalysisId, jsonData);
+                    (soilAnalysis, error) = await _soilAnalysisLogic.UpdateSoilAnalysisAsync(soilAnalysisId, jsonData);
                 }
                 else
                 {
                     jsonData = JsonConvert.SerializeObject(soilData);                    
-                    (soilAnalysis, error) = await _soilAnalysisService.AddSoilAnalysisAsync(jsonData);
+                    (soilAnalysis, error) = await _soilAnalysisLogic.AddSoilAnalysisAsync(jsonData);
                 }
 
                 string success = string.Empty;
@@ -792,7 +792,7 @@ namespace NMP.Portal.Controllers
             {
                 model.EncryptedFarmId = j;
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
-                var field = await _fieldService.FetchFieldByFieldId(fieldId);
+                var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
                 if (field != null)
                 {
                     model.EncryptedFieldId = i;
@@ -836,7 +836,7 @@ namespace NMP.Portal.Controllers
             if (model.SoilAnalysisRemove.HasValue && model.SoilAnalysisRemove.Value)
             {
                 int soilAnalysisId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
-                (string success, Error error) = await _soilAnalysisService.DeleteSoilAnalysisByIdAsync(soilAnalysisId);
+                (string success, Error error) = await _soilAnalysisLogic.DeleteSoilAnalysisByIdAsync(soilAnalysisId);
 
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {

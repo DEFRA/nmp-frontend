@@ -9,10 +9,11 @@ using NMP.Core.Interfaces;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService) : IFarmLogic
+public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService) : IFarmLogic
 {
     private readonly ILogger<FarmLogic> _logger = logger;
     private readonly IFarmService _farmService = farmService;
+    private readonly IFieldService _fieldService = fieldService;
 
     public async Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
@@ -32,10 +33,17 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService) : IF
         return await _farmService.DeleteFarmByIdAsync(farmId);
     }
 
-    public async Task<(List<Country>, Error)> FetchCountryAsync()
+    public async Task<List<Country>> FetchCountryAsync()
     {
         _logger.LogTrace("Fetching list of countries");
-        return await _farmService.FetchCountryAsync();
+        (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
+        if (error != null && countryList.Count > 0)
+        {
+            countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
+
+        }
+        return countryList.OrderBy(c => c.Name).ToList();
+
     }
 
     public async Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year)
@@ -84,5 +92,11 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService) : IF
     {
         _logger.LogTrace("Updating farm: {FarmName}", farmData.Farm.Name);
         return await _farmService.UpdateFarmAsync(farmData);
+    }
+
+    public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
+    {
+        _logger.LogTrace("Fetching field count for FarmId: {FarmId}", farmId);
+        return await _fieldService.FetchFieldCountByFarmIdAsync(farmId);
     }
 }

@@ -10,7 +10,6 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Helpers;
-using NMP.Portal.Services;
 using System.Globalization;
 using System.Net;
 using Error = NMP.Commons.ServiceResponses.Error;
@@ -18,7 +17,7 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, ISoilService soilService, IFieldLogic fieldLogic, ICropLogic cropLogic, IPreviousCroppingLogic previousCroppingLogic) : Controller
+     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IPreviousCroppingLogic previousCroppingLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -26,7 +25,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IDataProtector _soilAnalysisDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.SoilAnalysisController");
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic ?? throw new ArgumentNullException(nameof(fieldLogic));
-    private readonly ISoilService _soilService = soilService;
+    private readonly ISoilLogic _soilService = soilLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
