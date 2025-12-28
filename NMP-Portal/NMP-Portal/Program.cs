@@ -8,13 +8,9 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web.UI;
 using NMP.Commons.Models;
-using NMP.Portal.Models;
 using NMP.Portal.Security;
-using NMP.Portal.Services;
 using NMP.Registrar;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -159,22 +155,6 @@ builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
 });
 
 builder.Services.AddScoped<FarmContext>();
-
-builder.Services.AddSingleton<IUserFarmService, UserFarmService>();
-builder.Services.AddSingleton<IFarmService, FarmService>();
-builder.Services.AddSingleton<IFieldService, FieldService>();
-builder.Services.AddSingleton<ISoilService, SoilService>();
-builder.Services.AddSingleton<ICropService, CropService>();
-builder.Services.AddSingleton<IAuthService, AuthService>();
-builder.Services.AddSingleton<IOrganicManureService, OrganicManureService>();
-builder.Services.AddSingleton<IMannerService, MannerService>();
-builder.Services.AddSingleton<IFertiliserManureService, FertiliserManureService>();
-builder.Services.AddSingleton<ISoilAnalysisService, SoilAnalysisService>();
-builder.Services.AddSingleton<IPKBalanceService, PKBalanceService>();
-builder.Services.AddSingleton<ISnsAnalysisService, SnsAnalysisService>();
-builder.Services.AddSingleton<IReportService, ReportService>();
-builder.Services.AddSingleton<IStorageCapacityService, StorageCapacityService>();
-builder.Services.AddSingleton<IPreviousCroppingService, PreviousCroppingService>();
 builder.Services.AddAntiforgery(options =>
 {
     // Set Cookie properties using CookieBuilder properties�.
