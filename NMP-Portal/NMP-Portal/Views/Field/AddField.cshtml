@@ -21,7 +21,7 @@
         }
         <form asp-action="AddField" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
-            <div hidden="true">
+            <div hidden="hidden">
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea"/>

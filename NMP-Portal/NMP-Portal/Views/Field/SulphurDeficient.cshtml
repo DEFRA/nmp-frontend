@@ -11,7 +11,7 @@
 }
 <form asp-action="SulphurDeficient" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="true">
+    <div hidden="hidden">
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"/>
