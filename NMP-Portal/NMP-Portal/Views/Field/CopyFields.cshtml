@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingField")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingField")" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CopyFields" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
