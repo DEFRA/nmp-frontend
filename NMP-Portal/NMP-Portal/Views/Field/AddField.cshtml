@@ -5,19 +5,6 @@
 @{
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
     ViewData["Title"] = title;
-    var backAction = "";
-    // if (Model.IsCheckAnswer)
-    // {
-    //     backAction = "CheckAnswer";
-    // }
-    // else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
-    // {
-    //     backAction = "UpdateField";
-    // }
-    // else
-    // {
-    //     backAction = "BackActionForAddField";
-    // }
 }
 
 @section BeforeContent {

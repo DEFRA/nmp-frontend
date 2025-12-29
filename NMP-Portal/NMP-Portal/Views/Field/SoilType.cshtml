@@ -1,8 +1,9 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
+    string heading = string.Format(Resource.lblWhatIsSoilType, Model.Name);
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsSoilType, Model.Name)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
     var backAction = "";
     if (Model.IsCheckAnswer)
@@ -131,7 +132,7 @@
             <govuk-radios asp-for="@Model.SoilTypeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsSoilType, Model.Name)
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSoilTypes)
