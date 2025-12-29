@@ -5,6 +5,7 @@ using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Diagnostics.Metrics;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
@@ -34,7 +35,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
     {
         _logger.LogTrace("Fetching arable crop groups");
         var cropGroups = await _fieldService.FetchCropGroups();
-        return cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName).ToList();
+        return [.. cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName)];
     }
 
     public async Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year)
@@ -54,7 +55,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         _logger.LogTrace("Fetching crop groups");
         return await _fieldService.FetchCropGroups();
     }
-
+ 
     public async Task<string> FetchCropTypeById(int cropTypeId)
     {
         _logger.LogTrace("Fetching crop type by ID: {CropTypeId}", cropTypeId);
@@ -144,6 +145,14 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         _logger.LogTrace("Fetching soil types");
         return await _fieldService.FetchSoilTypes();
     }
+
+    public async Task<List<SoilTypesResponse>> FetchSoilTypesByRB209CountryId(int rb209CountryId)
+    {
+        _logger.LogTrace("Fetching soil types by RB209 Country Id");
+        List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
+        return [.. soilTypes.Where(x => x.CountryId == rb209CountryId)];
+    }
+    
 
     public async Task<List<CommonResponse>> GetGrassManagementOptions()
     {

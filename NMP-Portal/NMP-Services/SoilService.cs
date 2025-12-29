@@ -51,42 +51,34 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
             _logger.LogError(ex.Message);
             throw new Exception(error.Message, ex);
         }
-        return (nutrientIndex,error);
+        return (nutrientIndex, error);
     }
     public async Task<string> FetchSoilTypeById(int soilTypeId)
     {
-        Error error = null;
+        Error? error = null;
         string soilType = string.Empty;
-        try
-        {
 
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            soilType = responseWrapper?.Data["soilType"];
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
             {
-                soilType = responseWrapper.Data["soilType"];
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
-        catch (HttpRequestException hre)
-        {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-        }
+
         return soilType;
     }
 
