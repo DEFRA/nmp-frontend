@@ -5,6 +5,7 @@ using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Diagnostics.Metrics;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
@@ -144,6 +145,14 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         _logger.LogTrace("Fetching soil types");
         return await _fieldService.FetchSoilTypes();
     }
+
+    public async Task<List<SoilTypesResponse>> FetchSoilTypesByRB209CountryId(int rb209CountryId)
+    {
+        _logger.LogTrace("Fetching soil types by RB209 Country Id");
+        List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
+        return [.. soilTypes.Where(x => x.CountryId == rb209CountryId)];
+    }
+    
 
     public async Task<List<CommonResponse>> GetGrassManagementOptions()
     {
