@@ -138,11 +138,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> AddField(string q, string? r)//EncryptedfarmId EncryptedYear
     {
         _logger.LogTrace("Field Controller : AddField({Q}) action called", q);
-        FieldViewModel model = LoadFieldDataFromSession() ?? new FieldViewModel();
+        FieldViewModel? model = LoadFieldDataFromSession();
         Error? error = null;
         try
         {
-            if (string.IsNullOrWhiteSpace(q))
+            if (string.IsNullOrWhiteSpace(q)&&model==null)
             {
                 _logger.LogTrace("Field Controller : AddField() action : Farm Id is null or empty");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.BadRequest);
@@ -150,6 +150,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!string.IsNullOrEmpty(q))
             {
+                if(model==null)
+                {
+                    model = new FieldViewModel();
+                }
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
 
