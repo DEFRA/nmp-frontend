@@ -6,7 +6,7 @@
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    var backAction = (Model.IsCheckAnswer ? "CheckAnswer" : "SoilType");
+    var backAction = (Model!=null&&Model.IsCheckAnswer ? "CheckAnswer" : "SoilType");
 }
 
 @section BeforeContent {

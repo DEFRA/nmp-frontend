@@ -125,15 +125,15 @@
         </form>
         <p class="govuk-body cancel-link">
 
-            @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
+            @if (Model!=null&&!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
             {
                 <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
             }
-            else if (!Model.IsCheckAnswer)
+            else if (Model != null && !Model.IsCheckAnswer)
             {
                 <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
             }
-            else if (Model.IsCheckAnswer)
+            else if (Model != null && Model.IsCheckAnswer)
             {
                 <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
             }

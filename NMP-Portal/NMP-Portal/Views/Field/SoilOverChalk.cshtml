@@ -6,7 +6,7 @@
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    var backAction = (Model.IsCheckAnswer ? "CheckAnswer" : "SoilType");
+    var backAction = (Model != null && Model.IsCheckAnswer ? "CheckAnswer" : "SoilType");
 }
 
 @section BeforeContent {
@@ -15,7 +15,7 @@
 <form asp-action="SoilOverChalk" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div hidden="true">
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber"/>
@@ -69,7 +69,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HarvestYear"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.GrassManagementOptionID"/>
-            
+
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGreaterThan30PercentClover"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.SoilNitrogenSupplyItemID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.LayDuration"/>
@@ -81,7 +81,7 @@
                 }
             }
             @if(Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
-                {
+            {
                 @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ID" value="@Model.PreviousCroppingsList[i].ID" />
