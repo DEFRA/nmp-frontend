@@ -16102,7 +16102,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What kind of manure storage do you want to add?.
+        ///   Looks up a localized string similar to What type of manure storage do you want to add?.
         /// </summary>
         public static string lblWhatKindOfManureStorageDoYouWantToAdd {
             get {

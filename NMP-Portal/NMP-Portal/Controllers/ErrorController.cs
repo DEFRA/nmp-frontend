@@ -14,11 +14,23 @@ using NMP.Commons.ViewModels;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
+    [Route("Error/[action]")]
     public class ErrorController : Controller
     {        
         [Route("Error/{statusCode}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Error", new ErrorViewModel
+                {
+                    Code = 400,
+                    Message = "Invalid request data.",
+                    StatusCode = ((HttpStatusCode)400).ToString(),
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                });
+            }
+
             ErrorViewModel errorViewModel = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             string viewName = "Error";
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
@@ -48,7 +60,7 @@ namespace NMP.Portal.Controllers
                     errorViewModel.Message = "Page not found.";
                     errorViewModel.StatusCode = statusKey;
 
-                    string originalPath = "unknown";
+                    string? originalPath = "unknown";
                     if (HttpContext.Items.ContainsKey("originalPath"))
                     {
                         originalPath = HttpContext.Items["originalPath"] as string;
@@ -111,13 +123,7 @@ namespace NMP.Portal.Controllers
 
         public IActionResult Index()
         {
-            var error = new ErrorViewModel();
-            if (HttpContext.Session.Keys.Contains("Error"))
-            {
-                error = HttpContext.Session.GetObjectFromJson<ErrorViewModel>("Error");
-            }
-
-            Console.WriteLine("Error: " + error?.Message ?? "Unknown error");
+            ErrorViewModel error = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };            
             return View("Error", error);
         }
     }
