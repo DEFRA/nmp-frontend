@@ -12,8 +12,8 @@ using NMP.Application;
 namespace NMP.Portal.Controllers
 {
     public class StorageCapacityController(ILogger<StorageCapacityController> logger,
-        IDataProtectionProvider dataProtectionProvider,        
-        IFarmLogic farmLogic,        
+        IDataProtectionProvider dataProtectionProvider,
+        IFarmLogic farmLogic,
         IStorageCapacityLogic storageCapacityLogic,
         IHttpContextAccessor httpContextAccessor) : Controller
     {
@@ -73,7 +73,7 @@ namespace NMP.Portal.Controllers
                         {
                             TempData["succesMsgContent1"] = string.Format(Resource.lblYouHaveRemovedJourneyName, Resource.lblManureStorage.ToLower());
                             TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
-                            if(storeCapacityList.Count>0)
+                            if (storeCapacityList.Count > 0)
                             {
                                 TempData["succesMsgContent3"] = Resource.lblCreateAnExistingManureStorageCapacityReport;
                             }
@@ -90,7 +90,7 @@ namespace NMP.Portal.Controllers
                             TempData["succesMsgContent3"] = Resource.lblCreateAnExistingManureStorageCapacityReport;
                         }
                     }
-                    
+
                     List<HarvestYear> harvestYearList = new List<HarvestYear>();
 
                     if (string.IsNullOrWhiteSpace(storeCapacityError.Message))
@@ -217,7 +217,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.IsRemovedRecently = u;
                     }
-                    
+
                     if (storeCapacityList.Count > 0 || !string.IsNullOrWhiteSpace(u) || !string.IsNullOrWhiteSpace(model.IsRemovedRecently))
                     {
                         ViewBag.StorageCapacityList = storageCapacityList.Count > 0 ? storageCapacityList : null;
@@ -300,6 +300,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> materialStateList, error) = await _storageCapacityLogic.FetchMaterialStates();
                 if (error == null)
                 {
+                    materialStateList.RemoveAll(x => x.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage);
                     ViewBag.MaterialStateList = materialStateList;
                 }
                 else
@@ -348,7 +349,7 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(error.Message))
                 {
                     if (storeCapacityList.Count > 0)
-                    {                        
+                    {
                         model.IsStoreCapacityExist = true;
                     }
                 }
@@ -415,6 +416,7 @@ namespace NMP.Portal.Controllers
                     (List<CommonResponse> materialStateList, error) = await _storageCapacityLogic.FetchMaterialStates();
                     if (error == null)
                     {
+                        materialStateList.RemoveAll(x => x.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage);
                         ViewBag.MaterialStateList = materialStateList;
                     }
                     return View(model);
@@ -1589,7 +1591,7 @@ namespace NMP.Portal.Controllers
                                y = model.EncryptedHarvestYear,
                                r = _reportDataProtector.Protect(successMsg),
                                s = _reportDataProtector.Protect(success.ToString()),
-                               isPlan =string.IsNullOrWhiteSpace(model.IsComingFromPlan)?null:model.IsComingFromPlan,
+                               isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
                                t = model.IsComingFromManageToHubPage
                            },
                            fragment: tabId
@@ -1735,7 +1737,7 @@ namespace NMP.Portal.Controllers
                     }
                     if (!string.IsNullOrWhiteSpace(v))
                     {
-                        model.IsComingFromPlan =v;
+                        model.IsComingFromPlan = v;
                         ViewBag.IsPlan = v;
                     }
                     model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
@@ -1827,12 +1829,12 @@ namespace NMP.Portal.Controllers
                     ViewBag.EncryptedFarmId = q;
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     List<int> fixedYearList = GetReportYearsList();
-                    (Farm farm,Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         ViewBag.FarmName = farm.Name;
                     }
-                    (List<StoreCapacityResponse> storeCapacities,  error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, null);
+                    (List<StoreCapacityResponse> storeCapacities,error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, null);
 
                     if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0)
                     {
@@ -2261,7 +2263,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    
+
                     (string message,Error error) = await _storageCapacityLogic.RemoveStorageCapacity(model.ID.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
