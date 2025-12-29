@@ -150,6 +150,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!string.IsNullOrEmpty(q))
             {
+                if(model==null)
+                {
+                    model = new FieldViewModel();
+                }
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
 
