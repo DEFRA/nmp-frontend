@@ -5,6 +5,15 @@
 @{
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
     ViewData["Title"] = title;
+    var cancelAction = "CheckAnswer";
+    if (Model != null && !Model.IsCheckAnswer)
+    {
+        cancelAction = (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId)) ? "UpdateField" :
+          "CreateFieldCancel";
+    }
+
+    var cancelRouteId =
+        (cancelAction == "CreateFieldCancel" && Model != null) ? Model.EncryptedFarmId : null;
 }
 
 @section BeforeContent {
@@ -127,19 +136,11 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-
-            @if (Model!=null&&!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
-            {
-                <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
-            }
-            else if (Model != null && !Model.IsCheckAnswer)
-            {
-                <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
-            }
-            else if (Model != null && Model.IsCheckAnswer)
-            {
-                <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
-            }
+            <a asp-action="@cancelAction"
+               asp-controller="Field"
+               asp-route-id="@cancelRouteId">
+                @Resource.lblCancel
+            </a>
         </p>
     </div>
 </div>

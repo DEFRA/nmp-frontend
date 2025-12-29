@@ -239,7 +239,7 @@
                             @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : (Model.SoilReleasingClay.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDoesPotashClayForCheckAnswere)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDoesPotashClayForCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 

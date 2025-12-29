@@ -7,6 +7,16 @@
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = (Model != null && Model.IsCheckAnswer ? "CheckAnswer" : "SoilType");
+
+    var cancelAction = "CheckAnswer";
+    if (Model != null && !Model.IsCheckAnswer)
+    {
+        cancelAction = (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId)) ? "UpdateField" :
+          "CreateFieldCancel";
+    }
+
+    var cancelRouteId =
+        (cancelAction == "CreateFieldCancel" && Model != null) ? Model.EncryptedFarmId : null;
 }
 
 @section BeforeContent {
@@ -120,19 +130,11 @@
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link">
-
-                @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
-                {
-                    <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
-                }
-                else if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
-                }
-                else if (Model.IsCheckAnswer)
-                {
-                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
-                }
+                <a asp-action="@cancelAction"
+                   asp-controller="Field"
+                   asp-route-id="@cancelRouteId">
+                    @Resource.lblCancel
+                </a>
             </p>
 
         </div>
