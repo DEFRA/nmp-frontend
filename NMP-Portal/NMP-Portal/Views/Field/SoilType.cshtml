@@ -95,6 +95,27 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassYears[i]" value="@Model.PreviousGrassYears[i]"/>
                 }
             }
+            @if(Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
+                {
+                @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)
+                {
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ID" value="@Model.PreviousCroppingsList[i].ID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].FieldID" value="@Model.PreviousCroppingsList[i].FieldID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CropGroupID" value="@Model.PreviousCroppingsList[i].CropGroupID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CropTypeID" value="@Model.PreviousCroppingsList[i].CropTypeID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HasGrassInLastThreeYear" value="@Model.PreviousCroppingsList[i].HasGrassInLastThreeYear" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HarvestYear" value="@Model.PreviousCroppingsList[i].HarvestYear" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].LayDuration" value="@Model.PreviousCroppingsList[i].LayDuration" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].GrassManagementOptionID" value="@Model.PreviousCroppingsList[i].GrassManagementOptionID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HasGreaterThan30PercentClover" value="@Model.PreviousCroppingsList[i].HasGreaterThan30PercentClover" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].SoilNitrogenSupplyItemID" value="@Model.PreviousCroppingsList[i].SoilNitrogenSupplyItemID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedOn" value="@Model.PreviousCroppingsList[i].CreatedOn" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedByID" value="@Model.PreviousCroppingsList[i].CreatedByID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedOn" value="@Model.PreviousCroppingsList[i].ModifiedOn" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedByID" value="@Model.PreviousCroppingsList[i].ModifiedByID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].Action" value="@Model.PreviousCroppingsList[i].Action" />
+                }
+            }
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"/>
         }
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"/>
