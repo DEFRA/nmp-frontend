@@ -5,7 +5,7 @@
     ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     var dataLists = new List<(string Name, dynamic Data)>
     {
-        ("DirtyWater", ViewBag.DirtyWaterList),
+        // ("DirtyWater", ViewBag.DirtyWaterList),
         ("SlurryStorage", ViewBag.SlurryStorageList),
         ("SolidManureStorage", ViewBag.SolidManureStorageList)
     };
@@ -143,7 +143,8 @@
                 }
             </govuk-tabs-item>
 
-            <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
+            @* Remove dirty water stores. We agreed to exclude dirty water during recent slurry/dirty water discussions (note this may be different in Scotland, as Neil came back with a slightly different interpretation), but we need to remove for England and Wales *@
+           @*  <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
                 <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
                 @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
                 {
@@ -178,7 +179,7 @@
                         <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedDirtyWaterStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddDirtyWaterStorage</a>
                     </p>
                 }
-            </govuk-tabs-item>
+            </govuk-tabs-item> *@
 
             <govuk-tabs-item id="solidManureStorageList" label=@Resource.lblSolidManureStorage>
                 <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>

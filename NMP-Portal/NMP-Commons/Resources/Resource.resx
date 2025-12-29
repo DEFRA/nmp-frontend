@@ -5664,7 +5664,7 @@ livestock manure.</value>
     <value>Storage type</value>
   </data>
   <data name="lblWhatKindOfManureStorageDoYouWantToAdd" xml:space="preserve">
-    <value>What kind of manure storage do you want to add?</value>
+    <value>What type of manure storage do you want to add?</value>
   </data>
   <data name="lblStorageName" xml:space="preserve">
     <value>Storage name</value>
