@@ -1367,14 +1367,24 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm)
+    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId)
     {
         Error error = null;
         bool isOrganicManureExist = false;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOrganicManureExistanceByDateRangeAsyncAPI, managementId, dateFrom, dateTo, isConfirm));
+
+            string requestUrl = APIURLHelper.FetchOrganicManureExistanceByDateRangeAsyncAPI;
+
+            if (organicManureId.HasValue)
+            {
+                requestUrl += $"&organicManureID={organicManureId.Value}";
+            }
+
+            requestUrl = string.Format(requestUrl, managementId, dateFrom, dateTo, isConfirm);
+
+            var response = await httpClient.GetAsync(requestUrl);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)

@@ -193,10 +193,10 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchOrganicManureById(id);
     }
 
-    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm)
+    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchOrganicManureExistanceByDateRange() called");
-        return await _organicManureService.FetchOrganicManureExistanceByDateRange(managementId, dateFrom, dateTo, isConfirm);
+        return await _organicManureService.FetchOrganicManureExistanceByDateRange(managementId, dateFrom, dateTo, isConfirm, organicManureId);
     }
 
     public async Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString)
