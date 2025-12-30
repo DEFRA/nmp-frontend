@@ -54,7 +54,6 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         Error error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
-
         // check if farm already exists or not
         bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
         if (!IsFarmExist)
@@ -146,8 +145,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
     public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
     {
-        decimal rainfallAverage = 0;
-        Error error = new Error();
+        decimal rainfallAverage = 0;        
         string url = string.Format(APIURLHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -156,18 +154,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            rainfallAverage = responseWrapper.Data.avarageAnnualRainfall != null ? responseWrapper.Data.avarageAnnualRainfall.value : 0;
-        }
-        else
-        {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper.Error.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall != null ? responseWrapper.Data.avarageAnnualRainfall.value : 0;
         }
 
         return rainfallAverage;
@@ -358,7 +345,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
         {
 
-            JObject excessRainfallObj = responseWrapper.Data["ExcessRainfall"] as JObject;
+            JObject excessRainfallObj = responseWrapper?.Data["ExcessRainfall"] as JObject;
             if (excessRainfallObj != null)
             {
                 excessRainfalls = excessRainfallObj.ToObject<ExcessRainfalls>();
