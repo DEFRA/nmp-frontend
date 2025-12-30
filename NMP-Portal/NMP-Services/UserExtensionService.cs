@@ -52,10 +52,10 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         HttpClient httpClient = await GetNMPAPIClient();
         // if new farm then save farm data
         var response = await httpClient.PutAsync(APIURLHelper.UpdateUserExtensionTermsOfUseAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-        string result = await response.Content.ReadAsStringAsync();
-
+        response.EnsureSuccessStatusCode();
         if (response.IsSuccessStatusCode)
         {
+            string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
             {
@@ -76,7 +76,6 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         _logger.LogTrace("UpdateShowAboutServiceAsync method in UserExtensionService");
         string jsonData = JsonConvert.SerializeObject(aboutService);
         UserExtension? userExtension = null;
-
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.PutAsync(APIURLHelper.UpdateUserExtensionDoNotShowAboutServiceAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();

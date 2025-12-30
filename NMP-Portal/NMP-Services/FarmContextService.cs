@@ -10,13 +10,9 @@ using NMP.Core.Interfaces;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FarmContextService : Service, IFarmContextService
+public class FarmContextService(ILogger<FarmContextService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFarmContextService
 {
-    private readonly ILogger<FarmContextService> _logger;
-    public FarmContextService(ILogger<FarmContextService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<FarmContextService> _logger = logger;
 
     public async Task<Farm?> FetchFarmByIdAsync(int farmId)
     {

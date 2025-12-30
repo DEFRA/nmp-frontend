@@ -17,9 +17,9 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
 {
     private readonly ILogger<FarmService> _logger = logger;
 
-    public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails)
+    public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
-        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetails);
+        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetailsData);
         NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail = null;
         Error error = new Error();
         try
@@ -105,9 +105,9 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         }
         return (nutrientsLoadingFarmDetail, error);
     }
-    public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails)
+    public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
-        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetails);
+        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetailsData);
         NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail = null;
         Error error = new Error();
         try
@@ -538,9 +538,9 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (message, error);
     }
 
-    public async Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStock)
+    public async Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData)
     {
-        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStock);
+        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStockData);
         NutrientsLoadingLiveStock nutrientsLoadingLiveStocks = null;
         Error error = new Error();
         try
@@ -754,16 +754,16 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (message, error);
     }
 
-    public async Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStock)
+    public async Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData)
     {
-        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStock);
-        NutrientsLoadingLiveStock nutrientsLoadingLiveStocks = null;
+        string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStockData);
+        NutrientsLoadingLiveStock? nutrientsLoadingLiveStocks = null;
         Error error = new Error();
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-
+            HttpClient httpClient = await GetNMPAPIClient();            
             var response = await httpClient.PutAsync(APIURLHelper.UpdateNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")

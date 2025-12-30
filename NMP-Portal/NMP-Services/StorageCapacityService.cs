@@ -19,18 +19,19 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<StorageTypeResponse>, Error)> FetchStorageTypes()
     {
         List<StorageTypeResponse> storageTypeList = new List<StorageTypeResponse>();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchStorageTypesAsyncAPI));
+            var response = await httpClient.GetAsync(APIURLHelper.FetchStorageTypesAsyncAPI);
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var storageTypes = responseWrapper.Data.records.ToObject<List<StorageTypeResponse>>();
+                    var storageTypes = responseWrapper?.Data?.records.ToObject<List<StorageTypeResponse>>();
                     storageTypeList.AddRange(storageTypes);
                 }
             }
@@ -38,7 +39,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
+                    error = responseWrapper?.Error?.ToObject<Error>();
                     _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
                 }
             }

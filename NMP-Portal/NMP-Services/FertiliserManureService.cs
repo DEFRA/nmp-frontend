@@ -26,8 +26,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;            
-            url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
+            string url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
             if (cropOrder == null)
             {
                 url = url.Replace("&cropOrder=", "");
@@ -37,6 +36,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 url = url.Replace("cropGroupName=&", "");
             }
             var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -52,7 +52,10 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -60,15 +63,15 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);
+            throw;
         }
         return (managementIds, error);
     }
@@ -79,7 +82,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId));
+            string url = string.Format(APIURLHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -94,8 +99,11 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    error = responseWrapper?.Error?.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -103,14 +111,14 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (cropTypeList, error);
@@ -147,7 +155,10 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -155,14 +166,14 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (fieldResponses, error);
@@ -194,7 +205,10 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -202,14 +216,14 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (inOrganicManureDurationList, error);
@@ -241,7 +255,10 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -249,14 +266,14 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (inOrganicManureDuration, error);
@@ -268,11 +285,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
         Error error = null;
         List<FertiliserManure> fertilisers = new List<FertiliserManure>();
         try
-        {
-            //string jsonString = JsonConvert.SerializeObject(fertiliserManure);
+        {            
             HttpClient httpClient = await GetNMPAPIClient();
-
-            var response = await httpClient.PostAsync(string.Format(APIURLHelper.AddFertiliserManuresAsyncAPI), new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(APIURLHelper.AddFertiliserManuresAsyncAPI, new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -282,27 +297,29 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 {
                     fertilisers.AddRange(fertiliser);
                 }
-
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    error = responseWrapper?.Error?.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (fertilisers, error);
@@ -325,7 +342,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
             url = string.Format(url, fieldId, fromdate, toDate, confirm);
             var response = await httpClient.GetAsync(url);
-            //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, fertiliserId, confirm));
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -339,9 +356,12 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = new Error();
+                    
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -352,7 +372,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 error = new Error();
             }
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
@@ -362,7 +382,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 error = new Error();
             }
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (totalN, error);
@@ -376,14 +396,11 @@ public class FertiliserManureService : Service, IFertiliserManureService
             HttpClient httpClient = await GetNMPAPIClient();
             var content = new StringContent(fertiliserIds, Encoding.UTF8, "application/json");
             var url = APIURLHelper.DeleteFertiliserByIdsAPI;
-
-
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
                 Content = content
             };
-            var response = await httpClient.SendAsync(requestMessage);
-            //var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteFertiliserByIdsAPI, fertiliserIds));
+            var response = await httpClient.SendAsync(requestMessage);            
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -395,20 +412,23 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
 
@@ -437,20 +457,23 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
 
@@ -475,20 +498,23 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
 
@@ -517,20 +543,23 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
 
@@ -559,28 +588,25 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 {
                     error = new Error();
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            if (error == null)
-            {
-                error = new Error();
-            }
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
-            if (error == null)
-            {
-                error = new Error();
-            }
+            error ??= new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (totalN, error);

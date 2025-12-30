@@ -17,55 +17,15 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
     {
         Error error = null;
         string nutrientIndex = string.Empty;
-        try
-        {
-
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilNutrientIndexAsyncAPI, nutrientId, nutrientValue, methodologyId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-            {
-                nutrientIndex = responseWrapper.Data["index"];
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = new();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (nutrientIndex, error);
-    }
-    public async Task<string> FetchSoilTypeById(int soilTypeId)
-    {
-        Error? error = null;
-        string soilType = string.Empty;
-
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId));
+        var requestUrl = string.Format(APIURLHelper.FetchSoilNutrientIndexAsyncAPI, nutrientId, nutrientValue, methodologyId);
+        var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            soilType = responseWrapper?.Data["soilType"];
+            nutrientIndex = responseWrapper.Data["index"];
         }
         else
         {
@@ -77,6 +37,22 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
                     _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
                 }
             }
+        }
+
+        return (nutrientIndex, error);
+    }
+    public async Task<string> FetchSoilTypeById(int soilTypeId)
+    {
+        string soilType = string.Empty;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId);
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            soilType = responseWrapper?.Data["soilType"];
         }
 
         return soilType;

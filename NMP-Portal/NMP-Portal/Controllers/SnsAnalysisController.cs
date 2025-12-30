@@ -6,6 +6,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Helpers;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace NMP.Portal.Controllers
@@ -663,9 +664,11 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
         public IActionResult SoilNitrogenSupplyIndex(SnsAnalysisViewModel model)
         {
             _logger.LogTrace("SnsAnalysis Controller : SoilNitrogenSupplyIndex() post action called");
+            
             return RedirectToAction("CheckAnswer");
         }
 
