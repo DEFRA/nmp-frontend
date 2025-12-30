@@ -32,7 +32,9 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 
         ClaimsPrincipal? user = context.User;
         var identity = user?.Identity as ClaimsIdentity;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         string issuer = identity?.FindFirst("issuer")?.Value;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
         OAuthTokenResponse tokens;
         using (var client = _httpClientFactory.CreateClient())
         {
@@ -47,7 +49,9 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
                 new KeyValuePair<string, string>("grant_type", "refresh_token"),
                 new KeyValuePair<string, string>("scope", scopes)
             });
+#pragma warning disable CS8604 // Possible null reference argument.
             Uri uri = new Uri(uriString: issuer);
+#pragma warning restore CS8604 // Possible null reference argument.
             var url = $"https://{uri.Authority}/{_config["CustomerIdentityTenantId"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
 
             var response = await client.PostAsync(url, formData);

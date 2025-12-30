@@ -18,9 +18,9 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
         HttpClient httpClient = await GetNMPAPIClient();
         var requisteUrl = string.Format(APIURLHelper.AddressLookupAPI, postcode, offset);
         var response = await httpClient.GetAsync(requisteUrl);
+        response.EnsureSuccessStatusCode();
         if (response.IsSuccessStatusCode)
-        {
-            response.EnsureSuccessStatusCode();
+        {            
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")

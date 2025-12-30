@@ -15,6 +15,7 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
 
     public async Task<List<WarningHeaderResponse>> FetchWarningHeaderByFieldIdAndYear(string fieldIds, int harvestYear)
     {
+        _logger.LogTrace("Fetching warning headers by FieldId and year");
         var warningHeaders = new List<WarningHeaderResponse>();
         string requestUrl = string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, fieldIds, harvestYear);
         HttpClient httpClient = await GetNMPAPIClient();
@@ -32,6 +33,7 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     }
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
     {
+        _logger.LogTrace("Fetching warning by CountryId and key");
         string requestUrl = string.Format(APIURLHelper.FetchWarningByCountryIdAndWarningKeyAsyncAPI, countryId, warningKey);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
