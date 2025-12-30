@@ -1509,15 +1509,15 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (farmManureTypes, error);
     }
-    public async Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string mannerJsonData)
+    public async Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string jsonData)
     {
         MannerCalculateNutrientResponse mannerCalculateNutrientResponse = new MannerCalculateNutrientResponse();
         Error error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(string.Format(APIURLHelper.FetchMannerCalculateNutrientAsyncAPI), new StringContent(mannerJsonData, Encoding.UTF8, "application/json"));
-            //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerCalculateNutrientAsyncAPI, mannerJsonData));
+            var response = await httpClient.PostAsync(APIURLHelper.FetchMannerCalculateNutrientAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1742,25 +1742,21 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (organicManures, error);
     }
-    public async Task<(string, Error)> DeleteOrganicManureByIdAsync(string organicManureIds)
+    public async Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds)
     {
-
         Error error = new Error();
         string message = string.Empty;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-
-            var content = new StringContent(organicManureIds, Encoding.UTF8, "application/json");
+            var content = new StringContent(orgManureIds, Encoding.UTF8, "application/json");
             var url = APIURLHelper.DeleteOrganicManureByAPI;
-
-
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
                 Content = content
             };
-            var response = await httpClient.SendAsync(requestMessage);
-            // var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteOrganicManureByAPI, orgManureId));
+            var response = await httpClient.SendAsync(requestMessage); 
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -1779,7 +1775,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre,hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
