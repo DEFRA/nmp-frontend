@@ -1676,7 +1676,7 @@ namespace NMP.Portal.Controllers
                     model.ClosedPeriod = closedPeriod;
                     if (!string.IsNullOrWhiteSpace(closedPeriod))
                     {
-                        model = await GetDatesFromClosedPeriod(model,closedPeriod);
+                        model = await GetDatesFromClosedPeriod(model, closedPeriod);
                         string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
                         string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
 
@@ -7020,7 +7020,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            (isOrganicManureExist, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID, model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false,null);
+                            (isOrganicManureExist, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID, model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, null);
                         }
                         if (error != null)
                         {
@@ -10129,7 +10129,7 @@ namespace NMP.Portal.Controllers
             return (selectedDefoliation, error);
         }
 
-        private async Task<OrganicManureViewModel> GetDatesFromClosedPeriod(OrganicManureViewModel model, string closedPeriod)
+        private static async Task<OrganicManureViewModel> GetDatesFromClosedPeriod(OrganicManureViewModel model, string closedPeriod)
         {
             if (!string.IsNullOrWhiteSpace(closedPeriod))
             {
@@ -10138,43 +10138,42 @@ namespace NMP.Portal.Controllers
                 int endYear = harvestYear + 1;
                 string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
                 Regex regex = new Regex(pattern);
-                if (closedPeriod != null)
-                {
-                    Match match = regex.Match(closedPeriod);
-                    if (match.Success)
-                    {
-                        int startDay = int.Parse(match.Groups[1].Value);
-                        string startMonthStr = match.Groups[2].Value;
-                        int endDay = int.Parse(match.Groups[3].Value);
-                        string endMonthStr = match.Groups[4].Value;
 
-                        Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                        dtfi.Add(0, Resource.lblJanuary);
-                        dtfi.Add(1, Resource.lblFebruary);
-                        dtfi.Add(2, Resource.lblMarch);
-                        dtfi.Add(3, Resource.lblApril);
-                        dtfi.Add(4, Resource.lblMay);
-                        dtfi.Add(5, Resource.lblJune);
-                        dtfi.Add(6, Resource.lblJuly);
-                        dtfi.Add(7, Resource.lblAugust);
-                        dtfi.Add(8, Resource.lblSeptember);
-                        dtfi.Add(9, Resource.lblOctober);
-                        dtfi.Add(10, Resource.lblNovember);
-                        dtfi.Add(11, Resource.lblDecember);
-                        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                        int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
-                        if (startMonth <= endMonth)
-                        {
-                            model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                            model.ClosedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
-                        }
-                        else if (startMonth >= endMonth)
-                        {
-                            model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                            model.ClosedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
-                        }
+                Match match = regex.Match(closedPeriod);
+                if (match.Success)
+                {
+                    int startDay = int.Parse(match.Groups[1].Value);
+                    string startMonthStr = match.Groups[2].Value;
+                    int endDay = int.Parse(match.Groups[3].Value);
+                    string endMonthStr = match.Groups[4].Value;
+
+                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
+                    dtfi.Add(0, Resource.lblJanuary);
+                    dtfi.Add(1, Resource.lblFebruary);
+                    dtfi.Add(2, Resource.lblMarch);
+                    dtfi.Add(3, Resource.lblApril);
+                    dtfi.Add(4, Resource.lblMay);
+                    dtfi.Add(5, Resource.lblJune);
+                    dtfi.Add(6, Resource.lblJuly);
+                    dtfi.Add(7, Resource.lblAugust);
+                    dtfi.Add(8, Resource.lblSeptember);
+                    dtfi.Add(9, Resource.lblOctober);
+                    dtfi.Add(10, Resource.lblNovember);
+                    dtfi.Add(11, Resource.lblDecember);
+                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                    if (startMonth <= endMonth)
+                    {
+                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                        model.ClosedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                    }
+                    else if (startMonth >= endMonth)
+                    {
+                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
+                        model.ClosedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
                     }
                 }
+
             }
             return model;
         }
