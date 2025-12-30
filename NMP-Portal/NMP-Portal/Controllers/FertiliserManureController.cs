@@ -1016,26 +1016,23 @@ namespace NMP.Portal.Controllers
                             {
                                 cropList = cropList.Where(x => x.CropOrder == 1).ToList();
                             }
-                            if (cropList.Count > 0)
+                            if (cropList.Count > 0 && cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                             {
-                                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                                {
-                                    (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
+                                (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
 
-                                    var filteredFertiliserManure = model.FertiliserManures
-                                .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
-                                    fm.Defoliation == null).ToList();
-                                    if (filteredFertiliserManure != null && filteredFertiliserManure.Count == managementPeriod.Count)
-                                    {
-                                        var managementPeriodIdsToRemove = managementPeriod
-                                       .Skip(1)
-                                       .Select(mp => mp.ID.Value)
-                                       .ToList();
-                                        model.FertiliserManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
-                                    }
-                                    grassCropCounter++;
-                                    model.IsAnyCropIsGrass = true;
+                                var filteredFertiliserManure = model.FertiliserManures
+                            .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
+                                fm.Defoliation == null).ToList();
+                                if (filteredFertiliserManure != null && filteredFertiliserManure.Count == managementPeriod.Count)
+                                {
+                                    var managementPeriodIdsToRemove = managementPeriod
+                                   .Skip(1)
+                                   .Select(mp => mp.ID.Value)
+                                   .ToList();
+                                    model.FertiliserManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
                                 }
+                                grassCropCounter++;
+                                model.IsAnyCropIsGrass = true;
                             }
                         }
                         model.GrassCropCount = grassCropCounter;
@@ -1148,7 +1145,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace("Farm Controller : Exception in Fields() post action : {0}, {1}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "Farm Controller : Exception in Fields() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["FieldError"] = ex.Message;
                 return View(model);
             }
@@ -1191,7 +1188,7 @@ namespace NMP.Portal.Controllers
                         {
                             int harvestYear = model.HarvestYear ?? 0;
                             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                            Regex regex = new Regex(pattern);
+                            Regex regex = new(pattern,RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
                             if (closedPeriod != null)
                             {
                                 Match match = regex.Match(closedPeriod);
@@ -1355,7 +1352,7 @@ namespace NMP.Portal.Controllers
                             {
                                 int harvestYear = model.HarvestYear ?? 0;
                                 string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                Regex regex = new Regex(pattern);
+                                Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
                                 if (closedPeriod != null)
                                 {
                                     Match match = regex.Match(closedPeriod);
@@ -1486,7 +1483,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace("Farm Controller : Exception in InOrgnaicManureDuration() post action : {0}, {1}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "Farm Controller : Exception in InOrgnaicManureDuration() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["InOrgnaicManureDurationError"] = ex.Message;
                 return View(model);
             }
@@ -1985,7 +1982,7 @@ namespace NMP.Portal.Controllers
                                         string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId) ?? string.Empty;
 
                                         string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                        Regex regex = new Regex(pattern);
+                                        Regex regex = new Regex(pattern,RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
                                         if (closedPeriod != null)
                                         {
                                             Match match = regex.Match(closedPeriod);
@@ -2467,7 +2464,7 @@ namespace NMP.Portal.Controllers
                                     string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeResponse.CropTypeId) ?? string.Empty;
 
                                     string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                    Regex regex = new Regex(pattern);
+                                    Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
                                     if (closedPeriod != null)
                                     {
                                         Match match = regex.Match(closedPeriod);

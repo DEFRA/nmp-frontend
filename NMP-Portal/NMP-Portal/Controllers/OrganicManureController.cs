@@ -1680,7 +1680,7 @@ namespace NMP.Portal.Controllers
                         int startYear = harvestYear;
                         int endYear = harvestYear + 1;
                         string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                        Regex regex = new Regex(pattern);
+                        Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
                         if (closedPeriod != null)
                         {
                             Match match = regex.Match(closedPeriod);
