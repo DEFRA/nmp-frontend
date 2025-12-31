@@ -1984,27 +1984,25 @@ namespace NMP.Portal.Controllers
                                                 }
                                                 if (error == null)
                                                 {
-                                                    if (managementIds.Count > 0)
+                                                    if (managementIds.Count > 0 && model.N > 0)
                                                     {
-                                                        if (model.N > 0)
+                                                        (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
+
+                                                        CropTypeLinkingResponse cropTypeLinkingResponse = null;
+                                                        if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(model.FieldList[0])))
                                                         {
-                                                            (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
+                                                            int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(model.FieldList[0])).Select(x => x.ManagementPeriodID).FirstOrDefault();
 
-                                                            CropTypeLinkingResponse cropTypeLinkingResponse = null;
-                                                            if (model.FertiliserManures.Any(x => x.FieldID == Convert.ToInt32(model.FieldList[0])))
-                                                            {
-                                                                int manId = model.FertiliserManures.Where(x => x.FieldID == Convert.ToInt32(model.FieldList[0])).Select(x => x.ManagementPeriodID).FirstOrDefault();
+                                                            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manId);
+                                                            (crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
 
-                                                                (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manId);
-                                                                (crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-
-                                                                (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
-                                                            }
-                                                            if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                                                            {
-                                                                (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
-                                                            }
+                                                            (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
                                                         }
+                                                        if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                                        {
+                                                            (model, error) = await IsClosedPeriodWarningMessageShow(model, false);
+                                                        }
+
                                                     }
                                                 }
                                                 else
@@ -2485,12 +2483,9 @@ namespace NMP.Portal.Controllers
                                                 }
                                                 if (error == null)
                                                 {
-                                                    if (managementIds.Count > 0)
+                                                    if (managementIds.Count > 0 && model.N > 0)
                                                     {
-                                                        if (model.N > 0)
-                                                        {
-                                                            (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
-                                                        }
+                                                        (model, error) = await isNitrogenExceedWarning(model, managementIds[0], cropTypeResponse.CropTypeId, model.N.Value, startDate, endDate, cropTypeResponse.CropType, false, Convert.ToInt32(fieldId));
                                                     }
                                                 }
                                                 else
@@ -2531,7 +2526,7 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-                    
+
                 }
                 model.IsDoubleCropValueChange = false;
                 model.IsCheckAnswer = true;
