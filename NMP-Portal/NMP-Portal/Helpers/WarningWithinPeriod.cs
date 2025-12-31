@@ -192,7 +192,7 @@ namespace NMP.Portal.Helpers
             bool isWithinClosedPeriod = false;
 
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern);
+            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -269,7 +269,7 @@ namespace NMP.Portal.Helpers
         {
             string message = string.Empty;
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern);
+            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -453,7 +453,7 @@ namespace NMP.Portal.Helpers
         {
             bool? isWithinClosedPeriodAndFebruary = null;
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern);
+            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -662,7 +662,7 @@ namespace NMP.Portal.Helpers
             bool isWithinWarningPeriod = false;
 
             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern);
+            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (warningPeriod != null)
             {
                 Match match = regex.Match(warningPeriod);

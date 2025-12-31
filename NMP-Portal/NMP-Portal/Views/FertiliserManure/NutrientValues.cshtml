@@ -14,6 +14,9 @@
                     && Model.K2O == null && Model.SO3 == null && Model.MgO == null
                     && Model.Lime == null);
     }
+    int trueWarningCount = 0;
+    if (Model.IsClosedPeriodWarning) trueWarningCount++;
+    if (Model.IsNitrogenExceedWarning) trueWarningCount++;
 }
 
 @section BeforeContent {
@@ -148,17 +151,19 @@
         }
         <div class="govuk-form-group @(isFieldsEmpty ? "govuk-form-group--error" : "")">
             <div class="govuk-grid-column-two-thirds">
-                @if (Model.IsWarningMsgNeedToShow)
+                @if (Model.IsWarningMsgNeedToShow && Model.N >0)
                 {
-                    @if (Model.IsNitrogenExceedWarning)
-                    {
-                        @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @if (trueWarningCount == 1)
                         {
-                            <govuk-notification-banner>
-                                <govuk-notification-banner-title>
-                                    @Resource.lblImportant
-                                </govuk-notification-banner-title>
-                                @TempData["NitrogenExceedMessageTitle"]<br />
+                            @if (Model.IsNitrogenExceedWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
+                            {
+                                @TempData["NitrogenExceedMessageTitle"]
+                    
+                                <br />
                                 <p class="govuk-notification-banner__heading">
                                     @Model.ClosedPeriodNitrogenExceedWarningPara1
                                 </p>
@@ -168,10 +173,76 @@
                                 {
                                     <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
                                 }
-                            </govuk-notification-banner>
+                            }
+                            @if (Model.IsClosedPeriodWarning = true)
+                            {
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.ClosedPeriodWarningPara1
+                                </p>
+                                <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+                            }
+                        }
+                        @if (trueWarningCount > 1)
+                        {
+                            @* <div class="govuk-notification-banner__content">*@
+                            <p class="govuk-notification-banner__heading">
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                {
+                                    @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
+                                }
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                {
+                                    @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
+                                }
+                            </p>
+                            <ul class="govuk-list govuk-list--bullet">
+                                @if (Model.IsNitrogenExceedWarning)
+                                {
+                                    <li>@Model.ClosedPeriodNitrogenExceedWarningPara1</li>
+                                }
+                                @if (Model.IsClosedPeriodWarning)
+                                {
+                                    <li>@Model.ClosedPeriodWarningPara1</li>
+                                }
+                            </ul>
+                            <govuk-details>
+                                <govuk-details-summary>
+
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                    {
+                                        @Resource.lblMoreAboutTheseNVZRules
+                                    }
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                    {
+                                        @Resource.lblMoreAboutTheseWaterResourceRegulation
+                                    }
+                                </govuk-details-summary>
+                                <govuk-details-text>
+                                    @if (Model.IsNitrogenExceedWarning)
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.ClosedPeriodNitrogenExceedWarningPara1</h2>
+                                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                    }
+                                    @if (Model.IsClosedPeriodWarning)
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.ClosedPeriodWarningPara1</h2>
+                                        <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+                                    }
+                                    
+                                </govuk-details-text>
+                            </govuk-details>
+                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                            {
+                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheNitrateVulnerableZone</p>
+                            }
+                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                            {
+                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheWaterResources</p>
+                            }
                         }
 
-                    }
+                    </govuk-notification-banner>
+
                 }
                 <h1 class="govuk-heading-l">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))

@@ -152,53 +152,6 @@
                 </govuk-error-summary>
             }
 
-
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarning || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed))
-            {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @if (Model.IsClosedPeriodWarning = true)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodWarningPara1
-                        </p>
-                        <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
-                    }
-                </govuk-notification-banner>
-
-                @if (TempData["ClosedPeriodWarningMessage"] != null)
-                {
-                    @* <govuk-notification-banner>
-                <govuk-notification-banner-title>
-                @Resource.lblImportant
-                </govuk-notification-banner-title>
-                @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed ?
-                Resource.MsgApplicationAfter31October : Resource.MsgClosedPeriod)<br /><br />
-
-                <p class="govuk-notification-banner__heading">
-                @(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed ?
-                Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle : Resource.MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle)
-                </p>
-                <p class="govuk-body">@TempData["ClosedPeriodWarningMessage"]</p>
-
-                @if (Model.IsClosedPeriodWarningOnlyForGrassAndOilseed)
-                {
-                <p class="govuk-body">
-                @Resource.MsgForGrassAndOilseedRapeClosedPeriodForFertiliserAdditional
-                </p>
-                }
-                else @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
-                {
-                <p class="govuk-body">
-                @Resource.MsgYouCanContinueButYouShouldConsider
-                </p>
-                }
-                </govuk-notification-banner> *@
-                }
-            }
-
             <govuk-date-input asp-for="@Model.Date">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">

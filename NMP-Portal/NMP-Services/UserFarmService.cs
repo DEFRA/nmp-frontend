@@ -6,6 +6,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -16,39 +17,30 @@ public class UserFarmService(ILogger<UserFarmService> logger, IHttpContextAccess
     public async Task<(UserFarmResponse, Error)> UserFarmAsync(int userId)
     {
         UserFarmResponse userFarmList = new UserFarmResponse();
-        Error error = new Error();
-        try
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(APIURLHelper.FetchFarmByUserIdAPI, HttpUtility.UrlEncode(userId.ToString()));
+        var response = await httpClient.GetAsync(requestUrl);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmByUserIdAPI, userId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    UserFarmResponse userFarmResponse = responseWrapper.Data.ToObject<UserFarmResponse>();
-                    userFarmList.Farms = userFarmResponse.Farms;
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                UserFarmResponse userFarmResponse = responseWrapper.Data.ToObject<UserFarmResponse>();
+                userFarmList.Farms = userFarmResponse.Farms;
             }
         }
-        catch(HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
 
         return (userFarmList, error);

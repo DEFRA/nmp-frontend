@@ -4,18 +4,18 @@ using NMP.Commons.ViewModels;
 namespace NMP.Core.Interfaces;
 public interface IOrganicManureService
 {
-    Task<(List<ManureCropTypeResponse>,Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId,int harvestYear);
-    Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName);
-    Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder);
-    Task<(List<CommonResponse>, Error)> FetchManureGroupList();
-    Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId, int countryId);
-    Task<(CommonResponse, Error)> FetchManureGroupById(int manureGroupId);
+    Task<(List<ManureCropTypeResponse>,Error?)> FetchCropTypeByFarmIdAndHarvestYear(int farmId,int harvestYear);
+    Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName);
+    Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder);
+    Task<(List<CommonResponse>, Error?)> FetchManureGroupList();
+    Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId);
+    Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId);
 
-    Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId);
+    Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId);
 
-    Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType,bool isLiquid);
+    Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType,bool isLiquid);
 
-    Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int appId,string? applicableFor);
+    Task<(List<IncorporationMethodResponse>, Error?)> FetchIncorporationMethodsByApplicationId(int appId,string? applicableFor);
     Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor);
            
     Task<(string, Error)> FetchApplicationMethodById(int Id);
@@ -38,7 +38,7 @@ public interface IOrganicManureService
     Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
     Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year,bool confirm);
     Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId);
-    Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm);
+    Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId);
     Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString);
     Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId);
     Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId);
@@ -54,5 +54,5 @@ public interface IOrganicManureService
     Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeId(int farmId, int ManureTypeId, string ManureTypeName);
     Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureType(int fertiliserId, int farmId, int harvestYear);
     Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData);
-    Task<(decimal?, Error)> FetchAvailableNByManagementPeriodID(int managementPeriodID);
+    Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID);
 }

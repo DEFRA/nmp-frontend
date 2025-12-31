@@ -3,8 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NMP.Commons.ServiceResponses;
-using NMP.Core.Interfaces;
 using NMP.Core.Attributes;
+using NMP.Core.Interfaces;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -16,11 +17,11 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
     {
         List<AddressLookupResponse> addresses = new();
         HttpClient httpClient = await GetNMPAPIClient();
-        var requisteUrl = string.Format(APIURLHelper.AddressLookupAPI, postcode, offset);
+        var requisteUrl = string.Format(APIURLHelper.AddressLookupAPI, HttpUtility.UrlEncode(postcode), HttpUtility.UrlEncode(offset.ToString()));
         var response = await httpClient.GetAsync(requisteUrl);
+        response.EnsureSuccessStatusCode();
         if (response.IsSuccessStatusCode)
-        {
-            response.EnsureSuccessStatusCode();
+        {            
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
