@@ -9,6 +9,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -18,48 +19,30 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
 
     public async Task<(SoilAnalysis, Error)> FetchSoilAnalysisById(int id)
     {
-        SoilAnalysis soilAnalysis = new SoilAnalysis();
-        Error error = null;
-        try
-        {
-            _logger.LogTrace("SoilAnalysisService: soil-analyses/{0} called.",id);
+        SoilAnalysis? soilAnalysis = new SoilAnalysis();
+        Error? error = null;
+        
+            _logger.LogTrace("SoilAnalysisService: soil-analyses/{Id} called.",id);
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                JObject soilanalysis = responseWrapper.Data["SoilAnalysis"] as JObject;
-                if (soilanalysis != null)
+                JObject? soilanalysisObject = responseWrapper?.Data["SoilAnalysis"] as JObject;
+                if (soilanalysisObject != null)
                 {
-                    soilAnalysis = soilanalysis.ToObject<SoilAnalysis>();
+                    soilAnalysis = soilanalysisObject?.ToObject<SoilAnalysis>();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = new Error();
-                    error = responseWrapper.Error.ToObject<Error>();
+                {                    
+                    error = responseWrapper?.Error?.ToObject<Error>();
                     _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
                 }
             }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-
         return (soilAnalysis, error);
     }
     public async Task<(SoilAnalysis, Error)> UpdateSoilAnalysisAsync(int id, string soilData)

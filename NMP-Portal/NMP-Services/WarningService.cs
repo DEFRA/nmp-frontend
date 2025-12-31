@@ -6,6 +6,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -17,7 +18,7 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     {
         _logger.LogTrace("Fetching warning headers by FieldId and year");
         var warningHeaders = new List<WarningHeaderResponse>();
-        string requestUrl = string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI,  fieldIds, harvestYear);
+        string requestUrl = string.Format(APIURLHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, HttpUtility.UrlEncode(fieldIds), HttpUtility.UrlEncode(harvestYear.ToString()));
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
@@ -34,7 +35,7 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
     {
         _logger.LogTrace("Fetching warning by CountryId and key");
-        string requestUrl = string.Format(APIURLHelper.FetchWarningByCountryIdAndWarningKeyAsyncAPI, countryId, warningKey);
+        string requestUrl = string.Format(APIURLHelper.FetchWarningByCountryIdAndWarningKeyAsyncAPI, HttpUtility.UrlEncode(countryId.ToString()), HttpUtility.UrlEncode(warningKey));
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();

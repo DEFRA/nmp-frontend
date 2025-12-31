@@ -70,10 +70,11 @@ namespace NMP.Portal.Controllers
                 }
                 else if (!string.IsNullOrWhiteSpace(i))
                 {
+                    Error? error;
                     _logger.LogTrace("SoilAnalysisController: farms/{J} called.", j);
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
+                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
 
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    if (error != null && string.IsNullOrWhiteSpace(error.Message))
                     {
                         int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(j));
                         _logger.LogTrace("SoilAnalysisController: fields/{FieldId} called.", fieldId);
@@ -83,6 +84,7 @@ namespace NMP.Portal.Controllers
                         model.FieldID = fieldId;
                         int decryptedSoilId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                         _logger.LogTrace("SoilAnalysisController: soil-analyses/{DecryptedSoilId} called", decryptedSoilId);
+                        
                         (SoilAnalysis soilAnalysis, error) = await _soilAnalysisLogic.FetchSoilAnalysisById(decryptedSoilId);
                         
                         if (error == null)
