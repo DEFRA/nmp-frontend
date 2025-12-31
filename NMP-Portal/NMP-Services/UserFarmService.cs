@@ -6,6 +6,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -18,7 +19,7 @@ public class UserFarmService(ILogger<UserFarmService> logger, IHttpContextAccess
         UserFarmResponse userFarmList = new UserFarmResponse();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchFarmByUserIdAPI, userId);
+        var requestUrl = string.Format(APIURLHelper.FetchFarmByUserIdAPI, HttpUtility.UrlEncode(userId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

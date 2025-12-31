@@ -9,427 +9,315 @@ using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
 public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IOrganicManureService
 {
     private readonly ILogger<OrganicManureService> _logger = logger;
-
-    public async Task<(List<ManureCropTypeResponse>, Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
+    private const string _errorLogTemplate = "{Code} : {Message} : {Stack} : {Path}";
+    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
     {
         List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
-        Error error = null;
-        try
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var cropTypeResponseList = responseWrapper.Data.ToObject<List<ManureCropTypeResponse>>();
-                    cropTypeList.AddRange(cropTypeResponseList);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                var cropTypeResponseList = responseWrapper?.Data?.ToObject<List<ManureCropTypeResponse>>();
+                cropTypeList.AddRange(cropTypeResponseList);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (cropTypeList, error);
     }
-    public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
+    public async Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
     {
         List<CommonResponse> fieldResponses = new List<CommonResponse>();
-        Error error = null;
-        try
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        string url = string.Empty;
+        if (!string.IsNullOrWhiteSpace(cropGroupName))
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;
-            if (!string.IsNullOrWhiteSpace(cropGroupName))
+            url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(cropGroupName), HttpUtility.UrlEncode(farmId.ToString()));
+        }
+        else
+        {
+            url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString()));
+        }
+        var response = await httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
+                var fieldResponseList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+                fieldResponses.AddRange(fieldResponseList);
             }
-            else
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
             {
-                url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
-            }
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    var fieldResponseList = responseWrapper.Data.ToObject<List<CommonResponse>>();
-                    fieldResponses.AddRange(fieldResponseList);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
-            }
         }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (fieldResponses, error);
     }
 
-    public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
+    public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
         List<int> managementIds = new List<int>();
-        Error error = null;
-        if (cropOrder == null)
+        Error? error = null;
+        cropOrder ??= 1;
+        string url = string.Empty;
+        if (!string.IsNullOrWhiteSpace(cropGroupName))
         {
-            cropOrder = 1;
+            url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(cropGroupName.ToString()), HttpUtility.UrlEncode(fieldIds.ToString()), HttpUtility.UrlEncode(cropOrder.ToString()));
         }
-        try
+        else
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;
-            if (!string.IsNullOrWhiteSpace(cropGroupName))
+            url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(fieldIds.ToString()));
+        }
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            List<CommonResponse>? managementIdsList = responseWrapper?.Data?.ManagementPeriods?.ToObject<List<CommonResponse>>();
+            if (managementIdsList != null)
             {
-                url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
+                managementIds.AddRange(managementIdsList.Select(x => x.Id));
             }
-            else
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
             {
-                url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI, harvestYear, fieldIds);
-            }
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    List<CommonResponse> managementIdsList = responseWrapper.Data.ManagementPeriods.ToObject<List<CommonResponse>>();
-                    managementIds.AddRange(managementIdsList.Select(x => x.Id));
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
-            }
         }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (managementIds, error);
     }
 
-    public async Task<(List<CommonResponse>, Error)> FetchManureGroupList()
+    public async Task<(List<CommonResponse>, Error?)> FetchManureGroupList()
     {
         List<CommonResponse> manureGroupList = new List<CommonResponse>();
-        Error error = null;
-        try
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(APIURLHelper.FetchMannerManureGroupListAsyncAPI);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchMannerManureGroupListAsyncAPI);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            var manureGroups = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+            manureGroupList.AddRange(manureGroups);
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    var manureGroups = responseWrapper.Data.ToObject<List<CommonResponse>>();
-                    manureGroupList.AddRange(manureGroups);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
-            }
         }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (manureGroupList, error);
     }
-    public async Task<(List<ManureType>, Error)> FetchManureTypeList(int manureGroupId, int countryId)
+    public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
     {
         List<ManureType> manureTypeList = new List<ManureType>();
-        Error error = null;
-        try
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString()), HttpUtility.UrlEncode(countryId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, manureGroupId, countryId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var manureTypes = responseWrapper.Data.ToObject<List<ManureType>>();
-                    manureTypeList.AddRange(manureTypes);
-                    manureTypeList.OrderBy(m => m.SortOrder).ToList();
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                var manureTypes = responseWrapper?.Data?.ToObject<List<ManureType>>();
+                manureTypeList.AddRange(manureTypes);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (manureTypeList, error);
     }
-    public async Task<(CommonResponse, Error)> FetchManureGroupById(int manureGroupId)
+    public async Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId)
     {
-        CommonResponse manureGroup = new CommonResponse();
-        Error error = null;
-        try
+        CommonResponse? manureGroup = new CommonResponse();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureGroupByIdAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureGroupByIdAsyncAPI, manureGroupId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    manureGroup = responseWrapper.Data.ToObject<CommonResponse>();
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                manureGroup = responseWrapper?.Data?.ToObject<CommonResponse>();
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (manureGroup, error);
     }
 
-    public async Task<(ManureType, Error)> FetchManureTypeByManureTypeId(int manureTypeId)
+    public async Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId)
     {
-        ManureType manureType = new ManureType();
-        Error error = null;
-        try
+        ManureType? manureType = null;
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(manureTypeId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, manureTypeId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    manureType = responseWrapper.Data.ToObject<ManureType>();
-                    //manureTypeList.AddRange(manureTypes);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                manureType = responseWrapper?.Data?.ToObject<ManureType>();
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (manureType, error);
     }
 
-    public async Task<(List<ApplicationMethodResponse>, Error)> FetchApplicationMethodList(int fieldType, bool isLiquid)
+    public async Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid)
     {
         List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
-        Error error = null;
-        try
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodsByApplicableForAsyncAPI, HttpUtility.UrlEncode(isLiquid.ToString()), HttpUtility.UrlEncode(fieldType.ToString())));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodsByApplicableForAsyncAPI, isLiquid, fieldType));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var applicationMethods = responseWrapper.Data.ToObject<List<ApplicationMethodResponse>>();
-                    applicationMethodList.AddRange(applicationMethods);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                var applicationMethods = responseWrapper?.Data?.ToObject<List<ApplicationMethodResponse>>();
+                applicationMethodList.AddRange(applicationMethods);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (applicationMethodList, error);
     }
 
-    public async Task<(List<IncorporationMethodResponse>, Error)> FetchIncorporationMethodsByApplicationId(int appId, string? applicableFor)
+    public async Task<(List<IncorporationMethodResponse>, Error?)> FetchIncorporationMethodsByApplicationId(int appId, string? applicableFor)
     {
         List<IncorporationMethodResponse> incorporationMethods = new List<IncorporationMethodResponse>();
-        Error error = null;
-        try
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodsByApplicationIdAsyncAPI, HttpUtility.UrlEncode(appId.ToString()), applicableFor));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodsByApplicationIdAsyncAPI, appId, applicableFor));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var methods = responseWrapper.Data.ToObject<List<IncorporationMethodResponse>>();
-                    incorporationMethods.AddRange(methods);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                var methods = responseWrapper?.Data?.ToObject<List<IncorporationMethodResponse>>();
+                incorporationMethods.AddRange(methods);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (incorporationMethods, error);
     }
+
     public async Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor)
     {
         List<IncorprationDelaysResponse> incorporationDelays = new List<IncorprationDelaysResponse>();
@@ -437,7 +325,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, methodId, applicableFor));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, HttpUtility.UrlEncode(methodId.ToString()), HttpUtility.UrlEncode(applicableFor)));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -453,7 +341,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -480,7 +371,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodByIdAsyncAPI, Id));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -496,7 +387,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -523,14 +417,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodByIdAsyncAPI, Id));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationMethod != null
+                if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    incorporationMethod = responseWrapper.Data.name;//.IncorporationMethod.Name;
+                    incorporationMethod = responseWrapper.Data.name;
 
                 }
             }
@@ -539,7 +433,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -566,7 +463,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByIdAsyncAPI, Id));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -582,7 +479,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -628,7 +528,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -668,7 +571,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -695,7 +601,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(string.Format(APIURLHelper.FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI), new StringContent(jsonString, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(APIURLHelper.FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -710,7 +616,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -753,7 +662,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -781,7 +693,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMoisterTypeDefaultByApplicationDate, applicationDate));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMoisterTypeDefaultByApplicationDate, HttpUtility.UrlEncode(applicationDate.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -796,7 +708,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -840,7 +755,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -867,7 +785,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainTypeByIdAsyncAPI, rainTypeId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerRainTypeByIdAsyncAPI, HttpUtility.UrlEncode(rainTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -882,7 +800,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -926,7 +847,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -953,7 +877,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerWindspeedByIdAsyncAPI, windspeedId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerWindspeedByIdAsyncAPI, HttpUtility.UrlEncode(windspeedId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -968,7 +892,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1011,7 +938,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1038,7 +968,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerMoistureTypeByIdAsyncAPI, moisterTypeId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerMoistureTypeByIdAsyncAPI, HttpUtility.UrlEncode(moisterTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1053,7 +983,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1080,7 +1013,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1096,7 +1029,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1117,62 +1053,43 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
-        Error error = null;
+        Error? error = null;
         decimal totalN = 0;
         string fromdate = startDate.ToString("yyyy-MM-dd");
         string toDate = endDate.ToString("yyyy-MM-dd");
-        try
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        string url = APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI;
+
+        if (organicManureId.HasValue)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI;
+            url += $"&organicManureID={organicManureId.Value}";
+        }
 
-            if (organicManureId.HasValue)
+        url = string.Format(url, HttpUtility.UrlEncode(managementId.ToString()), HttpUtility.UrlEncode(fromdate.ToString()), HttpUtility.UrlEncode(toDate.ToString()), HttpUtility.UrlEncode(confirm.ToString()));
+        var response = await httpClient.GetAsync(url);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                url += $"&organicManureID={organicManureId.Value}";
+                totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
             }
-
-            url = string.Format(url, managementId, fromdate, toDate, confirm);
-            var response = await httpClient.GetAsync(url);
-            //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI, managementId, fromdate, toDate, confirm));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = new Error();
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
-            }
         }
-        catch (HttpRequestException hre)
-        {
-            if (error == null)
-            {
-                error = new Error();
-            }
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            if (error == null)
-            {
-                error = new Error();
-            }
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (totalN, error);
     }
 
@@ -1198,7 +1115,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1240,7 +1160,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1274,7 +1197,6 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    //manureTypeIds = responseWrapper.Data.manureTypeIds.ToObject<List<int>>();
                     manureTypeIds = responseWrapper.Data.ManureTypeIds.ToObject<List<int>>();
                 }
             }
@@ -1283,7 +1205,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1324,7 +1249,6 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
             url = string.Format(url, managementId, confirm);
             var response = await httpClient.GetAsync(url);
-            //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI, managementId, fertiliserId, confirm));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1338,9 +1262,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = new Error();
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1398,9 +1324,12 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = new Error();
+
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1448,9 +1377,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = new Error();
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1499,7 +1430,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1527,7 +1461,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.PostAsync(APIURLHelper.FetchMannerCalculateNutrientAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            
+
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1535,16 +1469,17 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
                     mannerCalculateNutrientResponse = responseWrapper.Data.ToObject<MannerCalculateNutrientResponse>();
-
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = new Error();
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1587,7 +1522,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1626,7 +1564,6 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
             url = string.Format(url, fieldId, fromdate, toDate, confirm, isGreenFoodCompost);
             var response = await httpClient.GetAsync(url);
-            //var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI, managementId, fromdate, toDate, confirm,isGreenFoodCompost, organicManureId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1690,7 +1627,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1732,7 +1672,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1765,7 +1708,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 Content = content
             };
-            var response = await httpClient.SendAsync(requestMessage); 
+            var response = await httpClient.SendAsync(requestMessage);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -1778,14 +1721,17 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre,hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
@@ -1845,7 +1791,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -1867,93 +1816,65 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
     public async Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData)
     {
-        Error error = new Error();
+        Error? error = new Error();
         List<OrganicManure> organicManures = new List<OrganicManure>();
-        try
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.PutAsync(APIURLHelper.UpdateOrganicManureAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateOrganicManureAsyncAPI), new StringContent(organicManureData, Encoding.UTF8, "application/json"));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            List<OrganicManure> organics = responseWrapper.Data.OrganicManure.ToObject<List<OrganicManure>>();
+            if (organics != null && organics.Count > 0)
             {
-                List<OrganicManure> organics = responseWrapper.Data.OrganicManure.ToObject<List<OrganicManure>>();
-                if (organics != null && organics.Count > 0)
-                {
-                    organicManures.AddRange(organics);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                organicManures.AddRange(organics);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
 
         return (organicManures, error);
     }
+
     public async Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID)
     {
-        Error error = null;
+        Error? error = null;
         decimal? totalN = null;
-        try
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOragnicManureAvailableNByManagementPeriodIDAPI, HttpUtility.UrlEncode(managementPeriodID.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchOragnicManureAvailableNByManagementPeriodIDAPI, managementPeriodID));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                totalN = responseWrapper?.Data?.TotalN;
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    totalN = responseWrapper.Data.TotalN;// != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = new Error();
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
-            }
         }
-        catch (HttpRequestException hre)
-        {
-            if (error == null)
-            {
-                error = new Error();
-            }
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            if (error == null)
-            {
-                error = new Error();
-            }
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return (totalN, error);
     }
 }

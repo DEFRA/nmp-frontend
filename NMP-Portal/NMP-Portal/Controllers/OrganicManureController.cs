@@ -2142,6 +2142,7 @@ namespace NMP.Portal.Controllers
                         orgManure.ApplicationMethodID = model.ApplicationMethod.Value;
                     }
                 }
+
                 (model.ApplicationMethodName, error) = await _organicManureLogic.FetchApplicationMethodById(model.ApplicationMethod.Value);
 
                 if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
@@ -2149,8 +2150,7 @@ namespace NMP.Portal.Controllers
                     if (manureTypeList.Count > 0)
                     {
                         string applicableFor = Resource.lblNull;
-                        List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                        var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
+                        List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));                        
 
                         (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureLogic.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableFor);
                         if (error == null && incorporationMethods.Count == 1)
@@ -2209,15 +2209,13 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    OrganicManureViewModel organicManureViewModel = new OrganicManureViewModel();
-                    if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
+                    OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
+                    if (organicManureViewModel== null)
                     {
-                        organicManureViewModel = HttpContext.Session.GetObjectFromJson<OrganicManureViewModel>(_organicManureSessionKey);
-                    }
-                    else
-                    {
-                        return RedirectToAction("FarmList", "Farm");
-                    }
+                        _logger.LogTrace("Organic Manure Controller : ApplicationMethod() action : OrganicManureViewModel is null in session");
+                        return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                    }                    
+
                     if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                     {
                         model.IncorporationDelay = null;
@@ -2271,38 +2269,34 @@ namespace NMP.Portal.Controllers
                 if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
-                    {
-                        (ManureType manureType, Error manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                        model.ManureType = manureType;
-
-                        if (error == null)
+                    {  
+                        if (error == null && farmManureTypeList.Count > 0)
                         {
-                            if (farmManureTypeList.Count > 0)
+                            farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
+                            if (farmManure != null)
                             {
-                                farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
-                                if (farmManure != null)
-                                {
-                                    model.ManureType.DryMatter = farmManure.DryMatter;
-                                    model.ManureType.TotalN = farmManure.TotalN;
-                                    model.ManureType.NH4N = farmManure.NH4N;
-                                    model.ManureType.Uric = farmManure.Uric;
-                                    model.ManureType.NO3N = farmManure.NO3N;
-                                    model.ManureType.P2O5 = farmManure.P2O5;
-                                    model.ManureType.K2O = farmManure.K2O;
-                                    model.ManureType.SO3 = farmManure.SO3;
-                                    model.ManureType.MgO = farmManure.MgO;
-                                    model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
-                                }
-                                else
-                                {
-                                    model.DefaultFarmManureValueDate = null;
-                                }
+                                model.ManureType.DryMatter = farmManure.DryMatter;
+                                model.ManureType.TotalN = farmManure.TotalN;
+                                model.ManureType.NH4N = farmManure.NH4N;
+                                model.ManureType.Uric = farmManure.Uric;
+                                model.ManureType.NO3N = farmManure.NO3N;
+                                model.ManureType.P2O5 = farmManure.P2O5;
+                                model.ManureType.K2O = farmManure.K2O;
+                                model.ManureType.SO3 = farmManure.SO3;
+                                model.ManureType.MgO = farmManure.MgO;
+                                model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
+                            }
+                            else
+                            {
+                                model.DefaultFarmManureValueDate = null;
                             }
                         }
-                        if (manureTypeError == null)
+
+                        (ManureType? manureType, Error? manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                        if (manureType != null && manureTypeError == null)
                         {
                             model.ManureType = manureType;
-                        }
+                        }                        
                         model.IsDefaultNutrient = true;
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                     }
@@ -2315,9 +2309,9 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    (ManureType manureType, Error manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                    (ManureType? manureType, Error? manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
 
-                    if (error == null && farmManureTypeList.Count > 0)//&&(string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || model.DefaultNutrientValue== Resource.lblYesUseTheseValues))
+                    if (error == null && farmManureTypeList.Count > 0)
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
                         if (model.IsDefaultValueChange)
@@ -9655,7 +9649,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Defoliation(OrganicManureViewModel model)
         {
             _logger.LogTrace($"OrganicManure Controller : Defoliation() post action called");
-            Error error = null;
+            Error? error = null;
             try
             {
                 if (model.DefoliationList[model.DefoliationCurrentCounter].Defoliation == null)
@@ -9928,94 +9922,12 @@ namespace NMP.Portal.Controllers
                         (ManagementPeriod managementPeriod, Error error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
                         if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                         {
-                            if (model.IsOrgManureNfieldLimitWarning)
-                            {
-                                WarningMessage warningMessage = new WarningMessage();
-                                warningMessage.FieldID = organicManure.FieldID ?? 0;
-                                warningMessage.CropID = managementPeriod.CropID ?? 0;
-                                warningMessage.JoiningID = null;
-                                warningMessage.WarningLevelID = model.NmaxWarningLevelID;
-                                warningMessage.WarningCodeID = model.NmaxWarningCodeID;
-                                warningMessage.Header = model.NmaxWarningHeader;
-                                warningMessage.Para1 = model.NmaxWarningPara1;
-                                warningMessage.Para2 = model.NmaxWarningPara2;
-                                warningMessage.Para3 = model.NmaxWarningPara3;
-                                warningMessages.Add(warningMessage);
-                            }
-                            if (model.IsNMaxLimitWarning)
-                            {
-                                WarningMessage warningMessage = new WarningMessage();
-
-                                warningMessage.FieldID = organicManure.FieldID ?? 0;
-                                warningMessage.CropID = managementPeriod.CropID ?? 0;
-                                warningMessage.JoiningID = null;
-                                warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
-                                warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
-                                warningMessage.Header = model.CropNmaxLimitWarningHeader;
-                                warningMessage.Para1 = model.CropNmaxLimitWarningPara1;
-                                warningMessage.Para2 = model.CropNmaxLimitWarningPara2;
-                                warningMessage.Para3 = model.CropNmaxLimitWarningPara3;
-                                warningMessages.Add(warningMessage);
-                            }
-
-                            if (model.IsClosedPeriodWarning)
-                            {
-                                WarningMessage warningMessage = new WarningMessage();
-                                warningMessage.FieldID = organicManure.FieldID ?? 0;
-                                warningMessage.CropID = managementPeriod.CropID ?? 0;
-                                warningMessage.JoiningID = null;
-                                warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
-                                warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
-                                warningMessage.Header = model.ClosedPeriodWarningHeader;
-                                warningMessage.Para1 = model.ClosedPeriodWarningPara1;
-                                warningMessage.Para2 = model.ClosedPeriodWarningPara2;
-                                warningMessage.Para3 = model.ClosedPeriodWarningPara3;
-                                warningMessages.Add(warningMessage);
-                            }
-                            if (model.IsEndClosedPeriodFebruaryWarning)
-                            {
-                                WarningMessage warningMessage = new WarningMessage();
-
-                                warningMessage.FieldID = organicManure.FieldID ?? 0;
-                                warningMessage.CropID = managementPeriod.CropID ?? 0;
-                                warningMessage.JoiningID = null;
-                                warningMessage.WarningLevelID = model.EndClosedPeriodEndFebWarningLevelID;
-                                warningMessage.WarningCodeID = model.EndClosedPeriodEndFebWarningCodeID;
-                                warningMessage.Header = model.EndClosedPeriodEndFebWarningHeader;
-                                warningMessage.Para1 = model.EndClosedPeriodEndFebWarningPara1;
-                                warningMessage.Para2 = model.EndClosedPeriodEndFebWarningPara2;
-                                warningMessage.Para3 = model.EndClosedPeriodEndFebWarningPara3;
-                                warningMessages.Add(warningMessage);
-                            }
-                            if (model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
-                            {
-                                WarningMessage warningMessage = new WarningMessage();
-
-                                warningMessage.FieldID = organicManure.FieldID ?? 0;
-                                warningMessage.CropID = managementPeriod.CropID ?? 0;
-                                warningMessage.JoiningID = null;
-                                warningMessage.WarningLevelID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID;
-                                warningMessage.WarningCodeID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID;
-                                warningMessage.Header = model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader;
-                                warningMessage.Para1 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1;
-                                warningMessage.Para2 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2;
-                                warningMessage.Para3 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3;
-                                warningMessages.Add(warningMessage);
-                            }
-                            if (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-                            {
-                                WarningMessage warningMessage = new WarningMessage();
-                                warningMessage.FieldID = organicManure.FieldID ?? 0;
-                                warningMessage.CropID = managementPeriod.CropID ?? 0;
-                                warningMessage.JoiningID = null;
-                                warningMessage.WarningLevelID = model.StartClosedPeriodEndFebWarningLevelID;
-                                warningMessage.WarningCodeID = model.StartClosedPeriodEndFebWarningCodeID;
-                                warningMessage.Header = model.StartClosedPeriodEndFebWarningHeader;
-                                warningMessage.Para1 = model.StartClosedPeriodEndFebWarningPara1;
-                                warningMessage.Para2 = model.StartClosedPeriodEndFebWarningPara2;
-                                warningMessage.Para3 = model.StartClosedPeriodEndFebWarningPara3;
-                                warningMessages.Add(warningMessage);
-                            }
+                            AddOrganicManureNfieldLimitWarning(model, warningMessages, organicManure, managementPeriod);
+                            AddNMaxLimitWarning(model, warningMessages, organicManure, managementPeriod);
+                            AddClosedPeriodWarning(model, warningMessages, organicManure, managementPeriod);
+                            AddEndClosedPeriodFebruaryWarning(model, warningMessages, organicManure, managementPeriod);
+                            AddEndClosedPeriodFebruaryExistWithinThreeWeeks(model, warningMessages, organicManure, managementPeriod);
+                            AddStartPeriodEndFebOrganicAppRateExceedMaxN150(model, warningMessages, organicManure, managementPeriod);
                         }
                     }
                 }
@@ -10025,6 +9937,115 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace(ex, "OrganicManure Controller : Exception in GetWarningMessages() method : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             }
             return warningMessages;
+        }
+
+        private static void AddStartPeriodEndFebOrganicAppRateExceedMaxN150(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.StartClosedPeriodEndFebWarningLevelID;
+                warningMessage.WarningCodeID = model.StartClosedPeriodEndFebWarningCodeID;
+                warningMessage.Header = model.StartClosedPeriodEndFebWarningHeader;
+                warningMessage.Para1 = model.StartClosedPeriodEndFebWarningPara1;
+                warningMessage.Para2 = model.StartClosedPeriodEndFebWarningPara2;
+                warningMessage.Para3 = model.StartClosedPeriodEndFebWarningPara3;
+                warningMessages.Add(warningMessage);
+            }
+        }
+
+        private static void AddEndClosedPeriodFebruaryExistWithinThreeWeeks(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID;
+                warningMessage.WarningCodeID = model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID;
+                warningMessage.Header = model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader;
+                warningMessage.Para1 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1;
+                warningMessage.Para2 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2;
+                warningMessage.Para3 = model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3;
+                warningMessages.Add(warningMessage);
+            }
+        }
+
+        private static void AddEndClosedPeriodFebruaryWarning(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsEndClosedPeriodFebruaryWarning)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.EndClosedPeriodEndFebWarningLevelID;
+                warningMessage.WarningCodeID = model.EndClosedPeriodEndFebWarningCodeID;
+                warningMessage.Header = model.EndClosedPeriodEndFebWarningHeader;
+                warningMessage.Para1 = model.EndClosedPeriodEndFebWarningPara1;
+                warningMessage.Para2 = model.EndClosedPeriodEndFebWarningPara2;
+                warningMessage.Para3 = model.EndClosedPeriodEndFebWarningPara3;
+                warningMessages.Add(warningMessage);
+            }
+        }
+
+        private static void AddNMaxLimitWarning(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsNMaxLimitWarning)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
+                warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
+                warningMessage.Header = model.CropNmaxLimitWarningHeader;
+                warningMessage.Para1 = model.CropNmaxLimitWarningPara1;
+                warningMessage.Para2 = model.CropNmaxLimitWarningPara2;
+                warningMessage.Para3 = model.CropNmaxLimitWarningPara3;
+                warningMessages.Add(warningMessage);
+            }
+        }
+
+        private static void AddClosedPeriodWarning(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsClosedPeriodWarning)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
+                warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
+                warningMessage.Header = model.ClosedPeriodWarningHeader;
+                warningMessage.Para1 = model.ClosedPeriodWarningPara1;
+                warningMessage.Para2 = model.ClosedPeriodWarningPara2;
+                warningMessage.Para3 = model.ClosedPeriodWarningPara3;
+                warningMessages.Add(warningMessage);
+            }
+        }
+
+        private static void AddOrganicManureNfieldLimitWarning(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsOrgManureNfieldLimitWarning)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.NmaxWarningLevelID;
+                warningMessage.WarningCodeID = model.NmaxWarningCodeID;
+                warningMessage.Header = model.NmaxWarningHeader;
+                warningMessage.Para1 = model.NmaxWarningPara1;
+                warningMessage.Para2 = model.NmaxWarningPara2;
+                warningMessage.Para3 = model.NmaxWarningPara3;
+                warningMessages.Add(warningMessage);
+            }
         }
 
         private async Task<(List<SelectListItem>, Error?)> GetDefoliationList(OrganicManureViewModel model)
@@ -10132,7 +10153,7 @@ namespace NMP.Portal.Controllers
         private async Task<(string?, Error?)> GetDefoliationName(OrganicManureViewModel model, int defoliation, int defoliationSequenceID)
         {
             string selectedDefoliation = string.Empty;
-            Error error = null;
+            Error? error = null;
             (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(defoliationSequenceID);
             if (error == null && defoliationSequence != null)
             {
@@ -10144,8 +10165,8 @@ namespace NMP.Portal.Controllers
                                                           .ToArray();
 
                     selectedDefoliation = (defoliation > 0 && defoliation <= defoliationParts.Length)
-             ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
-             : $"{defoliation}";
+                                         ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
+                                         : $"{defoliation}";
                     var parts = selectedDefoliation.Split('-');
                     if (parts.Length == 2)
                     {
@@ -10169,11 +10190,9 @@ namespace NMP.Portal.Controllers
         {
             if (!string.IsNullOrWhiteSpace(closedPeriod))
             {
-                int harvestYear = model.HarvestYear ?? 0;
-                int startYear = harvestYear;
-                int endYear = harvestYear + 1;
+                int harvestYear = model.HarvestYear ?? 0;                
                 string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                Regex regex = new Regex(pattern);
+                Regex regex = new Regex(pattern,RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
                 Match match = regex.Match(closedPeriod);
                 if (match.Success)
@@ -10196,22 +10215,21 @@ namespace NMP.Portal.Controllers
                     dtfi.Add(9, Resource.lblOctober);
                     dtfi.Add(10, Resource.lblNovember);
                     dtfi.Add(11, Resource.lblDecember);
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; 
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
                     if (startMonth <= endMonth)
                     {
-                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                        model.ClosedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay,00,00,00,DateTimeKind.Unspecified);
+                        model.ClosedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                     }
                     else if (startMonth >= endMonth)
                     {
-                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                        model.ClosedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
+                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+                        model.ClosedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                     }
                 }
-
             }
-            return model;
+            return await Task.FromResult(model);
         }
 
     }

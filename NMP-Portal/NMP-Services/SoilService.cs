@@ -6,6 +6,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -18,7 +19,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         Error error = null;
         string nutrientIndex = string.Empty;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchSoilNutrientIndexAsyncAPI, nutrientId, nutrientValue, methodologyId);
+        var requestUrl = string.Format(APIURLHelper.FetchSoilNutrientIndexAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(nutrientValue.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -45,7 +46,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
     {
         string soilType = string.Empty;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, soilTypeId);
+        var requestUrl = string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, HttpUtility.UrlEncode(soilTypeId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();

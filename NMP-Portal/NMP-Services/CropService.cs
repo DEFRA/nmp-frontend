@@ -5,228 +5,174 @@ using Newtonsoft.Json;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
-using NMP.Core.Attributes;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
 public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ICropService
 {
     private readonly ILogger<CropService> _logger = logger;
-
+    private const string _errorLogTemplate = "{Code} : {Message} : {Stack} : {Path}";
     public async Task<List<PotatoVarietyResponse>> FetchPotatoVarieties()
     {
-        List<PotatoVarietyResponse> potatoVarieties = new List<PotatoVarietyResponse>();
-        Error error = new Error();
-        try
+        List<PotatoVarietyResponse> potatoVarieties = [];
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(APIURLHelper.FetchPotatoVarietiesAsyncAPI);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchPotatoVarietiesAsyncAPI);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var potatoVarietyList = responseWrapper.Data.ToObject<List<PotatoVarietyResponse>>();
-                    potatoVarieties.AddRange(potatoVarietyList);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
+                var potatoVarietyList = responseWrapper?.Data?.ToObject<List<PotatoVarietyResponse>>();
+                potatoVarieties.AddRange(potatoVarietyList);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                Error? error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return potatoVarieties;
     }
     public async Task<int> FetchCropTypeByGroupId(int cropGroupId)
     {
         int cropTypeId = 0;
-        Error error = new Error();
-        try
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(APIURLHelper.FetchCropTypesAsyncAPI, HttpUtility.UrlEncode(cropGroupId.ToString()));
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchCropTypesAsyncAPI, cropGroupId);
-            var response = await httpClient.GetAsync(requestUrl);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                var cropTypeResponse = responseWrapper?.Data?.ToObject<List<CropTypeResponse>>();
+                if (cropTypeResponse != null)
                 {
-                    var cropTypeResponse = responseWrapper.Data.ToObject<List<CropTypeResponse>>();
-                    if (cropTypeResponse != null)
-                    {
-                        cropTypeId = cropTypeResponse[0].CropTypeId;
-                    }
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    cropTypeId = cropTypeResponse[0].CropTypeId;
                 }
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                Error? error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return cropTypeId;
     }
     public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId)
     {
         List<CropInfoOneResponse> cropInfoOneList = new List<CropInfoOneResponse>();
-        Error error = new Error();
-        try
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(APIURLHelper.FetchCropInfoOneByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString()));
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchCropInfoOneByCropTypeIdAsyncAPI, cropTypeId);
-            var response = await httpClient.GetAsync(requestUrl);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var cropInfoOneResponses = responseWrapper.Data.ToObject<List<CropInfoOneResponse>>();
-                    cropInfoOneList.AddRange(cropInfoOneResponses);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
+                var cropInfoOneResponses = responseWrapper?.Data?.ToObject<List<CropInfoOneResponse>>();
+                cropInfoOneList.AddRange(cropInfoOneResponses);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre,hre.Message);
-            throw;
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                Error? error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw;
-        }
+
         return cropInfoOneList;
     }
     public async Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId()
     {
         List<CropInfoTwoResponse> cropInfoTwoList = new List<CropInfoTwoResponse>();
-        Error error = new Error();
-        try
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(APIURLHelper.FetchCropInfoTwoByCropTypeIdAsyncAPI);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = await GetNMPAPIClient();            
-            var response = await httpClient.GetAsync(APIURLHelper.FetchCropInfoTwoByCropTypeIdAsyncAPI);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var cropInfoTwoResponses = responseWrapper.Data.ToObject<List<CropInfoTwoResponse>>();
-                    cropInfoTwoList.AddRange(cropInfoTwoResponses);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
+                var cropInfoTwoResponses = responseWrapper?.Data?.ToObject<List<CropInfoTwoResponse>>();
+                cropInfoTwoList.AddRange(cropInfoTwoResponses);
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                Error? error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
+
         return cropInfoTwoList;
     }
-    public async Task<(bool, Error)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
+    public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         string jsonData = JsonConvert.SerializeObject(cropData);
         bool success = false;
-        Error? error = new Error();
-        try
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.PostAsync(APIURLHelper.AddCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(APIURLHelper.AddCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            var cropResponsss = responseWrapper?.Data?.Recommendations;
+            if (cropResponsss != null)
             {
-                var cropResponsss = responseWrapper?.Data?.Recommendations;
-                if(cropResponsss!=null)
-                {
-                    success = true;
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
+                success = true;
             }
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
         }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-        }
+
         return (success, error);
     }
 
@@ -237,23 +183,23 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchPlanSummaryByFarmIdAsyncAPI, farmId,type));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchPlanSummaryByFarmIdAsyncAPI, HttpUtility.UrlEncode(farmId.ToString()), HttpUtility.UrlEncode(type.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var planSummaryResponses = responseWrapper.Data.ToObject<List<PlanSummaryResponse>>();
+                    var planSummaryResponses = responseWrapper?.Data?.ToObject<List<PlanSummaryResponse>>();
                     planSummaryList.AddRange(planSummaryResponses);
                 }
-            }              
+            }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -279,14 +225,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchHarvestYearPlansByFarmIdAsyncAPI, harvestYear,farmId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchHarvestYearPlansByFarmIdAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var harvestYearPlanResponses = responseWrapper.Data.ToObject<List<HarvestYearPlanResponse>>();
+                    var harvestYearPlanResponses = responseWrapper?.Data?.ToObject<List<HarvestYearPlanResponse>>();
                     harvestYearPlanList.AddRange(harvestYearPlanResponses);
                 }
             }
@@ -295,7 +241,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -320,7 +266,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRecommendationByFieldIdAndYearAsyncAPI, fieldId, harvestYear));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchRecommendationByFieldIdAndYearAsyncAPI, HttpUtility.UrlEncode(fieldId.ToString()), HttpUtility.UrlEncode(harvestYear.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -336,13 +282,13 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
@@ -357,14 +303,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (recommendationList, error);
     }
 
-    public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId,int cropInfo1Id)
+    public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id)
     {
         Error error = null;
         string cropInfo1Name = string.Empty;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsyncAPI, cropTypeId, cropInfo1Id));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString()), HttpUtility.UrlEncode(cropInfo1Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -376,7 +322,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -401,7 +347,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo2NameByCropInfo2IdAsyncAPI,cropInfo2Id));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfo2NameByCropInfo2IdAsyncAPI, HttpUtility.UrlEncode(cropInfo2Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -413,7 +359,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -438,7 +384,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropsByFieldIdAsyncAPI, fieldId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropsByFieldIdAsyncAPI, HttpUtility.UrlEncode(fieldId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -454,7 +400,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -480,7 +426,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -496,7 +442,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -512,17 +458,17 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
-        return defaultYield??0;
+        return defaultYield ?? 0;
     }
 
     public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId)
     {
-        List<int> secondCropList=new List<int>();
+        List<int> secondCropList = new List<int>();
         Error error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSecondCropListByFirstCropIdAsyncAPI, firstCropTypeId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSecondCropListByFirstCropIdAsyncAPI, HttpUtility.UrlEncode(firstCropTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -538,7 +484,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -563,7 +509,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropsOrganicinorganicdetailsByYearFarmIdAsyncAPI, harvestYear, farmId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropsOrganicinorganicdetailsByYearFarmIdAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -578,7 +524,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -604,7 +550,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfoOneQuestionByCropTypeIdAsyncAPI, cropTypeId));
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropInfoOneQuestionByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -619,7 +565,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -644,7 +590,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchManagementperiodByIdAsyncAPI, id);
+            var requestUrl = string.Format(APIURLHelper.FetchManagementperiodByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -661,7 +607,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -686,7 +632,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchCropByIdAsyncAPI, id);
+            var requestUrl = string.Format(APIURLHelper.FetchCropByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -703,7 +649,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -731,12 +677,12 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             HttpClient httpClient = await GetNMPAPIClient();
             var jsonContent = JsonConvert.SerializeObject(cropIdsRequest);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            var url = string.Format(APIURLHelper.DeleteCropPlanByIdsAPI, "");            
+            var url = string.Format(APIURLHelper.DeleteCropPlanByIdsAPI, "");
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
                 Content = content
             };
-            
+
             var response = await httpClient.SendAsync(requestMessage);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -750,7 +696,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -766,19 +712,19 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         return (message, error);
     }
-    public async Task<(bool,Error)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId)
+    public async Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId)
     {
         bool isCropsGroupNameExist = false;
         Error error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchCropGroupNameByCropIdGroupNameAndYearAPI, cropIds, cropGroupName, year, farmId);
+            var requestUrl = string.Format(APIURLHelper.FetchCropGroupNameByCropIdGroupNameAndYearAPI, HttpUtility.UrlEncode(cropIds), HttpUtility.UrlEncode(cropGroupName), HttpUtility.UrlEncode(year.ToString()), HttpUtility.UrlEncode(farmId.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null&&responseWrapper.Data == true)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data == true)
             {
                 isCropsGroupNameExist = true;
             }
@@ -787,7 +733,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
 
@@ -803,7 +749,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             _logger.LogError(ex, ex.Message);
         }
 
-        return (isCropsGroupNameExist,error);
+        return (isCropsGroupNameExist, error);
     }
     public async Task<(List<Crop>, Error)> UpdateCrop(string cropData)
     {
@@ -812,7 +758,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateCropAPI , new StringContent(cropData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(APIURLHelper.UpdateCropAPI, new StringContent(cropData, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -828,9 +774,9 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
-                {             
+                {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -863,7 +809,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var grassSeasonsList = responseWrapper.Data.ToObject<List<GrassSeasonResponse>>();
+                    var grassSeasonsList = responseWrapper?.Data?.ToObject<List<GrassSeasonResponse>>();
                     grassSeasons.AddRange(grassSeasonsList);
                 }
             }
@@ -872,7 +818,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -914,7 +860,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var grassGrowthClassList = responseWrapper.Data.ToObject<List<GrassGrowthClassResponse>>();
+                    var grassGrowthClassList = responseWrapper?.Data?.ToObject<List<GrassGrowthClassResponse>>();
                     grassGrowthClasses.AddRange(grassGrowthClassList);
                 }
             }
@@ -923,7 +869,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -947,7 +893,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchManagementPeriodByCropIdAsyncAPI, cropId, isShortSummary);
+            var requestUrl = string.Format(APIURLHelper.FetchManagementPeriodByCropIdAsyncAPI, HttpUtility.UrlEncode(cropId.ToString()), HttpUtility.UrlEncode(isShortSummary.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -964,7 +910,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -983,21 +929,21 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (managementPeriodList, error);
     }
     //grass
-    public async Task<(List<DefoliationSequenceResponse>,Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut,bool isNewSward)
+    public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward)
     {
         Error error = null;
         List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, swardTypeId, swardManagementId, numberOfCut, isNewSward);
+            var requestUrl = string.Format(APIURLHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, HttpUtility.UrlEncode(swardTypeId.ToString()), HttpUtility.UrlEncode(swardManagementId.ToString()), HttpUtility.UrlEncode(numberOfCut.ToString()), HttpUtility.UrlEncode(isNewSward.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
             {
-                var defoliationSequenceList = responseWrapper.Data.ToObject<List<DefoliationSequenceResponse>>();
+                var defoliationSequenceList = responseWrapper?.Data?.ToObject<List<DefoliationSequenceResponse>>();
                 defoliationSequenceResponses.AddRange(defoliationSequenceList);
             }
             else
@@ -1005,7 +951,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1021,24 +967,24 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
-        return (defoliationSequenceResponses,error);
+        return (defoliationSequenceResponses, error);
     }
 
-    public async Task<(List<PotentialCutResponse>,Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId)
+    public async Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId)
     {
         Error error = null;
         List<PotentialCutResponse> potentialCuts = new List<PotentialCutResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsyncAPI, swardTypeId, swardManagementId);
+            var requestUrl = string.Format(APIURLHelper.FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsyncAPI, HttpUtility.UrlEncode(swardTypeId.ToString()), HttpUtility.UrlEncode(swardManagementId.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                var potentialCutList = responseWrapper.Data.ToObject<List<PotentialCutResponse>>();
+                var potentialCutList = responseWrapper?.Data?.ToObject<List<PotentialCutResponse>>();
                 potentialCuts.AddRange(potentialCutList);
             }
             else
@@ -1046,7 +992,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1062,7 +1008,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
-        return (potentialCuts,error);
+        return (potentialCuts, error);
     }
 
     public async Task<(List<SwardManagementResponse>, Error)> FetchSwardManagements()
@@ -1080,7 +1026,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var swardManagementList = responseWrapper.Data.ToObject<List<SwardManagementResponse>>();
+                    var swardManagementList = responseWrapper?.Data?.ToObject<List<SwardManagementResponse>>();
                     swardManagementResponses.AddRange(swardManagementList);
                 }
             }
@@ -1089,7 +1035,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1123,7 +1069,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var swardTypeResponseList = responseWrapper.Data.ToObject<List<SwardTypeResponse>>();
+                    var swardTypeResponseList = responseWrapper?.Data?.ToObject<List<SwardTypeResponse>>();
                     swardTypeResponses.AddRange(swardTypeResponseList);
                 }
             }
@@ -1132,7 +1078,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1153,44 +1099,34 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
     public async Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId)
     {
-        Error error = null;
+        Error? error = null;
         List<YieldRangesEnglandAndWalesResponse> yieldRanges = new List<YieldRangesEnglandAndWalesResponse>();
-        try
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(APIURLHelper.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsyncAPI, HttpUtility.UrlEncode(sequenceId.ToString()), HttpUtility.UrlEncode(grassGrowthClassId.ToString()));
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsyncAPI, sequenceId, grassGrowthClassId);
-            var response = await httpClient.GetAsync(requestUrl);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            var yieldRangesList = responseWrapper?.Data?.ToObject<List<YieldRangesEnglandAndWalesResponse>>();
+            yieldRanges.AddRange(yieldRangesList);
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
             {
-                var yieldRangesList = responseWrapper.Data.ToObject<List<YieldRangesEnglandAndWalesResponse>>();
-                yieldRanges.AddRange(yieldRangesList);
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
-        catch (HttpRequestException hre)
-        {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (yieldRanges,error);
+
+        return (yieldRanges, error);
     }
+
     public async Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId)
     {
         Error error = null;
@@ -1198,21 +1134,21 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchDefoliationSequencesByIdAsyncAPI, defoliationId);
+            var requestUrl = string.Format(APIURLHelper.FetchDefoliationSequencesByIdAsyncAPI, HttpUtility.UrlEncode(defoliationId.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
             {
-                defoliationSequenceResponse = responseWrapper.Data.ToObject<DefoliationSequenceResponse>();                    
+                defoliationSequenceResponse = responseWrapper.Data.ToObject<DefoliationSequenceResponse>();
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1238,7 +1174,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchSwardManagementBySwardManagementIdAsyncAPI, swardManagementId);
+            var requestUrl = string.Format(APIURLHelper.FetchSwardManagementBySwardManagementIdAsyncAPI, HttpUtility.UrlEncode(swardManagementId.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -1252,7 +1188,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1277,14 +1213,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchSwardManagementBySwardTypeIdAsyncAPI, swardTypeId);
+            var requestUrl = string.Format(APIURLHelper.FetchSwardManagementBySwardTypeIdAsyncAPI, HttpUtility.UrlEncode(swardTypeId.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+            if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper?.Data != null)
             {
-                swardManagementResponse = responseWrapper.Data.ToObject<List<SwardManagementResponse>>();
+                swardManagementResponse = responseWrapper?.Data?.ToObject<List<SwardManagementResponse>>();
             }
             else
             {
@@ -1292,7 +1228,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 {
                     error = new Error();
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1300,7 +1236,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre,hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
@@ -1320,7 +1256,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchSwardTypeBySwardTypeIdAsyncAPI, swardTypeId);
+            var requestUrl = string.Format(APIURLHelper.FetchSwardTypeBySwardTypeIdAsyncAPI, HttpUtility.UrlEncode(swardTypeId.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -1333,7 +1269,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1372,7 +1308,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 {
                     error = new Error();
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1427,7 +1363,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -1464,14 +1400,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre,hre.Message);
+            _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
@@ -1487,7 +1423,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(APIURLHelper.FetchCropPlanByFieldIdAndYearAsyncAPI, fieldId, year);
+            var requestUrl = string.Format(APIURLHelper.FetchCropPlanByFieldIdAndYearAsyncAPI, HttpUtility.UrlEncode(fieldId.ToString()), HttpUtility.UrlEncode(year.ToString()));
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -1507,22 +1443,22 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                     error = responseWrapper?.Error?.ToObject<Error>();
                     if (error != null)
                     {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                     }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
             error ??= new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            _logger.LogError(ex, ex.Message);
         }
         return (crops, error);
     }

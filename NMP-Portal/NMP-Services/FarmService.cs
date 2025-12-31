@@ -105,7 +105,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            JObject farmDataJObject = responseWrapper.Data["Farm"] as JObject;
+            JObject? farmDataJObject = responseWrapper.Data["Farm"] as JObject;
             if (farmDataJObject != null)
             {
                 farm = farmDataJObject.ToObject<Farm>();
@@ -178,7 +178,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
             {
 
-                JObject farmDataJObject = responseWrapper.Data["Farm"] as JObject;
+                JObject? farmDataJObject = responseWrapper.Data["Farm"] as JObject;
                 if (farmData != null)
                 {
                     farm = farmDataJObject.ToObject<Farm>();
@@ -245,7 +245,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            List<Country> countries = responseWrapper.Data.Countries.ToObject<List<Country>>();
+            List<Country>? countries = responseWrapper?.Data?.Countries.ToObject<List<Country>>();
             if (countries != null && countries.Count > 0)
             {
                 countryList.AddRange(countries);
@@ -255,7 +255,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         {
             if (responseWrapper != null && responseWrapper.Error != null)
             {
-                error = responseWrapper.Error.ToObject<Error>();
+                error = responseWrapper?.Error?.ToObject<Error>();
                 if (error != null)
                 {
                     _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
@@ -283,7 +283,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         {
             if (responseWrapper != null && responseWrapper.Error != null)
             {
-                error = responseWrapper.Error.ToObject<Error>();
+                error = responseWrapper?.Error?.ToObject<Error>();
                 if (error != null)
                 {
                     _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
@@ -325,7 +325,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
         ExcessRainfalls excessRainfalls = null;
-        Error error = new Error();
+        Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
         string url = string.Empty;
@@ -342,15 +342,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
         {
-
-            JObject excessRainfallObj = responseWrapper?.Data["ExcessRainfall"] as JObject;
+            JObject? excessRainfallObj = responseWrapper?.Data["ExcessRainfall"] as JObject;
             if (excessRainfallObj != null)
             {
                 excessRainfalls = excessRainfallObj.ToObject<ExcessRainfalls>();
             }
-
         }
         else
         {
@@ -368,8 +366,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id)
     {
         CommonResponse excessWinterRainfallOption = new CommonResponse();
-        Error error = new Error();
-
+        Error? error = new Error();
         HttpClient httpClient = await GetNMPAPIClient();
         string url = string.Format(APIURLHelper.FetchExcessWinterRainfallOptionByIdAPI, id);
         var response = await httpClient.GetAsync(url);
@@ -379,7 +376,6 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
             excessWinterRainfallOption = responseWrapper.Data.records.ToObject<CommonResponse>();
-
         }
         else
         {
