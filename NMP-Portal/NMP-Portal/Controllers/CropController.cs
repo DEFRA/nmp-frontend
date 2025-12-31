@@ -3363,10 +3363,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedFieldName = _cropDataProtector.Protect(m.Field.ToString()));
                                 foreach (var organic in harvestYearPlans.OrganicManureList)
                                 {
-                                    (ManureType manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
-                                    if (error == null)
+                                    (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
+                                    if (error == null && manureType != null)
                                     {
-                                        organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+                                        organic.RateUnit = manureType.IsLiquid.HasValue && manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
                                     }
                                     else
                                     {
@@ -4106,8 +4106,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     {
                                         foreach (var item in recData.OrganicManures)
                                         {
-                                            (ManureType manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
-                                            if (error == null)
+                                            (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
+                                            if (error == null && manureType != null)
                                             {
                                                 var orgManure = new OrganicManureDataViewModel
                                                 {
