@@ -6938,6 +6938,7 @@ namespace NMP.Portal.Controllers
 
             if (isWithinClosedPeriod)
             {
+                //warning excel sheet row no. 10
                 WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
                     model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriod.ToString());
                 model.ClosedPeriodWarningHeader = warning.Header;
@@ -7065,6 +7066,7 @@ namespace NMP.Portal.Controllers
                 bool isPoultryManure = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
                 if (isSlurry || isPoultryManure)
                 {
+                    //warning excel sheet row no. 21
                     model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
                     WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
                         model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.AllowWeeksBetweenSlurryPoultryApplications.ToString());

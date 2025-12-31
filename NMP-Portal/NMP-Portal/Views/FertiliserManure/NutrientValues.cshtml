@@ -159,6 +159,14 @@
                         </govuk-notification-banner-title>
                         @if (trueWarningCount == 1)
                         {
+                            @if (Model.IsClosedPeriodWarning = true)
+                            {
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.ClosedPeriodWarningPara1
+                                </p>
+                                <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+                            }
+
                             @if (Model.IsNitrogenExceedWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
                             {
                                 @TempData["NitrogenExceedMessageTitle"]
@@ -174,13 +182,7 @@
                                     <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
                                 }
                             }
-                            @if (Model.IsClosedPeriodWarning = true)
-                            {
-                                <p class="govuk-notification-banner__heading">
-                                    @Model.ClosedPeriodWarningPara1
-                                </p>
-                                <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
-                            }
+
                         }
                         @if (trueWarningCount > 1)
                         {
@@ -196,13 +198,13 @@
                                 }
                             </p>
                             <ul class="govuk-list govuk-list--bullet">
-                                @if (Model.IsNitrogenExceedWarning)
-                                {
-                                    <li>@Model.ClosedPeriodNitrogenExceedWarningPara1</li>
-                                }
                                 @if (Model.IsClosedPeriodWarning)
                                 {
                                     <li>@Model.ClosedPeriodWarningPara1</li>
+                                }
+                                @if (Model.IsNitrogenExceedWarning)
+                                {
+                                    <li>@Model.ClosedPeriodNitrogenExceedWarningPara1</li>
                                 }
                             </ul>
                             <govuk-details>
@@ -218,17 +220,16 @@
                                     }
                                 </govuk-details-summary>
                                 <govuk-details-text>
-                                    @if (Model.IsNitrogenExceedWarning)
-                                    {
-                                        <h2 class="govuk-heading-s">@Model.ClosedPeriodNitrogenExceedWarningPara1</h2>
-                                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
-                                    }
                                     @if (Model.IsClosedPeriodWarning)
                                     {
                                         <h2 class="govuk-heading-s">@Model.ClosedPeriodWarningPara1</h2>
                                         <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
                                     }
-                                    
+                                    @if (Model.IsNitrogenExceedWarning)
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.ClosedPeriodNitrogenExceedWarningPara1</h2>
+                                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                    }
                                 </govuk-details-text>
                             </govuk-details>
                             @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
