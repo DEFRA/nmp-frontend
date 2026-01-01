@@ -940,12 +940,12 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public IActionResult CheckAnswer(string id, string? q)
         {
-            _logger.LogTrace("Farm Controller : CheckAnswer({0}) action called", q);
+            _logger.LogTrace("Farm Controller : CheckAnswer({Q}) action called", q);
             FarmViewModel? model = GetFarmFromSession();
 
             if (model == null)
             {
-                _logger.LogError("Farm Controller : Session not found in CheckAnswer({0}) action", q);
+                _logger.LogError("Farm Controller : Session not found in CheckAnswer({Q}) action", q);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
@@ -985,56 +985,57 @@ namespace NMP.Portal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
-        public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
+        public async Task<IActionResult> CheckAnswer(FarmViewModel model)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
+            
             try
-            {
+            {  
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-                int isAllFieldsAbove300 = farm.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
-                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
+                int isAllFieldsAbove300 = model.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
+                model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
 #pragma warning disable CS8604 // Possible null reference argument.
                 Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
 #pragma warning restore CS8604 // Possible null reference argument.
 
-                if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
+                if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
                 {
-                    farm.ClimateDataPostCode = farm.Postcode;
+                    model.ClimateDataPostCode = model.Postcode;
                 }
                 var farmData = new FarmData
                 {
                     Farm = new Farm()
                     {
-                        Name = farm.Name,
-                        Address1 = farm.Address1,
-                        Address2 = farm.Address2,
-                        Address3 = farm.Address3,
-                        Address4 = farm.Address4,
-                        Postcode = farm.Postcode,
-                        CPH = farm.CPH,
-                        FarmerName = farm.FarmerName,
-                        BusinessName = farm.BusinessName,
-                        SBI = farm.SBI,
-                        STD = farm.STD,
-                        Telephone = farm.Telephone,
-                        Mobile = farm.Mobile,
-                        Email = farm.Email,
-                        Rainfall = farm.Rainfall,
+                        Name = model.Name,
+                        Address1 = model.Address1,
+                        Address2 = model.Address2,
+                        Address3 = model.Address3,
+                        Address4 = model.Address4,
+                        Postcode = model.Postcode,
+                        CPH = model.CPH,
+                        FarmerName = model.FarmerName,
+                        BusinessName = model.BusinessName,
+                        SBI = model.SBI,
+                        STD = model.STD,
+                        Telephone = model.Telephone,
+                        Mobile = model.Mobile,
+                        Email = model.Email,
+                        Rainfall = model.Rainfall,
                         OrganisationID = organisationId,
-                        TotalFarmArea = farm.TotalFarmArea,
-                        AverageAltitude = farm.AverageAltitude,
-                        RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
-                        MetricUnits = farm.MetricUnits,
-                        EnglishRules = farm.EnglishRules,
-                        NVZFields = farm.NVZFields,
-                        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        CountryID = farm.CountryID,
-                        ClimateDataPostCode = farm.ClimateDataPostCode,
+                        TotalFarmArea = model.TotalFarmArea,
+                        AverageAltitude = model.AverageAltitude,
+                        RegisteredOrganicProducer = model.RegisteredOrganicProducer,
+                        MetricUnits = model.MetricUnits,
+                        EnglishRules = model.EnglishRules,
+                        NVZFields = model.NVZFields,
+                        FieldsAbove300SeaLevel = model.FieldsAbove300SeaLevel,
+                        CountryID = model.CountryID,
+                        ClimateDataPostCode = model.ClimateDataPostCode,
                         CreatedByID = userId,
                         CreatedOn = System.DateTime.Now,
-                        ModifiedByID = farm.ModifiedByID,
-                        ModifiedOn = farm.ModifiedOn
+                        ModifiedByID = model.ModifiedByID,
+                        ModifiedOn = model.ModifiedOn
                     },
                     UserID = userId,
                     RoleID = 2
@@ -1045,7 +1046,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
-                    return View(farm);
+                    return View(model);
                 }
                 string success = _dataProtector.Protect("true");
                 farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());

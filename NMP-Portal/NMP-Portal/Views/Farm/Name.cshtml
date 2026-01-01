@@ -5,55 +5,28 @@
 @{
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = 1;
 }
 
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmList")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 
-
-
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">        
-       @*  <h1 class="govuk-heading-l">@Resource.lblWhatIsTheFarmName</h1>
-        <p class="govuk-body">@Resource.lblIfYouhaveMoreThanOneHolding</p> *@
-
+    <div class="govuk-grid-column-two-thirds">
         <form asp-action="Name" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
-
-            <div hidden="true">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"/>
-            @if (Model != null)
-            {
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-            }
-            </div>
-                <govuk-input  asp-for="@Model.Name">                    
-                    <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
-                    <govuk-input-hint>@Resource.lblIfYouhaveMoreThanOneHolding</govuk-input-hint>                    
-                </govuk-input>
+            @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
+            <govuk-input asp-for="@Model.Name">
+                <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
+                <govuk-input-hint>@Resource.lblIfYouhaveMoreThanOneHolding</govuk-input-hint>
+            </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            @if (Model!=null&&(Model.IsCheckAnswer))
+            @if (Model != null && (Model.IsCheckAnswer))
             {
                 <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
             }
