@@ -301,7 +301,8 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        isFieldExist = responseWrapper?.Data!=null? responseWrapper?.Data["exists"]:false;
+        isFieldExist = responseWrapper?.Data?["exists"] ?? false;
+
         return isFieldExist;
     }
 
