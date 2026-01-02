@@ -16,30 +16,37 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
     public async Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset)
     {
         List<AddressLookupResponse> addresses = new();
-        HttpClient httpClient = await GetNMPAPIClient();
-        var requisteUrl = string.Format(APIURLHelper.AddressLookupAPI, HttpUtility.UrlEncode(postcode), HttpUtility.UrlEncode(offset.ToString()));
-        var response = await httpClient.GetAsync(requisteUrl);
-        response.EnsureSuccessStatusCode();
-        if (response.IsSuccessStatusCode)
-        {            
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var requisteUrl = string.Format(APIURLHelper.AddressLookupAPI, HttpUtility.UrlEncode(postcode), HttpUtility.UrlEncode(offset.ToString()));
+            var response = await httpClient.GetAsync(requisteUrl);
+            response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
             {
-                AddressLookupResponseWrapper? addressLookupResponseWrapper = responseWrapper?.Data?.ToObject<AddressLookupResponseWrapper>();
-                if (addressLookupResponseWrapper != null && addressLookupResponseWrapper.Results != null)
+                string result = await response.Content.ReadAsStringAsync();
+                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
                 {
-                    addresses.AddRange(addressLookupResponseWrapper.Results);
+                    AddressLookupResponseWrapper? addressLookupResponseWrapper = responseWrapper?.Data?.ToObject<AddressLookupResponseWrapper>();
+                    if (addressLookupResponseWrapper != null && addressLookupResponseWrapper.Results != null)
+                    {
+                        addresses.AddRange(addressLookupResponseWrapper.Results);
+                    }
+                }
+                else
+                {
+                    if (responseWrapper != null && responseWrapper.Error != null)
+                    {
+                        Error? error = responseWrapper?.Error?.ToObject<Error>();
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
+                    }
                 }
             }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    Error? error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
-                }
-            }
+        }
+        catch(HttpRequestException hre)
+        {
+            _logger.LogError("{Message} : {StackTrace}", hre?.Message, hre?.StackTrace);
         }
 
         return addresses;
