@@ -2545,7 +2545,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.ID = decrptedFieldId;
                 model.isEnglishRules = farm.EnglishRules;
                 model.SoilOverChalk = field.SoilOverChalk;
-
+                model.FarmID =Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;
                 model.FarmName = farm.Name;
                 if (farm != null)
