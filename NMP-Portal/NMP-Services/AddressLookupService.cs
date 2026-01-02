@@ -44,9 +44,9 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
                 }
             }
         }
-        catch(HttpRequestException)
-        { 
-        
+        catch(HttpRequestException hre)
+        {
+            _logger.LogError("{Message} : {StackTrace}", hre?.Message, hre?.StackTrace);
         }
 
         return addresses;
