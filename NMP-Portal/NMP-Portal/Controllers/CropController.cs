@@ -3122,7 +3122,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 Crops = cropEntries
             };
             (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
-            if (error.Message == null && success)
+            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && success)
             {
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 RemoveCropSession();
