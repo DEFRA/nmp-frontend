@@ -72,7 +72,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Organic Manure Controller : FieldGroup({Q}, {R}, {S}) action called", q, r, s);
 
-            var model = GetOrganicManureFromSession() ?? new OrganicManureViewModel();
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
 
             try
             {
@@ -82,12 +82,20 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.InternalServerError);
                 }
 
-                await InitializeModelAsync(q, r, model);
+                if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
+                {
+                    model = await InitializeModelAsync(q, r, model);
+                }
 
-                if (!string.IsNullOrWhiteSpace(s))
-                    return await HandleSpecificFieldSelectionAsync(q, r, s, model);
+                if (model != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(s))
+                    {
+                        return await HandleSpecificFieldSelectionAsync(q, r, s, model);
+                    }
 
-                await LoadCropTypeSelectionUIAsync(model);
+                    await LoadCropTypeSelectionUIAsync(model);
+                }
             }
             catch (Exception ex)
             {
@@ -98,37 +106,36 @@ namespace NMP.Portal.Controllers
             return FinalizeAndReturnView(model, s);
         }
 
-        private async Task<bool> ValidateQueryParametersAsync(string q, string r, OrganicManureViewModel model)
+        private async Task<bool> ValidateQueryParametersAsync(string q, string r, OrganicManureViewModel? model)
         {
-            if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+            if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r) && model == null)
             {
-                return false;
+                return await Task.FromResult(false);
             }
 
-            if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
-            {
-                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
-                model.EncryptedFarmId = q;
-                model.EncryptedHarvestYear = r;
-            }
-
-            return true;
+            return await Task.FromResult(true);
         }
 
-        private async Task InitializeModelAsync(string q, string r, OrganicManureViewModel model)
+        private async Task<OrganicManureViewModel> InitializeModelAsync(string q, string r, OrganicManureViewModel? model)
         {
+
+            model = new OrganicManureViewModel();
+            model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+            model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+            model.EncryptedFarmId = q;
+            model.EncryptedHarvestYear = r;
             (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["FieldGroupError"] = error.Message;
-                return;
+                return model;
             }
-
             model.FarmName = farm.Name;
             model.IsEnglishRules = farm.EnglishRules;
             model.FarmCountryId = farm.CountryID;
+
             SetOrganicManureToSession(model);
+            return model;
         }
 
         private async Task<IActionResult> HandleSpecificFieldSelectionAsync(string q, string r, string s, OrganicManureViewModel model)
@@ -423,7 +430,8 @@ namespace NMP.Portal.Controllers
                                         if (!string.IsNullOrWhiteSpace(error.Message))
                                         {
                                             TempData["FieldGroupError"] = error.Message;
-                                            return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                                            //return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                                            return RedirectToAction("FieldGroup");
                                         }
 
                                         if (cropList.Count > 0)
@@ -980,7 +988,8 @@ namespace NMP.Portal.Controllers
                         if (!string.IsNullOrWhiteSpace(error.Message))
                         {
                             TempData["FieldGroupError"] = error.Message;
-                            return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                            //return RedirectToAction("FieldGroup", new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                            return RedirectToAction("FieldGroup");
                         }
 
                         if (cropList.Count > 0)
@@ -2150,7 +2159,7 @@ namespace NMP.Portal.Controllers
                     if (manureTypeList.Count > 0)
                     {
                         string applicableFor = Resource.lblNull;
-                        List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));                        
+                        List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
 
                         (List<IncorporationMethodResponse> incorporationMethods, error) = await _organicManureLogic.FetchIncorporationMethodsByApplicationId(model.ApplicationMethod.Value, applicableFor);
                         if (error == null && incorporationMethods.Count == 1)
@@ -2210,11 +2219,11 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
-                    if (organicManureViewModel== null)
+                    if (organicManureViewModel == null)
                     {
                         _logger.LogTrace("Organic Manure Controller : ApplicationMethod() action : OrganicManureViewModel is null in session");
                         return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
-                    }                    
+                    }
 
                     if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                     {
@@ -2269,7 +2278,7 @@ namespace NMP.Portal.Controllers
                 if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
-                    {  
+                    {
                         if (error == null && farmManureTypeList.Count > 0)
                         {
                             farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
@@ -2296,7 +2305,7 @@ namespace NMP.Portal.Controllers
                         if (manureType != null && manureTypeError == null)
                         {
                             model.ManureType = manureType;
-                        }                        
+                        }
                         model.IsDefaultNutrient = true;
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                     }
@@ -3516,6 +3525,11 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("CheckAnswer");
                 }
             }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogTrace(hre, "Organic Manure Controller : Exception in ManualApplicationRate() post action : {Message}, {StackTrace}", hre.Message, hre.StackTrace);
+                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.InternalServerError);                
+            }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in ManualApplicationRate() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
@@ -4429,7 +4443,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> backActionForManureGroup()
+        public async Task<IActionResult> BackActionForManureGroup()
         {
             _logger.LogTrace($"Organic Manure Controller : BackActionForManureGroup() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
@@ -4487,11 +4501,12 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("Fields");
             }
 
-            return RedirectToAction("FieldGroup", new
-            {
-                q = model.EncryptedFarmId,
-                r = model.EncryptedHarvestYear
-            });
+            //return RedirectToAction("FieldGroup", new
+            //{
+            //    q = model.EncryptedFarmId,
+            //    r = model.EncryptedHarvestYear
+            //});
+            return RedirectToAction("FieldGroup");
         }
 
         [HttpGet]
@@ -6920,7 +6935,7 @@ namespace NMP.Portal.Controllers
 
             return (model, null, closedPeriod, isWithinClosedPeriod);
         }
-        
+
 
         private async Task<(OrganicManureViewModel, Error?)> HandleNonOrganicHighNWarning(
             OrganicManureViewModel model, WarningWithinPeriod warningMessage)
@@ -7082,7 +7097,7 @@ namespace NMP.Portal.Controllers
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator ||
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
         }
-        
+
 
         private async Task<(bool, string, Error?)> IsClosedPeriodStartAndEndFebExceedNRateException(OrganicManureViewModel model, int fieldId)
         {
@@ -10184,9 +10199,9 @@ namespace NMP.Portal.Controllers
         {
             if (!string.IsNullOrWhiteSpace(closedPeriod))
             {
-                int harvestYear = model.HarvestYear ?? 0;                
+                int harvestYear = model.HarvestYear ?? 0;
                 string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                Regex regex = new Regex(pattern,RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+                Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
                 Match match = regex.Match(closedPeriod);
                 if (match.Success)
@@ -10209,11 +10224,11 @@ namespace NMP.Portal.Controllers
                     dtfi.Add(9, Resource.lblOctober);
                     dtfi.Add(10, Resource.lblNovember);
                     dtfi.Add(11, Resource.lblDecember);
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; 
+                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
                     int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
                     if (startMonth <= endMonth)
                     {
-                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay,00,00,00,DateTimeKind.Unspecified);
+                        model.ClosedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                         model.ClosedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                     }
                     else if (startMonth >= endMonth)

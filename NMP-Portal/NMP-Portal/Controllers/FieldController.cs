@@ -1455,7 +1455,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : CheckAnswer() Field Data session not found");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            
+
             model.IsRecentSoilAnalysisQuestionChange = false;
             model.IsCheckAnswer = true;
             model.IsLastHarvestYearChange = false;
@@ -1485,7 +1485,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return View(model);
 
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckAnswer(FieldViewModel model)
@@ -2012,7 +2012,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             HttpContext.Session.Remove("SoilAnalysisDataBeforeUpdate");
         }
-                
+
         if (HttpContext.Session.Exists("FieldDataBeforeUpdate"))
         {
             HttpContext.Session.Remove("FieldDataBeforeUpdate");
@@ -2438,8 +2438,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         try
         {
-            List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
-            List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
 
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
@@ -2460,7 +2458,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     {
                         model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
                     }
-                    ViewBag.IsAnyPlan = false;
                 }
 
                 int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) : (model.LastHarvestYear ?? 0) + 1;// farm.LastHarvestYear to model.LastHarvestYear
@@ -2513,22 +2510,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     model.CropGroup = await _fieldLogic.FetchCropGroupById(model.CropGroupId.Value);
                     model.CropType = await _fieldLogic.FetchCropTypeById(model.CropTypeID.Value);
                 }
-
-                if (hasGrassInLastThreeYear == true)
-                {
-                    ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
-                      .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                      .Select(pc => pc.GrassManagementOptionID)
-                      .FirstOrDefault())?.Name;
-
-                    ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == prevCroppings
-                      .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                      .Select(pc => pc.SoilNitrogenSupplyItemID)
-                      .FirstOrDefault())?.Name;
-                }
-
-
-
+                await FetchViewBegDataForUpdate(model, hasGrassInLastThreeYear, cropPlans, prevCroppings, true);
                 model.Name = field.Name;
                 model.TotalArea = field.TotalArea ?? 0;
                 model.CroppedArea = field.CroppedArea ?? 0;
@@ -2545,7 +2527,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.ID = decrptedFieldId;
                 model.isEnglishRules = farm.EnglishRules;
                 model.SoilOverChalk = field.SoilOverChalk;
-                model.FarmID =Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
+                model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;
                 model.FarmName = farm.Name;
                 if (farm != null)
@@ -2584,15 +2566,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
                 if (model != null)
                 {
-                    if (model.PreviousCroppings.GrassManagementOptionID != null)
-                    {
-                        ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
-
-                    }
-                    if (model.PreviousCroppings.SoilNitrogenSupplyItemID != null)
-                    {
-                        ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
-                    }
                     if (model.PreviousGrassYears == null)
                     {
                         model.PreviousGrassYears = new List<int>();
@@ -2703,7 +2676,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                         model.IsSoilReleasingClay = false;
                     }
 
-                    SetFieldDataToSession(model);
+                    SetFieldDataToSession(model);//get plans of field
+                    List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(model.ID.Value);
+                    await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 }
             }
 
@@ -2712,34 +2687,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 HttpContext.Session.SetObjectAsJson("FieldDataBeforeUpdate", model);
             }
 
-            var previousModel = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldDataBeforeUpdate");
-
-            bool isDataChanged = false;
-            string action = "Action";
-
-            if (model != null && previousModel != null)
-            {
-                var oldJson = JObject.FromObject(previousModel);
-                var newJson = JObject.FromObject(model);
-
-                (oldJson["PreviousCroppings"] as JObject)?
-                    .Property(action)?
-                    .Remove();
-
-                (newJson["PreviousCroppings"] as JObject)?
-                    .Property(action)?
-                    .Remove();
-
-                oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
-                .Where(p => p != null).ToList().ForEach(p => p!.Remove());
-
-                newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
-                    .Where(p => p != null).ToList().ForEach(p => p!.Remove());
-
-                isDataChanged = !JToken.DeepEquals(oldJson, newJson);
-            }
-
-            ViewBag.IsDataChange = isDataChanged;
         }
         catch (Exception ex)
         {
@@ -2749,17 +2696,82 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return View(model);
     }
 
+    private async Task FetchViewBegDataForUpdate(FieldViewModel model, bool? hasGrassInLastThreeYear, List<Crop> cropPlans, List<PreviousCroppingData>? prevCroppings, bool IsComingForFirstTime)
+    {
+        List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
+        List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
+        if (IsComingForFirstTime && hasGrassInLastThreeYear.HasValue && hasGrassInLastThreeYear == true && prevCroppings != null)
+        {
+            ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
+              .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+              .Select(pc => pc.GrassManagementOptionID)
+              .FirstOrDefault())?.Name;
+
+            ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == prevCroppings
+              .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+              .Select(pc => pc.SoilNitrogenSupplyItemID)
+              .FirstOrDefault())?.Name;
+        }
+        else if (!IsComingForFirstTime)
+        {
+            if (model.PreviousCroppings.GrassManagementOptionID != null)
+            {
+                ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
+
+            }
+            if (model.PreviousCroppings.SoilNitrogenSupplyItemID != null)
+            {
+                ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
+            }
+        }
+        if (!cropPlans.Any())
+        {
+            ViewBag.IsAnyPlan = false;
+        }
+        var previousModel = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldDataBeforeUpdate");
+
+        bool isDataChanged = false;
+        string action = "Action";
+
+        if (model != null && previousModel != null)
+        {
+            var oldJson = JObject.FromObject(previousModel);
+            var newJson = JObject.FromObject(model);
+
+            (oldJson["PreviousCroppings"] as JObject)?
+                .Property(action)?
+                .Remove();
+
+            (newJson["PreviousCroppings"] as JObject)?
+                .Property(action)?
+                .Remove();
+
+            oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
+            .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+
+            newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
+                .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+
+            isDataChanged = !JToken.DeepEquals(oldJson, newJson);
+        }
+
+        ViewBag.IsDataChange = isDataChanged;
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    
+
     public async Task<IActionResult> UpdateField(FieldViewModel model)
     {
         _logger.LogTrace("Field Controller : UpdateField() post action called");
 
         try
         {
+            int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
             if (!ModelState.IsValid)
             {
+                List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(fieldId);
+                await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 return View(model);
             }
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
@@ -2789,7 +2801,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 PreviousCroppings = model.PreviousCroppingsList,
             };
 
-            int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
             (Field fieldResponse, Error error1) = await _fieldLogic.UpdateFieldAsync(fieldData, fieldId);
 
             if (error1.Message == null && fieldResponse != null)
@@ -2871,7 +2882,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : CopyExistingField() action called");
         FieldViewModel model = LoadFieldDataFromSession() ?? new FieldViewModel();
-        
+
         if (string.IsNullOrWhiteSpace(q))
         {
             _logger.LogTrace("Field Controller : farm id not found in query string");
@@ -2923,7 +2934,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : CopyFields() action called");
         FieldViewModel? model = LoadFieldDataFromSession();
-        
+
         if (model == null)
         {
             _logger.LogTrace("Field Controller : CopyFields() : field data not found in session");
@@ -2931,7 +2942,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmID, Resource.lblTrue);
-        
+
         if (string.IsNullOrWhiteSpace(error.Message))
         {
             ViewBag.FieldList = fieldList;
@@ -2946,7 +2957,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> CopyFields(FieldViewModel field)
     {
         _logger.LogTrace("Field Controller : CopyFields() post action called");
-        
+
         if (field.ID == null)
         {
             ModelState.AddModelError("ID", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2975,7 +2986,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     [HttpGet]
     public IActionResult HasGrassInLastThreeYear()
     {
-        _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() action called");        
+        _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() action called");
 
         FieldViewModel? model = LoadFieldDataFromSession();
         if (model == null)
