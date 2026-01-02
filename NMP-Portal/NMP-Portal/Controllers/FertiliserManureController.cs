@@ -116,22 +116,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectToAction(_fieldsActionName);
         }
 
-        return RedirectToAction(_fieldGroupActionName, new
-        {
-            q = model.EncryptedFarmId,
-            r = model.EncryptedHarvestYear
-        });
+        return RedirectToAction(_fieldGroupActionName);
     }
 
     [HttpGet]
     public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
     {
         _logger.LogTrace("Fertiliser Manure Controller : FieldGroup({Q}, {R}, {S}) action called", q, r, s);
-        FertiliserManureViewModel model = GetFertiliserManureFromSession() ?? new FertiliserManureViewModel();
+        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
         Error? error = null;
         try
         {
-            if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+            if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r)&&model==null)
             {
                 _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
@@ -139,6 +135,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
             {
+                model = new FertiliserManureViewModel();
                 model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                 model.EncryptedFarmId = q;
@@ -507,7 +504,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 if (!string.IsNullOrWhiteSpace(error.Message))
                                 {
                                     TempData["FieldGroupError"] = error.Message;
-                                    return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                                    return RedirectToAction(_fieldGroupActionName);
                                 }
 
                                 if (cropList.Count > 0)
@@ -616,7 +613,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 {
                                     TempData["FieldError"] = null;
                                 }
-                                return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                                return RedirectToAction(_fieldGroupActionName);
                             }
                         }
 
@@ -636,7 +633,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     {
                                         TempData["FieldError"] = null;
                                     }
-                                    return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                                    return RedirectToAction(_fieldGroupActionName);
                                 }
                                 if (cropList.Count > 0)
                                 {
@@ -724,7 +721,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         TempData["FieldError"] = null;
                     }
-                    return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                    return RedirectToAction(_fieldGroupActionName);
                 }
             }
             else
@@ -829,7 +826,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 TempData["CheckYourAnswerError"] = ex.Message;
                 return RedirectToAction(_checkAnswerActionName);
             }
-            return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+            return RedirectToAction(_fieldGroupActionName);
         }
 
         return View(model);
@@ -897,7 +894,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["FieldGroupError"] = error.Message;
-                        return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                        return RedirectToAction(_fieldGroupActionName);
                     }
 
                     if (cropList.Count > 0)
@@ -1278,7 +1275,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     TempData["InOrgnaicManureDurationError"] = null;
                 }
-                return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                return RedirectToAction(_fieldGroupActionName);
             }
         }
 
@@ -3787,11 +3784,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         return RedirectToAction(_fieldsActionName);
                     }
-                    return RedirectToAction(_fieldGroupActionName, new
-                    {
-                        q = model.EncryptedFarmId,
-                        r = model.EncryptedHarvestYear
-                    });
+                    return RedirectToAction(_fieldGroupActionName);
                 }
                 if (model.IsCheckAnswer && model.IsDoubleCropAvailable && model.IsDoubleCropValueChange && (!model.NeedToShowSameDefoliationForAll))
                 {
@@ -3848,7 +3841,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 return RedirectToAction(_checkAnswerActionName);
                             }
                             TempData["FieldGroupError"] = error.Message;
-                            return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                            return RedirectToAction(_fieldGroupActionName);
                         }
 
                         if (cropList.Count > 0)
@@ -3879,7 +3872,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 }
 
                                 TempData["FieldGroupError"] = error.Message;
-                                return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+                                return RedirectToAction(_fieldGroupActionName);
                             }
                             if (managementPeriodList.Count > 0)
                             {
@@ -3936,7 +3929,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return RedirectToAction(_checkAnswerActionName);
             }
             TempData["FieldGroupError"] = ex.Message;
-            return RedirectToAction(_fieldGroupActionName, new { q = model.EncryptedFarmId, r = model.EncryptedHarvestYear });
+            return RedirectToAction(_fieldGroupActionName);
         }
     }
 
@@ -4207,11 +4200,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             return RedirectToAction(_fieldsActionName);
         }
-        return RedirectToAction(_fieldGroupActionName, new
-        {
-            q = model.EncryptedFarmId,
-            r = model.EncryptedHarvestYear
-        });
+        return RedirectToAction(_fieldGroupActionName);
     }
 
     [HttpGet]
@@ -4438,11 +4427,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         return RedirectToAction(_fieldsActionName);
                     }
-                    return RedirectToAction(_fieldGroupActionName, new
-                    {
-                        q = model.EncryptedFarmId,
-                        r = model.EncryptedHarvestYear
-                    });
+                    return RedirectToAction(_fieldGroupActionName);
                 }
                 model.FieldID = model.DoubleCrop[index].FieldID;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DoubleCrop[index].FieldID)).Name;
@@ -4530,11 +4515,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         return RedirectToAction(_fieldsActionName);
                     }
                     TempData["FieldGroupError"] = error.Message;
-                    return RedirectToAction(_fieldGroupActionName, new
-                    {
-                        q = model.EncryptedFarmId,
-                        r = model.EncryptedHarvestYear
-                    });
+                    return RedirectToAction(_fieldGroupActionName);
                 }
                 if (cropList != null && cropList.Count == 2)
                 {
@@ -4583,11 +4564,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return RedirectToAction(_fieldsActionName);
             }
             TempData["FieldGroupError"] = ex.Message;
-            return RedirectToAction(_fieldGroupActionName, new
-            {
-                q = model.EncryptedFarmId,
-                r = model.EncryptedHarvestYear
-            });
+            return RedirectToAction(_fieldGroupActionName);
         }
         return View(model);
     }
