@@ -281,8 +281,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
     public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
     {
-        bool success = false;
-        Error error = null;
+        Error? error = null;
         List<FertiliserManure> fertilisers = new List<FertiliserManure>();
         try
         {            
