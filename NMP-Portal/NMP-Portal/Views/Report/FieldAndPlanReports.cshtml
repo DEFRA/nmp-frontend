@@ -27,7 +27,7 @@
 {
     <form asp-action="FieldAndPlanReports" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
+        <div hidden="hidden">
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
