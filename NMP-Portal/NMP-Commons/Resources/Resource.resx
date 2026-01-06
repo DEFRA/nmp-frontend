@@ -4507,10 +4507,10 @@ cubic metres per hectare  not set</value>
     <value>N total (all sources)</value>
   </data>
   <data name="lblOrganicCropAvailableNRate" xml:space="preserve">
-    <value>Organic crop available N rate</value>
+    <value>Organic material crop available N rate</value>
   </data>
   <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
-    <value>Organic crop available N total</value>
+    <value>Organic material crop available N total</value>
   </data>
   <data name="lblGrassCutOnlyAdjustment" xml:space="preserve">
     <value>Grass cut only adjustment</value>

@@ -9998,7 +9998,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organic crop available N rate.
+        ///   Looks up a localized string similar to Organic material crop available N rate.
         /// </summary>
         public static string lblOrganicCropAvailableNRate {
             get {
@@ -10007,7 +10007,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organic crop available N total.
+        ///   Looks up a localized string similar to Organic material crop available N total.
         /// </summary>
         public static string lblOrganicCropAvailableNTotal {
             get {
