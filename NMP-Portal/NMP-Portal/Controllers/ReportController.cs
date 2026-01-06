@@ -1835,7 +1835,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if (!model.IsCheckList)
+            if (!model.IsCheckList && model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
 
                 (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
@@ -1864,6 +1864,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
 
 
+            }
+            else
+            {
+                model.IsGrasslandDerogation = false;
+                var (savedData, error) = await SaveGrasslandDerogationAsync(model);
+                if (savedData == null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["DerogationSaveError"] = error.Message;
+                    return View(model);
+                }
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
 
         }
@@ -1897,32 +1910,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 model.GrassPercentage = null;
             }
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-            ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
-            (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-            if (nutrientsLoadingManures.Count > 0)
-            {
-                nutrientsLoadingManures = nutrientsLoadingManures.Where(x => x.ManureDate.Value.Date.Year == model.Year).ToList();
-                ViewBag.NutrientLivestockData = nutrientsLoadingManures;
-            }
-            var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
-            {
-                FarmID = model.FarmId,
-                CalendarYear = model.Year,
-                LandInNVZ = model.TotalAreaInNVZ,
-                LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
-                TotalFarmed = model.TotalFarmArea,
-                ManureTotal = null,
-                Derogation = model.IsGrasslandDerogation,
-                GrassPercentage = (model.IsGrasslandDerogation.HasValue && model.IsGrasslandDerogation.Value) ? model.GrassPercentage : null,
-                ContingencyPlan = false,
-                IsAnyLivestockImportExport = (!model.IsAnyLivestockImportExport.HasValue) ?
-                null : (nutrientsLoadingManures.Count > 0 ? true : false),
-                IsAnyLivestockNumber = (!model.IsAnyLivestockNumber.HasValue) ?
-                null : (nutrientsLoadingLiveStockList.Count > 0 ? true : false),
-            };
-            (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+
+            var (savedData, error) = await SaveGrasslandDerogationAsync(model);
+            if (savedData == null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["DerogationSaveError"] = error.Message;
                 return View(model);
@@ -7132,5 +7122,68 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return model;
     }
+
+    private async Task<(NutrientsLoadingFarmDetail? savedNutrientsLoadingFarmDetailsData, Error error)>
+    SaveGrasslandDerogationAsync(ReportViewModel model)
+    {
+        // Fetch livestock
+        var (livestockList, livestockError) =
+            await _reportLogic.FetchLivestockByFarmIdAndYear(
+                model.FarmId!.Value,
+                model.Year ?? 0);
+
+        if (!string.IsNullOrWhiteSpace(livestockError?.Message))
+        {
+            return (null, livestockError);
+        }
+
+        // Fetch manures
+        var (manures, manureError) =
+            await _reportLogic.FetchNutrientsLoadingManuresByFarmId(
+                model.FarmId!.Value);
+
+        if (!string.IsNullOrWhiteSpace(manureError?.Message))
+        {
+            return (null, manureError);
+        }
+
+        if (manures?.Any() == true)
+        {
+            manures = manures
+                .Where(x => x.ManureDate?.Year == model.Year)
+                .ToList();
+        }
+
+        var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail
+        {
+            FarmID = model.FarmId,
+            CalendarYear = model.Year,
+            LandInNVZ = model.TotalAreaInNVZ,
+            LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
+            TotalFarmed = model.TotalFarmArea,
+            Derogation = model.IsGrasslandDerogation,
+            GrassPercentage = model.IsGrasslandDerogation == true
+                ? model.GrassPercentage
+                : null,
+            ContingencyPlan = false,
+            IsAnyLivestockImportExport = model.IsAnyLivestockImportExport.HasValue
+                ? manures?.Any() == true
+                : null,
+            IsAnyLivestockNumber = model.IsAnyLivestockNumber.HasValue
+                ? livestockList?.Any() == true
+                : null
+        };
+
+        var (savedNutrientsLoadingFarmDetailsData, saveError) =
+            await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+
+        if (!string.IsNullOrWhiteSpace(saveError?.Message))
+        {
+            return (null, saveError);
+        }
+
+        return (savedNutrientsLoadingFarmDetailsData, new Error());
+    }
+
 
 }

@@ -27,12 +27,13 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PostAsync(APIURLHelper.AddNutrientsLoadingFarmDetailsAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
             {
 
-                JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data["NutrientsLoadingFarmDetails"] as JObject;
+                JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data as JObject;
                 if (nutrientsLoadingFarmDetailsJObject != null)
                 {
                     nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
