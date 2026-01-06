@@ -19371,7 +19371,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a field to see its nutrient recommendations, or to add a soil mineral nitrogen (N) analysis results.
+        ///   Looks up a localized string similar to Select a field to see its nutrient recommendations, or to add soil mineral nitrogen (N) analysis results..
         /// </summary>
         public static string MsgForSuccessCrop {
             get {
