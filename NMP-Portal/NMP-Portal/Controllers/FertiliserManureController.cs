@@ -1280,7 +1280,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return View(model);
     }
 
-    private Dictionary<int, string> GetMonthDictionary()
+    private static Dictionary<int, string> GetMonthDictionary()
     {
         return new Dictionary<int, string>
     {
@@ -1488,7 +1488,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     int fieldId;
                     try
                     {
-                        ( fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
+                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
                     }
                     catch (Exception ex)
                     {
@@ -1606,9 +1606,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                                                         (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
                                                     }
-                                                    if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                                    if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0 && field.IsWithinNVZ.Value)
                                                     {
-                                                        (model, error) = await IsClosedPeriodWarningMessageShow(model, false, Convert.ToInt32(fieldId), cropTypeResponse.CropTypeId, field);
+                                                        (model, error) = await IsClosedPeriodWarningMessageShow(model, cropTypeResponse.CropTypeId);
                                                     }
 
                                                 }
@@ -2372,9 +2372,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                             }
 
                                             //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                                            if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0)
+                                            if (cropTypeLinkingResponse != null && cropTypeLinkingResponse.NMaxLimitEngland != 0 && field.IsWithinNVZ.Value)
                                             {
-                                                (model, error) = await IsClosedPeriodWarningMessageShow(model, false, Convert.ToInt32(fieldId), cropTypeResponse.CropTypeId,field);
+                                                (model, error) = await IsClosedPeriodWarningMessageShow(model, cropTypeResponse.CropTypeId);
                                             }
                                             int cropOrder = model.DoubleCrop?.FirstOrDefault(x => x.FieldID == Convert.ToInt32(fieldId))?.CropOrder
                                                ?? crop?.CropOrder.Value ?? 1;
@@ -2735,15 +2735,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction("NutrientValues");
     }
 
-    private async Task<(FertiliserManureViewModel, Error?)> IsClosedPeriodWarningMessageShow(FertiliserManureViewModel model, bool isGetCheckAnswer, int fieldId, int cropTypeId, Field field)
+    private async Task<(FertiliserManureViewModel, Error?)> IsClosedPeriodWarningMessageShow(FertiliserManureViewModel model, int cropTypeId)
     {
         Error? error = null;
         string warningMsg = string.Empty;
-        bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
-        if (isFieldIsInNVZ)
-        {
-            //warning excel sheet row no. 23
-            HashSet<int> filterCrops = new HashSet<int>
+        //warning excel sheet row no. 23
+        HashSet<int> filterCrops = new HashSet<int>
                             {
                                 (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
                                 (int)NMP.Commons.Enums.CropTypes.Asparagus,
@@ -2766,55 +2763,55 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 (int)NMP.Commons.Enums.CropTypes.Grass
                             };
 
-            WarningWithinPeriod warning = new WarningWithinPeriod();
-            string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
-            bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
+        WarningWithinPeriod warning = new WarningWithinPeriod();
+        string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
+        bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
 
-            if (!filterCrops.Contains(cropTypeId))
+        if (!filterCrops.Contains(cropTypeId))
+        {
+            if (isWithinClosedPeriod)
             {
-                if (isWithinClosedPeriod)
-                {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
+                WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
 
-                    model.IsClosedPeriodWarning = true;
-                    model.ClosedPeriodWarningHeader = warningResponse.Header;
-                    model.ClosedPeriodWarningCodeID = warningResponse.WarningCodeID;
-                    model.ClosedPeriodWarningLevelID = warningResponse.WarningLevelID;
-                    model.ClosedPeriodWarningPara1 = warningResponse.Para1;
-                    model.ClosedPeriodWarningPara3 = warningResponse.Para3;
+                model.IsClosedPeriodWarning = true;
+                model.ClosedPeriodWarningHeader = warningResponse.Header;
+                model.ClosedPeriodWarningCodeID = warningResponse.WarningCodeID;
+                model.ClosedPeriodWarningLevelID = warningResponse.WarningLevelID;
+                model.ClosedPeriodWarningPara1 = warningResponse.Para1;
+                model.ClosedPeriodWarningPara3 = warningResponse.Para3;
 
-                }
             }
-            //warning excel sheet row no. 28
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
-            {
-                //31 october and end of closed period
-                string warningPeriod = string.Empty;
-                string startPeriod = string.Empty;
-                string endPeriod = string.Empty;
-                string[] periods = closedPeriod.Split(" to ");
-
-                if (periods.Length == 2)
-                {
-                    startPeriod = Resource.lbl31October;
-                    endPeriod = periods[1];
-                    warningPeriod = $"{startPeriod} to {endPeriod}";
-                }
-                bool isWithinWarningPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
-
-                if (isWithinWarningPeriod)
-                {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgFertDateOnly.ToString());
-                    model.IsClosedPeriodWarning = true;
-                    model.ClosedPeriodWarningHeader = warningResponse.Header;
-                    model.ClosedPeriodWarningCodeID = warningResponse.WarningCodeID;
-                    model.ClosedPeriodWarningLevelID = warningResponse.WarningLevelID;
-                    model.ClosedPeriodWarningPara1 = warningResponse.Para1;
-                    model.ClosedPeriodWarningPara3 = warningResponse.Para3;
-                }
-            }
-
         }
+        //warning excel sheet row no. 28
+        if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
+        {
+            //31 october and end of closed period
+            string warningPeriod = string.Empty;
+            string startPeriod = string.Empty;
+            string endPeriod = string.Empty;
+            string[] periods = closedPeriod.Split(" to ");
+
+            if (periods.Length == 2)
+            {
+                startPeriod = Resource.lbl31October;
+                endPeriod = periods[1];
+                warningPeriod = $"{startPeriod} to {endPeriod}";
+            }
+            bool isWithinWarningPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
+
+            if (isWithinWarningPeriod)
+            {
+                WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgFertDateOnly.ToString());
+                model.IsClosedPeriodWarning = true;
+                model.ClosedPeriodWarningHeader = warningResponse.Header;
+                model.ClosedPeriodWarningCodeID = warningResponse.WarningCodeID;
+                model.ClosedPeriodWarningLevelID = warningResponse.WarningLevelID;
+                model.ClosedPeriodWarningPara1 = warningResponse.Para1;
+                model.ClosedPeriodWarningPara3 = warningResponse.Para3;
+            }
+        }
+
+
         return (model, error);
     }
     private async Task<(FertiliserManureViewModel, Error?)> IsNitrogenExceedWarning(FertiliserManureViewModel model, int managementId, int cropTypeId, decimal appNitrogen, DateTime startDate, DateTime endDate, string cropType, bool isGetCheckAnswer, int fieldId)
