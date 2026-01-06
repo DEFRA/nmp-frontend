@@ -1491,7 +1491,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     int fieldId;
                     try
                     {
-                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
+                        ( fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
                     }
                     catch (Exception ex)
                     {
@@ -1675,7 +1675,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         int? cropTypeId = null;
         string? defoliationSequenceName = null;
-        int fieldId;
+        int fieldId = 0;
         if (model.FieldList != null && int.TryParse(model.FieldList[0], out fieldId))
         {
             model.FieldName = (await _fieldLogic.FetchFieldByFieldId(fieldId)).Name;
