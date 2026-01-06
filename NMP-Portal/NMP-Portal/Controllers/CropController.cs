@@ -4205,8 +4205,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         ViewBag.PreviousYear = s;
                                         ViewBag.IsThereAnyPreviousCropping = false;
                                         TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
-                                        TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName, decryptedHarvestYear - 1);
-                                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, decryptedHarvestYear - 1, model.FieldName);
+                                        TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName);
+                                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName,  model.FieldName);
                                     }
                                 }
                             }

@@ -6573,10 +6573,10 @@ livestock manure.</value>
     <value>Recommendations not available</value>
   </data>
   <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
-    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+    <value>To get recommendations for {0} for {1}, you will need to add 3 years history to the crop details for {2}.</value>
   </data>
   <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
-    <value>Add {0} crop details for {1}</value>
+    <value>Add 3 years history to crop details for {0}</value>
   </data>
   <data name="lblAddPreviousCrop" xml:space="preserve">
     <value>Add previous crop</value>
