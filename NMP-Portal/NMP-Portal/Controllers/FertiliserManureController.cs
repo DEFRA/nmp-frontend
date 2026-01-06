@@ -39,6 +39,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _recommendationsActionName = "Recommendations";
     private const string _fieldsActionName = "Fields";
     private const string _fieldGroupActionName = "FieldGroup";
+    private const string _fertiliserManureBeforeUpdateSessionKey = "FertiliserManureBeforeUpdate";
     private FertiliserManureViewModel? GetFertiliserManureFromSession()
     {
         if (HttpContext.Session.Exists(_fertiliserManureSessionKey))
@@ -2520,11 +2521,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
             {
-                SetFertiliserManureToSession(model);
+                SetFertiliserManureBeforeUpdateToSession(model);
             }
 
             bool isDataChanged = false;
-            var previousModel = HttpContext.Session.GetObjectFromJson<FertiliserManureViewModel>("FertiliserDataBeforeUpdate");
+            var previousModel = GetFertiliserManureBeforeUpdateFromSession();
             if (previousModel != null)
             {
                 string oldJson = JsonConvert.SerializeObject(previousModel);
@@ -4959,4 +4960,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         return (selectedDefoliation, error);
     }
+
+    private FertiliserManureViewModel? GetFertiliserManureBeforeUpdateFromSession()
+    {
+        if (HttpContext.Session.Exists(_fertiliserManureBeforeUpdateSessionKey))
+        {
+            return HttpContext.Session.GetObjectFromJson<FertiliserManureViewModel>(_fertiliserManureBeforeUpdateSessionKey);
+        }
+        return null;
+    }
+    private void SetFertiliserManureBeforeUpdateToSession(FertiliserManureViewModel fertiliserManureViewModel)
+    {
+        HttpContext.Session.SetObjectAsJson(_fertiliserManureBeforeUpdateSessionKey, fertiliserManureViewModel);
+    }
+
 }
