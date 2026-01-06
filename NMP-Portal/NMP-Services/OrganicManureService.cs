@@ -1126,14 +1126,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre,hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (cropType, error);
