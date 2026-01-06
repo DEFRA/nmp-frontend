@@ -1843,7 +1843,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add {0} crop details for {1}.
+        ///   Looks up a localized string similar to Add 3 years history to crop details for {0}.
         /// </summary>
         public static string lblAddYearCropDetailsForFieldName {
             get {
@@ -10898,7 +10898,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}..
+        ///   Looks up a localized string similar to To get recommendations for {0} for {1}, you will need to add 3 years history to the crop details for {2}..
         /// </summary>
         public static string lblPreviousCroppingContentOnRecommendation {
             get {
