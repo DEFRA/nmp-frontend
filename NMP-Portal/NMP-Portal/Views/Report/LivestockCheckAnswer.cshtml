@@ -223,8 +223,7 @@
                                     @(!string.IsNullOrWhiteSpace(Model.LivestockTypeName) ? Model.LivestockTypeName : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="LivestockType" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
+                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                             @if (Model.LivestockGroupId == cattle || Model.LivestockGroupId == sheep || Model.LivestockGroupId == goatsDeerOrHorses)
                             {
@@ -331,7 +330,7 @@
                                         <govuk-summary-list-row-action asp-action="Occupancy" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheOccupancyForThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                
+
                             }
                             <govuk-summary-list-row class=@(!Model.NitrogenStandard.HasValue ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -341,7 +340,10 @@
                                     @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNitrogenNStandardForThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
+                                    @if (Model.LivestockGroupId == pigs || Model.LivestockGroupId == poultry)
+                                    {
+                                        <govuk-summary-list-row-action asp-action="NitrogenStandard" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNitrogenNStandardForThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
+                                    }
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
