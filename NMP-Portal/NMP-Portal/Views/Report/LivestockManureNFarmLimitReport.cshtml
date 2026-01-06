@@ -22,24 +22,8 @@
         <govuk-error-summary-item href="#">@TempData["LivestockManureNitrogenFarmLimitReport"]</govuk-error-summary-item>
     </govuk-error-summary>
 }
-<div class="govuk-grid-row noprint">
-    <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">@Resource.lblHowtosaveyourplanasaPDF</h2>
-        <ol class="govuk-list govuk-list--number">
-            <li>@Html.Raw(Resource.lblPrint1)</li>
-            <li>@Html.Raw(Resource.lblPrint2)</li>
-            <li>@Html.Raw(Resource.lblPrint3)</li>
-        </ol>
-        <govuk-button id="cropReportPrintButton" type="button">
-            @Resource.lblPrintOrSaveAsAPDF
-        </govuk-button>
-    </div>
-</div>
-<div class="govuk-grid-row noprint margin-bottom-thirty">
-    <div class="govuk-grid-column-full">
-        <hr>
-    </div>
-</div>
+@await Html.PartialAsync("_ReportPrintHeader")
+
 <div class="govuk-grid-row margin-bottom-ten">
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-l">@Model.Farm.Name</span>
@@ -822,7 +806,6 @@ else
         <p class="govuk-body-s">
             @Resource.lblLivestockReportContentThirtySix
         </p>
-
         <h2 class="govuk-heading-s">
             @Resource.lblAboutRecommendationGuidenceAdvice
         </h2>
@@ -835,6 +818,5 @@ else
         <p class="govuk-body-s">
             @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
         </p>
-
     </div>
 </div>
