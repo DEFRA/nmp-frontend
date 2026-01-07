@@ -346,8 +346,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 var SelectListItem = cropTypeList.Select(f => new SelectListItem
                 {
-                    Value = string.IsNullOrWhiteSpace(f.CropGroupName) ? "Crop Group 1" : f.CropGroupName,
-                    Text = string.Format(Resource.lblGroupNameFieldsWithCropTypeName, string.IsNullOrWhiteSpace(f.CropGroupName) ? "Crop Group 1" : f.CropGroupName, f.CropType.ToString())
+                    Value = f.CropGroupName.ToString(),
+                    Text = string.Format(Resource.lblGroupNameFieldsWithCropTypeName, f.CropGroupName.ToString(), f.CropType.ToString())
                 }).ToList();
 
                 SelectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
@@ -409,10 +409,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (List<ManureCropTypeResponse> cropGroupList, error) = await _fertiliserManureLogic.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
             if (error == null && cropGroupList.Count > 0)
             {
-                var SelectListItem = cropGroupList.Select(f => new SelectListItem
+                selectListItem = cropGroupList.Select(f => new SelectListItem
                 {
-                    Value = string.IsNullOrWhiteSpace(f.CropGroupName) ? "Crop Group 1" : f.CropGroupName,
-                    Text = string.Format(Resource.lblGroupNameFieldsWithCropTypeName, string.IsNullOrWhiteSpace(f.CropGroupName) ? "Crop Group 1" : f.CropGroupName, f.CropType.ToString())
+                    Value = f.CropGroupName.ToString(),
+                    Text = string.Format(Resource.lblGroupNameFieldsWithCropTypeName, f.CropGroupName.ToString(), f.CropType.ToString())
                 }).ToList();
                 selectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
                 selectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
