@@ -10,9 +10,9 @@
     var organicInorganicCopy = "";
     var selection = "";
 
-    bool hasOrganic = (Model.OrganicInorganicCopy & NMP.Commons.Enums.OrganicInorganicCopy.OrganicMaterial) == NMP.Commons.Enums.OrganicInorganicCopy.OrganicMaterial;
-    bool hasInorganic = (Model.OrganicInorganicCopy & NMP.Commons.Enums.OrganicInorganicCopy.InorganicFertiliser) == NMP.Commons.Enums.OrganicInorganicCopy.InorganicFertiliser;
-    bool isNone = Model.OrganicInorganicCopy == NMP.Commons.Enums.OrganicInorganicCopy.None;
+    bool hasOrganic = (Model.OrganicInorganicCopy & NMP.Commons.Enums.OrganicInorganicCopyOptions.OrganicMaterial) == NMP.Commons.Enums.OrganicInorganicCopyOptions.OrganicMaterial;
+    bool hasInorganic = (Model.OrganicInorganicCopy & NMP.Commons.Enums.OrganicInorganicCopyOptions.InorganicFertiliser) == NMP.Commons.Enums.OrganicInorganicCopyOptions.InorganicFertiliser;
+    bool isNone = Model.OrganicInorganicCopy == NMP.Commons.Enums.OrganicInorganicCopyOptions.None;
 
     if (hasOrganic && hasInorganic)
     {

@@ -1865,7 +1865,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
             }
-            else
+            if(model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
                 model.IsGrasslandDerogation = false;
                 var (savedData, error) = await SaveGrasslandDerogationAsync(model);

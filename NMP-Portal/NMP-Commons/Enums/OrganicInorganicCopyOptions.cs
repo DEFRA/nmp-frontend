@@ -1,7 +1,7 @@
 ﻿namespace NMP.Commons.Enums;
 
 [Flags]
-public enum OrganicInorganicCopy
+public enum OrganicInorganicCopyOptions
 {
     None = 0,
     OrganicMaterial =1,
