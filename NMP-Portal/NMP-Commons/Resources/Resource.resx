@@ -3460,7 +3460,7 @@ cubic metres per hectare  not set</value>
     <value>Crop Group Name</value>
   </data>
   <data name="contentGettingHelp1" xml:space="preserve">
-    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469.</value>
   </data>
   <data name="contentGettingHelp2" xml:space="preserve">
     <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
@@ -3772,13 +3772,10 @@ cubic metres per hectare  not set</value>
     <value>Help with the tool's recommendations</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line1" xml:space="preserve">
-    <value>You can email the helpdesk if you have any issues with the data and recommendations the tool provides. Email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
-  </data>
-  <data name="lblHelp_with_the_service_recommendations_line2" xml:space="preserve">
-    <value>This tool might give slightly different recommendations from the previous version of the tool, PLANET. This is because this new tool uses an updated version of the RB209 API, so it provides the very latest data.</value>
+    <value>You can email the helpdesk at &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469 if you have any questions about the recommendations or reports provided by NMPT-GB.</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line3" xml:space="preserve">
-    <value>We will reply to your email as quickly as we can.</value>
+    <value>We will reply to your email or call as quickly as we can.</value>
   </data>
   <data name="lbl_I_accept_to_the_terms_of_use" xml:space="preserve">
     <value>I accept the Terms of Use</value>
@@ -3788,9 +3785,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblMore_information_line1" xml:space="preserve">
     <value>This tool is intended to be used alongside the &lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt; Nutrient management guide (RB209)&lt;/a&gt; (external link).</value>
-  </data>
-  <data name="lblMore_information_line2" xml:space="preserve">
-    <value>For advice about nutrient planning in general, visit &lt;a href="https://www.triedandtested.org.uk" target="_blank"&gt;Tried and Tested&lt;/a&gt; (external link).</value>
   </data>
   <data name="lblSaving_your_data" xml:space="preserve">
     <value>Saving your data</value>
@@ -3895,7 +3889,7 @@ cubic metres per hectare  not set</value>
     <value>technical issues</value>
   </data>
   <data name="lblHelpIssuesLine2" xml:space="preserve">
-    <value>login issues</value>
+    <value>login or access issues</value>
   </data>
   <data name="lblHelpIssuesLine3" xml:space="preserve">
     <value>service outages</value>
