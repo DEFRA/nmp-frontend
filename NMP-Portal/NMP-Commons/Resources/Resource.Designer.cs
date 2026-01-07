@@ -11348,7 +11348,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public Beta release, December 2025.
+        ///   Looks up a localized string similar to Public Beta release, January 2025.
         /// </summary>
         public static string lblReleaseScheduleContentOne {
             get {

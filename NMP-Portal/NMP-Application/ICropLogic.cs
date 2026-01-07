@@ -10,7 +10,7 @@ public interface ICropLogic
     Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId, int type);
     Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId);
 
-    Task<(bool, Error)> AddCropNutrientManagementPlan(CropDataWrapper cropData);
+    Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData);
     Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear);
     Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id);
     Task<string> FetchCropInfo2NameByCropInfo2Id(int cropInfo2Id);
@@ -46,4 +46,5 @@ public interface ICropLogic
     Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
     Task<(bool, Error)> MergeCrop(string cropData);
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId, int year);
+    Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId);
 }
