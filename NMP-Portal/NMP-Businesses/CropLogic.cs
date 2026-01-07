@@ -14,11 +14,12 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, ICropService cropService) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISnsAnalysisService snsAnalysisService) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
     private readonly ICropService _cropService = cropService;
-    public async Task<(bool, Error)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
+    private readonly ISnsAnalysisService _snsAnalysisService = snsAnalysisService;
+    public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         _logger.LogTrace("Adding crop nutrient management plan");
         return await _cropService.AddCropNutrientManagementPlan(cropData);
@@ -232,5 +233,11 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService) : IC
     {
         _logger.LogTrace("Updating crop data");
         return await _cropService.UpdateCrop(cropData);
+    }
+
+    public async Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId)
+    {
+        _logger.LogTrace("SnsAnalysisLogic : FetchSnsAnalysisByCropIdAsync() called");
+        return await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(cropId);
     }
 }
