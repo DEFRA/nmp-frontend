@@ -88,6 +88,7 @@ namespace NMP.Commons.Helpers
                 (int)CropTypes.WinterBeans,
                 (int)CropTypes.SpringBeans,
                 (int)CropTypes.Peas,
+                (int)CropTypes.MarketPickPeas,
                 (int)CropTypes.Asparagus,
                 (int)CropTypes.Carrots,
                 (int)CropTypes.Radish,
