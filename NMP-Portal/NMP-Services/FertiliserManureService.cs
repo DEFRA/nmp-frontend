@@ -287,6 +287,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {            
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.PostAsync(APIURLHelper.AddFertiliserManuresAsyncAPI, new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -312,14 +313,12 @@ public class FertiliserManureService : Service, IFertiliserManureService
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);          
         }
         return (fertilisers, error);
     }

@@ -241,15 +241,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET..
-        /// </summary>
-        public static string ContentReplacePlanetandManner {
-            get {
-                return ResourceManager.GetString("ContentReplacePlanetandManner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Stores information that you’ve submitted.
         /// </summary>
         public static string ContentStoreInformationThatYouHaveSubmitted {
@@ -11348,7 +11339,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public Beta release, January 2025.
+        ///   Looks up a localized string similar to Public Beta release, January 2026.
         /// </summary>
         public static string lblReleaseScheduleContentOne {
             get {
@@ -11465,7 +11456,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 25th November 2025.
+        ///   Looks up a localized string similar to 7th January 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {

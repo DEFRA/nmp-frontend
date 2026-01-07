@@ -3390,9 +3390,6 @@ cubic metres per hectare  not set</value>
   <data name="ContentHowToolWorks2" xml:space="preserve">
     <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service.</value>
   </data>
-  <data name="ContentReplacePlanetandManner" xml:space="preserve">
-    <value>This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET.</value>
-  </data>
   <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
     <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
   </data>
@@ -6894,7 +6891,7 @@ livestock manure.</value>
     <value>Last updated {0}</value>
   </data>
   <data name="lblReleaseScheduleContentOne" xml:space="preserve">
-    <value>Public Beta release, January 2025</value>
+    <value>Public Beta release, January 2026</value>
   </data>
   <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
     <value>The first functionality in the nutrient management planning tool is ready for use by the public in England and Wales. This has had approximately eight months of user testing.</value>
@@ -6960,7 +6957,7 @@ livestock manure.</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page)</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>25th November 2025</value>
+    <value>7th January 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
