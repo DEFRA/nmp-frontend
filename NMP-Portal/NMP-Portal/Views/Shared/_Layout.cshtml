@@ -1,37 +1,43 @@
 ﻿@using NMP.Commons.Resources
 @using System.Security.Claims;
 @{
-    Layout = "_GovUkPageTemplate";   
+    Layout = "_GovUkPageTemplate";
 }
 @section BodyStart {
-    @RenderSection("BodyStart", required: false)        
+    @await RenderSectionAsync("BodyStart", required: false)
 }
 @section BeforeContent {
-    @RenderSection("BeforeContent", required: false)
+    @await RenderSectionAsync("BeforeContent", required: false)
 }
-@section Header { 
+@section Header {
     @await Html.PartialAsync("_Navigation")
-    <govuk-phase-banner class="noprint">        
-            <govuk-phase-banner-tag>@Resource.lblPhaseBannerContent</govuk-phase-banner-tag>
-            @Html.Raw(Resource.lblPhaseBannerText)
+    <govuk-phase-banner class="noprint">
+        <govuk-phase-banner-tag>@Resource.lblPhaseBannerContent</govuk-phase-banner-tag>
+        @Html.Raw(Resource.lblPhaseBannerText)
     </govuk-phase-banner>
 }
 @RenderBody()
-@RenderSection("AfterContent", required: false)
+@await RenderSectionAsync("AfterContent", required: false)
 @section Footer {
     <govuk-footer class="noprint">
         <govuk-footer-meta>
             <govuk-footer-meta-items>
                 <govuk-footer-meta-item asp-action="Index" asp-controller="AccessibilityStatement">@Resource.lblAccessibilityStatement</govuk-footer-meta-item>
-                <govuk-footer-meta-item asp-action="Index" asp-controller="PrivacyNotice">@Resource.lblPrivacyNotice</govuk-footer-meta-item>
-                <govuk-footer-meta-item asp-action="Index" asp-controller="Cookie">@Resource.lblCookies</govuk-footer-meta-item>                
+                <govuk-footer-meta-item>
+                    <a class="govuk-footer__link" href="https://www.gov.uk/government/collections/defras-privacy-notices"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        @Resource.lblPrivacyNotice <span class="govuk-visually-hidden">(opens in new tab)</span>
+                    </a>
+                </govuk-footer-meta-item>
+                <govuk-footer-meta-item asp-action="Index" asp-controller="Cookie">@Resource.lblCookies</govuk-footer-meta-item>
                 <govuk-footer-meta-item asp-action="Index" asp-controller="AcceptTerms">@Resource.lblTermsOfUse</govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>
     </govuk-footer>
-} 
+}
 @section BodyEnd {
-    @RenderSection("BodyEnd", required: false)
-    @await Html.PartialAsync("_LoadingOverlay")      
+    @await RenderSectionAsync("BodyEnd", required: false)
+    @await Html.PartialAsync("_LoadingOverlay")
     @await Html.PartialAsync("_SessionTimeout")
 }
