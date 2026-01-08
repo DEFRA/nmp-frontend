@@ -620,7 +620,7 @@
     </div>
 </div>
                     }
-                    @if (field.SoilAnalysis != null && field.SoilAnalysis.Count > 0)
+                    @if (field.SoilAnalysis != null)
                     {
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-full">
@@ -639,22 +639,20 @@
                                             </tr>
                                         </thead>
                                         <tbody class="govuk-table__body">
-                                            @foreach (var soilAnalysis in field.SoilAnalysis)
-                                            {
                                                 <tr class="govuk-table__row">
-                                                    <td class="govuk-table__cell">@(soilAnalysis.Date != null ? soilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
-                                                    <td class="govuk-table__cell">@(soilAnalysis.PH != null ? soilAnalysis.PH : Resource.lblNotEntered)</td>
+                                                    <td class="govuk-table__cell">@(field.SoilAnalysis.Date != null ? field.SoilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(field.SoilAnalysis.PH != null ? field.SoilAnalysis.PH : Resource.lblNotEntered)</td>
                                                     <td class="govuk-table__cell">
-                                                        @(soilAnalysis.PhosphorusIndex != null ? $"{Resource.lblIndex} {soilAnalysis.PhosphorusIndex}" : Resource.lblNotEntered)
+                                                        @(field.SoilAnalysis.PhosphorusIndex != null ? $"{Resource.lblIndex} {field.SoilAnalysis.PhosphorusIndex}" : Resource.lblNotEntered)
                                                     </td>
                                                     <td class="govuk-table__cell">
-                                                        @(soilAnalysis.PotassiumIndex != null ? $"{Resource.lblIndex} {soilAnalysis.PotassiumIndex}" : Resource.lblNotEntered)
+                                                    @(field.SoilAnalysis.PotassiumIndex != null ? $"{Resource.lblIndex} {field.SoilAnalysis.PotassiumIndex}" : Resource.lblNotEntered)
                                                     </td>
                                                     <td class="govuk-table__cell">
-                                                        @(soilAnalysis.MagnesiumIndex != null ? $"{Resource.lblIndex} {soilAnalysis.MagnesiumIndex}" : Resource.lblNotEntered)
+                                                    @(field.SoilAnalysis.MagnesiumIndex != null ? $"{Resource.lblIndex} {field.SoilAnalysis.MagnesiumIndex}" : Resource.lblNotEntered)
                                                     </td>
                                                 </tr>
-                                            }
+                                            
                                         </tbody>
 
                                     </table>

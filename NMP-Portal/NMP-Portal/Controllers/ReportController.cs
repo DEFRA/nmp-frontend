@@ -819,12 +819,31 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
                     }
                     //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
-                    if (fieldData.SoilAnalysis != null && fieldData.SoilAnalysis.Count > 0)
+                    if (fieldData.SoilAnalysis != null&& !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
                     {
-                        foreach (var soilAnalysis in fieldData.SoilAnalysis)
+                        string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
+                        string? updatedPotassiumIndex = null;
+
+                        if (!string.IsNullOrWhiteSpace(potassiumIndex))
                         {
-                            soilAnalysis.PotassiumIndex = soilAnalysis.PotassiumIndex != null ? (soilAnalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex)) : null;
+                            if (potassiumIndex == Resource.lblMinusTwo)
+                            {
+                                updatedPotassiumIndex = Resource.lblTwoMinus;
+                            }
+                            else if (potassiumIndex == Resource.lblPlusTwo)
+                            {
+                                updatedPotassiumIndex = Resource.lblTwoPlus;
+                            }
+                            else
+                            {
+                                updatedPotassiumIndex = potassiumIndex;
+                            }
                         }
+
+                        fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+
+
+
                     }
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
