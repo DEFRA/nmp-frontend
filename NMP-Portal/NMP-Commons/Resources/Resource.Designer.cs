@@ -160,7 +160,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
+        ///   Looks up a localized string similar to If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469..
         /// </summary>
         public static string contentGettingHelp1 {
             get {
@@ -237,15 +237,6 @@ namespace NMP.Commons.Resources {
         public static string ContentLetsUsKnowThatYouHaveLoggedInOrRegistered {
             get {
                 return ResourceManager.GetString("ContentLetsUsKnowThatYouHaveLoggedInOrRegistered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET..
-        /// </summary>
-        public static string ContentReplacePlanetandManner {
-            get {
-                return ResourceManager.GetString("ContentReplacePlanetandManner", resourceCulture);
             }
         }
         
@@ -6343,7 +6334,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can email the helpdesk if you have any issues with the data and recommendations the tool provides. Email &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;..
+        ///   Looks up a localized string similar to You can email the helpdesk at &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469 if you have any questions about the recommendations or reports provided by NMPT-GB..
         /// </summary>
         public static string lblHelp_with_the_service_recommendations_line1 {
             get {
@@ -6352,16 +6343,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool might give slightly different recommendations from the previous version of the tool, PLANET. This is because this new tool uses an updated version of the RB209 API, so it provides the very latest data..
-        /// </summary>
-        public static string lblHelp_with_the_service_recommendations_line2 {
-            get {
-                return ResourceManager.GetString("lblHelp_with_the_service_recommendations_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We will reply to your email as quickly as we can..
+        ///   Looks up a localized string similar to We will reply to your email or call as quickly as we can..
         /// </summary>
         public static string lblHelp_with_the_service_recommendations_line3 {
             get {
@@ -6388,7 +6370,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to login issues.
+        ///   Looks up a localized string similar to login or access issues.
         /// </summary>
         public static string lblHelpIssuesLine2 {
             get {
@@ -8909,15 +8891,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For advice about nutrient planning in general, visit &lt;a href=&quot;https://www.triedandtested.org.uk&quot; target=&quot;_blank&quot;&gt;Tried and Tested&lt;/a&gt; (external link)..
-        /// </summary>
-        public static string lblMore_information_line2 {
-            get {
-                return ResourceManager.GetString("lblMore_information_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to More about these NVZ rules.
         /// </summary>
         public static string lblMoreAboutTheseNVZRules {
@@ -11348,7 +11321,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public Beta release, January 2025.
+        ///   Looks up a localized string similar to Public Beta release, January 2026.
         /// </summary>
         public static string lblReleaseScheduleContentOne {
             get {
@@ -11465,7 +11438,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 25th November 2025.
+        ///   Looks up a localized string similar to 7th January 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
