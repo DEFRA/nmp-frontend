@@ -7100,4 +7100,22 @@ livestock manure.</value>
   <data name="MsgValidationForSoilMineralNitrogen" xml:space="preserve">
     <value>Please enter the value for soil mineral nitrogen (N) as a whole number</value>
   </data>
+  <data name="lblNmaxWalesWarningPara2Extension1" xml:space="preserve">
+    <value>The maximum nitrogen limit for {0} is {1}kg of nitrogen per hectare. This limit can be increased for individual fields under certain circumstances. The adjusted N-max limit for this field is {2}kg of nitrogen per hectare.</value>
+  </data>
+  <data name="lblNmaxWalesWarningPara2Extension2" xml:space="preserve">
+    <value>You can apply more than the adjusted limit to a field, if you apply less to another field growing this crop type, and you comply with the adjusted maximum nitrogen limit averaged across all fields growing this crop type on the farm.</value>
+  </data>
+  <data name="lblNmaxWalesWarningPara2Extension3" xml:space="preserve">
+    <value>You can check your compliance with the maximum nitrogen limit for all fields growing this crop by producing a maximum nitrogen limit report.</value>
+  </data>
+  <data name="lblNmaxEnglandWarningPara2Extension1" xml:space="preserve">
+    <value>The N-max limit for {0} is {1}kg of nitrogen per hectare. This limit can be increased for individual fields under certain circumstances. The adjusted N-max limit for this field is {2}kg of nitrogen per hectare.</value>
+  </data>
+  <data name="lblNmaxEnglandWarningPara2Extension2" xml:space="preserve">
+    <value>You can apply more than the adjusted N-max limit to a field, if you apply less to another field growing this crop type, and you comply with the adjusted N-max limit averaged across all fields growing this crop type on the farm.</value>
+  </data>
+  <data name="lblNmaxEnglandWarningPara2Extension3" xml:space="preserve">
+    <value>You can check your compliance with the N-max limit for all fields growing this crop by producing an N-max report.</value>
+  </data>
 </root>

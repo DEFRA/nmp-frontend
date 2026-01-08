@@ -1459,6 +1459,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             model.IsNitrogenExceedWarning = false;
+            model.IsNMaxLimitWarning = false;
             model.IsWarningMsgNeedToShow = false;
             model.IsClosedPeriodWarning = false;
             SetFertiliserManureToSession(model);
@@ -1501,6 +1502,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             model.IsNitrogenExceedWarning = false;
+            model.IsNMaxLimitWarning = false;
             model.IsClosedPeriodWarning = false;
             if (model.Lime != null)
             {
@@ -1631,7 +1633,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     }
                 }
             }
-            if (model.IsNitrogenExceedWarning || model.IsClosedPeriodWarning)
+            if (model.IsNitrogenExceedWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning)
             {
                 if (!model.IsWarningMsgNeedToShow)
                 {
@@ -1643,6 +1645,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             else
             {
                 model.IsNitrogenExceedWarning = false;
+                model.IsNMaxLimitWarning = false;
                 model.IsClosedPeriodWarning = false;
                 model.IsWarningMsgNeedToShow = false;
             }
@@ -2416,18 +2419,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         return View(model);
                                     }
                                 }
-                                if (model.IsNitrogenExceedWarning)
-                                {
-                                    if (!model.IsWarningMsgNeedToShow)
-                                    {
-                                        model.IsWarningMsgNeedToShow = true;
-                                    }
-                                }
-                                else
-                                {
-                                    model.IsNitrogenExceedWarning = false;
-                                    model.IsWarningMsgNeedToShow = false;
-                                }
+
+                                model.IsWarningMsgNeedToShow =
+                                    model.IsClosedPeriodWarning ||
+                                    model.IsNitrogenExceedWarning ||
+                                    model.IsNMaxLimitWarning;
+
                             }
                         }
                     }
@@ -2438,7 +2435,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             model.IsCheckAnswer = true;
             model.IsAnyChangeInField = false;
             model.IsAnyChangeInSameDefoliationFlag = false;
-            if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarning || model.IsNitrogenExceedWarning)
+            if (model.IsClosedPeriodWarningOnlyForGrassAndOilseed || model.IsClosedPeriodWarning || model.IsNitrogenExceedWarning || model.IsNMaxLimitWarning)
             {
                 model.IsWarningMsgNeedToShow = true;
             }
@@ -3087,17 +3084,26 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     //end
                                     if (totalNitrogenApplied > nMaxLimit)
                                     {
-                                        model.IsNitrogenExceedWarning = true;
+                                        string cropTypeName = await _fieldLogic.FetchCropTypeById(crop[0].CropTypeID.Value);
+                                        model.IsNMaxLimitWarning = true;
                                         (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
-                                        model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                                        model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                                        model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                                        model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                                        model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, nMaxLimit) : null;
-                                        model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                                        model.CropNmaxLimitWarningHeader = warningResponse.Header;
+                                        model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
+                                        model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
+                                        model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
+                                        model.CropNmaxLimitWarningPara2 = warningResponse.Para2;
+                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                                        {
+                                            model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxEnglandWarningPara2Extension1, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
+                                        }
+                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                        {
+                                            model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxWalesWarningPara2Extension1, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
+                                        }
+                                        model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
                                     }
                                 }
                                 else
@@ -4739,6 +4745,21 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     warningMessage.Para1 = model.ClosedPeriodNitrogenExceedWarningPara1;
                     warningMessage.Para2 = model.ClosedPeriodNitrogenExceedWarningPara2;
                     warningMessage.Para3 = model.ClosedPeriodNitrogenExceedWarningPara3;
+                    warningMessages.Add(warningMessage);
+                }
+                if (model.IsNMaxLimitWarning)
+                {
+                    WarningMessage warningMessage = new WarningMessage();
+
+                    warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
+                    warningMessage.CropID = managementPeriod.CropID ?? 0;
+                    warningMessage.JoiningID = null;
+                    warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
+                    warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
+                    warningMessage.Header = model.CropNmaxLimitWarningHeader;
+                    warningMessage.Para1 = model.CropNmaxLimitWarningPara1;
+                    warningMessage.Para2 = model.CropNmaxLimitWarningPara2;
+                    warningMessage.Para3 = model.CropNmaxLimitWarningPara3;
                     warningMessages.Add(warningMessage);
                 }
             }

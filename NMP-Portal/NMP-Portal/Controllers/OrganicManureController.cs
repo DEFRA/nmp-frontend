@@ -6655,8 +6655,15 @@ namespace NMP.Portal.Controllers
                                                 model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
                                                 model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, nMaxLimit) : null;
-                                                model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
+                                                model.CropNmaxLimitWarningPara2 = warning.Para2;
+                                                if(farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                                                {
+                                                    model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxEnglandWarningPara2Extension1, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
+                                                }
+                                                if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                                {
+                                                    model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxWalesWarningPara2Extension1, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
+                                                }
                                                 model.CropNmaxLimitWarningPara3 = warning.Para3;
 
                                             }
@@ -6692,8 +6699,15 @@ namespace NMP.Portal.Controllers
                                                         model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
                                                         model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, nMaxLimit) : null;
-                                                        model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.MsgCropNmaxLimitWarningPara1Additional, nMaxLimit);
+                                                        model.CropNmaxLimitWarningPara2 = warning.Para2;
+                                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                                                        {
+                                                            model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxEnglandWarningPara2Extension1, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
+                                                        }
+                                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                                        {
+                                                            model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxWalesWarningPara2Extension1, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
+                                                        }
                                                         model.CropNmaxLimitWarningPara3 = warning.Para3;
 
                                                     }

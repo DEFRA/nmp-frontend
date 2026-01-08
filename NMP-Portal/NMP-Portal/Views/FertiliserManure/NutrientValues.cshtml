@@ -17,6 +17,7 @@
     int trueWarningCount = 0;
     if (Model.IsClosedPeriodWarning) trueWarningCount++;
     if (Model.IsNitrogenExceedWarning) trueWarningCount++;
+    if (Model.IsNMaxLimitWarning) trueWarningCount++;
 }
 
 @section BeforeContent {
@@ -49,7 +50,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"/>
@@ -160,6 +160,14 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningCodeID" value="@Model.ClosedPeriodNitrogenExceedWarningCodeID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningLevelID" value="@Model.ClosedPeriodNitrogenExceedWarningLevelID" />
 
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara1" value="@Model.CropNmaxLimitWarningPara1" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2" value="@Model.CropNmaxLimitWarningPara2" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2Additional" value="@Model.CropNmaxLimitWarningPara2Additional" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara3" value="@Model.CropNmaxLimitWarningPara3" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningHeader" value="@Model.CropNmaxLimitWarningHeader" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningCodeID" value="@Model.CropNmaxLimitWarningCodeID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningLevelID" value="@Model.CropNmaxLimitWarningLevelID" />
             }
         </div>
         @if (isFieldsEmpty)
@@ -198,6 +206,20 @@
                                     <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
                                 }
                             }
+                            @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                            {
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.CropNmaxLimitWarningPara1
+                                </p>
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
+                                <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension2 : Resource.lblNmaxEnglandWarningPara2Extension2)</p>
+                                <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension3 : Resource.lblNmaxEnglandWarningPara2Extension3)</p>
+                                @if (Model.CropNmaxLimitWarningPara3 != null)
+                                {
+                                    <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
+                                }
+                            }
 
                         }
                         @if (trueWarningCount > 1)
@@ -222,6 +244,10 @@
                                 {
                                     <li>@Model.ClosedPeriodNitrogenExceedWarningPara1</li>
                                 }
+                                @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                                {
+                                    <li>@Model.CropNmaxLimitWarningPara1</li>
+                                }
                             </ul>
                             <govuk-details>
                                 <govuk-details-summary>
@@ -245,6 +271,14 @@
                                     {
                                         <h2 class="govuk-heading-s">@Model.ClosedPeriodNitrogenExceedWarningPara1</h2>
                                         <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                    }
+                                    @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningPara1</h2>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
+                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
+                                        <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension2 : Resource.lblNmaxEnglandWarningPara2Extension2)</p>
+                                        <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension3 : Resource.lblNmaxEnglandWarningPara2Extension3)</p>
                                     }
                                 </govuk-details-text>
                             </govuk-details>

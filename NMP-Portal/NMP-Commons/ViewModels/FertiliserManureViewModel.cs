@@ -69,4 +69,12 @@ public class FertiliserManureViewModel
     public int ClosedPeriodNitrogenExceedWarningLevelID { get; set; }
     public List<DefoliationList>? DefoliationList { get; set; }
     public bool IsDoubleCropValueChange { get; set; } = false;
+    public bool IsNMaxLimitWarning { get; set; } = false;
+    public string? CropNmaxLimitWarningHeader { get; set; }
+    public int CropNmaxLimitWarningCodeID { get; set; }
+    public int CropNmaxLimitWarningLevelID { get; set; }
+    public string? CropNmaxLimitWarningPara1 { get; set; }
+    public string? CropNmaxLimitWarningPara2 { get; set; }
+    public string? CropNmaxLimitWarningPara2Additional { get; set; }
+    public string? CropNmaxLimitWarningPara3 { get; set; }
 }
