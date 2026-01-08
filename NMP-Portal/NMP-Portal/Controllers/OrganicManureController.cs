@@ -7044,10 +7044,7 @@ namespace NMP.Portal.Controllers
 
             if (isWithinClosedPeriodAndFebruary == true)
             {
-                (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
-                    model.HarvestYear.Value, fieldId.ToString(), null, null);
                 if (error != null) return (model, error);
-
                 int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
                 int? organicManureId = null;
                 if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
