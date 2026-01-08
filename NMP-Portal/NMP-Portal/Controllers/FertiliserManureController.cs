@@ -2616,11 +2616,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (model.FertiliserManures.Count > 0)
             {
                 List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
-                List<WarningMessage> warningMessageList = new List<WarningMessage>();
                 var FertiliserManure = new List<object>();
                 foreach (FertiliserManureDataViewModel fertiliserManure in model.FertiliserManures)
                 {
-                    warningMessageList = new List<WarningMessage>();
+                    List<WarningMessage> warningMessageList = new List<WarningMessage>();
                     FertiliserManure fertManure = new FertiliserManure
                     {
                         ManagementPeriodID = fertiliserManure.ManagementPeriodID,
@@ -3199,7 +3198,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
                     {
                         List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
-                        List<WarningMessage> warningMessageList = new List<WarningMessage>();
                         var FertiliserManure = new List<object>();
                         foreach (FertiliserManureDataViewModel fertiliserManure in model.FertiliserManures)
                         {
@@ -3230,7 +3228,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             };
                             fertiliserList.Add(fertManure);
 
-                            warningMessageList = new List<WarningMessage>();
+                            List<WarningMessage> warningMessageList = new List<WarningMessage>();
                             warningMessageList = await GetWarningMessages(model, fertiliserManure);
                             warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Commons.Enums.WarningCode.NMaxLimit ? fertID : fertiliserManure.FieldID);
                             FertiliserManure.Add(new
