@@ -819,10 +819,31 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
                     }
                     //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
-                    if (fieldData.SoilAnalysis != null)
+                    if (fieldData.SoilAnalysis != null&& !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
                     {
-                           fieldData.SoilAnalysis.PotassiumIndex =fieldData.SoilAnalysis.PotassiumIndex != null ? (fieldData.SoilAnalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (fieldData.SoilAnalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : fieldData.SoilAnalysis.PotassiumIndex)) : null;
-                        
+                        string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
+                        string? updatedPotassiumIndex = null;
+
+                        if (!string.IsNullOrWhiteSpace(potassiumIndex))
+                        {
+                            if (potassiumIndex == Resource.lblMinusTwo)
+                            {
+                                updatedPotassiumIndex = Resource.lblTwoMinus;
+                            }
+                            else if (potassiumIndex == Resource.lblPlusTwo)
+                            {
+                                updatedPotassiumIndex = Resource.lblTwoPlus;
+                            }
+                            else
+                            {
+                                updatedPotassiumIndex = potassiumIndex;
+                            }
+                        }
+
+                        fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+
+
+
                     }
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
