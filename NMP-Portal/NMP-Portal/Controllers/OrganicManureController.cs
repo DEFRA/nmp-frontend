@@ -7053,7 +7053,7 @@ namespace NMP.Portal.Controllers
                 if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
                 {
                     organicManureId = model.UpdatedOrganicIds
-                        .Where(x => x.ManagementPeriodId == managementIds[0])
+                        .Where(x => x.ManagementPeriodId == managementPeriodId)
                         .Select(x => x.OrganicManureId)
                         .FirstOrDefault();
                 }
@@ -7128,7 +7128,7 @@ namespace NMP.Portal.Controllers
 
             HashSet<int> brassicaCrops = new HashSet<int>
             {
-                (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
                     (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
                     (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
                     (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
