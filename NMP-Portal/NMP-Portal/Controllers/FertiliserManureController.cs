@@ -2618,8 +2618,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
                 List<WarningMessage> warningMessageList = new List<WarningMessage>();
                 var FertiliserManure = new List<object>();
-                foreach (FertiliserManure fertiliserManure in model.FertiliserManures)
+                foreach (FertiliserManureDataViewModel fertiliserManure in model.FertiliserManures)
                 {
+                    warningMessageList = new List<WarningMessage>();
                     FertiliserManure fertManure = new FertiliserManure
                     {
                         ManagementPeriodID = fertiliserManure.ManagementPeriodID,
@@ -2644,7 +2645,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     };
 
                     fertiliserList.Add(fertManure);
-                    warningMessageList.AddRange(await GetWarningMessages(model));
+                    warningMessageList.AddRange(await GetWarningMessages(model, fertiliserManure));
 
                     FertiliserManure.Add(new
                     {
@@ -3230,7 +3231,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             fertiliserList.Add(fertManure);
 
                             warningMessageList = new List<WarningMessage>();
-                            warningMessageList = await GetWarningMessages(model);
+                            warningMessageList = await GetWarningMessages(model, fertiliserManure);
                             warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Commons.Enums.WarningCode.NMaxLimit ? fertID : fertiliserManure.FieldID);
                             FertiliserManure.Add(new
                             {
@@ -4705,45 +4706,42 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
     }
 
-    private async Task<List<WarningMessage>> GetWarningMessages(FertiliserManureViewModel model)
+    private async Task<List<WarningMessage>> GetWarningMessages(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliserManure)
     {
         List<WarningMessage> warningMessages = new List<WarningMessage>();
         try
         {
             if (model != null && model.N > 0 && model.FertiliserManures != null && model.FertiliserManures.Count > 0)
             {
-                foreach (var fertiliserManure in model.FertiliserManures)
+                (ManagementPeriod managementPeriod, Error error) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
+                if (!string.IsNullOrWhiteSpace(model.ClosedPeriodWarningPara1))
                 {
-                    (ManagementPeriod managementPeriod, Error error) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
-                    if (!string.IsNullOrWhiteSpace(model.ClosedPeriodWarningPara1))
-                    {
-                        WarningMessage warningMessage = new WarningMessage();
-                        warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
-                        warningMessage.CropID = managementPeriod.CropID ?? 0;
-                        warningMessage.JoiningID = null;
-                        warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
-                        warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
-                        warningMessage.Header = model.ClosedPeriodWarningHeader;
-                        warningMessage.Para1 = model.ClosedPeriodWarningPara1;
-                        warningMessage.Para2 = null;
-                        warningMessage.Para3 = model.ClosedPeriodWarningPara3;
-                        warningMessages.Add(warningMessage);
-                    }
+                    WarningMessage warningMessage = new WarningMessage();
+                    warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
+                    warningMessage.CropID = managementPeriod.CropID ?? 0;
+                    warningMessage.JoiningID = null;
+                    warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
+                    warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
+                    warningMessage.Header = model.ClosedPeriodWarningHeader;
+                    warningMessage.Para1 = model.ClosedPeriodWarningPara1;
+                    warningMessage.Para2 = null;
+                    warningMessage.Para3 = model.ClosedPeriodWarningPara3;
+                    warningMessages.Add(warningMessage);
+                }
 
-                    if (model.IsNitrogenExceedWarning)
-                    {
-                        WarningMessage warningMessage = new WarningMessage();
-                        warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
-                        warningMessage.CropID = managementPeriod.CropID ?? 0;
-                        warningMessage.JoiningID = null;
-                        warningMessage.WarningLevelID = model.ClosedPeriodNitrogenExceedWarningLevelID;
-                        warningMessage.WarningCodeID = model.ClosedPeriodNitrogenExceedWarningCodeID;
-                        warningMessage.Header = model.ClosedPeriodNitrogenExceedWarningHeader;
-                        warningMessage.Para1 = model.ClosedPeriodNitrogenExceedWarningPara1;
-                        warningMessage.Para2 = model.ClosedPeriodNitrogenExceedWarningPara2;
-                        warningMessage.Para3 = model.ClosedPeriodNitrogenExceedWarningPara3;
-                        warningMessages.Add(warningMessage);
-                    }
+                if (model.IsNitrogenExceedWarning)
+                {
+                    WarningMessage warningMessage = new WarningMessage();
+                    warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
+                    warningMessage.CropID = managementPeriod.CropID ?? 0;
+                    warningMessage.JoiningID = null;
+                    warningMessage.WarningLevelID = model.ClosedPeriodNitrogenExceedWarningLevelID;
+                    warningMessage.WarningCodeID = model.ClosedPeriodNitrogenExceedWarningCodeID;
+                    warningMessage.Header = model.ClosedPeriodNitrogenExceedWarningHeader;
+                    warningMessage.Para1 = model.ClosedPeriodNitrogenExceedWarningPara1;
+                    warningMessage.Para2 = model.ClosedPeriodNitrogenExceedWarningPara2;
+                    warningMessage.Para3 = model.ClosedPeriodNitrogenExceedWarningPara3;
+                    warningMessages.Add(warningMessage);
                 }
             }
         }
