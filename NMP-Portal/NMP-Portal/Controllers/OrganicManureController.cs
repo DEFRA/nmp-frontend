@@ -5870,8 +5870,14 @@ namespace NMP.Portal.Controllers
 
                             }
                         }
+
+                        OrganicManureDataViewModel? organicManureData = model.OrganicManures?
+                         .FirstOrDefault(x => x.ManagementPeriodID == orgManure.ManagementPeriodID);
                         warningMessageList = new List<WarningMessage>();
-                        warningMessageList = await GetWarningMessages(model);
+                        if (organicManureData != null)
+                        {
+                            warningMessageList = await GetWarningMessages(model, organicManureData);
+                        }
 
                         OrganicManures.Add(new
                         {
@@ -6922,6 +6928,12 @@ namespace NMP.Portal.Controllers
             // Non-organic farm, high N, NVZ
             if (!registeredOrganicProducer && isHighReadilyAvailableNitrogen && isWithinNVZ)
             {
+                bool isPerennial = false;
+                (CropTypeResponse cropTypeResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
+                isPerennial = await _organicManureLogic.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
+
+                closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
+
                 (model, error) = await HandleNonOrganicHighNWarning(model, warningMessage);
                 return (model, error, closedPeriod, isWithinClosedPeriod);
             }
@@ -7379,7 +7391,7 @@ namespace NMP.Portal.Controllers
                                                     bool isOrganicManureExistWithin4Weeks = false;
                                                     if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
                                                     {
-                                                        (isOrganicManureExistWithin4Weeks, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID, model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementIds[0]).Select(x => x.OrganicManureId).FirstOrDefault());
+                                                        (isOrganicManureExistWithin4Weeks, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(model.OrganicManures[0].ManagementPeriodID, model.ApplicationDate.Value.AddDays(-28).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementIds[0]).Select(x => x.OrganicManureId).FirstOrDefault());
                                                     }
                                                     else
                                                     {
@@ -8448,7 +8460,13 @@ namespace NMP.Portal.Controllers
                                             }
                                         }
                                         warningMessageList = new List<WarningMessage>();
-                                        warningMessageList = await GetWarningMessages(model);
+                                        OrganicManureDataViewModel? organicManureData = model.OrganicManures?
+                                        .FirstOrDefault(x => x.ManagementPeriodID == orgManure.ManagementPeriodID);
+                                        warningMessageList = new List<WarningMessage>();
+                                        if (organicManureData != null)
+                                        {
+                                            warningMessageList = await GetWarningMessages(model, organicManureData);
+                                        }
                                         warningMessageList.ForEach(x => x.JoiningID = x.WarningCodeID != (int)NMP.Commons.Enums.WarningCode.NMaxLimit ? orgManure.ID : fieldID);
                                         OrganicManures.Add(new
                                         {
@@ -9947,25 +9965,22 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private async Task<List<WarningMessage>> GetWarningMessages(OrganicManureViewModel model)
+        private async Task<List<WarningMessage>> GetWarningMessages(OrganicManureViewModel model, OrganicManureDataViewModel organicManure)
         {
             List<WarningMessage> warningMessages = new List<WarningMessage>();
             try
             {
                 if (model != null && model.OrganicManures != null && model.OrganicManures.Count > 0)
                 {
-                    foreach (var organicManure in model.OrganicManures)
+                    (ManagementPeriod managementPeriod, Error error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
+                    if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                     {
-                        (ManagementPeriod managementPeriod, Error error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                        if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-                        {
-                            AddOrganicManureNfieldLimitWarning(model, warningMessages, organicManure, managementPeriod);
-                            AddNMaxLimitWarning(model, warningMessages, organicManure, managementPeriod);
-                            AddClosedPeriodWarning(model, warningMessages, organicManure, managementPeriod);
-                            AddEndClosedPeriodFebruaryWarning(model, warningMessages, organicManure, managementPeriod);
-                            AddEndClosedPeriodFebruaryExistWithinThreeWeeks(model, warningMessages, organicManure, managementPeriod);
-                            AddStartPeriodEndFebOrganicAppRateExceedMaxN150(model, warningMessages, organicManure, managementPeriod);
-                        }
+                        AddOrganicManureNfieldLimitWarning(model, warningMessages, organicManure, managementPeriod);
+                        AddNMaxLimitWarning(model, warningMessages, organicManure, managementPeriod);
+                        AddClosedPeriodWarning(model, warningMessages, organicManure, managementPeriod);
+                        AddEndClosedPeriodFebruaryWarning(model, warningMessages, organicManure, managementPeriod);
+                        AddEndClosedPeriodFebruaryExistWithinThreeWeeks(model, warningMessages, organicManure, managementPeriod);
+                        AddStartPeriodEndFebOrganicAppRateExceedMaxN150(model, warningMessages, organicManure, managementPeriod);
                     }
                 }
             }
