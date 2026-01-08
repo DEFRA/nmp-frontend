@@ -113,7 +113,8 @@ namespace NMP.Commons.Helpers
                 (int)CropTypes.WholecropSpringBarley,
                 (int)CropTypes.WholecropSpringWheat,
                 (int)CropTypes.WholecropWinterBarley,
-                (int)CropTypes.WholecropWinterWheat
+                (int)CropTypes.WholecropWinterWheat,
+                (int)CropTypes.BabyLeafLettuce
             };
 
             return eligibleCrops.Contains(cropTypeId);
