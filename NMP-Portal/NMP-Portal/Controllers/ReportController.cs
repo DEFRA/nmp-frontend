@@ -1730,7 +1730,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
-                    model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
+                    model.ReportTypeName =(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)?Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit;
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
@@ -4057,7 +4057,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
-                        TempData["succesMsgContent3"] = string.Format(Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] = string.Format(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales?Resource.MsgImportExportSuccessMsgForWales:Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
                     }
                 }
                 model.FarmName = farm.Name;
@@ -5729,7 +5729,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         {
                             TempData["RemoveSuccessMsg"] = Resource.lblAddMoreLivestock;
                         }
-                        TempData["succesMsgContent3"] = string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] =
+                            (model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)? string.Format(Resource.MsgSuccessForWalesLivestock, _farmDataProtector.Unprotect(y)):
+                            string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
                     }
                 }
                 model.FarmName = farm.Name;
