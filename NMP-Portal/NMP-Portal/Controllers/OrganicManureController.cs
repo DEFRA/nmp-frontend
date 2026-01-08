@@ -3528,7 +3528,7 @@ namespace NMP.Portal.Controllers
             catch (HttpRequestException hre)
             {
                 _logger.LogTrace(hre, "Organic Manure Controller : Exception in ManualApplicationRate() post action : {Message}, {StackTrace}", hre.Message, hre.StackTrace);
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.InternalServerError);                
+                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.InternalServerError);
             }
             catch (Exception ex)
             {
@@ -7038,53 +7038,81 @@ namespace NMP.Portal.Controllers
             OrganicManureViewModel model, int fieldId, string closedPeriod, WarningWithinPeriod warningMessage)
         {
             Error? error = null;
-            bool isOrganicManureExist = false;
-            bool? isWithinClosedPeriodAndFebruary = warningMessage.CheckEndClosedPeriodAndFebruary(
-                model.ApplicationDate.Value, closedPeriod);
 
-            if (isWithinClosedPeriodAndFebruary == true)
+            bool? isWithinClosedPeriodAndFebruary =
+                warningMessage.CheckEndClosedPeriodAndFebruary(
+                    model.ApplicationDate.Value,
+                    closedPeriod);
+
+            if (isWithinClosedPeriodAndFebruary != true)
             {
-                (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
-                    model.HarvestYear.Value, fieldId.ToString(), null, null);
-                if (error != null) return (model, error);
+                return (model, null);
+            }
 
-                int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
-                int? organicManureId = null;
-                if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
-                {
-                    organicManureId = model.UpdatedOrganicIds
-                        .Where(x => x.ManagementPeriodId == managementIds[0])
-                        .Select(x => x.OrganicManureId)
-                        .FirstOrDefault();
-                }
+            (List<int> managementIds, error) =
+                await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
+                    model.HarvestYear.Value,
+                    fieldId.ToString(),
+                    null,
+                    null);
 
-                (isOrganicManureExist, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(
+            if (error != null)
+            {
+                return (model, error);
+            }
+
+            int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
+            int? organicManureId = null;
+
+            if (model.UpdatedOrganicIds?.Count > 0)
+            {
+                int targetManagementId =
+                    managementIds.Count > 1 ? managementPeriodId : managementIds[0];
+
+                organicManureId = model.UpdatedOrganicIds
+                    .Where(x => x.ManagementPeriodId == targetManagementId)
+                    .Select(x => x.OrganicManureId)
+                    .FirstOrDefault();
+            }
+
+            (bool isOrganicManureExist, error) =
+                await _organicManureLogic.FetchOrganicManureExistanceByDateRange(
                     managementPeriodId,
                     model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"),
                     model.ApplicationDate.Value.ToString("yyyy-MM-dd"),
                     false,
                     organicManureId);
-                if (error != null) return (model, error);
+
+            if (error != null || !isOrganicManureExist)
+            {
+                return (model, error);
             }
 
-            if (isOrganicManureExist)
+            bool isSlurry = IsSlurryType(model.ManureTypeId);
+            bool isPoultryManure =
+                model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
+
+            if (!isSlurry && !isPoultryManure)
             {
-                bool isSlurry = IsSlurryType(model.ManureTypeId);
-                bool isPoultryManure = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
-                if (isSlurry || isPoultryManure)
-                {
-                    //warning excel sheet row no. 21
-                    model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
-                    WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                        model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.AllowWeeksBetweenSlurryPoultryApplications.ToString());
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
-                }
+                return (model, null);
             }
+
+            // warning excel sheet row no. 21
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+
+            WarningResponse warning =
+                await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmCountryId ?? 0,
+                    NMP.Commons.Enums.WarningKey
+                        .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+
             return (model, null);
         }
 
@@ -7128,7 +7156,7 @@ namespace NMP.Portal.Controllers
 
             HashSet<int> brassicaCrops = new HashSet<int>
             {
-                (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
                     (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
                     (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
                     (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
