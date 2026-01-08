@@ -819,12 +819,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
                     }
                     //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
-                    if (fieldData.SoilAnalysis != null && fieldData.SoilAnalysis.Count > 0)
+                    if (fieldData.SoilAnalysis != null)
                     {
-                        foreach (var soilAnalysis in fieldData.SoilAnalysis)
-                        {
-                            soilAnalysis.PotassiumIndex = soilAnalysis.PotassiumIndex != null ? (soilAnalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex)) : null;
-                        }
+                           fieldData.SoilAnalysis.PotassiumIndex =fieldData.SoilAnalysis.PotassiumIndex != null ? (fieldData.SoilAnalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (fieldData.SoilAnalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : fieldData.SoilAnalysis.PotassiumIndex)) : null;
+                        
                     }
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
