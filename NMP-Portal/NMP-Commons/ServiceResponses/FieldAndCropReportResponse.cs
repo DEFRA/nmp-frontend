@@ -12,7 +12,7 @@ public class FieldAndCropReportResponse  : FieldViewModel
     public List<PreviousCropping>? PreviousCroppings { get; set; }
 
     [JsonProperty("SoilAnalysis")]
-    public List<SoilAnalysisForReportResponse>? SoilAnalysis { get; set; }
+    public SoilAnalysisForReportResponse? SoilAnalysis { get; set; }
 
      [JsonProperty("SoilDetails")]
     public SoilDetailsResponse? SoilDetails { get; set; }
