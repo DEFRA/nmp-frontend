@@ -86,31 +86,42 @@
                             </p>
                         }
 
-                    </li>
-                </ul>
+                </li>
+            </ul>
 
-            </div>
-            <div>
-                <hr class="seperator_thirty">
-                <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent4</h2>
-                <p class="govuk-body">
-                    @Resource.lblFarmSummaryContent5
-                </p>
+        </div>
+        <div>
+            <hr class="seperator_thirty">
+            <h2 class="govuk-heading-m">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                Resource.lblFarmSummaryContentForWalesOne:Resource.lblFarmSummaryContent4)</h2>
+            <p class="govuk-body">
+                @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                Resource.lblFarmSummaryContentForWalesTwo : Resource.lblFarmSummaryContent5)
 
-                <ul class="govuk-list govuk-list--bullet">
-                    <li>@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMax)</li>
-                    <li>@Resource.lblLivestockManureNitrogenNFarmLimit</li>
-                    <li>@Resource.lblExistingManureStorageCapacity</li>
-                    <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li>
-                </ul>
+            </p>
 
-                <ul class="menu-list govuk-list govuk-list--spaced">
-                    <li>
-                        <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">@Resource.lblCreateAnNVZReport</a>
-                    </li>
-                </ul>
-            </div>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMax)</li>
+
+                <li>
+                    @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                        Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenNFarmLimit)
+                                                                                                                              </li>
+                                                                                                                              @* <li>@Resource.lblExistingManureStorageCapacity</li>
+                    <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li> *@
+            </ul>
+
+            <ul class="menu-list govuk-list govuk-list--spaced">
+                <li>
+                    <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">
+                        @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                                Resource.lblFarmSummaryContent6 : Resource.lblCreateAnNVZReport)
+
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
+</div>
 }
 
