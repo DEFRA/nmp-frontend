@@ -9197,33 +9197,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The N-max limit for {0} is {1}kg of nitrogen per hectare. This limit can be increased for individual fields under certain circumstances. The adjusted N-max limit for this field is {2}kg of nitrogen per hectare..
-        /// </summary>
-        public static string lblNmaxEnglandWarningPara2Extension1 {
-            get {
-                return ResourceManager.GetString("lblNmaxEnglandWarningPara2Extension1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can apply more than the adjusted N-max limit to a field, if you apply less to another field growing this crop type, and you comply with the adjusted N-max limit averaged across all fields growing this crop type on the farm..
-        /// </summary>
-        public static string lblNmaxEnglandWarningPara2Extension2 {
-            get {
-                return ResourceManager.GetString("lblNmaxEnglandWarningPara2Extension2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can check your compliance with the N-max limit for all fields growing this crop by producing an N-max report..
-        /// </summary>
-        public static string lblNmaxEnglandWarningPara2Extension3 {
-            get {
-                return ResourceManager.GetString("lblNmaxEnglandWarningPara2Extension3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} limit for {1} before adjustments: {2}kg per hectare..
         /// </summary>
         public static string lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare {
@@ -9292,33 +9265,6 @@ namespace NMP.Commons.Resources {
         public static string lblNMaxReportSummaryContent {
             get {
                 return ResourceManager.GetString("lblNMaxReportSummaryContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The maximum nitrogen limit for {0} is {1}kg of nitrogen per hectare. This limit can be increased for individual fields under certain circumstances. The adjusted N-max limit for this field is {2}kg of nitrogen per hectare..
-        /// </summary>
-        public static string lblNmaxWalesWarningPara2Extension1 {
-            get {
-                return ResourceManager.GetString("lblNmaxWalesWarningPara2Extension1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can apply more than the adjusted limit to a field, if you apply less to another field growing this crop type, and you comply with the adjusted maximum nitrogen limit averaged across all fields growing this crop type on the farm..
-        /// </summary>
-        public static string lblNmaxWalesWarningPara2Extension2 {
-            get {
-                return ResourceManager.GetString("lblNmaxWalesWarningPara2Extension2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can check your compliance with the maximum nitrogen limit for all fields growing this crop by producing a maximum nitrogen limit report..
-        /// </summary>
-        public static string lblNmaxWalesWarningPara2Extension3 {
-            get {
-                return ResourceManager.GetString("lblNmaxWalesWarningPara2Extension3", resourceCulture);
             }
         }
         

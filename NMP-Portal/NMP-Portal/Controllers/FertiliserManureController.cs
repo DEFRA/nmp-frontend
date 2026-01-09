@@ -2866,7 +2866,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             //warning excel sheet row no. 25
             if (brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod)
             {
-                DateTime fourWeekDate = model.Date.Value.AddDays(-28);
+                DateTime fourWeekDate = model.Date.Value.AddDays(-27);
                 decimal nitrogenInFourWeek = 0;
                 //if we are coming for update then we will exclude the fertiliserId.
                 if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
@@ -3094,15 +3094,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
                                         model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
                                         model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
-                                        model.CropNmaxLimitWarningPara2 = warningResponse.Para2;
-                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
-                                        {
-                                            model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxEnglandWarningPara2Extension1, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
-                                        }
-                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                        {
-                                            model.CropNmaxLimitWarningPara2Additional = string.Format(Resource.lblNmaxWalesWarningPara2Extension1, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit);
-                                        }
+                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2)? string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit):null;
+                                        
                                         model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
                                     }
                                 }

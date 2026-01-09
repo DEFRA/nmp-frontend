@@ -211,10 +211,7 @@
                                 <p class="govuk-notification-banner__heading">
                                     @Model.CropNmaxLimitWarningPara1
                                 </p>
-                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
-                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
-                                <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension2 : Resource.lblNmaxEnglandWarningPara2Extension2)</p>
-                                <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension3 : Resource.lblNmaxEnglandWarningPara2Extension3)</p>
+                                <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
                                 @if (Model.CropNmaxLimitWarningPara3 != null)
                                 {
                                     <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
@@ -275,20 +272,18 @@
                                     @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
                                     {
                                         <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningPara1</h2>
-                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
-                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
-                                        <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension2 : Resource.lblNmaxEnglandWarningPara2Extension2)</p>
-                                        <p class="govuk-body">@(Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblNmaxWalesWarningPara2Extension3 : Resource.lblNmaxEnglandWarningPara2Extension3)</p>
+                                        <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
+                                        
                                     }
                                 </govuk-details-text>
                             </govuk-details>
-                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                            @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
                             {
-                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheNitrateVulnerableZone</p>
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
                             }
-                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                            else
                             {
-                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheWaterResources</p>
+                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
                             }
                         }
 
