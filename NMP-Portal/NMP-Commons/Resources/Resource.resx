@@ -2376,9 +2376,6 @@ cubic metres per hectare  not set</value>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
-  <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>You must follow the appropriate soil analysis regulations for your region.</value>
-  </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S) not set?</value>
   </data>
