@@ -293,8 +293,7 @@
                             <p class="govuk-notification-banner__heading">
                                 @Model.CropNmaxLimitWarningPara1
                             </p>
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
+                            <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
                             @if (Model.CropNmaxLimitWarningPara3 != null)
                             {
                                 <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
@@ -370,8 +369,7 @@
                                     @if (Model.IsNMaxLimitWarning)
                                     {
                                         <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningPara1</h2>
-                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2</p>
-                                        <p class="govuk-body">@Model.CropNmaxLimitWarningPara2Additional</p>
+                                        <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
                                     }
                                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                                     {
@@ -385,13 +383,21 @@
                                     }
                                 </govuk-details-text>
                             </govuk-details>
-                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                            @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                             {
-                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheNitrateVulnerableZone</p>
+                                <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara3</p>
                             }
-                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                            else if (Model.IsEndClosedPeriodFebruaryWarning)
                             {
-                                <p class="govuk-body">@Resource.lblItIsAnOffenceToBreachTheWaterResources</p>
+                                <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara3</p>
+                            }
+                            else if (Model.IsNMaxLimitWarning)
+                            {
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
+                            }
+                            else if (Model.IsOrgManureNfieldLimitWarning)
+                            {
+                                <p class="govuk-body">@Model.NmaxWarningPara3</p>
                             }
 
                         </div>

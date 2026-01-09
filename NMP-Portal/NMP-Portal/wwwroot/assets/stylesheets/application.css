@@ -951,3 +951,8 @@ p + .govuk-heading-s,
 hr.seperator_five_report {
     margin: 10px 0 40px 0;
 }
+
+.warning-text {
+    white-space: pre-line;
+}
+
