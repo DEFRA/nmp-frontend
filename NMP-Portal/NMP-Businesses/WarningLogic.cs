@@ -3,8 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using NMP.Commons.Helpers;
+using System.Collections.Generic;
+using System.Reflection;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
@@ -28,6 +32,17 @@ public class WarningLogic(ILogger<WarningLogic> logger, IWarningService warningS
     public async Task<List<WarningResponse>> FetchAllWarningAsync()
     {
         _logger.LogTrace("WarningLogic : FetchAllWarningAsync() called");
-        return await _warningService.FetchAllWarningAsync();
+
+        var session = _httpContextAccessor.HttpContext?.Session;
+        var warningList = session?.GetObjectFromJson<List<WarningResponse>>(_warningListSessionKey);
+
+        if (warningList != null && warningList.Count > 0)
+            return warningList;
+
+        warningList = await _warningService.FetchAllWarningAsync();
+        session?.SetObjectAsJson(_warningListSessionKey, warningList);
+
+        return warningList;
     }
+
 }

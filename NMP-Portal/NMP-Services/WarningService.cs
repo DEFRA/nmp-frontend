@@ -57,11 +57,11 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadAsStringAsync();
         var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (responseWrapper?.Data is null)
+        if (responseWrapper?.Data is null&& responseWrapper?.Data?.records is null)
         {
             return new List<WarningResponse>();
         }
-        return responseWrapper.Data.ToObject<List<WarningResponse>>();
+        return responseWrapper.Data.records.ToObject<List<WarningResponse>>();
     }
 
 
