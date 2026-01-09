@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
-namespace NMP.Portal.Helpers
+namespace NMP.Commons.Helpers
 {
     public static class SessionExtensions
     {
