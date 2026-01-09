@@ -153,14 +153,12 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
 
         return soilTypes;
@@ -196,14 +194,12 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return cropGroup;
     }
@@ -238,58 +234,82 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);           
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);           
         }
         return cropType;
     }
 
-    public async Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
+    public async Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
+    {
+        if (fieldData != null && fieldData.Field != null && !string.IsNullOrWhiteSpace(fieldData.Field.Name) && await IsFieldExistAsync(farmId, fieldData.Field.Name))
+        {
+            return (null, CreateFieldAlreadyExistsError());
+        }
+
+        var httpClient = await GetNMPAPIClient();
+        var response = await PostFieldAsync(httpClient, farmId, fieldData);
+
+        return await ParseAddFieldResponseAsync(response);
+    }
+
+    private static Error CreateFieldAlreadyExistsError()
+    {
+        return new Error
+        {
+            Message = Resource.MsgFieldAlreadyExist
+        };
+    }
+
+    private async static Task<HttpResponseMessage> PostFieldAsync( HttpClient httpClient, int farmId, FieldData fieldData)
     {
         string jsonData = JsonConvert.SerializeObject(fieldData);
-        Field field = null;
-        Error error = new Error();
-        HttpClient httpClient = await GetNMPAPIClient();
-        bool IsFarmExist = await IsFieldExistAsync(farmId, fieldData.Field.Name);
-        if (!IsFarmExist)
-        {
-            var url = string.Format(APIURLHelper.AddFieldAsyncAPI, farmId);
-            var response = await httpClient.PostAsync(url, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
-            {
+        string url = string.Format(APIURLHelper.AddFieldAsyncAPI, farmId);
 
-                JObject farmDataJObject = responseWrapper.Data["Field"] as JObject;
-                if (fieldData != null)
-                {
-                    field = farmDataJObject.ToObject<Field>();
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        else
+        var response = await httpClient.PostAsync(
+            url,
+            new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
+        response.EnsureSuccessStatusCode();
+        return response;
+    }
+
+    private async Task<(Field?, Error?)> ParseAddFieldResponseAsync(HttpResponseMessage response)
+    {
+        string result = await response.Content.ReadAsStringAsync();
+        var wrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (wrapper?.Data != null && wrapper?.Data?.GetType().Name != "String")
         {
-            error.Message = Resource.MsgFieldAlreadyExist;
+            var field = ExtractObject<Field>(wrapper, "Field");
+            return (field, null);
         }
-        return (field, error);
+
+        var error = ExtractError(wrapper, _logger);
+        return (null, error);
+    }
+
+    private static T? ExtractObject<T>(ResponseWrapper? wrapper, string key)
+    {
+        return wrapper?.Data[key] is JObject jobject
+            ? jobject.ToObject<T>()
+            : default(T);
+    }
+
+    private static Error? ExtractError(ResponseWrapper? wrapper,ILogger<FieldService> logger)
+    {
+        var error = wrapper?.Error?.ToObject<Error>();
+
+        if (error != null)
+        {            
+            logger.LogError("Error Response Wrapper: {Wrapper}", JsonConvert.SerializeObject(wrapper));
+        }
+
+        return error;
     }
 
     public async Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null)
@@ -309,8 +329,6 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<List<Field>> FetchFieldsByFarmId(int farmId)
     {
         List<Field> fields = new List<Field>();
-        Error error = new Error();
-
         HttpClient httpClient = await GetNMPAPIClient();
         var url = string.Format(APIURLHelper.FetchFieldsByFarmIdAsyncAPI, farmId);
         var response = await httpClient.GetAsync(url);
@@ -321,7 +339,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
             if (responseWrapper != null && responseWrapper.Data != null)
             {
-                var fieldslist = responseWrapper.Data.Fields.ToObject<List<Field>>();
+                var fieldslist = responseWrapper?.Data?.Fields.ToObject<List<Field>>();
                 fields.AddRange(fieldslist);
             }
         }
@@ -329,7 +347,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
             if (responseWrapper != null && responseWrapper.Error != null)
             {
-                error = responseWrapper.Error.ToObject<Error>();
+                Error? error = responseWrapper?.Error?.ToObject<Error>();
                 if (error != null)
                 {
                     _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
@@ -354,7 +372,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    field = responseWrapper.Data.Field.ToObject<Field>();
+                    field = responseWrapper?.Data?.Field.ToObject<Field>();
                 }
             }
             else
@@ -362,21 +380,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex,ex.Message);            
         }
         return field;
     }
@@ -387,38 +406,33 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         Error error = new Error();
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchAllCropTypeAsyncAPI));
+            HttpClient httpClient = await GetNMPAPIClient();            
+            var response = await httpClient.GetAsync(APIURLHelper.FetchAllCropTypeAsyncAPI);
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var cropTypesList = responseWrapper.Data.ToObject<List<CropTypeResponse>>();
+                    var cropTypesList = responseWrapper?.Data?.ToObject<List<CropTypeResponse>>();
                     cropTypes.AddRange(cropTypesList);
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                ExtractError(responseWrapper, _logger);
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre,hre.Message);           
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
 
         return cropTypes;
@@ -430,7 +444,6 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         string soilType = string.Empty;
         try
         {
-
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeBySoilTypeIdAsyncAPI, soilTypeId));
             string result = await response.Content.ReadAsStringAsync();
@@ -444,21 +457,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);           
         }
         return soilType;
     }
@@ -483,21 +497,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);           
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);           
         }
         return soilAnalysis;
     }
@@ -524,7 +539,10 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
@@ -532,22 +550,20 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);           
         }
         return (fieldDetail, error);
     }
 
     public async Task<int> FetchSNSCategoryIdByCropTypeId(int cropTypeId)
     {
-        int? sNSCategoryID = null;
+        int? snsCategoryID = null;
         Error error = new Error();
         try
         {
@@ -562,7 +578,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                     CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
                     if (cropTypeLinkingResponse != null)
                     {
-                        sNSCategoryID = cropTypeLinkingResponse.SNSCategoryID;
+                        snsCategoryID = cropTypeLinkingResponse.SNSCategoryID;
                     }
                 }
             }
@@ -571,23 +587,24 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
-        return sNSCategoryID ?? 0;
+        return snsCategoryID ?? 0;
     }
 
     public async Task<List<SeasonResponse>> FetchSeasons()
@@ -613,21 +630,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);           
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return seasons;
     }
@@ -647,15 +665,18 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
             {
 
-                JObject farmDataJObject = responseWrapper.Data as JObject;
+                JObject farmDataJObject = responseWrapper?.Data as JObject;
                 snsResponse = farmDataJObject.ToObject<SnsResponse>();
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    error = responseWrapper?.Error?.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
 
@@ -663,12 +684,12 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre,hre.Message);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex,ex.Message);
         }
         return (snsResponse, error);
     }
@@ -705,12 +726,12 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
         }
         return (field, error);
     }
@@ -733,21 +754,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
 
         return (message, error);
@@ -776,21 +798,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(   hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return grassManagementOptions;
     }
@@ -818,21 +841,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return grassTypicalCuts;
     }
@@ -860,21 +884,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return soilNitrogenSupplyItems;
     }
@@ -885,7 +910,9 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldsByFarmIdAsyncAPI, farmId, shortSummary));
+            string url= string.Format(APIURLHelper.FetchFieldByFarmIdAsyncAPI, farmId, shortSummary);
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -901,21 +928,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return (error, fields);
     }
@@ -941,21 +969,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return (fieldResponse, error);
     }
@@ -980,22 +1009,23 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    error = responseWrapper?.Error?.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);            
         }
         return (cropAndFieldReportResponse, error);
     }

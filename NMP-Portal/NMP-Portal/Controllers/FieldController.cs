@@ -1769,8 +1769,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 PreviousCroppings = previousCropping
             };
 
-            (Field fieldResponse, Error error1) = await _fieldLogic.AddFieldAsync(fieldData, farm.ID, farm.Name);
-            if (error1.Message == null && fieldResponse != null)
+            (Field? fieldResponse, Error? error1) = await _fieldLogic.AddFieldAsync(fieldData, farm.ID, farm.Name);
+            if (error1== null && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
                 string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
