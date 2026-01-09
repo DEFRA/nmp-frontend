@@ -12428,15 +12428,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must follow the appropriate soil analysis regulations for your region..
-        /// </summary>
-        public static string lblSoil_Analysis_line2 {
-            get {
-                return ResourceManager.GetString("lblSoil_Analysis_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan..
         /// </summary>
         public static string lblSoil_Analysis_line3 {

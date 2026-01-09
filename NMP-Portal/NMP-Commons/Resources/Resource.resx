@@ -3792,9 +3792,6 @@ cubic metres per hectare  not set</value>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
-  <data name="lblSoil_Analysis_line2" xml:space="preserve">
-    <value>You must follow the appropriate soil analysis regulations for your region.</value>
-  </data>
   <data name="lblSoil_Analysis_line3" xml:space="preserve">
     <value>You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan.</value>
   </data>

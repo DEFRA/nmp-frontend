@@ -73,6 +73,14 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningCodeID" value="@Model.ClosedPeriodNitrogenExceedWarningCodeID"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningLevelID" value="@Model.ClosedPeriodNitrogenExceedWarningLevelID"/>
 
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara1" value="@Model.CropNmaxLimitWarningPara1"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2" value="@Model.CropNmaxLimitWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2Additional" value="@Model.CropNmaxLimitWarningPara2Additional"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara3" value="@Model.CropNmaxLimitWarningPara3"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningHeader" value="@Model.CropNmaxLimitWarningHeader"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningCodeID" value="@Model.CropNmaxLimitWarningCodeID"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningLevelID" value="@Model.CropNmaxLimitWarningLevelID"/>
                 @if (Model != null)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
@@ -163,7 +171,7 @@
                     <govuk-error-summary-item href="#">@TempData["CheckYourAnswerError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning || Model.IsClosedPeriodWarning))
+            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning))
             {
                 @if(Model.N>0)
                 {
@@ -172,7 +180,7 @@
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
 
-                    @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
+                    @if (Model.IsClosedPeriodWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.ClosedPeriodWarningPara1
@@ -194,6 +202,12 @@
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.ClosedPeriodNitrogenExceedWarningPara1
+                        </p>
+                    }
+                    @if (Model.IsNMaxLimitWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.CropNmaxLimitWarningPara1
                         </p>
                     }
 
