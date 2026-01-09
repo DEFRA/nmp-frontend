@@ -1854,7 +1854,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            if (!model.IsCheckList && model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+            if (!model.IsCheckList)
             {
 
                 (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);

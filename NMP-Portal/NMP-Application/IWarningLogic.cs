@@ -11,6 +11,7 @@ namespace NMP.Application
     {
         Task<List<WarningHeaderResponse>> FetchWarningHeaderByFieldIdAndYearAsync(string fieldIds, int harvestYear);
         Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey);
+        Task<List<WarningResponse>> FetchAllWarningAsync();
 
     }
 }
