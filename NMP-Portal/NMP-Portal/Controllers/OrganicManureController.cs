@@ -3216,12 +3216,14 @@ namespace NMP.Portal.Controllers
 
                     if (model.FieldList != null && model.FieldList.Count > 0)
                     {
+                        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                         foreach (var fieldId in model.FieldList)
                         {
                             Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
                             if (field != null)
                             {
                                 bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
+                                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
                                 if (isFieldIsInNVZ)
                                 {
                                     (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldId, null, null);
@@ -3229,10 +3231,10 @@ namespace NMP.Portal.Controllers
                                     {
                                         if (managementIds.Count > 0)
                                         {
-                                            (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], false, Convert.ToInt32(fieldId));
+                                            (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], false, Convert.ToInt32(fieldId), farm, warningList);
                                             if (error == null)
                                             {
-                                                (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false);
+                                                (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false, farm);
                                                 if (error == null)
                                                 {
                                                     (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), false);
@@ -3411,12 +3413,14 @@ namespace NMP.Portal.Controllers
 
                 if (model.FieldList != null && model.FieldList.Count > 0)
                 {
+                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     foreach (var fieldId in model.FieldList)
                     {
                         Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
                         if (field != null)
                         {
                             bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
+                            List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
                             if (isFieldIsInNVZ)
                             {
                                 (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldId, null, null);
@@ -3424,10 +3428,10 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (managementIds.Count > 0)
                                     {
-                                        (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], false, Convert.ToInt32(fieldId));
+                                        (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], false, Convert.ToInt32(fieldId), farm, warningList);
                                         if (error == null)
                                         {
-                                            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false);
+                                            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false, farm);
                                             if (error == null)
                                             {
                                                 if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
@@ -3446,7 +3450,7 @@ namespace NMP.Portal.Controllers
                                             //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
                                             if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId));
+                                                (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm);
                                                 if (error == null)
                                                 {
                                                     if (!string.IsNullOrWhiteSpace(message))
@@ -3659,6 +3663,8 @@ namespace NMP.Portal.Controllers
             }
             if (model.FieldList != null && model.FieldList.Count > 0)
             {
+                (farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
                 foreach (var fieldId in model.FieldList)
                 {
                     Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
@@ -3672,10 +3678,10 @@ namespace NMP.Portal.Controllers
                             {
                                 if (managementIds.Count > 0)
                                 {
-                                    (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], false, Convert.ToInt32(fieldId));
+                                    (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], false, Convert.ToInt32(fieldId), farm, warningList);
                                     if (error == null)
                                     {
-                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false);
+                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], false, farm);
                                         if (error == null)
                                         {
                                             (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), false);
@@ -5142,6 +5148,8 @@ namespace NMP.Portal.Controllers
 
                 if (model.FieldList != null && model.FieldList.Count > 0)
                 {
+                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
                     foreach (var fieldId in model.FieldList)
                     {
                         Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
@@ -5173,7 +5181,6 @@ namespace NMP.Portal.Controllers
                                 bool isPerennial = false;
                                 List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                                 int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                                 if (!farm.RegisteredOrganicProducer.Value && isHighReadilyAvailableNitrogen)
                                 {
@@ -5202,10 +5209,10 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (managementIds.Count > 0)
                                     {
-                                        (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], true, Convert.ToInt32(fieldId));
+                                        (model, error) = await IsNFieldLimitWarningMessage(model, isFieldIsInNVZ, managementIds[0], true, Convert.ToInt32(fieldId), farm, warningList);
                                         if (error == null)
                                         {
-                                            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], true);
+                                            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), managementIds[0], true, farm);
                                             if (error == null)
                                             {
                                                 if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
@@ -5272,7 +5279,7 @@ namespace NMP.Portal.Controllers
 
                                         if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                         {
-                                            (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId));
+                                            (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm);
                                             if (error == null)
                                             {
                                                 if (!string.IsNullOrWhiteSpace(message))
@@ -6428,7 +6435,7 @@ namespace NMP.Portal.Controllers
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return RedirectToAction("ConditionsAffectingNutrients");
         }
-        private async Task<(OrganicManureViewModel, Error?)> IsNFieldLimitWarningMessage(OrganicManureViewModel model, bool isFieldIsInNVZ, int managementId, bool isGetCheckAnswer, int fieldId)
+        private async Task<(OrganicManureViewModel, Error?)> IsNFieldLimitWarningMessage(OrganicManureViewModel model, bool isFieldIsInNVZ, int managementId, bool isGetCheckAnswer, int fieldId, Farm farm, List<WarningResponse> warningList)
         {
             Error? error = null;
             decimal defaultNitrogen = 0;
@@ -6445,7 +6452,6 @@ namespace NMP.Portal.Controllers
             {
                 decimal previousAppliedTotalN = 0;
                 decimal totalN = 0;
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                 //The planned application would result in more than 250 kg/ha of total N from all applications of any Manure type apart from ‘Green compost’ or ‘Green/food compost’, applied or planned to the field in the last 365 days up to and including the application date of the manure
                 //warning excel sheet row 2
@@ -6469,7 +6475,8 @@ namespace NMP.Portal.Controllers
                         {
                             model.IsOrgManureNfieldLimitWarning = true;
 
-                            WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString());
+                            WarningResponse warning = warningList.Where(x => x.CountryID == farm.CountryID && x.WarningKey == NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString()).First();
+                            //WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString());
 
                             model.NmaxWarningHeader = warning.Header;
                             model.NmaxWarningCodeID = warning.WarningCodeID;
@@ -6518,8 +6525,7 @@ namespace NMP.Portal.Controllers
                             if (totalN > 500)
                             {
                                 model.IsOrgManureNfieldLimitWarning = true;
-                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString());
-
+                                WarningResponse warning = warningList.Where(x => x.CountryID == farm.CountryID && x.WarningKey == NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString()).First();
                                 model.NmaxWarningHeader = warning.Header;
                                 model.NmaxWarningCodeID = warning.WarningCodeID;
                                 model.NmaxWarningLevelID = warning.WarningLevelID;
@@ -6552,8 +6558,8 @@ namespace NMP.Portal.Controllers
                             if (totalN > 1000)
                             {
                                 model.IsOrgManureNfieldLimitWarning = true;
-
-                                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString());
+                                WarningResponse warning = warningList.Where(x => x.CountryID == farm.CountryID && x.WarningKey == NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString()).First();
+                                //WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString());
 
                                 model.NmaxWarningHeader = warning.Header;
                                 model.NmaxWarningCodeID = warning.WarningCodeID;
@@ -6575,7 +6581,7 @@ namespace NMP.Portal.Controllers
         }
 
         //warning excel sheet row no. 8
-        private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer)
+        private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer, Farm farm, List<WarningResponse>? warningList=null)
         {
             Error? error = null;
             decimal defaultNitrogen = 0;
@@ -6646,7 +6652,6 @@ namespace NMP.Portal.Controllers
                                             if (totalN > nMaxLimit)
                                             {
                                                 model.IsNMaxLimitWarning = true;
-                                                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                                                 WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
@@ -6683,7 +6688,6 @@ namespace NMP.Portal.Controllers
                                                     if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
                                                         model.IsNMaxLimitWarning = true;
-                                                        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                                                         WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
@@ -7139,7 +7143,7 @@ namespace NMP.Portal.Controllers
         }
 
 
-        private async Task<(bool, string, Error?)> IsClosedPeriodStartAndEndFebExceedNRateException(OrganicManureViewModel model, int fieldId)
+        private async Task<(bool, string, Error?)> IsClosedPeriodStartAndEndFebExceedNRateException(OrganicManureViewModel model, int fieldId, Farm farm)
         {
             Error? error = null;
             string warningMsg = string.Empty;
@@ -7184,12 +7188,6 @@ namespace NMP.Portal.Controllers
                     (int)NMP.Commons.Enums.CropTypes.Turnips
             };
 
-            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-            (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-            {
-                return (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, warningMsg, error);
-            }
             if (farm != null)
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;

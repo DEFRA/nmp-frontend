@@ -48,5 +48,21 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
         return responseWrapper.Data.ToObject<WarningResponse>();
     }
 
+    public async Task<List<WarningResponse>> FetchAllWarningAsync()
+    {
+        _logger.LogTrace("Fetching warning list");
+        string requestUrl = APIURLHelper.FetchAllWarningAsyncAPI;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        var result = await response.Content.ReadAsStringAsync();
+        var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (responseWrapper?.Data is null)
+        {
+            return new List<WarningResponse>();
+        }
+        return responseWrapper.Data.ToObject<List<WarningResponse>>();
+    }
+
 
 }
