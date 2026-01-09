@@ -131,7 +131,7 @@
                     }
                     else
                     {
-                        @string.Format("{0}{1}", string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit), ".")
+                        @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
                     }
 
                 </p>
@@ -148,7 +148,15 @@
             else
             {
                 <p class="govuk-body-s">
-                    @string.Format("{0}{1}", string.Format((Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblWaterResourceRegulationsForWales : Resource.lblLivestockContentTwoForNonDerogation), ViewBag.FarmLimit), ".")
+                    @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                    {
+                        @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
+                    }
+                    else
+                    {
+                        @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
+                    }
+                    @* @string.Format("{0}{1}", string.Format((Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblWaterResourceRegulationsForWales : Resource.lblLivestockContentTwoForNonDerogation), ViewBag.FarmLimit), ".") *@
                 </p>
             }
         }
