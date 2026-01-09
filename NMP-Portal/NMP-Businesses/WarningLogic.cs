@@ -2,11 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
+using NMP.Commons.Helpers;
+using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
-using NMP.Commons.Helpers;
 using System.Collections.Generic;
 using System.Reflection;
 namespace NMP.Businesses;
@@ -26,6 +27,16 @@ public class WarningLogic(ILogger<WarningLogic> logger, IWarningService warningS
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
     {
         _logger.LogTrace("WarningLogic : FetchWarningByCountryIdAndWarningKeyAsync() called");
+        List<WarningResponse> warningList = await FetchAllWarningAsync();
+        if (warningList != null && warningList.Count > 0)
+        {
+            WarningResponse? warning = warningList.FirstOrDefault(x => x.CountryID == countryId
+                            && string.Equals(x.WarningKey.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+            if (warning != null)
+            {
+                return warning;
+            }
+        }
         return await _warningService.FetchWarningByCountryIdAndWarningKeyAsync(countryId, warningKey);
     }
 
