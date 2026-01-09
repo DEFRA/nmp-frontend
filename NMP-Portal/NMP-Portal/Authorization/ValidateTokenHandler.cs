@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using NMP.Commons.Models;
-using NMP.Portal.Helpers;
+using NMP.Commons.Helpers;
 
 using System.Net;
 

@@ -2376,9 +2376,6 @@ cubic metres per hectare  not set</value>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
-  <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>You must follow the appropriate soil analysis regulations for your region.</value>
-  </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S) not set?</value>
   </data>
@@ -3795,9 +3792,6 @@ cubic metres per hectare  not set</value>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
-  <data name="lblSoil_Analysis_line2" xml:space="preserve">
-    <value>You must follow the appropriate soil analysis regulations for your region.</value>
-  </data>
   <data name="lblSoil_Analysis_line3" xml:space="preserve">
     <value>You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan.</value>
   </data>
@@ -4699,7 +4693,7 @@ cubic metres per hectare  not set</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Including {0}, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -5883,7 +5877,7 @@ livestock manure.</value>
     <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
-    <value>This value is from the NVZ regulation and takes into account livestock occupancy.</value>
+    <value>This value is from the {0} and takes into account livestock occupancy.</value>
   </data>
   <data name="lblTheMonthsOf" xml:space="preserve">
     <value>the months of {0}</value>
@@ -7056,7 +7050,7 @@ livestock manure.</value>
     <value>Maximum Nitrogen (N) limits {0}</value>
   </data>
   <data name="lblMaximumNitrogenLimit" xml:space="preserve">
-    <value>Maximum Nitrogen (N) limit</value>
+    <value>Maximum nitrogen (N) limit</value>
   </data>
   <data name="lblMaximumNitrogen" xml:space="preserve">
     <value>Maximum Nitrogen (N)</value>
@@ -7099,5 +7093,47 @@ livestock manure.</value>
   </data>
   <data name="MsgValidationForSoilMineralNitrogen" xml:space="preserve">
     <value>Please enter the value for soil mineral nitrogen (N) as a whole number</value>
+  </data>
+  <data name="lblFarmSummaryContentForWalesOne" xml:space="preserve">
+    <value>Create a report to check compliance with the Water Resource Regulations</value>
+  </data>
+  <data name="lblHoldingNitrogenLimitThe170Limit" xml:space="preserve">
+    <value>Holding nitrogen limit ‘the 170 limit’  </value>
+  </data>
+  <data name="lblAWaterResourceRegulationsReport" xml:space="preserve">
+    <value>A Water Resource Regulations report</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit" xml:space="preserve">
+    <value>Which year would you like to create a holding nitrogen limit ‘the 170 limit’ report for?</value>
+  </data>
+  <data name="lblNVZRegulation" xml:space="preserve">
+    <value>NVZ regulation</value>
+  </data>
+  <data name="lblCreateHoldingNitrogenLimitForYear" xml:space="preserve">
+    <value>Create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
+  </data>
+  <data name="lblComplianceWithHoldingNitrogenLimit" xml:space="preserve">
+    <value>Compliance with the holding nitrogen limit ‘the 170 limit’</value>
+  </data>
+  <data name="lblWaterResourceRegulationsForWales" xml:space="preserve">
+    <value>This assessment is based on the Water Resources Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare.</value>
+  </data>
+  <data name="MsgSuccessForWalesLivestock" xml:space="preserve">
+    <value>Continue to create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
+  </data>
+  <data name="lblFarmContentForWales" xml:space="preserve">
+    <value>Create a report to check compliance with the Water Resource Regulations</value>
+  </data>
+  <data name="lblFarmSummaryContentForWalesTwo" xml:space="preserve">
+    <value>Create field and crop level reports, including for the:</value>
+  </data>
+  <data name="lblIncludesMaximumNitrogenHoldingNitrogenForWales" xml:space="preserve">
+    <value>Including for the maximum nitrogen (N) limit, and the holding nitrogen limit ‘the 170 limit’</value>
+  </data>
+  <data name="lblHoldingNitrogenLimitForYear" xml:space="preserve">
+    <value>Holding nitrogen limit ‘the 170 limit’ 2026</value>
+  </data>
+  <data name="MsgImportExportSuccessMsgForWales" xml:space="preserve">
+    <value>Create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
   </data>
 </root>

@@ -182,7 +182,7 @@
                 </div>
 
                 <h1 class="govuk-heading-l">
-                    @string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReportYear, Model.Year)
+                    @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? string.Format(Resource.lblCreateHoldingNitrogenLimitForYear, Model.Year) : string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReportYear, Model.Year))
                 </h1>
 
                 <p class="govuk-hint">

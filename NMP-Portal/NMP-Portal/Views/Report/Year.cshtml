@@ -9,7 +9,7 @@
     }
     if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
     {
-        heading = Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
+        heading = Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?Resource.lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit :Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
     }
     if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
     {

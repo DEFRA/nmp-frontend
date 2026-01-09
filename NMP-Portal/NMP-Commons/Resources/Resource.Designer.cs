@@ -2509,6 +2509,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A Water Resource Regulations report.
+        /// </summary>
+        public static string lblAWaterResourceRegulationsReport {
+            get {
+                return ResourceManager.GetString("lblAWaterResourceRegulationsReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to B.
         /// </summary>
         public static string lblB {
@@ -3085,6 +3094,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compliance with the holding nitrogen limit ‘the 170 limit’.
+        /// </summary>
+        public static string lblComplianceWithHoldingNitrogenLimit {
+            get {
+                return ResourceManager.GetString("lblComplianceWithHoldingNitrogenLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit.
         /// </summary>
         public static string lblComplianceWithNVZLivestockManureNitrogenFarmLimit {
@@ -3369,6 +3387,15 @@ namespace NMP.Commons.Resources {
         public static string lblCreatedOnDate {
             get {
                 return ResourceManager.GetString("lblCreatedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a holding nitrogen limit ‘the 170 limit’ report for {0}.
+        /// </summary>
+        public static string lblCreateHoldingNitrogenLimitForYear {
+            get {
+                return ResourceManager.GetString("lblCreateHoldingNitrogenLimitForYear", resourceCulture);
             }
         }
         
@@ -5200,6 +5227,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a report to check compliance with the Water Resource Regulations.
+        /// </summary>
+        public static string lblFarmContentForWales {
+            get {
+                return ResourceManager.GetString("lblFarmContentForWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm Details.
         /// </summary>
         public static string lblFarmDetails {
@@ -5475,6 +5511,24 @@ namespace NMP.Commons.Resources {
         public static string lblFarmSummaryContent9 {
             get {
                 return ResourceManager.GetString("lblFarmSummaryContent9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a report to check compliance with the Water Resource Regulations.
+        /// </summary>
+        public static string lblFarmSummaryContentForWalesOne {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContentForWalesOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create field and crop level reports, including for the:.
+        /// </summary>
+        public static string lblFarmSummaryContentForWalesTwo {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContentForWalesTwo", resourceCulture);
             }
         }
         
@@ -6460,6 +6514,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Holding nitrogen limit ‘the 170 limit’ 2026.
+        /// </summary>
+        public static string lblHoldingNitrogenLimitForYear {
+            get {
+                return ResourceManager.GetString("lblHoldingNitrogenLimitForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Holding nitrogen limit ‘the 170 limit’  .
+        /// </summary>
+        public static string lblHoldingNitrogenLimitThe170Limit {
+            get {
+                return ResourceManager.GetString("lblHoldingNitrogenLimitThe170Limit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home page.
         /// </summary>
         public static string lblHomePage {
@@ -6973,7 +7045,16 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Including {0}, livestock manure nitrogen (N) farm limit, and organic manure storage reports.
+        ///   Looks up a localized string similar to Including for the maximum nitrogen (N) limit, and the holding nitrogen limit ‘the 170 limit’.
+        /// </summary>
+        public static string lblIncludesMaximumNitrogenHoldingNitrogenForWales {
+            get {
+                return ResourceManager.GetString("lblIncludesMaximumNitrogenHoldingNitrogenForWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports.
         /// </summary>
         public static string lblIncludesNmaxLivestockManureNitrogen {
             get {
@@ -8648,7 +8729,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum Nitrogen (N) limit.
+        ///   Looks up a localized string similar to Maximum nitrogen (N) limit.
         /// </summary>
         public static string lblMaximumNitrogenLimit {
             get {
@@ -9778,6 +9859,15 @@ namespace NMP.Commons.Resources {
         public static string lblNVZFieldForFieldCheckAnswere {
             get {
                 return ResourceManager.GetString("lblNVZFieldForFieldCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZ regulation.
+        /// </summary>
+        public static string lblNVZRegulation {
+            get {
+                return ResourceManager.GetString("lblNVZRegulation", resourceCulture);
             }
         }
         
@@ -12338,15 +12428,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must follow the appropriate soil analysis regulations for your region..
-        /// </summary>
-        public static string lblSoil_Analysis_line2 {
-            get {
-                return ResourceManager.GetString("lblSoil_Analysis_line2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan..
         /// </summary>
         public static string lblSoil_Analysis_line3 {
@@ -13834,7 +13915,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This value is from the NVZ regulation and takes into account livestock occupancy..
+        ///   Looks up a localized string similar to This value is from the {0} and takes into account livestock occupancy..
         /// </summary>
         public static string lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount {
             get {
@@ -15234,6 +15315,15 @@ namespace NMP.Commons.Resources {
         public static string lblWasFutureFieldUsedForGrassInYear {
             get {
                 return ResourceManager.GetString("lblWasFutureFieldUsedForGrassInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This assessment is based on the Water Resources Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare..
+        /// </summary>
+        public static string lblWaterResourceRegulationsForWales {
+            get {
+                return ResourceManager.GetString("lblWaterResourceRegulationsForWales", resourceCulture);
             }
         }
         
@@ -16674,6 +16764,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichYearWouldYouLikeToCopy {
             get {
                 return ResourceManager.GetString("lblWhichYearWouldYouLikeToCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which year would you like to create a holding nitrogen limit ‘the 170 limit’ report for?.
+        /// </summary>
+        public static string lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit {
+            get {
+                return ResourceManager.GetString("lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit", resourceCulture);
             }
         }
         
@@ -19470,6 +19569,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a holding nitrogen limit ‘the 170 limit’ report for {0}.
+        /// </summary>
+        public static string MsgImportExportSuccessMsgForWales {
+            get {
+                return ResourceManager.GetString("MsgImportExportSuccessMsgForWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imports and exports of manure for {0} must be completed.
         /// </summary>
         public static string MsgImportsAndExportsOfManureForYearMustBeCompleted {
@@ -20307,15 +20415,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must follow the appropriate soil analysis regulations for your region..
-        /// </summary>
-        public static string MsgSoilAnalysisHint2 {
-            get {
-                return ResourceManager.GetString("MsgSoilAnalysisHint2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
         /// </summary>
         public static string MsgSoilAnalysisHint3 {
@@ -20447,6 +20546,15 @@ namespace NMP.Commons.Resources {
         public static string MsgStoreAlreadyExists {
             get {
                 return ResourceManager.GetString("MsgStoreAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to create a holding nitrogen limit ‘the 170 limit’ report for {0}.
+        /// </summary>
+        public static string MsgSuccessForWalesLivestock {
+            get {
+                return ResourceManager.GetString("MsgSuccessForWalesLivestock", resourceCulture);
             }
         }
         
