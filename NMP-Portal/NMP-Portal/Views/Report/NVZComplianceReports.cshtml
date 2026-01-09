@@ -161,7 +161,7 @@
                             @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblMaximumNitrogenLimit : Resource.lblNMaxReport)                            
                         </govuk-radios-item>
                         <govuk-radios-item value="@livestockManureNFarmLimitReport">
-                            @Resource.lblLivestockManureNitrogenFarmLimit
+                        @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit)
                         </govuk-radios-item>
                         @* <govuk-radios-item value="@existingManureStorageCapacityReport">
                             @Resource.lblExistingManureStorageCapacityReport
