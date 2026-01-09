@@ -10,7 +10,7 @@ public interface IFieldService : IService
     Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId);
     Task<string> FetchCropGroupById(int cropGroupId);
     Task<string> FetchCropTypeById(int cropTypeId);
-    Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId,string farmName);
+    Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId,string farmName);
     Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId=null);
     Task<List<Field>> FetchFieldsByFarmId(int farmId);
     Task<Field> FetchFieldByFieldId(int fieldId);
@@ -23,7 +23,7 @@ public interface IFieldService : IService
     Task<List<SeasonResponse>> FetchSeasons();
 
     Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData);
-    Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId);
+    Task<(Field, Error)> UpdateFieldAsync(FieldData fieldData, int fieldId);
     Task<(string, Error)> DeleteFieldByIdAsync(int fieldId);
     Task<List<CommonResponse>> GetGrassManagementOptions();
     Task<List<CommonResponse>> GetGrassTypicalCuts();
