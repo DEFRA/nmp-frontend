@@ -3116,6 +3116,10 @@ namespace NMP.Portal.Controllers
                     ViewBag.Error = error1.Message;
                 }
                 model.IsWarningMsgNeedToShow = false;
+                model.IsOrgManureNfieldLimitWarning = false;
+                model.IsNMaxLimitWarning = false;
+                model.IsEndClosedPeriodFebruaryWarning = false;
+                model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             }
             catch (Exception ex)
@@ -3198,6 +3202,10 @@ namespace NMP.Portal.Controllers
                     model.IsNMaxLimitWarning = false;
                     model.IsOrgManureNfieldLimitWarning = false;
                     model.IsEndClosedPeriodFebruaryWarning = false;
+                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
+
+                    string message = string.Empty;
+
                     OrganicManureViewModel? organicManureViewModel = new OrganicManureViewModel();
                     if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
                     {
@@ -3223,7 +3231,7 @@ namespace NMP.Portal.Controllers
                             int? fieldId = organicManure.FieldID ?? null;
                             if (fieldId != null)
                             {
-                                Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                                Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
                                 if (field != null)
                                 {
                                     bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
@@ -3233,40 +3241,66 @@ namespace NMP.Portal.Controllers
                                         (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
                                         if (error == null)
                                         {
-
                                             (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
                                             if (error == null)
                                             {
                                                 (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
                                                 if (error == null)
                                                 {
-                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+                                                    if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                                    {
+                                                        (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+
+                                                    }
 
                                                 }
                                                 else
                                                 {
-                                                    ViewBag.Error = error.Message;
+                                                    TempData["ApplicationRateMethodError"] = error.Message;
                                                     return View(model);
                                                 }
-                                                        }
-                                                    else
-                                                    {
-                                                ViewBag.Error = error.Message;
+                                            }
+                                            else
+                                            {
+                                                TempData["ApplicationRateMethodError"] = error.Message;
                                                 return View(model);
                                             }
+
+                                            //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
+                                            if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                            {
+                                                (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
+                                                if (error == null)
+                                                {
+                                                    if (!string.IsNullOrWhiteSpace(message))
+                                                    {
+                                                        TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    TempData["ApplicationRateMethodError"] = error.Message;
+                                                    return View(model);
+                                                }
+                                            }
+
                                         }
                                         else
                                         {
-                                            ViewBag.Error = error.Message;
+                                            TempData["ApplicationRateMethodError"] = error.Message;
                                             return View(model);
                                         }
+
                                     }
                                 }
                             }
                         }
                     }
                 }
-                if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsEndClosedPeriodFebruaryWarning)
+                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning 
+                    || model.IsEndClosedPeriodFebruaryWarning || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150;
+
+                if (hasAnyWarning)
                 {
                     if (!model.IsWarningMsgNeedToShow)
                     {
@@ -3278,19 +3312,13 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     model.IsWarningMsgNeedToShow = false;
-                    if (model.IsOrgManureNfieldLimitWarning)
-                    {
-                        model.IsOrgManureNfieldLimitWarning = false;
-                    }
-                    if (model.IsNMaxLimitWarning)
-                    {
-                        model.IsNMaxLimitWarning = false;
-                    }
-                    if (model.IsEndClosedPeriodFebruaryWarning)
-                    {
-                        model.IsEndClosedPeriodFebruaryWarning = false;
-                    }
+
+                    model.IsOrgManureNfieldLimitWarning = false;
+                    model.IsNMaxLimitWarning = false;
+                    model.IsEndClosedPeriodFebruaryWarning = false;
+                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
                 }
+
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange) && (!model.IsAnyChangeInField))
                 {
@@ -3488,13 +3516,14 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning
+                    || model.IsEndClosedPeriodFebruaryWarning || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150;
+                
+                if (hasAnyWarning)
                 {
                     if (!model.IsWarningMsgNeedToShow)
                     {
                         model.IsWarningMsgNeedToShow = true;
-                        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                        ViewBag.IsWales = farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? true : false;
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                         return View(model);
                     }
@@ -3502,18 +3531,11 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     model.IsWarningMsgNeedToShow = false;
-                    if (model.IsOrgManureNfieldLimitWarning)
-                    {
-                        model.IsOrgManureNfieldLimitWarning = false;
-                    }
-                    if (model.IsNMaxLimitWarning)
-                    {
-                        model.IsNMaxLimitWarning = false;
-                    }
-                    if (model.IsEndClosedPeriodFebruaryWarning)
-                    {
-                        model.IsEndClosedPeriodFebruaryWarning = false;
-                    }
+
+                    model.IsOrgManureNfieldLimitWarning = false;
+                    model.IsNMaxLimitWarning = false;
+                    model.IsEndClosedPeriodFebruaryWarning = false;
+                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
                 }
 
                 model.Area = null;
@@ -3566,6 +3588,7 @@ namespace NMP.Portal.Controllers
             model.IsOrgManureNfieldLimitWarning = false;
             model.IsNMaxLimitWarning = false;
             model.IsEndClosedPeriodFebruaryWarning = false;
+            model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return View(model);
         }
@@ -3650,6 +3673,8 @@ namespace NMP.Portal.Controllers
             model.IsNMaxLimitWarning = false;
             model.IsOrgManureNfieldLimitWarning = false;
             model.IsEndClosedPeriodFebruaryWarning = false;
+            model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
+            string message = string.Empty;
             OrganicManureViewModel? organicManureViewModel = new OrganicManureViewModel();
             if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
             {
@@ -3665,7 +3690,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsWarningMsgNeedToShow = false;
                 }
-            }
+            } 
             if (model.OrganicManures != null && model.OrganicManures.Count > 0)
             {
                 (farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
@@ -3674,12 +3699,13 @@ namespace NMP.Portal.Controllers
                     int? fieldId = organicManure.FieldID ?? null;
                     if (fieldId != null)
                     {
-                        Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
                         if (field != null)
                         {
                             bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
                             if (isFieldIsInNVZ)
                             {
+
                                 (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
                                 if (error == null)
                                 {
@@ -3689,7 +3715,12 @@ namespace NMP.Portal.Controllers
                                         (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
                                         if (error == null)
                                         {
-                                            (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+                                            if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                            {
+                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+
+                                            }
+
                                         }
                                         else
                                         {
@@ -3702,19 +3733,42 @@ namespace NMP.Portal.Controllers
                                         TempData["AreaAndQuantityError"] = error.Message;
                                         return View(model);
                                     }
+
+                                    //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
+                                    if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                    {
+                                        (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
+                                        if (error == null)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(message))
+                                            {
+                                                TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["AreaAndQuantityError"] = error.Message;
+                                            return View(model);
+                                        }
+                                    }
+
                                 }
                                 else
                                 {
                                     TempData["AreaAndQuantityError"] = error.Message;
                                     return View(model);
                                 }
+
                             }
                         }
                     }
                 }
             }
 
-            if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsEndClosedPeriodFebruaryWarning)
+            bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning
+                    || model.IsEndClosedPeriodFebruaryWarning || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150;
+
+            if (hasAnyWarning)
             {
                 if (!model.IsWarningMsgNeedToShow)
                 {
@@ -3726,18 +3780,11 @@ namespace NMP.Portal.Controllers
             else
             {
                 model.IsWarningMsgNeedToShow = false;
-                if (model.IsOrgManureNfieldLimitWarning)
-                {
-                    model.IsOrgManureNfieldLimitWarning = false;
-                }
-                if (model.IsNMaxLimitWarning)
-                {
-                    model.IsNMaxLimitWarning = false;
-                }
-                if (model.IsEndClosedPeriodFebruaryWarning)
-                {
-                    model.IsEndClosedPeriodFebruaryWarning = false;
-                }
+
+                model.IsOrgManureNfieldLimitWarning = false;
+                model.IsNMaxLimitWarning = false;
+                model.IsEndClosedPeriodFebruaryWarning = false;
+                model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
             }
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange) && (!model.IsAnyChangeInField))

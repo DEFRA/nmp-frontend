@@ -1059,7 +1059,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString("yyyy-MM-dd");
 
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = APIURLHelper.FetchTotalNBasedOnManIdAndAppDateAsyncAPI;
+        string url = APIURLHelper.FetchTotalNByManagementIdAndAppDateAsyncAPI;
 
         if (organicManureId.HasValue)
         {
