@@ -164,6 +164,11 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure() called");
         return await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(fieldId, year, confirm);
     }
+    public async Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManure(int managementId)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchManureTypsIdsByManIdFromOrgManure() called");
+        return await _organicManureService.FetchManureTypsIdsByManIdFromOrgManure(managementId);
+    }
 
     public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeById(int moisterTypeId)
     {
@@ -195,10 +200,10 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchOrganicManureById(id);
     }
 
-    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId)
+    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly)
     {
         _logger.LogTrace("OrganicManureLogic : FetchOrganicManureExistanceByDateRange() called");
-        return await _organicManureService.FetchOrganicManureExistanceByDateRange(managementId, dateFrom, dateTo, isConfirm, organicManureId);
+        return await _organicManureService.FetchOrganicManureExistanceByDateRange(managementId, dateFrom, dateTo, isConfirm, organicManureId, isSlurryOnly);
     }
 
     public async Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString)
@@ -240,7 +245,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedOnManIdAndAppDate() called");
-        return await _organicManureService.FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(managementId, startDate, endDate, confirm, false, organicManureId);
+        return await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, confirm, organicManureId);
     }
 
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId)

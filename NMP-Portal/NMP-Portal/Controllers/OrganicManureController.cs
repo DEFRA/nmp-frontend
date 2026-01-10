@@ -3248,9 +3248,9 @@ namespace NMP.Portal.Controllers
                                                     ViewBag.Error = error.Message;
                                                     return View(model);
                                                 }
-                                            }
-                                            else
-                                            {
+                                                        }
+                                                    else
+                                                    {
                                                 ViewBag.Error = error.Message;
                                                 return View(model);
                                             }
@@ -6625,15 +6625,13 @@ namespace NMP.Portal.Controllers
                                     currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
                                     totalN = previousApplicationsN + currentApplicationNitrogen;
 
-                                    (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                    (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+                                    (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByManIdFromOrgManure(managementId);
                                     if (error == null)
                                     {
                                         nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
                                         OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
 
-                                        bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, model.ManureTypeId.Value)
-                                                                || Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
+                                        bool hasSpecialManure = Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
                                         nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut ?? 0, hasSpecialManure);
 
                                         if (totalN > nMaxLimit)
@@ -6666,14 +6664,14 @@ namespace NMP.Portal.Controllers
 
                                         if (error == null)
                                         {
-                                            (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                            (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+                                            (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByManIdFromOrgManure(managementId);
+
                                             if (error == null)
                                             {
                                                 nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
 
                                                 OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                                bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, model.ManureTypeId.Value) || Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
+                                                bool hasSpecialManure =  Functions.HasSpecialManure(previousYearManureTypeIds, model.ManureTypeId.Value);
                                                 nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut ?? 0, hasSpecialManure);
 
                                                 if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
@@ -7080,7 +7078,7 @@ namespace NMP.Portal.Controllers
                     model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"),
                     model.ApplicationDate.Value.ToString("yyyy-MM-dd"),
                     false,
-                    organicManureId);
+                    organicManureId,true);
 
             if (error != null || !isOrganicManureExist)
             {
@@ -7369,11 +7367,11 @@ namespace NMP.Portal.Controllers
                                                     bool isOrganicManureExistWithin4Weeks = false;
                                                     if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
                                                     {
-                                                        (isOrganicManureExistWithin4Weeks, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(managementPeriodId, model.ApplicationDate.Value.AddDays(-27).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementIds[0]).Select(x => x.OrganicManureId).FirstOrDefault());
+                                                        (isOrganicManureExistWithin4Weeks, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(managementPeriodId, model.ApplicationDate.Value.AddDays(-27).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementIds[0]).Select(x => x.OrganicManureId).FirstOrDefault(),false);
                                                     }
                                                     else
                                                     {
-                                                        (isOrganicManureExistWithin4Weeks, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(managementPeriodId, model.ApplicationDate.Value.AddDays(-27).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, null);
+                                                        (isOrganicManureExistWithin4Weeks, error) = await _organicManureLogic.FetchOrganicManureExistanceByDateRange(managementPeriodId, model.ApplicationDate.Value.AddDays(-27).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), false, null,false);
                                                     }
 
                                                     decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
