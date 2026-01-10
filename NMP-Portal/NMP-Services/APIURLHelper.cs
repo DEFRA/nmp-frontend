@@ -225,4 +225,5 @@ internal static class APIURLHelper
     public const string FetchPreviousCroppingYearByFarmIdAsyncAPI = "previous-cropping-year/{0}";
     public const string FetchWarningByCountryIdAndWarningKeyAsyncAPI = "warning/{0}?WarningKey={1}";
     public const string FetchAllWarningAsyncAPI = "warning";
+    public const string FetchTotalNByManagementIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-management-period/{0}?fromDate={1}&toDate={2}&confirm={3}";
 }
