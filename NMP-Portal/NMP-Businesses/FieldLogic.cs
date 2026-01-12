@@ -13,7 +13,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
 {
     private readonly ILogger<FieldLogic> _logger = logger;
     private readonly IFieldService _fieldService = fieldService;
-    public async Task<(Field, Error)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
+    public async Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
     {
         _logger.LogTrace("Adding new field: {FieldName} to FarmId: {FarmId}", fieldData.Field.Name, farmId);
         return await _fieldService.AddFieldAsync(fieldData, farmId, farmName);

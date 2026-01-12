@@ -24,8 +24,8 @@ namespace NMP.Portal.Controllers
     {
         private readonly ILogger<FarmController> _logger = logger;
         private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-        private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;       
-        private readonly IFarmLogic _farmLogic = farmLogic;        
+        private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;
+        private readonly IFarmLogic _farmLogic = farmLogic;
         private const string _farmListActionName = "FarmList";
         private const string _checkAnswerActionName = "CheckAnswer";
         private const string _rainfallActionName = "Rainfall";
@@ -144,7 +144,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogError("Farm Controller : Session not found in Country() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                                
+
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
 
                 return View(model);
@@ -276,13 +276,15 @@ namespace NMP.Portal.Controllers
                         farm.IsPostCodeChanged = false;
                         return RedirectToAction(_checkAnswerActionName);
                     }
-
+                    else
+                    {
+                        farm.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
+                    }
                     farm.IsPostCodeChanged = true;
                     farm.Rainfall = null;
                 }
                 else if (isPostcodeChanged)
                 {
-
                     farm.Rainfall = null;
                 }
 
@@ -764,7 +766,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : RainfallManual() post action called");
             ValidateRainfall(farm);
-            
+
             if (!ModelState.IsValid)
             {
                 return View("RainfallManual", farm);
@@ -840,7 +842,7 @@ namespace NMP.Portal.Controllers
         public IActionResult NVZ(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : NVZ() post action called");
-            
+
             if (farm.NVZFields == null)
             {
                 ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -965,7 +967,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q))
             {
                 SetFarmDataBeforeUpdateToSession(model);
-                
+
             }
             var previousModel = GetFarmDataBeforeUpdateFromSession();
 
@@ -990,7 +992,15 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
             
             try
-            {  
+            {
+                if (farm.Rainfall == null)
+                {
+                    ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(farm);
+                }
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
                 int isAllFieldsAbove300 = model.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
                 model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
@@ -1052,7 +1062,7 @@ namespace NMP.Portal.Controllers
                 farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
                 RemoveFarmSession();
                 RemoveAddressesSession();
-                RemoveFarmDataBeforeUpdateFromSession();                
+                RemoveFarmDataBeforeUpdateFromSession();
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
             catch (HttpRequestException hre)
@@ -1243,9 +1253,25 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : FarmUpdate() action called");
 
+            if (model.Rainfall == null)
+            {
+                ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
+            }
+
             if (!ModelState.IsValid)
             {
-                return View(model);
+                var previousModel = GetFarmDataBeforeUpdateFromSession();
+
+                bool isDataChanged = false;
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+
+                ViewBag.IsDataChange = isDataChanged;
+                return View("CheckAnswer", model);
             }
 
             try
@@ -1496,7 +1522,7 @@ namespace NMP.Portal.Controllers
                 return HttpContext.Session.GetObjectFromJson<FarmViewModel>(_farmDataBeforeUpdateSessionKey);
             }
             return null;
-        }        
+        }
 
         private void RemoveFarmDataBeforeUpdateFromSession()
         {
@@ -1509,7 +1535,7 @@ namespace NMP.Portal.Controllers
         private void SetFarmDataBeforeUpdateToSession(FarmViewModel farm)
         {
             HttpContext.Session.SetObjectAsJson(_farmDataBeforeUpdateSessionKey, farm);
-        } 
+        }
 
         private List<AddressLookupResponse>? GetAddressesFromSession()
         {

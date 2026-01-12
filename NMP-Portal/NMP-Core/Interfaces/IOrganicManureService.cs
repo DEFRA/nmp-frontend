@@ -37,8 +37,9 @@ public interface IOrganicManureService
     Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year,bool confirm);
     Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId);
     Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year,bool confirm);
+    Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManure(int managementId);
     Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId);
-    Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId);
+    Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly);
     Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString);
     Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId);
     Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId);

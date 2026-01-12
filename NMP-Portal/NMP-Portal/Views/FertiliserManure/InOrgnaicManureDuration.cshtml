@@ -143,6 +143,33 @@
                             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
                         }
                     }
+                    @* warning model properties start *@
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning.ToString().ToLower()" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()" />
+
+
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara1" value="@Model.ClosedPeriodWarningPara1" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara3" value="@Model.ClosedPeriodWarningPara3" />
+
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara1" value="@Model.ClosedPeriodNitrogenExceedWarningPara1" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara2" value="@Model.ClosedPeriodNitrogenExceedWarningPara2" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara3" value="@Model.ClosedPeriodNitrogenExceedWarningPara3" />
+
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeader" value="@Model.ClosedPeriodWarningHeader" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningCodeID" value="@Model.ClosedPeriodWarningCodeID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningLevelID" value="@Model.ClosedPeriodWarningLevelID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningHeader" value="@Model.ClosedPeriodNitrogenExceedWarningHeader" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningCodeID" value="@Model.ClosedPeriodNitrogenExceedWarningCodeID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningLevelID" value="@Model.ClosedPeriodNitrogenExceedWarningLevelID" />
+
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara1" value="@Model.CropNmaxLimitWarningPara1" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2" value="@Model.CropNmaxLimitWarningPara2" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2Additional" value="@Model.CropNmaxLimitWarningPara2Additional" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara3" value="@Model.CropNmaxLimitWarningPara3" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningHeader" value="@Model.CropNmaxLimitWarningHeader" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningCodeID" value="@Model.CropNmaxLimitWarningCodeID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningLevelID" value="@Model.CropNmaxLimitWarningLevelID" />
                 }
             </div>
             @if (TempData["InOrgnaicManureDurationError"] != null)

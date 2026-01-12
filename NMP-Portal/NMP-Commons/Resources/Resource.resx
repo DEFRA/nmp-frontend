@@ -2376,9 +2376,6 @@ cubic metres per hectare  not set</value>
   <data name="MsgSoilAnalysisHint1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
   </data>
-  <data name="MsgSoilAnalysisHint2" xml:space="preserve">
-    <value>You must follow the appropriate soil analysis regulations for your region.</value>
-  </data>
   <data name="lblSoilDeficientInSulpurForCheckAnswerNotset" xml:space="preserve">
     <value>Is the soil deficient in sulphur (S) not set?</value>
   </data>
@@ -3390,9 +3387,6 @@ cubic metres per hectare  not set</value>
   <data name="ContentHowToolWorks2" xml:space="preserve">
     <value>You will get better recommendations if you have a recent soil analysis. You will be asked to enter the data from the analysis as you progress through the service.</value>
   </data>
-  <data name="ContentReplacePlanetandManner" xml:space="preserve">
-    <value>This tool replaces the PLANET and MANNER-NPK planning tools. It will allow you to import your data from PLANET.</value>
-  </data>
   <data name="ContentSustainableFarmingIncentiveEnd" xml:space="preserve">
     <value>, you will need a nutrient plan. This service will create a plan that you can use for this purpose.</value>
   </data>
@@ -3463,7 +3457,7 @@ cubic metres per hectare  not set</value>
     <value>Crop Group Name</value>
   </data>
   <data name="contentGettingHelp1" xml:space="preserve">
-    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
+    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469.</value>
   </data>
   <data name="contentGettingHelp2" xml:space="preserve">
     <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
@@ -3775,13 +3769,10 @@ cubic metres per hectare  not set</value>
     <value>Help with the tool's recommendations</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line1" xml:space="preserve">
-    <value>You can email the helpdesk if you have any issues with the data and recommendations the tool provides. Email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;.</value>
-  </data>
-  <data name="lblHelp_with_the_service_recommendations_line2" xml:space="preserve">
-    <value>This tool might give slightly different recommendations from the previous version of the tool, PLANET. This is because this new tool uses an updated version of the RB209 API, so it provides the very latest data.</value>
+    <value>You can email the helpdesk at &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469 if you have any questions about the recommendations or reports provided by NMPT-GB.</value>
   </data>
   <data name="lblHelp_with_the_service_recommendations_line3" xml:space="preserve">
-    <value>We will reply to your email as quickly as we can.</value>
+    <value>We will reply to your email or call as quickly as we can.</value>
   </data>
   <data name="lbl_I_accept_to_the_terms_of_use" xml:space="preserve">
     <value>I accept the Terms of Use</value>
@@ -3792,9 +3783,6 @@ cubic metres per hectare  not set</value>
   <data name="lblMore_information_line1" xml:space="preserve">
     <value>This tool is intended to be used alongside the &lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt; Nutrient management guide (RB209)&lt;/a&gt; (external link).</value>
   </data>
-  <data name="lblMore_information_line2" xml:space="preserve">
-    <value>For advice about nutrient planning in general, visit &lt;a href="https://www.triedandtested.org.uk" target="_blank"&gt;Tried and Tested&lt;/a&gt; (external link).</value>
-  </data>
   <data name="lblSaving_your_data" xml:space="preserve">
     <value>Saving your data</value>
   </data>
@@ -3803,9 +3791,6 @@ cubic metres per hectare  not set</value>
   </data>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
-  </data>
-  <data name="lblSoil_Analysis_line2" xml:space="preserve">
-    <value>You must follow the appropriate soil analysis regulations for your region.</value>
   </data>
   <data name="lblSoil_Analysis_line3" xml:space="preserve">
     <value>You will be asked to enter the data from your analysis as you progress through NMPT-GB, in order to create your nutrient management plan.</value>
@@ -3898,7 +3883,7 @@ cubic metres per hectare  not set</value>
     <value>technical issues</value>
   </data>
   <data name="lblHelpIssuesLine2" xml:space="preserve">
-    <value>login issues</value>
+    <value>login or access issues</value>
   </data>
   <data name="lblHelpIssuesLine3" xml:space="preserve">
     <value>service outages</value>
@@ -4315,7 +4300,7 @@ cubic metres per hectare  not set</value>
     <value>{0} added for {1}</value>
   </data>
   <data name="MsgForSuccessCrop" xml:space="preserve">
-    <value>Select a field to see its nutrient recommendations, or to add a soil mineral nitrogen (N) analysis results</value>
+    <value>Select a field to see its nutrient recommendations, or to add soil mineral nitrogen (N) analysis results.</value>
   </data>
   <data name="lblUpdateCropGroupNameContentForSingleField" xml:space="preserve">
     <value>Changes here will be applied to {0} only. To change multiple fields at once you can </value>
@@ -4507,10 +4492,10 @@ cubic metres per hectare  not set</value>
     <value>N total (all sources)</value>
   </data>
   <data name="lblOrganicCropAvailableNRate" xml:space="preserve">
-    <value>Organic crop available N rate</value>
+    <value>Organic material crop available N rate</value>
   </data>
   <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
-    <value>Organic crop available N total</value>
+    <value>Organic material crop available N total</value>
   </data>
   <data name="lblGrassCutOnlyAdjustment" xml:space="preserve">
     <value>Grass cut only adjustment</value>
@@ -4708,7 +4693,7 @@ cubic metres per hectare  not set</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Including {0}, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -5892,7 +5877,7 @@ livestock manure.</value>
     <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
-    <value>This value is from the NVZ regulation and takes into account livestock occupancy.</value>
+    <value>This value is from the {0} and takes into account livestock occupancy.</value>
   </data>
   <data name="lblTheMonthsOf" xml:space="preserve">
     <value>the months of {0}</value>
@@ -6573,10 +6558,10 @@ livestock manure.</value>
     <value>Recommendations not available</value>
   </data>
   <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
-    <value>To get recommendations for {0} for {1}, you will need to add the crop details for {2} in {3}.</value>
+    <value>To get recommendations for {0} for {1}, you will need to add 3 years history to the crop details for {2}.</value>
   </data>
   <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
-    <value>Add {0} crop details for {1}</value>
+    <value>Add 3 years history to crop details for {0}</value>
   </data>
   <data name="lblAddPreviousCrop" xml:space="preserve">
     <value>Add previous crop</value>
@@ -6894,7 +6879,7 @@ livestock manure.</value>
     <value>Last updated {0}</value>
   </data>
   <data name="lblReleaseScheduleContentOne" xml:space="preserve">
-    <value>Public Beta release, December 2025</value>
+    <value>Public Beta release, January 2026</value>
   </data>
   <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
     <value>The first functionality in the nutrient management planning tool is ready for use by the public in England and Wales. This has had approximately eight months of user testing.</value>
@@ -6960,7 +6945,7 @@ livestock manure.</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page)</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>25th November 2025</value>
+    <value>7th January 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
@@ -7065,7 +7050,7 @@ livestock manure.</value>
     <value>Maximum Nitrogen (N) limits {0}</value>
   </data>
   <data name="lblMaximumNitrogenLimit" xml:space="preserve">
-    <value>Maximum Nitrogen (N) limit</value>
+    <value>Maximum nitrogen (N) limit</value>
   </data>
   <data name="lblMaximumNitrogen" xml:space="preserve">
     <value>Maximum Nitrogen (N)</value>
@@ -7108,5 +7093,47 @@ livestock manure.</value>
   </data>
   <data name="MsgValidationForSoilMineralNitrogen" xml:space="preserve">
     <value>Please enter the value for soil mineral nitrogen (N) as a whole number</value>
+  </data>
+  <data name="lblFarmSummaryContentForWalesOne" xml:space="preserve">
+    <value>Create a report to check compliance with the Water Resource Regulations</value>
+  </data>
+  <data name="lblHoldingNitrogenLimitThe170Limit" xml:space="preserve">
+    <value>Holding nitrogen limit ‘the 170 limit’  </value>
+  </data>
+  <data name="lblAWaterResourceRegulationsReport" xml:space="preserve">
+    <value>A Water Resource Regulations report</value>
+  </data>
+  <data name="lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit" xml:space="preserve">
+    <value>Which year would you like to create a holding nitrogen limit ‘the 170 limit’ report for?</value>
+  </data>
+  <data name="lblNVZRegulation" xml:space="preserve">
+    <value>NVZ regulation</value>
+  </data>
+  <data name="lblCreateHoldingNitrogenLimitForYear" xml:space="preserve">
+    <value>Create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
+  </data>
+  <data name="lblComplianceWithHoldingNitrogenLimit" xml:space="preserve">
+    <value>Compliance with the holding nitrogen limit ‘the 170 limit’</value>
+  </data>
+  <data name="lblWaterResourceRegulationsForWales" xml:space="preserve">
+    <value>This assessment is based on the Water Resources Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare.</value>
+  </data>
+  <data name="MsgSuccessForWalesLivestock" xml:space="preserve">
+    <value>Continue to create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
+  </data>
+  <data name="lblFarmContentForWales" xml:space="preserve">
+    <value>Create a report to check compliance with the Water Resource Regulations</value>
+  </data>
+  <data name="lblFarmSummaryContentForWalesTwo" xml:space="preserve">
+    <value>Create field and crop level reports, including for the:</value>
+  </data>
+  <data name="lblIncludesMaximumNitrogenHoldingNitrogenForWales" xml:space="preserve">
+    <value>Including for the maximum nitrogen (N) limit, and the holding nitrogen limit ‘the 170 limit’</value>
+  </data>
+  <data name="lblHoldingNitrogenLimitForYear" xml:space="preserve">
+    <value>Holding nitrogen limit ‘the 170 limit’ 2026</value>
+  </data>
+  <data name="MsgImportExportSuccessMsgForWales" xml:space="preserve">
+    <value>Create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
   </data>
 </root>

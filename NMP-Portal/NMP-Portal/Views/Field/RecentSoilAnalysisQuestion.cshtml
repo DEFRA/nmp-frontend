@@ -30,7 +30,7 @@
 }
 <form asp-action="RecentSoilAnalysisQuestion" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="true">
+    <div hidden="hidden">
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"/>
@@ -108,10 +108,7 @@
             <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)</h1>
             <p class="govuk-body">
                 @Resource.MsgSoilAnalysisHint1
-            </p>
-            <p class="govuk-body">
-                @Resource.MsgSoilAnalysisHint2
-            </p>
+            </p>            
             <p class="govuk-body margin-bottom-forty">
                 @Resource.MsgSoilAnalysisHint3
             </p>

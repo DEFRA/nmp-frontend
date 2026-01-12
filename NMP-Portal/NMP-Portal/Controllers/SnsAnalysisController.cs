@@ -5,7 +5,7 @@ using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
-using NMP.Portal.Helpers;
+using NMP.Commons.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 

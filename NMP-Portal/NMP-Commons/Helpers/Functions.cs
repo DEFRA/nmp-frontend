@@ -88,6 +88,7 @@ namespace NMP.Commons.Helpers
                 (int)CropTypes.WinterBeans,
                 (int)CropTypes.SpringBeans,
                 (int)CropTypes.Peas,
+                (int)CropTypes.MarketPickPeas,
                 (int)CropTypes.Asparagus,
                 (int)CropTypes.Carrots,
                 (int)CropTypes.Radish,
@@ -112,7 +113,8 @@ namespace NMP.Commons.Helpers
                 (int)CropTypes.WholecropSpringBarley,
                 (int)CropTypes.WholecropSpringWheat,
                 (int)CropTypes.WholecropWinterBarley,
-                (int)CropTypes.WholecropWinterWheat
+                (int)CropTypes.WholecropWinterWheat,
+                (int)CropTypes.BabyLeafLettuce
             };
 
             return eligibleCrops.Contains(cropTypeId);

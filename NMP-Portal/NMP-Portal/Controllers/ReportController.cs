@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NMP.Commons.Enums;
-using NMP.Portal.Helpers;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -819,12 +819,31 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
                     }
                     //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
-                    if (fieldData.SoilAnalysis != null && fieldData.SoilAnalysis.Count > 0)
+                    if (fieldData.SoilAnalysis != null&& !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
                     {
-                        foreach (var soilAnalysis in fieldData.SoilAnalysis)
+                        string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
+                        string? updatedPotassiumIndex = null;
+
+                        if (!string.IsNullOrWhiteSpace(potassiumIndex))
                         {
-                            soilAnalysis.PotassiumIndex = soilAnalysis.PotassiumIndex != null ? (soilAnalysis.PotassiumIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex)) : null;
+                            if (potassiumIndex == Resource.lblMinusTwo)
+                            {
+                                updatedPotassiumIndex = Resource.lblTwoMinus;
+                            }
+                            else if (potassiumIndex == Resource.lblPlusTwo)
+                            {
+                                updatedPotassiumIndex = Resource.lblTwoPlus;
+                            }
+                            else
+                            {
+                                updatedPotassiumIndex = potassiumIndex;
+                            }
                         }
+
+                        fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+
+
+
                     }
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
@@ -1711,7 +1730,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
-                    model.ReportTypeName = Resource.lblLivestockManureNitrogenFarmLimit;
+                    model.ReportTypeName =(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)?Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit;
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
@@ -1865,6 +1884,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
             }
+            if(model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            {
+                model.IsGrasslandDerogation = false;
+                var (savedData, error) = await SaveGrasslandDerogationAsync(model);
+                if (savedData == null && !string.IsNullOrWhiteSpace(error.Message))
+                {
+                    TempData["DerogationSaveError"] = error.Message;
+                    return View(model);
+                }
+                HttpContext.Session.SetObjectAsJson("ReportData", model);
+
+                return RedirectToAction("LivestockManureNitrogenReportChecklist");
+            }
 
         }
         catch (Exception ex)
@@ -1897,32 +1929,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 model.GrassPercentage = null;
             }
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-            ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
-            (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-            if (nutrientsLoadingManures.Count > 0)
-            {
-                nutrientsLoadingManures = nutrientsLoadingManures.Where(x => x.ManureDate.Value.Date.Year == model.Year).ToList();
-                ViewBag.NutrientLivestockData = nutrientsLoadingManures;
-            }
-            var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
-            {
-                FarmID = model.FarmId,
-                CalendarYear = model.Year,
-                LandInNVZ = model.TotalAreaInNVZ,
-                LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
-                TotalFarmed = model.TotalFarmArea,
-                ManureTotal = null,
-                Derogation = model.IsGrasslandDerogation,
-                GrassPercentage = (model.IsGrasslandDerogation.HasValue && model.IsGrasslandDerogation.Value) ? model.GrassPercentage : null,
-                ContingencyPlan = false,
-                IsAnyLivestockImportExport = (!model.IsAnyLivestockImportExport.HasValue) ?
-                null : (nutrientsLoadingManures.Count > 0 ? true : false),
-                IsAnyLivestockNumber = (!model.IsAnyLivestockNumber.HasValue) ?
-                null : (nutrientsLoadingLiveStockList.Count > 0 ? true : false),
-            };
-            (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+
+            var (savedData, error) = await SaveGrasslandDerogationAsync(model);
+            if (savedData == null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["DerogationSaveError"] = error.Message;
                 return View(model);
@@ -4048,7 +4057,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
-                        TempData["succesMsgContent3"] = string.Format(Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] = string.Format(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales?Resource.MsgImportExportSuccessMsgForWales:Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
                     }
                 }
                 model.FarmName = farm.Name;
@@ -5720,7 +5729,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         {
                             TempData["RemoveSuccessMsg"] = Resource.lblAddMoreLivestock;
                         }
-                        TempData["succesMsgContent3"] = string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] =
+                            (model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)? string.Format(Resource.MsgSuccessForWalesLivestock, _farmDataProtector.Unprotect(y)):
+                            string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
                     }
                 }
                 model.FarmName = farm.Name;
@@ -7132,5 +7143,68 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return model;
     }
+
+    private async Task<(NutrientsLoadingFarmDetail? savedNutrientsLoadingFarmDetailsData, Error error)>
+    SaveGrasslandDerogationAsync(ReportViewModel model)
+    {
+        // Fetch livestock
+        var (livestockList, livestockError) =
+            await _reportLogic.FetchLivestockByFarmIdAndYear(
+                model.FarmId!.Value,
+                model.Year ?? 0);
+
+        if (!string.IsNullOrWhiteSpace(livestockError?.Message))
+        {
+            return (null, livestockError);
+        }
+
+        // Fetch manures
+        var (manures, manureError) =
+            await _reportLogic.FetchNutrientsLoadingManuresByFarmId(
+                model.FarmId!.Value);
+
+        if (!string.IsNullOrWhiteSpace(manureError?.Message))
+        {
+            return (null, manureError);
+        }
+
+        if (manures?.Any() == true)
+        {
+            manures = manures
+                .Where(x => x.ManureDate?.Year == model.Year)
+                .ToList();
+        }
+
+        var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail
+        {
+            FarmID = model.FarmId,
+            CalendarYear = model.Year,
+            LandInNVZ = model.TotalAreaInNVZ,
+            LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
+            TotalFarmed = model.TotalFarmArea,
+            Derogation = model.IsGrasslandDerogation,
+            GrassPercentage = model.IsGrasslandDerogation == true
+                ? model.GrassPercentage
+                : null,
+            ContingencyPlan = false,
+            IsAnyLivestockImportExport = model.IsAnyLivestockImportExport.HasValue
+                ? manures?.Any() == true
+                : null,
+            IsAnyLivestockNumber = model.IsAnyLivestockNumber.HasValue
+                ? livestockList?.Any() == true
+                : null
+        };
+
+        var (savedNutrientsLoadingFarmDetailsData, saveError) =
+            await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+
+        if (!string.IsNullOrWhiteSpace(saveError?.Message))
+        {
+            return (null, saveError);
+        }
+
+        return (savedNutrientsLoadingFarmDetailsData, new Error());
+    }
+
 
 }
