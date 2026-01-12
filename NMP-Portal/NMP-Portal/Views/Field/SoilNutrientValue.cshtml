@@ -98,6 +98,7 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"/>
                 }
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
             </div>
             @if (isFieldsEmpty)
             {

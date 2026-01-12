@@ -1,5 +1,5 @@
 ﻿namespace NMP.Commons.Enums;
-public enum SNSCategories
+public enum SnsCategories
 {
     WinterCereals = 1,
     WinterOilseedRape = 2,

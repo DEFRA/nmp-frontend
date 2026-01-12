@@ -26,11 +26,11 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : backAction)" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : backAction)" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="RecentSoilAnalysisQuestion" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="true">
+    <div hidden="hidden">
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference"/>
@@ -95,6 +95,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()"/>
         }
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -107,10 +108,7 @@
             <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)</h1>
             <p class="govuk-body">
                 @Resource.MsgSoilAnalysisHint1
-            </p>
-            <p class="govuk-body">
-                @Resource.MsgSoilAnalysisHint2
-            </p>
+            </p>            
             <p class="govuk-body margin-bottom-forty">
                 @Resource.MsgSoilAnalysisHint3
             </p>

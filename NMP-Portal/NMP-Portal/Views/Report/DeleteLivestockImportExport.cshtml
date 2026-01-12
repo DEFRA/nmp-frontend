@@ -34,7 +34,7 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"/>
-
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
@@ -112,9 +112,7 @@
                 </div>
                 <govuk-fieldset>
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblRemoveAnOrganicMaterial,
-                        Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
-                        Resource.lblExport.ToLower())
+                        @title
                 </govuk-fieldset-legend>
                 <p class="govuk-body">@Resource.lblDeletLivestockImportExportContentOne</p>
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteLivestockImportExport">

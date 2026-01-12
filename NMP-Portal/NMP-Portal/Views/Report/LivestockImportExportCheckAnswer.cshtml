@@ -110,7 +110,7 @@
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId" />
             <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter" />
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" />
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209" />
@@ -331,6 +331,7 @@
                                             }
                                             @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
                                             {
+                                                totalN = Model.ManureType.TotalN.Value;
                                                 <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.TotalN.Value)</span></span>
                                             }
                                             @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
@@ -347,6 +348,7 @@
                                             }
                                             @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
                                             {
+                                                totalP2O5 = Model.ManureType.P2O5.Value;
                                                 <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.P2O5.Value)</span></span>
 
                                             }
@@ -386,6 +388,7 @@
                                             }
                                             @if ((Model.N.HasValue) && Model.N.Value > 0)
                                             {
+                                                totalN = Model.N.Value;
                                                 <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
 
                                             }
@@ -406,6 +409,7 @@
                                             }
                                             @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                             {
+                                                totalP2O5 = Model.P2O5.Value;
                                                 <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
 
                                             }
@@ -447,6 +451,7 @@
                                         }
                                         @if ((Model.N.HasValue) && Model.N.Value > 0)
                                         {
+                                            totalN = Model.N.Value;
                                             <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
 
                                         }
@@ -467,6 +472,7 @@
                                         }
                                         @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                         {
+                                            totalP2O5 = Model.P2O5.Value;
                                             <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
 
                                         }
@@ -513,6 +519,7 @@
                                         }
                                         @if ((Model.N.HasValue) && Model.N.Value > 0)
                                         {
+                                            totalN = Model.N.Value;
                                             <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
 
                                         }
@@ -533,6 +540,7 @@
                                         }
                                         @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                         {
+                                            totalP2O5 = Model.P2O5.Value;
                                             <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
 
                                         }
@@ -561,6 +569,7 @@
                                         }
                                         @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
                                         {
+                                            totalN = Model.ManureType.TotalN.Value;
                                             <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.TotalN.Value)</span></span>
 
                                         }
@@ -581,6 +590,7 @@
                                         }
                                         @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
                                         {
+                                            totalP2O5 = Model.ManureType.P2O5.Value;
                                             <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.P2O5.Value)</span></span>
 
                                         }
@@ -683,7 +693,7 @@
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(string.Format("{0:N0} {1}", Math.Round(totalP2O5 * Model.LivestockQuantity.Value, 0), Resource.lblkg))
+                            @(string.Format("{0:N0}{1}", Math.Round(totalP2O5 * Model.LivestockQuantity.Value, 0), Resource.lblkg))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>

@@ -1,54 +1,41 @@
-﻿using Azure.Core;
-using Azure.Identity;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using NMP.Portal.Helpers;
+using NMP.Application;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
-using NMP.Portal.Services;
 using NMP.Commons.ViewModels;
+using NMP.Portal.Helpers;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Reflection;
+using System.Security.Claims;
 using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
 {
     [Authorize]
-    public class FarmController : Controller
+    public class FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
+        IFarmLogic farmLogic) : Controller
     {
-        private readonly ILogger<FarmController> _logger;
-        private readonly IDataProtector _dataProtector;
-        private readonly IAddressLookupService _addressLookupService;
-        private readonly IUserFarmService _userFarmService;
-        private readonly IFarmService _farmService;
-        private readonly IFieldService _fieldService;
-        private readonly ICropService _cropService;
-        private readonly IReportService _reportService;
-        private readonly IStorageCapacityService _storageCapacityService;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IHttpContextAccessor httpContextAccessor, IAddressLookupService addressLookupService,
-            IUserFarmService userFarmService, IFarmService farmService,
-            IFieldService fieldService, ICropService cropService, IReportService reportService, IStorageCapacityService storageCapacityService)
-        {
-            _logger = logger;
-            _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-            _addressLookupService = addressLookupService;
-            _userFarmService = userFarmService;
-            _farmService = farmService;
-            _fieldService = fieldService;
-            _cropService = cropService;
-            _reportService = reportService;
-            _storageCapacityService = storageCapacityService;
-            _httpContextAccessor = httpContextAccessor;
-        }
+        private readonly ILogger<FarmController> _logger = logger;
+        private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+        private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;
+        private readonly IFarmLogic _farmLogic = farmLogic;
+        private const string _farmListActionName = "FarmList";
+        private const string _checkAnswerActionName = "CheckAnswer";
+        private const string _rainfallActionName = "Rainfall";
+        private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
+
         public IActionResult Index()
         {
             _logger.LogTrace("Farm Controller : Index() action called");
             HttpContext.Session.Clear();
-            return RedirectToAction("FarmList");
+            return RedirectToAction(_farmListActionName);
         }
 
         public async Task<IActionResult> FarmList(string? q)
@@ -56,15 +43,14 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
             HttpContext.Session.Clear();
 
-
-
             FarmsViewModel model = new FarmsViewModel();
-            Error error = null;
+            Error? error = null;
             try
             {
-                string orgId = HttpContext.User.FindFirst("organisationId").Value;
+                Claim? claim = HttpContext.User.FindFirst("organisationId");
+                string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
-                (List<Farm> farms, error) = await _farmService.FetchFarmByOrgIdAsync(organisationId);
+                (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
@@ -102,12 +88,13 @@ namespace NMP.Portal.Controllers
 
             return View(model);
         }
+
         public IActionResult CreateFarmCancel()
         {
             _logger.LogTrace("Farm Controller : CreateFarmCancel() action called");
             RemoveFarmSession();
             RemoveAddressesSession();
-            return RedirectToAction("FarmList");
+            return RedirectToAction(_farmListActionName);
         }
 
         [HttpGet]
@@ -128,10 +115,12 @@ namespace NMP.Portal.Controllers
         public IActionResult Name(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : Name() post action called");
+
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
+
             if (!ModelState.IsValid)
             {
                 return View(farm);
@@ -139,7 +128,7 @@ namespace NMP.Portal.Controllers
 
             SetFarmToSession(farm);
 
-            return farm.IsCheckAnswer ? RedirectToAction("CheckAnswer") : RedirectToAction("Country");
+            return farm.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("Country");
         }
 
         [HttpGet]
@@ -155,13 +144,8 @@ namespace NMP.Portal.Controllers
                     _logger.LogError("Farm Controller : Session not found in Country() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-                if (error != null && countryList.Count > 0)
-                {
-                    countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
-                    ViewBag.CountryList = countryList.OrderBy(c => c.Name);
-                }
 
+                ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
 
                 return View(model);
             }
@@ -188,18 +172,14 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("CountryID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
                 }
+
                 if (!ModelState.IsValid)
                 {
-                    (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-                    if (error != null && countryList.Count > 0)
-                    {
-                        countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
-                        ViewBag.CountryList = countryList.OrderBy(c => c.Name);
-                    }
+                    ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
                     return View("Country", farm);
                 }
 
-                farm.EnglishRules = farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? false : true;
+                farm.EnglishRules = farm.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland;
 
                 if (farm.CountryID.HasValue && Enum.IsDefined(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID.Value))
                 {
@@ -210,7 +190,7 @@ namespace NMP.Portal.Controllers
 
                 if (farm.IsCheckAnswer)
                 {
-                    return RedirectToAction("CheckAnswer");
+                    return RedirectToAction(_checkAnswerActionName);
                 }
             }
             catch (HttpRequestException hre)
@@ -243,14 +223,16 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult FarmingRules(FarmViewModel farm)
+        [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
+        public IActionResult FarmingRules(FarmViewModel model)
         {
-            SetFarmToSession(farm);
+            SetFarmToSession(model);
 
-            if (farm.IsCheckAnswer)
+            if (model.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(_checkAnswerActionName);
             }
+
             return RedirectToAction("PostCode");
         }
 
@@ -273,7 +255,7 @@ namespace NMP.Portal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult PostCode(FarmViewModel farm)
         {
-            _logger.LogTrace($"Farm Controller : PostCode() post action called");
+            _logger.LogTrace("Farm Controller : PostCode() post action called");
             try
             {
                 ValidatePostcode(farm);
@@ -292,21 +274,23 @@ namespace NMP.Portal.Controllers
                     if (!isPostcodeChanged)
                     {
                         farm.IsPostCodeChanged = false;
-                        return RedirectToAction("CheckAnswer");
+                        return RedirectToAction(_checkAnswerActionName);
                     }
-
+                    else
+                    {
+                        farm.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
+                    }
                     farm.IsPostCodeChanged = true;
                     farm.Rainfall = null;
                 }
                 else if (isPostcodeChanged)
                 {
-
                     farm.Rainfall = null;
                 }
 
                 SetFarmToSession(farm);
 
-                return RedirectToAction("Address"); ;
+                return RedirectToAction("Address");
             }
             catch (HttpRequestException hre)
             {
@@ -322,9 +306,10 @@ namespace NMP.Portal.Controllers
 
         private void ValidatePostcode(FarmViewModel farm)
         {
+            string key = "Postcode";
             if (string.IsNullOrWhiteSpace(farm.Postcode))
             {
-                ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
+                ModelState.AddModelError(key, Resource.MsgEnterTheFarmPostcode);
                 return;
             }
 
@@ -332,10 +317,10 @@ namespace NMP.Portal.Controllers
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
 
-            bool exists = _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
+            bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
             if (exists)
             {
-                ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+                ModelState.AddModelError(key, Resource.MsgFarmAlreadyExist);
             }
         }
 
@@ -353,7 +338,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 RemoveAddressesSession();
-                List<AddressLookupResponse> addresses = await _addressLookupService.AddressesAsync(model.Postcode, 0);
+
+                List<AddressLookupResponse> addresses = await _addressLookupLogic.AddressesAsync(model.Postcode, 0);
                 var addressesList = addresses.Select(a => new SelectListItem { Value = a.AddressLine, Text = a.AddressLine }).ToList();
 
                 if (addressesList.Count == 0)
@@ -402,7 +388,7 @@ namespace NMP.Portal.Controllers
 
                 return (farm.IsPostCodeChanged || !farm.IsCheckAnswer)
                     ? RedirectToAction("ClimatePostCode")
-                    : RedirectToAction("CheckAnswer");
+                    : RedirectToAction(_checkAnswerActionName);
             }
             catch (HttpRequestException hre)
             {
@@ -430,7 +416,7 @@ namespace NMP.Portal.Controllers
             var addresses = GetAddressesFromSession() ?? new List<AddressLookupResponse>();
             return addresses.Count > 0
                 ? addresses
-                : await _addressLookupService.AddressesAsync(farm.Postcode, 0);
+                : await _addressLookupLogic.AddressesAsync(farm.Postcode, 0);
         }
 
         private void PopulateAddressViewBags(List<AddressLookupResponse> addresses)
@@ -447,7 +433,7 @@ namespace NMP.Portal.Controllers
             ViewBag.AddressCount = string.Format(Resource.lblAdddressFound, items.Count.ToString());
         }
 
-        private void ApplySelectedAddress(FarmViewModel farm, List<AddressLookupResponse> addresses)
+        private static void ApplySelectedAddress(FarmViewModel farm, List<AddressLookupResponse> addresses)
         {
             var address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address == null) return;
@@ -489,53 +475,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ManualAddress(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : ManualAddress() post action called");
+
             try
             {
-                if (string.IsNullOrEmpty(farm.Address1))
-                {
-                    ModelState.AddModelError("Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
-                }
-                if (string.IsNullOrEmpty(farm.Address3))
-                {
-                    ModelState.AddModelError("Address3", Resource.MsgEnterATownOrCity);
-                }
-                if (string.IsNullOrEmpty(farm.Address4))
-                {
-                    ModelState.AddModelError("Address4", Resource.MsgEnterACounty);
-                }
-                if (string.IsNullOrEmpty(farm.Postcode))
-                {
-                    ModelState.AddModelError("Postcode", Resource.MsgEnterAPostcode);
-                }
-                if (!string.IsNullOrWhiteSpace(farm.Address1) && farm.Address1.Length > 50)
-                {
-                    ModelState.AddModelError("Address1", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine1, 50));
-                }
-                if (!string.IsNullOrWhiteSpace(farm.Address2) && farm.Address2.Length > 50)
-                {
-                    ModelState.AddModelError("Address2", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblAddressLine2ForErrorMsg, 50));
-                }
-                if (!string.IsNullOrWhiteSpace(farm.Address3) && farm.Address3.Length > 50)
-                {
-                    ModelState.AddModelError("Address3", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblTownOrCity, 50));
-                }
-                if (!string.IsNullOrWhiteSpace(farm.Address4) && farm.Address4.Length > 50)
-                {
-                    ModelState.AddModelError("Address4", string.Format(Resource.lblModelPropertyCannotBeLongerThanNumberCharacters, Resource.lblCountry, 50));
-                }
-                if (!string.IsNullOrWhiteSpace(farm.Postcode))
-                {
-                    int id = 0;
-                    if (farm.EncryptedFarmId != null)
-                    {
-                        id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                    }
-                    bool IsFarmExist = await _farmService.IsFarmExistAsync(farm.Name, farm.Postcode, id);
-                    if (IsFarmExist)
-                    {
-                        ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
-                    }
-                }
+                await ValidateManualAddress(farm);
+
                 if (!ModelState.IsValid)
                 {
                     return View("~/Views/Farm/ManualAddress.cshtml", farm);
@@ -543,13 +487,11 @@ namespace NMP.Portal.Controllers
 
                 FarmViewModel? farmView = GetFarmFromSession();
 
-                if (farmView != null)
+                if (farmView != null && farmView.Postcode != farm.Postcode)
                 {
-                    if (farmView.Postcode != farm.Postcode)
-                    {
-                        farm.Rainfall = null;
-                    }
+                    farm.Rainfall = null;
                 }
+
                 farm.FullAddress = string.Empty;
                 farm.IsManualAddress = true;
 
@@ -566,6 +508,65 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ManualAddress() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        private async Task ValidateManualAddress(FarmViewModel farm)
+        {
+            ValidateRequiredFields(farm);
+            ValidateFieldLengths(farm);
+            await ValidateFarmUniquenessAsync(farm);
+        }
+
+        private void ValidateRequiredFields(FarmViewModel farm)
+        {
+            AddIfEmpty(farm.Address1, "Address1", Resource.MsgEnterAddressLine1TypicallyTheBuildingAndSreet);
+            AddIfEmpty(farm.Address3, "Address3", Resource.MsgEnterATownOrCity);
+            AddIfEmpty(farm.Address4, "Address4", Resource.MsgEnterACounty);
+            AddIfEmpty(farm.Postcode, "Postcode", Resource.MsgEnterAPostcode);
+        }
+
+        private void ValidateFieldLengths(FarmViewModel farm)
+        {
+            ValidateMaxLength(farm.Address1, "Address1", Resource.lblAddressLine1, 50);
+            ValidateMaxLength(farm.Address2, "Address2", Resource.lblAddressLine2ForErrorMsg, 50);
+            ValidateMaxLength(farm.Address3, "Address3", Resource.lblTownOrCity, 50);
+            ValidateMaxLength(farm.Address4, "Address4", Resource.lblCountry, 50);
+        }
+
+        private async Task ValidateFarmUniquenessAsync(FarmViewModel farm)
+        {
+            if (string.IsNullOrWhiteSpace(farm.Postcode))
+                return;
+
+            var farmId = farm.EncryptedFarmId != null
+                ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
+                : 0;
+
+            if (await _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId))
+            {
+                ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
+            }
+        }
+
+        private void AddIfEmpty(string? value, string key, string message)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                ModelState.AddModelError(key, message);
+            }
+        }
+
+        private void ValidateMaxLength(string? value, string key, string label, int maxLength)
+        {
+            if (!string.IsNullOrWhiteSpace(value) && value.Length > maxLength)
+            {
+                ModelState.AddModelError(
+                    key,
+                    string.Format(
+                        Resource.lblModelPropertyCannotBeLongerThanNumberCharacters,
+                        label,
+                        maxLength));
             }
         }
 
@@ -588,7 +589,7 @@ namespace NMP.Portal.Controllers
                 if (rainfallNotAvailable)
                 {
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
-                    decimal rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    decimal rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
                     model.Rainfall = (int)Math.Round(rainfall);
 
                     if (model.Rainfall.HasValue && model.Rainfall > 0)
@@ -599,12 +600,12 @@ namespace NMP.Portal.Controllers
                         }
 
                         SetFarmToSession(model);
-                        return RedirectToAction("Rainfall");
+                        return RedirectToAction(_rainfallActionName);
                     }
                 }
                 else if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
                 {
-                    return RedirectToAction("Rainfall");
+                    return RedirectToAction(_rainfallActionName);
                 }
 
                 return View(model);
@@ -628,41 +629,15 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Farm Controller : ClimatePostCode() action called");
             try
             {
-                if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
-                {
-                    ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
-                }
+                await ValidateClimatePostcode(model);
 
-                if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
-                {
-                    FarmViewModel? farmView = null;
-                    farmView = GetFarmFromSession();
-                    bool ClimateDataPostCodeChange = false;
-                    if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
-                    {
-                        ClimateDataPostCodeChange = true;
-                    }
-                    if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
-                    {
-                        string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.ClimateDataPostCode);
-
-                        var rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
-                        if (rainfall != null)
-                        {
-                            model.Rainfall = (int)Math.Round(rainfall);
-                        }
-                        if (model.Rainfall == null || model.Rainfall == 0)
-                        {
-                            ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
-                        }
-                    }
-                }
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
+
                 SetFarmToSession(model);
-                return RedirectToAction("Rainfall");
+                return RedirectToAction(_rainfallActionName);
             }
             catch (HttpRequestException hre)
             {
@@ -673,6 +648,39 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "Farm Controller : Exception in ClimatePostCode() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        private async Task ValidateClimatePostcode(FarmViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
+            {
+                ModelState.AddModelError("ClimateDataPostCode", Resource.lblEnterTheClimatePostcode);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
+            {
+                FarmViewModel? farmView = null;
+                farmView = GetFarmFromSession();
+                bool ClimateDataPostCodeChange = false;
+                if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
+                {
+                    ClimateDataPostCodeChange = true;
+                }
+                if ((ClimateDataPostCodeChange) || (model.Rainfall == 0 || model.Rainfall == null))
+                {
+                    string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.ClimateDataPostCode);
+
+                    var rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
+                    if (rainfall != null)
+                    {
+                        model.Rainfall = (int)Math.Round(rainfall);
+                    }
+                    if (model.Rainfall == null || model.Rainfall == 0)
+                    {
+                        ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
+                    }
+                }
             }
         }
 
@@ -694,7 +702,7 @@ namespace NMP.Portal.Controllers
                 {
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
 
-                    decimal? rainfall = await _farmService.FetchRainfallAverageAsync(firstHalfPostcode);
+                    decimal? rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
                     if (rainfall != null)
                     {
                         model.Rainfall = (int)Math.Round(rainfall.Value);
@@ -715,7 +723,6 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in Rainfall() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
         }
 
         [HttpPost]
@@ -725,17 +732,17 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Farm Controller : Rainfall() post action called");
             if (farm.Rainfall == null)
             {
-                ModelState.AddModelError("Rainfall", Resource.MsgEnterAverageAnnualRainfall);
+                ModelState.AddModelError(_rainfallActionName, Resource.MsgEnterAverageAnnualRainfall);
             }
             if (!ModelState.IsValid)
             {
-                return View("Rainfall", farm);
+                return View(_rainfallActionName, farm);
             }
 
             SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(_checkAnswerActionName);
             }
             return RedirectToAction("NVZ");
         }
@@ -759,6 +766,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : RainfallManual() post action called");
             ValidateRainfall(farm);
+
             if (!ModelState.IsValid)
             {
                 return View("RainfallManual", farm);
@@ -767,30 +775,31 @@ namespace NMP.Portal.Controllers
             SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(_checkAnswerActionName);
             }
             return RedirectToAction("NVZ");
         }
 
         private void ValidateRainfall(FarmViewModel farm)
         {
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("Rainfall"))
+            string key = "Rainfall";
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(key))
             {
 
-                var RainfallError = ModelState["Rainfall"]?.Errors.Count > 0 ?
-                                ModelState["Rainfall"]?.Errors[0].ErrorMessage.ToString() : null;
+                var RainfallError = ModelState[key]?.Errors.Count > 0 ?
+                                ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Rainfall"].RawValue, Resource.lblRainfall)))
+                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblRainfall)))
                 {
-                    ModelState["Rainfall"]?.Errors.Clear();
+                    ModelState[key]?.Errors.Clear();
                     decimal decimalValue;
-                    if (decimal.TryParse(ModelState["Rainfall"]?.RawValue?.ToString(), out decimalValue))
+                    if (decimal.TryParse(ModelState[key]?.RawValue?.ToString(), out decimalValue))
                     {
-                        ModelState["Rainfall"]?.Errors.Add(RainfallError);
+                        ModelState[key]?.Errors.Add(RainfallError);
                     }
                     else
                     {
-                        ModelState["Rainfall"]?.Errors.Add(Resource.MsgForRainfallManual);
+                        ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
                     }
                 }
             }
@@ -798,14 +807,12 @@ namespace NMP.Portal.Controllers
             //we need to call api for rainfall on the basis of postcode
             if (farm.Rainfall == null)
             {
-                ModelState.AddModelError("Rainfall", Resource.MsgEnterTheAverageAnnualRainfall);
+                ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
             }
-            if (farm.Rainfall != null)
+
+            if (farm.Rainfall != null && farm.Rainfall < 0)
             {
-                if (farm.Rainfall < 0)
-                {
-                    ModelState.AddModelError("Rainfall", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
+                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
         }
 
@@ -818,14 +825,14 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in NVZ() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
             }
 
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
-                model.NVZFields = (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ;
+                model.NVZFields = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
                 SetFarmToSession(model);
-                return RedirectToAction("Elevation");
+                return await Task.FromResult(RedirectToAction("Elevation"));
             }
             return View(model);
         }
@@ -835,20 +842,24 @@ namespace NMP.Portal.Controllers
         public IActionResult NVZ(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : NVZ() post action called");
+
             if (farm.NVZFields == null)
             {
                 ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+
             if (!ModelState.IsValid)
             {
                 return View("NVZ", farm);
             }
 
             SetFarmToSession(farm);
+
             if (farm.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(_checkAnswerActionName);
             }
+
             return RedirectToAction("Elevation");
         }
 
@@ -863,6 +874,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+
             return View(model);
         }
 
@@ -871,6 +883,7 @@ namespace NMP.Portal.Controllers
         public IActionResult Elevation(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : Elevation() post action called");
+
             if (farm.FieldsAbove300SeaLevel == null)
             {
                 ModelState.AddModelError("FieldsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -882,24 +895,27 @@ namespace NMP.Portal.Controllers
             }
 
             SetFarmToSession(farm);
+
             if (farm.IsCheckAnswer)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(_checkAnswerActionName);
             }
+
             return RedirectToAction("Organic");
-
-
         }
+
         [HttpGet]
         public IActionResult Organic()
         {
             _logger.LogTrace("Farm Controller : Organic() action called");
             FarmViewModel? model = GetFarmFromSession();
+
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Organic() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+
             return View(model);
         }
 
@@ -908,18 +924,19 @@ namespace NMP.Portal.Controllers
         public IActionResult Organic(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : Organic() post action called");
+
             if (farm.RegisteredOrganicProducer == null)
             {
                 ModelState.AddModelError("RegisteredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+
             if (!ModelState.IsValid)
             {
                 return View("Organic", farm);
             }
 
             SetFarmToSession(farm);
-
-            return RedirectToAction("CheckAnswer");
+            return RedirectToAction(_checkAnswerActionName);
         }
 
         [HttpGet]
@@ -949,9 +966,10 @@ namespace NMP.Portal.Controllers
 
             if (!string.IsNullOrWhiteSpace(q))
             {
-                HttpContext.Session.SetObjectAsJson("FarmDataBeforeUpdate", model);
+                SetFarmDataBeforeUpdateToSession(model);
+
             }
-            var previousModel = HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmDataBeforeUpdate");
+            var previousModel = GetFarmDataBeforeUpdateFromSession();
 
             bool isDataChanged = false;
             if (previousModel != null)
@@ -968,16 +986,27 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
         public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
             try
             {
+                if (farm.Rainfall == null)
+                {
+                    ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(farm);
+                }
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below :
-                farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
+                int isAllFieldsAbove300 = farm.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
+                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
+#pragma warning disable CS8604 // Possible null reference argument.
                 Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+#pragma warning restore CS8604 // Possible null reference argument.
 
                 if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
                 {
@@ -1021,7 +1050,7 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmService.AddFarmAsync(farmData);
+                (Farm farmResponse, Error error) = await _farmLogic.AddFarmAsync(farmData);
 
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1030,9 +1059,9 @@ namespace NMP.Portal.Controllers
                 }
                 string success = _dataProtector.Protect("true");
                 farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-                HttpContext.Session.Remove("FarmData");
-                HttpContext.Session.Remove("AddressList");
-                HttpContext.Session.Remove("FarmDataBeforeUpdate");
+                RemoveFarmSession();
+                RemoveAddressesSession();
+                RemoveFarmDataBeforeUpdateFromSession();
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
             catch (HttpRequestException hre)
@@ -1045,7 +1074,6 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-
         }
 
         public IActionResult BackCheckAnswer()
@@ -1102,11 +1130,11 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
-                    (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
-                        return RedirectToAction("FarmList");
+                        return RedirectToAction(_farmListActionName);
                     }
 
                     HttpContext.Session.SetString("current_farm_name", farm.Name ?? "");
@@ -1116,40 +1144,38 @@ namespace NMP.Portal.Controllers
                     {
                         farmData = new FarmViewModel();
                         farmData.Name = farm.Name;
+                        farmData.CountryID = farm.CountryID.Value;
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
-                        ViewBag.FieldCount = await _fieldService.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                        ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                     }
                 }
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, "Farm Controller: HttpRequestException in FarmSummary() action. Message: {0}, StackTrace: {1}", hre.Message, hre.StackTrace);
+                _logger.LogError(hre, "Farm Controller: HttpRequestException in FarmSummary() action. Message: {Message}, StackTrace: {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError("Farm Controller : Exception in FarmSummary() action : {1} {2}", ex.Message, ex.StackTrace);
+                _logger.LogError(ex, "Farm Controller : Exception in FarmSummary() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
-            return View(farmData);
 
+            return View(farmData);
         }
 
         [HttpGet]
         public async Task<IActionResult> FarmDetails(string id)
         {
-            _logger.LogTrace("Farm Controller : FarmDetails({id}) action called", id);
+            _logger.LogTrace("Farm Controller : FarmDetails({Id}) action called", id);
             string farmId = string.Empty;
             FarmViewModel? farmData = null;
             Error? error = null;
             try
             {
-                if (HttpContext.Session.Exists("FarmDataBeforeUpdate"))
-                {
-                    HttpContext.Session.Remove("FarmDataBeforeUpdate");
-                }
+                RemoveFarmDataBeforeUpdateFromSession();
                 if (string.IsNullOrWhiteSpace(id))
                 {
                     _logger.LogError("Farm Controller : Id is null in FarmDetails() action");
@@ -1157,12 +1183,14 @@ namespace NMP.Portal.Controllers
                 }
 
                 farmId = _dataProtector.Unprotect(id);
-                (Farm farm, error) = await _farmService.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["Error"] = error.Message;
-                    return RedirectToAction("FarmList");
+                    return RedirectToAction(_farmListActionName);
                 }
+
                 if (farm != null)
                 {
                     farmData = new FarmViewModel();
@@ -1204,16 +1232,15 @@ namespace NMP.Portal.Controllers
                     farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
                     SetFarmToSession(farmData);
                 }
-
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError("Farm Controller : HttpRequestException in FarmDetails() action : {0}, {1}", hre.Message, hre.StackTrace);
+                _logger.LogError(hre, "Farm Controller : HttpRequestException in FarmDetails() action : {Message}, {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError("Farm Controller : Exception in FarmDetails() action : {1}, {1}", ex.Message, ex.StackTrace);
+                _logger.LogError(ex, "Farm Controller : Exception in FarmDetails() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(farmData);
@@ -1221,88 +1248,117 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FarmUpdate(FarmViewModel farm)
+        public async Task<IActionResult> FarmUpdate(FarmViewModel model)
         {
             _logger.LogTrace("Farm Controller : FarmUpdate() action called");
+
+            if (model.Rainfall == null)
+            {
+                ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var previousModel = GetFarmDataBeforeUpdateFromSession();
+
+                bool isDataChanged = false;
+                if (previousModel != null)
+                {
+                    string oldJson = JsonConvert.SerializeObject(previousModel);
+                    string newJson = JsonConvert.SerializeObject(model);
+                    isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+                }
+
+                ViewBag.IsDataChange = isDataChanged;
+                return View("CheckAnswer", model);
+            }
+
             try
             {
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below :
-                        farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
+                int isAllFieldsAbove300 = model.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
+                model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
+#pragma warning disable CS8604 // Possible null reference argument.
                 Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
-                int farmId = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
+                int farmId = Convert.ToInt32(_dataProtector.Unprotect(model.EncryptedFarmId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
                 int createdByID = 0;
                 DateTime createdOn = DateTime.Now;
-                (Farm farmDetail, Error apiError) = await _farmService.FetchFarmByIdAsync(farmId);
+                (Farm farmDetail, Error apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+
                 if (!string.IsNullOrWhiteSpace(apiError.Message))
                 {
                     TempData["Error"] = apiError.Message;
-                    return RedirectToAction("FarmList");
+                    return RedirectToAction(_farmListActionName);
                 }
+
                 if (farmDetail != null)
                 {
                     createdByID = farmDetail.CreatedByID ?? 0;
                     createdOn = farmDetail.CreatedOn;
+                }
 
-                }
-                if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
+                if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
                 {
-                    farm.ClimateDataPostCode = farm.Postcode;
+                    model.ClimateDataPostCode = model.Postcode;
                 }
+
                 var farmData = new FarmData
                 {
                     Farm = new Farm()
                     {
                         ID = farmId,
-                        Name = farm.Name,
-                        Address1 = farm.Address1,
-                        Address2 = farm.Address2,
-                        Address3 = farm.Address3,
-                        Address4 = farm.Address4,
-                        Postcode = farm.Postcode,
-                        CPH = farm.CPH,
-                        FarmerName = farm.FarmerName,
-                        BusinessName = farm.BusinessName,
-                        SBI = farm.SBI,
-                        STD = farm.STD,
-                        Telephone = farm.Telephone,
-                        Mobile = farm.Mobile,
-                        Email = farm.Email,
-                        Rainfall = farm.Rainfall,
+                        Name = model.Name,
+                        Address1 = model.Address1,
+                        Address2 = model.Address2,
+                        Address3 = model.Address3,
+                        Address4 = model.Address4,
+                        Postcode = model.Postcode,
+                        CPH = model.CPH,
+                        FarmerName = model.FarmerName,
+                        BusinessName = model.BusinessName,
+                        SBI = model.SBI,
+                        STD = model.STD,
+                        Telephone = model.Telephone,
+                        Mobile = model.Mobile,
+                        Email = model.Email,
+                        Rainfall = model.Rainfall,
                         OrganisationID = organisationId,
-                        TotalFarmArea = farm.TotalFarmArea,
-                        AverageAltitude = farm.AverageAltitude,
-                        RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
-                        MetricUnits = farm.MetricUnits,
-                        EnglishRules = farm.EnglishRules,
-                        NVZFields = farm.NVZFields,
-                        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        CountryID = farm.CountryID,
-                        ClimateDataPostCode = farm.ClimateDataPostCode,
+                        TotalFarmArea = model.TotalFarmArea,
+                        AverageAltitude = model.AverageAltitude,
+                        RegisteredOrganicProducer = model.RegisteredOrganicProducer,
+                        MetricUnits = model.MetricUnits,
+                        EnglishRules = model.EnglishRules,
+                        NVZFields = model.NVZFields,
+                        FieldsAbove300SeaLevel = model.FieldsAbove300SeaLevel,
+                        CountryID = model.CountryID,
+                        ClimateDataPostCode = model.ClimateDataPostCode,
                         CreatedByID = createdByID,
                         CreatedOn = createdOn,
                         ModifiedByID = userId,
-                        ModifiedOn = farm.ModifiedOn
+                        ModifiedOn = model.ModifiedOn
                     },
                     UserID = userId,
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmService.UpdateFarmAsync(farmData);
+                (Farm farmResponse, Error error) = await _farmLogic.UpdateFarmAsync(farmData);
 
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
-                    return RedirectToAction("CheckAnswer", new { q = EncryptUpdateStatus });
+                    return RedirectToAction(_checkAnswerActionName, new { q = EncryptUpdateStatus });
                 }
+
                 string success = _dataProtector.Protect("true");
                 farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-                HttpContext.Session.Remove("FarmData");
-                HttpContext.Session.Remove("AddressList");
-
+                RemoveFarmSession();
+                RemoveAddressesSession();
                 string isUpdate = _dataProtector.Protect("true");
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
             }
@@ -1344,10 +1400,12 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("FarmRemove", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+
                 if (!ModelState.IsValid)
                 {
                     return View("FarmRemove", farm);
                 }
+
                 if (farm.FarmRemove.HasValue && !farm.FarmRemove.Value)
                 {
                     return RedirectToAction("FarmDetails", new { id = farm.EncryptedFarmId });
@@ -1355,7 +1413,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
-                    (string message, Error error) = await _farmService.DeleteFarmByIdAsync(id);
+                    (string message, Error error) = await _farmLogic.DeleteFarmByIdAsync(id);
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["AddFarmError"] = error.Message;
@@ -1363,11 +1421,12 @@ namespace NMP.Portal.Controllers
                     }
                     if (!string.IsNullOrWhiteSpace(message))
                     {
-                        string name = _dataProtector.Protect(farm.Name);
+                        string name = farm.Name != null ? _dataProtector.Protect(farm.Name) : string.Empty;
                         RemoveFarmSession();
-                        return RedirectToAction("FarmList", new { q = name });
+                        return RedirectToAction(_farmListActionName, new { q = name });
                     }
                 }
+
                 return View(farm);
             }
             catch (HttpRequestException hre)
@@ -1397,7 +1456,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"farm Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace(ex,"farm Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
@@ -1412,20 +1471,22 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+
             if (!ModelState.IsValid)
             {
                 return View("Cancel", model);
             }
+
             if (model.IsCancel.HasValue && !model.IsCancel.Value)
             {
-                return RedirectToAction("CheckAnswer");
+                return RedirectToAction(_checkAnswerActionName);
             }
             else
             {
                 RemoveFarmSession();
                 if (string.IsNullOrWhiteSpace(model.EncryptedFarmId))
                 {
-                    return RedirectToAction("FarmList");
+                    return RedirectToAction(_farmListActionName);
                 }
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
             }
@@ -1451,6 +1512,28 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext.Session.Remove("FarmData");
             }
+        }
+
+        private FarmViewModel? GetFarmDataBeforeUpdateFromSession()
+        {
+            if (HttpContext.Session.Exists(_farmDataBeforeUpdateSessionKey))
+            {
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(_farmDataBeforeUpdateSessionKey);
+            }
+            return null;
+        }
+
+        private void RemoveFarmDataBeforeUpdateFromSession()
+        {
+            if (HttpContext.Session.Exists(_farmDataBeforeUpdateSessionKey))
+            {
+                HttpContext.Session.Remove(_farmDataBeforeUpdateSessionKey);
+            }
+        }
+
+        private void SetFarmDataBeforeUpdateToSession(FarmViewModel farm)
+        {
+            HttpContext.Session.SetObjectAsJson(_farmDataBeforeUpdateSessionKey, farm);
         }
 
         private List<AddressLookupResponse>? GetAddressesFromSession()

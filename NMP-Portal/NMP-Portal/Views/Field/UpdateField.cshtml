@@ -51,7 +51,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID" value="@Model.FarmID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea" />
@@ -62,7 +62,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
-
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
@@ -115,7 +115,7 @@
                         @Model.Name
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblFieldName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblFieldName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @*   <govuk-summary-list-row>
@@ -223,7 +223,10 @@
                         @Model.SoilType
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
+                        @if (ViewBag.IsAnyPlan != null && (!ViewBag.IsAnyPlan))
+                        {
                         <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblSoilTypeForCheckAnswer)</span></govuk-summary-list-row-action>
+                        }
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (Model.SoilReleasingClay != null)
@@ -236,7 +239,7 @@
                             @((!Model.SoilReleasingClay.HasValue) ? @Resource.lblNotSet : (Model.SoilReleasingClay.Value ? Resource.lblYes : Resource.lblNo))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDoesPotashClayForCheckAnswere)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilReleasingClay" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDoesPotashClayForCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 

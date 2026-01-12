@@ -36,11 +36,11 @@ public class FertiliserManureViewModel
     public int? CropOrder { get; set; }
     public int? FarmCountryId { get; set; }
     public bool IsClosedPeriodWarning { get; set; } = false;
-    public string? ClosedPeriodWarningHeading { get; set; } = string.Empty;        
-    public string? ClosedPeriodWarningPara2 { get; set; } = string.Empty;
-    public string? ClosedPeriodNitrogenExceedWarningHeading { get; set; } = string.Empty;
+    public string? ClosedPeriodWarningPara1 { get; set; } = string.Empty;        
+    public string? ClosedPeriodWarningPara3 { get; set; } = string.Empty;
     public string? ClosedPeriodNitrogenExceedWarningPara1 { get; set; } = string.Empty;
     public string? ClosedPeriodNitrogenExceedWarningPara2 { get; set; } = string.Empty;
+    public string? ClosedPeriodNitrogenExceedWarningPara3 { get; set; } = string.Empty;
     public bool? IsWithinNVZ { get; set; }
     public string? EncryptedFertId { get; set; } = string.Empty;       
     public List<FertiliserAndOrganicManureUpdateResponse>? UpdatedFertiliserIds { get; set; }
@@ -69,4 +69,12 @@ public class FertiliserManureViewModel
     public int ClosedPeriodNitrogenExceedWarningLevelID { get; set; }
     public List<DefoliationList>? DefoliationList { get; set; }
     public bool IsDoubleCropValueChange { get; set; } = false;
+    public bool IsNMaxLimitWarning { get; set; } = false;
+    public string? CropNmaxLimitWarningHeader { get; set; }
+    public int CropNmaxLimitWarningCodeID { get; set; }
+    public int CropNmaxLimitWarningLevelID { get; set; }
+    public string? CropNmaxLimitWarningPara1 { get; set; }
+    public string? CropNmaxLimitWarningPara2 { get; set; }
+    public string? CropNmaxLimitWarningPara2Additional { get; set; }
+    public string? CropNmaxLimitWarningPara3 { get; set; }
 }

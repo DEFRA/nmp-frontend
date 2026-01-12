@@ -39,9 +39,7 @@ public class FieldViewModel : Field
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSampleForSoilMineralNitrogen))]
     public DateTime? SampleForSoilMineralNitrogen { get; set; }
     public bool? RecentSoilAnalysisQuestion { get; set; }
-    public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
-    
-    //public bool SoilOverChalk { get; set; } = false;
+    public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;    
     public string? EncryptedIsUpdate { get; set; } = string.Empty;
     public bool? FieldRemove { get; set; }
     public List<int>? PreviousGrassYears { get; set; }
