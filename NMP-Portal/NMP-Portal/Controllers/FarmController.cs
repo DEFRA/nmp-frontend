@@ -985,21 +985,20 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
+        [ValidateAntiForgeryToken]        
         public async Task<IActionResult> CheckAnswer(FarmViewModel model)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
             
             try
             {
-                if (farm.Rainfall == null)
+                if (model.Rainfall == null)
                 {
                     ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
                 }
                 if (!ModelState.IsValid)
                 {
-                    return View(farm);
+                    return View(model);
                 }
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
                 int isAllFieldsAbove300 = model.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
