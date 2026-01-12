@@ -3,15 +3,15 @@
 @{
     var heading = "";
     if (Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport ||
-                                        Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.NmaxReport)
+                                        Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
     {
         heading = string.Format(Resource.lblForYearForReport, Model.ReportTypeName);
     }
-    if (Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.LivestockManureNFarmLimitReport)
+    if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
     {
-        heading = Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
+        heading = Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?Resource.lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit :Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
     }
-    if (Model.NVZReportOption == (int)NMP.Commons.Enums.NVZReportOption.ExistingManureStorageCapacityReport)
+    if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
     {
         heading = Resource.lblWhichYearWouldYouLikeToCreateExistingManureReport;
     }
@@ -66,7 +66,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>

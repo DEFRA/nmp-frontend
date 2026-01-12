@@ -48,7 +48,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" value="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
@@ -142,41 +142,37 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]"/>
                 }
             }
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <govuk-radios asp-for="@Model.ReportOption">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @if (Model.Year == null)
-                            {
-                                @Resource.lblWhatTypeOfReportDoYouWantToCreate
-                            }
-                            else
-                            {
-                                @string.Format(Resource.lblWhatTypeOfReportDoYouWantToCreateFromYourYearData, Model.Year)
-                            }
-                        </govuk-radios-fieldset-legend>
-                        
-                        <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
-                            @Resource.lblAnNVZReport
-                            <govuk-radios-item-hint>
-                                @Resource.lblIncludesNmaxLivestockManureNitrogen
-                            </govuk-radios-item-hint>
-                        </govuk-radios-item>
-                        <govuk-radios-item value="@fieldRecordsAndPlan">
-                            @Resource.lblACropAndNutrientManagementReport
-                            <govuk-radios-item-hint>
-                                @Resource.lblDetailsAboutYourFieldsCropsAndRecommendations
-                            </govuk-radios-item-hint>
-                        </govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
-                <p class="govuk-body cancel-link">
-                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-radios asp-for="@Model.ReportOption">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-radios-fieldset-legend>
+
+                    <govuk-radios-item value="@farmAndFieldDetailsForNVZRecord">
+                        @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                                Resource.lblAWaterResourceRegulationsReport : Resource.lblAnNVZReport)
+
+                        <govuk-radios-item-hint>
+                            @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                                        Resource.lblIncludesMaximumNitrogenHoldingNitrogenForWales : Resource.lblIncludesNmaxLivestockManureNitrogen)
+                        </govuk-radios-item-hint>
+                    </govuk-radios-item>
+                    <govuk-radios-item value="@fieldRecordsAndPlan">
+                        @Resource.lblACropAndNutrientManagementReport
+                        <govuk-radios-item-hint>
+                            @Resource.lblDetailsAboutYourFieldsCropsAndRecommendations
+                        </govuk-radios-item-hint>
+                    </govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {
                         <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
                             @Resource.lblCancel

@@ -20,6 +20,7 @@ internal static class APIURLHelper
     public const string FetchCropTypeByIdAsyncAPI = "vendors/rb209/Arable/CropType/{0}";
     public const string AddFieldAsyncAPI = "fields/farms/{0}";
     public const string IsFieldExistAsyncAPI = "fields/farms/{0}/exists?name={1}";
+    public const string IsFieldExistByFieldIdAsyncAPI = "fields/farms/{0}/exists?name={1}&fieldId={2}";
     public const string FetchFieldsByFarmIdAsyncAPI = "fields/farms/{0}";
     public const string FetchPotatoVarietiesAsyncAPI = "vendors/rb209/Arable/PotatoVarieties";
     public const string FetchFieldByFieldIdAsyncAPI = "fields/{0}";
@@ -81,10 +82,11 @@ internal static class APIURLHelper
     public const string FetchCropTypeByFieldIdAndHarvestYearAsyncAPI = "crops/crop-type/{0}?year={1}&confirm={2}";
     public const string FetchCropTypeLinkingByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
     public const string FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI = "organic-manures/manure-type/{0}?year={1}&confirm={2}";
+    public const string FetchManureTypeIdsByManIdFromOrgManureAsyncAPI = "organic-manures/manure-types/{0}";
     public const string FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI = "fertiliser-manures/organic-manures/total-nitrogen/{0}?confirm={1}";
     public const string FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI = "fertiliser-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";
     public const string FetchCropTypeLinkingsByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
-    public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?managementPeriodID={0}&dateFrom={1}&dateTo={2}&confirm={3}";
+    public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?managementPeriodID={0}&dateFrom={1}&dateTo={2}&confirm={3}&isSlurryOnly={4}";
     public const string FetchSeasonsAsyncAPI = "vendors/rb209/Measurement/Seasons";
     public const string FetchSNSIndexByMeasurementMethodAsyncAPI = "vendors/rb209/Measurement/MeasurementMethod";
     public const string FetchSecondCropListByFirstCropIdAsyncAPI = "second-crop-linkings/{0}";
@@ -221,4 +223,7 @@ internal static class APIURLHelper
     public const string UpdateNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
     public const string FetchWarningCodesByFieldIdAndYearAsyncAPI = "warning-message/{0}?harvestYear={1}";
     public const string FetchPreviousCroppingYearByFarmIdAsyncAPI = "previous-cropping-year/{0}";
+    public const string FetchWarningByCountryIdAndWarningKeyAsyncAPI = "warning/{0}?WarningKey={1}";
+    public const string FetchAllWarningAsyncAPI = "warning";
+    public const string FetchTotalNByManagementIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-management-period/{0}?fromDate={1}&toDate={2}&confirm={3}";
 }

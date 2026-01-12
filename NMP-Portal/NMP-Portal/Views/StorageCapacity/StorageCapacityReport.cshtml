@@ -152,7 +152,8 @@
             </div>
         }
 
-        <h2 class="govuk-heading-l">@Resource.lblDirtyWaterStores</h2>
+        @* Remove dirty water stores. We agreed to exclude dirty water during recent slurry/dirty water discussions (note this may be different in Scotland, as Neil came back with a slightly different interpretation), but we need to remove for England and Wales *@
+        @* <h2 class="govuk-heading-l">@Resource.lblDirtyWaterStores</h2>
         @if (ViewBag.DirtyWaterStoreCapacities != null)
         {
             <p class="govuk-body-s">@Resource.lblStoreCapacityReportContentOne</p>
@@ -199,15 +200,15 @@
             </div>
         }
         else
-        {
-            <div class="govuk-grid-row">
+        {            
+             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full margin-bottom-ten">
                     <h3 class="govuk-heading-s">
                         @Resource.lblNoDirtyWaterStores
                     </h3>
                 </div>
-            </div>
-        }
+            </div> 
+        } *@
         
         
         <h2 class="govuk-heading-l">@Resource.lblSolidManureStores</h2>

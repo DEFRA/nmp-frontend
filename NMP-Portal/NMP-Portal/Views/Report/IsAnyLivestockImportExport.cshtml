@@ -2,7 +2,8 @@
 
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
+    string title = string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year);
+    ViewData["Title"] = $"{title} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
@@ -35,7 +36,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers"/>
@@ -135,7 +136,7 @@
                     <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestockImportExport">
                         <govuk-radios-fieldset>
                             <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                @string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year)
+                            @title
                             </govuk-radios-fieldset-legend>
                             <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                             <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>

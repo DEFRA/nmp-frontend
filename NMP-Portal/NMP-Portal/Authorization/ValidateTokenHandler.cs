@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using NMP.Commons.Models;
-using NMP.Portal.Helpers;
-using NMP.Portal.Models;
+using NMP.Commons.Helpers;
+
 using System.Net;
 
 namespace NMP.Portal.Authorization

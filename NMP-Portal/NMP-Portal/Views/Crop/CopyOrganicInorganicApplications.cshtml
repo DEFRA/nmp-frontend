@@ -113,21 +113,21 @@
                     <govuk-checkboxes-hint>
                         @string.Format(Resource.lblSelectAllThatApplyApplicationDateWillBeUpdated, Model.Year)
                     </govuk-checkboxes-hint>
-                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.OrganicMaterial)"
-                                           checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopy.OrganicMaterial) == true)">
+                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopyOptions.OrganicMaterial)"
+                                           checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopyOptions.OrganicMaterial) == true)">
                         @Resource.lblIncludeOrganicMaterialApplications
                     </govuk-checkboxes-item>
 
-                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.InorganicFertiliser)"
-                                           checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopy.InorganicFertiliser) == true)">
+                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopyOptions.InorganicFertiliser)"
+                                           checked="@(Model.OrganicInorganicCopy?.HasFlag(OrganicInorganicCopyOptions.InorganicFertiliser) == true)">
                         @Resource.lblIncludeInorganicFertiliserApplications
                     </govuk-checkboxes-item>
 
                     <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
 
-                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopy.None)"
+                    <govuk-checkboxes-item value="@((int)OrganicInorganicCopyOptions.None)"
                                            behavior="CheckboxesItemBehavior.Exclusive"
-                                           checked="@(Model.OrganicInorganicCopy == OrganicInorganicCopy.None)">
+                                           checked="@(Model.OrganicInorganicCopy == OrganicInorganicCopyOptions.None)">
                         @Resource.lblIncludeNoneOfThese
                     </govuk-checkboxes-item>
                 </govuk-checkboxes-fieldset>

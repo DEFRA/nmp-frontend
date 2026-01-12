@@ -17,20 +17,13 @@
         }
         else if (Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
         {
-            if (Model.IsPreviousYearGrass.HasValue && Model.IsPreviousYearGrass.Value)
+            if (Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && !Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
             {
-                if (Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && !Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
-                {
-                    backAction = "SoilNitrogenSupplyItems";
-                }
-                else
-                {
-                    backAction = "HasGreaterThan30PercentClover";
-                }
+                backAction = "SoilNitrogenSupplyItems";
             }
             else
             {
-                backAction = "RecentSoilAnalysisQuestion";
+                backAction = "HasGreaterThan30PercentClover";
             }
         }
         else
@@ -161,6 +154,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingField" value="@Model.CopyExistingField.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

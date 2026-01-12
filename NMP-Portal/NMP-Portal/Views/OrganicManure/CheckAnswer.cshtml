@@ -78,18 +78,18 @@
                     @if (Model.IsOrgManureNfieldLimitWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @if (Model.NmaxWarningHeading != null)
+                            @if (Model.NmaxWarningPara1 != null)
                             {
-                                @Model.NmaxWarningHeading
+                                @Model.NmaxWarningPara1
                             }
                         </p>
                     }
                     @if (Model.IsNMaxLimitWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @if (Model.CropNmaxLimitWarningHeading != null)
+                            @if (Model.CropNmaxLimitWarningPara1 != null)
                             {
-                                @Model.CropNmaxLimitWarningHeading
+                                @Model.CropNmaxLimitWarningPara1
                             }
                         </p>
                     }
@@ -103,19 +103,19 @@
                     @if (Model.IsEndClosedPeriodFebruaryWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Model.EndClosedPeriodEndFebWarningHeading
+                            @Model.EndClosedPeriodEndFebWarningPara1
                         </p>
                     }
                     @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading
+                            @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1
                         </p>
                     }
                     @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Model.StartClosedPeriodEndFebWarningHeading
+                            @Model.StartClosedPeriodEndFebWarningPara1
                         </p>
                     }
                 </govuk-notification-banner>
@@ -236,30 +236,30 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEndClosedPeriodFebruaryWarning" value="@Model.IsEndClosedPeriodFebruaryWarning.ToString().ToLower()"/>
                 
                 @* warning model properties start *@
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NmaxWarningHeading" value="@Model.NmaxWarningHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NmaxWarningPara1" value="@Model.NmaxWarningPara1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NmaxWarningPara2" value="@Model.NmaxWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NmaxWarningPara3" value="@Model.NmaxWarningPara3"/>
 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningHeading" value="@Model.CropNmaxLimitWarningHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara1" value="@Model.CropNmaxLimitWarningPara1"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara1Additional" value="@Model.CropNmaxLimitWarningPara1Additional"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2" value="@Model.CropNmaxLimitWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2Additional" value="@Model.CropNmaxLimitWarningPara2Additional"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara3" value="@Model.CropNmaxLimitWarningPara3"/>
 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodEndFebWarningHeading" value="@Model.EndClosedPeriodEndFebWarningHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodEndFebWarningPara1" value="@Model.EndClosedPeriodEndFebWarningPara1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodEndFebWarningPara2" value="@Model.EndClosedPeriodEndFebWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodEndFebWarningPara3" value="@Model.EndClosedPeriodEndFebWarningPara3"/>
 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningHeading" value="@Model.StartClosedPeriodEndFebWarningHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningPara1" value="@Model.StartClosedPeriodEndFebWarningPara1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningPara2" value="@Model.StartClosedPeriodEndFebWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningPara3" value="@Model.StartClosedPeriodEndFebWarningPara3"/>
 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeading" value="@Model.ClosedPeriodWarningHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara1" value="@Model.ClosedPeriodWarningPara1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara2" value="@Model.ClosedPeriodWarningPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara3" value="@Model.ClosedPeriodWarningPara3"/>
 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading" value="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeading"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1" value="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2" value="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3" value="@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3"/>
                 @* ------------------------------------------- *@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NmaxWarningHeader" value="@Model.NmaxWarningHeader"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NmaxWarningCodeID" value="@Model.NmaxWarningCodeID"/>

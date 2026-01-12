@@ -2,22 +2,20 @@
 @model NMP.Commons.ViewModels.FarmViewModel
 
 @{
-    //ViewData["Title"] = Resource.lblCheckAnswer;
     ViewData["Title"] = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower())} {Resource.lblHyphen} {Resource.lblDetails}" : $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddAFarm}";
-    //ViewData["Title"] ={title}";
     var organicProducer = "";
     var fieldsAbove300m = "";
     var fieldsInNVZ = "";
 
     switch (Model.NVZFields)
     {
-        case (int)NMP.Commons.Enums.NVZFields.NoFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ:
             fieldsInNVZ = Resource.lblNoneOfTheFieldsAreInAnNVZ;
             break;
-        case (int)NMP.Commons.Enums.NVZFields.SomeFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ:
             fieldsInNVZ = Resource.lblSomeOfTheFieldsAreInAnNVZ;
             break;
-        case (int)NMP.Commons.Enums.NVZFields.AllFieldsInNVZ:
+        case (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ:
             fieldsInNVZ = Resource.lblAllTheFieldsAreInAnNVZ;
             break;
     }
@@ -54,12 +52,10 @@
         <div class="govuk-grid-column-two-thirds-from-desktop">
             @if (TempData["AddFarmError"] != null)
             {
-                @* <govuk-error-message>@ViewBag.AddFarmError</govuk-error-message> *@
                 <govuk-error-summary>
                     <govuk-error-summary-item href="#passport-issued-day">@TempData["AddFarmError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @* <button class="govuk-back-link back-link" type="submit" asp-action="Organic" asp-controller="Farm">@Resource.lblBack</button> *@
             <h1 class="govuk-heading-l">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblCheckYourAnswers)
             </h1>
@@ -77,7 +73,6 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress" />
-                @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer"/> *@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
@@ -149,12 +144,12 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-                    <govuk-summary-list-row>
+                    <govuk-summary-list-row class=@((!Model.Rainfall.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblAverageAnnualRainfall
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm)
+                            @(!Model.Rainfall.HasValue ? Resource.lblNotSet : string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblAnnualRainfall)</span></govuk-summary-list-row-action>

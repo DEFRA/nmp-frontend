@@ -14,6 +14,10 @@
                     && Model.K2O == null && Model.SO3 == null && Model.MgO == null
                     && Model.Lime == null);
     }
+    int trueWarningCount = 0;
+    if (Model.IsClosedPeriodWarning) trueWarningCount++;
+    if (Model.IsNitrogenExceedWarning) trueWarningCount++;
+    if (Model.IsNMaxLimitWarning) trueWarningCount++;
 }
 
 @section BeforeContent {
@@ -46,7 +50,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId"/>
@@ -138,6 +141,33 @@
                         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
                     }
                 }
+                @* warning model properties start *@
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning.ToString().ToLower()" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()" />
+
+
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara1" value="@Model.ClosedPeriodWarningPara1" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningPara3" value="@Model.ClosedPeriodWarningPara3" />
+
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara1" value="@Model.ClosedPeriodNitrogenExceedWarningPara1" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara2" value="@Model.ClosedPeriodNitrogenExceedWarningPara2" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningPara3" value="@Model.ClosedPeriodNitrogenExceedWarningPara3" />
+
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningHeader" value="@Model.ClosedPeriodWarningHeader" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningCodeID" value="@Model.ClosedPeriodWarningCodeID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodWarningLevelID" value="@Model.ClosedPeriodWarningLevelID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningHeader" value="@Model.ClosedPeriodNitrogenExceedWarningHeader" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningCodeID" value="@Model.ClosedPeriodNitrogenExceedWarningCodeID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClosedPeriodNitrogenExceedWarningLevelID" value="@Model.ClosedPeriodNitrogenExceedWarningLevelID" />
+
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNMaxLimitWarning" value="@Model.IsNMaxLimitWarning.ToString().ToLower()" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara1" value="@Model.CropNmaxLimitWarningPara1" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2" value="@Model.CropNmaxLimitWarningPara2" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara2Additional" value="@Model.CropNmaxLimitWarningPara2Additional" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningPara3" value="@Model.CropNmaxLimitWarningPara3" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningHeader" value="@Model.CropNmaxLimitWarningHeader" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningCodeID" value="@Model.CropNmaxLimitWarningCodeID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropNmaxLimitWarningLevelID" value="@Model.CropNmaxLimitWarningLevelID" />
             }
         </div>
         @if (isFieldsEmpty)
@@ -148,30 +178,117 @@
         }
         <div class="govuk-form-group @(isFieldsEmpty ? "govuk-form-group--error" : "")">
             <div class="govuk-grid-column-two-thirds">
-                @if (Model.IsWarningMsgNeedToShow)
+                @if (Model.IsWarningMsgNeedToShow && Model.N >0)
                 {
-                    @if (Model.IsNitrogenExceedWarning)
-                    {
-                        @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningHeading))
+                    <govuk-notification-banner>
+                        <govuk-notification-banner-title>
+                            @Resource.lblImportant
+                        </govuk-notification-banner-title>
+                        @if (trueWarningCount == 1)
                         {
-                            <govuk-notification-banner>
-                                <govuk-notification-banner-title>
-                                    @Resource.lblImportant
-                                </govuk-notification-banner-title>
-                                @TempData["NitrogenExceedMessageTitle"]<br />
+                            @if (Model.IsClosedPeriodWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
+                            {
                                 <p class="govuk-notification-banner__heading">
-                                    @Model.ClosedPeriodNitrogenExceedWarningHeading
+                                    @Model.ClosedPeriodWarningPara1
                                 </p>
-                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara1</p>
+                                <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+                            }
 
-                                @if (Model.ClosedPeriodNitrogenExceedWarningPara2 != null)
+                            @if (Model.IsNitrogenExceedWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
+                            {
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.ClosedPeriodNitrogenExceedWarningPara1
+                                </p>
+                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+
+                                @if (!string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara3))
                                 {
-                                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                    <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
                                 }
-                            </govuk-notification-banner>
+                            }
+                            @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                            {
+                                <p class="govuk-notification-banner__heading">
+                                    @Model.CropNmaxLimitWarningPara1
+                                </p>
+                                <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
+                                @if (Model.CropNmaxLimitWarningPara3 != null)
+                                {
+                                    <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
+                                }
+                            }
+
+                        }
+                        @if (trueWarningCount > 1)
+                        {
+                            @* <div class="govuk-notification-banner__content">*@
+                            <p class="govuk-notification-banner__heading">
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                {
+                                    @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
+                                }
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                {
+                                    @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
+                                }
+                            </p>
+                            <ul class="govuk-list govuk-list--bullet">
+                                @if (Model.IsClosedPeriodWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
+                                {
+                                    <li>@Model.ClosedPeriodWarningPara1</li>
+                                }
+                                @if (Model.IsNitrogenExceedWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
+                                {
+                                    <li>@Model.ClosedPeriodNitrogenExceedWarningPara1</li>
+                                }
+                                @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                                {
+                                    <li>@Model.CropNmaxLimitWarningPara1</li>
+                                }
+                            </ul>
+                            <govuk-details>
+                                <govuk-details-summary>
+
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                    {
+                                        @Resource.lblMoreAboutTheseNVZRules
+                                    }
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                    {
+                                        @Resource.lblMoreAboutTheseWaterResourceRegulation
+                                    }
+                                </govuk-details-summary>
+                                <govuk-details-text>
+                                    @if (Model.IsClosedPeriodWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.ClosedPeriodWarningPara1</h2>
+                                        <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+                                    }
+                                    @if (Model.IsNitrogenExceedWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodNitrogenExceedWarningPara1))
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.ClosedPeriodNitrogenExceedWarningPara1</h2>
+                                        <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara2</p>
+                                    }
+                                    @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                                    {
+                                        <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningPara1</h2>
+                                        <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
+                                        
+                                    }
+                                </govuk-details-text>
+                            </govuk-details>
+                            @if (Model.IsNMaxLimitWarning && !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1))
+                            {
+                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
+                            }
+                            else
+                            {
+                                <p class="govuk-body">@Model.ClosedPeriodNitrogenExceedWarningPara3</p>
+                            }
                         }
 
-                    }
+                    </govuk-notification-banner>
+
                 }
                 <h1 class="govuk-heading-l">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))

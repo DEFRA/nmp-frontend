@@ -1,24 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using NMP.Core.Interfaces;
-using NMP.Securities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
-
 namespace NMP.Services;
-
-public abstract class Service : IService
+public abstract class Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh) : IService
 {
-    public readonly IHttpClientFactory _clientFactory;
-    public readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly TokenRefreshService _tokenRefreshService;
-
-    protected Service(IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefresh)
-    {
-        _httpContextAccessor = httpContextAccessor;
-        _clientFactory = clientFactory;
-        _tokenRefreshService = tokenRefresh;
-    }
+    public readonly IHttpClientFactory _clientFactory = clientFactory;
+    public readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly TokenRefreshService _tokenRefreshService = tokenRefresh;
 
     private async Task<string> GetAccessTokenAsync()
     {
@@ -32,7 +22,7 @@ public abstract class Service : IService
         return token;
     }
 
-    private bool JwtExpired(string jwt)
+    private static bool JwtExpired(string jwt)
     {
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(jwt);
