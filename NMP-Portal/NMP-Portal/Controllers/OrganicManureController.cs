@@ -440,7 +440,7 @@ namespace NMP.Portal.Controllers
                                 model.IsDoubleCropAvailable = false;
                                 foreach (string field in model.FieldList)
                                 {
-                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); //await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(field), model.HarvestYear.Value);                                       
+                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
 
                                     if (cropList.Count > 0)
                                     {
@@ -550,7 +550,7 @@ namespace NMP.Portal.Controllers
                                 int grassCropCounter = 0;
                                 foreach (var field in model.FieldList)
                                 {
-                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); //await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(field), model.HarvestYear.Value);
+                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
                                     if (cropList.Count > 0)
                                     {
                                         if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
@@ -1006,7 +1006,7 @@ namespace NMP.Portal.Controllers
                     }
                     foreach (string field in model.FieldList)
                     {
-                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); //await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(field), model.HarvestYear.Value);
+                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
                         
                         if (cropList.Count > 0)
                         {
