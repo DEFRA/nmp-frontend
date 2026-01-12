@@ -2574,28 +2574,27 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if(!model.IsComingFromRecommendation)
                 {
                     (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                    if (error == null)
+
+                    if (error == null && model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
                     {
-                        if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
+                        if (fieldList.Count > 0)
                         {
-                            if (fieldList.Count > 0)
+                            var fieldNames = fieldList
+                                             .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                             .Select(field => field.Name)
+                                             .ToList();
+                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                            if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
                             {
-                                var fieldNames = fieldList
-                                                 .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                                 .Select(field => field.Name)
-                                                 .ToList();
-                                ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                                if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
-                                {
-                                    ViewBag.Fields = fieldList;
-                                }
-                                if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
-                                {
-                                    model.FieldName = fieldNames.FirstOrDefault();
-                                }
+                                ViewBag.Fields = fieldList;
+                            }
+                            if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
+                            {
+                                model.FieldName = fieldNames.FirstOrDefault();
                             }
                         }
                     }
+
                 }
                 return View(model);
             }
@@ -3136,7 +3135,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     foreach (string fieldId in model.FieldList)
                     {
-                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(fieldId)).ToList(); //await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fieldId), model.HarvestYear.Value);
+                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(fieldId)).ToList();
                         if (cropList != null && cropList.Count == 2)
                         {
                             ModelState.AddModelError("FieldName", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
@@ -3173,28 +3172,26 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (!model.IsComingFromRecommendation)
                 {
                     (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                    if (error == null)
+                    if (error == null && model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
                     {
-                        if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
+                        if (fieldList.Count > 0)
                         {
-                            if (fieldList.Count > 0)
+                            var fieldNames = fieldList
+                                             .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                             .Select(field => field.Name)
+                                             .ToList();
+                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                            if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
                             {
-                                var fieldNames = fieldList
-                                                 .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                                 .Select(field => field.Name)
-                                                 .ToList();
-                                ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                                if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
-                                {
-                                    ViewBag.Fields = fieldList;
-                                }
-                                if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
-                                {
-                                    model.FieldName = fieldNames.FirstOrDefault();
-                                }
+                                ViewBag.Fields = fieldList;
+                            }
+                            if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
+                            {
+                                model.FieldName = fieldNames.FirstOrDefault();
                             }
                         }
                     }
+
                 }
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -3417,27 +3414,25 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (model.FieldList != null && model.FieldList.Count > 0)
             {
                 (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
-                if (error == null)
+                if (error == null && fieldList.Count > 0)
                 {
-                    if (fieldList.Count > 0)
-                    {
-                        var fieldNames = fieldList
-                                         .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                         .Select(field => field.Name)
-                                         .ToList();
+                    var fieldNames = fieldList
+                                     .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                     .Select(field => field.Name)
+                                     .ToList();
 
-                        if (fieldNames != null && fieldNames.Count == 1)
-                        {
-                            model.FieldName = fieldNames.FirstOrDefault();
-                        }
-                        else if (fieldNames != null)
-                        {
-                            model.FieldName = string.Empty;
-                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                        }
-                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                    if (fieldNames != null && fieldNames.Count == 1)
+                    {
+                        model.FieldName = fieldNames.FirstOrDefault();
                     }
+                    else if (fieldNames != null)
+                    {
+                        model.FieldName = string.Empty;
+                        ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                    }
+                    ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
                 }
+
             }
             return View(model);
         }
