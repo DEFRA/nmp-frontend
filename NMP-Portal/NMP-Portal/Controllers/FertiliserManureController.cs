@@ -513,7 +513,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             model.IsDoubleCropAvailable = false;
                             foreach (string field in model.FieldList)
                             {
-                                List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
+                                List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
 
                                 if (cropList.Count > 0)
                                 {
@@ -582,7 +582,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                         {
                                                             (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
                                                             if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
-                                                            {                                                              
+                                                            {
                                                                 HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value);
                                                                 if (crop != null && crop.DefoliationSequenceID != null)
                                                                 {
@@ -634,7 +634,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             foreach (var field in model.FieldList)
                             {
                                 List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
-                                
+
                                 if (cropList.Count > 0)
                                 {
                                     if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
@@ -684,7 +684,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
                             if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
                             {
-                                HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value); 
+                                HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value);
                                 if (crop != null)
                                 {
                                     fertiliser.FieldID = crop.FieldID;
@@ -871,8 +871,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
-                        TempData["FieldGroupError"] = error.Message;
-                        return RedirectToAction(_fieldGroupActionName);
+                    TempData["FieldGroupError"] = error.Message;
+                    return RedirectToAction(_fieldGroupActionName);
                 }
 
 
@@ -898,7 +898,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 foreach (string field in model.FieldList)
                 {
 
-                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();              
+                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
 
                     if (cropList.Count > 0)
                     {
@@ -1005,7 +1005,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     foreach (var field in model.FieldList)
                     {
                         List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
-                       
+
                         if (cropList.Count > 0)
                         {
                             cropList = cropList.Where(x => x.CropOrder == 1).ToList();
@@ -2520,29 +2520,28 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         Error error = new Error();
         try
         {
+            (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+            if (!string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["CheckYourAnswerError"] = error.Message;
+                return View(model);
+            }
+
             if (model.DoubleCrop == null && model.IsDoubleCropAvailable)
             {
                 int index = 0;
-                List<Crop> cropList = new List<Crop>();
                 string cropTypeName = string.Empty;
                 if (model.DoubleCrop == null)
                 {
                     foreach (string fieldId in model.FieldList)
                     {
-                        (cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fieldId), model.HarvestYear.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message))
+                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(fieldId)).ToList(); //await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fieldId), model.HarvestYear.Value);
+                        if (cropList != null && cropList.Count == 2)
                         {
-                            if (cropList != null && cropList.Count == 2)
-                            {
-                                ModelState.AddModelError("FieldName", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
-                                index++;
-                            }
+                            ModelState.AddModelError("FieldName", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                            index++;
                         }
-                        else
-                        {
-                            TempData["CheckYourAnswerError"] = error.Message;
-                            return View(model);
-                        }
+
                     }
                 }
             }
@@ -2572,23 +2571,35 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 model.IsCheckAnswer = false;
                 SetFertiliserManureToSession(model);
+                if(!model.IsComingFromRecommendation)
+                {
+                    (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    if (error == null)
+                    {
+                        if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
+                        {
+                            if (fieldList.Count > 0)
+                            {
+                                var fieldNames = fieldList
+                                                 .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                                 .Select(field => field.Name)
+                                                 .ToList();
+                                ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                                if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+                                {
+                                    ViewBag.Fields = fieldList;
+                                }
+                                if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
+                                {
+                                    model.FieldName = fieldNames.FirstOrDefault();
+                                }
+                            }
+                        }
+                    }
+                }
                 return View(model);
             }
-            if (model.FertiliserManures.Count > 0)
-            {
-                foreach (var fertiliserManure in model.FertiliserManures)
-                {
-                    fertiliserManure.ManagementPeriodID = fertiliserManure.ManagementPeriodID;
-                    fertiliserManure.ApplicationDate = model.Date.Value;
-                    fertiliserManure.N = model.N ?? 0;
-                    fertiliserManure.P2O5 = model.P2O5 ?? 0;
-                    fertiliserManure.K2O = model.K2O ?? 0;
-                    fertiliserManure.SO3 = model.SO3 ?? 0;
-                    fertiliserManure.Lime = model.Lime ?? 0;
-                    fertiliserManure.MgO = model.MgO ?? 0;
-                    fertiliserManure.ApplicationRate = 1;
-                }
-            }
+
             if (model.FertiliserManures.Count > 0)
             {
                 List<FertiliserManure> fertiliserList = new List<FertiliserManure>();
@@ -2599,23 +2610,23 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     FertiliserManure fertManure = new FertiliserManure
                     {
                         ManagementPeriodID = fertiliserManure.ManagementPeriodID,
-                        ApplicationDate = fertiliserManure.ApplicationDate,
-                        ApplicationRate = fertiliserManure.ApplicationRate ?? 0,
+                        ApplicationDate = model.Date,
+                        ApplicationRate = 1,
                         Confirm = fertiliserManure.Confirm,
-                        N = fertiliserManure.N ?? 0,
-                        P2O5 = fertiliserManure.P2O5 ?? 0,
-                        K2O = fertiliserManure.K2O ?? 0,
-                        MgO = fertiliserManure.MgO ?? 0,
-                        SO3 = fertiliserManure.SO3 ?? 0,
-                        Na2O = fertiliserManure.Na2O ?? 0,
+                        N = model.N ?? 0,
+                        P2O5 = model.P2O5 ?? 0,
+                        K2O = model.K2O ?? 0,
+                        MgO = model.MgO ?? 0,
+                        SO3 = model.SO3 ?? 0,
+                        Na2O = model.Na2O ?? 0,
                         NFertAnalysisPercent = fertiliserManure.NFertAnalysisPercent ?? 0,
                         P2O5FertAnalysisPercent = fertiliserManure.P2O5FertAnalysisPercent ?? 0,
                         K2OFertAnalysisPercent = fertiliserManure.K2OFertAnalysisPercent ?? 0,
                         MgOFertAnalysisPercent = fertiliserManure.MgOFertAnalysisPercent ?? 0,
                         SO3FertAnalysisPercent = fertiliserManure.SO3FertAnalysisPercent ?? 0,
                         Na2OFertAnalysisPercent = fertiliserManure.Na2OFertAnalysisPercent ?? 0,
-                        Lime = fertiliserManure.Lime ?? 0,
-                        NH4N = fertiliserManure.NH4N ?? 0,
+                        Lime = model.Lime ?? 0,
+                        NH4N = fertiliserManure.NH4N?? 0,
                         NO3N = fertiliserManure.NO3N ?? 0,
                     };
 
@@ -3112,27 +3123,24 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         Error error = new Error();
         try
         {
+            (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+            if (!string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["CheckYourAnswerError"] = error.Message;
+                return RedirectToAction(_checkAnswerActionName);
+            }
             if (model.DoubleCrop == null && model.IsDoubleCropAvailable)
             {
                 int index = 0;
-                List<Crop> cropList = new List<Crop>();
                 if (model.DoubleCrop == null)
                 {
                     foreach (string fieldId in model.FieldList)
                     {
-                        (cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fieldId), model.HarvestYear.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message))
+                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(fieldId)).ToList(); //await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fieldId), model.HarvestYear.Value);
+                        if (cropList != null && cropList.Count == 2)
                         {
-                            if (cropList != null && cropList.Count == 2)
-                            {
-                                ModelState.AddModelError("FieldName", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
-                                index++;
-                            }
-                        }
-                        else
-                        {
-                            TempData["CheckYourAnswerError"] = error.Message;
-                            return View(model);
+                            ModelState.AddModelError("FieldName", string.Format("{0} {1}", string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                            index++;
                         }
                     }
                 }
@@ -3162,6 +3170,32 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (!ModelState.IsValid)
             {
                 SetFertiliserManureToSession(model);
+                if (!model.IsComingFromRecommendation)
+                {
+                    (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+                    if (error == null)
+                    {
+                        if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll))
+                        {
+                            if (fieldList.Count > 0)
+                            {
+                                var fieldNames = fieldList
+                                                 .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                                 .Select(field => field.Name)
+                                                 .ToList();
+                                ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                                if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+                                {
+                                    ViewBag.Fields = fieldList;
+                                }
+                                if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
+                                {
+                                    model.FieldName = fieldNames.FirstOrDefault();
+                                }
+                            }
+                        }
+                    }
+                }
                 return RedirectToAction(_checkAnswerActionName);
             }
 
