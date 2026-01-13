@@ -283,13 +283,13 @@
                                 {
                                     <govuk-summary-list-row class=@(!Model.AverageNumber.HasValue ? "govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
-                                            @string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)
+                                            @string.Format(Resource.lblAverageTotalForYear, Model.Year)
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
                                             @(Model.AverageNumber.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumber), " " + ViewBag.LivestockCategory?.ToLower())) : Resource.lblNotSet)
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="AverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblAverageNumberOfThisLivestockGroup, ViewBag.LivestockCategory?.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="AverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblAverageTotalForYear, Model.Year)</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                 }

@@ -5089,13 +5089,13 @@ cubic metres per hectare  not set</value>
     <value>Enter a number for each month</value>
   </data>
   <data name="lblEnterTheAverageNumberForTheYear" xml:space="preserve">
-    <value>Enter the average number for the year</value>
+    <value>Enter the average total for the year</value>
   </data>
   <data name="lblLivestockNumberQuestion" xml:space="preserve">
     <value>livestock number question</value>
   </data>
   <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
-    <value>Average number of {0} in {1}</value>
+    <value>Average total number of this {0} type in {1}</value>
   </data>
   <data name="lblSelectedLivestockType" xml:space="preserve">
     <value>Selected livestock type: {0}</value>
@@ -5419,7 +5419,7 @@ cubic metres per hectare  not set</value>
     <value>Home-produced manures from any cattle, sheep, deer, goats, or horses, regardless of whether the animals are housed or not.</value>
   </data>
   <data name="lblLivestockReportContentSeventeen" xml:space="preserve">
-    <value>Average number for year</value>
+    <value>Average total for the year</value>
   </data>
   <data name="lblLivestockReportContentEighteen" xml:space="preserve">
     <value>Total nitrogen (N) produced</value>
@@ -5808,7 +5808,7 @@ livestock manure.</value>
     <value>{0}kg/yr</value>
   </data>
   <data name="lblWhatIsTheAverageTotalNumberOfThis" xml:space="preserve">
-    <value>What is the average total number of this {0} type for {1}?</value>
+    <value>What is the average total number of this {0} type in {1}?</value>
   </data>
   <data name="lblOccupancyAndStandard" xml:space="preserve">
     <value>Occupancy and standard</value>
@@ -6411,7 +6411,7 @@ livestock manure.</value>
     <value>What was the total rainfall since application</value>
   </data>
   <data name="lblWhatIsTheAverageNumberOfSuffix" xml:space="preserve">
-    <value>What is the average number of {0} in {1}</value>
+    <value>What is the average total number of {0} in {1}</value>
   </data>
   <data name="lblWhatIsTheTotalFarmAreaSuffix" xml:space="preserve">
     <value>What is the total farm area</value>
@@ -6432,7 +6432,7 @@ livestock manure.</value>
     <value>What is the nitrogen (N) standard for this livestock type in {0}</value>
   </data>
   <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
-    <value>What is the average total number of this {0} type for {1}</value>
+    <value>What is the average total number of this {0} type in {1}</value>
   </data>
   <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
     <value>What is the occupancy for this livestock type in {0}</value>
@@ -7135,5 +7135,8 @@ livestock manure.</value>
   </data>
   <data name="MsgImportExportSuccessMsgForWales" xml:space="preserve">
     <value>Create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
+  </data>
+  <data name="lblAverageTotalForYear" xml:space="preserve">
+    <value>Average total for {0}</value>
   </data>
 </root>
