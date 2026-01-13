@@ -2482,7 +2482,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average number of {0} in {1}.
+        ///   Looks up a localized string similar to Average total number of this {0} type in {1}.
         /// </summary>
         public static string lblAverageNumberOfThisLivestockGroup {
             get {
@@ -2496,6 +2496,15 @@ namespace NMP.Commons.Resources {
         public static string lblAverageRainfallBetweenManAppAndEndOfSoilDrainage {
             get {
                 return ResourceManager.GetString("lblAverageRainfallBetweenManAppAndEndOfSoilDrainage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average total for {0}.
+        /// </summary>
+        public static string lblAverageTotalForYear {
+            get {
+                return ResourceManager.GetString("lblAverageTotalForYear", resourceCulture);
             }
         }
         
@@ -4894,7 +4903,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the average number for the year.
+        ///   Looks up a localized string similar to Enter the average total for the year.
         /// </summary>
         public static string lblEnterTheAverageNumberForTheYear {
             get {
@@ -8144,7 +8153,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average number for year.
+        ///   Looks up a localized string similar to Average total for the year.
         /// </summary>
         public static string lblLivestockReportContentSeventeen {
             get {
@@ -15499,7 +15508,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average number of {0} in {1}.
+        ///   Looks up a localized string similar to What is the average total number of {0} in {1}.
         /// </summary>
         public static string lblWhatIsTheAverageNumberOfSuffix {
             get {
@@ -15526,7 +15535,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average total number of this {0} type for {1}?.
+        ///   Looks up a localized string similar to What is the average total number of this {0} type in {1}?.
         /// </summary>
         public static string lblWhatIsTheAverageTotalNumberOfThis {
             get {
@@ -15535,7 +15544,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the average total number of this {0} type for {1}.
+        ///   Looks up a localized string similar to What is the average total number of this {0} type in {1}.
         /// </summary>
         public static string lblWhatIsTheAverageTotalNumberOfThisSuffix {
             get {
