@@ -37,11 +37,6 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     {
         _logger.LogTrace("Fetching list of countries");
         (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-        //if (error != null && countryList.Count > 0)
-        //{
-        //    countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
-
-        //}
         return countryList.OrderBy(c => c.Name).ToList();
 
     }
