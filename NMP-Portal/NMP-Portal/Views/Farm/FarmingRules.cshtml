@@ -15,34 +15,11 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
         <form asp-action="FarmingRules" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
-            <div hidden="true">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"/>
-            @if (Model != null)
-            {
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-            }
-            </div>
-            @if (Model != null && (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland))
+            @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
+            
+            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
             {
                 <h1 class="govuk-heading-l">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblRegulations_for_England : Resource.lblRegulations_for_Scotland)</h1>
                 <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
@@ -71,10 +48,9 @@
                     @Resource.lblThirdRuleOfNVZForEngland
                     <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
                     @Resource.lblOpenInANewWindow
-                </p>
-               
+                </p>               
             }
-            else @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            else if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
                 <h1 class="govuk-heading-l">@Resource.lblTheWaterResourcesRegulations2021</h1>
                 <p class="govuk-body">
