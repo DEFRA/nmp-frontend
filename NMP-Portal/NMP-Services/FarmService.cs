@@ -93,9 +93,9 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (farm, error);
     }
-    public async Task<(Farm, Error)> FetchFarmByIdAsync(int farmId)
+    public async Task<(FarmResponse, Error)> FetchFarmByIdAsync(int farmId)
     {
-        Farm farm = new Farm();
+        FarmResponse farm = new FarmResponse();
         Error error = new Error();
         string url = string.Format(APIURLHelper.FetchFarmByIdAPI, farmId);
         HttpClient httpClient = await GetNMPAPIClient();
@@ -108,7 +108,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
             JObject? farmDataJObject = responseWrapper.Data["Farm"] as JObject;
             if (farmDataJObject != null)
             {
-                farm = farmDataJObject.ToObject<Farm>();
+                farm = farmDataJObject.ToObject<FarmResponse>();
             }
         }
         else
