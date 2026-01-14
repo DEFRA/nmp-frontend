@@ -14,10 +14,12 @@ using NMP.Commons.ViewModels;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-    [Route("Error/[action]")]
+
+    [Route("[Controller]")]
     public class ErrorController : Controller
     {        
-        [Route("Error/{statusCode}")]
+        //[Route("Error/{statusCode}")]
+        [HttpGet("{statusCode}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
             if (!ModelState.IsValid)
@@ -121,6 +123,7 @@ namespace NMP.Portal.Controllers
             return View(viewName, errorViewModel);
         }
 
+        [HttpGet("")]
         public IActionResult Index()
         {
             ErrorViewModel error = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };            
