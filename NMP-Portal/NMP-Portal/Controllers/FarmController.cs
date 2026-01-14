@@ -915,6 +915,12 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Organic() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                model.RegisteredOrganicProducer = false;
+                SetFarmToSession(model);
+                return RedirectToAction(_checkAnswerActionName);
+            }
 
             return View(model);
         }
@@ -1099,6 +1105,10 @@ namespace NMP.Portal.Controllers
             {
                 model.IsCheckAnswer = false;
                 SetFarmToSession(model);
+                if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    return RedirectToAction("Elevation");
+                }
                 return RedirectToAction("Organic");
             }
         }
@@ -1456,7 +1466,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex,"farm Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "farm Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);

@@ -7139,4 +7139,7 @@ livestock manure.</value>
   <data name="lblAverageTotalForYear" xml:space="preserve">
     <value>Average total for {0}</value>
   </data>
+  <data name="lblRegulations_for_Scotland" xml:space="preserve">
+    <value>Regulations for Scotland</value>
+  </data>
 </root>

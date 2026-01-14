@@ -11312,6 +11312,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Regulations for Scotland.
+        /// </summary>
+        public static string lblRegulations_for_Scotland {
+            get {
+                return ResourceManager.GetString("lblRegulations_for_Scotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can use the recommendations and outputs from NMPT-GB to demonstrate compliance with environmental regulations. This tool will warn you if you enter field or nutrient management information that will breach rules relating to inorganic fertilisers, organic manures or other materials containing nitrogen..
         /// </summary>
         public static string lblRegulations_line1 {

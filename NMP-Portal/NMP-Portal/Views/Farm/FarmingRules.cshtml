@@ -42,9 +42,9 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             }
             </div>
-            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+            @if (Model != null && (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland))
             {
-                <h1 class="govuk-heading-l">@Resource.lblRegulations_for_England</h1>
+                <h1 class="govuk-heading-l">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblRegulations_for_England : Resource.lblRegulations_for_Scotland)</h1>
                 <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
                 <p class="govuk-body">
                     @Resource.lblFarmingRuleOfWaterFirstForEngland
