@@ -19,7 +19,7 @@
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
             
-            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 <h1 class="govuk-heading-l">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblRegulations_for_England : Resource.lblRegulations_for_Scotland)</h1>
                 <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
