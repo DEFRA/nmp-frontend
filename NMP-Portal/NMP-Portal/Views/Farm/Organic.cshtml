@@ -1,11 +1,12 @@
-﻿@using NMP.Commons.Resources
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.FarmViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{Resource.lblRegisteredOrganicProducer} {Resource.lblHyphen} {title}";
     var organicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var noOrganicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    ViewBag.CurrentStep = 11;
+    ViewBag.CurrentStep = (int)FarmWizardSteps.OrganicFarm;
 }
 
 @section BeforeContent {

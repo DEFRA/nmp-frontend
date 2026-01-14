@@ -1,4 +1,5 @@
-﻿@using NMP.Commons.Resources
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.FarmViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
@@ -6,7 +7,7 @@
     var AllFieldsInNVZ = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
     var SomeFieldsInNVZ = (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
     var NoFieldsInNVZ = (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ;
-    ViewBag.CurrentStep = 9;
+    ViewBag.CurrentStep = (int)FarmWizardSteps.Nvz;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>

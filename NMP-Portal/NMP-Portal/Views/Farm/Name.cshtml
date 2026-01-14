@@ -1,11 +1,12 @@
-﻿@using NMP.Commons.Resources
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
 @model FarmViewModel
 
 @{
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
-    ViewBag.CurrentStep = 1;
+    ViewBag.CurrentStep = (int)FarmWizardSteps.Name;
 }
 
 @section BeforeContent {

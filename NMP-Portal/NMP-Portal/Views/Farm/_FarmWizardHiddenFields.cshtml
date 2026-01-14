@@ -1,51 +1,52 @@
-﻿@using NMP.Commons.ViewModels;
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.ViewModels;
 @using NMP.Commons.Resources;
 @model NMP.Commons.ViewModels.FarmViewModel
 @{
     var currentStep = ViewBag.CurrentStep as int?;
 }
 <div hidden="hidden">    
-    @if(currentStep !=1)
+    @if (currentStep != (int)FarmWizardSteps.Name)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" />
     }
-    @if (currentStep != 2)
+    @if (currentStep != (int)FarmWizardSteps.Country)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
     }
-    @if (currentStep != 4)
+    @if (currentStep != (int)FarmWizardSteps.Postcode)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode" />
     }
-    @if (currentStep != 5)
+    @if (currentStep != (int)FarmWizardSteps.FullAddress)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress" />
     }
-    @if (currentStep != 6)
+    @if (currentStep != (int)FarmWizardSteps.ManualAddress)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4" />
     }
-    @if (currentStep != 8)
+    @if (currentStep != (int)FarmWizardSteps.ManualRainFall)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall" />
     }
-    @if (currentStep != 9)
+    @if (currentStep != (int)FarmWizardSteps.Nvz)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields" />
     }
-    @if (currentStep != 10)
+    @if (currentStep != (int)FarmWizardSteps.FieldAbove300Level)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel" />
     }
-    @if (currentStep != 11)
+    @if (currentStep != (int)FarmWizardSteps.OrganicFarm)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer" />
     }
-    @if (currentStep != 12)
+    @if (currentStep != (int)FarmWizardSteps.ClimateDataPostcode)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode" />
     }

@@ -1,4 +1,5 @@
-﻿@using NMP.Commons.Resources
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.FarmViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
@@ -23,7 +24,7 @@
             backAction = "NVZ";
         }
     }
-    ViewBag.CurrentStep = 10;
+    ViewBag.CurrentStep = (int)FarmWizardSteps.FieldAbove300Level;
 }
 
 @section BeforeContent {

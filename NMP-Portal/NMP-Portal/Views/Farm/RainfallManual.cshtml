@@ -1,10 +1,11 @@
-﻿@using NMP.Commons.Resources;
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources;
 @model NMP.Commons.ViewModels.FarmViewModel
 
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)} {Resource.lblHyphen} {title}";
-    ViewBag.CurrentStep = 8;
+    ViewBag.CurrentStep = (int)FarmWizardSteps.ManualRainFall;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
