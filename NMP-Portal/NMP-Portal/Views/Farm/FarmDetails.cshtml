@@ -74,10 +74,14 @@
                         <td class="govuk-table__cell">@Resource.lblAverageAnnualRainfall</td>
                         <td class="govuk-table__cell">@string.Format("{0:N0}",Model.Rainfall)</td>
                     </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreInNVZ, Model.Name)</td>
-                        <td class="govuk-table__cell">@fieldsInNVZ</td>
-                    </tr>
+                    @if (Model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreInNVZ, Model.Name)</td>
+                            <td class="govuk-table__cell">@fieldsInNVZ</td>
+                        </tr>
+                    }
+                    
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@string.Format(Resource.lblHowManyFieldsAtFarmAreAbove300Meters, Model.Name)</td>
                         <td class="govuk-table__cell">@fieldsAbove300m</td>
