@@ -56,6 +56,7 @@ namespace NMP.Portal.Security
                 options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
+                options.ErrorPath = "/Error/index";
             },
             cookieOptions =>
             {
