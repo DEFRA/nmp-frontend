@@ -104,7 +104,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                 {
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -404,7 +404,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
             {
                 //fetch crop type
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -881,7 +881,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.EncryptedHarvestYear = j;
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
                     model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1403,7 +1403,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     model.EncryptedFarmId = f;
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1423,7 +1423,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -1463,7 +1463,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.Country = farm.CountryID;
@@ -1584,7 +1584,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.FarmName = farm.Name;
@@ -1620,7 +1620,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1965,7 +1965,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error error = null;
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2090,7 +2090,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.Country = farm.CountryID;
@@ -2128,7 +2128,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2159,7 +2159,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             string totalAreaInNVZKey = "TotalAreaInNVZ";
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2498,7 +2498,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
@@ -2569,7 +2569,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error error = null;
             if (!ModelState.IsValid)
             {
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
@@ -2819,7 +2819,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 TempData["succesMsgContent"] = _reportDataProtector.Unprotect(r);
             }
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 model.FarmName = farm.Name;
@@ -4047,7 +4047,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             model.IsComingFromSuccessMsg = false;
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 if (!string.IsNullOrWhiteSpace(r))
@@ -4090,7 +4090,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             nutrientsLoadingManuresList.ForEach(x => x.EncryptedID = _reportDataProtector.Protect(x.ID.Value.ToString()));
                             ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
                             string unit = "";
-                            (Farm farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                            (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                             if (string.IsNullOrWhiteSpace(error.Message) && farmData != null)
                             {
                                 (List<ManureType> ManureTypes, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.LivestockManure, farmData.CountryID.Value);
@@ -5712,7 +5712,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             model.IsComingFromSuccessMsg = false;
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 if (!string.IsNullOrWhiteSpace(r))
@@ -6549,10 +6549,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         int totalLivestockManureCapacity = 0;
-        (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+        (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
         if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
         {
-            model.Farm = new Farm();
+            model.Farm = new FarmResponse();
             model.Farm = farm;
         }
         else if (error != null && !string.IsNullOrWhiteSpace(error.Message))

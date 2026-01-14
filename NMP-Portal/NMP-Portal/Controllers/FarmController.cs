@@ -1140,7 +1140,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                     if (!string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
@@ -1193,7 +1193,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 farmId = _dataProtector.Unprotect(id);
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1298,7 +1298,7 @@ namespace NMP.Portal.Controllers
 
                 int createdByID = 0;
                 DateTime createdOn = DateTime.Now;
-                (Farm farmDetail, Error apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse farmDetail, Error apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
                 if (!string.IsNullOrWhiteSpace(apiError.Message))
                 {

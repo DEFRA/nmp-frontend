@@ -126,7 +126,7 @@ namespace NMP.Portal.Controllers
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
             model.EncryptedFarmId = q;
             model.EncryptedHarvestYear = r;
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
             if (!string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["FieldGroupError"] = error.Message;
@@ -1667,7 +1667,7 @@ namespace NMP.Portal.Controllers
 
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
 
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     TempData["Error"] = error.Message;
@@ -1756,7 +1756,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 int farmId = 0;
-                Farm farm = new Farm();
+                FarmResponse farm = new FarmResponse();
                 Error error = new Error();
                 if (model.ApplicationDate == null)
                 {
@@ -1946,7 +1946,7 @@ namespace NMP.Portal.Controllers
             model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
 
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-            (Farm farm, Error farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            (FarmResponse farm, Error farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
             if (farmError != null && !string.IsNullOrWhiteSpace(farmError.Message))
             {
                 TempData["Error"] = farmError.Message;
@@ -3242,7 +3242,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                     {
-                        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                        (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                         foreach (var organicManure in model.OrganicManures)
                         {
                             int? fieldId = organicManure.FieldID ?? null;
@@ -3461,7 +3461,7 @@ namespace NMP.Portal.Controllers
 
                 if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                 {
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     foreach (var organicManure in model.OrganicManures)
                     {
                         int? fieldId = organicManure.FieldID ?? null;
@@ -3616,7 +3616,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Organic Manure Controller : AreaQuantity() post action called");
             int farmId = 0;
-            Farm farm = new Farm();
+            FarmResponse farm = new FarmResponse();
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Area"))
             {
                 var areaError = ModelState["Area"].Errors.Count > 0 ?
@@ -4317,7 +4317,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 //Effective rainfall after application
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 string halfPostCode = string.Empty;
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
@@ -4590,7 +4590,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Organic Manure Controller : CheckAnswer() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             Error error = null;
-            Farm farm = null;
+            FarmResponse farm = null;
             try
             {
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
@@ -5692,7 +5692,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    (Farm farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farmData != null && (string.IsNullOrWhiteSpace(error.Message)))
                     {
                         foreach (var organic in model.OrganicManures)
@@ -7553,7 +7553,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                (Farm farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farmData != null && (string.IsNullOrWhiteSpace(error.Message)))
                 {
                     foreach (var organic in model.OrganicManures)
@@ -8298,7 +8298,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        (Farm farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                        (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                         if (farmData != null && string.IsNullOrWhiteSpace(error.Message))
                         {
                             if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)

@@ -237,7 +237,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            (Farm farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+            (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
             model.IsEnglishRules = farm.EnglishRules;
             ViewBag.CropGroupList = await GetCropGroups(model.IsEnglishRules);
 
@@ -2366,7 +2366,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-            (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
+            (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
             if (farm != null && string.IsNullOrWhiteSpace(error.Message))
             {
                 model.IsEnglishRules = farm.EnglishRules;
@@ -3254,7 +3254,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                     int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
 
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -3675,7 +3675,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (!string.IsNullOrWhiteSpace(id))
         {
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
             model.FarmName = farm.Name;
             List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
             planSummaryResponse.RemoveAll(x => x.Year == 0);
@@ -3835,7 +3835,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (!string.IsNullOrWhiteSpace(q))
             {
                 decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                model.FarmName = (await _farmLogic.FetchFarmByIdAsync(decryptedFarmId)).Item1.Name;
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
+                }
                 model.EncryptedFarmId = q;
             }
 
@@ -6994,7 +6999,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : CheckYourPlanData() action called");
         PlanViewModel model = new PlanViewModel();
         int farmId = 0;
-        Farm farm = new Farm();
+        FarmResponse farm = new FarmResponse();
         Error error = new Error();
         try
         {
