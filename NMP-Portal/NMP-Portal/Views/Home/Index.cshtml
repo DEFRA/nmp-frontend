@@ -5,14 +5,16 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-         @*<h1 class="govuk-heading-xl">
-            Plan and Manage Nutrient Applications Tool - Update
+        <h1 class="govuk-heading-xl">
+            Plan and Manage Nutrient Applications Tool — Launch Update
         </h1>
-        <p class="govuk-body">The Plan and Manage Nutrient Applications tool is scheduled for release by early 2026.</p>
-        <p class="govuk-body">For our private beta users: we are currently implementing updates, and your version of the tool will be ready shortly. Thank you for your patience and continued feedback.</p>
-        </<br />
-        <p class="govuk-body">Further communications will be issued in the next few weeks.</p>*@
-        @if (ViewBag.Error != null || ViewBag.ServiceError != null)
+        <p class="govuk-body">This is the production version of the Nutrient Management and Planning Application tool.</p>
+        <p class="govuk-body">
+            The Nutrient Management and Planning Application tool is in its final stages and will be ready soon.
+            We’re making final refinements and will share further updates shortly.
+        </p>
+        <p class="govuk-body">If you have any queries before the launch of the tool, please email <a href="mailto:nmpt@defra.gov.uk">nmpt@defra.gov.uk</a>.</p>
+        @*@if (ViewBag.Error != null || ViewBag.ServiceError != null)
         {
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
@@ -35,7 +37,6 @@
                 @Resource.lblHelpProtectTheEnvironment
             </li>
         </ul>
-
         <h2 class="govuk-heading-m">@Resource.lblHowitworks</h2>
         <p class="govuk-body">@Html.Raw(Resource.lblRecommendationFromthisService)</p>
         <p class="govuk-body">@Resource.lblYourPlanWillBasedOn</p>
@@ -51,11 +52,7 @@
             </li>
         </ul>
         <p class="govuk-body">@Resource.lblDevelopNutrientApplicationPlan</p>
-        <p class="govuk-body">@Resource.lbldownloadablePdftext</p>
-        
-
-        
-
+        <p class="govuk-body">@Resource.lbldownloadablePdftext</p>        
         <h2 class="govuk-heading-m">@Resource.lblYourData</h2>
         <p class="govuk-body">
             @Resource.lblYourDataContentOne
@@ -73,6 +70,6 @@
                     <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
                 </svg>
             </govuk-button-link>
-        } 
+        } *@
     </div>
 </div>
