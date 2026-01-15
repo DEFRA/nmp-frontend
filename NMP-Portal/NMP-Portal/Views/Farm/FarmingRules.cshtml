@@ -38,9 +38,22 @@
                     @Resource.lblOpenInANewWindow
                 </p>
             }
-            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            @if (Model != null && (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland))
             {
-                <h2 class="govuk-heading-m">@Resource.lblNitrateVulnerableZones</h2>
+                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                {
+                <h2 class="govuk-heading-m">
+                    @Resource.lblNitrateVulnerableZones
+                    </h2>
+                }
+                else
+                {
+
+                    <h1 class="govuk-heading-l">
+                                        @Resource.lblFarmingRuleForScotlandContent9 
+            </h1>
+                    
+                }
                 <p class="govuk-body">
                     @Resource.lblFirstRuleOfNVZForEngland
                     @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)

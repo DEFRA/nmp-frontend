@@ -7152,7 +7152,7 @@ livestock manure.</value>
     <value>Regulations for Scotland</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent1" xml:space="preserve">
-    <value>There are currently &lt;a href="/https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt; 5 NVZs in Scotland &lt;/a&gt;:</value>
+    <value>There are currently &lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt; 5 NVZs in Scotland &lt;/a&gt;:</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent2" xml:space="preserve">
     <value>Lower Nithsdale</value>
@@ -7177,5 +7177,8 @@ livestock manure.</value>
   </data>
   <data name="lblFarmingRuleForEnglandContent1" xml:space="preserve">
     <value>They include about 55% of land in England.</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent9" xml:space="preserve">
+    <value>About Nitrate Vulnerable Zones (NVZs)</value>
   </data>
 </root>

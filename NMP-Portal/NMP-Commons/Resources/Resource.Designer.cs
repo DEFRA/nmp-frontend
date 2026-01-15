@@ -5317,7 +5317,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are currently &lt;a href=&quot;/https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/&quot;  target=&quot;_blank&quot;&gt; 5 NVZs in Scotland &lt;/a&gt;:.
+        ///   Looks up a localized string similar to There are currently &lt;a href=&quot;https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/&quot;  target=&quot;_blank&quot;&gt; 5 NVZs in Scotland &lt;/a&gt;:.
         /// </summary>
         public static string lblFarmingRuleForScotlandContent1 {
             get {
@@ -5385,6 +5385,15 @@ namespace NMP.Commons.Resources {
         public static string lblFarmingRuleForScotlandContent8 {
             get {
                 return ResourceManager.GetString("lblFarmingRuleForScotlandContent8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Nitrate Vulnerable Zones (NVZs).
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent9 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent9", resourceCulture);
             }
         }
         
