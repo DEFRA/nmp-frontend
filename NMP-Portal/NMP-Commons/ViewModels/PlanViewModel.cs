@@ -13,7 +13,7 @@ public class PlanViewModel
     public int? CropInfo2 { get; set; }
     public string? CropInfo1Name { get; set; }
     public string? CropInfo2Name { get; set; }
-    public bool IsEnglishRules { get; set; }
+    public int? FarmRB209CountryID { get; set; }
     public string EncryptedFarmId { get; set; } = string.Empty;
     public int? CropGroupId { get; set; }
     public string? CropGroup { get; set; }
