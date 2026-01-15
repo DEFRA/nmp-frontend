@@ -3910,7 +3910,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
   </data>
   <data name="lblFirstRuleOfNVZForEngland" xml:space="preserve">
-    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England.</value>
+    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution.</value>
   </data>
   <data name="lblFourthRuleOfNVZForEngland" xml:space="preserve">
     <value>Nitrate vulnerable zones (NVZs)</value>
@@ -7150,5 +7150,35 @@ livestock manure.</value>
   </data>
   <data name="lblRegulations_for_Scotland" xml:space="preserve">
     <value>Regulations for Scotland</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent1" xml:space="preserve">
+    <value>There are currently &lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt; 5 NVZs in Scotland &lt;/a&gt;:</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent2" xml:space="preserve">
+    <value>Lower Nithsdale</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent3" xml:space="preserve">
+    <value>Lothian and Borders</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent4" xml:space="preserve">
+    <value>Strathmore and Fife (including Finavon)</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent5" xml:space="preserve">
+    <value>Moray, Aberdeenshire/Banff and Buchan</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent6" xml:space="preserve">
+    <value>Stranraer Lowlands</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent7" xml:space="preserve">
+    <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent8" xml:space="preserve">
+    <value>You should &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;follow the guidance in the Technical Notes &lt;/a&gt; when making plans for your nutrients and crops.</value>
+  </data>
+  <data name="lblFarmingRuleForEnglandContent1" xml:space="preserve">
+    <value>They include about 55% of land in England.</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent9" xml:space="preserve">
+    <value>About Nitrate Vulnerable Zones (NVZs)</value>
   </data>
 </root>

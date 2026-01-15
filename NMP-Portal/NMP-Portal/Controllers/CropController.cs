@@ -1530,6 +1530,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!ModelState.IsValid)
         {
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            ViewBag.DefaultYield = defaultYield;
             return View(model);
         }
         try
