@@ -7148,4 +7148,7 @@ livestock manure.</value>
   <data name="lblAboutRecommendationForScotlandContent3" xml:space="preserve">
     <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
   </data>
+  <data name="lblRegulations_for_Scotland" xml:space="preserve">
+    <value>Regulations for Scotland</value>
+  </data>
 </root>
