@@ -5308,6 +5308,87 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to They include about 55% of land in England..
+        /// </summary>
+        public static string lblFarmingRuleForEnglandContent1 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForEnglandContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are currently &lt;a href=&quot;/https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/&quot;  target=&quot;_blank&quot;&gt; 5 NVZs in Scotland &lt;/a&gt;:.
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent1 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lower Nithsdale.
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent2 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lothian and Borders.
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent3 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strathmore and Fife (including Finavon).
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent4 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moray, Aberdeenshire/Banff and Buchan.
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent5 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stranraer Lowlands.
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent6 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read more about &lt;a href=&quot;https://www.gov.scot/policies/agriculture-and-the-environment/nvz/&quot;  target=&quot;_blank&quot;&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window)..
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent7 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should &lt;a href=&quot;https://www.fas.scot/technical-notes/&quot;  target=&quot;_blank&quot;&gt;follow the guidance in the Technical Notes &lt;/a&gt; when making plans for your nutrients and crops..
+        /// </summary>
+        public static string lblFarmingRuleForScotlandContent8 {
+            get {
+                return ResourceManager.GetString("lblFarmingRuleForScotlandContent8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farming rules for water.
         /// </summary>
         public static string lblFarmingRuleOfWater {
@@ -5830,7 +5911,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England..
+        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution..
         /// </summary>
         public static string lblFirstRuleOfNVZForEngland {
             get {

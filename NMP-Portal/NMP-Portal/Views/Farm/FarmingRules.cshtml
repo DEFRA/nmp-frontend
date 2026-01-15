@@ -18,8 +18,8 @@
         <form asp-action="FarmingRules" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
-            
-            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+
+            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
             {
                 <h1 class="govuk-heading-l">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblRegulations_for_England : Resource.lblRegulations_for_Scotland)</h1>
                 <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
@@ -36,19 +36,60 @@
                     @Resource.lblFarmingRuleOfWaterFourthForEngland
                     <a target="_blank" href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks">@Resource.lblFarmingRuleOfWaterFifthForEngland</a>
                     @Resource.lblOpenInANewWindow
-                </p>                
+                </p>
+            }
+            @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
                 <h2 class="govuk-heading-m">@Resource.lblNitrateVulnerableZones</h2>
                 <p class="govuk-body">
                     @Resource.lblFirstRuleOfNVZForEngland
+                    @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                    {
+                        @Resource.lblFarmingRuleForEnglandContent1
+                    }
+                    
                 </p>
+                @if (Model.CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    <p class="govuk-body">@Html.Raw(Resource.lblFarmingRuleForScotlandContent1)</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>
+                            @Resource.lblFarmingRuleForScotlandContent2
+                        </li>
+                        <li>
+                            @Resource.lblFarmingRuleForScotlandContent3
+                        </li>
+                        <li>
+                            @Resource.lblFarmingRuleForScotlandContent4
+                        </li>
+                        <li>
+                            @Resource.lblFarmingRuleForScotlandContent5
+                        </li>
+                        <li>  @Resource.lblFarmingRuleForScotlandContent6
+                        </li>
+                    </ul>
+                }
                 <p class="govuk-body">
                     @Resource.lblSecondRuleOfNVZForEngland
                 </p>
-                <p class="govuk-body">
-                    @Resource.lblThirdRuleOfNVZForEngland
-                    <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
-                    @Resource.lblOpenInANewWindow
-                </p>               
+                
+                    @if (Model.CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                    <p class="govuk-body">
+                        @Resource.lblThirdRuleOfNVZForEngland
+                        <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
+                        @Resource.lblOpenInANewWindow
+                    </p>
+                    }
+                    else
+                    {
+                    <p class="govuk-body">
+                        @Html.Raw(Resource.lblFarmingRuleForScotlandContent7)
+                    </p>
+                    <p class="govuk-body">
+                        @Html.Raw(Resource.lblFarmingRuleForScotlandContent8)
+                    </p>
+                    }
             }
             else if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
@@ -71,7 +112,7 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-             @if (!Model.IsCheckAnswer)
+            @if (!Model.IsCheckAnswer)
             {
                 <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
             }

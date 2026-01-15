@@ -160,6 +160,7 @@ namespace NMP.Commons.ViewModels
         public bool? IsDeleteNLLivestock { get; set; }
         public bool IsLivestockGroupChange { get; set; } = false;
         public int? Country { get; set; }
+        public int? FarmRB209CountryID { get; set; }
 
     }
 }
