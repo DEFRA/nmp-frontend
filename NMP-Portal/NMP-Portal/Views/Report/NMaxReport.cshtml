@@ -2,10 +2,10 @@
 @using System.Globalization
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    ViewData["Title"] = $"{string.Format(Resource.ReportTitle, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMaxReport : Resource.lblMaximumNitrogenLimit, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
+    ViewData["Title"] = $"{string.Format(Resource.ReportTitle, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMaxReport : Resource.lblMaximumNitrogenLimit, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblReport}";
     int nMaxLimitCounter = 1;
     int totalCount = Model.NMaxLimitReport.Count;
-    string reportName = (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England) ? Resource.lblNMax : Resource.lblMaximumNitrogen;
+    string reportName = (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogen;
 }
 
 @section BeforeContent {

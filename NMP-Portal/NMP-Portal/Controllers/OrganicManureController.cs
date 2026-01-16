@@ -441,7 +441,7 @@ namespace NMP.Portal.Controllers
                                 model.IsDoubleCropAvailable = false;
                                 foreach (string field in model.FieldList)
                                 {
-                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
+                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
 
                                     if (cropList.Count > 0)
                                     {
@@ -551,7 +551,7 @@ namespace NMP.Portal.Controllers
                                 int grassCropCounter = 0;
                                 foreach (var field in model.FieldList)
                                 {
-                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
+                                    List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
                                     if (cropList.Count > 0)
                                     {
                                         if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
@@ -601,10 +601,10 @@ namespace NMP.Portal.Controllers
                                         if (crop != null)
                                         {
                                             organicManure.FieldID = crop.FieldID;
-                                                organicManure.FieldName = fieldList?
-                                                .FirstOrDefault(x => x.Id == crop.FieldID)
-                                                ?.Name;
-                                            
+                                            organicManure.FieldName = fieldList?
+                                            .FirstOrDefault(x => x.Id == crop.FieldID)
+                                            ?.Name;
+
                                             //(await _fieldLogic.FetchFieldByFieldId(organicManure.FieldID.Value)).Name;
                                             organicManure.EncryptedCounter = _fieldDataProtector.Protect(organicCounter.ToString());
                                             organicCounter++;
@@ -1007,8 +1007,8 @@ namespace NMP.Portal.Controllers
                     }
                     foreach (string field in model.FieldList)
                     {
-                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList(); 
-                        
+                        List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
+
                         if (cropList.Count > 0)
                         {
                             if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
@@ -1264,7 +1264,7 @@ namespace NMP.Portal.Controllers
                         int grassCropCounter = 0;
                         foreach (var field in model.FieldList)
                         {
-                            List<HarvestYearPlanResponse> cropList= cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();                            
+                            List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
                             if (cropList.Count > 0)
                             {
                                 cropList = cropList.Where(x => x.CropOrder == 1).ToList();
@@ -1500,7 +1500,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("ManureGroupIdForFilter", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            Error? error = null;;
+            Error? error = null;
             try
             {
                 if (!ModelState.IsValid)
@@ -1636,16 +1636,13 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 List<ManureType> manureTypeList = new List<ManureType>();
-                Error? error = null;;
-                if (model.FarmRB209CountryID.HasValue&& model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                Error? error = null;
+
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
                 }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value,model.FarmRB209CountryID.Value);
-                }
-                model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
                 bool isHighReadilyAvailableNitrogen = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -1933,14 +1930,10 @@ namespace NMP.Portal.Controllers
         private async Task PopulateManureApplyingDateModel(OrganicManureViewModel model)
         {
             List<ManureType> manureTypeList = new List<ManureType>();
-            Error? error = null;;
-            if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+            Error? error = null;
+            if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
             {
-                (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-            }
-            else if(model.FarmRB209CountryID.HasValue)
-            {
-                (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
             }
             model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
 
@@ -2012,13 +2005,9 @@ namespace NMP.Portal.Controllers
                 }
 
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue&& (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial,model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
@@ -2119,7 +2108,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ApplicationMethod(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : ApplicationMethod() post action called");
-            Error? error = null;;
+            Error? error = null;
             if (model.ApplicationMethod == null)
             {
                 ModelState.AddModelError("ApplicationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2127,13 +2116,9 @@ namespace NMP.Portal.Controllers
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 bool isLiquid = false;
                 if (!ModelState.IsValid)
@@ -2442,10 +2427,6 @@ namespace NMP.Portal.Controllers
                                     model.ManureType.SO3 = farmManure.SO3;
                                     model.ManureType.MgO = farmManure.MgO;
                                 }
-                            }
-                            if (manureTypeError == null)
-                            {
-                                model.ManureType = manureType;
                             }
                             model.IsDefaultNutrient = true;
 
@@ -3101,13 +3082,9 @@ namespace NMP.Portal.Controllers
                 {
                     List<ManureType> manureTypeList = new List<ManureType>();
                     Error? error = null;
-                    if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                     {
-                        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                    }
-                    else if(model.FarmRB209CountryID.HasValue)
-                    {
-                        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                        (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                     }
                     if (error == null && manureTypeList.Count > 0)
                     {
@@ -3157,13 +3134,9 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -3362,16 +3335,12 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
 
-                
+
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error? error = null;
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
 
@@ -3827,13 +3796,9 @@ namespace NMP.Portal.Controllers
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
@@ -3885,13 +3850,9 @@ namespace NMP.Portal.Controllers
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial,model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 if (!ModelState.IsValid)
                 {
@@ -4056,13 +4017,9 @@ namespace NMP.Portal.Controllers
             {
                 string applicableFor = string.Empty;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
@@ -4118,13 +4075,9 @@ namespace NMP.Portal.Controllers
                 {
                     string applicableFor = string.Empty;
                     List<ManureType> manureTypeList = new List<ManureType>();
-                    if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                    if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                     {
-                        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                    }
-                    else if(model.FarmRB209CountryID.HasValue)
-                    {
-                        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                        (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                     }
                     bool isLiquid = false;
                     if (error == null && manureTypeList.Count > 0)
@@ -5221,13 +5174,9 @@ namespace NMP.Portal.Controllers
                                 {
 
                                     List<ManureType> manureTypeList = new List<ManureType>();
-                                    if (model.FarmRB209CountryID.HasValue&& model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                                    if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                                     {
-                                        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                                    }
-                                    else if(model.FarmRB209CountryID.HasValue)
-                                    {
-                                        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                                        (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                                     }
                                     bool isHighReadilyAvailableNitrogen = false;
                                     if (error == null && manureTypeList.Count > 0)
@@ -6789,13 +6738,9 @@ namespace NMP.Portal.Controllers
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue&& model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 bool isHighReadilyAvailableNitrogen = false;
                 if (error != null)
@@ -6912,9 +6857,9 @@ namespace NMP.Portal.Controllers
 
             // Fetch manure types
             List<ManureType> manureTypeList = new List<ManureType>();
-            if (model.FarmRB209CountryID.HasValue)
+            if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
             {
-                (manureTypeList, error) = await FetchManureTypeListForClosedPeriod(model, model.FarmRB209CountryID.Value);
+                (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 if (error != null) return (model, error);
             }
             // Determine if manure is high readily available nitrogen
@@ -6941,16 +6886,16 @@ namespace NMP.Portal.Controllers
             return (model, null);
         }
 
-        private async Task<(List<ManureType>, Error?)> FetchManureTypeListForClosedPeriod(OrganicManureViewModel model, int countryId)
+        private async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupIdForFilter, int FarmRB209CountryId)
         {
-            if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials ||
-                model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+            if (manureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials ||
+                manureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
             {
-                return await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, countryId);
+                return await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, FarmRB209CountryId);
             }
             else
             {
-                return await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, countryId);
+                return await _organicManureLogic.FetchManureTypeList(manureGroupIdForFilter, FarmRB209CountryId);
             }
         }
 
@@ -7225,13 +7170,9 @@ namespace NMP.Portal.Controllers
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 bool isHighReadilyAvailableNitrogen = false;
 
@@ -9008,13 +8949,9 @@ namespace NMP.Portal.Controllers
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 if (error == null)
                 {
@@ -9066,13 +9003,9 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction("FarmList", "Farm");
                 }
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial,model.FarmRB209CountryID.Value);
-                }
-                else if(model.FarmRB209CountryID.HasValue)
-                {
-                    (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
                 if (error == null)
                 {
@@ -10305,5 +10238,19 @@ namespace NMP.Portal.Controllers
             return await Task.FromResult(model);
         }
 
+        //private async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupIdForFilter, int farmRB209CountryID)
+        //{
+        //    List<ManureType> manureTypeList = new List<ManureType>();
+        //    Error? error = null;
+        //    if (manureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || manureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+        //    {
+        //        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, farmRB209CountryID);
+        //    }
+        //    else
+        //    {
+        //        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(manureGroupIdForFilter, farmRB209CountryID);
+        //    }
+        //    return (manureTypeList, error);
+        //}
     }
 }

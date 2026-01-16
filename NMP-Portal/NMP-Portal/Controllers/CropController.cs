@@ -184,7 +184,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsPlanRecord == true)
         {
-            return RedirectToAction(_plansAndRecordsOverviewActionName,"Crop",
+            return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop",
                 new
                 {
                     id = model.EncryptedFarmId,
@@ -194,7 +194,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsAddAnotherCrop)
         {
-            return RedirectToAction( _harvestYearOverviewActionName,   "Crop",
+            return RedirectToAction(_harvestYearOverviewActionName, "Crop",
                 new
                 {
                     id = model.EncryptedFarmId,
@@ -202,7 +202,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 });
         }
 
-        return View("HarvestYearForPlan",model);
+        return View("HarvestYearForPlan", model);
     }
 
     private async Task InitializeFarmContextAsync(PlanViewModel model, string encryptedFarmId)
@@ -338,7 +338,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CropGroups() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CropGroups() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropGroupError"] = ex.Message;
             return View(model);
         }
@@ -457,12 +457,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
             if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other)
             {
-                List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0);
-                if (model.FarmRB209CountryID.HasValue)
-                {
-                    var cropTypeList = cropTypes.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-                    ViewBag.CropTypeList = cropTypeList.OrderBy(c => c.CropType);
-                }
+                List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
+                ViewBag.CropTypeList = cropTypeList.OrderBy(c => c.CropType);
             }
             model.IsCropTypeChange = false;
             SetCropToSession(model);
@@ -505,12 +501,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other)
                 {
-                    List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
-                    cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0);
-                    if (model.FarmRB209CountryID.HasValue)
-                    {
-                        ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList().OrderBy(c => c.CropType); ;
-                    }
+                    List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
+                    ViewBag.CropTypeList = cropTypes;
                 }
                 return View(model);
             }
@@ -1381,7 +1373,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             bool isPerennial = await _organicManureLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
             //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-            DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00,00,00, DateTimeKind.Unspecified);
+            DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00, 00, 00, DateTimeKind.Unspecified);
 
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
@@ -1802,7 +1794,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             List<CropInfoOneResponse> cropInfoOneList = await GetCropInfoOneList(model);
             await PopulateCropInfoOneViewData(model, cropInfoOneList);
-            if(cropInfoOneList!=null&&cropInfoOneList.Any(x => x.CropInfo1Name == Resource.lblNone))
+            if (cropInfoOneList != null && cropInfoOneList.Any(x => x.CropInfo1Name == Resource.lblNone))
             {
                 model.CropInfo1Name = cropInfoOneList?
                 .FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)
@@ -2695,7 +2687,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
         if (model.FarmRB209CountryID.HasValue)
         {
-            cropInfoOneResponse= cropInfoOneResponse.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+            cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
         }
         return cropInfoOneResponse;
     }
@@ -3667,7 +3659,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> HarvestYearOverview(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : HarvestYearOverview() post action called");
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return await Task.FromResult(View(model));
         }
@@ -3677,7 +3669,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year, string? q)
     {
-        _logger.LogTrace("Crop Controller : PlansAndRecordsOverview({Id}, {Year}) action called",id,year);
+        _logger.LogTrace("Crop Controller : PlansAndRecordsOverview({Id}, {Year}) action called", id, year);
         PlanViewModel model = new PlanViewModel();
         if (HttpContext.Session.Exists("FertiliserManure"))
         {
@@ -3815,7 +3807,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
     {
-        _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q,r,s);
+        _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
         Error error = null;
         int decryptedFarmId = 0;
@@ -4261,7 +4253,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         ViewBag.IsThereAnyPreviousCropping = false;
                                         TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
                                         TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName);
-                                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName,  model.FieldName);
+                                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, model.FieldName);
                                     }
                                 }
                             }
@@ -4305,7 +4297,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(crop.FieldID.Value);
                     int cropPlanCount = cropsResponse.Count(x => x.Year == harvestYear && !x.Confirm);
-                    int firstCropType = cropsResponse.Where(x => x.Year == harvestYear && !x.Confirm  && x.CropOrder == 1).Select(c => c.CropTypeID.Value).FirstOrDefault();
+                    int firstCropType = cropsResponse.Where(x => x.Year == harvestYear && !x.Confirm && x.CropOrder == 1).Select(c => c.CropTypeID.Value).FirstOrDefault();
                     if (isUpdate && cropPlanCount == 2)
                     {
                         secondCropList = await _cropLogic.FetchSecondCropListByFirstCropId(firstCropType);
@@ -4866,7 +4858,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public IActionResult UpdateExcessWinterRainfall(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : UpdateExcessWinterRainfall() post action called");
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return View(model);
         }
@@ -4946,7 +4938,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Crop Controller : Exception in ExcessWinterRainfall() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfall() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallError"] = ex.Message;
             return View(model);
         }
@@ -4977,7 +4969,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallError"] = ex.Message;
             return RedirectToAction("ExcessWinterRainfall", model);
         }
@@ -4993,7 +4985,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         try
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -5033,7 +5025,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallCheckAnswerError"] = ex.Message;
             return View(model);
         }
@@ -5043,7 +5035,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> UpdateCropGroupNameCheckAnswer(string? q, string? r, string? t, string? u, string? s)
     {
         _logger.LogTrace("Crop Controller : UpdateCropGroupNameCheckAnswer() action called");
-        PlanViewModel model = GetCropFromSession()?? new PlanViewModel();
+        PlanViewModel model = GetCropFromSession() ?? new PlanViewModel();
 
         try
         {
@@ -6695,7 +6687,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> DryMatterYield(string q)
     {
-        _logger.LogTrace("Crop Controller : DryMatterYield({Q}) action called",q);
+        _logger.LogTrace("Crop Controller : DryMatterYield({Q}) action called", q);
         PlanViewModel model = GetCropFromSession();
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
@@ -7244,7 +7236,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CopyPlanYears() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CopyPlanYears() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
             return RedirectToAction(_farmSummaryActionName, "Farm");
         }
@@ -7300,7 +7292,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
             return RedirectToAction(_farmSummaryActionName, "Farm");
         }
@@ -7345,7 +7337,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm"));
         }
@@ -7535,7 +7527,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<(List<HarvestYearPlanResponse>?, List<Field>?)> SeparateFieldsAsync(PlanViewModel model)
     {
         List<HarvestYearPlanResponse>? fieldsToBeRemoved = null;
-        List<Field>? newFields  = null;
+        List<Field>? newFields = null;
         Error? error = null;
         int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
 
