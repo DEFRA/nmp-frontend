@@ -14,9 +14,11 @@ using NMP.Commons.ViewModels;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
+
     [Route("[Controller]")]
     public class ErrorController : Controller
-    {
+    {        
+        //[Route("Error/{statusCode}")]
         [HttpGet("{statusCode}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
