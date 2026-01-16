@@ -86,7 +86,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
-
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId" />
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {
             @for (int i = 0; i < Model.HarvestYear.Count; i++)
