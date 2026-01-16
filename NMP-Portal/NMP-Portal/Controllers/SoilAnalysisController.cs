@@ -72,7 +72,7 @@ namespace NMP.Portal.Controllers
                 {
                     Error? error;
                     _logger.LogTrace("SoilAnalysisController: farms/{J} called.", j);
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
 
                     if (error != null && string.IsNullOrWhiteSpace(error.Message))
                     {

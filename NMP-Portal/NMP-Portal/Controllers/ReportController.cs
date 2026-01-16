@@ -23,7 +23,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 {
     private readonly ILogger<ReportController> _logger = logger;
     private readonly IDataProtector _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
-    private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");        
+    private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
@@ -104,7 +104,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                 {
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -404,7 +404,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
             {
                 //fetch crop type
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -681,6 +681,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
         {
+            model.FarmRB209CountryID = model.CropAndFieldReport.Farm.RB209CountryID;
             if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
             {
                 model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
@@ -713,79 +714,78 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         // * fieldData.Crops.Count;
                         foreach (var cropData in fieldData.Crops)
                         {
-                            (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
-                            if (string.IsNullOrWhiteSpace(error.Message))
+                            if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
-
-                                if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+                                (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
+                                if (string.IsNullOrWhiteSpace(error.Message))
                                 {
-                                    cropData.GrowthClass = grassGrowthClasses.FirstOrDefault().GrassGrowthClassName;
-                                }
 
-                            }
-                            else
-                            {
-                                TempData["ErrorOnSelectField"] = error.Message;
-                                return RedirectToAction("ExportFieldsOrCropType");
-                            }
-                            totalCount++;
-                            if (cropData.CropOrder == 1)
-                            {
-                                cropData.SwardManagementName = cropData.SwardManagementName;
-                                cropData.EstablishmentName = cropData.EstablishmentName;
-                                cropData.SwardTypeName = cropData.SwardTypeName;
-                                if (cropData.Establishment != null)
-                                {
-                                    if (cropData.Establishment != (int)NMP.Commons.Enums.Season.Autumn &&
-                                    cropData.Establishment != (int)NMP.Commons.Enums.Season.Spring)
+                                    if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
                                     {
-                                        cropData.EstablishmentName = Resource.lblExistingSwards;
+                                        cropData.GrowthClass = grassGrowthClasses.FirstOrDefault().GrassGrowthClassName;
                                     }
-                                    else if (cropData.Establishment == (int)NMP.Commons.Enums.Season.Spring)
-                                    {
-                                        cropData.EstablishmentName = Resource.lblSpringSown;
-                                    }
-                                    //else if (cropData.Establishment == (int)NMP.Commons.Enums.Season.Spring)
-                                    //{
-                                    //    cropData.EstablishmentName = Resource.lblautumn;
-                                    //}
-                                }
 
-                                //cropData.DefoliationSequenceName = cropData.DefoliationSequenceName;
-                                if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                {
-                                    totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
                                 }
                                 else
                                 {
-                                    totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    TempData["ErrorOnSelectField"] = error.Message;
+                                    return RedirectToAction("ExportFieldsOrCropType");
                                 }
-                            }
-                            string defolicationName = string.Empty;
-                            if (cropData.SwardTypeID != null && cropData.PotentialCut != null && cropData.DefoliationSequenceID != null)
-                            {
-                                if ((string.IsNullOrWhiteSpace(defolicationName)) && cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                totalCount++;
+                                if (cropData.CropOrder == 1)
                                 {
-                                    (DefoliationSequenceResponse defResponse, Error grassError) = await _cropLogic.FetchDefoliationSequencesById(cropData.DefoliationSequenceID.Value);
-                                    if (grassError == null && defResponse != null)
+                                    cropData.SwardManagementName = cropData.SwardManagementName;
+                                    cropData.EstablishmentName = cropData.EstablishmentName;
+                                    cropData.SwardTypeName = cropData.SwardTypeName;
+                                    if (cropData.Establishment != null)
                                     {
-                                        defolicationName = defResponse.DefoliationSequenceDescription;
-                                        if (!string.IsNullOrWhiteSpace(defolicationName))
+                                        if (cropData.Establishment != (int)NMP.Commons.Enums.Season.Autumn &&
+                                        cropData.Establishment != (int)NMP.Commons.Enums.Season.Spring)
                                         {
-                                            List<string> defoliationList = defolicationName
-                                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                            .Select(s => s.Trim())
-                                            .ToList();
-                                            cropData.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+                                            cropData.EstablishmentName = Resource.lblExistingSwards;
+                                        }
+                                        else if (cropData.Establishment == (int)NMP.Commons.Enums.Season.Spring)
+                                        {
+                                            cropData.EstablishmentName = Resource.lblSpringSown;
+                                        }
+                                        //else if (cropData.Establishment == (int)NMP.Commons.Enums.Season.Spring)
+                                        //{
+                                        //    cropData.EstablishmentName = Resource.lblautumn;
+                                        //}
+                                    }
+
+                                    //cropData.DefoliationSequenceName = cropData.DefoliationSequenceName;
+                                    if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                    {
+                                        totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    }
+                                    else
+                                    {
+                                        totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
+                                    }
+                                }
+                                string defolicationName = string.Empty;
+                                if (cropData.SwardTypeID != null && cropData.PotentialCut != null && cropData.DefoliationSequenceID != null)
+                                {
+                                    if ((string.IsNullOrWhiteSpace(defolicationName)) && cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                    {
+                                        (DefoliationSequenceResponse defResponse, Error grassError) = await _cropLogic.FetchDefoliationSequencesById(cropData.DefoliationSequenceID.Value);
+                                        if (grassError == null && defResponse != null)
+                                        {
+                                            defolicationName = defResponse.DefoliationSequenceDescription;
+                                            if (!string.IsNullOrWhiteSpace(defolicationName))
+                                            {
+                                                List<string> defoliationList = defolicationName
+                                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(s => s.Trim())
+                                                .ToList();
+                                                cropData.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            int defIndex = 0;
-                            var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
-                            if (cropData.ManagementPeriods != null)
-                            {
-
+                                int defIndex = 0;
+                                var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
                                 foreach (var manData in cropData.ManagementPeriods)
                                 {
                                     string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
@@ -793,7 +793,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                     if (defolicationParts != null)
                                     {
                                         manData.DefoliationSequenceName = defoliationSequenceName;// (defolicationParts != null && defIndex < defolicationParts.Length) ? char.ToUpper(defolicationParts[defIndex][0]) + defolicationParts[defIndex].Substring(1) : string.Empty;
-                                    }
+                                    }                                    
+                                    defIndex++;
+                                }
+                            }
+                            if (cropData.ManagementPeriods != null)
+                            {
+                                foreach (var manData in cropData.ManagementPeriods)
+                                {
                                     if (manData.Recommendation != null)
                                     {
                                         manData.Recommendation.LimeIndex = manData.Recommendation.PH;
@@ -813,13 +820,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                             return RedirectToAction("ExportFieldsOrCropType");
                                         }
                                     }
-                                    defIndex++;
                                 }
                             }
                         }
                     }
                     //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
-                    if (fieldData.SoilAnalysis != null&& !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
+                    if (fieldData.SoilAnalysis != null && !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
                     {
                         string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
                         string? updatedPotassiumIndex = null;
@@ -881,7 +887,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.EncryptedHarvestYear = j;
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
                     model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -959,6 +965,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (model.Farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
             if (model.Farm != null && string.IsNullOrWhiteSpace(error.Message))
             {
+                model.FarmRB209CountryID = model.Farm.RB209CountryID;
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
                 {
@@ -1403,7 +1410,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     model.EncryptedFarmId = f;
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1423,7 +1430,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -1463,7 +1470,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.Country = farm.CountryID;
@@ -1584,7 +1591,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.FarmName = farm.Name;
@@ -1620,7 +1627,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1730,7 +1737,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
-                    model.ReportTypeName =(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)?Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit;
+                    model.ReportTypeName = (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit;
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
@@ -1884,7 +1891,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
             }
-            if(model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
                 model.IsGrasslandDerogation = false;
                 var (savedData, error) = await SaveGrasslandDerogationAsync(model);
@@ -1965,7 +1972,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error error = null;
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2090,7 +2097,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.Country = farm.CountryID;
@@ -2128,7 +2135,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2159,7 +2166,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             string totalAreaInNVZKey = "TotalAreaInNVZ";
             if (model.FarmId != null && model.Country == null)
             {
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2498,7 +2505,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
@@ -2569,7 +2576,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error error = null;
             if (!ModelState.IsValid)
             {
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
@@ -2819,7 +2826,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 TempData["succesMsgContent"] = _reportDataProtector.Unprotect(r);
             }
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 model.FarmName = farm.Name;
@@ -4047,7 +4054,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             model.IsComingFromSuccessMsg = false;
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 if (!string.IsNullOrWhiteSpace(r))
@@ -4057,7 +4064,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
-                        TempData["succesMsgContent3"] = string.Format(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales?Resource.MsgImportExportSuccessMsgForWales:Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] = string.Format(model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.MsgImportExportSuccessMsgForWales : Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
                     }
                 }
                 model.FarmName = farm.Name;
@@ -4090,7 +4097,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             nutrientsLoadingManuresList.ForEach(x => x.EncryptedID = _reportDataProtector.Protect(x.ID.Value.ToString()));
                             ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
                             string unit = "";
-                            (Farm farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                            (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                             if (string.IsNullOrWhiteSpace(error.Message) && farmData != null)
                             {
                                 (List<ManureType> ManureTypes, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.LivestockManure, farmData.CountryID.Value);
@@ -5712,7 +5719,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             model.IsComingFromSuccessMsg = false;
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 if (!string.IsNullOrWhiteSpace(r))
@@ -5730,7 +5737,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             TempData["RemoveSuccessMsg"] = Resource.lblAddMoreLivestock;
                         }
                         TempData["succesMsgContent3"] =
-                            (model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)? string.Format(Resource.MsgSuccessForWalesLivestock, _farmDataProtector.Unprotect(y)):
+                            (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? string.Format(Resource.MsgSuccessForWalesLivestock, _farmDataProtector.Unprotect(y)) :
                             string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
                     }
                 }
@@ -6549,10 +6556,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         int totalLivestockManureCapacity = 0;
-        (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+        (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
         if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
         {
-            model.Farm = new Farm();
+            model.Farm = new FarmResponse();
             model.Farm = farm;
         }
         else if (error != null && !string.IsNullOrWhiteSpace(error.Message))

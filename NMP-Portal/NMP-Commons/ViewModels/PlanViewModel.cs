@@ -107,4 +107,5 @@ public class PlanViewModel
     public string? GrassSeasonName { get; set; }
     public bool? IsFieldToBeRemoved { get; set; }
     public bool IsCurrentSwardChange { get; set; } = false;
+    public int? CountryId { get; set; }
 }

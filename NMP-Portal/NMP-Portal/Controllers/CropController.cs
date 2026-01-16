@@ -237,8 +237,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            (Farm farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+            (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
             model.IsEnglishRules = farm.EnglishRules;
+            model.CountryId = farm.CountryID;
             ViewBag.CropGroupList = await GetCropGroups(model.IsEnglishRules);
 
             if (model.IsCropGroupChange)
@@ -1492,7 +1493,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         try
         {
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             ViewBag.DefaultYield = defaultYield;
             if (model.IsQuestionChange)
             {
@@ -1519,7 +1520,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!ModelState.IsValid)
         {
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             ViewBag.DefaultYield = defaultYield;
             return View(model);
         }
@@ -1545,7 +1546,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             ViewBag.DefaultYield = defaultYield;
             if (defaultYield == 0 && model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
             {
@@ -1580,7 +1581,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         try
         {
-            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYieldForCropType > 0)
             {
                 ViewBag.IsYieldOptional = Resource.lblYes;
@@ -1644,7 +1645,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     return RedirectToAction("CropInfoOne");
                 }
             }
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYield > 0)
             {
                 ViewBag.DefaultYield = defaultYield;
@@ -1665,7 +1666,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : Yield() post action called");
         try
         {
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYield == 0)
             {
                 if (model.Crops[model.YieldCurrentCounter].Yield == null)
@@ -2067,7 +2068,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.Crops = new List<Crop>();
                         model.FieldList = new List<string>();
                         int counter = 1;
-                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID);
+                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                         List<decimal?> yields = new List<decimal?>();
                         for (int i = 0; i < harvestYearPlanResponse.Count; i++)
                         {
@@ -2307,7 +2308,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYieldForCropType > 0)
             {
                 ViewBag.IsYieldOptional = Resource.lblYes;
@@ -2368,7 +2369,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-            (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
+            (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
             if (farm != null && string.IsNullOrWhiteSpace(error.Message))
             {
                 model.IsEnglishRules = farm.EnglishRules;
@@ -2845,7 +2846,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         {
                             if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                             {
-                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                                 if (defaultYield == 0)
                                 {
                                     ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
@@ -2854,7 +2855,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             }
                             else if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                             {
-                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                                 if (defaultYield == 0)
                                 {
                                     ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
@@ -2960,7 +2961,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 if (model.CropTypeID != null)
                 {
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                     if (defaultYield > 0)
                     {
                         ViewBag.DefaultYield = defaultYield;
@@ -3256,7 +3257,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                     int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
 
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -3677,7 +3678,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (!string.IsNullOrWhiteSpace(id))
         {
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
             model.FarmName = farm.Name;
             List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
             planSummaryResponse.RemoveAll(x => x.Year == 0);
@@ -3837,7 +3838,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (!string.IsNullOrWhiteSpace(q))
             {
                 decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                model.FarmName = (await _farmLogic.FetchFarmByIdAsync(decryptedFarmId)).Item1.Name;
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
+                }
                 model.EncryptedFarmId = q;
             }
 
@@ -4495,67 +4501,26 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> CropGroupName()
     {
         _logger.LogTrace("Crop Controller : CropGroupName() action called");
+
         PlanViewModel model = GetCropFromSession();
+        if (model == null)
+        {
+            _logger.LogTrace("Crop Controller : session not found in CropGroupName() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+
         try
         {
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+            bool isCropUpdate = !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate);
 
-            if (model == null)
-            {
-                _logger.LogTrace("Crop Controller : session not found in CropGroupName() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-            }
+            var fieldList = await GetFilteredFields(model, farmId, isCropUpdate);
+            var selectListItems = MapToSelectList(fieldList);
 
-            Error error = null;
-            int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-            List<Field> fieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
-            {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
-                {
-                    harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                    if (harvestYearPlanResponseForFilter != null)
-                    {
-                        var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
-                        fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
-                    }
-                }
-            }
-            var SelectListItem = fieldList.Select(f => new SelectListItem
-            {
-                Value = f.ID.ToString(),
-                Text = f.Name
-            }).ToList();
+            await ApplySecondCropRules(model, farmId, isCropUpdate, selectListItems);
 
-            List<int> fieldsAllowedForSecondCrop = new List<int>();
-            List<int> fieldRemoveList = new List<int>();
-            (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
-
-            var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
-            List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
-
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
-            {
-                (List<int> fieldsAllowedForSecondCrops, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
-                foreach (var removeFieldId in fieldRemoveList)
-                {
-                    SelectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
-                }
-            }
-            else
-            {
-                //Fetch fields allowed for second crop based on first crop
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
-
-                if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
-                {
-                    var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
-                }
-            }
-
-            ViewBag.fieldList = SelectListItem;
+            ViewBag.fieldList = selectListItems;
+            return View(model);
         }
         catch (Exception ex)
         {
@@ -4563,8 +4528,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             TempData["ErrorOnSelectField"] = ex.Message;
             return RedirectToAction("CropFields");
         }
-
-        return View(model);
     }
 
     [HttpPost]
@@ -5108,7 +5071,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         model.Crops = new List<Crop>();
 
-                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID);
+                        var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
+
+                        decimal? defaultYield = cropTypeId.HasValue
+                            ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) : null;
+
                         for (int i = 0; i < harvestYearPlanResponse.Count; i++)
                         {
                             var crop = new Crop();
@@ -5224,7 +5191,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         isBasePlan = true;
                     }
 
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.Crops.FirstOrDefault().CropTypeID.Value);
+                    var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
+
+                    decimal? defaultYield = cropTypeId.HasValue
+                        ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value,model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland): null;
+
                     yieldQuestion = model.Crops[i].Yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
                     if (string.IsNullOrWhiteSpace(yieldQuestion))
                     {
@@ -5338,7 +5309,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                         {
-                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                             if (defaultYield == 0)
                             {
                                 ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
@@ -5347,7 +5318,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         }
                         else if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                         {
-                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                             if (defaultYield == 0)
                             {
                                 ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
@@ -5454,7 +5425,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 List<Field> fieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
                 if (model.CropTypeID != null)
                 {
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                     if (defaultYield > 0)
                     {
                         ViewBag.DefaultYield = defaultYield;
@@ -7039,7 +7010,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : CheckYourPlanData() action called");
         PlanViewModel model = new PlanViewModel();
         int farmId = 0;
-        Farm farm = new Farm();
+        FarmResponse farm = new FarmResponse();
         Error error = new Error();
         try
         {
@@ -7599,5 +7570,85 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private void SetHarvestYearPlanToSession(PlanViewModel plan)
     {
         HttpContext.Session.SetObjectAsJson("HarvestYearPlan", plan);
+    }
+
+    private async Task<List<Field>> GetFilteredFields(PlanViewModel model, int farmId, bool isCropUpdate)
+    {
+        var fields = await _fieldLogic.FetchFieldsByFarmId(farmId);
+
+        if (!isCropUpdate)
+            return fields;
+
+        var (plans, error) =
+            await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
+
+        if (!string.IsNullOrWhiteSpace(error.Message) || plans.Count == 0)
+            return fields;
+
+        var fieldIds = plans
+            .Where(x => x.CropGroupName == model.PreviousCropGroupName)
+            .Select(x => x.FieldID)
+            .ToList();
+
+        return fields.Where(f => fieldIds.Contains(f.ID.Value)).ToList();
+    }
+
+    private static List<SelectListItem> MapToSelectList(List<Field> fields)
+    {
+        return fields.Select(f => new SelectListItem
+        {
+            Value = f.ID.ToString(),
+            Text = f.Name
+        }).ToList();
+    }
+
+    private async Task ApplySecondCropRules(PlanViewModel model, int farmId, bool isCropUpdate, List<SelectListItem> selectList)
+    {
+        Error error;
+        var (plans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmId);
+
+        var firstCropPlans = plans
+            .Where(x => x.IsBasePlan != null && !x.IsBasePlan.Value)
+            .ToList();
+
+        var (allowedFields, removeFields) =
+            await FetchAllowedFieldsForSecondCrop(
+                firstCropPlans,
+                model.Year ?? 0,
+                model.CropTypeID ?? 0,
+                isCropUpdate,
+                model.Crops);
+
+        if (isCropUpdate)
+        {
+            RemoveFields(selectList, removeFields);
+            return;
+        }
+
+        ApplyHarvestFieldFiltering(selectList, plans, allowedFields);
+    }
+
+    private static void RemoveFields(
+    List<SelectListItem> selectList,
+    List<int> removeFieldIds)
+    {
+        foreach (var id in removeFieldIds)
+        {
+            selectList.RemoveAll(x => x.Value == id.ToString());
+        }
+    }
+
+    private static void ApplyHarvestFieldFiltering(List<SelectListItem> selectList, List<HarvestYearPlanResponse> plans, List<int> allowedFields)
+    {
+        if (!plans.Any() && selectList.Count != 1)
+            return;
+
+        var harvestedFieldIds = plans
+            .Select(x => x.FieldID.ToString())
+            .ToList();
+
+        selectList.RemoveAll(x =>
+            harvestedFieldIds.Contains(x.Value) &&
+            !allowedFields.Contains(int.Parse(x.Value)));
     }
 }

@@ -246,7 +246,7 @@ namespace NMP.Portal.Controllers
 
                 List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value);
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmID));
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
@@ -291,7 +291,7 @@ namespace NMP.Portal.Controllers
             {
                 List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value);
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmID));
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     var country = (farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.England ||
