@@ -5071,7 +5071,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         model.Crops = new List<Crop>();
 
-                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
+                        var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
+
+                        decimal? defaultYield = cropTypeId.HasValue
+                            ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) : null;
+
                         for (int i = 0; i < harvestYearPlanResponse.Count; i++)
                         {
                             var crop = new Crop();
@@ -5187,7 +5191,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         isBasePlan = true;
                     }
 
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.Crops.FirstOrDefault().CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
+                    var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
+
+                    decimal? defaultYield = cropTypeId.HasValue
+                        ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value,model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland): null;
+
                     yieldQuestion = model.Crops[i].Yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
                     if (string.IsNullOrWhiteSpace(yieldQuestion))
                     {
