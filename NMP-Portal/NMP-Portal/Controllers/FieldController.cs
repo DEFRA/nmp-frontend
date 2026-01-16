@@ -174,7 +174,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
                 (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
-                model.isEnglishRules = farm.EnglishRules;
+                model.FarmRB209CountryID = farm.RB209CountryID;
                 model.FarmName = farm.Name;
                 model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                 model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
@@ -558,9 +558,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            var country = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            ViewBag.SoilTypesList = await _fieldLogic.FetchSoilTypesByRB209CountryId(country);
-
+            if (model.FarmRB209CountryID.HasValue)
+            {
+                ViewBag.SoilTypesList = await _fieldLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryID.Value);
+            }
             if (ViewBag.SoilTypesList == null && ((List<SoilTypesResponse>)ViewBag.SoilTypesList).Count > 0)
             {
                 ViewBag.SoilTypeError = Resource.MsgServiceNotAvailable;
@@ -590,9 +591,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 ModelState.AddModelError("SoilTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblSoilType.ToLower()));
             }
 
-            var country = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(country);
-
+            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+            if (model.FarmRB209CountryID.HasValue)
+            {
+                soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryID.Value);
+            }
             if (!ModelState.IsValid)
             {
                 ViewBag.SoilTypesList = soilTypes;
@@ -688,8 +691,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
 
-        var country = field.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-        List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(country);
+        List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+        if (field.FarmRB209CountryID.HasValue)
+        {
+            soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(field.FarmRB209CountryID.Value);
+        }
         var soilType = soilTypes?.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
         if (soilType != null && !soilType.KReleasingClay)
         {
@@ -1351,10 +1357,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0);
-            var country = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
-
+            List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
             ViewBag.CropTypeList = cropTypeList;
             if (cropTypeList.Count == 1 && cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
             {
@@ -1388,10 +1391,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!ModelState.IsValid)
         {
-            List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
-            cropTypes = await _fieldLogic.FetchCropTypes(field.CropGroupId ?? 0);
-            var country = field.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
+            List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(field.CropGroupId ?? 0, field.FarmRB209CountryID);
+            ViewBag.CropTypeList = cropTypes;
             return View(field);
         }
         field.CropType = await _fieldLogic.FetchCropTypeById(field.CropTypeID.Value);
@@ -1770,7 +1771,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             };
 
             (Field? fieldResponse, Error? error1) = await _fieldLogic.AddFieldAsync(fieldData, farm.ID, farm.Name);
-            if (error1== null && fieldResponse != null)
+            if (error1 == null && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect("true");
                 string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
@@ -2161,7 +2162,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         model.EncryptedFieldId = fieldId;
         model.ID = decryptedFieldId;
-        model.isEnglishRules = farm.EnglishRules;
+        model.FarmRB209CountryID = farm.RB209CountryID;
         model.SoilOverChalk = field.SoilOverChalk;
         if (farm != null)
         {
@@ -2525,7 +2526,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilTypeID = field.SoilTypeID;
                 model.EncryptedFieldId = fieldId;
                 model.ID = decrptedFieldId;
-                model.isEnglishRules = farm.EnglishRules;
+                model.FarmRB209CountryID = farm.RB209CountryID;
                 model.SoilOverChalk = field.SoilOverChalk;
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;

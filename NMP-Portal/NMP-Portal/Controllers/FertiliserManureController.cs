@@ -147,7 +147,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (error.Message == null)
                 {
                     model.FarmName = farm.Name;
-                    model.isEnglishRules = farm.EnglishRules;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
                     model.FarmCountryId = farm.CountryID;
                     SetFertiliserManureToSession(model);
                 }
