@@ -85,10 +85,10 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchCropTypeByGroupId(cropGroupId);
     }
 
-    public async Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId)
+    public async Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland)
     {
         _logger.LogTrace("Fetching default yield for CropTypeId: {CropTypeId}", cropTypeId);
-        return await _cropService.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId);
+        return await _cropService.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId, isScotland);
     }
 
     public async Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking()
