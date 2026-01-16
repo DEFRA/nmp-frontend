@@ -53,8 +53,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
     public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId, int? farmRB209CountryID)
     {
         _logger.LogTrace("Fetching CropInfoOne for CropTypeId: {CropTypeId}", cropTypeId);
-        List<CropInfoOneResponse> cropInfoOneResponse = new List<CropInfoOneResponse>();
-        cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(cropTypeId);
+        List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(cropTypeId);
         if (farmRB209CountryID.HasValue)
         {
             cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();

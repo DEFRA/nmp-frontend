@@ -2409,8 +2409,11 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                         {
-                            (ManureType manureType, Error manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                            model.ManureType = manureType;
+                            (ManureType? manureType, Error? manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                            if (manureTypeError == null && manureType != null)
+                            {
+                                model.ManureType = manureType;
+                            }
                             // (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                             if (error == null)
                             {
