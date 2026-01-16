@@ -2318,12 +2318,15 @@ namespace NMP.Portal.Controllers
                                 model.DefaultFarmManureValueDate = null;
                             }
                         }
-
-                        (ManureType? manureType, Error? manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                        if (manureType != null && manureTypeError == null)
+                        else
                         {
-                            model.ManureType = manureType;
+                            (ManureType? manureType, Error? manureTypeError) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                            if (manureType != null && manureTypeError == null)
+                            {
+                                model.ManureType = manureType;
+                            }
                         }
+                           
                         model.IsDefaultNutrient = true;
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                     }
