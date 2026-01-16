@@ -7139,4 +7139,7 @@ livestock manure.</value>
   <data name="lblAverageTotalForYear" xml:space="preserve">
     <value>Average total for {0}</value>
   </data>
+  <data name="lblLettuceFields" xml:space="preserve">
+    <value>Lettuce fields</value>
+  </data>
 </root>
