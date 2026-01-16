@@ -5,7 +5,7 @@ public interface ICropLogic
 {
     Task<List<PotatoVarietyResponse>> FetchPotatoVarieties();
     Task<int> FetchCropTypeByGroupId(int cropGroupId);
-    Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId);
+    Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId, int? farmRB209CountryID);
     Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId();
     Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId, int type);
     Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId);

@@ -2555,12 +2555,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 if (cropInfoOneQuestion == null)
                 {
-                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-                    if (model.FarmRB209CountryID.HasValue)
-                    {
-                        cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-                        ViewBag.CropInfoOneList = cropInfoOneResponse.OrderBy(c => c.CropInfo1Name);
-                    }
+                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
+                    ViewBag.CropInfoOneList = cropInfoOneResponse.OrderBy(c => c.CropInfo1Name);
 
                     if (cropInfoOneResponse.Count > 0)
                     {
@@ -2684,11 +2680,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<List<CropInfoOneResponse>> GetCropInfoOneList(PlanViewModel model)
     {
-        List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-        if (model.FarmRB209CountryID.HasValue)
-        {
-            cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-        }
+        List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0,model.FarmRB209CountryID);
+
         return cropInfoOneResponse;
     }
 
@@ -2724,12 +2717,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     s = model.EncryptedHarvestYear
                 });
             }
-            List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-            List<CropInfoOneResponse> cropInfoOneList = new List<CropInfoOneResponse>();
-            if (model.FarmRB209CountryID.HasValue)
-            {
-                cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-            }
+            List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0,model.FarmRB209CountryID);
+            
+           
             action = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals ?
                _cropInfoTwoActionName : (((model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
                || cropInfoOneList.Count == 1) ?
@@ -5205,7 +5195,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
 
                     decimal? defaultYield = cropTypeId.HasValue
-                        ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value,model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland): null;
+                        ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) : null;
 
                     yieldQuestion = model.Crops[i].Yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
                     if (string.IsNullOrWhiteSpace(yieldQuestion))

@@ -10238,19 +10238,5 @@ namespace NMP.Portal.Controllers
             return await Task.FromResult(model);
         }
 
-        //private async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupIdForFilter, int farmRB209CountryID)
-        //{
-        //    List<ManureType> manureTypeList = new List<ManureType>();
-        //    Error? error = null;
-        //    if (manureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || manureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
-        //    {
-        //        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial, farmRB209CountryID);
-        //    }
-        //    else
-        //    {
-        //        (manureTypeList, error) = await _organicManureLogic.FetchManureTypeList(manureGroupIdForFilter, farmRB209CountryID);
-        //    }
-        //    return (manureTypeList, error);
-        //}
     }
 }

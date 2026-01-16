@@ -8,6 +8,7 @@ using NMP.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,10 +50,16 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchCropInfo2NameByCropInfo2Id(cropInfo2Id);
     }
 
-    public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId)
+    public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId, int? farmRB209CountryID)
     {
         _logger.LogTrace("Fetching CropInfoOne for CropTypeId: {CropTypeId}", cropTypeId);
-        return await _cropService.FetchCropInfoOneByCropTypeId(cropTypeId);
+        List<CropInfoOneResponse> cropInfoOneResponse = new List<CropInfoOneResponse>();
+        cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(cropTypeId);
+        if (farmRB209CountryID.HasValue)
+        {
+            cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+        }
+        return cropInfoOneResponse;
     }
 
     public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId)
