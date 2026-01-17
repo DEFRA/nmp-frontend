@@ -7139,6 +7139,9 @@ livestock manure.</value>
   <data name="lblAverageTotalForYear" xml:space="preserve">
     <value>Average total for {0}</value>
   </data>
+  <data name="lblLettuceFields" xml:space="preserve">
+    <value>Lettuce fields</value>
+ </data>
   <data name="lblAboutRecommendationForScotlandContent1" xml:space="preserve">
     <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the SRUC Technical Notes.</value>
   </data>

@@ -219,6 +219,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                             cropGroups.Remove(Resource.lblGroup1Vegetables);
                                             cropGroups.Remove(Resource.lblGroup2Vegetables);
                                             cropGroups.Remove(Resource.lblGroup3Vegetables);
+
+                                            var lettuceGroups = GetNmaxReportLettuceGroups();
+                                            foreach (var group in lettuceGroups)
+                                            {
+                                                cropGroups[group.Key] = group.Value;
+                                            }
+
+                                            var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuceFields)
+                                                ? lettuceGroups[Resource.lblLettuceFields]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (lettuceFieldsList.Count > 1)
+                                            {
+                                                for (int i = 1; i < lettuceFieldsList.Count; i++)
+                                                {
+                                                    lettuceFieldsList[i] = lettuceFieldsList[i].ToLower();
+                                                }
+                                            }
+                                            ViewBag.LettuceFieldsListHint = string.Join(", ", lettuceFieldsList);
                                         }
 
                                         var list = new List<SelectListItem>();
@@ -523,6 +546,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                         cropGroups.Remove(Resource.lblGroup1Vegetables);
                                         cropGroups.Remove(Resource.lblGroup2Vegetables);
                                         cropGroups.Remove(Resource.lblGroup3Vegetables);
+
+                                        var lettuceGroups = GetNmaxReportLettuceGroups();
+                                        foreach (var group in lettuceGroups)
+                                        {
+                                            cropGroups[group.Key] = group.Value;
+                                        }
+
+                                        var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuceFields)
+                                            ? lettuceGroups[Resource.lblLettuceFields]
+                                                .Where(id => cropTypeMap.ContainsKey(id))
+                                                .Select(id => cropTypeMap[id])
+                                                .OrderBy(name => name)
+                                                .ToList()
+                                            : new List<string>();
+
+                                        if (lettuceFieldsList.Count > 1)
+                                        {
+                                            for (int i = 1; i < lettuceFieldsList.Count; i++)
+                                            {
+                                                lettuceFieldsList[i] = lettuceFieldsList[i].ToLower();
+                                            }
+                                        }
+                                        ViewBag.LettuceFieldsListHint = string.Join(", ", lettuceFieldsList);
                                     }
 
                                     foreach (var group in cropGroups)
@@ -986,6 +1032,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         cropGroups.Remove(Resource.lblGroup1Vegetables);
                         cropGroups.Remove(Resource.lblGroup2Vegetables);
                         cropGroups.Remove(Resource.lblGroup3Vegetables);
+
+                        var lettuceGroups = GetNmaxReportLettuceGroups();
+                        foreach (var group in lettuceGroups)
+                        {
+                            cropGroups[group.Key] = group.Value;
+                        }
                     }
                     // Build reverse lookup: cropId -> groupIds[]
                     var idToGroup = cropGroups
@@ -6953,6 +7005,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             { Resource.lblGroup2Vegetables, new [] { (int)Enums.CropTypes.CelerySelfBlanching, (int)Enums.CropTypes.Courgettes, (int)Enums.CropTypes.DwarfBeans, (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BulbOnions, (int)Enums.CropTypes.SaladOnions, (int)Enums.CropTypes.Parsnips, (int)Enums.CropTypes.RunnerBeans, (int)Enums.CropTypes.Sweetcorn, (int)Enums.CropTypes.Turnips, (int)Enums.CropTypes.BabyLeafLettuce } },
 
             { Resource.lblGroup3Vegetables, new [] { (int)Enums.CropTypes.Beetroot, (int)Enums.CropTypes.BrusselSprouts, (int)Enums.CropTypes.Cabbage, (int)Enums.CropTypes.Calabrese, (int)Enums.CropTypes.Cauliflower, (int)Enums.CropTypes.Leeks } }
+        };
+    }
+
+    private static Dictionary<string, int[]> GetNmaxReportLettuceGroups()
+    {
+        return new Dictionary<string, int[]>
+        {
+            { Resource.lblLettuceFields, new [] { (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BabyLeafLettuce } },
         };
     }
     string GetGroupName(int cropId)

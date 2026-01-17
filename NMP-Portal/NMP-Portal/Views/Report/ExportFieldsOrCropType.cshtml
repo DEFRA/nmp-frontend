@@ -334,6 +334,10 @@ else
                                         {
                                             <govuk-checkboxes-item-hint>@ViewBag.Group3VegetablesHint</govuk-checkboxes-item-hint>
                                         }
+                                        @if (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales && item.Text == Resource.lblLettuceFields)
+                                        {
+                                            <govuk-checkboxes-item-hint>@ViewBag.LettuceFieldsListHint</govuk-checkboxes-item-hint>
+                                        }
                                     </govuk-checkboxes-item>
 
                                 }
