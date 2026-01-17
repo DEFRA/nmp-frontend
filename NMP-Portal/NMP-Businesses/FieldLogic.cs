@@ -5,6 +5,7 @@ using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 namespace NMP.Businesses;
 
@@ -55,17 +56,22 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         _logger.LogTrace("Fetching crop groups");
         return await _fieldService.FetchCropGroups();
     }
- 
+
     public async Task<string> FetchCropTypeById(int cropTypeId)
     {
         _logger.LogTrace("Fetching crop type by ID: {CropTypeId}", cropTypeId);
         return await _fieldService.FetchCropTypeById(cropTypeId);
     }
 
-    public async Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId)
+    public async Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId, int? farmRB209CountryID)
     {
-       _logger.LogTrace("Fetching crop types for CropGroupId: {CropGroupId}", cropGroupId);
-        return await _fieldService.FetchCropTypes(cropGroupId);
+        _logger.LogTrace("Fetching crop types for CropGroupId: {CropGroupId}", cropGroupId);
+        List<CropTypeResponse> cropTypeList = await _fieldService.FetchCropTypes(cropGroupId);
+        if (farmRB209CountryID.HasValue)
+        {
+            cropTypeList = cropTypeList.Where(x => x.CountryId == farmRB209CountryID.Value || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+        }
+        return cropTypeList;
     }
 
     public async Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary)
@@ -93,7 +99,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
     }
 
     public async Task<List<Field>> FetchFieldsByFarmId(int farmId)
-    {            
+    {
         _logger.LogTrace("Fetching fields for FarmId: {FarmId}", farmId);
         return await _fieldService.FetchFieldsByFarmId(farmId);
     }
@@ -112,7 +118,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
 
     public async Task<List<SeasonResponse>> FetchSeasons()
     {
-       _logger.LogTrace("Fetching seasons");
+        _logger.LogTrace("Fetching seasons");
         return await _fieldService.FetchSeasons();
     }
 
@@ -152,7 +158,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         List<SoilTypesResponse> soilTypes = await _fieldService.FetchSoilTypes();
         return [.. soilTypes.Where(x => x.CountryId == rb209CountryId)];
     }
-    
+
 
     public async Task<List<CommonResponse>> GetGrassManagementOptions()
     {
@@ -175,7 +181,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
     public async Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null)
     {
         _logger.LogTrace("Checking if field exists with Name: {FieldName} in FarmId: {FarmId}", name, farmId);
-        return await _fieldService.IsFieldExistAsync(farmId, name,  fieldId);
+        return await _fieldService.IsFieldExistAsync(farmId, name, fieldId);
     }
 
     public async Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId)

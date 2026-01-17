@@ -143,11 +143,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 model.EncryptedFarmId = q;
                 model.EncryptedHarvestYear = r;
                 model.CropOrder = 1;
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (error.Message == null)
                 {
                     model.FarmName = farm.Name;
-                    model.isEnglishRules = farm.EnglishRules;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
                     model.FarmCountryId = farm.CountryID;
                     SetFertiliserManureToSession(model);
                 }
@@ -1996,7 +1996,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                 model.FarmId = decryptedFarmId;
                 int decryptedHarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (error.Message == null)
                 {
                     model.FarmCountryId = farm.CountryID;
@@ -3074,7 +3074,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     {
                                         string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                                         model.IsNMaxLimitWarning = true;
-                                        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                                        (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
