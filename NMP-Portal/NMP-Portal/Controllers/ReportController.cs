@@ -23,7 +23,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 {
     private readonly ILogger<ReportController> _logger = logger;
     private readonly IDataProtector _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
-    private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");        
+    private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
@@ -214,6 +214,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                             cropGroups.Remove(Resource.lblGroup1Vegetables);
                                             cropGroups.Remove(Resource.lblGroup2Vegetables);
                                             cropGroups.Remove(Resource.lblGroup3Vegetables);
+
+                                            var lettuceGroups = GetNmaxReportLettuceGroups();
+                                            foreach (var group in lettuceGroups)
+                                            {
+                                                cropGroups[group.Key] = group.Value;
+                                            }
+
+                                            var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuceFields)
+                                                ? lettuceGroups[Resource.lblLettuceFields]
+                                                    .Where(id => cropTypeMap.ContainsKey(id))
+                                                    .Select(id => cropTypeMap[id])
+                                                    .OrderBy(name => name)
+                                                    .ToList()
+                                                : new List<string>();
+
+                                            if (lettuceFieldsList.Count > 1)
+                                            {
+                                                for (int i = 1; i < lettuceFieldsList.Count; i++)
+                                                {
+                                                    lettuceFieldsList[i] = lettuceFieldsList[i].ToLower();
+                                                }
+                                            }
+                                            ViewBag.LettuceFieldsListHint = string.Join(", ", lettuceFieldsList);
                                         }
 
                                         var list = new List<SelectListItem>();
@@ -513,6 +536,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                         cropGroups.Remove(Resource.lblGroup1Vegetables);
                                         cropGroups.Remove(Resource.lblGroup2Vegetables);
                                         cropGroups.Remove(Resource.lblGroup3Vegetables);
+
+                                        var lettuceGroups = GetNmaxReportLettuceGroups();
+                                        foreach (var group in lettuceGroups)
+                                        {
+                                            cropGroups[group.Key] = group.Value;
+                                        }
+
+                                        var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuceFields)
+                                            ? lettuceGroups[Resource.lblLettuceFields]
+                                                .Where(id => cropTypeMap.ContainsKey(id))
+                                                .Select(id => cropTypeMap[id])
+                                                .OrderBy(name => name)
+                                                .ToList()
+                                            : new List<string>();
+
+                                        if (lettuceFieldsList.Count > 1)
+                                        {
+                                            for (int i = 1; i < lettuceFieldsList.Count; i++)
+                                            {
+                                                lettuceFieldsList[i] = lettuceFieldsList[i].ToLower();
+                                            }
+                                        }
+                                        ViewBag.LettuceFieldsListHint = string.Join(", ", lettuceFieldsList);
                                     }
 
                                     foreach (var group in cropGroups)
@@ -819,7 +865,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
                     }
                     //manData.Recommendation.KIndex != null ? (manData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (manData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : manData.Recommendation.KIndex)) : null;
-                    if (fieldData.SoilAnalysis != null&& !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
+                    if (fieldData.SoilAnalysis != null && !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
                     {
                         string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
                         string? updatedPotassiumIndex = null;
@@ -969,6 +1015,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         cropGroups.Remove(Resource.lblGroup1Vegetables);
                         cropGroups.Remove(Resource.lblGroup2Vegetables);
                         cropGroups.Remove(Resource.lblGroup3Vegetables);
+
+                        var lettuceGroups = GetNmaxReportLettuceGroups();
+                        foreach (var group in lettuceGroups)
+                        {
+                            cropGroups[group.Key] = group.Value;
+                        }
                     }
                     // Build reverse lookup: cropId -> groupIds[]
                     var idToGroup = cropGroups
@@ -1730,7 +1782,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
-                    model.ReportTypeName =(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)?Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit;
+                    model.ReportTypeName = (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenFarmLimit;
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
@@ -1884,7 +1936,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
             }
-            if(model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
                 model.IsGrasslandDerogation = false;
                 var (savedData, error) = await SaveGrasslandDerogationAsync(model);
@@ -4057,7 +4109,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
                         TempData["succesMsgContent2"] = Resource.MsgImportExportSuccessMsgContent2;
-                        TempData["succesMsgContent3"] = string.Format(model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales?Resource.MsgImportExportSuccessMsgForWales:Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
+                        TempData["succesMsgContent3"] = string.Format(model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.MsgImportExportSuccessMsgForWales : Resource.MsgImportExportSuccessMsgContent3, _farmDataProtector.Unprotect(y));
                     }
                 }
                 model.FarmName = farm.Name;
@@ -5730,7 +5782,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             TempData["RemoveSuccessMsg"] = Resource.lblAddMoreLivestock;
                         }
                         TempData["succesMsgContent3"] =
-                            (model.Country==(int)NMP.Commons.Enums.FarmCountry.Wales)? string.Format(Resource.MsgSuccessForWalesLivestock, _farmDataProtector.Unprotect(y)):
+                            (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? string.Format(Resource.MsgSuccessForWalesLivestock, _farmDataProtector.Unprotect(y)) :
                             string.Format(Resource.lblCreateALivestockManureNitrogenFarmLimitReport, _farmDataProtector.Unprotect(y));
                     }
                 }
@@ -6941,6 +6993,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             { Resource.lblGroup2Vegetables, new [] { (int)Enums.CropTypes.CelerySelfBlanching, (int)Enums.CropTypes.Courgettes, (int)Enums.CropTypes.DwarfBeans, (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BulbOnions, (int)Enums.CropTypes.SaladOnions, (int)Enums.CropTypes.Parsnips, (int)Enums.CropTypes.RunnerBeans, (int)Enums.CropTypes.Sweetcorn, (int)Enums.CropTypes.Turnips, (int)Enums.CropTypes.BabyLeafLettuce } },
 
             { Resource.lblGroup3Vegetables, new [] { (int)Enums.CropTypes.Beetroot, (int)Enums.CropTypes.BrusselSprouts, (int)Enums.CropTypes.Cabbage, (int)Enums.CropTypes.Calabrese, (int)Enums.CropTypes.Cauliflower, (int)Enums.CropTypes.Leeks } }
+        };
+    }
+
+    private static Dictionary<string, int[]> GetNmaxReportLettuceGroups()
+    {
+        return new Dictionary<string, int[]>
+        {
+            { Resource.lblLettuceFields, new [] { (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BabyLeafLettuce } },
         };
     }
     string GetGroupName(int cropId)
