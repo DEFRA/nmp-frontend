@@ -17,7 +17,7 @@
     else 
     @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport && (ViewBag.NoPlan != null || ViewBag.NoField != null))
     {
-        title=string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit, Model.Year);
+        title = string.Format(Resource.lblAnNMaxIsNotAvailableForYear, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit, Model.Year);
     }
     else if (Model.FieldAndPlanReportOption != null && Model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
     {
@@ -25,12 +25,12 @@
     }
     else if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
     {
-        title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit);
+        title = string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit);
     }
 
     if (ViewBag.NMaxReportNotAvailable != null && ViewBag.NMaxReportNotAvailable)
     {
-        title = string.Format(Resource.lblAnNmaxReportIsNotAvailable, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit);
+        title = string.Format(Resource.lblAnNmaxReportIsNotAvailable, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit);
     }
 
     ViewData["Title"] = $" {title} {Resource.lblHyphen} {Resource.lblReport}";
@@ -58,17 +58,18 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-heading-l">
-                @(string.Format(Resource.lblAnNmaxReportIsNotAvailable, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
+                @(string.Format(Resource.lblAnNmaxReportIsNotAvailable, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
             </h2>
             <p class="govuk-body">
                 @if (ViewBag.FarmOrFieldNotInNVZ != null && ViewBag.FarmOrFieldNotInNVZ)
                 {
-                    @(string.Format(Resource.lblNMaxReportsAreOnlyAvailableForFarms, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
+                    @(string.Format(Resource.lblNMaxReportsAreOnlyAvailableForFarms, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
                     
                 }
                 else
                 {
-                    @(string.Format(Resource.lblYouHaveNotPlannedAnyCropsForYear, Model.Year,Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
+            @(string.Format(Resource.lblYouHaveNotPlannedAnyCropsForYear, Model.Year, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit)
+                        )
                 }
             </p>
             <p class="govuk-body  margin-bottom-thirty">
@@ -239,8 +240,8 @@ else
                     }
                     else @if (Model.NVZReportOption != null && Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport){
                     <h2 class="govuk-heading-l">
-                        @(string.Format(Resource.lblAnNMaxIsNotAvailableForYear, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit, Model.Year))                        
-                        </h2>
+                        @(string.Format(Resource.lblAnNMaxIsNotAvailableForYear, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit, Model.Year))
+                    </h2>
                     <div class="margin-bottom-forty">
                         <p class="govuk-body">
                             @Resource.lblYouNeedToEnterDetailsFirstAbout
@@ -308,7 +309,7 @@ else
                     <govuk-checkboxes asp-for="CropTypeList">
                         <govuk-checkboxes-fieldset>
                             <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                @(string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year, Model.Country == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
+                                @(string.Format(Resource.lblWhichCropsWouldYouLikeToCreateNMaxReportFor, Model.Year, (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogenLimit))
                             </govuk-checkboxes-fieldset-legend>
 
                             <govuk-checkboxes-hint>
@@ -332,6 +333,10 @@ else
                                         @if (item.Text == Resource.lblGroup3Vegetables)
                                         {
                                             <govuk-checkboxes-item-hint>@ViewBag.Group3VegetablesHint</govuk-checkboxes-item-hint>
+                                        }
+                                        @if (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales && item.Text == Resource.lblLettuceFields)
+                                        {
+                                            <govuk-checkboxes-item-hint>@ViewBag.LettuceFieldsListHint</govuk-checkboxes-item-hint>
                                         }
                                     </govuk-checkboxes-item>
 

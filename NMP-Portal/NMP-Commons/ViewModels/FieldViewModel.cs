@@ -31,7 +31,7 @@ public class FieldViewModel : Field
     public string? CropType { get; set; } = string.Empty;
     public string? CropGroup { get; set; } = string.Empty;
     public string SampleDate { get; set; } = string.Empty;
-    public bool isEnglishRules { get; set; }
+    public int? FarmRB209CountryID { get; set; }
     public int FarmID { get; set; }
     public bool? IsWithinNVZForFarm { get; set; }
     public bool? IsAbove300SeaLevelForFarm { get; set; }

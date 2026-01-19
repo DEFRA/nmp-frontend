@@ -5,14 +5,38 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-       @*<h1 class="govuk-heading-xl">
+       @*  <h1 class="govuk-heading-xl">
+            Plan and Manage Nutrient Applications Tool — Launch Update
+        </h1>
+        <p class="govuk-body">This is the production version of the Nutrient Management and Planning Application tool.</p>
+        <p class="govuk-body">
+            The Nutrient Management and Planning Application tool is in its final stages and will be ready soon.
+            We’re making final refinements and will share further updates shortly.
+        </p>
+        <p class="govuk-body">If you have any queries before the launch of the tool, please email <a href="mailto:nmpt@defra.gov.uk">nmpt@defra.gov.uk</a>.</p>
+ *@
+
+        @* <h1 class="govuk-heading-xl">
             Plan and Manage Nutrient Applications Tool - Update
         </h1>
-        <p class="govuk-body">The Plan and Manage Nutrient Applications tool is scheduled for release by early 2026.</p>
-        <p class="govuk-body">For our private beta users: we are currently implementing updates, and your version of the tool will be ready shortly. Thank you for your patience and continued feedback.</p>
-        </<br />
+        <p class="govuk-body">This is a pre-production environment.</p>
+        <p class="govuk-body">
+            The production version of the Plan and Manage Nutrient Applications tool is now publicly available.<br />
+            You can access the production environment here: <a href="https://plan-and-manage-nutrient-applications.service.gov.uk/">Plan and manage nutrient applications - NMPTGB - GOV.UK</a>.
+        </p>
+        <p class="govuk-body">
+            If you have previously used the private beta tool, please note that you will need to create a new Government Gateway account to access the production environment.
+        </p>
+        <h2 class="govuk-heading-l">
+            Private beta users
+        </h2>
+        <p class="govuk-body">For our private beta users, we are currently implementing further updates. Your version of the tool will be ready shortly. Thank you for your patience and continued feedback.</p>
         <p class="govuk-body">Further communications will be issued in the next few weeks.</p> *@
-        @if (ViewBag.Error != null || ViewBag.ServiceError != null)
+
+
+       
+        
+       @if (ViewBag.Error != null || ViewBag.ServiceError != null)
         {
             <govuk-error-summary>
                 <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
@@ -35,7 +59,6 @@
                 @Resource.lblHelpProtectTheEnvironment
             </li>
         </ul>
-
         <h2 class="govuk-heading-m">@Resource.lblHowitworks</h2>
         <p class="govuk-body">@Html.Raw(Resource.lblRecommendationFromthisService)</p>
         <p class="govuk-body">@Resource.lblYourPlanWillBasedOn</p>
@@ -52,10 +75,6 @@
         </ul>
         <p class="govuk-body">@Resource.lblDevelopNutrientApplicationPlan</p>
         <p class="govuk-body">@Resource.lbldownloadablePdftext</p>
-        
-
-        
-
         <h2 class="govuk-heading-m">@Resource.lblYourData</h2>
         <p class="govuk-body">
             @Resource.lblYourDataContentOne
@@ -76,4 +95,3 @@
         }
     </div>
 </div>
-

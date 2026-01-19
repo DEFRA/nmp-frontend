@@ -29,7 +29,6 @@ namespace NMP.Portal.Security
 
             services.AddAuthentication(options =>
             {
-
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -43,19 +42,21 @@ namespace NMP.Portal.Security
             })
             .AddMicrosoftIdentityWebApp(options =>
             {
-                options.Instance = builder.Configuration?["CustomerIdentityInstance"] ?? string.Empty;
-                options.ClientId = builder.Configuration?["CustomerIdentityClientId"];
-                options.ClientSecret = builder.Configuration?["CustomerIdentityClientSecret"];
-                options.TenantId = builder.Configuration?["CustomerIdentityTenantId"];
-                options.Domain = builder.Configuration?["CustomerIdentityDomain"];
+                options.Instance = configuration?["CustomerIdentityInstance"] ?? string.Empty;
+                options.ClientId = configuration?["CustomerIdentityClientId"];
+                options.ClientSecret = configuration?["CustomerIdentityClientSecret"];
+                options.TenantId = configuration?["CustomerIdentityTenantId"];
+                options.Domain = configuration?["CustomerIdentityDomain"];
                 var extraQueryParameters = new Dictionary<string, string>();
-                extraQueryParameters.Add("serviceId", value: builder.Configuration["CustomerIdentityServiceId"].ToString());
+                string serviceId = configuration?["CustomerIdentityServiceId"] ?? string.Empty;
+                extraQueryParameters.Add("serviceId", value: serviceId);
                 extraQueryParameters.Add("forceReselection", value: "true");
                 options.ExtraQueryParameters = extraQueryParameters;
                 options.CallbackPath = "/signin-oidc";
-                options.SignUpSignInPolicyId = builder.Configuration["CustomerIdentityPolicyId"];
+                options.SignUpSignInPolicyId = configuration?["CustomerIdentityPolicyId"];
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
+                options.ErrorPath = "/Error/index";
             },
             cookieOptions =>
             {
@@ -63,7 +64,7 @@ namespace NMP.Portal.Security
                 cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
                 cookieOptions.SlidingExpiration = true;
             })
-            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", builder.Configuration["CustomerIdentityClientId"] })
+            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", configuration?["CustomerIdentityClientId"]?? string.Empty })
             .AddDistributedTokenCaches();                        
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -94,11 +95,10 @@ namespace NMP.Portal.Security
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
             string traceId = context.HttpContext.TraceIdentifier;
             string path = context.HttpContext.Request.Path;
-            string ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();
+            string? ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();
             string error = context.Failure?.Message ?? "Unknown";
             string errorCode = GetOidcErrorCode(error);
-            logger.LogWarning("OIDC Remote Failure:{Code} | Path:{Path} | Trace:{TraceId} | IP:{IP}",
-                errorCode, path, traceId, ip);            
+            logger.LogError("OIDC Remote Failure:{Code} | Path:{Path} | Trace:{TraceId} | IP:{IP}", errorCode, path, traceId, ip);            
             context.Response.Redirect($"/Error/503");
             context.HandleResponse(); // Prevents throwing exception
             await Task.CompletedTask.ConfigureAwait(false);
@@ -146,11 +146,10 @@ namespace NMP.Portal.Security
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
             string traceId = context.HttpContext.TraceIdentifier;
             string path = context.HttpContext.Request.Path;
-            string ip = context.HttpContext.Connection.RemoteIpAddress.ToString();
+            string? ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();
             string error = context.Exception?.Message ?? "Unknown";
             string errorCode = GetOidcErrorCode(error);
-            logger.LogWarning("OIDC Authentication Failed:{Code} | Path:{Path} | Trace:{TraceId} | IP:{IP}",
-                errorCode, path, traceId, ip);
+            logger.LogError("OIDC Authentication Failed:{Code} | Path:{Path} | Trace:{TraceId} | IP:{IP}", errorCode, path, traceId, ip);
             context.Response.Redirect("/Error/503");
             context.HandleResponse(); // Suppress the exception
             // Don't remove this line
@@ -210,193 +209,217 @@ namespace NMP.Portal.Security
 
         private static async Task OnTokenValidated(TokenValidatedContext context)
         {
-            var accessToken = context?.TokenEndpointResponse?.AccessToken;
-            var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
-            var identity = context?.Principal?.Identity as ClaimsIdentity;
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            string traceId = context.HttpContext.TraceIdentifier;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            string path = context.HttpContext.Request.Path;
+            string? ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();            
             try
             {
+                var accessToken = context?.TokenEndpointResponse?.AccessToken;
+                var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
+                var identity = context?.Principal?.Identity as ClaimsIdentity;
+
+                CheckTokens(accessToken, refreshToken);
+
                 if (identity != null)
                 {
-                    if (string.IsNullOrEmpty(accessToken))
-                    { 
-                        throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
-                    }
-
-                    if (string.IsNullOrEmpty(refreshToken))                    
-                    {
-                        throw new AuthenticationFailureException(Resource.MsgRrefreshTokenNotReceived);
-                    }
+                    await RecordRequiredClaims(accessToken, identity);
                 }
-                if (!string.IsNullOrEmpty(accessToken))
-                {
-                    var handler = new JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadToken(accessToken) as JwtSecurityToken;
-
-                    if (jsonToken != null)
-                    {
-                        int userId = 0;
-                        Guid? userIdentifier = null;
-                        string firstName = string.Empty;
-                        string lastName = string.Empty;
-                        string email = string.Empty;
-                        string currentRelationShipId = string.Empty;
-                        string organisationName = string.Empty;
-                        Guid? organisationId = null;
-
-                        foreach (var claim in jsonToken.Claims)
-                        {
-                            // Add the claims to the ClaimsIdentity
-                            switch (claim.Type)
-                            {
-                                case "iss":
-                                    identity?.AddClaim(new Claim("issuer", claim.Value));
-                                    break;                                
-                                case "sub":
-                                    userIdentifier = Guid.Parse(claim.Value);
-                                    break;
-                                case "firstName":
-                                    firstName = claim.Value;
-                                    break;
-                                case "lastName":
-                                    lastName = claim.Value;
-                                    break;
-                                case "email":
-                                    email = claim.Value;
-                                    break;
-                                case "currentRelationshipId":
-                                    currentRelationShipId = claim.Value;
-                                    break;
-                                case "enrolmentCount":
-                                    identity?.AddClaim(new Claim("enrolmentCount", claim.Value));
-                                    break;
-                                case "relationships":
-                                    List<string> relationShipsArray = new List<string>();
-                                    List<string> relationShipDetails = new List<string>();
-                                    if (claim.Value.GetType().IsArray)
-                                    {
-                                        relationShipsArray.AddRange(claim.Value.Split(","));
-                                    }
-                                    else
-                                    {
-                                        relationShipsArray.Add(claim.Value);
-                                    }
-                                    var rs = relationShipsArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
-                                    if (rs != null)
-                                    {
-                                        relationShipDetails.AddRange(rs.Split(":"));
-                                        if (relationShipDetails[4] == "Citizen")
-                                        {
-                                            organisationName = $"{firstName} {lastName}";
-                                            organisationId = Guid.Parse(relationShipDetails[0]);
-                                        }
-                                        else
-                                        {
-                                            organisationName = relationShipDetails[2];
-                                            organisationId = Guid.Parse(relationShipDetails[1]);
-                                        }
-                                        identity?.AddClaim(new Claim("organisationName", organisationName));
-                                        identity?.AddClaim(new Claim("organisationId", organisationId.ToString() ?? string.Empty));
-                                    }
-                                    break;
-                                case "roles":
-                                    List<string> rolesArray = new List<string>();
-                                    List<string> roleDetails = new List<string>();
-                                    if (claim.Value.GetType().IsArray)
-                                    {
-                                        rolesArray.AddRange(claim.Value.Split(","));
-                                    }
-                                    else
-                                    {
-                                        rolesArray.Add(claim.Value);
-                                    }
-                                    var rd = rolesArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
-                                    if (rd != null)
-                                    {
-                                        roleDetails.AddRange(rd.Split(":"));
-                                        identity?.AddClaim(new Claim(ClaimTypes.Role, roleDetails[1]));
-                                        identity?.AddClaim(new Claim("roleStatus", roleDetails[2]));
-                                    }
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                        }
-
-                        UserData userData = new UserData()
-                        {
-                            User = new User()
-                            {
-                                GivenName = firstName,
-                                Surname = lastName,
-                                Email = email,
-                                UserIdentifier = userIdentifier
-                            },
-                            Organisation = new Organisation()
-                            {
-                                ID = organisationId,
-                                Name = organisationName
-                            }
-                        };
-
-
-                        string jsonData = JsonConvert.SerializeObject(userData);
-                        if (configuration != null)
-                        {
-                            const string dafaultlocalUrl = $"http://localhost:3000/";
-                            using HttpClient httpClient = new HttpClient();
-                            httpClient.Timeout = TimeSpan.FromMinutes(5);
-                            httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? dafaultlocalUrl);
-                            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);                            
-                            var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                            response.EnsureSuccessStatusCode();
-                            if (response.IsSuccessStatusCode)
-                            {
-                                string result = await response.Content.ReadAsStringAsync();
-                                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                                if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
-                                {
-                                    userId = responseWrapper?.Data?["UserID"];
-                                    identity?.AddClaim(new Claim("userId", userId.ToString()));
-                                }
-                            }
-                            else if (response.StatusCode == HttpStatusCode.Forbidden)
-                            {
-                                throw new HttpRequestException(Resource.MsgNmptApiServiceBlockedAccess);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new AuthenticationFailureException(Resource.MsgInvalidAuthentication);
-                    }
-                }
-                else
-                {
-                    throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
-                }
-
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException hre)
             {
-                var errorViewModel = new ErrorViewModel();
-                errorViewModel.Message = Resource.MsgNmptServiceNotAvailable;
-                errorViewModel.Stack = string.Empty;
-                context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
-                context?.Response.Redirect("/Error/");
+                string error = hre.Message ?? Resource.MsgNmptServiceNotAvailable;                
+                logger.LogError(hre,"NMPT service error :{Error} | Path:{Path} | Trace:{TraceId} | IP:{IP}",error, path, traceId, ip);                                
+                context?.Response.Redirect("/Error/503");
                 context?.HandleResponse(); // Suppress the exception 
             }
             catch (Exception ex)
-            {
-                var errorViewModel = new ErrorViewModel();
-                errorViewModel.Message = ex.Message;
-                errorViewModel.Stack = string.Empty;
-                context?.HttpContext.Session.SetObjectAsJson("Error", errorViewModel);
-                context?.Response.Redirect("/Error");
+            {                
+                string error = ex.Message;
+                logger.LogError(ex, "Error in login process :{Error} | Path:{Path} | Trace:{TraceId} | IP:{IP}", error, path, traceId, ip);
+                context?.Response.Redirect("/Error/503");
                 context?.HandleResponse(); // Suppress the exception                    
             }
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        private static async Task RecordRequiredClaims(string? accessToken, ClaimsIdentity? identity)
+        {
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                JwtSecurityToken? jwtToken = ParseAccessToken(accessToken);
+
+                if (jwtToken != null)
+                {
+                    UserData userData = new UserData();
+                    userData.User = new User();
+                    userData.Organisation = new Organisation();
+
+                    AddClaimsToIdentity(identity, jwtToken, userData);
+                    
+                    await SaveUserDetails(accessToken, identity, userData);
+                }
+                else
+                {
+                    throw new AuthenticationFailureException(Resource.MsgInvalidAuthentication);
+                }
+            }
+            else
+            {
+                throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
+            }
+        }
+
+        private static async Task SaveUserDetails(string accessToken, ClaimsIdentity? identity, UserData userData)
+        { 
+            string jsonData = JsonConvert.SerializeObject(userData);
+            if (configuration != null)
+            {
+                const string dafaultlocalUrl = $"http://localhost:3000/";
+                using HttpClient httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromMinutes(5);
+                httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? dafaultlocalUrl);
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+                var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                    if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+                    {
+                        var userId = responseWrapper?.Data?["UserID"];
+                        identity?.AddClaim(new Claim("userId", userId?.ToString()));
+                    }
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    throw new HttpRequestException(Resource.MsgNmptApiServiceBlockedAccess);
+                }
+            }
+        }
+
+        private static void AddClaimsToIdentity(ClaimsIdentity? identity, JwtSecurityToken jwtToken, UserData userData)
+        {
+            userData.User = new User();
+            userData.Organisation = new Organisation();
+            string currentRelationShipId = string.Empty;
+            string organisationName = string.Empty;
+            Guid? organisationId = null;
+
+            foreach (var claim in jwtToken.Claims)
+            {
+                // Add the claims to the ClaimsIdentity
+                switch (claim.Type)
+                {
+                    case "iss":
+                        identity?.AddClaim(new Claim("issuer", claim.Value));
+                        break;
+                    case "sub":
+                        userData.User.UserIdentifier = Guid.Parse(claim.Value);
+                        break;
+                    case "firstName":
+                        userData.User.GivenName = claim.Value;
+                        break;
+                    case "lastName":
+                        userData.User.Surname = claim.Value;
+                        break;
+                    case "email":
+                        userData.User.Email = claim.Value;
+                        break;
+                    case "currentRelationshipId":
+                        currentRelationShipId = claim.Value;
+                        break;
+                    case "enrolmentCount":
+                        identity?.AddClaim(new Claim("enrolmentCount", claim.Value));
+                        break;
+                    case "relationships":
+                        ParseOrganisationData(identity, userData, currentRelationShipId, ref organisationName, ref organisationId, claim);
+                        break;
+                    case "roles":
+                        ParseRolesData(identity, currentRelationShipId, claim);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private static void ParseRolesData(ClaimsIdentity? identity, string currentRelationShipId, Claim claim)
+        {
+            List<string> rolesArray = new List<string>();
+            List<string> roleDetails = new List<string>();
+            if (claim.Value.GetType().IsArray)
+            {
+                rolesArray.AddRange(claim.Value.Split(","));
+            }
+            else
+            {
+                rolesArray.Add(claim.Value);
+            }
+            var rd = rolesArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
+            if (rd != null)
+            {
+                roleDetails.AddRange(rd.Split(":"));
+                identity?.AddClaim(new Claim(ClaimTypes.Role, roleDetails[1]));
+                identity?.AddClaim(new Claim("roleStatus", roleDetails[2]));
+            }
+        }
+
+        private static void ParseOrganisationData(ClaimsIdentity? identity, UserData userData, string currentRelationShipId, ref string organisationName, ref Guid? organisationId, Claim claim)
+        {
+            List<string> relationShipsArray = new List<string>();
+            List<string> relationShipDetails = new List<string>();
+            if (claim.Value.GetType().IsArray)
+            {
+                relationShipsArray.AddRange(claim.Value.Split(","));
+            }
+            else
+            {
+                relationShipsArray.Add(claim.Value);
+            }
+            var rs = relationShipsArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
+            if (rs != null)
+            {
+                relationShipDetails.AddRange(rs.Split(":"));
+                if (relationShipDetails[4] == "Citizen")
+                {
+                    organisationName = $"{userData.User.GivenName} {userData.User.Surname}";
+                    organisationId = Guid.Parse(relationShipDetails[0]);
+                }
+                else
+                {
+                    organisationName = relationShipDetails[2];
+                    organisationId = Guid.Parse(relationShipDetails[1]);
+                }
+                userData.Organisation.ID = organisationId;
+                userData.Organisation.Name = organisationName;
+                identity?.AddClaim(new Claim("organisationName", organisationName));
+                identity?.AddClaim(new Claim("organisationId", organisationId.ToString() ?? string.Empty));
+            }
+        }
+
+        private static JwtSecurityToken? ParseAccessToken(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(accessToken) as JwtSecurityToken;
+            return jsonToken;
+        }
+
+        private static void CheckTokens(string? accessToken, string? refreshToken)
+        {
+            if (string.IsNullOrWhiteSpace(accessToken))
+            {
+                throw new AuthenticationFailureException(Resource.MsgAccessTokenNotReceived);
+            }
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                throw new AuthenticationFailureException(Resource.MsgRrefreshTokenNotReceived);
+            }
         }
     }
 }

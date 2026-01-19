@@ -3910,7 +3910,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
   </data>
   <data name="lblFirstRuleOfNVZForEngland" xml:space="preserve">
-    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England.</value>
+    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution.</value>
   </data>
   <data name="lblFourthRuleOfNVZForEngland" xml:space="preserve">
     <value>Nitrate vulnerable zones (NVZs)</value>
@@ -5089,13 +5089,13 @@ cubic metres per hectare  not set</value>
     <value>Enter a number for each month</value>
   </data>
   <data name="lblEnterTheAverageNumberForTheYear" xml:space="preserve">
-    <value>Enter the average number for the year</value>
+    <value>Enter the average total for the year</value>
   </data>
   <data name="lblLivestockNumberQuestion" xml:space="preserve">
     <value>livestock number question</value>
   </data>
   <data name="lblAverageNumberOfThisLivestockGroup" xml:space="preserve">
-    <value>Average number of {0} in {1}</value>
+    <value>Average total number of this {0} type in {1}</value>
   </data>
   <data name="lblSelectedLivestockType" xml:space="preserve">
     <value>Selected livestock type: {0}</value>
@@ -5419,7 +5419,7 @@ cubic metres per hectare  not set</value>
     <value>Home-produced manures from any cattle, sheep, deer, goats, or horses, regardless of whether the animals are housed or not.</value>
   </data>
   <data name="lblLivestockReportContentSeventeen" xml:space="preserve">
-    <value>Average number for year</value>
+    <value>Average total for the year</value>
   </data>
   <data name="lblLivestockReportContentEighteen" xml:space="preserve">
     <value>Total nitrogen (N) produced</value>
@@ -5808,7 +5808,7 @@ livestock manure.</value>
     <value>{0}kg/yr</value>
   </data>
   <data name="lblWhatIsTheAverageTotalNumberOfThis" xml:space="preserve">
-    <value>What is the average total number of this {0} type for {1}?</value>
+    <value>What is the average total number of this {0} type in {1}?</value>
   </data>
   <data name="lblOccupancyAndStandard" xml:space="preserve">
     <value>Occupancy and standard</value>
@@ -6411,7 +6411,7 @@ livestock manure.</value>
     <value>What was the total rainfall since application</value>
   </data>
   <data name="lblWhatIsTheAverageNumberOfSuffix" xml:space="preserve">
-    <value>What is the average number of {0} in {1}</value>
+    <value>What is the average total number of {0} in {1}</value>
   </data>
   <data name="lblWhatIsTheTotalFarmAreaSuffix" xml:space="preserve">
     <value>What is the total farm area</value>
@@ -6432,7 +6432,7 @@ livestock manure.</value>
     <value>What is the nitrogen (N) standard for this livestock type in {0}</value>
   </data>
   <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
-    <value>What is the average total number of this {0} type for {1}</value>
+    <value>What is the average total number of this {0} type in {1}</value>
   </data>
   <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
     <value>What is the occupancy for this livestock type in {0}</value>
@@ -7135,5 +7135,53 @@ livestock manure.</value>
   </data>
   <data name="MsgImportExportSuccessMsgForWales" xml:space="preserve">
     <value>Create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
+  </data>
+  <data name="lblAverageTotalForYear" xml:space="preserve">
+    <value>Average total for {0}</value>
+  </data>
+  <data name="lblLettuceFields" xml:space="preserve">
+    <value>Lettuce fields</value>
+ </data>
+  <data name="lblAboutRecommendationForScotlandContent1" xml:space="preserve">
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the SRUC Technical Notes.</value>
+  </data>
+  <data name="lblAboutRecommendationForScotlandContent2" xml:space="preserve">
+    <value>While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
+  </data>
+  <data name="lblAboutRecommendationForScotlandContent3" xml:space="preserve">
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+  </data>
+  <data name="lblRegulations_for_Scotland" xml:space="preserve">
+    <value>Regulations for Scotland</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent1" xml:space="preserve">
+    <value>There are currently &lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt; 5 NVZs in Scotland &lt;/a&gt;:</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent2" xml:space="preserve">
+    <value>Lower Nithsdale</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent3" xml:space="preserve">
+    <value>Lothian and Borders</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent4" xml:space="preserve">
+    <value>Strathmore and Fife (including Finavon)</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent5" xml:space="preserve">
+    <value>Moray, Aberdeenshire/Banff and Buchan</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent6" xml:space="preserve">
+    <value>Stranraer Lowlands</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent7" xml:space="preserve">
+    <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent8" xml:space="preserve">
+    <value>You should &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;follow the guidance in the Technical Notes &lt;/a&gt; when making plans for your nutrients and crops.</value>
+  </data>
+  <data name="lblFarmingRuleForEnglandContent1" xml:space="preserve">
+    <value>They include about 55% of land in England.</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent9" xml:space="preserve">
+    <value>About Nitrate Vulnerable Zones (NVZs)</value>
   </data>
 </root>
