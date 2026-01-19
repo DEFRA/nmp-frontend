@@ -164,6 +164,7 @@ hr.seperator_five {
     #farm-title h1 {
         margin: 0 0 15px 0;
         padding: 0;
+        word-break:break-word;
     }
 
 .govuk-input__wrapper label {
