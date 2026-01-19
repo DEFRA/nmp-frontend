@@ -221,7 +221,7 @@
                             @Model.ManureTypeName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ManureGroup" asp-controller="Report">
+                            <govuk-summary-list-row-action asp-action="ManureType" asp-controller="Report">
                                 @Resource.lblChange<span class="govuk-visually-hidden">
                                     @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
                                                                         Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
