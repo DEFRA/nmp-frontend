@@ -310,7 +310,7 @@
                             <govuk-details-summary>
                                 @string.Format(Resource.lblShowRecommendationsFor, Model.FieldName)
                             </govuk-details-summary>
-                            <govuk-details-text>
+                            <govuk-details-text class="table-container">
                                 <h2 class="govuk-heading-m">
                                     @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
                                     {
