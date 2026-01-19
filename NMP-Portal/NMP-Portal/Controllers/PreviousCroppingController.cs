@@ -59,11 +59,11 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> HasGrassInLastThreeYear(string? q, string? r, string? s)
         {
             _logger.LogTrace($"Previous Croppping Controller: HasGrassInLastThreeYear() action called");
-            PreviousCroppingViewModel model = GetPreviousCroppingFromSession() ?? new PreviousCroppingViewModel();
+            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
 
             try
             {
-                if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
+                if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r) && model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : HasGrassInLastThreeYear() action : FarmId and FieldId parameters missing");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.BadRequest);
@@ -71,6 +71,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
                 {
+                    model = new PreviousCroppingViewModel();
                     model.EncryptedFarmID = q;
                     model.EncryptedFieldID = r;
                     model.EncryptedYear = s;
