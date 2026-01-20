@@ -280,7 +280,9 @@
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
-                        <th scope="col" class="govuk-table__header alignRight">@Resource.lblValuePerTonne </th>
+                        <th scope="col" class="govuk-table__header alignRight">
+                            @(Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid.Value ? Resource.lblValuePerCubicMetre : Resource.lblValuePerTonne)
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">

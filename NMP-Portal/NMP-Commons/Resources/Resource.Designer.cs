@@ -15121,6 +15121,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value per cubic metre.
+        /// </summary>
+        public static string lblValuePerCubicMetre {
+            get {
+                return ResourceManager.GetString("lblValuePerCubicMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value per tonne.
         /// </summary>
         public static string lblValuePerTonne {
