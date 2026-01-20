@@ -2421,7 +2421,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
             {
                 int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
-                    : model.ManureGroupIdForFilter.Value;
+                : model.ManureGroupIdForFilter.Value;
+                model.ManureGroupIdForFilter = manureGroup;
+                model.ManureGroupId = manureGroup;
                 (List<ManureType> ManureTypes, error) = await _organicManureLogic.FetchManureTypeList(manureGroup, farm.CountryID.Value);
                 if (error == null && ManureTypes != null && ManureTypes.Count > 0)
                 {
@@ -6210,7 +6212,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
     [HttpGet]
-    public async Task<IActionResult> BackActionForManureType()
+    public IActionResult BackActionForManureType()
     {
         _logger.LogTrace($"Report Controller : BackActionForManureType() action called");
         ReportViewModel? model = new ReportViewModel();
@@ -6222,27 +6224,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             return RedirectToAction("FarmList", "Farm");
         }
-
-        if (model.IsCheckAnswer)
+        if (model != null && model.IsCheckAnswer)
         {
-            model.ManureGroupIdForFilter = model.ManureGroupId;
-            HttpContext.Session.SetObjectAsJson("ReportData", model);
-            (CommonResponse manureGroup, Error error) = await _organicManureLogic.FetchManureGroupById(model.ManureGroupId.Value);
-            if (error == null)
-            {
-                if (manureGroup != null)
-                {
-                    model.ManureGroupName = manureGroup.Name;
-                    HttpContext.Session.SetObjectAsJson("ReportData", model);
-                }
-            }
-            else
-            {
-                TempData["ErrorOnManureGroup"] = error.Message;
-                return View(model);
-            }
+            return RedirectToAction("LivestockImportExportCheckAnswer");
         }
-        if (model.IsImport != null)
+        else
+                if (model != null && model.IsImport != null)
         {
             return RedirectToAction("ManageImportExport", new
             {
@@ -6250,11 +6237,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 y = _farmDataProtector.Protect(model.Year.ToString())
             });
         }
-        else if (model.IsCheckAnswer)
-        {
-            return RedirectToAction("LivestockImportExportCheckAnswer");
-        }
-        else
+        else 
         {
             return RedirectToAction("ImportExportOption");
         }
