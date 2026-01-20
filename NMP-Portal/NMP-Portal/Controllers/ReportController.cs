@@ -7149,8 +7149,23 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.LettuceFieldsListHint = BuildHint(cropGroups, Resource.lblLettuce, cropTypeMap);
     }
 
+    private int FetchNmaxLimit(int countryId, CropTypeLinkingResponse cropTypeLinkingResponse)
+    {
+        switch ((NMP.Commons.Enums.FarmCountry)countryId)
+        {
+            case NMP.Commons.Enums.FarmCountry.England:
+                return cropTypeLinkingResponse.NMaxLimitEngland ?? 0;
 
-    
+            case NMP.Commons.Enums.FarmCountry.Wales:
+                return cropTypeLinkingResponse.NMaxLimitWales ?? 0;
+
+            case NMP.Commons.Enums.FarmCountry.Scotland:
+                return cropTypeLinkingResponse.NMaxLimitScotland ?? 0;
+
+            default:
+                return 0;
+        }
+    }
 
 
 
