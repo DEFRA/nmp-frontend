@@ -11,6 +11,9 @@ public class CropTypeLinkingResponse
     [JsonProperty("defaultYield")]
     public decimal? DefaultYield { get; set; }
 
+    [JsonProperty("defaultYieldScotland")]
+    public decimal? DefaultYieldScotland { get; set; }
+
     [JsonProperty("isPerennial")]
     public bool? IsPerennial { get; set; }
 
@@ -19,6 +22,9 @@ public class CropTypeLinkingResponse
 
     [JsonProperty("nMaxLimitWales")]
     public int? NMaxLimitWales { get; set; }
+
+    [JsonProperty("nMaxLimitScotland")]
+    public int? NMaxLimitScotland { get; set; }
 
     [JsonProperty("sNSCategoryID")]
     public int? SNSCategoryID { get; set; }

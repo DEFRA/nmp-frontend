@@ -56,7 +56,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateQuestion" />
@@ -96,7 +96,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
-
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId" />
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {
             @for (int i = 0; i < Model.HarvestYear.Count; i++)
