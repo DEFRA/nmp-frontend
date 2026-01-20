@@ -221,8 +221,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                                 cropGroups[group.Key] = group.Value;
                                             }
 
-                                            var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuceFields)
-                                                ? lettuceGroups[Resource.lblLettuceFields]
+                                            var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuce)
+                                                ? lettuceGroups[Resource.lblLettuce]
                                                     .Where(id => cropTypeMap.ContainsKey(id))
                                                     .Select(id => cropTypeMap[id])
                                                     .OrderBy(name => name)
@@ -543,8 +543,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                             cropGroups[group.Key] = group.Value;
                                         }
 
-                                        var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuceFields)
-                                            ? lettuceGroups[Resource.lblLettuceFields]
+                                        var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuce)
+                                            ? lettuceGroups[Resource.lblLettuce]
                                                 .Where(id => cropTypeMap.ContainsKey(id))
                                                 .Select(id => cropTypeMap[id])
                                                 .OrderBy(name => name)
@@ -7000,7 +7000,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         return new Dictionary<string, int[]>
         {
-            { Resource.lblLettuceFields, new [] { (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BabyLeafLettuce } },
+            { Resource.lblLettuce, new [] { (int)Enums.CropTypes.Lettuce, (int)Enums.CropTypes.BabyLeafLettuce } },
         };
     }
     string GetGroupName(int cropId)
