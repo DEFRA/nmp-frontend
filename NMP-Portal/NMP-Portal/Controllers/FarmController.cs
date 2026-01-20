@@ -1006,6 +1006,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
+
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
                 int isAllFieldsAbove300 = model.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
                 model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
@@ -1056,18 +1057,21 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmLogic.AddFarmAsync(farmData);
+                (Farm? farmResponse, Error? error) = await _farmLogic.AddFarmAsync(farmData);
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
                     return View(model);
                 }
                 string success = _dataProtector.Protect("true");
-                farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
                 RemoveFarmSession();
                 RemoveAddressesSession();
                 RemoveFarmDataBeforeUpdateFromSession();
+                if (farmResponse != null)
+                {  
+                    farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());                                      
+                }
                 return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
             }
             catch (HttpRequestException hre)
@@ -1356,9 +1360,9 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmLogic.UpdateFarmAsync(farmData);
+                (Farm? farmResponse, Error? error) = await _farmLogic.UpdateFarmAsync(farmData);
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
