@@ -885,8 +885,8 @@
   <data name="lblWhatIsThePlantingDateForYearInTheseField" xml:space="preserve">
     <value>What is the planting date for {0} in these fields?</value>
   </data>
-  <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
-    <value>You can change your sowing date later.</value>
+  <data name="lblYouCanChangeTheDateLater" xml:space="preserve">
+    <value>You can change the date later.</value>
   </data>
   <data name="lblPotato" xml:space="preserve">
     <value>potato </value>
@@ -7139,8 +7139,8 @@ livestock manure.</value>
   <data name="lblAverageTotalForYear" xml:space="preserve">
     <value>Average total for {0}</value>
   </data>
-  <data name="lblLettuceFields" xml:space="preserve">
-    <value>Lettuce fields</value>
+  <data name="lblLettuce" xml:space="preserve">
+    <value>Lettuce</value>
   </data>
   <data name="lblUseTheTypicalNutrientValuesForManureTypeName" xml:space="preserve">
     <value>Use the typical nutrient values for {0}?</value>
