@@ -7910,11 +7910,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lettuce fields.
+        ///   Looks up a localized string similar to Lettuce.
         /// </summary>
-        public static string lblLettuceFields {
+        public static string lblLettuce {
             get {
-                return ResourceManager.GetString("lblLettuceFields", resourceCulture);
+                return ResourceManager.GetString("lblLettuce", resourceCulture);
             }
         }
         
@@ -17281,20 +17281,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can change the date later..
+        /// </summary>
+        public static string lblYouCanChangeTheDateLater {
+            get {
+                return ResourceManager.GetString("lblYouCanChangeTheDateLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change this later..
         /// </summary>
         public static string lblYouCanChangeThisLater {
             get {
                 return ResourceManager.GetString("lblYouCanChangeThisLater", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can change your sowing date later..
-        /// </summary>
-        public static string lblYouCanChangeYourPlantingDateLater {
-            get {
-                return ResourceManager.GetString("lblYouCanChangeYourPlantingDateLater", resourceCulture);
             }
         }
         
