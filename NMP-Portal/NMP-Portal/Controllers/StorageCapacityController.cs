@@ -43,7 +43,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                 if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                 {
                     model.FarmName = farm.Name;
@@ -250,7 +250,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(f))
                 {
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -312,7 +312,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(f))
                 {
                     decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId ?? 0);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId ?? 0);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -488,7 +488,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(f))
                 {
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1274,7 +1274,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.IsComingFromPlan = r;
                     }
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1829,7 +1829,7 @@ namespace NMP.Portal.Controllers
                     ViewBag.EncryptedFarmId = q;
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     List<int> fixedYearList = GetReportYearsList();
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         ViewBag.FarmName = farm.Name;
@@ -2018,7 +2018,7 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;

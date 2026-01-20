@@ -13,7 +13,7 @@ public class PlanViewModel
     public int? CropInfo2 { get; set; }
     public string? CropInfo1Name { get; set; }
     public string? CropInfo2Name { get; set; }
-    public bool IsEnglishRules { get; set; }
+    public int? FarmRB209CountryID { get; set; }
     public string EncryptedFarmId { get; set; } = string.Empty;
     public int? CropGroupId { get; set; }
     public string? CropGroup { get; set; }
@@ -107,4 +107,5 @@ public class PlanViewModel
     public string? GrassSeasonName { get; set; }
     public bool? IsFieldToBeRemoved { get; set; }
     public bool IsCurrentSwardChange { get; set; } = false;
+    public int? CountryId { get; set; }
 }
