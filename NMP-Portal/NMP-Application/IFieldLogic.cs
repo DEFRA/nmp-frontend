@@ -33,6 +33,6 @@ public interface IFieldLogic
     Task<List<CommonResponse>> GetGrassTypicalCuts();
     Task<List<CommonResponse>> GetSoilNitrogenSupplyItems();
     Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary);
-    Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
-    Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year);
+    Task<(FieldResponse?, Error?)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
+    Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year);
 }
