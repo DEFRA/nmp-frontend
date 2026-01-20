@@ -155,88 +155,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                                         if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                         {
-                                            // Group 1
-                                            var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
-                                                ? cropGroups[Resource.lblGroup1Vegetables]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (group1List.Count > 1)
-                                            {
-                                                for (int i = 1; i < group1List.Count; i++)
-                                                {
-                                                    group1List[i] = group1List[i].ToLower();
-                                                }
-                                            }
-
-                                            // Group 2
-                                            var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
-                                                ? cropGroups[Resource.lblGroup2Vegetables]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (group2List.Count > 1)
-                                            {
-                                                for (int i = 1; i < group2List.Count; i++)
-                                                {
-                                                    group2List[i] = group2List[i].ToLower();
-                                                }
-                                            }
-
-                                            // Group 3
-                                            var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
-                                                ? cropGroups[Resource.lblGroup3Vegetables]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (group3List.Count > 1)
-                                            {
-                                                for (int i = 1; i < group3List.Count; i++)
-                                                {
-                                                    group3List[i] = group3List[i].ToLower();
-                                                }
-                                            }
-                                            ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
-                                            ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
-                                            ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
+                                            SetVegetableHints(cropGroups, cropTypeMap);
                                         }
                                         if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                         {
-                                            cropGroups.Remove(Resource.lblGroup1Vegetables);
-                                            cropGroups.Remove(Resource.lblGroup2Vegetables);
-                                            cropGroups.Remove(Resource.lblGroup3Vegetables);
-
+                                            RemoveVegetableGroups(cropGroups);
                                             var lettuceGroups = GetNmaxReportLettuceGroups();
                                             foreach (var group in lettuceGroups)
                                             {
                                                 cropGroups[group.Key] = group.Value;
                                             }
-
-                                            var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuce)
-                                                ? lettuceGroups[Resource.lblLettuce]
-                                                    .Where(id => cropTypeMap.ContainsKey(id))
-                                                    .Select(id => cropTypeMap[id])
-                                                    .OrderBy(name => name)
-                                                    .ToList()
-                                                : new List<string>();
-
-                                            if (lettuceFieldsList.Count > 1)
-                                            {
-                                                for (int i = 1; i < lettuceFieldsList.Count; i++)
-                                                {
-                                                    lettuceFieldsList[i] = lettuceFieldsList[i].ToLower();
-                                                }
-                                            }
-                                            ViewBag.LettuceFieldsListHint = string.Join(", ", lettuceFieldsList);
+                                            SetLettuceHint(cropGroups, cropTypeMap);
                                         }
 
                                         var list = new List<SelectListItem>();
@@ -477,88 +406,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                                     if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
                                     {
-                                        // Group 1
-                                        var group1List = cropGroups.ContainsKey(Resource.lblGroup1Vegetables)
-                                            ? cropGroups[Resource.lblGroup1Vegetables]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (group1List.Count > 1)
-                                        {
-                                            for (int i = 1; i < group1List.Count; i++)
-                                            {
-                                                group1List[i] = group1List[i].ToLower();
-                                            }
-                                        }
-
-                                        // Group 2
-                                        var group2List = cropGroups.ContainsKey(Resource.lblGroup2Vegetables)
-                                            ? cropGroups[Resource.lblGroup2Vegetables]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (group2List.Count > 1)
-                                        {
-                                            for (int i = 1; i < group2List.Count; i++)
-                                            {
-                                                group2List[i] = group2List[i].ToLower();
-                                            }
-                                        }
-
-                                        // Group 3
-                                        var group3List = cropGroups.ContainsKey(Resource.lblGroup3Vegetables)
-                                            ? cropGroups[Resource.lblGroup3Vegetables]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (group3List.Count > 1)
-                                        {
-                                            for (int i = 1; i < group3List.Count; i++)
-                                            {
-                                                group3List[i] = group3List[i].ToLower();
-                                            }
-                                        }
-                                        ViewBag.Group1VegetablesHint = string.Join(", ", group1List);
-                                        ViewBag.Group2VegetablesHint = string.Join(", ", group2List);
-                                        ViewBag.Group3VegetablesHint = string.Join(", ", group3List);
+                                        SetVegetableHints(cropGroups, cropTypeMap);
                                     }
                                     if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                                     {
-                                        cropGroups.Remove(Resource.lblGroup1Vegetables);
-                                        cropGroups.Remove(Resource.lblGroup2Vegetables);
-                                        cropGroups.Remove(Resource.lblGroup3Vegetables);
-
+                                        RemoveVegetableGroups(cropGroups);
                                         var lettuceGroups = GetNmaxReportLettuceGroups();
                                         foreach (var group in lettuceGroups)
                                         {
                                             cropGroups[group.Key] = group.Value;
                                         }
-
-                                        var lettuceFieldsList = lettuceGroups.ContainsKey(Resource.lblLettuce)
-                                            ? lettuceGroups[Resource.lblLettuce]
-                                                .Where(id => cropTypeMap.ContainsKey(id))
-                                                .Select(id => cropTypeMap[id])
-                                                .OrderBy(name => name)
-                                                .ToList()
-                                            : new List<string>();
-
-                                        if (lettuceFieldsList.Count > 1)
-                                        {
-                                            for (int i = 1; i < lettuceFieldsList.Count; i++)
-                                            {
-                                                lettuceFieldsList[i] = lettuceFieldsList[i].ToLower();
-                                            }
-                                        }
-                                        ViewBag.LettuceFieldsListHint = string.Join(", ", lettuceFieldsList);
+                                        SetLettuceHint(cropGroups, cropTypeMap);
                                     }
 
                                     foreach (var group in cropGroups)
@@ -1012,10 +870,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     var cropGroups = GetNmaxReportCropGroups();
                     if (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                     {
-                        cropGroups.Remove(Resource.lblGroup1Vegetables);
-                        cropGroups.Remove(Resource.lblGroup2Vegetables);
-                        cropGroups.Remove(Resource.lblGroup3Vegetables);
-
+                        RemoveVegetableGroups(cropGroups);
                         var lettuceGroups = GetNmaxReportLettuceGroups();
                         foreach (var group in lettuceGroups)
                         {
@@ -7265,6 +7120,43 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return (savedNutrientsLoadingFarmDetailsData, new Error());
     }
+
+    private void SetVegetableHints(Dictionary<string, int[]> cropGroups, Dictionary<int, string> cropTypeMap)
+    {
+        ViewBag.Group1VegetablesHint = BuildHint(cropGroups, Resource.lblGroup1Vegetables, cropTypeMap);
+
+        ViewBag.Group2VegetablesHint = BuildHint(cropGroups, Resource.lblGroup2Vegetables, cropTypeMap);
+
+        ViewBag.Group3VegetablesHint = BuildHint(cropGroups, Resource.lblGroup3Vegetables, cropTypeMap);
+    }
+    private static string BuildHint(Dictionary<string, int[]> groups, string key, Dictionary<int, string> map)
+    {
+        if (!groups.ContainsKey(key))
+            return string.Empty;
+
+        var list = groups[key].Where(map.ContainsKey).Select(id => map[id]).OrderBy(x => x).ToList();
+
+        for (int i = 1; i < list.Count; i++)
+            list[i] = list[i].ToLower();
+
+        return string.Join(", ", list);
+    }
+
+    private static void RemoveVegetableGroups(Dictionary<string, int[]> cropGroups)
+    {
+        cropGroups.Remove(Resource.lblGroup1Vegetables);
+        cropGroups.Remove(Resource.lblGroup2Vegetables);
+        cropGroups.Remove(Resource.lblGroup3Vegetables);
+    }
+
+    private void SetLettuceHint(Dictionary<string, int[]> cropGroups, Dictionary<int, string> cropTypeMap)
+    {
+        ViewBag.LettuceFieldsListHint = BuildHint(cropGroups, Resource.lblLettuce, cropTypeMap);
+    }
+
+
+    
+
 
 
 }
