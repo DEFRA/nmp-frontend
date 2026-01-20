@@ -7145,6 +7145,9 @@ livestock manure.</value>
   <data name="lblUseTheTypicalNutrientValuesForManureTypeName" xml:space="preserve">
     <value>Use the typical nutrient values for {0}?</value>
   </data>
+  <data name="lblValuePerCubicMetre" xml:space="preserve">
+    <value>Value per cubic metre</value>
+  </data>
   <data name="lblLettuceFields" xml:space="preserve">
     <value>Lettuce fields</value>
  </data>
