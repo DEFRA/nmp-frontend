@@ -20,7 +20,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(Guid orgId)
     {
         List<Farm> farmList = new List<Farm>();
-        Error error = new Error();
+        Error? error = new Error();
         string url = string.Format(APIURLHelper.FetchFarmByOrgIdAPI, orgId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -37,14 +37,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
         return (farmList, error);
     }
@@ -203,7 +196,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(List<Country>, Error)> FetchCountryAsync()
     {
         List<Country> countryList = new List<Country>();
-        Error error = new Error();
+        Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(APIURLHelper.FetchCountryListAsyncAPI);
@@ -220,14 +213,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (countryList, error);
