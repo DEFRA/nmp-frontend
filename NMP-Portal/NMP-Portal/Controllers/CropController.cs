@@ -4949,7 +4949,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (CommonResponse commonResponse, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionByIdAsync(model.ExcessWinterRainfallId.Value);
-            if (string.IsNullOrWhiteSpace(error.Message) && commonResponse != null)
+            if (error?.Message == null && commonResponse != null)
             {
                 model.ExcessWinterRainfallName = commonResponse.Name;
                 model.ExcessWinterRainfallValue = commonResponse.Value;
