@@ -1888,7 +1888,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         ViewBag.CropInfoOneList =
-            cropInfoOneList.OrderBy(c => c.CropInfo1Name);
+            cropInfoOneList.OrderBy(c => c.CropInfo1Id);
     }
 
     private static void SetCropInfoOne(
