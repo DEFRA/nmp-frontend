@@ -157,4 +157,5 @@ public class OrganicManureViewModel
     public int StartClosedPeriodEndFebWarningLevelID { get; set; }
     public List<DefoliationList>? DefoliationList { get; set; }
     public bool IsDoubleCropValueChange { get; set; } = false;
+    public string? FarmGroupManureId { get; set; } = string.Empty;
 }

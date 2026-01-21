@@ -136,6 +136,8 @@ internal static class APIURLHelper
     public const string FetchFieldDataByFieldIdAsyncAPI = "previous-cropping/{0}";
     public const string FetchFieldDataByFieldIdOldestHarvestYearAsyncAPI = "previous-cropping-previous-years/{0}?year={1}";
     public const string MergePreviousCropAPI = "previous-cropping/mergePreviousCrop";
+    public const string FetchFarmManureTypeByIdAPI = "farm-manure-type/farm-manure-type-by-id/{0}";
+
     //Manner APi Url
     public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
     public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
