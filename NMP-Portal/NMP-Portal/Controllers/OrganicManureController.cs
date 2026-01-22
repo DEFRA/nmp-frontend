@@ -1485,7 +1485,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (!string.IsNullOrWhiteSpace(model.OtherMaterialName) && (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                     {
-                        FarmManureTypeResponse farmManureType = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName)).First();
+                        FarmManureTypeResponse farmManureType = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName)).FirstOrDefault();
                         if (farmManureType != null)
                         {
                             model.FarmGroupManureId = string.Format(Resource.lblFarmManureWithId, farmManureType.ID.ToString());
@@ -2343,7 +2343,7 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                     {
-                        farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName)).First();
+                        farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName)).FirstOrDefault();
                         if (farmManure != null)
                         {
                             //farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
@@ -2390,7 +2390,7 @@ namespace NMP.Portal.Controllers
 
                     if (error == null && farmManureTypeList.Count > 0)
                     {
-                        farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.ManureTypeName)).First();
+                        farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.ManureTypeName)).FirstOrDefault();
                         if (model.IsDefaultValueChange)
                         {
                             model.IsDefaultValueChange = false;
@@ -2482,7 +2482,7 @@ namespace NMP.Portal.Controllers
                             // (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                             if (error == null && !string.IsNullOrWhiteSpace(model.ManureTypeName))
                             {
-                                farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && model.ManureTypeName.Equals(model.OtherMaterialName)).First();
+                                farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && model.ManureTypeName.Equals(model.OtherMaterialName)).FirstOrDefault();
                                 if (farmManure != null)
                                 {
                                     model.ManureType.DryMatter = farmManure.DryMatter;
@@ -2656,7 +2656,7 @@ namespace NMP.Portal.Controllers
                             (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                             if (error1 == null && farmManureTypeList.Count > 0)
                             {
-                                FarmManureTypeResponse farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).First();
+                                FarmManureTypeResponse farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
                                 if (farmManure != null)
                                 {
                                     model.ManureType.DryMatter = farmManure.DryMatter;
@@ -2718,7 +2718,7 @@ namespace NMP.Portal.Controllers
                             (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                             if (error1 == null && farmManureTypeList.Count > 0)
                             {
-                                FarmManureTypeResponse farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).First();
+                                FarmManureTypeResponse farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
 
                                 if (farmManure != null)
                                 {
