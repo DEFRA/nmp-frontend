@@ -7148,6 +7148,12 @@ livestock manure.</value>
   <data name="lblValuePerCubicMetre" xml:space="preserve">
     <value>Value per cubic metre</value>
   </data>
+  <data name="lblFarmManureWithId" xml:space="preserve">
+    <value>FarmManure_{0}</value>
+  </data>
+  <data name="lblFarmManure" xml:space="preserve">
+    <value>FarmManure</value>
+  </data>
   <data name="lblLettuceFields" xml:space="preserve">
     <value>Lettuce fields</value>
   </data>
