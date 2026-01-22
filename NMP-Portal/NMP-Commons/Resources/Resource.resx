@@ -5832,7 +5832,7 @@ livestock manure.</value>
     <value>{0} kg per 1,000 places, per year</value>
   </data>
   <data name="lblKgPerPlacesPerYear" xml:space="preserve">
-    <value>{0}kg per places, per year</value>
+    <value>{0}kg per place, per year</value>
   </data>
   <data name="lblOccupancyAndNitrogenStandard" xml:space="preserve">
     <value>Occupancy and nitrogen (N) standard</value>
@@ -6501,7 +6501,7 @@ livestock manure.</value>
     <value> from your manure nitrogen (N) farm limit report.</value>
   </data>
   <data name="lblRemoveNLLivetsockContent" xml:space="preserve">
-    <value>This will remove {0} from your manure nitrogen (N) farm limit report.</value>
+    <value>This will remove {0} from your {1} manure nitrogen (N) farm limit report.</value>
   </data>
   <data name="lblAddMoreLivestock" xml:space="preserve">
     <value>Add more livestock</value>
