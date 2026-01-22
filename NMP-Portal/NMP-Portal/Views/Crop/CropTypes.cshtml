@@ -159,9 +159,10 @@
 
                         <govuk-radios-hint>
                             <p>
-                                @string.Format(Resource.lblTheseOptionsComeFromRB209, Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoGroups : Resource.lblCroupTypes)
-                            </p>
-                            @if (Model.CropGroupId == PotatoGroupId)
+                                @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ?
+                                                            Resource.lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes : string.Format(Resource.lblTheseOptionsComeFromRB209, Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoGroups : Resource.lblCroupTypes))
+                        </p>
+                        @if (Model.CropGroupId == PotatoGroupId)
                             {
                                 <p>
                                     <a href="@Resource.UrlAHDBPotatoVarietyGroup" target="_blank">@Resource.lblHelpMeFindMyPotatoVarietyGroup</a>
