@@ -1640,9 +1640,10 @@ namespace NMP.Portal.Controllers
                     {
                         model.ManureTypeName = model.OtherMaterialName;
                     }
-                    else
+                    else if (manureType != null)
                     {
                         model.ManureTypeName = manureType.Name;
+                        isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
                     }
                     isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
                     model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
@@ -1949,7 +1950,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.ManureTypeName = model.OtherMaterialName;
                 }
-                else
+                else if (manureType != null)
                 {
                     model.ManureTypeName = manureType.Name;
                 }
@@ -2026,11 +2027,11 @@ namespace NMP.Portal.Controllers
                     {
                         model.ManureTypeName = model.OtherMaterialName;
                     }
-                    else
+                    else if(manureType != null)
                     {
                         model.ManureTypeName = manureType.Name;
+                        isLiquid = manureType.IsLiquid.HasValue ? manureType.IsLiquid.Value : false;
                     }
-                    isLiquid = manureType.IsLiquid.Value;
 
                 }
                 else
@@ -2151,11 +2152,11 @@ namespace NMP.Portal.Controllers
                         {
                             model.ManureTypeName = model.OtherMaterialName;
                         }
-                        else
+                        else if (manureType != null)
                         {
                             model.ManureTypeName = manureType.Name;
+                            isLiquid = manureType.IsLiquid.HasValue? manureType.IsLiquid.Value:false;
                         }
-                        isLiquid = manureType.IsLiquid.Value;
 
                     }
                     else
@@ -3871,7 +3872,7 @@ namespace NMP.Portal.Controllers
                 if (error == null && manureTypeList.Count > 0)
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                    isLiquid = manureType.IsLiquid.Value;
+                    isLiquid =(manureType!=null&& manureType.IsLiquid.HasValue) ? manureType.IsLiquid.Value : false;
 
                 }
 
@@ -3934,7 +3935,7 @@ namespace NMP.Portal.Controllers
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        isLiquid = manureType.IsLiquid.Value;
+                        isLiquid = manureType.IsLiquid.HasValue ? manureType.IsLiquid.Value : false;
 
                     }
 
