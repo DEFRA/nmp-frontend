@@ -7919,6 +7919,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lettuce fields.
+        /// </summary>
+        public static string lblLettuceFields {
+            get {
+                return ResourceManager.GetString("lblLettuceFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All content is available under the.
         /// </summary>
         public static string lblLicenseText {
@@ -12253,6 +12262,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear {
             get {
                 return ResourceManager.GetString("lblSelectOneOptionAvailableReportsAreBasedOnDataEntereForTheYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one option. These are the crop types from the SRUC Technical Notes..
+        /// </summary>
+        public static string lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes {
+            get {
+                return ResourceManager.GetString("lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes", resourceCulture);
             }
         }
         
