@@ -1934,36 +1934,38 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmManureTypeByIdAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.records != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    farmManureType = responseWrapper.Data.records.ToObject<FarmManureTypeResponse>();
-                }
+                farmManureType = responseWrapper.Data.records.ToObject<FarmManureTypeResponse>();
             }
-            else
+            else if (responseWrapper != null && responseWrapper.Error != null)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                error = new Error();
+                error = responseWrapper.Error.ToObject<Error>();
+                if (error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
                 }
+
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
+            error = new Error
+            {
+                Message = Resource.MsgServiceNotAvailable
+            };
+
             _logger.LogError(hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
+            error = new Error
+            {
+                Message = ex.Message
+            };
+
             _logger.LogError(ex.Message);
             throw new Exception(error.Message, ex);
         }
