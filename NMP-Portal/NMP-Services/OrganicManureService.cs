@@ -1938,7 +1938,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    farmManureType = responseWrapper.Data.ToObject<FarmManureTypeResponse>();
+                    farmManureType = responseWrapper.Data.records.ToObject<FarmManureTypeResponse>();
                 }
             }
             else

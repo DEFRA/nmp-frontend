@@ -2346,9 +2346,6 @@ namespace NMP.Portal.Controllers
                         farmManure = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName)).FirstOrDefault();
                         if (farmManure != null)
                         {
-                            //farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
-                            //if (farmManure != null)
-                            //{
                             model.ManureType.DryMatter = farmManure.DryMatter;
                             model.ManureType.TotalN = farmManure.TotalN;
                             model.ManureType.NH4N = farmManure.NH4N;
@@ -2359,11 +2356,6 @@ namespace NMP.Portal.Controllers
                             model.ManureType.SO3 = farmManure.SO3;
                             model.ManureType.MgO = farmManure.MgO;
                             model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
-                            //}
-                            //else
-                            //{
-                            //    model.DefaultFarmManureValueDate = null;
-                            //}
                         }
                         else
                         {
