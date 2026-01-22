@@ -550,8 +550,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     [HttpGet]
     public async Task<IActionResult> CropAndFieldManagement()
     {
-        ReportViewModel model = new ReportViewModel();
-        Error error = new Error();
+        ReportViewModel? model = new ReportViewModel();
+        Error? error = new Error();
         if (HttpContext.Session.Keys.Contains("ReportData"))
         {
             model = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
@@ -560,13 +560,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             return RedirectToAction("FarmList", "Farm");
         }
+
         string fieldIds = string.Join(",", model.FieldList);
 
         List<WarningHeaderResponse> warningHeaderResponses = await _warningLogic.FetchWarningHeaderByFieldIdAndYearAsync(fieldIds, model.Year.Value);
         ViewBag.WarningHeaders = warningHeaderResponses;
 
-        (CropAndFieldReportResponse cropAndFieldReportResponse, error) = await _fieldLogic.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
-        if (string.IsNullOrWhiteSpace(error.Message))
+        (CropAndFieldReportResponse? cropAndFieldReportResponse, error) = await _fieldLogic.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
+        if (error != null && string.IsNullOrWhiteSpace(error.Message))
         {
             model.CropAndFieldReport = cropAndFieldReportResponse;
         }
@@ -575,6 +576,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnSelectField"] = error.Message;
             return RedirectToAction("ExportFieldsOrCropType");
         }
+
         (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
         if (error == null && nutrients.Count > 0)
         {

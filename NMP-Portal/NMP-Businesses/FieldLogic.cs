@@ -39,7 +39,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         return [.. cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName)];
     }
 
-    public async Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year)
+    public async Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year)
     {
         _logger.LogTrace("Fetching crop and field report for FieldId: {FieldId}, Year: {Year}", fieldId, year);
         return await _fieldService.FetchCropAndFieldReportById(fieldId, year);
@@ -104,7 +104,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         return await _fieldService.FetchFieldsByFarmId(farmId);
     }
 
-    public async Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId)
+    public async Task<(FieldResponse?, Error?)> FetchFieldSoilAnalysisAndSnsById(int fieldId)
     {
         _logger.LogTrace("Fetching field soil analysis and SNS for FieldId: {FieldId}", fieldId);
         return await _fieldService.FetchFieldSoilAnalysisAndSnsById(fieldId);

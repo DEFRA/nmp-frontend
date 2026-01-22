@@ -224,9 +224,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model.CopyExistingField != null && (model.CopyExistingField.Value))
         {
             Error? error = null;
-            (FieldResponse fieldResponse, error) = await _fieldLogic.FetchFieldSoilAnalysisAndSnsById(model.ID.Value);
+            (FieldResponse? fieldResponse, error) = await _fieldLogic.FetchFieldSoilAnalysisAndSnsById(model.ID.Value);
 
-            if (fieldResponse != null && string.IsNullOrWhiteSpace(error.Message))
+            if (fieldResponse != null && error == null)
             {
                 model.NationalGridReference = fieldResponse.Field.NationalGridReference;
                 model.OtherReference = fieldResponse.Field.OtherReference;
