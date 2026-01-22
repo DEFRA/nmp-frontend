@@ -19,7 +19,7 @@ namespace NMP.Commons.ViewModels
         public CropAndFieldReportResponse? CropAndFieldReport { get; set; }
         public List<NutrientResponseWrapper>? Nutrients { get; set; }
         public List<string>? CropTypeList { get; set; }
-        public Farm? Farm { get; set; }
+        public FarmResponse? Farm { get; set; }
         public List<NMaxReportResponse>? NMaxLimitReport { get; set; }
         public int? ReportOption { get; set; }
         public int? FieldAndPlanReportOption { get; set; }
@@ -160,6 +160,7 @@ namespace NMP.Commons.ViewModels
         public bool? IsDeleteNLLivestock { get; set; }
         public bool IsLivestockGroupChange { get; set; } = false;
         public int? Country { get; set; }
+        public int? FarmRB209CountryID { get; set; }
 
     }
 }
