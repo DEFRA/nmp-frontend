@@ -19,4 +19,5 @@ public class RecommendationViewModel
     public List<FertiliserManureDataViewModel> FertiliserManures { get; set; }        
     public List<NutrientResponseWrapper> Nutrients { get; set; }
     public PKBalance? PKBalance { get; set; }
+    public int? FarmRB209CountryID { get; set; }
 }
