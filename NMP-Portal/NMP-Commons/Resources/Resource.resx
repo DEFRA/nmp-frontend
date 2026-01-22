@@ -226,7 +226,7 @@
     <value>How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
-    <value>If you have more than one holding, it's best to add a separate farm for each.</value>
+    <value>If you have more than one holding, add a separate farm for each.</value>
   </data>
   <data name="lblManualAddress" xml:space="preserve">
     <value>Manual address</value>
@@ -298,7 +298,7 @@
     <value>Some of the fields are above 300m</value>
   </data>
   <data name="lblSomeOfTheFieldsAreInAnNVZ" xml:space="preserve">
-    <value>Some of the fields are in a Nitrate Vulnerable Zone (NVZ)</value>
+    <value>Some of the fields are in an NVZ</value>
   </data>
   <data name="lblSignout" xml:space="preserve">
     <value>Sign out</value>
@@ -334,7 +334,7 @@
     <value>You have not added any farms.</value>
   </data>
   <data name="lblYourAverageAnualRainfall" xml:space="preserve">
-    <value>This is the average annual rainfall for your postcode area. If you have more accurate information for your farm, you can update it now or later.</value>
+    <value>This is the average annual rainfall for your postcode area. If you have your own measurement for the farm, you can update it now or later.</value>
   </data>
   <data name="lblYourFarms" xml:space="preserve">
     <value>Your farms</value>
@@ -421,7 +421,7 @@
     <value>Check your answers</value>
   </data>
   <data name="lblFarmAddress" xml:space="preserve">
-    <value>Farm Address</value>
+    <value>Farm address</value>
   </data>
   <data name="lblCheckAnswer" xml:space="preserve">
     <value>Check answer</value>
@@ -885,8 +885,8 @@
   <data name="lblWhatIsThePlantingDateForYearInTheseField" xml:space="preserve">
     <value>What is the planting date for {0} in these fields?</value>
   </data>
-  <data name="lblYouCanChangeYourPlantingDateLater" xml:space="preserve">
-    <value>You can change your sowing date later.</value>
+  <data name="lblYouCanChangeTheDateLater" xml:space="preserve">
+    <value>You can change the date later.</value>
   </data>
   <data name="lblPotato" xml:space="preserve">
     <value>potato </value>
@@ -6687,7 +6687,7 @@ livestock manure.</value>
     <value>These fields will be removed from this crop group.</value>
   </data>
   <data name="lblAnyExistingCropsAndOragnicOrInorganicContent" xml:space="preserve">
-    <value>Any existing crops, and organic or inorganic material applications, planned for {0} will be lost from these fields.</value>
+    <value>Crop details, and any organic or inorganic material applications planned for {0}, will be removed from these fields.</value>
   </data>
   <data name="lblUpdateThisCropGroupOnButton" xml:space="preserve">
     <value>Update this crop group</value>
@@ -7139,9 +7139,18 @@ livestock manure.</value>
   <data name="lblAverageTotalForYear" xml:space="preserve">
     <value>Average total for {0}</value>
   </data>
+  <data name="lblLettuce" xml:space="preserve">
+    <value>Lettuce</value>
+  </data>
+  <data name="lblUseTheTypicalNutrientValuesForManureTypeName" xml:space="preserve">
+    <value>Use the typical nutrient values for {0}?</value>
+  </data>
+  <data name="lblValuePerCubicMetre" xml:space="preserve">
+    <value>Value per cubic metre</value>
+  </data>
   <data name="lblLettuceFields" xml:space="preserve">
     <value>Lettuce fields</value>
- </data>
+  </data>
   <data name="lblAboutRecommendationForScotlandContent1" xml:space="preserve">
     <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the SRUC Technical Notes.</value>
   </data>
@@ -7183,5 +7192,8 @@ livestock manure.</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent9" xml:space="preserve">
     <value>About Nitrate Vulnerable Zones (NVZs)</value>
+  </data>
+  <data name="lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes" xml:space="preserve">
+    <value>Select one option. These are the crop types from the SRUC Technical Notes.</value>
   </data>
 </root>

@@ -2167,7 +2167,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Any existing crops, and organic or inorganic material applications, planned for {0} will be lost from these fields..
+        ///   Looks up a localized string similar to Crop details, and any organic or inorganic material applications planned for {0}, will be removed from these fields..
         /// </summary>
         public static string lblAnyExistingCropsAndOragnicOrInorganicContent {
             get {
@@ -5218,7 +5218,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Farm Address.
+        ///   Looks up a localized string similar to Farm address.
         /// </summary>
         public static string lblFarmAddress {
             get {
@@ -7018,7 +7018,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you have more than one holding, it&apos;s best to add a separate farm for each..
+        ///   Looks up a localized string similar to If you have more than one holding, add a separate farm for each..
         /// </summary>
         public static string lblIfYouhaveMoreThanOneHolding {
             get {
@@ -7906,6 +7906,15 @@ namespace NMP.Commons.Resources {
         public static string lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm {
             get {
                 return ResourceManager.GetString("lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lettuce.
+        /// </summary>
+        public static string lblLettuce {
+            get {
+                return ResourceManager.GetString("lblLettuce", resourceCulture);
             }
         }
         
@@ -12257,6 +12266,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one option. These are the crop types from the SRUC Technical Notes..
+        /// </summary>
+        public static string lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes {
+            get {
+                return ResourceManager.GetString("lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one option. You can add more livestock types later..
         /// </summary>
         public static string lblSelectOneOptionYouCanAddMoreLivestock {
@@ -12986,7 +13004,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some of the fields are in a Nitrate Vulnerable Zone (NVZ).
+        ///   Looks up a localized string similar to Some of the fields are in an NVZ.
         /// </summary>
         public static string lblSomeOfTheFieldsAreInAnNVZ {
             get {
@@ -15139,6 +15157,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the typical nutrient values for {0}?.
+        /// </summary>
+        public static string lblUseTheTypicalNutrientValuesForManureTypeName {
+            get {
+                return ResourceManager.GetString("lblUseTheTypicalNutrientValuesForManureTypeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
         /// </summary>
         public static string lblUseThisServiceToPlan {
@@ -15234,6 +15261,15 @@ namespace NMP.Commons.Resources {
         public static string lblValuePercent {
             get {
                 return ResourceManager.GetString("lblValuePercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value per cubic metre.
+        /// </summary>
+        public static string lblValuePerCubicMetre {
+            get {
+                return ResourceManager.GetString("lblValuePerCubicMetre", resourceCulture);
             }
         }
         
@@ -17281,20 +17317,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can change the date later..
+        /// </summary>
+        public static string lblYouCanChangeTheDateLater {
+            get {
+                return ResourceManager.GetString("lblYouCanChangeTheDateLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can change this later..
         /// </summary>
         public static string lblYouCanChangeThisLater {
             get {
                 return ResourceManager.GetString("lblYouCanChangeThisLater", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can change your sowing date later..
-        /// </summary>
-        public static string lblYouCanChangeYourPlantingDateLater {
-            get {
-                return ResourceManager.GetString("lblYouCanChangeYourPlantingDateLater", resourceCulture);
             }
         }
         
@@ -17614,7 +17650,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the average annual rainfall for your postcode area. If you have more accurate information for your farm, you can update it now or later..
+        ///   Looks up a localized string similar to This is the average annual rainfall for your postcode area. If you have your own measurement for the farm, you can update it now or later..
         /// </summary>
         public static string lblYourAverageAnualRainfall {
             get {
