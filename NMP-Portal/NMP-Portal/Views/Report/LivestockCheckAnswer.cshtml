@@ -301,7 +301,7 @@
                                         @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName.ToLower(), Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.AverageNumberOfPlaces.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumberOfPlaces), Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces))) : Resource.lblNotSet)
+                                        @(Model.AverageNumberOfPlaces.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumberOfPlaces), (Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces))) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
@@ -337,7 +337,7 @@
                                     @string.Format(Resource.lblWhatIsTheNitrogenNStandardForThis, Model.LivestockGroupName.ToLower(), Model.Year)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.NitrogenStandard.HasValue ? (string.Format(Resource.lblKgPerYear, string.Format("{0:N0}", Math.Round(Model.NitrogenStandard.Value, 0)))) : Resource.lblNotSet)
+                                    @(Model.NitrogenStandard.HasValue ? string.Format(Resource.lblKgPerYear, string.Format("{0:N1}",Model.NitrogenStandard.Value)) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     @if (Model.LivestockGroupId == pigs || Model.LivestockGroupId == poultry)

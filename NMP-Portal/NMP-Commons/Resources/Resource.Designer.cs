@@ -7657,7 +7657,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}kg per places, per year.
+        ///   Looks up a localized string similar to {0}kg per place, per year.
         /// </summary>
         public static string lblKgPerPlacesPerYear {
             get {
@@ -11843,7 +11843,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove {0} from your manure nitrogen (N) farm limit report..
+        ///   Looks up a localized string similar to This will remove {0} from your {1} manure nitrogen (N) farm limit report..
         /// </summary>
         public static string lblRemoveNLLivetsockContent {
             get {
