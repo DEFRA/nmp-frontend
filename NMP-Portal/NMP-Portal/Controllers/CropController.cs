@@ -2156,6 +2156,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 if (cropTypeResponse != null)
                                 {
                                     model.CropGroupId = cropTypeResponse.CropGroupId;
+                                    if (model.CropGroupId != null)
+                                    {
+                                        model.CropGroup = await _fieldLogic.FetchCropGroupById(model.CropGroupId.Value);
+                                    }
 
                                 }
                             }
@@ -2312,11 +2316,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
-            if (defaultYieldForCropType > 0)
+            if (model.CropTypeID.HasValue)
             {
-                ViewBag.IsYieldOptional = Resource.lblYes;
+            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);            
+              if (defaultYieldForCropType > 0)
+              { 
+                      ViewBag.IsYieldOptional = Resource.lblYes;
+                      ViewBag.DefaultYield = defaultYieldForCropType;
+              }
             }
+
             if (!string.IsNullOrWhiteSpace(model.CropGroupName))
             {
                 model.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
@@ -2541,10 +2550,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             model.IsCheckAnswer = true;
-            if (defaultYieldForCropType > 0)
-            {
-                ViewBag.DefaultYield = defaultYieldForCropType;
-            }
 
             if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
             {
@@ -5865,7 +5870,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     return RedirectToAction(_checkAnswerActionName);
                 }
-                if (planViewModel.CurrentSward != model.CurrentSward)
+                if (planViewModel.CurrentSward != null && planViewModel.CurrentSward != model.CurrentSward)
                 {
                     model.IsCurrentSwardChange = true;
                 }
