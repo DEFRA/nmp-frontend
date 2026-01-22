@@ -567,14 +567,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.WarningHeaders = warningHeaderResponses;
 
         (CropAndFieldReportResponse? cropAndFieldReportResponse, error) = await _fieldLogic.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
-        if (error != null && string.IsNullOrWhiteSpace(error.Message))
-        {
-            model.CropAndFieldReport = cropAndFieldReportResponse;
-        }
-        else
+        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["ErrorOnSelectField"] = error.Message;
             return RedirectToAction("ExportFieldsOrCropType");
+        }
+        else
+        {
+            model.CropAndFieldReport = cropAndFieldReportResponse;
         }
 
         (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
@@ -6239,7 +6239,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 y = _farmDataProtector.Protect(model.Year.ToString())
             });
         }
-        else 
+        else
         {
             return RedirectToAction("ImportExportOption");
         }
