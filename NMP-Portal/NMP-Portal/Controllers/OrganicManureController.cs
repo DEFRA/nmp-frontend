@@ -1455,27 +1455,37 @@ namespace NMP.Portal.Controllers
                         TempData["FieldError"] = error.Message;
                         return RedirectToAction("Fields", model);
                     }
-                    var selectListItems = farmManureGroupList.Select(f => new SelectListItem
-                    {
-                        Value = f.ID.ToString(),
-                        Text = f.ManureTypeName
-                    }).OrderBy(x => x.Text).ToList();
-                    ViewBag.FarmManureTypeList = selectListItems;
 
-                    if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
+                    if (farmManureGroupList.Any())
                     {
-                        if (!string.IsNullOrWhiteSpace(model.OtherMaterialName) && (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                        var selectListItems = farmManureGroupList.Select(f => new SelectListItem
                         {
-                            FarmManureTypeResponse? farmManureType = farmManureGroupList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName));
-                            if (farmManureType != null)
+                            Value = f.ID.ToString(),
+                            Text = f.ManureTypeName
+                        }).OrderBy(x => x.Text).ToList();
+
+                        ViewBag.FarmManureTypeList = selectListItems;
+
+
+                        if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(model.OtherMaterialName) && (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                             {
-                                model.FarmGroupManureId = string.Format(Resource.lblFarmManureWithId, farmManureType.ID.ToString());
+                                FarmManureTypeResponse? farmManureType = farmManureGroupList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName));
+                                if (farmManureType != null)
+                                {
+                                    model.FarmGroupManureId = string.Format(Resource.lblFarmManureWithId, farmManureType.ID.ToString());
+                                }
+                            }
+                            else
+                            {
+                                model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
                             }
                         }
-                        else
-                        {
-                            model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
-                        }
+                    }
+                    else
+                    {
+                        model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
                     }
                 }
 
@@ -1504,7 +1514,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    (List<SelectListItem> manureGroupList,  error) = await FetchManureGroup();
+                    (List<SelectListItem> manureGroupList, error) = await FetchManureGroup();
 
                     ViewBag.ManureGroupList = manureGroupList;
                     if (model.FarmId.HasValue)
@@ -1514,13 +1524,15 @@ namespace NMP.Portal.Controllers
                         {
                             TempData["ManureGroupError"] = error.Message;
                         }
-                        var selectListItems = farmManureGroupList.Select(f => new SelectListItem
+                        if (farmManureGroupList.Any())
                         {
-                            Value = f.ID.ToString(),
-                            Text = f.ManureTypeName
-                        }).OrderBy(x => x.Text).ToList();
-                        ViewBag.FarmManureTypeList = selectListItems;
-
+                            var selectListItems = farmManureGroupList.Select(f => new SelectListItem
+                            {
+                                Value = f.ID.ToString(),
+                                Text = f.ManureTypeName
+                            }).OrderBy(x => x.Text).ToList();
+                            ViewBag.FarmManureTypeList = selectListItems;
+                        }
                     }
                     return View(model);
 
@@ -2015,7 +2027,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.ManureTypeName = model.OtherMaterialName;
                     }
-                    else if(manureType != null)
+                    else if (manureType != null)
                     {
                         model.ManureTypeName = manureType.Name;
                         isLiquid = manureType.IsLiquid.HasValue ? manureType.IsLiquid.Value : false;
@@ -2138,7 +2150,7 @@ namespace NMP.Portal.Controllers
                         else if (manureType != null)
                         {
                             model.ManureTypeName = manureType.Name;
-                            isLiquid = manureType.IsLiquid.HasValue? manureType.IsLiquid.Value:false;
+                            isLiquid = manureType.IsLiquid.HasValue ? manureType.IsLiquid.Value : false;
                         }
 
                     }
@@ -3835,7 +3847,7 @@ namespace NMP.Portal.Controllers
                 if (error == null && manureTypeList.Count > 0)
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                    isLiquid =(manureType!=null&& manureType.IsLiquid.HasValue) ? manureType.IsLiquid.Value : false;
+                    isLiquid = (manureType != null && manureType.IsLiquid.HasValue) ? manureType.IsLiquid.Value : false;
 
                 }
 

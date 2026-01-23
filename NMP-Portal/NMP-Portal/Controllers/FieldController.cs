@@ -832,16 +832,21 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return;
         }
 
-        if (DateTime.TryParseExact(model.SoilAnalyses.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _) || IsOutOfAllowedRange(date.Value))
+        if (DateTime.TryParseExact(model.SoilAnalyses.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
         {
             ModelState.AddModelError(Resource.lblSoilAnalysesDate, Resource.MsgEnterTheDateInNumber);
+        }
+
+        if (IsOutOfAllowedRange(date.Value))
+        {
+            ModelState.AddModelError(Resource.lblSoilAnalysesDate, Resource.lblTheDateCannotBeInTheFuture);
         }
     }
 
     private static bool IsOutOfAllowedRange(DateTime date)
     {
         var year = date.Year;
-        return year < 1601 || year > DateTime.Now.AddYears(1).Year;
+        return year < 1601 || date.Date >= DateTime.Now.AddDays(1).Date;
     }
 
     [HttpGet]
