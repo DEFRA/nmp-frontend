@@ -359,7 +359,7 @@
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
-                            @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation == true)
+                            @if (Model.IsGrasslandDerogation.HasValue && Model.IsGrasslandDerogation == true)
                             {
                                 <govuk-summary-list-row>
                                     <govuk-summary-list-row-key>
