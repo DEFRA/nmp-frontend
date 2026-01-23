@@ -1,10 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using NMP.Commons.Enums;
+using NMP.Commons.ServiceResponses;
 namespace NMP.Commons.Helpers
 {
     public static class Functions
     {
+
+        public static Error? ExtractError(this ILogger logger, ResponseWrapper? wrapper, Error? error)
+        {
+            if (wrapper != null && wrapper.Error != null)
+            {
+                error = wrapper?.Error?.ToObject<Error>();
+
+                if (error != null)
+                {
+                    // Cast dynamic values to object to avoid dynamic dispatch for extension methods
+                    logger.LogError(
+                        "{Code} : {Message} : {Stack} : {Path}",
+                        error.Code,
+                        error.Message,
+                        error.Stack,
+                        error.Path);
+                }
+            }
+
+            return error;
+        }
+
         public static string ExtractFirstHalfPostcode(string postcode)
         {
             if (string.IsNullOrWhiteSpace(postcode))

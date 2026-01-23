@@ -11,7 +11,7 @@ public interface IFieldLogic
     Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync();
     Task<List<CropGroupResponse>> FetchCropGroups();
     Task<List<CropGroupResponse>> FetchArableCropGroups();
-    Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId);
+    Task<List<CropTypeResponse>> FetchCropTypes(int cropGroupId,int? farmRB209CountryID);
     Task<string> FetchCropGroupById(int cropGroupId);
     Task<string> FetchCropTypeById(int cropTypeId);
     Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId, string farmName);
@@ -33,6 +33,6 @@ public interface IFieldLogic
     Task<List<CommonResponse>> GetGrassTypicalCuts();
     Task<List<CommonResponse>> GetSoilNitrogenSupplyItems();
     Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary);
-    Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
-    Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year);
+    Task<(FieldResponse?, Error?)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
+    Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year);
 }
