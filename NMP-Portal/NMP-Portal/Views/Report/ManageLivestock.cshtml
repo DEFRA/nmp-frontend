@@ -118,7 +118,7 @@
                                     <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}", cattle.Units)</td>
                                     <td class="govuk-table__cell">
-                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(cattle.NByUnit, 0)))
+                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}",cattle.NByUnit, 0))
                                     </td>
                                     <td class="govuk-table__cell">
                                         @string.Format("{0:N0}{1}", cattle.TotalNProduced, Resource.lblkg)
@@ -192,7 +192,7 @@
                                         @string.Format("{0:N0}{1}", pig.Occupancy, Resource.lblPercentage)
                                     </td>
                                     <td class="govuk-table__cell">
-                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(pig.NByUnit, 0)))
+                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}", pig.NByUnit, 0))
                                     </td>
                                     @* <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell">
@@ -260,7 +260,7 @@
                                     <td class="govuk-table__cell">@poultry.Units</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
                                     <td class="govuk-table__cell">
-                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(poultry.NByUnit, 0)))
+                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}",poultry.NByUnit, 0))
                                     </td>
                                     @* <td class="govuk-table__cell"> @string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell">
@@ -322,7 +322,7 @@
                                     <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}", sheep.Units)</td>
                                     <td class="govuk-table__cell">
-                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(sheep.NByUnit, 0)))
+                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}", sheep.NByUnit, 0))
                                     </td>
                                     @* <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell">
@@ -386,7 +386,7 @@
                                     <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}", goatsDeerAndHorse.Units)</td>
                                     <td class="govuk-table__cell">
-                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(goatsDeerAndHorse.NByUnit, 0)))
+                                        @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}", goatsDeerAndHorse.NByUnit, 0))
                                     </td>
                                     @* <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td> *@
                                     <td class="govuk-table__cell">
@@ -456,7 +456,7 @@
                                             <td class="govuk-table__cell">@cattle.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@string.Format("{0:N2}", cattle.Units)</td>
                                             <td class="govuk-table__cell">
-                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(cattle.NByUnit, 0)))
+                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}",cattle.NByUnit, 0))
                                             </td>
                                             @* <td class="govuk-table__cell">@string.Format("{0}{1}", cattle.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cattle.TotalNProduced, Resource.lblkg)</td>
@@ -521,7 +521,7 @@
                                                 @string.Format("{0:N0}{1}", pig.Occupancy, Resource.lblPercentage)
                                             </td>
                                             <td class="govuk-table__cell">
-                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(pig.NByUnit, 0)))
+                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}",pig.NByUnit, 0))
                                             </td>
                                             @* <td class="govuk-table__cell"> @string.Format("{0}{1}", pig.NByUnit, Resource.lblkg) </td> *@
                                             <td class="govuk-table__cell"> @string.Format("{0:N0}{1}", pig.TotalNProduced, Resource.lblkg) </td>
@@ -585,7 +585,7 @@
                                             <td class="govuk-table__cell">@string.Format("{0:N2}", poultry.Units)</td>
                                             <td class="govuk-table__cell">@string.Format("{0:N0}{1}", poultry.Occupancy, Resource.lblPercentage)</td>
                                             <td class="govuk-table__cell">
-                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(poultry.NByUnit, 0)))
+                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}", poultry.NByUnit, 0))
                                             </td>
                                             @* <td class="govuk-table__cell">@string.Format("{0}{1}", poultry.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0:N0}{1}", poultry.TotalNProduced, Resource.lblkg)</td>
@@ -647,7 +647,7 @@
                                             <td class="govuk-table__cell">@sheep.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@string.Format("{0:N2}", sheep.Units)</td>
                                             <td class="govuk-table__cell">
-                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(sheep.NByUnit, 0)))
+                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}", sheep.NByUnit, 0))
                                             </td>
                                             @* <td class="govuk-table__cell">@string.Format("{0}{1}", sheep.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0:N0}{1}", sheep.TotalNProduced, Resource.lblkg)</td>
@@ -708,7 +708,7 @@
                                             <td class="govuk-table__cell">@goatsDeerAndHorse.LivestockTypeName</td>
                                             <td class="govuk-table__cell">@string.Format("{0:N2}", goatsDeerAndHorse.Units)</td>
                                             <td class="govuk-table__cell">
-                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N0}", Math.Round(goatsDeerAndHorse.NByUnit, 0)))
+                                                @string.Format(Resource.lblNutrientKgPerYear, string.Format("{0:N1}", goatsDeerAndHorse.NByUnit, 0))
                                             </td>
                                             @* <td class="govuk-table__cell">@string.Format("{0}{1}", goatsDeerAndHorse.NByUnit, Resource.lblkg)</td> *@
                                             <td class="govuk-table__cell">@string.Format("{0:N0}{1}", goatsDeerAndHorse.TotalNProduced, Resource.lblkg)</td>
