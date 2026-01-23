@@ -5437,10 +5437,10 @@ cubic metres per hectare  not set</value>
     <value>Number of places</value>
   </data>
   <data name="lblLivestockReportContentTwentyThree" xml:space="preserve">
-    <value>Typical nitrogen (N) standard</value>
+    <value>Typical nitrogen (N) standard per year</value>
   </data>
   <data name="lblLivestockReportContentTwentyFour" xml:space="preserve">
-    <value>Entered nitrogen (N) standard</value>
+    <value>Entered nitrogen (N) standard per year</value>
   </data>
   <data name="lblLivestockReportContentTwentyFive" xml:space="preserve">
     <value>Total livestock manure nitrogen (N) production</value>
