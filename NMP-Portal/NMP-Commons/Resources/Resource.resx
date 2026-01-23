@@ -7148,4 +7148,34 @@ livestock manure.</value>
   <data name="lblValuePerCubicMetre" xml:space="preserve">
     <value>Value per cubic metre</value>
   </data>
+  <data name="MsgFieldNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a field name that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgCropGroupNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a crop group name that is no more than 128 characters long</value>
+  </data>
+  <data name="MsgVarietyMaxLengthValidation" xml:space="preserve">
+    <value>Enter a variety name that is no more than 100 characters long.</value>
+  </data>
+  <data name="MsgOtherMaterialNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a material name that is no more than 250 characters long.</value>
+  </data>
+  <data name="MsgReceiverNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a name that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine1MaxLengthValidation" xml:space="preserve">
+    <value>Enter a address line 1 that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine2MaxLengthValidation" xml:space="preserve">
+    <value>Enter a address line 2 that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine3MaxLengthValidation" xml:space="preserve">
+    <value>Enter a town or city that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine4MaxLengthValidation" xml:space="preserve">
+    <value>Enter a county that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgCommentMaxLengthValidation" xml:space="preserve">
+    <value>Enter a comment that is no more than 100 characters long.</value>
+  </data>
 </root>
