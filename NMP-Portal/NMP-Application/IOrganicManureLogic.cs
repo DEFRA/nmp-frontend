@@ -58,4 +58,5 @@ public interface IOrganicManureLogic
     Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureType(int fertiliserId, int farmId, int harvestYear);
     Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData);
     Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID);
+    Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeById(int id);
 }

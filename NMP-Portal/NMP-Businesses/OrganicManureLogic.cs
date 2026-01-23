@@ -277,4 +277,11 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : UpdateOrganicManure() called");
         return await _organicManureService.UpdateOrganicManure(organicManureData);
     }
+
+    public async Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeById(int id)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchFarmManureTypeById() called");
+        return await _organicManureService.FetchFarmManureTypeById(id);
+    }
+
 }

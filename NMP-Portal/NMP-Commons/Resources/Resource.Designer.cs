@@ -5380,6 +5380,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FarmManure.
+        /// </summary>
+        public static string lblFarmManure {
+            get {
+                return ResourceManager.GetString("lblFarmManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FarmManure_{0}.
+        /// </summary>
+        public static string lblFarmManureWithId {
+            get {
+                return ResourceManager.GetString("lblFarmManureWithId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm name.
         /// </summary>
         public static string lblFarmName {
