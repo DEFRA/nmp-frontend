@@ -8,6 +8,7 @@ public class Field
     public int?  NVZProgrammeID { get; set; }
 
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]
+    [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFieldNameMaxLengthValidation))]
     public string? Name { get; set; } = string.Empty;
 
     [StringLength(14, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgLandParcelIdMinMaxValidation))]
