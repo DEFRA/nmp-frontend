@@ -17758,6 +17758,42 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a address line 1 that is no more than 50 characters long..
+        /// </summary>
+        public static string MsgAddressLine1MaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgAddressLine1MaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a address line 2 that is no more than 50 characters long..
+        /// </summary>
+        public static string MsgAddressLine2MaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgAddressLine2MaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a town or city that is no more than 50 characters long..
+        /// </summary>
+        public static string MsgAddressLine3MaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgAddressLine3MaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a county that is no more than 50 characters long..
+        /// </summary>
+        public static string MsgAddressLine4MaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgAddressLine4MaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to APPLICATION AFTER 31 OCTOBER.
         /// </summary>
         public static string MsgApplicationAfter31October {
@@ -18161,6 +18197,24 @@ namespace NMP.Commons.Resources {
         public static string MsgClosedSpreadingPeriodApplicationAfter31October {
             get {
                 return ResourceManager.GetString("MsgClosedSpreadingPeriodApplicationAfter31October", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a comment that is no more than 100 characters long..
+        /// </summary>
+        public static string MsgCommentMaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgCommentMaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a crop group name that is no more than 128 characters long.
+        /// </summary>
+        public static string MsgCropGroupNameMaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgCropGroupNameMaxLengthValidation", resourceCulture);
             }
         }
         
@@ -19317,6 +19371,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a field name that is no more than 50 characters long..
+        /// </summary>
+        public static string MsgFieldNameMaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgFieldNameMaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter only a number from 0 to 250, to 1 decimal place, such as 8.5.
         /// </summary>
         public static string MsgForApplicationRate {
@@ -20055,6 +20118,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a material name that is no more than 250 characters long..
+        /// </summary>
+        public static string MsgOtherMaterialNameMaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgOtherMaterialNameMaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil pH value not set.
         /// </summary>
         public static string MsgPhNotSet {
@@ -20213,6 +20285,15 @@ namespace NMP.Commons.Resources {
         public static string MsgRainfallWithinSixHoursOfApplicationNotSet {
             get {
                 return ResourceManager.GetString("MsgRainfallWithinSixHoursOfApplicationNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a name that is no more than 50 characters long..
+        /// </summary>
+        public static string MsgReceiverNameMaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgReceiverNameMaxLengthValidation", resourceCulture);
             }
         }
         
@@ -20771,6 +20852,15 @@ namespace NMP.Commons.Resources {
         public static string MsgValueIsNotAValidValueForPotassium {
             get {
                 return ResourceManager.GetString("MsgValueIsNotAValidValueForPotassium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a variety name that is no more than 100 characters long..
+        /// </summary>
+        public static string MsgVarietyMaxLengthValidation {
+            get {
+                return ResourceManager.GetString("MsgVarietyMaxLengthValidation", resourceCulture);
             }
         }
         
