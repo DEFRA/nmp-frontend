@@ -419,7 +419,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return cropList;
     }
 
-    public async Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId)
+    public async Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland)
     {
         decimal? defaultYield = 0;
         Error error = new Error();
@@ -434,7 +434,8 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
                     CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    defaultYield = cropTypeLinkingResponse.DefaultYield;
+                    
+                    defaultYield = isScotland? cropTypeLinkingResponse.DefaultYieldScotland: cropTypeLinkingResponse.DefaultYield;
                 }
             }
             else

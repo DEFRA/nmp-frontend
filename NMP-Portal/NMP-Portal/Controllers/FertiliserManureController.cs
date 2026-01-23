@@ -143,11 +143,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 model.EncryptedFarmId = q;
                 model.EncryptedHarvestYear = r;
                 model.CropOrder = 1;
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (error.Message == null)
                 {
                     model.FarmName = farm.Name;
-                    model.isEnglishRules = farm.EnglishRules;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
                     model.FarmCountryId = farm.CountryID;
                     SetFertiliserManureToSession(model);
                 }
@@ -1790,7 +1790,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             var limeError = ModelState["Lime"]?.Errors.FirstOrDefault()?.ErrorMessage;
 
-            if (limeError != null && ModelState["Lime"] != null && limeError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Lime"].RawValue, Resource.lblLime)))
+            if (limeError != null && ModelState["Lime"] != null && limeError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Lime"]?.RawValue, Resource.lblLime)))
             {
                 ModelState["Lime"]?.Errors.Clear();
                 ModelState["Lime"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblLime));
@@ -1813,14 +1813,24 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private void MgOValidations(FertiliserManureViewModel model)
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
-        {
-            var magnesiumMgOError = ModelState["MgO"]?.Errors.FirstOrDefault()?.ErrorMessage;
+        ModelStateGenericValidations("MgO", Resource.lblMagnesiumMgO, Resource.lblMgO);
 
-            if (magnesiumMgOError != null && magnesiumMgOError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
+        if (model.MgO != null && (model.MgO < 0 || model.MgO > 9999))
+        {
+            ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 9999));
+        }
+    }
+
+    private void ModelStateGenericValidations(string nutrientErrorKey, string nutrientNameWithFormula, string nutrientFormula)
+    {
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(nutrientErrorKey))
+        {
+            var nutrientError = ModelState[nutrientErrorKey]?.Errors.FirstOrDefault()?.ErrorMessage;
+
+            if (nutrientError != null && nutrientError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[nutrientErrorKey]?.RawValue, nutrientFormula)))
             {
-                var rawValue = ModelState["MgO"]?.RawValue?.ToString();
-                var errors = ModelState["MgO"]?.Errors;
+                var rawValue = ModelState[nutrientErrorKey]?.RawValue?.ToString();
+                var errors = ModelState[nutrientErrorKey]?.Errors;
 
                 if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
                 {
@@ -1828,7 +1838,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     errors.Clear();
                     if (isDecimal)
                     {
-                        errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblMagnesiumMgO));
+                        errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, nutrientNameWithFormula));
                     }
                     else if (!isDecimal)
                     {
@@ -1837,39 +1847,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
             }
         }
-
-        if (model.MgO != null && (model.MgO < 0 || model.MgO > 9999))
-        {
-            ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 9999));
-        }
     }
 
     private void SO3Validations(FertiliserManureViewModel model)
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
-        {
-            var sulphurSO3Error = ModelState["SO3"]?.Errors.FirstOrDefault()?.ErrorMessage;
-
-            if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"].RawValue, Resource.lblSO3)))
-            {
-                var rawValue = ModelState["SO3"]?.RawValue?.ToString();
-                var errors = ModelState["SO3"]?.Errors;
-
-                if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
-                {
-                    bool isDecimal = decimal.TryParse(rawValue, out _);
-                    errors.Clear();
-                    if (isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblSulphurSO3));
-                    }
-                    else if (!isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSulphurSO3));
-                    }
-                }
-            }
-        }
+        ModelStateGenericValidations("SO3", Resource.lblSulphurSO3, Resource.lblSO3);
 
         if (model.SO3 != null && (model.SO3 < 0 || model.SO3 > 9999))
         {
@@ -1879,30 +1861,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private void K2OValidations(FertiliserManureViewModel model)
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
-        {
-            var totalPotassiumError = ModelState["K2O"]?.Errors.FirstOrDefault()?.ErrorMessage;
-
-            if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"].RawValue, Resource.lblK2O)))
-            {
-                var rawValue = ModelState["K2O"]?.RawValue?.ToString();
-                var errors = ModelState["K2O"]?.Errors;
-
-                if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
-                {
-                    bool isDecimal = decimal.TryParse(rawValue, out _);
-                    errors.Clear();
-                    if (isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblPotashK2O));
-                    }
-                    else if (!isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPotashK2O));
-                    }
-                }
-            }
-        }
+        ModelStateGenericValidations("K2O", Resource.lblPotashK2O, Resource.lblK2O);
 
         if (model.K2O != null && (model.K2O < 0 || model.K2O > 9999))
         {
@@ -1912,30 +1871,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private void P2O5Validations(FertiliserManureViewModel model)
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
-        {
-            var totalPhosphateError = ModelState["P2O5"]?.Errors.FirstOrDefault()?.ErrorMessage;
-
-            if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"].RawValue, Resource.lblP2O5)))
-            {
-                var rawValue = ModelState["P2O5"]?.RawValue?.ToString();
-                var errors = ModelState["P2O5"]?.Errors;
-
-                if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
-                {
-                    bool isDecimal = decimal.TryParse(rawValue, out _);
-                    errors.Clear();
-                    if (isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblPhosphateP2O5));
-                    }
-                    else if (!isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblPhosphateP2O5));
-                    }
-                }
-            }
-        }
+        ModelStateGenericValidations("P2O5", Resource.lblPhosphateP2O5, Resource.lblP2O5);
 
         if (model.P2O5 != null && (model.P2O5 < 0 || model.P2O5 > 9999))
         {
@@ -1945,30 +1881,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private void NValidations(FertiliserManureViewModel model)
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
-        {
-            var totalNitrogenError = ModelState["N"]?.Errors.FirstOrDefault()?.ErrorMessage;
-
-            if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"].RawValue, Resource.lblN)))
-            {
-                var rawValue = ModelState["N"]?.RawValue?.ToString();
-                var errors = ModelState["N"]?.Errors;
-
-                if (!string.IsNullOrWhiteSpace(rawValue) && errors != null)
-                {
-                    bool isDecimal = decimal.TryParse(rawValue, out _);
-                    errors.Clear();
-                    if (isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterTheValueAmountUsingIntValueOnly, Resource.lblNitrogen));
-                    }
-                    else if (!isDecimal)
-                    {
-                        errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
-                    }
-                }
-            }
-        }
+        ModelStateGenericValidations("N", Resource.lblNitrogen, Resource.lblN);
 
         if (model.N != null && (model.N < 0 || model.N > 9999))
         {
@@ -1996,7 +1909,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                 model.FarmId = decryptedFarmId;
                 int decryptedHarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (error.Message == null)
                 {
                     model.FarmCountryId = farm.CountryID;
@@ -2724,7 +2637,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private async Task<(FertiliserManureViewModel, Error?)> IsClosedPeriodWarningMessageShow(FertiliserManureViewModel model, int cropTypeId)
     {
         Error? error = null;
-        string warningMsg = string.Empty;
+
         //warning excel sheet row no. 23
         HashSet<int> filterCrops = new HashSet<int>
                             {
@@ -2753,21 +2666,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         string closedPeriod = warning.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
         bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
 
-        if (!filterCrops.Contains(cropTypeId))
+        if (!filterCrops.Contains(cropTypeId) && isWithinClosedPeriod)
         {
-            if (isWithinClosedPeriod)
-            {
-                WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
+            WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
 
-                model.IsClosedPeriodWarning = true;
-                model.ClosedPeriodWarningHeader = warningResponse.Header;
-                model.ClosedPeriodWarningCodeID = warningResponse.WarningCodeID;
-                model.ClosedPeriodWarningLevelID = warningResponse.WarningLevelID;
-                model.ClosedPeriodWarningPara1 = warningResponse.Para1;
-                model.ClosedPeriodWarningPara3 = warningResponse.Para3;
-
-            }
+            model.IsClosedPeriodWarning = true;
+            model.ClosedPeriodWarningHeader = warningResponse.Header;
+            model.ClosedPeriodWarningCodeID = warningResponse.WarningCodeID;
+            model.ClosedPeriodWarningLevelID = warningResponse.WarningLevelID;
+            model.ClosedPeriodWarningPara1 = warningResponse.Para1;
+            model.ClosedPeriodWarningPara3 = warningResponse.Para3;
         }
+
         //warning excel sheet row no. 28
         if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
         {
@@ -2802,11 +2712,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
     private async Task<(FertiliserManureViewModel, Error?)> IsNitrogenExceedWarning(FertiliserManureViewModel model, int managementId, int cropTypeId, decimal appNitrogen, DateTime startDate, DateTime endDate, string cropType, bool isGetCheckAnswer, int fieldId)
     {
-        Error? error = null;
-        string nitrogenExceedMessageTitle = string.Empty;
-        string warningMsg = string.Empty;
-        string nitrogenExceedFirstAdditionalMessage = string.Empty;
-        string nitrogenExceedSecondAdditionalMessage = string.Empty;
+        Error? error = null;       
         decimal totalNitrogen = 0;
         //if we are coming for update then we will exclude the fertiliserId.
         if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
@@ -2821,26 +2727,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (error == null)
         {
             WarningWithinPeriod warningMessage = new WarningWithinPeriod();
-            string message = string.Empty;
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
-
-            HashSet<int> brassicaCrops = new HashSet<int>
-            {
-                (int)NMP.Commons.Enums.CropTypes.ForageRape,
-                (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
-                (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
-                (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
-                (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
-                (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
-                (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
-                (int)NMP.Commons.Enums.CropTypes.Cabbage,
-                (int)NMP.Commons.Enums.CropTypes.Calabrese,
-                (int)NMP.Commons.Enums.CropTypes.Cauliflower,
-                (int)NMP.Commons.Enums.CropTypes.Radish,
-                (int)NMP.Commons.Enums.CropTypes.WildRocket,
-                (int)NMP.Commons.Enums.CropTypes.Swedes,
-                (int)NMP.Commons.Enums.CropTypes.Turnips
-            };
+            HashSet<int> brassicaCrops = BrassicaCrops();
             string closedPeriod = warningMessage.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
             bool isWithinClosedPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
             string startPeriod = string.Empty;
@@ -2895,30 +2783,23 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 bool isNitrogenRateExceeded = false;
                 int maxNitrogenRate = 0;
-                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus)
+                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus && totalNitrogen > 50)
                 {
-                    if (totalNitrogen > 50)
-                    {
-                        isNitrogenRateExceeded = true;
-                        maxNitrogenRate = 50;
-                    }
+                    isNitrogenRateExceeded = true;
+                    maxNitrogenRate = 50;
                 }
-                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions)
+                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions && totalNitrogen > 40)
                 {
-                    if (totalNitrogen > 40)
-                    {
-                        isNitrogenRateExceeded = true;
-                        maxNitrogenRate = 40;
-                    }
+                    isNitrogenRateExceeded = true;
+                    maxNitrogenRate = 40;
                 }
-                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions)
+
+                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions && totalNitrogen > 40)
                 {
-                    if (totalNitrogen > 40)
-                    {
-                        isNitrogenRateExceeded = true;
-                        maxNitrogenRate = 40;
-                    }
+                    isNitrogenRateExceeded = true;
+                    maxNitrogenRate = 40;
                 }
+
                 if (isNitrogenRateExceeded)
                 {
                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRate.ToString());
@@ -2944,7 +2825,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
-            DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31);
+            DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31,00,00,00,DateTimeKind.Unspecified);
             decimal PreviousApplicationsNitrogen = 0;
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
@@ -3018,6 +2899,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
                 }
             }
+
+
             //warning excel sheet row no. 8
 
             //NMax limit for crop logic
@@ -3075,7 +2958,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     {
                                         string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                                         model.IsNMaxLimitWarning = true;
-                                        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                                        (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
                                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
 
@@ -3113,6 +2996,27 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
 
         return (model, error);
+    }
+
+    private static HashSet<int> BrassicaCrops()
+    {
+        return new HashSet<int>
+            {
+                (int)NMP.Commons.Enums.CropTypes.ForageRape,
+                (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+                (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+                (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+                (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
+                (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+                (int)NMP.Commons.Enums.CropTypes.Cabbage,
+                (int)NMP.Commons.Enums.CropTypes.Calabrese,
+                (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+                (int)NMP.Commons.Enums.CropTypes.Radish,
+                (int)NMP.Commons.Enums.CropTypes.WildRocket,
+                (int)NMP.Commons.Enums.CropTypes.Swedes,
+                (int)NMP.Commons.Enums.CropTypes.Turnips
+            };
     }
 
     [HttpPost]
@@ -3321,32 +3225,27 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     _logger.LogError("Fertiliser Manure Controller : Session not found in RemoveFertiliser() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                if (model != null)
+                if (model != null && model.FieldList != null && model.FieldList.Count > 0)
                 {
-                    if (model.FieldList != null && model.FieldList.Count > 0)
+                    (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
+                    if (error == null && fieldList.Count > 0)
                     {
-                        (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
-                        if (error == null)
-                        {
-                            if (fieldList.Count > 0)
-                            {
-                                var fieldNames = fieldList
-                                                 .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                                 .Select(field => field.Name)
-                                                 .ToList();
+                        var fieldNames = fieldList
+                                         .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                         .Select(field => field.Name)
+                                         .ToList();
 
-                                if (fieldNames != null && fieldNames.Count == 1)
-                                {
-                                    model.FieldName = fieldNames.FirstOrDefault();
-                                }
-                                else if (fieldNames != null)
-                                {
-                                    model.FieldName = string.Empty;
-                                    ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                                }
-                                ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-                            }
+                        if (fieldNames != null && fieldNames.Count == 1)
+                        {
+                            model.FieldName = fieldNames[0];
                         }
+                        else if (fieldNames != null)
+                        {
+                            model.FieldName = string.Empty;
+                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                        }
+
+                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList[0]);
                     }
                 }
             }
@@ -3384,8 +3283,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            _logger.LogTrace("OrganicManure Controller : Exception in RemoveFertiliser() action : {0}, {1}", ex.Message, ex.StackTrace);
-            if (model.IsComingFromRecommendation)
+            _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveFertiliser() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            
+            if (model != null && model.IsComingFromRecommendation)
             {
                 TempData["NutrientRecommendationsError"] = ex.Message;
                 return RedirectToAction(_recommendationsActionName, "Crop", new { q = model.EncryptedFarmId, r, s = model.EncryptedHarvestYear });
