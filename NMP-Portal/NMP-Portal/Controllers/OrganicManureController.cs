@@ -1462,10 +1462,9 @@ namespace NMP.Portal.Controllers
                             Value = f.ID.ToString(),
                             Text = f.ManureTypeName
                         }).OrderBy(x => x.Text).ToList();
-                        if (selectListItems.Any())
-                        {
-                            ViewBag.FarmManureTypeList = selectListItems;
-                        }
+
+                        ViewBag.FarmManureTypeList = selectListItems;
+
 
                         if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
                         {
