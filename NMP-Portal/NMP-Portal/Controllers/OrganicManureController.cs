@@ -1524,13 +1524,15 @@ namespace NMP.Portal.Controllers
                         {
                             TempData["ManureGroupError"] = error.Message;
                         }
-                        var selectListItems = farmManureGroupList.Select(f => new SelectListItem
+                        if (farmManureGroupList.Any())
                         {
-                            Value = f.ID.ToString(),
-                            Text = f.ManureTypeName
-                        }).OrderBy(x => x.Text).ToList();
-                        ViewBag.FarmManureTypeList = selectListItems;
-
+                            var selectListItems = farmManureGroupList.Select(f => new SelectListItem
+                            {
+                                Value = f.ID.ToString(),
+                                Text = f.ManureTypeName
+                            }).OrderBy(x => x.Text).ToList();
+                            ViewBag.FarmManureTypeList = selectListItems;
+                        }
                     }
                     return View(model);
 
