@@ -144,7 +144,12 @@
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThisSuffix, ViewBag.LivestockCategory?.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory?.ToLower())</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                 </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">
