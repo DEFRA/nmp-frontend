@@ -8486,7 +8486,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered nitrogen (N) standard.
+        ///   Looks up a localized string similar to Entered nitrogen (N) standard per year.
         /// </summary>
         public static string lblLivestockReportContentTwentyFour {
             get {
@@ -8531,7 +8531,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Typical nitrogen (N) standard.
+        ///   Looks up a localized string similar to Typical nitrogen (N) standard per year.
         /// </summary>
         public static string lblLivestockReportContentTwentyThree {
             get {
