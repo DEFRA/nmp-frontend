@@ -7232,4 +7232,10 @@ livestock manure.</value>
   <data name="MsgCommentMaxLengthValidation" xml:space="preserve">
     <value>Enter a comment that is no more than 100 characters long.</value>
   </data>
+  <data name="lblCapacityWeight" xml:space="preserve">
+    <value>CapacityWeight</value>
+  </data>
+  <data name="lblStorageBagCapacity" xml:space="preserve">
+    <value>StorageBagCapacity</value>
+  </data>
 </root>
