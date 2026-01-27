@@ -995,9 +995,9 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                
 
-                
+
+
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1088,45 +1088,13 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : Dimension() post action called");
             try
             {
-                if (model.CapacityWeight == null)
-                {
-                    ModelState.AddModelError("WeightCapacity", Resource.MsgEnterTheWeightCapacityBeforeContinuing);
-                }
-
-                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
-                {
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCapacityWeight))
-                    {
-
-                        var capacityWeightError = ModelState[Resource.lblCapacityWeight]?.Errors.Count > 0 ?
-                                        ModelState[Resource.lblCapacityWeight]?.Errors[0].ErrorMessage.ToString() : null;
-
-                        if (capacityWeightError != null && capacityWeightError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCapacityWeight]?.RawValue, Resource.lblCapacityWeight)))
-                        {
-                            ModelState[Resource.lblCapacityWeight]?.Errors.Clear();
-                            decimal decimalValue;
-                            if (decimal.TryParse(ModelState[Resource.lblCapacityWeight]?.RawValue?.ToString(), out decimalValue))
-                            {
-                                ModelState[Resource.lblCapacityWeight]?.Errors.Add(capacityWeightError);
-                            }
-                            else
-                            {
-                                ModelState[Resource.lblCapacityWeight]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999999999);
-                            }
-                        }
-                    }
-                }
+                ValidateWeightCapacity(model);
 
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
-                //if (model.CapacityWeight != Math.Round((model.Length * model.Width * model.Depth) * (model.SolidManureDensity) ?? 0))
-                //{
-                //    model.Length = null;
-                //    model.Width = null;
-                //    model.Depth = null;
-                //}
+
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
                 if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
                 {
@@ -1152,6 +1120,36 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        private void ValidateWeightCapacity(StorageCapacityViewModel model)
+        {
+            if (model.CapacityWeight == null)
+            {
+                ModelState.AddModelError("WeightCapacity", Resource.MsgEnterTheWeightCapacityBeforeContinuing);
+            }
+
+            if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage &&
+                (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCapacityWeight))
+            {
+
+                var capacityWeightError = ModelState[Resource.lblCapacityWeight]?.Errors.Count > 0 ?
+                                ModelState[Resource.lblCapacityWeight]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (capacityWeightError != null && capacityWeightError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCapacityWeight]?.RawValue, Resource.lblCapacityWeight)))
+                {
+                    ModelState[Resource.lblCapacityWeight]?.Errors.Clear();
+                    decimal decimalValue;
+                    if (decimal.TryParse(ModelState[Resource.lblCapacityWeight]?.RawValue?.ToString(), out decimalValue))
+                    {
+                        ModelState[Resource.lblCapacityWeight]?.Errors.Add(capacityWeightError);
+                    }
+                    else
+                    {
+                        ModelState[Resource.lblCapacityWeight]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999999999);
+                    }
+                }
+
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> StorageBagCapacity()
         {
@@ -1184,34 +1182,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : StorageBagCapacity() post action called");
             try
             {
-                if (model.StorageBagCapacity == null)
-                {
-                    ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
-                }
-
-                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
-                {
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
-                    {
-
-                        var storageBagCapacityError = ModelState[Resource.lblStorageBagCapacity]?.Errors.Count > 0 ?
-                                        ModelState[Resource.lblStorageBagCapacity]?.Errors[0].ErrorMessage.ToString() : null;
-
-                        if (storageBagCapacityError != null && storageBagCapacityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblStorageBagCapacity]?.RawValue, Resource.lblStorageBagCapacity)))
-                        {
-                            ModelState[Resource.lblStorageBagCapacity]?.Errors.Clear();
-                            decimal decimalValue;
-                            if (decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out decimalValue))
-                            {
-                                ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(storageBagCapacityError);
-                            }
-                            else
-                            {
-                                ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
-                            }
-                        }
-                    }
-                }
+                ValidateStorageBagcapacity(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1237,6 +1208,38 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"StorageCapacity Controller : Exception in StorageBagCapacity() post action : {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnStorageBagCapacity"] = ex.Message;
                 return View(model);
+            }
+        }
+
+        private void ValidateStorageBagcapacity(StorageCapacityViewModel model)
+        {
+            if (model.StorageBagCapacity == null)
+            {
+                ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
+            }
+
+            if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
+            {
+                if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
+                {
+
+                    var storageBagCapacityError = ModelState[Resource.lblStorageBagCapacity]?.Errors.Count > 0 ?
+                                    ModelState[Resource.lblStorageBagCapacity]?.Errors[0].ErrorMessage.ToString() : null;
+
+                    if (storageBagCapacityError != null && storageBagCapacityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblStorageBagCapacity]?.RawValue, Resource.lblStorageBagCapacity)))
+                    {
+                        ModelState[Resource.lblStorageBagCapacity]?.Errors.Clear();
+                        decimal decimalValue;
+                        if (decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out decimalValue))
+                        {
+                            ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(storageBagCapacityError);
+                        }
+                        else
+                        {
+                            ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
+                        }
+                    }
+                }
             }
         }
 
