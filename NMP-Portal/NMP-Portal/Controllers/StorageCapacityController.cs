@@ -66,7 +66,7 @@ namespace NMP.Portal.Controllers
                         model.IsComingFromManageToHubPage = t;
                     }
 
-                    (storeCapacityList,  storeCapacityError) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
+                    (storeCapacityList, storeCapacityError) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
                     if (!string.IsNullOrWhiteSpace(r))
                     {
                         string succesMsg = _reportDataProtector.Unprotect(r);
@@ -187,17 +187,17 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    ViewBag.TotalLiquidCapacity = storeCapacityList.Count>0? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume):0;
+                    ViewBag.TotalLiquidCapacity = storeCapacityList.Count > 0 ? storeCapacityList
+                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume) : 0;
 
                     ViewBag.TotalSolidCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume):0;
+                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume) : 0;
 
                     ViewBag.TotalSolidWeightCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight):0;
+                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight) : 0;
 
                     ViewBag.TotalSurfaceCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year).Sum(x => x.SurfaceArea):0;
+                        .Where(x => x.Year == model.Year).Sum(x => x.SurfaceArea) : 0;
 
                     ViewBag.EncryptedSolidStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SolidManureStorage));
                     ViewBag.EncryptedSlurryStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SlurryStorage));
@@ -952,7 +952,7 @@ namespace NMP.Portal.Controllers
                                 }
                             }
                         }
-                        else if(!model.IsCircumference.Value && (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDiameter))
+                        else if (!model.IsCircumference.Value && (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDiameter))
                         {
                             var diameterError = ModelState[Resource.lblDiameter]?.Errors.Count > 0 ?
                                             ModelState[Resource.lblDiameter]?.Errors[0].ErrorMessage.ToString() : null;
@@ -1218,27 +1218,17 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
             }
 
-            if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
+            if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag &&
+                (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
             {
-                if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
+                var storageBagCapacityError = ModelState[Resource.lblStorageBagCapacity]?.Errors.Count > 0 ?
+                                ModelState[Resource.lblStorageBagCapacity]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (storageBagCapacityError != null && storageBagCapacityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblStorageBagCapacity]?.RawValue, Resource.lblStorageBagCapacity)) &&
+                    !decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out decimal decimalValue))
                 {
-
-                    var storageBagCapacityError = ModelState[Resource.lblStorageBagCapacity]?.Errors.Count > 0 ?
-                                    ModelState[Resource.lblStorageBagCapacity]?.Errors[0].ErrorMessage.ToString() : null;
-
-                    if (storageBagCapacityError != null && storageBagCapacityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblStorageBagCapacity]?.RawValue, Resource.lblStorageBagCapacity)))
-                    {
-                        ModelState[Resource.lblStorageBagCapacity]?.Errors.Clear();
-                        decimal decimalValue;
-                        if (decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out decimalValue))
-                        {
-                            ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(storageBagCapacityError);
-                        }
-                        else
-                        {
-                            ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
-                        }
-                    }
+                    ModelState[Resource.lblStorageBagCapacity]?.Errors.Clear();
+                    ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
                 }
             }
         }
@@ -2021,7 +2011,7 @@ namespace NMP.Portal.Controllers
                     {
                         ViewBag.FarmName = farm.Name;
                     }
-                    (List<StoreCapacityResponse> storeCapacities,error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, null);
+                    (List<StoreCapacityResponse> storeCapacities, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, null);
 
                     if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0)
                     {
@@ -2451,7 +2441,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    (string message,Error error) = await _storageCapacityLogic.RemoveStorageCapacity(model.ID.Value);
+                    (string message, Error error) = await _storageCapacityLogic.RemoveStorageCapacity(model.ID.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
                         (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year.Value);
