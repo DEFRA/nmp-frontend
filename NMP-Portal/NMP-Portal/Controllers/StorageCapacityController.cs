@@ -1111,7 +1111,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                ModelState[Resource.lblCapacityWeight]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                                ModelState[Resource.lblCapacityWeight]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999999999);
                             }
                         }
                     }
@@ -1207,7 +1207,7 @@ namespace NMP.Portal.Controllers
                             }
                             else
                             {
-                                ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                                ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
                             }
                         }
                     }
