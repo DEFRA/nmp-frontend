@@ -1225,7 +1225,7 @@ namespace NMP.Portal.Controllers
                                 ModelState[Resource.lblStorageBagCapacity]?.Errors[0].ErrorMessage.ToString() : null;
 
                 if (storageBagCapacityError != null && storageBagCapacityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblStorageBagCapacity]?.RawValue, Resource.lblStorageBagCapacity)) &&
-                    !decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out decimal decimalValue))
+                    !decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out _))
                 {
                     ModelState[Resource.lblStorageBagCapacity]?.Errors.Clear();
                     ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
