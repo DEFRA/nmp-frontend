@@ -1105,7 +1105,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return true;
     }
 
-    private async Task<bool> TryPopulateIndexAsync(FieldViewModel model, string nutrientName, int? nutrientValue, Action<int, int> assignIndex, int methodologyId, List<NutrientResponseWrapper> nutrients)
+    private async Task<bool> TryPopulateIndexAsync(FieldViewModel model, string nutrientName, int? nutrientValue, Action<int, dynamic> assignIndex, int methodologyId, List<NutrientResponseWrapper> nutrients)
     {
         if (nutrientValue == null)
         {
@@ -1124,7 +1124,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (!string.IsNullOrWhiteSpace(indexValue))
         {
-            assignIndex(nutrientId, Convert.ToInt32(indexValue.Trim()));
+            if (int.TryParse(indexValue, out _))
+            {
+                assignIndex(nutrientId, Convert.ToInt32(indexValue.Trim()));
+            }
+            else
+            {
+                assignIndex(nutrientId, indexValue.Trim());
+            }
         }
 
         return true;
