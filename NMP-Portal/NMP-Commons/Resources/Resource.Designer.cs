@@ -2797,6 +2797,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CapacityWeight.
+        /// </summary>
+        public static string lblCapacityWeight {
+            get {
+                return ResourceManager.GetString("lblCapacityWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cattle.
         /// </summary>
         public static string lblCattle {
@@ -13225,6 +13234,15 @@ namespace NMP.Commons.Resources {
         public static string lblStaySignedIn {
             get {
                 return ResourceManager.GetString("lblStaySignedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StorageBagCapacity.
+        /// </summary>
+        public static string lblStorageBagCapacity {
+            get {
+                return ResourceManager.GetString("lblStorageBagCapacity", resourceCulture);
             }
         }
         
