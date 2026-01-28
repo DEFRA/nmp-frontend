@@ -259,7 +259,7 @@
                     </govuk-summary-list-row>
 
                 }
-                @if (ViewBag.NoNeedToShowPreviousCroppingDetail != null && ViewBag.NoNeedToShowPreviousCroppingDetail)
+                @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
                 {
                     <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGrassInLastThreeYear==null)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
