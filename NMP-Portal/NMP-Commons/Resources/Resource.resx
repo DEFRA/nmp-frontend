@@ -5945,17 +5945,14 @@ livestock manure.</value>
   <data name="lblSolidManureTotal" xml:space="preserve">
     <value>Solid manure total</value>
   </data>
-  <data name="lblTotaLiquidCapacity" xml:space="preserve">
-    <value>Total liquid capacity</value>
-  </data>
   <data name="lblTotalSolidCapacity" xml:space="preserve">
-    <value>Total solid capacity</value>
+    <value>Total solid manure capacity (volume)</value>
   </data>
   <data name="lblTotalSolidCapacityFreshWeight" xml:space="preserve">
-    <value>Total solid capacity (fresh weight)</value>
+    <value>Total solid manure capacity (fresh weight)</value>
   </data>
   <data name="lblTotalSurfaceArea" xml:space="preserve">
-    <value>Total surface area</value>
+    <value>Total area of uncovered stores</value>
   </data>
   <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
     <value>To create an existing manure storage capacity report, enter the manure storage on {0} in {1}</value>
@@ -5987,8 +5984,8 @@ livestock manure.</value>
   <data name="lblManureStorageTotals" xml:space="preserve">
     <value>Manure storage totals</value>
   </data>
-  <data name="lblTotalLiquidCapacity" xml:space="preserve">
-    <value>Total liquid capacity</value>
+  <data name="lblTotalSlurryCapacity" xml:space="preserve">
+    <value>Total slurry capacity</value>
   </data>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
     <value>You have not added any Solid material storage</value>
