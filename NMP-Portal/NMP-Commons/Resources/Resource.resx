@@ -7250,4 +7250,10 @@ livestock manure.</value>
   <data name="lblEnterTheWidthToOneDecimalPlace" xml:space="preserve">
     <value>Enter the width to one decimal place.</value>
   </data>
+  <data name="lblEnterTheCircumferenceToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the circumference to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheWeightCapacityToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the weight capacity to one decimal place.</value>
+  </data>
 </root>

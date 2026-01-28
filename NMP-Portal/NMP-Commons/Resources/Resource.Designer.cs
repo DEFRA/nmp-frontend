@@ -4948,6 +4948,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the circumference to one decimal place..
+        /// </summary>
+        public static string lblEnterTheCircumferenceToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheCircumferenceToOneDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the climate postcode.
         /// </summary>
         public static string lblEnterTheClimatePostcode {
@@ -5034,6 +5043,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterTheValuesForYour {
             get {
                 return ResourceManager.GetString("lblEnterTheValuesForYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the weight capacity to one decimal place..
+        /// </summary>
+        public static string lblEnterTheWeightCapacityToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheWeightCapacityToOneDecimalPlace", resourceCulture);
             }
         }
         
