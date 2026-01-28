@@ -12,18 +12,23 @@ public class StoreCapacity
     public int? SolidManureTypeID { get; set; }  //not in view model
 
     [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And999))]
+    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheLengthToOneDecimalPlace))]
+    
     public decimal? Length { get; set; }
 
     [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And999))]
+    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheWidthToOneDecimalPlace))]
     public decimal? Width { get; set; }
 
     [Range(0, 99, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And99))]
+    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheDepthToOneDecimalPlace))]
     public decimal? Depth { get; set; }
 
     [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And999))]
     public decimal? Circumference { get; set; }
 
     [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And999))]
+    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheDiameterToOneDecimalPlace))]
     public decimal? Diameter { get; set; }
     public int? BankSlopeAngleID { get; set; }
     public bool? IsCovered { get; set; }

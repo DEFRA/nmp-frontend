@@ -4714,7 +4714,7 @@ cubic metres per hectare  not set</value>
     <value>Update organic material imports and exports</value>
   </data>
   <data name="lblFarmSummaryContent11" xml:space="preserve">
-    <value>Update organic material storage</value>
+    <value>Update organic manure storage</value>
   </data>
   <data name="lblFarmSummaryContent7" xml:space="preserve">
     <value>Manage farm and field details</value>
@@ -5554,10 +5554,10 @@ cubic metres per hectare  not set</value>
     <value>Not entered storage</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
-    <value>You have not entered any organic material storage for {0}</value>
+    <value>You have not entered any organic manure storage for {0}</value>
   </data>
   <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
-    <value>Add organic material storage</value>
+    <value>Add organic manure storage</value>
   </data>
   <data name="lblWinterWheat" xml:space="preserve">
     <value>Winter wheat</value>
@@ -5604,7 +5604,7 @@ livestock manure.</value>
     <value>do not compliance</value>
   </data>
   <data name="lblOrganicMaterialStorage" xml:space="preserve">
-    <value>Organic material storage</value>
+    <value>Organic manure storage</value>
   </data>
   <data name="lblMetres" xml:space="preserve">
     <value>metres</value>
@@ -5703,7 +5703,7 @@ livestock manure.</value>
     <value>About freeboards</value>
   </data>
   <data name="lblFreeboardIsTheDistanceBetweenTheTopOfTheTank" xml:space="preserve">
-    <value>Freeboard is the distance between the top of the tank and the level of the slurry inside. You must always keep this distance clear.</value>
+    <value>Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear.</value>
   </data>
   <data name="lblForASteelOrConcreteStore" xml:space="preserve">
     <value>For a steel or concrete store, you must keep a minimum of 30cm of freeboard.</value>
@@ -5991,10 +5991,10 @@ livestock manure.</value>
     <value>Total liquid capacity</value>
   </data>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
-    <value>You have not added any Solid material storage</value>
+    <value>You have not added any Solid manure storage</value>
   </data>
   <data name="lblAddSolidMaterialStorage" xml:space="preserve">
-    <value>Add solid material storage</value>
+    <value>Add solid manure storage</value>
   </data>
   <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
     <value>You have not added any dirty water storage</value>
@@ -6366,7 +6366,7 @@ livestock manure.</value>
     <value>, in {0}</value>
   </data>
   <data name="lblUpdateOrganicMaterialStorage" xml:space="preserve">
-    <value>Update organic material storage</value>
+    <value>Update organic manure storage</value>
   </data>
   <data name="AddASoilMineralNitrogenAnalysisResult" xml:space="preserve">
     <value>Add a soil mineral nitrogen analysis result</value>
@@ -7231,5 +7231,17 @@ livestock manure.</value>
   </data>
   <data name="MsgCommentMaxLengthValidation" xml:space="preserve">
     <value>Enter a comment that is no more than 100 characters long.</value>
+  </data>
+  <data name="lblEnterTheLengthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the length to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheDepthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the depth to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheDiameterToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the diameter to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheWidthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the width to one decimal place.</value>
   </data>
 </root>
