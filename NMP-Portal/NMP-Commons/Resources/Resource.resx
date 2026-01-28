@@ -5556,8 +5556,8 @@ cubic metres per hectare  not set</value>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
     <value>You have not entered any organic manure storage for {0}</value>
   </data>
-  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
-    <value>Add organic manure storage</value>
+  <data name="lblAddAManureStore" xml:space="preserve">
+    <value>Add a manure store</value>
   </data>
   <data name="lblWinterWheat" xml:space="preserve">
     <value>Winter wheat</value>
@@ -5993,8 +5993,8 @@ livestock manure.</value>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
     <value>You have not added any Solid manure storage</value>
   </data>
-  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
-    <value>Add solid manure storage</value>
+  <data name="lblAddASolidManureStore" xml:space="preserve">
+    <value>Add a solid manure store</value>
   </data>
   <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
     <value>You have not added any dirty water storage</value>
@@ -6275,8 +6275,8 @@ livestock manure.</value>
   <data name="lblSectionAddFarm" xml:space="preserve">
     <value>Add Farm</value>
   </data>
-  <data name="lblAddSlurryStorage" xml:space="preserve">
-    <value>Add slurry storage</value>
+  <data name="lblAddASlurryStore" xml:space="preserve">
+    <value>Add a slurry store</value>
   </data>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>

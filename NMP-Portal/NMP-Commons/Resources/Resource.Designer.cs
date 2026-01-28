@@ -1303,6 +1303,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a manure store.
+        /// </summary>
+        public static string lblAddAManureStore {
+            get {
+                return ResourceManager.GetString("lblAddAManureStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add analysis values for {0}..
         /// </summary>
         public static string lblAddAnalysisValues {
@@ -1429,6 +1438,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a slurry store.
+        /// </summary>
+        public static string lblAddASlurryStore {
+            get {
+                return ResourceManager.GetString("lblAddASlurryStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a soil analysis.
         /// </summary>
         public static string lblAddASoilAnalysis {
@@ -1443,6 +1461,15 @@ namespace NMP.Commons.Resources {
         public static string lblAddASoilMineralNitrogenAnalysisResultForCrop {
             get {
                 return ResourceManager.GetString("lblAddASoilMineralNitrogenAnalysisResultForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a solid manure store.
+        /// </summary>
+        public static string lblAddASolidManureStore {
+            get {
+                return ResourceManager.GetString("lblAddASolidManureStore", resourceCulture);
             }
         }
         
@@ -1645,15 +1672,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add organic manure storage.
-        /// </summary>
-        public static string lblAddOrganicMaterialStorage {
-            get {
-                return ResourceManager.GetString("lblAddOrganicMaterialStorage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add or update fields and soil analysis.
         /// </summary>
         public static string lblAddOrUpdateFieldsOrSoilAnalysis {
@@ -1726,15 +1744,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add slurry storage.
-        /// </summary>
-        public static string lblAddSlurryStorage {
-            get {
-                return ResourceManager.GetString("lblAddSlurryStorage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis for {0}.
         /// </summary>
         public static string lblAddSoilAnalysis {
@@ -1767,15 +1776,6 @@ namespace NMP.Commons.Resources {
         public static string lblAddSoilNutrientValue {
             get {
                 return ResourceManager.GetString("lblAddSoilNutrientValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add solid manure storage.
-        /// </summary>
-        public static string lblAddSolidMaterialStorage {
-            get {
-                return ResourceManager.GetString("lblAddSolidMaterialStorage", resourceCulture);
             }
         }
         
