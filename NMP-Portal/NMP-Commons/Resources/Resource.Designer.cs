@@ -10988,7 +10988,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To get recommendations for {0} for {1}, you will need to add 3 years history to the crop details for {2}..
+        ///   Looks up a localized string similar to To get recommendations for {0} for {1}, you will need to add 3 years&apos; history to the crop details for {2}..
         /// </summary>
         public static string lblPreviousCroppingContentOnRecommendation {
             get {
@@ -19002,7 +19002,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the expected yield for {0} in {1}, in tonnes per hectare?.
+        ///   Looks up a localized string similar to Enter the expected yield for {0} in {1}, in tonnes per hectare..
         /// </summary>
         public static string MsgEnterExpectedYieldforCropinField {
             get {
@@ -19227,7 +19227,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For Potassium(K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-..
+        ///   Looks up a localized string similar to For Potassium (K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-..
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint3 {
             get {
@@ -19533,7 +19533,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg)..
+        ///   Looks up a localized string similar to Enter at least one value for either the pH, Phosphorus (P), Potassium (K), or Magnesium (Mg)..
         /// </summary>
         public static string MsgForPhPhosphorusPotassiumMagnesium {
             get {

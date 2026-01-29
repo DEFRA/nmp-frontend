@@ -58,6 +58,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
@@ -225,7 +226,7 @@
                     <govuk-summary-list-row-actions>
                         @if (ViewBag.IsAnyPlan != null && (!ViewBag.IsAnyPlan))
                         {
-                        <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblSoilTypeForCheckAnswer)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblSoilTypeForCheckAnswer)</span></govuk-summary-list-row-action>
                         }
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
@@ -259,134 +260,138 @@
                     </govuk-summary-list-row>
 
                 }
-                <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGrassInLastThreeYear==null)?"govuk-error-message":"")>
-                    <govuk-summary-list-row-key>
-                        @string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name)
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value>
-                        @(Model.PreviousCroppings.HasGrassInLastThreeYear != null ? (Model.PreviousCroppings.HasGrassInLastThreeYear.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name))</span></govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
 
-
-                @if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
+                @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
                 {
-                    <govuk-summary-list-row class=@((Model.PreviousGrassYears==null || Model.PreviousGrassYears.Count==0)?"govuk-error-message":"")>
+                    <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGrassInLastThreeYear==null)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
+                            @string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @if (Model.PreviousGrassYears == null || !Model.PreviousGrassYears.Any())
-                            {
-                                @Resource.lblNotSet
-                            }
-                            else
-                            {
-                                foreach (var year in Model.PreviousGrassYears.OrderByDescending(x => x))
-                                {
-                                    @year
-                                    <br />
-                                }
-                            }
-
+                            @(Model.PreviousCroppings.HasGrassInLastThreeYear != null ? (Model.PreviousCroppings.HasGrassInLastThreeYear.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
-
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="GrassLastThreeHarvestYear" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name))</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name))</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
-
                     </govuk-summary-list-row>
-                    @if (Model.PreviousGrassYears.Count() > 0)
+
+
+                    @if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
                     {
-                        @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears?[0] == Model.LastHarvestYear))
+                        <govuk-summary-list-row class=@((Model.PreviousGrassYears==null || Model.PreviousGrassYears.Count==0)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if (Model.PreviousGrassYears == null || !Model.PreviousGrassYears.Any())
+                                {
+                                    @Resource.lblNotSet
+                                }
+                                else
+                                {
+                                    foreach (var year in Model.PreviousGrassYears.OrderByDescending(x => x))
+                                    {
+                                        @year
+                                        <br />
+                                    }
+                                }
+
+                            </govuk-summary-list-row-value>
+
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="GrassLastThreeHarvestYear" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name))</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+
+                        </govuk-summary-list-row>
+                        @if (Model.PreviousGrassYears.Count() > 0)
                         {
-                            <govuk-summary-list-row class=@((!Model.PreviousCroppings.LayDuration.HasValue)?"govuk-error-message":"")>
+                            @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears?[0] == Model.LastHarvestYear))
+                            {
+                                <govuk-summary-list-row class=@((!Model.PreviousCroppings.LayDuration.HasValue)?"govuk-error-message":"")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(Model.PreviousCroppings.LayDuration != null ? (Model.PreviousCroppings.LayDuration.Value == (int)NMP.Commons.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore) : Resource.lblNotSet)
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                        }
+
+                        <govuk-summary-list-row class=@((!Model.PreviousCroppings.GrassManagementOptionID.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblHowWasTheGrassTypicallyManagedEachYear
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @* @ViewBag.GrassManagementOptions *@
+                                @(ViewBag.GrassManagementOption == null ? Resource.lblNotSet : ViewBag.GrassManagementOption)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="GrassManagementOptions" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblHowWasTheGrassTypicallyManagedEachYear)</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+                        <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGreaterThan30PercentClover==null)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.PreviousCroppings.HasGreaterThan30PercentClover != null ? (Model.PreviousCroppings.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="HasGreaterThan30PercentClover" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name))</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+                        @if (Model.PreviousCroppings.HasGreaterThan30PercentClover != null && Model.PreviousCroppings.HasGreaterThan30PercentClover == false)
+                        {
+                            <govuk-summary-list-row class=@((!Model.PreviousCroppings.SoilNitrogenSupplyItemID.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])
+                                    @string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.PreviousCroppings.LayDuration != null ? (Model.PreviousCroppings.LayDuration.Value == (int)NMP.Commons.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore) : Resource.lblNotSet)
+                                    @(ViewBag.SoilNitrogenSupplyItem == null ? Resource.lblNotSet : ViewBag.SoilNitrogenSupplyItem)
+                                    @* @ViewBag.SoilNitrogenSupplyItems *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="SoilNitrogenSupplyItems" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name))</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
+
                     }
-
-                    <govuk-summary-list-row class=@((!Model.PreviousCroppings.GrassManagementOptionID.HasValue)?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblHowWasTheGrassTypicallyManagedEachYear
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @* @ViewBag.GrassManagementOptions *@
-                            @(ViewBag.GrassManagementOption == null ? Resource.lblNotSet : ViewBag.GrassManagementOption)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="GrassManagementOptions" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblHowWasTheGrassTypicallyManagedEachYear)</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-
-                    <govuk-summary-list-row class=@((Model.PreviousCroppings.HasGreaterThan30PercentClover==null)?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @(Model.PreviousCroppings.HasGreaterThan30PercentClover != null ? (Model.PreviousCroppings.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="HasGreaterThan30PercentClover" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name))</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-
-                    @if (Model.PreviousCroppings.HasGreaterThan30PercentClover != null && Model.PreviousCroppings.HasGreaterThan30PercentClover == false)
+                    @if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && (Model.IsPreviousYearGrass == null || Model.IsPreviousYearGrass == false))
                     {
-                        <govuk-summary-list-row class=@((!Model.PreviousCroppings.SoilNitrogenSupplyItemID.HasValue)?"govuk-error-message":"")>
+                        <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.CropGroup))?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)
+                                @string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(ViewBag.SoilNitrogenSupplyItem == null ? Resource.lblNotSet : ViewBag.SoilNitrogenSupplyItem)
-                                @* @ViewBag.SoilNitrogenSupplyItems *@
+                                @((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNitrogenSupplyItems" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name))</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear))</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
+
+                        <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.CropType))?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType)
+                            </govuk-summary-list-row-value>
+                            @if (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+                            {
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear))</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            }
+                        </govuk-summary-list-row>
                     }
-
-                }
-                @if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && (Model.IsPreviousYearGrass == null || Model.IsPreviousYearGrass == false))
-                {
-                    <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.CropGroup))?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear))</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-
-                    <govuk-summary-list-row class=@((string.IsNullOrWhiteSpace(Model.CropType))?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType)
-                        </govuk-summary-list-row-value>
-                        @if (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
-                        {
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear))</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        }
-                    </govuk-summary-list-row>
                 }
             </govuk-summary-list>
 
