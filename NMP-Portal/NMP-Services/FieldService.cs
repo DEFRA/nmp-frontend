@@ -1049,8 +1049,8 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             else if (responseWrapper is { Error: not null })
             {
                 error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-              
+                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+
             }
 
         }
