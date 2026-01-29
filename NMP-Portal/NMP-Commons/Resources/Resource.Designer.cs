@@ -1303,6 +1303,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a manure store.
+        /// </summary>
+        public static string lblAddAManureStore {
+            get {
+                return ResourceManager.GetString("lblAddAManureStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add analysis values for {0}..
         /// </summary>
         public static string lblAddAnalysisValues {
@@ -1429,6 +1438,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a slurry store.
+        /// </summary>
+        public static string lblAddASlurryStore {
+            get {
+                return ResourceManager.GetString("lblAddASlurryStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a soil analysis.
         /// </summary>
         public static string lblAddASoilAnalysis {
@@ -1443,6 +1461,15 @@ namespace NMP.Commons.Resources {
         public static string lblAddASoilMineralNitrogenAnalysisResultForCrop {
             get {
                 return ResourceManager.GetString("lblAddASoilMineralNitrogenAnalysisResultForCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a solid manure store.
+        /// </summary>
+        public static string lblAddASolidManureStore {
+            get {
+                return ResourceManager.GetString("lblAddASolidManureStore", resourceCulture);
             }
         }
         
@@ -1645,15 +1672,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add organic material storage.
-        /// </summary>
-        public static string lblAddOrganicMaterialStorage {
-            get {
-                return ResourceManager.GetString("lblAddOrganicMaterialStorage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add or update fields and soil analysis.
         /// </summary>
         public static string lblAddOrUpdateFieldsOrSoilAnalysis {
@@ -1726,15 +1744,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add slurry storage.
-        /// </summary>
-        public static string lblAddSlurryStorage {
-            get {
-                return ResourceManager.GetString("lblAddSlurryStorage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add soil analysis for {0}.
         /// </summary>
         public static string lblAddSoilAnalysis {
@@ -1767,15 +1776,6 @@ namespace NMP.Commons.Resources {
         public static string lblAddSoilNutrientValue {
             get {
                 return ResourceManager.GetString("lblAddSoilNutrientValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add solid material storage.
-        /// </summary>
-        public static string lblAddSolidMaterialStorage {
-            get {
-                return ResourceManager.GetString("lblAddSolidMaterialStorage", resourceCulture);
             }
         }
         
@@ -4948,6 +4948,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the circumference to one decimal place..
+        /// </summary>
+        public static string lblEnterTheCircumferenceToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheCircumferenceToOneDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the climate postcode.
         /// </summary>
         public static string lblEnterTheClimatePostcode {
@@ -4975,11 +4984,38 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the depth to one decimal place..
+        /// </summary>
+        public static string lblEnterTheDepthToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheDepthToOneDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the details for {0}.
         /// </summary>
         public static string lblEnterTheDetailsFor {
             get {
                 return ResourceManager.GetString("lblEnterTheDetailsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the diameter to one decimal place..
+        /// </summary>
+        public static string lblEnterTheDiameterToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheDiameterToOneDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the length to one decimal place..
+        /// </summary>
+        public static string lblEnterTheLengthToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheLengthToOneDecimalPlace", resourceCulture);
             }
         }
         
@@ -5007,6 +5043,24 @@ namespace NMP.Commons.Resources {
         public static string lblEnterTheValuesForYour {
             get {
                 return ResourceManager.GetString("lblEnterTheValuesForYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the weight capacity to one decimal place..
+        /// </summary>
+        public static string lblEnterTheWeightCapacityToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheWeightCapacityToOneDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the width to one decimal place..
+        /// </summary>
+        public static string lblEnterTheWidthToOneDecimalPlace {
+            get {
+                return ResourceManager.GetString("lblEnterTheWidthToOneDecimalPlace", resourceCulture);
             }
         }
         
@@ -5578,7 +5632,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update organic material storage.
+        ///   Looks up a localized string similar to Update organic manure storage.
         /// </summary>
         public static string lblFarmSummaryContent11 {
             get {
@@ -6082,7 +6136,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Freeboard is the distance between the top of the tank and the level of the slurry inside. You must always keep this distance clear..
+        ///   Looks up a localized string similar to Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear..
         /// </summary>
         public static string lblFreeboardIsTheDistanceBetweenTheTopOfTheTank {
             get {
@@ -10376,7 +10430,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organic material storage.
+        ///   Looks up a localized string similar to Organic manure storage.
         /// </summary>
         public static string lblOrganicMaterialStorage {
             get {
@@ -14968,7 +15022,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update organic material storage.
+        ///   Looks up a localized string similar to Update organic manure storage.
         /// </summary>
         public static string lblUpdateOrganicMaterialStorage {
             get {
@@ -17524,7 +17578,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not added any Solid material storage.
+        ///   Looks up a localized string similar to You have not added any Solid manure storage.
         /// </summary>
         public static string lblYouHaveNotAddedAnySolidMaterialStorage {
             get {
@@ -17560,7 +17614,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any organic material storage for {0}.
+        ///   Looks up a localized string similar to You have not entered any organic manure storage for {0}.
         /// </summary>
         public static string lblYouHaveNotEnteredAnyOrganicMaterialStorageFor {
             get {
