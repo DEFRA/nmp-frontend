@@ -1,11 +1,9 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    // string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     var dataLists = new List<(string Name, dynamic Data)>
     {
-        // ("DirtyWater", ViewBag.DirtyWaterList),
         ("SlurryStorage", ViewBag.SlurryStorageList),
         ("SolidManureStorage", ViewBag.SolidManureStorageList)
     };
@@ -98,7 +96,7 @@
         }
 
         <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">
-            @Resource.lblAddOrganicMaterialStorage
+            @Resource.lblAddAManureStore
         </a>
     </div>
 </div>
@@ -138,7 +136,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSlurryStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddASlurryStore</a>
                     </p>
                 }
             </govuk-tabs-item>
@@ -213,7 +211,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSolidMaterialStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddASolidManureStore</a>
                     </p>
                 }
             </govuk-tabs-item>
@@ -226,7 +224,7 @@
                         <table class="govuk-table">
                             <tbody>
                                 <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalLiquidCapacity</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSlurryCapacity</th>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalLiquidCapacity, Resource.lblCubicMeters)</td>
                                 </tr>
                                 <tr class="govuk-table__row">
