@@ -6271,15 +6271,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grass cut only adjustment.
-        /// </summary>
-        public static string lblGrassCutOnlyAdjustment {
-            get {
-                return ResourceManager.GetString("lblGrassCutOnlyAdjustment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Grass details for {0}.
         /// </summary>
         public static string lblGrassDetailsForField {
@@ -14217,6 +14208,15 @@ namespace NMP.Commons.Resources {
         public static string lblThreeDays {
             get {
                 return ResourceManager.GetString("lblThreeDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Three or more cuts.
+        /// </summary>
+        public static string lblThreeOrMoreCuts {
+            get {
+                return ResourceManager.GetString("lblThreeOrMoreCuts", resourceCulture);
             }
         }
         
