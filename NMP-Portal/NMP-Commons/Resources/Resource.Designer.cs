@@ -14509,24 +14509,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total liquid capacity.
-        /// </summary>
-        public static string lblTotaLiquidCapacity {
-            get {
-                return ResourceManager.GetString("lblTotaLiquidCapacity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Total liquid capacity.
-        /// </summary>
-        public static string lblTotalLiquidCapacity {
-            get {
-                return ResourceManager.GetString("lblTotalLiquidCapacity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Total Magnesium (MgO).
         /// </summary>
         public static string lblTotalMagnesium {
@@ -14716,7 +14698,16 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total solid capacity.
+        ///   Looks up a localized string similar to Total slurry capacity.
+        /// </summary>
+        public static string lblTotalSlurryCapacity {
+            get {
+                return ResourceManager.GetString("lblTotalSlurryCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total solid manure capacity (volume).
         /// </summary>
         public static string lblTotalSolidCapacity {
             get {
@@ -14725,7 +14716,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total solid capacity (fresh weight).
+        ///   Looks up a localized string similar to Total solid manure capacity (fresh weight).
         /// </summary>
         public static string lblTotalSolidCapacityFreshWeight {
             get {
@@ -14743,7 +14734,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total surface area.
+        ///   Looks up a localized string similar to Total area of uncovered stores.
         /// </summary>
         public static string lblTotalSurfaceArea {
             get {
