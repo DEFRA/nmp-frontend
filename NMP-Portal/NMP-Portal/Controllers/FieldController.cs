@@ -2829,7 +2829,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             bool onlyFieldUpdate = false;
             if (cropPlans.Any())
             {
-                int highestYearOfPlan = cropPlans.Any() ? cropPlans.Max(cp => cp.Year) : (model.LastHarvestYear ?? 0) + 1;
+                int highestYearOfPlan =cropPlans.Max(cp => cp.Year);
                 List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
                 if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
                 {

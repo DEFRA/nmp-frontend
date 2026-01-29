@@ -7184,4 +7184,7 @@ livestock manure.</value>
   <data name="lblAddSlurryStorage" xml:space="preserve">
     <value>Add slurry storage</value>
   </data>
+  <data name="MsgForNotValidValueForNutrient" xml:space="preserve">
+    <value>The value in not valid for {0}. The value must be a whole number between {1} and {2}.</value>
+  </data>
 </root>

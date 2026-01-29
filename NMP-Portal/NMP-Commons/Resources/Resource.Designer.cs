@@ -19533,6 +19533,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value in not valid for {0}. The value must be a whole number between {1} and {2}..
+        /// </summary>
+        public static string MsgForNotValidValueForNutrient {
+            get {
+                return ResourceManager.GetString("MsgForNotValidValueForNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter at least one value for either the pH, Phosphorus (P), Potassium (K), or Magnesium (Mg)..
         /// </summary>
         public static string MsgForPhPhosphorusPotassiumMagnesium {
