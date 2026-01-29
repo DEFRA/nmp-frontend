@@ -4497,8 +4497,8 @@ cubic metres per hectare  not set</value>
   <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
     <value>Organic material crop available N total</value>
   </data>
-  <data name="lblGrassCutOnlyAdjustment" xml:space="preserve">
-    <value>Grass cut only adjustment</value>
+  <data name="lblThreeOrMoreCuts" xml:space="preserve">
+    <value>Three or more cuts</value>
   </data>
   <data name="lblHigh" xml:space="preserve">
     <value>high</value>
@@ -5556,9 +5556,6 @@ cubic metres per hectare  not set</value>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
     <value>You have not entered any organic material storage for {0}</value>
   </data>
-  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
-    <value>Add organic material storage</value>
-  </data>
   <data name="lblWinterWheat" xml:space="preserve">
     <value>Winter wheat</value>
   </data>
@@ -5993,9 +5990,6 @@ livestock manure.</value>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
     <value>You have not added any Solid material storage</value>
   </data>
-  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
-    <value>Add solid material storage</value>
-  </data>
   <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
     <value>You have not added any dirty water storage</value>
   </data>
@@ -6274,9 +6268,6 @@ livestock manure.</value>
   </data>
   <data name="lblSectionAddFarm" xml:space="preserve">
     <value>Add Farm</value>
-  </data>
-  <data name="lblAddSlurryStorage" xml:space="preserve">
-    <value>Add slurry storage</value>
   </data>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>
@@ -7183,5 +7174,14 @@ livestock manure.</value>
   </data>
   <data name="MsgCommentMaxLengthValidation" xml:space="preserve">
     <value>Enter a comment that is no more than 100 characters long.</value>
+  </data>
+  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
+    <value>Add organic material storage</value>
+  </data>
+  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
+    <value>Add solid material storage</value>
+  </data>
+  <data name="lblAddSlurryStorage" xml:space="preserve">
+    <value>Add slurry storage</value>
   </data>
 </root>
