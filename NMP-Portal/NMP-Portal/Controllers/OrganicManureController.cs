@@ -1505,9 +1505,9 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> ManureGroup(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : ManureGroup() post action called");
-            if (model.FarmGroupManureId == null)
+            if (string.IsNullOrWhiteSpace(model.FarmGroupManureId))
             {
-                ModelState.AddModelError("ManureGroupIdForFilter", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("FarmGroupManureId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             Error? error = null;
             try
