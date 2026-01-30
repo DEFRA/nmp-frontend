@@ -3035,7 +3035,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
             }
 
-            if (managementPeriod != null && managementPeriod.CropID != null)
+            if (managementPeriod.CropID != null)
             {
                 (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.CropTypeID != null)
