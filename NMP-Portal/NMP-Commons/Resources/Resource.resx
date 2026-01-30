@@ -2265,7 +2265,7 @@ cubic metres per hectare  not set</value>
   <data name="lblSoilDepth" xml:space="preserve">
     <value>Sample depth</value>
   </data>
-  <data name="lblSoilMineralNitrogenForError" xml:space="preserve">
+  <data name="lblSoilMineralNitrogenWithSpace" xml:space="preserve">
     <value>SoilMineralNitrogen</value>
   </data>
   <data name="lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation" xml:space="preserve">
