@@ -68,7 +68,7 @@
 {
     <form class="form-with-overlay" asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
+        <div hidden="hidden">
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
@@ -267,7 +267,7 @@
                                                                                                                      </govuk-summary-list-row>
                                                                                                                      <govuk-summary-list-row>
                                                                                                                          <govuk-summary-list-row-key class=@((!Model.LivestockQuantity.HasValue) ? "govuk-error-message" : "")>
-                            @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                            @(string.Format("{0}{1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                                                                                                                             </govuk-summary-list-row-key>
                                                                                                                                             <govuk-summary-list-row-value>
@@ -276,7 +276,7 @@
                                                                                                                                             <govuk-summary-list-row-actions>
                                                                                                                                                 <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">
                                                                                                                                                     @Resource.lblChange<span class="govuk-visually-hidden">
-                                    @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                                    @(string.Format("{0}{1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                 </span>
                             </govuk-summary-list-row-action>
