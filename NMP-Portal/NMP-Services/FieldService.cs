@@ -16,6 +16,7 @@ namespace NMP.Services;
 public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFieldService
 {
     private readonly ILogger<FieldService> _logger = logger;
+    private const string _applicationJson = "application/json"; 
 
     public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
     {
@@ -266,7 +267,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
         var response = await httpClient.PostAsync(
             url,
-            new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            new StringContent(jsonData, Encoding.UTF8, _applicationJson));
 
         response.EnsureSuccessStatusCode();
         return response;
@@ -640,7 +641,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.FetchSNSIndexByMeasurementMethodAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(APIURLHelper.FetchSNSIndexByMeasurementMethodAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -679,7 +680,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateFieldAsyncAPI, fieldId), new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateFieldAsyncAPI, fieldId), new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -956,5 +957,41 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             _logger.LogError(ex, ex.Message);            
         }
         return (cropAndFieldReportResponse, error);
+    }
+    public async Task<(Field?, Error)> UpdateFieldDataAsync(Field field)
+    {
+        string jsonData = JsonConvert.SerializeObject(field);
+        Field? fieldData = null;
+        Error error = new Error();
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.PutAsync(APIURLHelper.UpdateOnlyFieldAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode &&
+                responseWrapper?.Data?["Field"] is JObject farmDataJObject)
+            {
+                fieldData = farmDataJObject.ToObject<Field>();
+            }
+            else if (responseWrapper is { Error: not null })
+            {
+                error = responseWrapper.Error.ToObject<Error>();
+                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+
+            }
+
+        }
+        catch (HttpRequestException hre)
+        {
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (fieldData, error);
     }
 }

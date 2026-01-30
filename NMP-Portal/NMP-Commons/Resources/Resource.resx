@@ -3877,7 +3877,7 @@ cubic metres per hectare  not set</value>
     <value>Total area</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
-    <value>For Potassium(K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
+    <value>For Potassium (K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
   </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
@@ -6285,7 +6285,7 @@ livestock manure.</value>
     <value>Update soil analysis</value>
   </data>
   <data name="MsgForPhPhosphorusPotassiumMagnesium" xml:space="preserve">
-    <value>Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg).</value>
+    <value>Enter at least one value for either the pH, Phosphorus (P), Potassium (K), or Magnesium (Mg).</value>
   </data>
   <data name="lblChangeRainfallAmount" xml:space="preserve">
     <value>Change rainfall amount</value>
@@ -6534,7 +6534,7 @@ livestock manure.</value>
     <value>What is the field name?</value>
   </data>
   <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
-    <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
+    <value>Enter the expected yield for {0} in {1}, in tonnes per hectare.</value>
   </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
     <value>Enter an quantity between 1 and 9,99,999 as an integer value only.</value>
@@ -6555,7 +6555,7 @@ livestock manure.</value>
     <value>Recommendations not available</value>
   </data>
   <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
-    <value>To get recommendations for {0} for {1}, you will need to add 3 years history to the crop details for {2}.</value>
+    <value>To get recommendations for {0} for {1}, you will need to add 3 years' history to the crop details for {2}.</value>
   </data>
   <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
     <value>Add 3 years history to crop details for {0}</value>
@@ -7252,5 +7252,8 @@ livestock manure.</value>
   </data>
   <data name="lblEnterTheWeightCapacityToOneDecimalPlace" xml:space="preserve">
     <value>Enter the weight capacity to one decimal place.</value>
+  </data>
+  <data name="MsgForNotValidValueForNutrient" xml:space="preserve">
+    <value>The value in not valid for {0}. The value must be a whole number between {1} and {2}.</value>
   </data>
 </root>
