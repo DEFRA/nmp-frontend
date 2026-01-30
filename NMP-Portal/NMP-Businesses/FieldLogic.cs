@@ -183,4 +183,10 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         _logger.LogTrace("Updating field with ID: {FieldId}", fieldId);
         return await _fieldService.UpdateFieldAsync(field, fieldId);
     }
+    public async Task<(Field?, Error)> UpdateFieldDataAsync(Field field)
+    {
+        _logger.LogTrace("Updating field : {Field}", field);
+        return await _fieldService.UpdateFieldDataAsync(field);
+    }
+
 }
