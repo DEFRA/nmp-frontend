@@ -1092,6 +1092,48 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (totalN, error);
     }
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDate(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    {
+        Error? error = null;
+        decimal totalN = 0;
+        string fromdate = startDate.ToString("yyyy-MM-dd");
+        string toDate = endDate.ToString("yyyy-MM-dd");
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        string url = APIURLHelper.FetchTotalNByCropIdAndAppDateAsyncAPI;
+
+        if (organicManureId.HasValue)
+        {
+            url += $"&organicManureID={organicManureId.Value}";
+        }
+
+        url = string.Format(url, HttpUtility.UrlEncode(cropId.ToString()), HttpUtility.UrlEncode(fromdate.ToString()), HttpUtility.UrlEncode(toDate.ToString()), HttpUtility.UrlEncode(confirm.ToString()));
+        var response = await httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (totalN, error);
+    }
 
     public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year, bool confirm)
     {
@@ -1295,6 +1337,70 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
             url = string.Format(url, managementId, confirm);
             var response = await httpClient.GetAsync(url);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            if (error == null)
+            {
+                error = new Error();
+            }
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre.Message);
+            throw new Exception(error.Message, hre);
+        }
+        catch (Exception ex)
+        {
+            if (error == null)
+            {
+                error = new Error();
+            }
+            error.Message = ex.Message;
+            _logger.LogError(ex.Message);
+            throw new Exception(error.Message, ex);
+        }
+        return (totalN, error);
+    }
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(int cropId, bool confirm, int? fertiliserId, int? organicManureId)
+    {
+        Error error = null;
+        decimal totalN = 0;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            string url = APIURLHelper.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserAsyncAPI;
+
+            if (fertiliserId.HasValue)
+            {
+                url += $"&fertiliserID={fertiliserId.Value}";
+            }
+            if (organicManureId.HasValue)
+            {
+                url += $"&organicManureID={organicManureId.Value}";
+            }
+
+            url = string.Format(url, cropId, confirm);
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
