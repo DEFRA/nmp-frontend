@@ -7256,4 +7256,49 @@ livestock manure.</value>
   <data name="MsgForNotValidValueForNutrient" xml:space="preserve">
     <value>The value in not valid for {0}. The value must be a whole number between {1} and {2}.</value>
   </data>
+  <data name="MsgValidateSoilMineralNitrogenMinMax" xml:space="preserve">
+    <value>The value in not valid for {0}. Enter a value between {1} and {2}.</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt0To30CM" xml:space="preserve">
+    <value>Soil mineral nitrogen (N) at 0 to 30cm</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt030CM" xml:space="preserve">
+    <value>SoilMineralNitrogenAt030CM</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt3060CM" xml:space="preserve">
+    <value>SoilMineralNitrogenAt3060CM</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt6090CM" xml:space="preserve">
+    <value>SoilMineralNitrogenAt6090CM</value>
+  </data>
+  <data name="MsgEnterAValueBetweenValue" xml:space="preserve">
+    <value>Enter a value between {0} and {1}.</value>
+  </data>
+  <data name="MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces" xml:space="preserve">
+    <value>Enter an amount between {0} and {1} with no decimal places.</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt6090AtLowerCase" xml:space="preserve">
+    <value>soil mineral nitrogen (N) at 60cm to 90cm</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt3060LowerCase" xml:space="preserve">
+    <value>soil mineral nitrogen (N) at 30cm to 60cm</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt030CMInLowerCase" xml:space="preserve">
+    <value>soil mineral nitrogen (N) at 0 to 30cm</value>
+  </data>
+  <data name="MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces" xml:space="preserve">
+    <value>Enter an amount between {0} and {1} with 1 decimal places.</value>
+  </data>
+  <data name="lblNumberOfShootsForError" xml:space="preserve">
+    <value>NumberOfShoots</value>
+  </data>
+  <data name="lblCropHeightForError" xml:space="preserve">
+    <value>CropHeight</value>
+  </data>
+  <data name="lblSoilOrganicMatterForErrorNotValidValue" xml:space="preserve">
+    <value>SoilOrganicMatter</value>
+  </data>
+  <data name="lblSampleDepthForErrorNotValidValue" xml:space="preserve">
+    <value>SampleDepth</value>
+  </data>
 </root>
