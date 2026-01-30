@@ -17,7 +17,7 @@ public interface ICropService
 
     Task<List<Crop>> FetchCropsByFieldId(int fieldId);
 
-    Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId);
+    Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland);
     Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
     Task<(HarvestYearResponseHeader, Error)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
     Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId);
