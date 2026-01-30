@@ -1393,7 +1393,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 Message = Resource.MsgServiceNotAvailable
             };
 
-            _logger.LogError(hre.Message);
+            _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
@@ -1403,7 +1403,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 Message = ex.Message
             };
 
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }
         return (totalN, error);
