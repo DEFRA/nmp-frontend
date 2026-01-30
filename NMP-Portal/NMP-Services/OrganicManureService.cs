@@ -1394,7 +1394,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             };
 
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
+            throw new InvalidOperationException(error.Message, hre);
         }
         catch (Exception ex)
         {
