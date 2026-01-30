@@ -1113,16 +1113,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         var result = await response.Content.ReadAsStringAsync();
         var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-        if (responseWrapper?.Data?.TotalN != null)
-        {
-            totalN = responseWrapper.Data.TotalN.ToObject<decimal>();
-        }
-        else
-        {
-            totalN = 0;
-        }
-
+        totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
         return (totalN, error);
     }
 
