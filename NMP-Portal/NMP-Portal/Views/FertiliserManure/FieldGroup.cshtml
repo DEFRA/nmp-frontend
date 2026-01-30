@@ -47,7 +47,7 @@
                 @if (Model != null)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()"/>

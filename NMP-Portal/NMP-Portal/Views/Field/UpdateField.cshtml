@@ -63,7 +63,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
@@ -141,7 +141,7 @@
                         <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row> *@
-                @if (!Model.isEnglishRules)
+                @if (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
