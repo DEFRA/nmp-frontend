@@ -7187,4 +7187,10 @@ livestock manure.</value>
   <data name="MsgForNotValidValueForNutrient" xml:space="preserve">
     <value>The value in not valid for {0}. The value must be a whole number between {1} and {2}.</value>
   </data>
+  <data name="MsgValidateSoilMineralNitrogenMinMax" xml:space="preserve">
+    <value>The value in not valid for {0}. Enter a value between {1} and [2}.</value>
+  </data>
+  <data name="lblSoilMineralNitrogenAt0To30CM" xml:space="preserve">
+    <value>soil mineral nitrogen (N) at 0 to 30cm</value>
+  </data>
 </root>

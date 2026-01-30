@@ -12635,6 +12635,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to soil mineral nitrogen (N) at 0 to 30cm.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt0To30CM {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt0To30CM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil mineral nitrogen (N) at 30cm to 60cm.
         /// </summary>
         public static string lblSoilMineralNitrogenAt3060CMForError {
@@ -20834,6 +20843,15 @@ namespace NMP.Commons.Resources {
         public static string MsgUricAcid {
             get {
                 return ResourceManager.GetString("MsgUricAcid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value in not valid for {0}. Enter a value between {1} and [2}..
+        /// </summary>
+        public static string MsgValidateSoilMineralNitrogenMinMax {
+            get {
+                return ResourceManager.GetString("MsgValidateSoilMineralNitrogenMinMax", resourceCulture);
             }
         }
         
