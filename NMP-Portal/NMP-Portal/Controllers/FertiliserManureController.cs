@@ -2904,20 +2904,21 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             //warning excel sheet row no. 8
 
             //NMax limit for crop logic
+            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(managementId);
+            int cropId = managementPeriod.CropID ?? 0;
             decimal previousApplicationsN = 0;
             decimal currentApplicationNitrogen = Convert.ToDecimal(model.N);
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
             {
-                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), null);
+                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), null);
             }
             else
             {
-                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, false, null, null);
+                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
             }
 
-            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(managementId);
-            if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null && managementPeriod.CropID != null)
+            if (managementPeriod.CropID != null)
             {
                 (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.CropTypeID != null)
@@ -2943,17 +2944,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
                                     nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure);
 
-                                    //correction begin for user story NMPT-1742
                                     decimal totalNitrogenApplied = 0;
-                                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-                                    {
-                                        totalNitrogenApplied = previousApplicationsN;
-                                    }
-                                    else
-                                    {
-                                        totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
-                                    }
-                                    //end
+
+                                    totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
+
                                     if (totalNitrogenApplied > nMaxLimit)
                                     {
                                         string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
