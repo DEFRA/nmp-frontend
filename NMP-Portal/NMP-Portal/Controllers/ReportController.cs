@@ -139,9 +139,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                         cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
                                     }
                                     cropTypeList = cropTypeList
-                                    .Where(crop => cropTypeLinking
-                                    .Any(link => link.CropTypeId == crop.CropTypeID))
-                                    .DistinctBy(x => x.CropTypeID).ToList();
+                                    .Where(crop =>cropTypeLinking.
+                                    Any(link => link.CropTypeId == crop.CropTypeID)
+                                    && ( crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass
+                                         || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+                                    )
+                                    .DistinctBy(x => x.CropTypeID)
+                                    .ToList();
 
 
                                     if (cropTypeList.Count > 0)
@@ -6225,7 +6229,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 y = _farmDataProtector.Protect(model.Year.ToString())
             });
         }
-        else 
+        else
         {
             return RedirectToAction("ImportExportOption");
         }
@@ -7138,7 +7142,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
 
 
-    
+
 
 
 

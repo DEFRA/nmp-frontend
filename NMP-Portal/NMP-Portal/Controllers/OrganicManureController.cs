@@ -6730,144 +6730,148 @@ namespace NMP.Portal.Controllers
             {
                 decimal totalN = 0;
                 decimal previousApplicationsN = 0;
-                List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(fieldId));
-                var crop = cropsResponse.Where(x => x.Year == model.HarvestYear && x.Confirm == false).ToList();
+                (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
+
                 if (crop != null)
                 {
-                    (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop[0].CropTypeID.Value);
-                    if (error == null)
+                    if (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
                     {
-                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
-                        if (nmaxLimitEnglandOrWales != null)
+                        (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+                        if (error == null)
                         {
-                            //passing orgId
-                            if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
+                            int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+                            if (nmaxLimitEnglandOrWales != null)
                             {
-                                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
-                            }
-                            else
-                            {
-                                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
-                            }
-
-                            if (error == null)
-                            {
-                                decimal nMaxLimit = 0;
-                                int? percentOfTotalNForUseInNmaxCalculation = null;
-                                (ManureType manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-                                if (manureType != null)
+                                //passing orgId
+                                if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
                                 {
-                                    percentOfTotalNForUseInNmaxCalculation = manureType.PercentOfTotalNForUseInNmaxCalculation;
-                                }
-
-                                decimal currentApplicationNitrogen = 0;
-                                if (percentOfTotalNForUseInNmaxCalculation != null)
-                                {
-                                    decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
-                                    currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
-                                    totalN = previousApplicationsN + currentApplicationNitrogen;
-
-                                    //fetch current year manure type ids
-                                    (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-
-                                    //fetch previous year manure type ids
-                                    (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
-                                    if (error == null)
-                                    {
-                                        nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                                        OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-
-                                        bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
-
-                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut ?? 0, hasSpecialManure);
-
-                                        if (totalN > nMaxLimit)
-                                        {
-                                            model.IsNMaxLimitWarning = true;
-                                            var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
-
-                                            WarningResponse? warning = warningList
-                                                .FirstOrDefault(x => x.CountryID == farm.CountryID &&
-                                                                     string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                            if (warning != null)
-                                            {
-                                                model.CropNmaxLimitWarningHeader = warning.Header;
-                                                model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
-
-                                                model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-                                                model.CropNmaxLimitWarningPara3 = warning.Para3;
-                                            }
-
-                                        }
-                                    }
+                                    (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
                                 }
                                 else
                                 {
-                                    if (isGetCheckAnswer)
-                                    {
-                                        (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
+                                    (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
+                                }
 
+                                if (error == null)
+                                {
+                                    decimal nMaxLimit = 0;
+                                    int? percentOfTotalNForUseInNmaxCalculation = null;
+                                    (ManureType manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+                                    if (manureType != null)
+                                    {
+                                        percentOfTotalNForUseInNmaxCalculation = manureType.PercentOfTotalNForUseInNmaxCalculation;
+                                    }
+
+                                    decimal currentApplicationNitrogen = 0;
+                                    if (percentOfTotalNForUseInNmaxCalculation != null)
+                                    {
+                                        decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
+                                        currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
+                                        totalN = previousApplicationsN + currentApplicationNitrogen;
+
+                                        //fetch current year manure type ids
+                                        (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+
+                                        //fetch previous year manure type ids
+                                        (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
                                         if (error == null)
                                         {
-                                            (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                            (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+                                            nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
+                                            OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+
+                                            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+
+                                            nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure);
+
+                                            if (totalN > nMaxLimit)
+                                            {
+                                                model.IsNMaxLimitWarning = true;
+                                                var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
+
+                                                WarningResponse? warning = warningList
+                                                    .FirstOrDefault(x => x.CountryID == farm.CountryID &&
+                                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                                                if (warning != null)
+                                                {
+                                                    model.CropNmaxLimitWarningHeader = warning.Header;
+                                                    model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
+                                                    model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
+
+                                                    model.CropNmaxLimitWarningPara1 = warning.Para1;
+                                                    model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                                    model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (isGetCheckAnswer)
+                                        {
+                                            (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
+
                                             if (error == null)
                                             {
-                                                nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-
-                                                OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                                bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
-                                                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop[0].Yield == null ? null : crop[0].Yield.Value, fieldDetail.SoilTypeName, crop[0].CropInfo1 == null ? null : crop[0].CropInfo1.Value, crop[0].CropTypeID.Value, crop[0].PotentialCut ?? 0, hasSpecialManure);
-
-                                                if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
+                                                (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                                                (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+                                                if (error == null)
                                                 {
-                                                    model.IsNMaxLimitWarning = true;
+                                                    nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
 
-                                                    var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
+                                                    OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                                                    bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+                                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure);
 
-                                                    WarningResponse? warning = warningList
-                                                        .FirstOrDefault(x => x.CountryID == farm.CountryID &&
-                                                                             string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                                    if (warning != null)
+                                                    if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                     {
-                                                        model.CropNmaxLimitWarningHeader = warning.Header;
-                                                        model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                        model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
+                                                        model.IsNMaxLimitWarning = true;
 
-                                                        model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-                                                        model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                        var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
+
+                                                        WarningResponse? warning = warningList
+                                                            .FirstOrDefault(x => x.CountryID == farm.CountryID &&
+                                                                                 string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                                                        if (warning != null)
+                                                        {
+                                                            model.CropNmaxLimitWarningHeader = warning.Header;
+                                                            model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
+                                                            model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
+
+                                                            model.CropNmaxLimitWarningPara1 = warning.Para1;
+                                                            model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                                            model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                        }
+
                                                     }
-
                                                 }
+                                                else
+                                                {
+                                                    return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
+                                                }
+
                                             }
                                             else
                                             {
                                                 return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                                             }
-
-                                        }
-                                        else
-                                        {
-                                            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                                         }
                                     }
+
+                                }
+                                else
+                                {
+                                    return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                                 }
 
                             }
-                            else
-                            {
-                                return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                            }
-
+                        }
+                        else
+                        {
+                            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                         }
                     }
-                    else
-                    {
-                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                    }
+                    
                 }
             }
 
