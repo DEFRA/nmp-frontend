@@ -3598,6 +3598,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CropHeight.
+        /// </summary>
+        public static string lblCropHeightForError {
+            get {
+                return ResourceManager.GetString("lblCropHeightForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which option applies to your {0}?.
         /// </summary>
         public static string lblCropInfo1ForCheckAnswer {
@@ -9683,6 +9692,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NumberOfShoots.
+        /// </summary>
+        public static string lblNumberOfShootsForError {
+            get {
+                return ResourceManager.GetString("lblNumberOfShootsForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of shoots per square metre.
         /// </summary>
         public static string lblNumberOfShootsPerSquareMetre {
@@ -11924,6 +11942,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SampleDepth.
+        /// </summary>
+        public static string lblSampleDepthForErrorNotValidValue {
+            get {
+                return ResourceManager.GetString("lblSampleDepthForErrorNotValidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample for soil mineral nitrogen (N).
         /// </summary>
         public static string lblSampleForSoilMineralNitrogen {
@@ -12626,6 +12653,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogenAt030CM.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt030CM {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt030CM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil mineral nitrogen (N) at 30cm.
         /// </summary>
         public static string lblSoilMineralNitrogenAt030CMForError {
@@ -12637,9 +12673,27 @@ namespace NMP.Commons.Resources {
         /// <summary>
         ///   Looks up a localized string similar to soil mineral nitrogen (N) at 0 to 30cm.
         /// </summary>
+        public static string lblSoilMineralNitrogenAt030CMInLowerCase {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt030CMInLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil mineral nitrogen (N) at 0 to 30cm.
+        /// </summary>
         public static string lblSoilMineralNitrogenAt0To30CM {
             get {
                 return ResourceManager.GetString("lblSoilMineralNitrogenAt0To30CM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogenAt3060CM.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt3060CM {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt3060CM", resourceCulture);
             }
         }
         
@@ -12649,6 +12703,33 @@ namespace NMP.Commons.Resources {
         public static string lblSoilMineralNitrogenAt3060CMForError {
             get {
                 return ResourceManager.GetString("lblSoilMineralNitrogenAt3060CMForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to soil mineral nitrogen (N) at 30cm to 60cm.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt3060LowerCase {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt3060LowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to soil mineral nitrogen (N) at 60cm to 90cm.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt6090AtLowerCase {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt6090AtLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilMineralNitrogenAt6090CM.
+        /// </summary>
+        public static string lblSoilMineralNitrogenAt6090CM {
+            get {
+                return ResourceManager.GetString("lblSoilMineralNitrogenAt6090CM", resourceCulture);
             }
         }
         
@@ -12739,6 +12820,15 @@ namespace NMP.Commons.Resources {
         public static string lblSoilOrganicMatterForError {
             get {
                 return ResourceManager.GetString("lblSoilOrganicMatterForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SoilOrganicMatter.
+        /// </summary>
+        public static string lblSoilOrganicMatterForErrorNotValidValue {
+            get {
+                return ResourceManager.GetString("lblSoilOrganicMatterForErrorNotValidValue", resourceCulture);
             }
         }
         
@@ -18795,6 +18885,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an amount between {0} and {1} with no decimal places..
+        /// </summary>
+        public static string MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces {
+            get {
+                return ResourceManager.GetString("MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an amount between {0} and {1} with 1 decimal places..
+        /// </summary>
+        public static string MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces {
+            get {
+                return ResourceManager.GetString("MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter at least one value before continuing.
         /// </summary>
         public static string MsgEnterAnAmountForAMinimumOfOneNutrientBeforeContinuing {
@@ -18980,6 +19088,15 @@ namespace NMP.Commons.Resources {
         public static string MsgEnterAValueBetween0And9999999999 {
             get {
                 return ResourceManager.GetString("MsgEnterAValueBetween0And9999999999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value between {0} and {1}..
+        /// </summary>
+        public static string MsgEnterAValueBetweenValue {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetweenValue", resourceCulture);
             }
         }
         
@@ -20847,7 +20964,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value in not valid for {0}. Enter a value between {1} and [2}..
+        ///   Looks up a localized string similar to The value in not valid for {0}. Enter a value between {1} and {2}..
         /// </summary>
         public static string MsgValidateSoilMineralNitrogenMinMax {
             get {

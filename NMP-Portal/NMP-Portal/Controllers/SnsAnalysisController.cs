@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using NMP.Application;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
-using NMP.Commons.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -187,10 +187,10 @@ namespace NMP.Portal.Controllers
                 var InvalidFormatError = ModelState["SoilMineralNitrogenAt030CM"].Errors.Count > 0 ?
                                 ModelState["SoilMineralNitrogenAt030CM"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt030CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt030CMForError)))
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt030CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt030CM)))
                 {
                     ModelState["SoilMineralNitrogenAt030CM"].Errors.Clear();
-                    ModelState["SoilMineralNitrogenAt030CM"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt030CMForError, 0, 999));
+                    ModelState["SoilMineralNitrogenAt030CM"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt030CMInLowerCase, 0, 999));
                 }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogenAt3060CM"))
@@ -198,10 +198,10 @@ namespace NMP.Portal.Controllers
                 var InvalidFormatError = ModelState["SoilMineralNitrogenAt3060CM"].Errors.Count > 0 ?
                                 ModelState["SoilMineralNitrogenAt3060CM"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt3060CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt3060CMForError)))
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt3060CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt3060CM)))
                 {
                     ModelState["SoilMineralNitrogenAt3060CM"].Errors.Clear();
-                    ModelState["SoilMineralNitrogenAt3060CM"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt3060CMForError, 0, 999));
+                    ModelState["SoilMineralNitrogenAt3060CM"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt3060LowerCase, 0, 999));
                 }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogenAt6090CM"))
@@ -209,10 +209,10 @@ namespace NMP.Portal.Controllers
                 var InvalidFormatError = ModelState["SoilMineralNitrogenAt6090CM"].Errors.Count > 0 ?
                                 ModelState["SoilMineralNitrogenAt6090CM"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt6090CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt6090CMForError)))
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogenAt6090CM"].AttemptedValue, Resource.lblSoilMineralNitrogenAt6090CM)))
                 {
                     ModelState["SoilMineralNitrogenAt6090CM"].Errors.Clear();
-                    ModelState["SoilMineralNitrogenAt6090CM"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt6090CMForError, 0, 999));
+                    ModelState["SoilMineralNitrogenAt6090CM"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt6090AtLowerCase, 0, 999));
                 }
             }
             if (model.SoilMineralNitrogenAt030CM == null)
@@ -227,21 +227,21 @@ namespace NMP.Portal.Controllers
             {
                 if (model.SoilMineralNitrogenAt030CM < 0 || model.SoilMineralNitrogenAt030CM > 999)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt0To30CM, 0, 999));
+                    ModelState.AddModelError("SoilMineralNitrogenAt030CM", Resource.MsgEnterAValueBetween0And999);
                 }
             }
             if (model.SoilMineralNitrogenAt3060CM != null)
             {
                 if (model.SoilMineralNitrogenAt3060CM < 0 || model.SoilMineralNitrogenAt3060CM > 999)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt6090CMForError, 0, 999));
+                    ModelState.AddModelError("SoilMineralNitrogenAt3060CM", Resource.MsgEnterAValueBetween0And999);
                 }
             }
             if (model.SoilMineralNitrogenAt6090CM != null)
             {
                 if (model.SoilMineralNitrogenAt6090CM < 0 || model.SoilMineralNitrogenAt6090CM > 999)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt6090CMForError, 0, 999));
+                    ModelState.AddModelError("SoilMineralNitrogenAt6090CM", Resource.MsgEnterAValueBetween0And999);
                 }
             }
             if (!ModelState.IsValid)
@@ -700,27 +700,37 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SoilOrganicMatter(SnsAnalysisViewModel model)
+        public IActionResult SoilOrganicMatter(SnsAnalysisViewModel model)
         {
             _logger.LogTrace($"SnsAnalysis Controller : SoilOrganicMatter() post action called");
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilOrganicMatter"))
+            if (!ModelState.IsValid && ModelState.ContainsKey("SoilOrganicMatter") && ModelState["SoilOrganicMatter"] != null)
             {
-                var InvalidFormatError = ModelState["SoilOrganicMatter"].Errors.Count > 0 ?
-                                ModelState["SoilOrganicMatter"].Errors[0].ErrorMessage.ToString() : null;
+                var InvalidFormatError = ModelState["SoilOrganicMatter"]?.Errors.Count > 0 ?
+                               ModelState["SoilOrganicMatter"]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilOrganicMatter"].AttemptedValue, Resource.lblSoilOrganicMatterForError)))
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilOrganicMatter"].AttemptedValue, Resource.lblSoilOrganicMatterForErrorNotValidValue)))
                 {
-                    ModelState["SoilOrganicMatter"].Errors.Clear();
-                    ModelState["SoilOrganicMatter"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilOrganicMatter, 0, 100));// string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblSoilOrganicMatter));
+                    ModelState["SoilOrganicMatter"]?.Errors.Clear();
+                    ModelState["SoilOrganicMatter"]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilOrganicMatter, 0, 100));
                 }
+
             }
+
+
             if (model.SoilOrganicMatter == null)
             {
                 ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPercentageValue));
             }
-            if (model.SoilOrganicMatter != null && (model.SoilOrganicMatter < 0 || model.SoilOrganicMatter > 100))
+            if (model.SoilOrganicMatter != null)
             {
-                ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilOrganicMatter, 0, 100));
+                if (decimal.Round(model.SoilOrganicMatter.Value, 1) != model.SoilOrganicMatter)
+                {
+                    ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 100));
+                }
+                if (model.SoilOrganicMatter < 0 || model.SoilOrganicMatter > 100)
+                {
+                    ModelState.AddModelError("SoilOrganicMatter", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 100));
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -800,9 +810,16 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAdjustmentValue.ToLower()));
             }
-            if (model.AdjustmentValue != null && (model.AdjustmentValue < 0 || model.AdjustmentValue > 60))
+            if (model.AdjustmentValue != null)
             {
-                ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblAdjustmentValue, 0, 60));
+                if (model.AdjustmentValue.Value % 1 != 0)
+                {
+                    ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 60));
+                }
+                if (model.AdjustmentValue < 0 || model.AdjustmentValue > 60)
+                {
+                    ModelState.AddModelError("AdjustmentValue", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 60));
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -965,6 +982,24 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> NumberOfShoots(SnsAnalysisViewModel model)
         {
             _logger.LogTrace($"SnsAnalysis Controller : NumberOfShoots() post action called");
+            if (!ModelState.IsValid && ModelState.ContainsKey("NumberOfShoots") && ModelState["NumberOfShoots"] != null)
+            {
+                var value = ModelState["NumberOfShoots"]?.AttemptedValue;
+
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    ModelState["NumberOfShoots"]?.Errors.Clear();
+
+                    if (!decimal.TryParse(value, out decimal num))
+                    {
+                        ModelState["NumberOfShoots"]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilOrganicMatter, 0, 1500));
+                    }
+                    else if (num % 1 != 0)
+                    {
+                        ModelState["NumberOfShoots"]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 1500));
+                    }
+                }
+            }
             if (model.NumberOfShoots == null)
             {
                 ModelState.AddModelError("NumberOfShoots", Resource.lblEnterAValidNumber);
@@ -973,9 +1008,12 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if (model.NumberOfShoots != null && (model.NumberOfShoots < 0 || model.NumberOfShoots > 1500))
+            if (model.NumberOfShoots != null)
             {
-                ModelState.AddModelError("NumberOfShoots", string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblNumberOfShoots, 0, 1500));
+                if (model.NumberOfShoots < 0 || model.NumberOfShoots > 1500)
+                {
+                    ModelState.AddModelError("NumberOfShoots", Resource.MsgEnterShootNumberBetween0To1500);
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -1140,6 +1178,17 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CropHeight(SnsAnalysisViewModel model)
         {
             _logger.LogTrace($"SnsAnalysis Controller : CropHeight() post action called");
+            if ((!ModelState.IsValid) && ModelState.ContainsKey("CropHeight"))
+            {
+                var InvalidFormatError = ModelState["CropHeight"]?.Errors.Count > 0 ?
+                                ModelState["CropHeight"]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["CropHeight"].AttemptedValue, Resource.lblCropHeight)))
+                {
+                    ModelState["CropHeight"]?.Errors.Clear();
+                    ModelState["CropHeight"]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblNumberOfShoots, 0, 30));
+                }
+            }
             if (model.CropHeight == null)
             {
                 ModelState.AddModelError("CropHeight", Resource.lblEnterACropHeightBeforeContinue);
@@ -1148,9 +1197,16 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SeasonId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if (model.CropHeight != null && (model.CropHeight < 0 || model.CropHeight > 30))
+            if (model.CropHeight != null)
             {
-                ModelState.AddModelError("CropHeight", Resource.MSGEnterAValidCropHeight);
+                if (model.CropHeight.Value % 1 != 0)
+                {
+                    ModelState.AddModelError("CropHeight", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 30));
+                }
+                if (model.CropHeight < 0 || model.CropHeight > 30)
+                {
+                    ModelState.AddModelError("CropHeight", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 30));
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -1220,18 +1276,18 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GreenAreaIndex(SnsAnalysisViewModel model)
+        public IActionResult GreenAreaIndex(SnsAnalysisViewModel model)
         {
             _logger.LogTrace($"SnsAnalysis Controller : GreenAreaIndex() post action called");
             if ((!ModelState.IsValid) && ModelState.ContainsKey("GreenAreaIndex"))
             {
-                var greenAreaIndexError = ModelState["GreenAreaIndex"].Errors.Count > 0 ?
-                                ModelState["GreenAreaIndex"].Errors[0].ErrorMessage.ToString() : null;
+                var greenAreaIndexError = ModelState["GreenAreaIndex"]?.Errors.Count > 0 ?
+                                ModelState["GreenAreaIndex"]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (greenAreaIndexError != null && greenAreaIndexError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["GreenAreaIndex"].RawValue, Resource.lblGreenAreaIndexForError)))
+                if (greenAreaIndexError != null && greenAreaIndexError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["GreenAreaIndex"]?.RawValue, Resource.lblGreenAreaIndexForError)))
                 {
-                    ModelState["GreenAreaIndex"].Errors.Clear();
-                    ModelState["GreenAreaIndex"].Errors.Add(Resource.MsgForGreenAreaIndex);
+                    ModelState["GreenAreaIndex"]?.Errors.Clear();
+                    ModelState["GreenAreaIndex"]?.Errors.Add(Resource.MsgForGreenAreaIndex);
                 }
             }
             if (model.GreenAreaIndex == null)
@@ -1241,7 +1297,7 @@ namespace NMP.Portal.Controllers
 
             if (model.GreenAreaIndex != null && (model.GreenAreaIndex < 0 || model.GreenAreaIndex > 3))
             {
-                ModelState.AddModelError("GreenAreaIndex", Resource.MsgEnterAValidNumericGAIvalue);
+                ModelState.AddModelError("GreenAreaIndex", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 3));
             }
             if (!ModelState.IsValid)
             {
@@ -1390,28 +1446,45 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SampleDepth(SnsAnalysisViewModel model)
         {
             _logger.LogTrace($"SnsAnalysis Controller : SampleDepth() post action called");
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("SampleDepth"))
-            {
-                var InvalidFormatError = ModelState["SampleDepth"].Errors.Count > 0 ?
-                                ModelState["SampleDepth"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SampleDepth"].AttemptedValue, Resource.lblSamplelDepthForError)))
+            if (!ModelState.IsValid && ModelState.ContainsKey("SampleDepth") && ModelState["SampleDepth"] != null)
+            {
+                var value = ModelState["SampleDepth"]?.AttemptedValue;
+
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    ModelState["SampleDepth"].Errors.Clear();
-                    ModelState["SampleDepth"].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSampleDepth, 0, 90));
+                    ModelState["SampleDepth"]?.Errors.Clear();
+
+                    if (!decimal.TryParse(value, out decimal num))
+                    {
+                        ModelState["SampleDepth"]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSampleDepth, 1, 90));
+                    }
+                    else if (num % 1 != 0)
+                    {
+                        ModelState["SampleDepth"]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 1, 90));
+                    }
                 }
             }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilMineralNitrogen"))
-            {
-                var InvalidFormatError = ModelState["SoilMineralNitrogen"].Errors.Count > 0 ?
-                                ModelState["SoilMineralNitrogen"].Errors[0].ErrorMessage.ToString() : null;
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilMineralNitrogen"].AttemptedValue, Resource.lblSoilMineralNitrogenForError)))
+            if (!ModelState.IsValid && ModelState.ContainsKey("SoilMineralNitrogen") && ModelState["SoilMineralNitrogen"] != null)
+            {
+                var value = ModelState["SoilMineralNitrogen"]?.AttemptedValue;
+
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    ModelState["SoilMineralNitrogen"].Errors.Clear();
-                    ModelState["SoilMineralNitrogen"].Errors.Add(Resource.MsgValidationForSoilMineralNitrogen);
+                    ModelState["SoilMineralNitrogen"]?.Errors.Clear();
+
+                    if (!decimal.TryParse(value, out decimal num))
+                    {
+                        ModelState["SoilMineralNitrogen"]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilOrganicMatter, 0, 999));
+                    }
+                    else if (num % 1 != 0)
+                    {
+                        ModelState["SoilMineralNitrogen"]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
+                    }
                 }
             }
+
             if (model.SampleDepth == null)
             {
                 ModelState.AddModelError("SampleDepth", Resource.MsgEnterAValueBeforeContinue);
@@ -1422,16 +1495,24 @@ namespace NMP.Portal.Controllers
             }
             if (model.SampleDepth != null)
             {
-                if (model.SampleDepth < 0)
+                if (model.SampleDepth.Value % 1 != 0)
                 {
-                    ModelState.AddModelError("SampleDepth", string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblSampleDepth));
+                    ModelState.AddModelError("SampleDepth", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 1, 90));
+                }
+                if (model.SampleDepth < 1 || model.SampleDepth > 90)
+                {
+                    ModelState.AddModelError("SampleDepth", string.Format(Resource.MsgEnterAValueBetweenValue, 1, 90));
                 }
             }
             if (model.SoilMineralNitrogen != null)
             {
-                if (model.SoilMineralNitrogen < 0)
+                if (model.SoilMineralNitrogen.Value % 1 != 0)
                 {
-                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblSoilMineralNitrogen));
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
+                }
+                if (model.SoilMineralNitrogen < 0 || model.SoilMineralNitrogen > 999)
+                {
+                    ModelState.AddModelError("SoilMineralNitrogen", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999));
                 }
             }
             if (!ModelState.IsValid)
