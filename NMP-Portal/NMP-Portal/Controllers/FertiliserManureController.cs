@@ -3038,11 +3038,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (managementPeriod.CropID != null)
             {
                 (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                if (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
-                {
-                    if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.CropTypeID != null)
-                    {
-                        (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+                if (crop.CropTypeID != null &&
+                    string.IsNullOrWhiteSpace(error.Message) &&
+                    (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass ||
+                        crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+                )
+                { 
+                    (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                         if (error == null)
                         {
                             int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
@@ -3099,7 +3101,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         {
                             return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                         }
-                    }
+                    
                 }
 
             }
