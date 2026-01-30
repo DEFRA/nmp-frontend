@@ -30,7 +30,7 @@
 {
     <form asp-action="LivestockQuantity" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
+        <div hidden="hidden">
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
@@ -175,8 +175,7 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else
-                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
                             @if (!Model.IsCheckList)
                             {

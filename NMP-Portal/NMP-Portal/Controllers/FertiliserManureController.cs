@@ -2933,13 +2933,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             {
                                 decimal nMaxLimit = 0;
 
-                                (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByManIdFromOrgManure(managementId);
+                                (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                                (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
                                 if (error == null)
                                 {
                                     nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
 
                                     OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                    bool hasSpecialManure = Functions.HasSpecialManure(previousYearManureTypeIds, null);
+                                    bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
                                     nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure);
 
                                     //correction begin for user story NMPT-1742

@@ -3877,7 +3877,7 @@ cubic metres per hectare  not set</value>
     <value>Total area</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
-    <value>For Potassium(K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
+    <value>For Potassium (K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
   </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
@@ -4497,8 +4497,8 @@ cubic metres per hectare  not set</value>
   <data name="lblOrganicCropAvailableNTotal" xml:space="preserve">
     <value>Organic material crop available N total</value>
   </data>
-  <data name="lblGrassCutOnlyAdjustment" xml:space="preserve">
-    <value>Grass cut only adjustment</value>
+  <data name="lblThreeOrMoreCuts" xml:space="preserve">
+    <value>Three or more cuts</value>
   </data>
   <data name="lblHigh" xml:space="preserve">
     <value>high</value>
@@ -4714,7 +4714,7 @@ cubic metres per hectare  not set</value>
     <value>Update organic material imports and exports</value>
   </data>
   <data name="lblFarmSummaryContent11" xml:space="preserve">
-    <value>Update organic material storage</value>
+    <value>Update organic manure storage</value>
   </data>
   <data name="lblFarmSummaryContent7" xml:space="preserve">
     <value>Manage farm and field details</value>
@@ -5437,10 +5437,10 @@ cubic metres per hectare  not set</value>
     <value>Number of places</value>
   </data>
   <data name="lblLivestockReportContentTwentyThree" xml:space="preserve">
-    <value>Typical nitrogen (N) standard</value>
+    <value>Typical nitrogen (N) standard per year</value>
   </data>
   <data name="lblLivestockReportContentTwentyFour" xml:space="preserve">
-    <value>Entered nitrogen (N) standard</value>
+    <value>Entered nitrogen (N) standard per year</value>
   </data>
   <data name="lblLivestockReportContentTwentyFive" xml:space="preserve">
     <value>Total livestock manure nitrogen (N) production</value>
@@ -5554,10 +5554,10 @@ cubic metres per hectare  not set</value>
     <value>Not entered storage</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
-    <value>You have not entered any organic material storage for {0}</value>
+    <value>You have not entered any organic manure storage for {0}</value>
   </data>
-  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
-    <value>Add organic material storage</value>
+  <data name="lblAddAManureStore" xml:space="preserve">
+    <value>Add a manure store</value>
   </data>
   <data name="lblWinterWheat" xml:space="preserve">
     <value>Winter wheat</value>
@@ -5604,7 +5604,7 @@ livestock manure.</value>
     <value>do not compliance</value>
   </data>
   <data name="lblOrganicMaterialStorage" xml:space="preserve">
-    <value>Organic material storage</value>
+    <value>Organic manure storage</value>
   </data>
   <data name="lblMetres" xml:space="preserve">
     <value>metres</value>
@@ -5703,7 +5703,7 @@ livestock manure.</value>
     <value>About freeboards</value>
   </data>
   <data name="lblFreeboardIsTheDistanceBetweenTheTopOfTheTank" xml:space="preserve">
-    <value>Freeboard is the distance between the top of the tank and the level of the slurry inside. You must always keep this distance clear.</value>
+    <value>Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear.</value>
   </data>
   <data name="lblForASteelOrConcreteStore" xml:space="preserve">
     <value>For a steel or concrete store, you must keep a minimum of 30cm of freeboard.</value>
@@ -5832,7 +5832,7 @@ livestock manure.</value>
     <value>{0} kg per 1,000 places, per year</value>
   </data>
   <data name="lblKgPerPlacesPerYear" xml:space="preserve">
-    <value>{0}kg per places, per year</value>
+    <value>{0}kg per place, per year</value>
   </data>
   <data name="lblOccupancyAndNitrogenStandard" xml:space="preserve">
     <value>Occupancy and nitrogen (N) standard</value>
@@ -5945,17 +5945,14 @@ livestock manure.</value>
   <data name="lblSolidManureTotal" xml:space="preserve">
     <value>Solid manure total</value>
   </data>
-  <data name="lblTotaLiquidCapacity" xml:space="preserve">
-    <value>Total liquid capacity</value>
-  </data>
   <data name="lblTotalSolidCapacity" xml:space="preserve">
-    <value>Total solid capacity</value>
+    <value>Total solid manure capacity (volume)</value>
   </data>
   <data name="lblTotalSolidCapacityFreshWeight" xml:space="preserve">
-    <value>Total solid capacity (fresh weight)</value>
+    <value>Total solid manure capacity (fresh weight)</value>
   </data>
   <data name="lblTotalSurfaceArea" xml:space="preserve">
-    <value>Total surface area</value>
+    <value>Total area of uncovered stores</value>
   </data>
   <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
     <value>To create an existing manure storage capacity report, enter the manure storage on {0} in {1}</value>
@@ -5987,14 +5984,14 @@ livestock manure.</value>
   <data name="lblManureStorageTotals" xml:space="preserve">
     <value>Manure storage totals</value>
   </data>
-  <data name="lblTotalLiquidCapacity" xml:space="preserve">
-    <value>Total liquid capacity</value>
+  <data name="lblTotalSlurryCapacity" xml:space="preserve">
+    <value>Total slurry capacity</value>
   </data>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
-    <value>You have not added any Solid material storage</value>
+    <value>You have not added any Solid manure storage</value>
   </data>
-  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
-    <value>Add solid material storage</value>
+  <data name="lblAddASolidManureStore" xml:space="preserve">
+    <value>Add a solid manure store</value>
   </data>
   <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
     <value>You have not added any dirty water storage</value>
@@ -6275,8 +6272,8 @@ livestock manure.</value>
   <data name="lblSectionAddFarm" xml:space="preserve">
     <value>Add Farm</value>
   </data>
-  <data name="lblAddSlurryStorage" xml:space="preserve">
-    <value>Add slurry storage</value>
+  <data name="lblAddASlurryStore" xml:space="preserve">
+    <value>Add a slurry store</value>
   </data>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>
@@ -6288,7 +6285,7 @@ livestock manure.</value>
     <value>Update soil analysis</value>
   </data>
   <data name="MsgForPhPhosphorusPotassiumMagnesium" xml:space="preserve">
-    <value>Enter a value for either pH, Phosphorus (P),Potassium (K), or Magnesium (Mg).</value>
+    <value>Enter at least one value for either the pH, Phosphorus (P), Potassium (K), or Magnesium (Mg).</value>
   </data>
   <data name="lblChangeRainfallAmount" xml:space="preserve">
     <value>Change rainfall amount</value>
@@ -6366,7 +6363,7 @@ livestock manure.</value>
     <value>, in {0}</value>
   </data>
   <data name="lblUpdateOrganicMaterialStorage" xml:space="preserve">
-    <value>Update organic material storage</value>
+    <value>Update organic manure storage</value>
   </data>
   <data name="AddASoilMineralNitrogenAnalysisResult" xml:space="preserve">
     <value>Add a soil mineral nitrogen analysis result</value>
@@ -6501,7 +6498,7 @@ livestock manure.</value>
     <value> from your manure nitrogen (N) farm limit report.</value>
   </data>
   <data name="lblRemoveNLLivetsockContent" xml:space="preserve">
-    <value>This will remove {0} from your manure nitrogen (N) farm limit report.</value>
+    <value>This will remove {0} from your {1} manure nitrogen (N) farm limit report.</value>
   </data>
   <data name="lblAddMoreLivestock" xml:space="preserve">
     <value>Add more livestock</value>
@@ -6537,7 +6534,7 @@ livestock manure.</value>
     <value>What is the field name?</value>
   </data>
   <data name="MsgEnterExpectedYieldforCropinField" xml:space="preserve">
-    <value>Enter the expected yield for {0} in {1}, in tonnes per hectare?</value>
+    <value>Enter the expected yield for {0} in {1}, in tonnes per hectare.</value>
   </data>
   <data name="MsgEnterAnQuantityBetweenValue" xml:space="preserve">
     <value>Enter an quantity between 1 and 9,99,999 as an integer value only.</value>
@@ -6558,7 +6555,7 @@ livestock manure.</value>
     <value>Recommendations not available</value>
   </data>
   <data name="lblPreviousCroppingContentOnRecommendation" xml:space="preserve">
-    <value>To get recommendations for {0} for {1}, you will need to add 3 years history to the crop details for {2}.</value>
+    <value>To get recommendations for {0} for {1}, you will need to add 3 years' history to the crop details for {2}.</value>
   </data>
   <data name="lblAddYearCropDetailsForFieldName" xml:space="preserve">
     <value>Add 3 years history to crop details for {0}</value>
@@ -7148,6 +7145,12 @@ livestock manure.</value>
   <data name="lblValuePerCubicMetre" xml:space="preserve">
     <value>Value per cubic metre</value>
   </data>
+  <data name="lblFarmManureWithId" xml:space="preserve">
+    <value>FarmManure_{0}</value>
+  </data>
+  <data name="lblFarmManure" xml:space="preserve">
+    <value>FarmManure</value>
+  </data>
   <data name="lblLettuceFields" xml:space="preserve">
     <value>Lettuce fields</value>
   </data>
@@ -7195,5 +7198,62 @@ livestock manure.</value>
   </data>
   <data name="lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes" xml:space="preserve">
     <value>Select one option. These are the crop types from the SRUC Technical Notes.</value>
+  </data>
+  <data name="MsgFieldNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a field name that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgCropGroupNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a crop group name that is no more than 128 characters long</value>
+  </data>
+  <data name="MsgVarietyMaxLengthValidation" xml:space="preserve">
+    <value>Enter a variety name that is no more than 100 characters long.</value>
+  </data>
+  <data name="MsgOtherMaterialNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a material name that is no more than 250 characters long.</value>
+  </data>
+  <data name="MsgReceiverNameMaxLengthValidation" xml:space="preserve">
+    <value>Enter a name that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine1MaxLengthValidation" xml:space="preserve">
+    <value>Enter a address line 1 that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine2MaxLengthValidation" xml:space="preserve">
+    <value>Enter a address line 2 that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine3MaxLengthValidation" xml:space="preserve">
+    <value>Enter a town or city that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgAddressLine4MaxLengthValidation" xml:space="preserve">
+    <value>Enter a county that is no more than 50 characters long.</value>
+  </data>
+  <data name="MsgCommentMaxLengthValidation" xml:space="preserve">
+    <value>Enter a comment that is no more than 100 characters long.</value>
+  </data>
+  <data name="lblCapacityWeight" xml:space="preserve">
+    <value>CapacityWeight</value>
+  </data>
+  <data name="lblStorageBagCapacity" xml:space="preserve">
+    <value>StorageBagCapacity</value>
+  </data>
+  <data name="lblEnterTheLengthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the length to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheDepthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the depth to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheDiameterToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the diameter to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheWidthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the width to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheCircumferenceToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the circumference to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheWeightCapacityToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the weight capacity to one decimal place.</value>
+  </data>
+  <data name="MsgForNotValidValueForNutrient" xml:space="preserve">
+    <value>The value in not valid for {0}. The value must be a whole number between {1} and {2}.</value>
   </data>
 </root>

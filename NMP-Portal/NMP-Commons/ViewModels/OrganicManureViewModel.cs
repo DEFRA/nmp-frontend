@@ -84,6 +84,8 @@ public class OrganicManureViewModel
     public bool IsStartPeriodEndFebOrganicAppRateExceedMaxN150 { get; set; } = false;
     public int? CropOrder { get; set; }
     public string? EncryptedFieldId { get; set; }
+
+    [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgOtherMaterialNameMaxLengthValidation))]
     public string? OtherMaterialName { get; set; }
     public DateTime? DefaultFarmManureValueDate { get; set; }
     public bool? IsThisDefaultValueOfRB209 { get; set; }
@@ -157,4 +159,5 @@ public class OrganicManureViewModel
     public int StartClosedPeriodEndFebWarningLevelID { get; set; }
     public List<DefoliationList>? DefoliationList { get; set; }
     public bool IsDoubleCropValueChange { get; set; } = false;
+    public string? FarmGroupManureId { get; set; } = string.Empty;
 }

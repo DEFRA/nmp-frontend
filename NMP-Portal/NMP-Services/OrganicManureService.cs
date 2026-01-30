@@ -1864,4 +1864,52 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (totalN, error);
     }
+
+    public async Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeById(int id)
+    {
+        FarmManureTypeResponse farmManureType = new FarmManureTypeResponse();
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFarmManureTypeByIdAPI, id));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.records != null)
+            {
+                farmManureType = responseWrapper.Data.records.ToObject<FarmManureTypeResponse>();
+            }
+            else if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = new Error();
+                error = responseWrapper.Error.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error
+            {
+                Message = Resource.MsgServiceNotAvailable
+            };
+
+            _logger.LogError(hre.Message);
+            throw new Exception(error.Message, hre);
+        }
+        catch (Exception ex)
+        {
+            error = new Error
+            {
+                Message = ex.Message
+            };
+
+            _logger.LogError(ex.Message);
+            throw new Exception(error.Message, ex);
+        }
+        return (farmManureType, error);
+    }
 }
