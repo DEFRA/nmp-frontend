@@ -2712,7 +2712,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
     private async Task<(FertiliserManureViewModel, Error?)> IsNitrogenExceedWarning(FertiliserManureViewModel model, int managementId, int cropTypeId, decimal appNitrogen, DateTime startDate, DateTime endDate, string cropType, bool isGetCheckAnswer, int fieldId)
     {
-        Error? error = null;       
+        Error? error = null;
         decimal totalNitrogen = 0;
         //if we are coming for update then we will exclude the fertiliserId.
         if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
@@ -2825,7 +2825,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
-            DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31,00,00,00,DateTimeKind.Unspecified);
+            DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31, 00, 00, 00, DateTimeKind.Unspecified);
             decimal PreviousApplicationsNitrogen = 0;
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
@@ -2921,7 +2921,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (managementPeriod.CropID != null)
             {
                 (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                if (string.IsNullOrWhiteSpace(error.Message) && crop != null && crop.CropTypeID != null)
+
+                if (crop.CropTypeID != null && string.IsNullOrWhiteSpace(error.Message) &&
+                    (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass ||
+                        crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+                )
                 {
                     (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                     if (error == null)
@@ -2981,6 +2985,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
                     }
                 }
+
             }
 
         }
@@ -3278,7 +3283,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveFertiliser() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            
+
             if (model != null && model.IsComingFromRecommendation)
             {
                 TempData["NutrientRecommendationsError"] = ex.Message;
