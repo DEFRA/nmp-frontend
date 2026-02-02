@@ -61,19 +61,21 @@
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblEnterTheSoilMineralNitrogenAnalysisResult, Model.FieldName)</h1>
             </legand>
             <govuk-input name="SoilMineralNitrogenAt030CM" asp-for=@Model.SoilMineralNitrogenAt030CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt030CM
+                <govuk-input-label is-page-heading="true">@Resource.lblSoilMineralNitrogenAt0To30CM
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>
             <govuk-input name="SoilMineralNitrogenAt3060CM" asp-for=@Model.SoilMineralNitrogenAt3060CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM
+                <govuk-input-label is-page-heading="true">
+                    @Resource.lblSoilMineralNitrogenAt3060CMForError
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>
             <govuk-input name="SoilMineralNitrogenAt6090CM" asp-for=@Model.SoilMineralNitrogenAt6090CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
-                <govuk-input-label is-page-heading="true">@Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional
+                <govuk-input-label is-page-heading="true">
+                    @string.Format("{0} {1}",Resource.lblSoilMineralNitrogenAt6090CMForError,Resource.lblOptional)
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>

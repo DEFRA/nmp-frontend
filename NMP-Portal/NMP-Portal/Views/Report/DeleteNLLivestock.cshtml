@@ -132,7 +132,7 @@
                     <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                         @title
                 </govuk-fieldset-legend>
-                    <p class="govuk-body">@string.Format(Resource.lblRemoveNLLivetsockContent, Model.LivestockGroupName.ToLower())</p>
+                    <p class="govuk-body">@string.Format(Resource.lblRemoveNLLivetsockContent, Model.LivestockTypeName,Model.Year)</p>
                 <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteNLLivestock">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
