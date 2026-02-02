@@ -389,7 +389,7 @@ namespace NMP.Portal.Controllers
 
 
                     }
-                    if (model.PH == null && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
+                    if (ModelState.IsValid && model.PH == null && string.IsNullOrWhiteSpace(model.PotassiumIndexValue) &&
                         model.PhosphorusIndex == null && model.MagnesiumIndex == null)
                     {
                         ViewData["IsPostRequest"] = true;
@@ -403,7 +403,7 @@ namespace NMP.Portal.Controllers
                         if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["PhosphorusIndex"]?.AttemptedValue, Resource.lblPhosphorusIndex)))
                         {
                             ModelState["PhosphorusIndex"]?.Errors.Clear();
-                            ModelState["PhosphorusIndex"]?.Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                            ModelState["PhosphorusIndex"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 9));
                         }
                     }
 
@@ -417,7 +417,7 @@ namespace NMP.Portal.Controllers
                         if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MagnesiumIndex"].AttemptedValue, Resource.lblMagnesiumIndex)))
                         {
                             ModelState["MagnesiumIndex"]?.Errors.Clear();
-                            ModelState["MagnesiumIndex"]?.Errors.Add(Resource.MsgTheValueMustBeAnIntegerValueBetweenZeroAndNine);
+                            ModelState["MagnesiumIndex"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9));
                         }
                     }
                 }
@@ -431,7 +431,7 @@ namespace NMP.Portal.Controllers
                         if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Potassium"].AttemptedValue, Resource.lblPotassiumPerLitreOfSoil)))
                         {
                             ModelState["Potassium"]?.Errors.Clear();
-                            ModelState["Potassium"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmount));
+                            ModelState["Potassium"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
                         }
                     }
                     if ((!ModelState.IsValid) && ModelState.ContainsKey("Phosphorus"))
@@ -442,7 +442,7 @@ namespace NMP.Portal.Controllers
                         if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Phosphorus"].AttemptedValue, Resource.lblPhosphorusPerLitreOfSoil)))
                         {
                             ModelState["Phosphorus"]?.Errors.Clear();
-                            ModelState["Phosphorus"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmount));
+                            ModelState["Phosphorus"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 999));
                         }
                     }
                     if ((!ModelState.IsValid) && ModelState.ContainsKey("Magnesium"))
@@ -453,10 +453,10 @@ namespace NMP.Portal.Controllers
                         if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Magnesium"]?.AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil)))
                         {
                             ModelState["Magnesium"]?.Errors.Clear();
-                            ModelState["Magnesium"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmount));
+                            ModelState["Magnesium"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
                         }
                     }
-                    if (model.PH == null && model.Potassium == null &&
+                    if (ModelState.IsValid && model.PH == null && model.Potassium == null &&
                         model.Phosphorus == null && model.Magnesium == null)
                     {
                         ViewData["IsPostRequest"] = true;

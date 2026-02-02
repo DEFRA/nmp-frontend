@@ -68,7 +68,7 @@
 {
     <form class="form-with-overlay" asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
+        <div hidden="hidden">
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
@@ -221,7 +221,7 @@
                             @Model.ManureTypeName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ManureGroup" asp-controller="Report">
+                            <govuk-summary-list-row-action asp-action="ManureType" asp-controller="Report">
                                 @Resource.lblChange<span class="govuk-visually-hidden">
                                     @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
                                                                         Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
@@ -230,7 +230,7 @@
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                        @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
                             @if (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
                             {
@@ -267,7 +267,7 @@
                                                                                                                      </govuk-summary-list-row>
                                                                                                                      <govuk-summary-list-row>
                                                                                                                          <govuk-summary-list-row-key class=@((!Model.LivestockQuantity.HasValue) ? "govuk-error-message" : "")>
-                            @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                            @(string.Format("{0}{1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                                                                                                                             </govuk-summary-list-row-key>
                                                                                                                                             <govuk-summary-list-row-value>
@@ -276,7 +276,7 @@
                                                                                                                                             <govuk-summary-list-row-actions>
                                                                                                                                                 <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">
                                                                                                                                                     @Resource.lblChange<span class="govuk-visually-hidden">
-                                    @(string.Format("{0} {1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                                    @(string.Format("{0}{1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
                                 </span>
                             </govuk-summary-list-row-action>
@@ -287,16 +287,16 @@
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)? "govuk-error-message" : "")>
                                     @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblDefaultNutrientValueContentSecond, Model.ManureTypeName) :
-                                                                string.Format(Resource.lblNutrientValuesFor, Model.ManureTypeName))
-                                                                                                                               </govuk-summary-list-row-key>
-                                                                                                                               <govuk-summary-list-row-value>
-                                                                                                                                   @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? ((Model.DefaultNutrientValue == Resource.lblYes || Model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) ? Resource.lblYesUseTheseValues : Model.DefaultNutrientValue) : Resource.lblNotSet)
-                                                                                                                               </govuk-summary-list-row-value>
-                                                                                                                               <govuk-summary-list-row-actions>
-                                                                                                                                   <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">
-                                                                                                                                       @Resource.lblChange<span class="govuk-visually-hidden">
+                                                                string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureTypeName))
+                                                                                                                                                          </govuk-summary-list-row-key>
+                                                                                                                                                          <govuk-summary-list-row-value>
+                                                                                                                                                              @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? ((Model.DefaultNutrientValue == Resource.lblYes || Model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) ? Resource.lblYesUseTheseValues : Model.DefaultNutrientValue) : Resource.lblNotSet)
+                                                                                                                                                          </govuk-summary-list-row-value>
+                                                                                                                                                          <govuk-summary-list-row-actions>
+                                                                                                                                                              <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">
+                                                                                                                                                                  @Resource.lblChange<span class="govuk-visually-hidden">
                                             @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblDefaultNutrientValueContentSecond, Model.ManureTypeName) :
-                                                                                string.Format(Resource.lblNutrientValuesFor, Model.ManureTypeName))
+                                                                                string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureTypeName))
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
@@ -685,12 +685,13 @@
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblTotalPhosphateInThisImportOrExport,
-                                                        Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
-                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
+                    @if (Model.IsGrasslandDerogation != null && Model.IsGrasslandDerogation == true)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblTotalPhosphateInThisImportOrExport,
+                                    Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                                    Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @(string.Format("{0:N0}{1}", Math.Round(totalP2O5 * Model.LivestockQuantity.Value, 0), Resource.lblkg))
@@ -698,9 +699,10 @@
                         <govuk-summary-list-row-actions>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                </govuk-summary-list>
-            </div>
-            @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
+                                        }
+                    </govuk-summary-list>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
                 {
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
