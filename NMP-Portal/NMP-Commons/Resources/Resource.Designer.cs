@@ -12961,9 +12961,9 @@ namespace NMP.Commons.Resources {
         /// <summary>
         ///   Looks up a localized string similar to SoilMineralNitrogen.
         /// </summary>
-        public static string lblSoilMineralNitrogenForError {
+        public static string lblSoilMineralNitrogenWithSpace {
             get {
-                return ResourceManager.GetString("lblSoilMineralNitrogenForError", resourceCulture);
+                return ResourceManager.GetString("lblSoilMineralNitrogenWithSpace", resourceCulture);
             }
         }
         
