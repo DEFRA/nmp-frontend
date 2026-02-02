@@ -197,7 +197,7 @@ namespace NMP.Portal.Controllers
                         .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight) : 0;
 
                     ViewBag.TotalSurfaceCapacity = storeCapacityList
-                    .Where(x => x.Year == model.Year && x.IsCovered.HasValue && x.IsCovered.Value == false)
+                    .Where(x => x.Year == model.Year && x.IsCovered.HasValue && !x.IsCovered.Value)
                     .Sum(x => x.SurfaceArea);
 
 
