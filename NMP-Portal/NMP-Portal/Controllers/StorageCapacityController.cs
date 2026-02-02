@@ -196,8 +196,10 @@ namespace NMP.Portal.Controllers
                     ViewBag.TotalSolidWeightCapacity = storeCapacityList.Count > 0 ? storeCapacityList
                         .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight) : 0;
 
-                    ViewBag.TotalSurfaceCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year).Sum(x => x.SurfaceArea) : 0;
+                    ViewBag.TotalSurfaceCapacity = storeCapacityList
+                    .Where(x => x.Year == model.Year && x.IsCovered.HasValue && !x.IsCovered.Value)
+                    .Sum(x => x.SurfaceArea);
+
 
                     ViewBag.EncryptedSolidStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SolidManureStorage));
                     ViewBag.EncryptedSlurryStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SlurryStorage));
