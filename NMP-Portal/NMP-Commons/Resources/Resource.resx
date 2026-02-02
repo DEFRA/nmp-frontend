@@ -7301,4 +7301,16 @@ livestock manure.</value>
   <data name="lblSampleDepthForErrorNotValidValue" xml:space="preserve">
     <value>SampleDepth</value>
   </data>
+  <data name="lblCapacityWeightForSummary" xml:space="preserve">
+    <value>Capacity weigth</value>
+  </data>
+  <data name="lblSolidManureStorageTotal" xml:space="preserve">
+    <value>Solid manure storage total</value>
+  </data>
+  <data name="lblSlurryStorageTotal" xml:space="preserve">
+    <value>Slurry storage total</value>
+  </data>
+  <data name="lblTotalSurfaceAreaOfUncoveredStores" xml:space="preserve">
+    <value>Total surface area of uncovered stores</value>
+  </data>
 </root>
