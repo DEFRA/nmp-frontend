@@ -248,10 +248,21 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchTotalNBasedOnManIdAndAppDate(managementId, startDate, endDate, confirm, organicManureId);
     }
 
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDate(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedOnCropIdAndAppDate() called");
+        return await _organicManureService.FetchTotalNBasedOnCropIdAndAppDate(cropId, startDate, endDate, confirm, organicManureId);
+    }
+
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedOnManIdFromOrgManureAndFertiliser() called");
         return await _organicManureService.FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(managementId, confirm, fertiliserId, organicManureId);
+    }
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(int cropId, bool confirm, int? fertiliserId, int? organicManureId)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser() called");
+        return await _organicManureService.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, confirm, fertiliserId, organicManureId);
     }
 
     public async Task<(WindspeedResponse?, Error?)> FetchWindspeedById(int windspeedId)

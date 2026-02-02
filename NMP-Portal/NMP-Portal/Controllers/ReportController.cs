@@ -143,9 +143,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                         cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitScotland != null).ToList();
                                     }
                                     cropTypeList = cropTypeList
-                                    .Where(crop => cropTypeLinking
-                                    .Any(link => link.CropTypeId == crop.CropTypeID))
-                                    .DistinctBy(x => x.CropTypeID).ToList();
+                                    .Where(crop =>cropTypeLinking.
+                                    Any(link => link.CropTypeId == crop.CropTypeID)
+                                    && ( crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass
+                                         || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+                                    )
+                                    .DistinctBy(x => x.CropTypeID)
+                                    .ToList();
 
 
                                     if (cropTypeList.Count > 0)
