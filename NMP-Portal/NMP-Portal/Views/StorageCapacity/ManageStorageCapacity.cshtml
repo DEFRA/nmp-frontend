@@ -11,7 +11,6 @@
     var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
     var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
-    int count = 0;
     int totalCapacity = 0;
     decimal totalWeight = 0;
 }
@@ -110,7 +109,6 @@
                 <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
                 @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
                 {
-                    count = 0;
                     totalCapacity = 0;
                     <div class="table-container">
                         <table class="govuk-table">
@@ -126,7 +124,6 @@
                                 @for (int i = 0; i < ViewBag.SlurryStorageList.Count; i++)
                                 {
                                     var slurryStorage = ViewBag.SlurryStorageList[i];
-                                    count++;
                                     totalCapacity += slurryStorage.CapacityVolume;
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
@@ -200,12 +197,11 @@
                 <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
                 @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
                 {
-                    count = 0;
                     totalCapacity = 0;
                     totalWeight = 0;
                     <div class="table-container ">
                         <table class="govuk-table">
-                            <thead class="govuk-table__head">
+                            <thead class="govu2k-table__head">
                                 <tr class="govuk-table__row">
                                     <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
@@ -218,7 +214,6 @@
                                 @for (int i = 0; i < ViewBag.SolidManureStorageList.Count; i++)
                                 {
                                     var solidStorage = ViewBag.SolidManureStorageList[i];
-                                    count++;
                                     totalCapacity += solidStorage.CapacityVolume;
                                     totalWeight += solidStorage.CapacityWeight;
                                     <tr class="govuk-table__row">
