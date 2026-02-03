@@ -21,7 +21,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.AddExcessWinterRainfallAsync(farmId, year, excessWinterRainfallData, isUpdated);
     }
 
-    public async Task<(Farm, Error)> AddFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData)
     {
         _logger.LogTrace("Adding new farm: {FarmName}", farmData.Farm.Name);
         return await _farmService.AddFarmAsync(farmData);
@@ -37,11 +37,6 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     {
         _logger.LogTrace("Fetching list of countries");
         (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-        if (error != null && countryList.Count > 0)
-        {
-            countryList.RemoveAll(x => x.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland);
-
-        }
         return countryList.OrderBy(c => c.Name).ToList();
 
     }
@@ -64,7 +59,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.FetchExcessWinterRainfallOptionByIdAsync(id);
     }
 
-    public async Task<(Farm, Error)> FetchFarmByIdAsync(int farmId)
+    public async Task<(FarmResponse, Error)> FetchFarmByIdAsync(int farmId)
     {
         _logger.LogTrace("Fetching farm with ID: {FarmId}", farmId);
         return await _farmService.FetchFarmByIdAsync(farmId);
@@ -88,7 +83,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.IsFarmExistAsync(farmName, postcode, Id);
     }
 
-    public async Task<(Farm, Error)> UpdateFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData)
     {
         _logger.LogTrace("Updating farm: {FarmName}", farmData.Farm.Name);
         return await _farmService.UpdateFarmAsync(farmData);

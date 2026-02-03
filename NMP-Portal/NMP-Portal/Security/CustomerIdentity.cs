@@ -70,8 +70,7 @@ namespace NMP.Portal.Security
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
                 options.ResponseType = OpenIdConnectResponseType.Code;
-                options.SaveTokens = true;  // Save tokens in the authentication session
-                options.Scope.Add("openid profile offline_access");
+                options.SaveTokens = true;  // Save tokens in the authentication session                
                 options.Events ??= new OpenIdConnectEvents();
                 options.Events.OnAuthorizationCodeReceived += OnAuthorizationCodeReceived;
                 options.Events.OnRedirectToIdentityProvider += OnRedirectToIdentityProvider;

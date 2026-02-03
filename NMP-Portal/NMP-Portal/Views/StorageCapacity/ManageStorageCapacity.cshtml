@@ -1,11 +1,9 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    // string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
     ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     var dataLists = new List<(string Name, dynamic Data)>
     {
-        // ("DirtyWater", ViewBag.DirtyWaterList),
         ("SlurryStorage", ViewBag.SlurryStorageList),
         ("SolidManureStorage", ViewBag.SolidManureStorageList)
     };
@@ -13,6 +11,8 @@
     var nonEmptyLists = dataLists.Where(x => x.Data != null && x.Data.Count > 0).ToList();
     var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
+    int totalCapacity = 0;
+    decimal totalWeight = 0;
 }
 
 @section BeforeContent {
@@ -98,7 +98,7 @@
         }
 
         <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">
-            @Resource.lblAddOrganicMaterialStorage
+            @Resource.lblAddAManureStore
         </a>
     </div>
 </div>
@@ -109,6 +109,7 @@
                 <h2 class="govuk-heading-l non-standard">@Resource.lblSlurryStorage</h2>
                 @if (ViewBag.SlurryStorageList != null && ViewBag.SlurryStorageList.Count > 0)
                 {
+                    totalCapacity = 0;
                     <div class="table-container">
                         <table class="govuk-table">
                             <thead class="govuk-table__head">
@@ -120,14 +121,25 @@
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
-                                @foreach (var slurryStorage in ViewBag.SlurryStorageList)
+                                @for (int i = 0; i < ViewBag.SlurryStorageList.Count; i++)
                                 {
+                                    var slurryStorage = ViewBag.SlurryStorageList[i];
+                                    totalCapacity += slurryStorage.CapacityVolume;
                                     <tr class="govuk-table__row">
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                         <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@slurryStorage.StoreName</span></a></td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@slurryStorage.StoreName</span></a></td>
                                     </tr>
+                                    @if (i == ViewBag.SlurryStorageList.Count - 1)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <th scope="col" class="govuk-table__header livestock-type">@Resource.lblSlurryStorageTotal</th>
+                                            <th scope="col" class="govuk-table__header"></th>
+                                            <th scope="col" class="govuk-table__header">@string.Format("{0:N0} {1}", totalCapacity, Resource.lblMetresCubed)</th>
+                                            <th scope="col" class="govuk-table__header"></th>
+                                        </tr>
+                                    }
 
                                 }
                             </tbody>
@@ -138,13 +150,13 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySlurryStorage</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSlurryStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSlurryStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddASlurryStore</a>
                     </p>
                 }
             </govuk-tabs-item>
 
             @* Remove dirty water stores. We agreed to exclude dirty water during recent slurry/dirty water discussions (note this may be different in Scotland, as Neil came back with a slightly different interpretation), but we need to remove for England and Wales *@
-           @*  <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
+            @*  <govuk-tabs-item id="dirtyWaterList" label=@Resource.lblDirtyWater>
                 <h2 class="govuk-heading-l non-standard">@Resource.lblDirtyWater</h2>
                 @if (ViewBag.DirtyWaterList != null && ViewBag.DirtyWaterList.Count > 0)
                 {
@@ -185,6 +197,8 @@
                 <h2 class="govuk-heading-l non-standard">@Resource.lblSolidManureStorage</h2>
                 @if (ViewBag.SolidManureStorageList != null && ViewBag.SolidManureStorageList.Count > 0)
                 {
+                    totalCapacity = 0;
+                    totalWeight = 0;
                     <div class="table-container ">
                         <table class="govuk-table">
                             <thead class="govuk-table__head">
@@ -192,18 +206,33 @@
                                     <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblCapacityWeightForSummary</th>
                                     <th scope="col" class="govuk-table__header"></th>
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
-                                @foreach (var solidManureStorage in ViewBag.SolidManureStorageList)
+                                @for (int i = 0; i < ViewBag.SolidManureStorageList.Count; i++)
                                 {
+                                    var solidStorage = ViewBag.SolidManureStorageList[i];
+                                    totalCapacity += solidStorage.CapacityVolume;
+                                    totalWeight += solidStorage.CapacityWeight;
                                     <tr class="govuk-table__row">
-                                        <td class="govuk-table__cell">@solidManureStorage.StoreName</td>
-                                        <td class="govuk-table__cell">@solidManureStorage.SolidManureTypeName</td>
-                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidManureStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-id="@solidManureStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@solidManureStorage.StoreName</span></a></td>
+                                        <td class="govuk-table__cell">@solidStorage.StoreName</td>
+                                        <td class="govuk-table__cell">@solidStorage.SolidManureTypeName</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.CapacityVolume, Resource.lblMetresCubed)</td>
+                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.CapacityWeight, Resource.lbltonnes)</td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@solidStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@solidStorage.StoreName</span></a></td>
                                     </tr>
+                                    @if (i == ViewBag.SolidManureStorageList.Count - 1)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <th scope="col" class="govuk-table__header livestock-type">@Resource.lblSolidManureStorageTotal</th>
+                                            <th scope="col" class="govuk-table__header"></th>
+                                            <th scope="col" class="govuk-table__header">@string.Format("{0:N0} {1}", totalCapacity, Resource.lblMetresCubed)</th>
+                                            <th scope="col" class="govuk-table__header">@string.Format("{0:N0} {1}", totalWeight, Resource.lbltonnes)</th>
+                                            <th scope="col" class="govuk-table__header"></th>
+                                        </tr>
+                                    }
                                 }
                             </tbody>
                         </table>
@@ -213,7 +242,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnySolidMaterialStorage</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddSolidMaterialStorage</a>
+                        <a class="" asp-action="StoreName" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-q="@ViewBag.EncryptedSolidStateId" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-w="@Model.IsRemovedRecently">@Resource.lblAddASolidManureStore</a>
                     </p>
                 }
             </govuk-tabs-item>
@@ -226,7 +255,7 @@
                         <table class="govuk-table">
                             <tbody>
                                 <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalLiquidCapacity</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSlurryCapacity</th>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalLiquidCapacity, Resource.lblCubicMeters)</td>
                                 </tr>
                                 <tr class="govuk-table__row">
@@ -238,7 +267,7 @@
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSolidWeightCapacity, Resource.lbltonnes)</td>
                                 </tr>
                                 <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblTotalSurfaceAreaOfUncoveredStores</th>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", ViewBag.TotalSurfaceCapacity, Resource.lblMetresSquared)</td>
                                 </tr>
                             </tbody>
