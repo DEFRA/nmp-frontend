@@ -21,7 +21,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.AddExcessWinterRainfallAsync(farmId, year, excessWinterRainfallData, isUpdated);
     }
 
-    public async Task<(Farm, Error)> AddFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData)
     {
         _logger.LogTrace("Adding new farm: {FarmName}", farmData.Farm.Name);
         return await _farmService.AddFarmAsync(farmData);
@@ -83,7 +83,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.IsFarmExistAsync(farmName, postcode, Id);
     }
 
-    public async Task<(Farm, Error)> UpdateFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData)
     {
         _logger.LogTrace("Updating farm: {FarmName}", farmData.Farm.Name);
         return await _farmService.UpdateFarmAsync(farmData);

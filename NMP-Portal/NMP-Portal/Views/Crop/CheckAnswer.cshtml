@@ -327,24 +327,23 @@
                         </govuk-summary-list-row-actions>
                         } *@
                         </govuk-summary-list-row>
-                        @if(Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
-                        {
-                            <govuk-summary-list-row>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblCropGroup
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @Model.CropGroup
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblCropGroup</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                        }
-                        
                     }
 
-                    <govuk-summary-list-row class=@((!Model.CropTypeID.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblCropGroup
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.CropGroup
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblCropGroup</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    
+                    @if(Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
+                    {
+                        <govuk-summary-list-row class=@((!Model.CropTypeID.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
                             @Resource.lblWhatIsTheCropType
                         </govuk-summary-list-row-key>
@@ -354,12 +353,12 @@
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
 
-                            <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblWhatIsTheCropType</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblWhatIsTheCropType</span></govuk-summary-list-row-action>
 
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-
-
+                    }
+                    
                     @if (Model.IsComingFromRecommendation == null)
                     {
                             <govuk-summary-list-row class=@(((Model.Crops?.Count ?? 0) == 0)?"govuk-error-message":"")>
@@ -809,7 +808,9 @@
                         {
                             @if ((Model.CropInfo1 == null && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))) || Model.CropInfo1 != null && Model.CropInfo1 != 0)
                             {
-                                <govuk-summary-list-row class=@((!Model.CropInfo1.HasValue)?"govuk-error-message":"")>
+                                @if(ViewBag.CropInfoOneQuestion != null)
+                                {
+                                    <govuk-summary-list-row class=@((!Model.CropInfo1.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
                                         @* @string.Format(Resource.lblCropInfo1ForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType) *@
                                         @if (ViewBag.CropInfoOneQuestion != null)
@@ -832,6 +833,8 @@
                                             </govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
+                                }
+                                
                             }
 
                         }

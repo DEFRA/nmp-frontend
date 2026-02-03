@@ -148,73 +148,133 @@
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblJanuary, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                                                 </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInFebruary type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblFebruary, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInMarch type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblMarch, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInApril type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblApril, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInMay type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblMay, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInJune type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblJune, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInJuly type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblJuly, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInAugust type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblAugust, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInSeptember type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblSeptember, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInOctober type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblOctober, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInNovember type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblNovember, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                     <govuk-input asp-for=@Model.NumbersInDecember type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblDecember, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
-                        <govuk-input-suffix>@ViewBag.LivestockCategory </govuk-input-suffix>
+                    <govuk-input-suffix>
+                        @(ViewBag.LivestockCategory != null
+                                                ? ViewBag.LivestockCategory.ToLower()
+                                                : "")
+                    </govuk-input-suffix>
+
                     </govuk-input>
                 </govuk-fieldset>
                 <govuk-button type="submit" class="margin-bottom-forty">

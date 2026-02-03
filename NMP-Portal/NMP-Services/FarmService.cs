@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -19,7 +20,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(Guid orgId)
     {
         List<Farm> farmList = new List<Farm>();
-        Error error = new Error();
+        Error? error = new Error();
         string url = string.Format(APIURLHelper.FetchFarmByOrgIdAPI, orgId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -36,67 +37,46 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
         return (farmList, error);
     }
-    public async Task<(Farm, Error)> AddFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData)
     {
         string jsonData = JsonConvert.SerializeObject(farmData);
-        Farm farm = null;
-        Error error = new Error();
-
-        HttpClient httpClient = await GetNMPAPIClient();
+        Farm? farm = null;
+        Error? error = new Error();
+        
         // check if farm already exists or not
         bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
-        if (!IsFarmExist)
+        if (IsFarmExist)
         {
-            // if new farm then save farm data
-            var response = await httpClient.PostAsync(APIURLHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
-            {
+            error.Message = string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
+            return (farm, error);
+        }
 
-                JObject farmDataJObject = responseWrapper.Data["Farm"] as JObject;
-                if (farmData != null)
-                {
-                    farm = farmDataJObject.ToObject<Farm>();
-                }
-
-            }
-            else
+        HttpClient httpClient = await GetNMPAPIClient();        
+        var response = await httpClient.PostAsync(APIURLHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+        {
+            if (responseWrapper?.Data["Farm"] is JObject farmDataJObject)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                farm = farmDataJObject.ToObject<Farm>();
             }
         }
         else
         {
-            error.Message =
-                string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
+            error = _logger.ExtractError(responseWrapper, error);
         }
-
         return (farm, error);
     }
     public async Task<(FarmResponse, Error)> FetchFarmByIdAsync(int farmId)
     {
         FarmResponse farm = new FarmResponse();
-        Error error = new Error();
+        Error? error = new Error();
         string url = string.Format(APIURLHelper.FetchFarmByIdAPI, farmId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -113,14 +93,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (farm, error);
@@ -134,8 +107,8 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         var farmExist = await httpClient.GetAsync(url);
         farmExist.EnsureSuccessStatusCode();
         string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapperFarmExist = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
-        if (responseWrapperFarmExist.Data["exists"] == true)
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
+        if (responseWrapper?.Data["exists"] == true)
         {
             isFarmExist = true;
         }
@@ -145,7 +118,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
     public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
     {
-        decimal rainfallAverage = 0;        
+        decimal rainfallAverage = 0;
         string url = string.Format(APIURLHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -160,54 +133,48 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         return rainfallAverage;
     }
 
-    public async Task<(Farm, Error)> UpdateFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData)
     {
         string jsonData = JsonConvert.SerializeObject(farmData);
-        Farm farm = null;
-        Error error = new Error();
+        Farm? farm = null;
+        Error? error = null;
 
         //check if Updated farm Name already exist or not in the Postcode...
         bool IsFarmNameWithInPostCodeAlreadyExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
-        if (!IsFarmNameWithInPostCodeAlreadyExist)
+        if (IsFarmNameWithInPostCodeAlreadyExist)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            error = new Error
             {
+                Message = string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode)
+            };
+            return (farm, error);
+        }
 
-                JObject? farmDataJObject = responseWrapper.Data["Farm"] as JObject;
-                if (farmData != null)
-                {
-                    farm = farmDataJObject.ToObject<Farm>();
-                }
-            }
-            else
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.PutAsync(APIURLHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+        {
+            JObject? farmDataJObject = responseWrapper?.Data["Farm"] as JObject;
+            if (farmDataJObject != null)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                farm = farmDataJObject.ToObject<Farm>();
             }
         }
         else
         {
-            error.Message =
-                string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
+            error = _logger.ExtractError(responseWrapper, error);
         }
+
 
         return (farm, error);
     }
 
     public async Task<(string, Error)> DeleteFarmByIdAsync(int farmId)
     {
-        Error error = new Error();
+        Error? error = new Error();
         string message = string.Empty;
         string url = string.Format(APIURLHelper.DeleteFarmByIdAPI, farmId);
         HttpClient httpClient = await GetNMPAPIClient();
@@ -221,14 +188,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper.Error.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (message, error);
@@ -236,7 +196,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(List<Country>, Error)> FetchCountryAsync()
     {
         List<Country> countryList = new List<Country>();
-        Error error = new Error();
+        Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(APIURLHelper.FetchCountryListAsyncAPI);
@@ -253,14 +213,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (countryList, error);
@@ -268,7 +221,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year)
     {
         ExcessRainfalls excessRainfalls = new ExcessRainfalls();
-        Error error = new Error();
+        Error? error = new Error();
         string url = string.Format(APIURLHelper.FetchExcessRainfallByFarmIdAndYearAPI, farmId, year);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -281,14 +234,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (excessRainfalls, error);
@@ -296,7 +242,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<(List<CommonResponse>, Error)> FetchExcessWinterRainfallOptionAsync()
     {
         List<CommonResponse> excessWinterRainfallOption = new List<CommonResponse>();
-        Error error = new Error();
+        Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(APIURLHelper.FetchExcessWinterRainfallOptionAPI);
@@ -310,14 +256,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper.Error.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (excessWinterRainfallOption, error);
@@ -352,21 +291,14 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
         return (excessRainfalls, error);
     }
-    public async Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id)
+    public async Task<(CommonResponse?, Error?)> FetchExcessWinterRainfallOptionByIdAsync(int id)
     {
-        CommonResponse excessWinterRainfallOption = new CommonResponse();
-        Error? error = new Error();
+        CommonResponse? excessWinterRainfallOption = new CommonResponse();
+        Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
         string url = string.Format(APIURLHelper.FetchExcessWinterRainfallOptionByIdAPI, id);
         var response = await httpClient.GetAsync(url);
@@ -375,18 +307,11 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            excessWinterRainfallOption = responseWrapper.Data.records.ToObject<CommonResponse>();
+            excessWinterRainfallOption = responseWrapper?.Data?.records.ToObject<CommonResponse>();
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (excessWinterRainfallOption, error);

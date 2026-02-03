@@ -124,7 +124,7 @@
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
                     </govuk-input-label>
 
-                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                    <govuk-input-suffix>@Resource.lblHectares.ToLower()</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
@@ -132,7 +132,7 @@
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
                     </govuk-input-label>
 
-                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                    <govuk-input-suffix>@Resource.lblHectares.ToLower()</govuk-input-suffix>
                 </govuk-input>
                 <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
@@ -141,7 +141,7 @@
                         @Resource.lblOptional
                     </govuk-input-label>
 
-                    <govuk-input-suffix>@Resource.lblHectares</govuk-input-suffix>
+                    <govuk-input-suffix>@Resource.lblHectares.ToLower()</govuk-input-suffix>
                 </govuk-input>
             </govuk-fieldset>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">

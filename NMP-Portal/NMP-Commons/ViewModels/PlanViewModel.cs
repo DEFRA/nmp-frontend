@@ -7,6 +7,8 @@ namespace NMP.Commons.ViewModels;
 public class PlanViewModel
 {
     public int? CropTypeID { get; set; }
+
+    [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgVarietyMaxLengthValidation))]
     public string? Variety { get; set; }
     public string? OtherCropName { get; set; }
     public int? CropInfo1 { get; set; }
@@ -64,6 +66,7 @@ public class PlanViewModel
     public string? SortOrganicListOrderByFieldName { get; set; } = string.Empty;
 
     [RegularExpression(@"^[a-zA-Z0-9\s]+$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCropGroupNameShouldNotContainSpecialChar))]
+    [StringLength(128, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCropGroupNameMaxLengthValidation))]
     public string? CropGroupName { get; set; } = string.Empty;
     public bool? RemoveCrop { get; set; }
     public bool? DeletePlanOrganicAndFertiliser { get; set; }

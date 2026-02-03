@@ -3,7 +3,7 @@
 @{
     var heading = (!string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId) ? Resource.lblUpdateManureStorage : string.Format(Resource.lblAddStorageFor, Model.Year));
 
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     int squareOrRectangularTank = (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank;
     int circularTank = (int)NMP.Commons.Enums.StorageTypes.CircularTank;

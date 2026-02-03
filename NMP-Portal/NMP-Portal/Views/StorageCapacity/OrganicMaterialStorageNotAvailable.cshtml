@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{string.Format(Resource.lblYouHaveNotEnteredAnyOrganicMaterialStorageFor, Model.Year)} {Resource.lblHyphen} {title}";
     var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");
@@ -32,7 +32,7 @@
             </h1>
             <p class="govuk-body">
                 <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" >
-                    @Resource.lblAddOrganicMaterialStorage
+                    @Resource.lblAddAManureStore
                 </a>
             </p>
             <p class="govuk-body cancel-link">

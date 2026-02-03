@@ -19,7 +19,7 @@
 
 @section BeforeContent {
     @if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields||
-        Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
+            Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
     {
         <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"YieldQuestion")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
@@ -147,14 +147,7 @@
                     {
                         @foreach (var item in ViewBag.CropInfoOneList)
                         {
-                            @if ((Model.CropTypeID == PotatoVarietyGroup1 && item.CropInfo1Id == GreaterThan120days) || (Model.CropTypeID == PotatoVarietyGroup4 && item.CropInfo1Id == LessThan60days))
-                            {
-                                <govuk-radios-item value="@item.CropInfo1Id" disabled="true">@item.CropInfo1Name</govuk-radios-item>
-                            }
-                            else
-                            {
-                                <govuk-radios-item value="@item.CropInfo1Id">@item.CropInfo1Name</govuk-radios-item>
-                            }
+                            <govuk-radios-item value="@item.CropInfo1Id">@item.CropInfo1Name</govuk-radios-item>
                         }
                     }
 

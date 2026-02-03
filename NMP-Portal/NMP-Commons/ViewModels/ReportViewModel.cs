@@ -59,23 +59,30 @@ namespace NMP.Commons.ViewModels
         public bool? IsThisDefaultValueOfRB209 { get; set; }
         public bool? IsManureTypeLiquid { get; set; }
         public bool IsAnyNeedToStoreNutrientValueForFuture { get; set; } = false;
+
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgReceiverNameMaxLengthValidation))]
         public string? ReceiverName { get; set; }
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblTownOrCity))]
+
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgAddressLine1MaxLengthValidation))]
         public string? Address1 { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblAddressLine2))]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgAddressLine2MaxLengthValidation))]
         public string? Address2 { get; set; }
 
-        //[Display(ResourceType = typeof(Resource), Name = nameof(string.Format("{0} {1}",Resource.lblTownOrCity,Resource.lblOptional)))]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgAddressLine3MaxLengthValidation))]
         public string? Address3 { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblCounty))]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgAddressLine4MaxLengthValidation))]
         public string? Address4 { get; set; }
+
         [StringLength(8, MinimumLength = 6, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
         [RegularExpression(@"^[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s*\d[A-Za-z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
-        //[Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmPostcode))]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
         public string? Postcode { get; set; } = string.Empty;
+
+        [StringLength(100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCommentMaxLengthValidation))]
         public string? Comment { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;
         public bool IsManageImportExport { get; set; } = false;

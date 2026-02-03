@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
 
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{Resource.lblCopyExistingStorageManureContentOne} {Resource.lblHyphen} {title}";
 
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);

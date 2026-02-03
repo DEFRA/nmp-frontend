@@ -4,6 +4,11 @@
     ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    var livestockGroupName = Model.LivestockGroupName.ToLower();
+    if(livestockGroupName.Equals("pigs"))
+    {
+        livestockGroupName = "pig";
+    }
 }
 
 @section BeforeContent {
@@ -141,7 +146,7 @@
                             @string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>
-                            @string.Format(Resource.SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater,(Model.LivestockGroupId==(int)NMP.Commons.Enums.LivestockGroup.GoatsDeerOrHorses?Resource.lblLivestock: Model.LivestockGroupName.ToLower()))
+                            @string.Format(Resource.SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater,(Model.LivestockGroupId==(int)NMP.Commons.Enums.LivestockGroup.GoatsDeerOrHorses?Resource.lblLivestock: livestockGroupName))
                         </govuk-radios-hint>
                         @if (ViewBag.LivestockTypes != null && ViewBag.LivestockTypes.Count > 0)
                         {
