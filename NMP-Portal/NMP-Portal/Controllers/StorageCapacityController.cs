@@ -1383,14 +1383,14 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer(string? id, string? q, string? r)
+        public async Task<IActionResult> CheckAnswer(string? storeCapId, string? q, string? r)
         {
             _logger.LogTrace("StorageCapacity Controller : CheckAnswer() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
                 Error error = null;
-                if (string.IsNullOrWhiteSpace(id))
+                if (string.IsNullOrWhiteSpace(storeCapId))
                 {
                     if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
                     {
@@ -1416,7 +1416,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    int storeCapacityId = Convert.ToInt32(_storageCapacityProtector.Unprotect(id));
+                    int storeCapacityId = Convert.ToInt32(_storageCapacityProtector.Unprotect(storeCapId));
                     (StoreCapacity storeCapacity, error) = await _storageCapacityLogic.FetchStoreCapacityByIdAsync(storeCapacityId);
 
                     model = new StorageCapacityViewModel
@@ -1492,7 +1492,7 @@ namespace NMP.Portal.Controllers
                     }
                     model.IsCircumference = storeCapacity.Circumference != null ? true : false;
 
-                    model.EncryptedStoreCapacityId = id;
+                    model.EncryptedStoreCapacityId = storeCapId;
 
                 }
                 if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
@@ -1538,7 +1538,7 @@ namespace NMP.Portal.Controllers
                 model.IsStorageTypeChange = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
 
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(storeCapId))
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityDataBeforeUpdate", model);
 
