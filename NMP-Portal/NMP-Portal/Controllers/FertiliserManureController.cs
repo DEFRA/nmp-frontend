@@ -1251,7 +1251,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            _logger.LogTrace("Farm Controller : Exception in InOrgnaicManureDuration() action : {0}, {1}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Farm Controller : Exception in InOrgnaicManureDuration() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
             {
                 TempData["FieldError"] = ex.Message;
@@ -1286,20 +1286,20 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private static Dictionary<int, string> GetMonthDictionary()
     {
         return new Dictionary<int, string>
-    {
-        { 0, Resource.lblJanuary },
-        { 1, Resource.lblFebruary },
-        { 2, Resource.lblMarch },
-        { 3, Resource.lblApril },
-        { 4, Resource.lblMay },
-        { 5, Resource.lblJune },
-        { 6, Resource.lblJuly },
-        { 7, Resource.lblAugust },
-        { 8, Resource.lblSeptember },
-        { 9, Resource.lblOctober },
-        { 10, Resource.lblNovember },
-        { 11, Resource.lblDecember }
-    };
+        {
+            { 0, Resource.lblJanuary },
+            { 1, Resource.lblFebruary },
+            { 2, Resource.lblMarch },
+            { 3, Resource.lblApril },
+            { 4, Resource.lblMay },
+            { 5, Resource.lblJune },
+            { 6, Resource.lblJuly },
+            { 7, Resource.lblAugust },
+            { 8, Resource.lblSeptember },
+            { 9, Resource.lblOctober },
+            { 10, Resource.lblNovember },
+            { 11, Resource.lblDecember }
+        };
     }
 
 
@@ -3164,7 +3164,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         year = model.EncryptedHarvestYear,
                                         q = _farmDataProtector.Protect(success.ToString()),
                                         r = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
-                                        w = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault())
+                                        w = _fieldDataProtector.Protect(model.FieldList[0])
                                     }) + Resource.lblInorganicFertiliserApplicationsForSorting);
                                 }
                                 else
@@ -3172,7 +3172,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     return RedirectToAction(_recommendationsActionName, "Crop", new
                                     {
                                         q = model.EncryptedFarmId,
-                                        r = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault()),
+                                        r = _fieldDataProtector.Protect(model.FieldList[0]),
                                         s = model.EncryptedHarvestYear,
                                         t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationUpdated),
                                         u = _cropDataProtector.Protect(Resource.MsgNutrientRecommendationsMayBeUpdated)
@@ -3379,7 +3379,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         {
                             if (model.FieldList != null && model.FieldList.Count > 0)
                             {
-                                string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                                string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList[0]);
                                 if (!string.IsNullOrWhiteSpace(encryptedFieldId))
                                 {
                                     return RedirectToAction(_recommendationsActionName, "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.MsgInorganicFertiliserApplicationRemoved) });
@@ -3430,7 +3430,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            _logger.LogTrace("OrganicManure Controller : Exception in RemoveFertiliser() post action : {0}, {1}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveFertiliser() post action : {0}, {1}", ex.Message, ex.StackTrace);
             TempData["RemoveFertiliserError"] = ex.Message;
             return View(model);
         }
@@ -3452,7 +3452,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            _logger.LogTrace("Fertiliser Manure Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Fertiliser Manure Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
             TempData["CheckYourAnswerError"] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -3505,7 +3505,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     [HttpGet]
     public async Task<IActionResult> Defoliation(string q)
     {
-        _logger.LogTrace("Fertiliser Manure Controller : Defoliation({q}) action called");
+        _logger.LogTrace("Fertiliser Manure Controller : Defoliation({Q}) action called", q);
         FertiliserManureViewModel? model = GetFertiliserManureFromSession();
         Error error = null;
         try
@@ -3527,7 +3527,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    model.FieldID = model.FertiliserManures.Where(x => x.IsGrass && x.FieldID.HasValue).Select(x => x.FieldID.Value).First();
+                    model.FieldID = model.FertiliserManures?.Where(x => x.IsGrass && x.FieldID.HasValue).Select(x => x.FieldID.Value).First();
                     model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
                 }
                 SetFertiliserManureToSession(model);
