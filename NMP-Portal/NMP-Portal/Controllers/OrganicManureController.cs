@@ -6783,6 +6783,7 @@ namespace NMP.Portal.Controllers
 
                                         if (totalN > nMaxLimit)
                                         {
+                                            string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                                             model.IsNMaxLimitWarning = true;
                                             var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
 
@@ -6796,7 +6797,7 @@ namespace NMP.Portal.Controllers
                                                 model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
                                                 model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
                                                 model.CropNmaxLimitWarningPara3 = warning.Para3;
                                             }
 
@@ -6823,8 +6824,8 @@ namespace NMP.Portal.Controllers
 
                                                 if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                 {
+                                                    string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                                                     model.IsNMaxLimitWarning = true;
-
                                                     var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
 
                                                     WarningResponse? warning = warningList
@@ -6837,7 +6838,7 @@ namespace NMP.Portal.Controllers
                                                         model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
                                                         model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, model.CropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
                                                         model.CropNmaxLimitWarningPara3 = warning.Para3;
                                                     }
 
