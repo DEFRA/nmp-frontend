@@ -1854,7 +1854,7 @@ namespace NMP.Portal.Controllers
             decimal slope = model.Slope ?? 0m;
             decimal freeboardDefault = model.FreeBoardHeight ?? 0m;
 
-            decimal freeboardToUse = covered ? 0m : freeboardDefault;// not using 
+            //decimal freeboardToUse = covered ? 0m : freeboardDefault;// not using 
             decimal effDepth = d - freeboardDefault;
             if (effDepth < 0m) effDepth = 0m;
 
