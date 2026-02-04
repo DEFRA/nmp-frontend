@@ -6624,7 +6624,7 @@ livestock manure.</value>
     <value>High clover content</value>
   </data>
   <data name="lblLengthOfTheLay" xml:space="preserve">
-    <value>Length of the lay</value>
+    <value>Length of the ley</value>
   </data>
   <data name="lblDefaultNutrientValueContentFirst" xml:space="preserve">
     <value>These values come from the AHDB Nutrient Management Guide (RB209).</value>
