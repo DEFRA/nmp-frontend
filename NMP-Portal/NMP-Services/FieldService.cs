@@ -9,6 +9,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -30,7 +31,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
             if (responseWrapper != null && responseWrapper.Data != null)
             {
-                fieldCount = responseWrapper.Data["count"];
+                fieldCount = responseWrapper?.Data["count"];
             }
         }
 
@@ -60,7 +61,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<(List<NutrientResponseWrapper>, Error)> FetchNutrientsAsync()
     {
         List<NutrientResponseWrapper> nutrients = new List<NutrientResponseWrapper>();
-        Error error = null;
+        Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(APIURLHelper.FetchNutrientsAsyncAPI);
         response.EnsureSuccessStatusCode();
@@ -76,14 +77,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
         return (nutrients, error);
     }
@@ -565,18 +559,19 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<int> FetchSNSCategoryIdByCropTypeId(int cropTypeId)
     {
         int? snsCategoryID = null;
-        Error error = new Error();
+        Error? error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
+            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
                     if (cropTypeLinkingResponse != null)
                     {
                         snsCategoryID = cropTypeLinkingResponse.SNSCategoryID;
@@ -585,14 +580,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -611,7 +599,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<List<SeasonResponse>> FetchSeasons()
     {
         List<SeasonResponse> seasons = new List<SeasonResponse>();
-        Error error = new Error();
+        Error? error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -622,20 +610,13 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var seasonlist = responseWrapper.Data.ToObject<List<SeasonResponse>>();
+                    var seasonlist = responseWrapper?.Data?.ToObject<List<SeasonResponse>>();
                     seasons.AddRange(seasonlist);
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -666,19 +647,15 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
             {
 
-                JObject farmDataJObject = responseWrapper?.Data as JObject;
-                snsResponse = farmDataJObject.ToObject<SnsResponse>();
+                JObject? farmDataJObject = responseWrapper?.Data as JObject;
+                if (farmDataJObject != null)
+                {
+                    snsResponse = farmDataJObject.ToObject<SnsResponse>();
+                }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
 
         }
@@ -716,11 +693,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
 
         }
@@ -752,14 +725,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -779,7 +745,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<List<CommonResponse>> GetGrassManagementOptions()
     {
         List<CommonResponse> grassManagementOptions = new List<CommonResponse>();
-        Error error = new Error();
+        Error? error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -796,14 +762,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -822,7 +781,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<List<CommonResponse>> GetGrassTypicalCuts()
     {
         List<CommonResponse> grassTypicalCuts = new List<CommonResponse>();
-        Error error = new Error();
+        Error? error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -839,14 +798,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -882,14 +834,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -907,7 +852,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<(Error, List<Field>)> FetchFieldByFarmId(int farmId, string shortSummary)
     {
         List<Field> fields = new List<Field>();
-        Error error = new Error();
+        Error? error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -926,14 +871,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -948,10 +886,10 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         return (error, fields);
     }
-    public async Task<(FieldResponse, Error)> FetchFieldSoilAnalysisAndSnsById(int fieldId)
+    public async Task<(FieldResponse?, Error?)> FetchFieldSoilAnalysisAndSnsById(int fieldId)
     {
-        FieldResponse fieldResponse = new FieldResponse();
-        Error error = new Error();
+        FieldResponse? fieldResponse = new FieldResponse();
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -962,37 +900,32 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    fieldResponse = responseWrapper.Data.Records.ToObject<FieldResponse>();
+                    fieldResponse = responseWrapper?.Data?.Records.ToObject<FieldResponse>();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);            
         }
         return (fieldResponse, error);
     }
-    public async Task<(CropAndFieldReportResponse, Error)> FetchCropAndFieldReportById(string fieldId, int year)
+    public async Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year)
     {
-        CropAndFieldReportResponse cropAndFieldReportResponse = new CropAndFieldReportResponse();
-        Error error = new Error();
+        CropAndFieldReportResponse? cropAndFieldReportResponse = new CropAndFieldReportResponse();
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1003,28 +936,23 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    cropAndFieldReportResponse = responseWrapper.Data.ToObject<CropAndFieldReportResponse>();
+                    cropAndFieldReportResponse = responseWrapper?.Data?.ToObject<CropAndFieldReportResponse>();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);            
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);            
         }

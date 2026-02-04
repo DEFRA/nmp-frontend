@@ -67,7 +67,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable"/>
             @if (Model != null)
             {
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />

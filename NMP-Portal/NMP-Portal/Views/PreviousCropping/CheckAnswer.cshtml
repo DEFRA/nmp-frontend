@@ -29,6 +29,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
         @if (Model != null)
         {
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
@@ -53,7 +54,7 @@
                 <h1 class="govuk-heading-l">
                     @string.Format(Resource.lblAddYearCropHistoryToFieldName, Model.HarvestYear, Model.FieldName)
                 </h1>
-                <div class="check-answers">
+                
                     <govuk-summary-list>
 
                         <govuk-summary-list-row class=@((!Model.HasGrassInLastThreeYear.HasValue)?"govuk-error-message":"")>
@@ -184,7 +185,6 @@
                         }
 
                     </govuk-summary-list>
-                </div>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblAddCropHistory
                 </govuk-button>
