@@ -39,17 +39,18 @@
                 @string.Concat(Resource.lblHarvestYear, " ", Model.Year)
             </h2>
 
-            <div class="check-answers">
-                <dl class="govuk-summary-list">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</dt>
-                        <dd class="govuk-summary-list__value">
+            
+                <govuk-summary-list>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
                             @Model.ExcessWinterRainfallName
-                        </dd>
-                        <dd class="govuk-summary-list__actions"><a class="govuk-link" asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</span></a></dd>
-                    </div>
-                </dl>
-            </div>
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                </govuk-summary-list>
 
 
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">

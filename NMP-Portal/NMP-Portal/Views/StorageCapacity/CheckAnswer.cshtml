@@ -103,7 +103,7 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" value="@Model.ID"/>
                 </div>
 
-                <div class="check-answers">
+
                     <govuk-summary-list>
                         @if (string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
                         {
@@ -364,7 +364,6 @@
                         }
 
                     </govuk-summary-list>
-                </div>
                 @if (string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId))
                 {
                     <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
