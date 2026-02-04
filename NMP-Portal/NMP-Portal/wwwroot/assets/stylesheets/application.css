@@ -836,3 +836,14 @@ hr.seperator_five_report {
     white-space: pre-line;
 }
 
+
+.sr-only {
+    display: inline-block; /* DOM me visible for SR */
+    width: 1px; /* almost invisible */
+    height: 1px;
+    overflow: hidden;
+    text-indent: -9999px; /* push text out of screen */
+    white-space: nowrap;
+    border: 0;
+    background: transparent;
+}

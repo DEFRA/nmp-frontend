@@ -117,7 +117,7 @@
                                     <th scope="col" class="govuk-table__header livestock-type">@Resource.lblName</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
-                                    <th scope="col" class="govuk-table__header"></th>
+                                    <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
@@ -129,7 +129,7 @@
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                         <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblMetresCubed)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@slurryStorage.StoreName</span></a></td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan" aria-label="@(string.Format("{0} {1}", Resource.lblChange, slurryStorage.StoreName))">@Resource.lblChange</a></td>
                                     </tr>
                                     @if (i == ViewBag.SlurryStorageList.Count - 1)
                                     {
@@ -207,7 +207,7 @@
                                     <th scope="col" class="govuk-table__header">@Resource.lblStorageType</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCapacityVolume</th>
                                     <th scope="col" class="govuk-table__header">@Resource.lblCapacityWeightForSummary</th>
-                                    <th scope="col" class="govuk-table__header"></th>
+                                    <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
@@ -221,7 +221,7 @@
                                         <td class="govuk-table__cell">@solidStorage.SolidManureTypeName</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.CapacityVolume, Resource.lblMetresCubed)</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.CapacityWeight, Resource.lbltonnes)</td>
-                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@solidStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan">@Resource.lblChange<span class="govuk-visually-hidden">@solidStorage.StoreName</span></a></td>
+                                        <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@solidStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan" aria-label="@(string.Format("{0} {1}", Resource.lblChange, solidStorage.StoreName))">@Resource.lblChange</a></td>
                                     </tr>
                                     @if (i == ViewBag.SolidManureStorageList.Count - 1)
                                     {
