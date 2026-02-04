@@ -92,7 +92,7 @@
                                 <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblQuantity</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
-                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span></th>
+                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden-focusable">@Resource.lblAction</span></th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -106,7 +106,7 @@
                                     </td>
                                     <td class="govuk-table__cell">@import.Manure.FarmName</td>
 
-                                    <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@import.Manure.EncryptedID">@Resource.lblViewOrChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@import.Manure.EncryptedID" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, string.Format(Resource.MsgGenericFor, import.Manure.ManureType)))">@Resource.lblViewOrChange</a></td>
                                 </tr>
                             }
                         </tbody>
@@ -147,7 +147,7 @@
                                         @string.Format("{0:N0} {1}", export.Manure.Quantity, export.Unit)
                                     </td>
                                     <td class="govuk-table__cell">@export.Manure.FarmName</td>
-                                    <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@export.Manure.EncryptedID">@Resource.lblViewOrChange</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@export.Manure.EncryptedID" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, string.Format(Resource.MsgGenericFor, export.Manure.ManureType)))">@Resource.lblViewOrChange</a></td>
                                 </tr>
                             }
                         </tbody>

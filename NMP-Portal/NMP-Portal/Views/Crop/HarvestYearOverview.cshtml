@@ -112,7 +112,7 @@
                     </govuk-button> *@
                                 </div>
                                 @* big_crop_table_version_five *@                                
-                                                                <div class="table-container">
+                                                                                <div class="table-container">
                                     <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
                                         <caption class="govuk-table__caption--m govuk-visually-hidden">
                                             @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
@@ -135,7 +135,7 @@
                                                         @Resource.lblVarietyForRecommendation
                                                     }
                                                 </th>
-                                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span></th>
+                                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden-focusable">@Resource.lblAction</span></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -179,8 +179,8 @@
 
                                                         </td>
                                                         <td class="govuk-table__cell">
-                                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
-                                                                @Resource.lblUpdateThisFieldOrViewRecommendations<span class="govuk-visually-hidden">@(string.Format(Resource.MsgGenericFor, field.FieldName))</span>
+                                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" aria-label="@(string.Format("{0} {1}",Resource.lblUpdateThisFieldOrViewRecommendations,string.Format(Resource.MsgGenericFor, field.FieldName)))">
+                                                                @Resource.lblUpdateThisFieldOrViewRecommendations
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -243,7 +243,7 @@
                                 </th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblType</th>
                                 <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span></th>
+                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden-focusable">@Resource.lblAction</span></th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -257,7 +257,7 @@
                                                 <td class="govuk-table__cell">
                                                     @string.Format("{0} {1}", organicManure.Rate, organicManure.RateUnit)
                                                 </td>
-                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName">@Resource.lblViewOrChange</a></td>
+                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, string.Format(Resource.MsgGenericFor, organicManure.Field)))">@Resource.lblViewOrChange</a></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -312,7 +312,7 @@
                                 </th>
 
                                             <th scope="col" class="govuk-table__header">@Resource.lblNutrients</th>
-                                            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span></th>
+                                            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden-focusable">@Resource.lblAction</span></th>
                                         </tr>
                                     </thead>
                                     <tbody class="govuk-table__body">
@@ -356,7 +356,7 @@
                                                     @* <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a>
                                                 <br /> *@
 
-                                                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</span></a>
+                                                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblChange, string.Format(Resource.MsgGenericFor, inorganicFertiliser.Field)))">@Resource.lblChange</a>
 
                                                 </td>
                                             </tr>
