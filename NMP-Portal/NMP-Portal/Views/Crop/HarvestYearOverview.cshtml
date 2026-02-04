@@ -257,7 +257,7 @@
                                                 <td class="govuk-table__cell">
                                                     @string.Format("{0} {1}", organicManure.Rate, organicManure.RateUnit)
                                                 </td>
-                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, string.Format(Resource.MsgGenericFor, organicManure.Field)))">@Resource.lblViewOrChange</a></td>
+                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, organicManure.Field))">@Resource.lblViewOrChange</a></td>
                                             </tr>
                                         }
                                     </tbody>
