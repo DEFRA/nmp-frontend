@@ -11,7 +11,6 @@ a, .govuk:link {
     color: #1d70b8;
 }
 a:link, .govuk-link:link {
-    /*color: #1d70b8 !important;*/   
     text-decoration-thickness: max(1px, .0625rem);
     text-underline-offset: 0.1578em;
 }
@@ -247,9 +246,7 @@ hr.big_seperator {
     font-size: 17px !important;
 }
 
-    .big_crop_table_version_five td:last-child {
-        /*padding-right: 0;
-        text-align: right;*/
+    .big_crop_table_version_five td:last-child {       
         width: 35%;
     }
 .field-name {
@@ -304,35 +301,6 @@ a:focus, .govuk-link:focus {
     padding-right:15px;
 }
 
-/*.govuk-service-navigation__list {
-    display: flex;
-    justify-content: space-between;
-}*/
-
-
-/*.govuk-phase-banner {
-    width: 100%;
-}
-
-.govuk-phase-banner__content {
-    max-width: 100%;
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between !important;
-}
-
-.govuk-phase-banner__content__top {
-    align-items: flex-start !important;
-}
-
-.govuk-phase-banner__content__align {
-    display: inline-flex !important;
-    align-items: center;
-}
-
-.govuk-phase-banner__text__right {
-    text-align: right !important;
-}*/
 .cancel-link__bottom_padding {
     padding-bottom: 2% !important;
 }
@@ -413,7 +381,7 @@ a:focus, .govuk-link:focus {
     }
 
     .govuk-table__caption--m {
-        font-size: 18pt !important;
+        font-size: 13pt !important;
         line-height: 1.15;
     }
 
@@ -432,12 +400,7 @@ a:focus, .govuk-link:focus {
         line-height: 1.2;
         font-family: sans-serif;
     }
-
-    .govuk-table__caption--m {
-        font-size: 13pt !important;
-        line-height: 1.15;
-    }
-
+     
     .govuk-heading-s {
         font-size: 14pt !important;
         line-height: 1.15;
@@ -578,23 +541,6 @@ hr.seperator_forty {
     font-size: 17px;
 }
 
-
-.new_nmax_rates_table th {
-    margin-right: 5px;
-}
-
-.new_nmax_rates_table .col_1 {
-    width: 122px;
-}
-
-.new_nmax_rates_table .col_2 {
-    width: 45px;
-}
-
-.new_nmax_rates_table .col_7, .new_nmax_rates_table .col_8 {
-    width: 100px;
-}
-
 .new_nmax_table_grass th {
     margin-right: 5px;
 }
@@ -631,64 +577,6 @@ hr.seperator_thirty {
     margin: 30px 0 30px 0;
 }
 
-/*.govuk-task-list {
-    font-family: "GDS Transport", arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-weight: 400;
-    font-size: 1.1875rem;
-    line-height: 1.3157894737;
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding: 0;
-    list-style-type: none;
-    text-transform: none !important;
-}
-
-.govuk-task-list__item {
-    display: table;
-    position: relative;
-    width: 100%;
-    margin-bottom: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #b1b4b6;
-}
-
-.govuk-task-list__name-and-hint {
-    display: table-cell;
-    vertical-align: top;
-    color: #0b0c0c;
-}
-
-.govuk-task-list__link::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
-.govuk-task-list__status {
-    display: table-cell;
-    padding-left: 10px;
-    text-align: right;
-    vertical-align: top;
-    color: #0b0c0c;
-    font-weight: normal;
-    text-transform: none !important;
-}*/
-
-/*.govuk-tag--blue {
-    text-transform: none !important;
-    font-weight: 400;
-    font-size: 19px;
-    color: rgb(12, 45, 74);
-    font-stretch: normal;
-    font-style: normal;
-}*/
 .livestock-type {
     width: 25%;
 }
@@ -726,10 +614,7 @@ hr.seperator_thirty {
     word-break: keep-all !important;
     overflow-wrap: break-word !important;
 }
-.total_row {
-    background-color: #f3f2f1;
-    font-weight: bold;
-}
+
 
 /* Hidden by default */
 .loading-overlay {
@@ -788,12 +673,7 @@ hr.seperator_thirty {
 .nav_right {
     float: inline-end;
     text-align: end;
-    padding-top: 5px;
-    /*padding-bottom: 10px;*/
-    /*display: flex;
-    flex-direction: column;
-    align-content: flex-end;
-    justify-content: flex-end;*/
+    padding-top: 5px;    
 }
 
 .govuk-service-navigation__item:last-child {
