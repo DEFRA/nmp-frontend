@@ -7793,7 +7793,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Length of the lay.
+        ///   Looks up a localized string similar to Length of the ley.
         /// </summary>
         public static string lblLengthOfTheLay {
             get {
