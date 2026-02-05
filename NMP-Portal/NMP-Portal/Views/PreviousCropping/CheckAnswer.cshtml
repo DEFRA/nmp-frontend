@@ -54,7 +54,7 @@
                 <h1 class="govuk-heading-l">
                     @string.Format(Resource.lblAddYearCropHistoryToFieldName, Model.HarvestYear, Model.FieldName)
                 </h1>
-                <div class="check-answers">
+                
                     <govuk-summary-list>
 
                         <govuk-summary-list-row class=@((!Model.HasGrassInLastThreeYear.HasValue)?"govuk-error-message":"")>
@@ -185,7 +185,6 @@
                         }
 
                     </govuk-summary-list>
-                </div>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblAddCropHistory
                 </govuk-button>

@@ -745,7 +745,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About freeboards.
+        ///   Looks up a localized string similar to About freeboard.
         /// </summary>
         public static string lblAboutFreeboards {
             get {
@@ -2802,6 +2802,15 @@ namespace NMP.Commons.Resources {
         public static string lblCapacityWeight {
             get {
                 return ResourceManager.GetString("lblCapacityWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capacity weigth.
+        /// </summary>
+        public static string lblCapacityWeightForSummary {
+            get {
+                return ResourceManager.GetString("lblCapacityWeightForSummary", resourceCulture);
             }
         }
         
@@ -6145,7 +6154,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear..
+        ///   Looks up a localized string similar to Freeboard is the distance between the top of the earth banked stores and the level of the slurry inside. You must always keep this distance clear..
         /// </summary>
         public static string lblFreeboardIsTheDistanceBetweenTheTopOfTheTank {
             get {
@@ -7973,7 +7982,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Length of the lay.
+        ///   Looks up a localized string similar to Length of the ley.
         /// </summary>
         public static string lblLengthOfTheLay {
             get {
@@ -12581,6 +12590,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slurry storage total.
+        /// </summary>
+        public static string lblSlurryStorageTotal {
+            get {
+                return ResourceManager.GetString("lblSlurryStorageTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Slurry stores.
         /// </summary>
         public static string lblSlurryStores {
@@ -13135,6 +13153,15 @@ namespace NMP.Commons.Resources {
         public static string lblSolidManureStorage {
             get {
                 return ResourceManager.GetString("lblSolidManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solid manure storage total.
+        /// </summary>
+        public static string lblSolidManureStorageTotal {
+            get {
+                return ResourceManager.GetString("lblSolidManureStorageTotal", resourceCulture);
             }
         }
         
@@ -14838,6 +14865,15 @@ namespace NMP.Commons.Resources {
         public static string lblTotalSurfaceArea {
             get {
                 return ResourceManager.GetString("lblTotalSurfaceArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total surface area of uncovered stores.
+        /// </summary>
+        public static string lblTotalSurfaceAreaOfUncoveredStores {
+            get {
+                return ResourceManager.GetString("lblTotalSurfaceAreaOfUncoveredStores", resourceCulture);
             }
         }
         

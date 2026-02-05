@@ -60,7 +60,7 @@
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblCheckYourAnswers)
             </h1>
                       
-            <div class="check-answers">
+          
                 <govuk-summary-list>
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -177,7 +177,6 @@
                         </govuk-summary-list-row>
                     }
                 </govuk-summary-list>
-            </div>
 
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblUpdateThisFarm : Resource.lblAddThisFarm)

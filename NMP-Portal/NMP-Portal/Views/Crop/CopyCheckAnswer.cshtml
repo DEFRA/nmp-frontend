@@ -140,7 +140,6 @@
                 </h1>
             }
             
-            <div class="check-answers">
 
                 <govuk-summary-list>
                     <govuk-summary-list-row class=@((!Model.CopyExistingPlan.HasValue)?"govuk-error-message":"")>
@@ -178,7 +177,6 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>
-            </div>
             
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @Resource.lblCreatePlan

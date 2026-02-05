@@ -84,34 +84,35 @@
                 <h2 class="govuk-heading-m non-standard">@Resource.lblImports</h2>
                 @if (ViewBag.ImportList != null && ViewBag.ImportList.Count > 0)
                 {
-                    <table class="govuk-table sortable-table recomendation-table data-table">
-                        <thead class="govuk-table__head">
-                            <tr class="govuk-table__row">
-
-                                <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblQuantity</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
-                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                            @foreach (var import in ViewBag.ImportList)
-                            {
+                    <div class="table-container">
+                        <table class="govuk-table recomendation-table data-table">
+                            <thead class="govuk-table__head">
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@import.Manure.ManureType</td>
-                                    <td class="govuk-table__cell">@import.Manure.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                    <td class="govuk-table__cell">
-                                        @string.Format("{0:N0} {1}", import.Manure.Quantity, import.Unit)
-                                    </td>
-                                    <td class="govuk-table__cell">@import.Manure.FarmName</td>
 
-                                    <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@import.Manure.EncryptedID">@Resource.lblViewOrChange</a></td>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblQuantity</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
+                                    <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                                @foreach (var import in ViewBag.ImportList)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@import.Manure.ManureType</td>
+                                        <td class="govuk-table__cell">@import.Manure.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                        <td class="govuk-table__cell">
+                                            @string.Format("{0:N0} {1}", import.Manure.Quantity, import.Unit)
+                                        </td>
+                                        <td class="govuk-table__cell">@import.Manure.FarmName</td>
 
+                                        <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@import.Manure.EncryptedID" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, import.Manure.ManureType))">@Resource.lblViewOrChange</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
                 else
                 {
@@ -126,32 +127,35 @@
 
                 @if (ViewBag.ExportList != null && ViewBag.ExportList.Count > 0)
                 {
-                    <table class="govuk-table sortable-table recomendation-table data-table">
-                        <thead class="govuk-table__head">
-                            <tr class="govuk-table__row">
 
-                                <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblQuantity</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
-                                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblAction</span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                            @foreach (var export in ViewBag.ExportList)
-                            {
+                    <div class="table-container">
+                        <table class="govuk-table recomendation-table data-table">
+                            <thead class="govuk-table__head">
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@export.Manure.ManureType</td>
-                                    <td class="govuk-table__cell">@export.Manure.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                    <td class="govuk-table__cell">
-                                        @string.Format("{0:N0} {1}", export.Manure.Quantity, export.Unit)
-                                    </td>
-                                    <td class="govuk-table__cell">@export.Manure.FarmName</td>
-                                    <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@export.Manure.EncryptedID">@Resource.lblViewOrChange</a></td>
+
+                                    <th scope="col" class="govuk-table__header">@Resource.lblManureType</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblQuantity</th>
+                                    <th scope="col" class="govuk-table__header">@Resource.lblSupplier</th>
+                                    <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                                @foreach (var export in ViewBag.ExportList)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@export.Manure.ManureType</td>
+                                        <td class="govuk-table__cell">@export.Manure.ManureDate?.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                        <td class="govuk-table__cell">
+                                            @string.Format("{0:N0} {1}", export.Manure.Quantity, export.Unit)
+                                        </td>
+                                        <td class="govuk-table__cell">@export.Manure.FarmName</td>
+                                        <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@export.Manure.EncryptedID" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, export.Manure.ManureType))">@Resource.lblViewOrChange</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
                 else
                 {
@@ -167,7 +171,7 @@
                 @if (ViewBag.ImportList != null || ViewBag.ExportList != null)
                 {
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-two-thirds">
+                        <div class="govuk-grid-column-two-thirds table-container">
                             <table class="govuk-table margin-bottom-forty">
                                 <tbody class="govuk-table__body">
                                     <tr class="govuk-table__row">
@@ -188,7 +192,7 @@
                             </table>
                         </div>
                     </div>
-                }                
+                }
             </govuk-tabs-item>
         </govuk-tabs>
 
