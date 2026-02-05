@@ -37,6 +37,7 @@
     <PackageReference Include="Microsoft.Identity.Web" Version="3.8.3" />
     <PackageReference Include="Microsoft.Identity.Web.TokenCache" Version="4.1.1" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.8.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
@@ -51,6 +52,15 @@
     <ProjectReference Include="..\NMP-Application\NMP-Application.csproj" />
     <ProjectReference Include="..\NMP-Commons\NMP-Commons.csproj" />
     <ProjectReference Include="..\NMP-Registrar\NMP-Registrar.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Manner\Data\" />
+    <Folder Include="Areas\Manner\Models\" />
+    <Folder Include="Areas\Planet\Controllers\" />
+    <Folder Include="Areas\Planet\Data\" />
+    <Folder Include="Areas\Planet\Models\" />
+    <Folder Include="Areas\Planet\Views\" />
   </ItemGroup>
 
 </Project>
