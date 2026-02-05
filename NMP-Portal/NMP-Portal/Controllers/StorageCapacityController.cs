@@ -1845,7 +1845,6 @@ namespace NMP.Portal.Controllers
         public static (decimal CapacityVolume, decimal? SurfaceArea) CalculateCapacityAndArea(StorageCapacityViewModel model)
         {
             int typeId = model.StorageTypeID ?? 0;
-            bool covered = model.IsCovered ?? false;
             decimal l = model.Length ?? 0m;
             decimal w = model.Width ?? 0m;
             decimal d = model.Depth ?? 0m;

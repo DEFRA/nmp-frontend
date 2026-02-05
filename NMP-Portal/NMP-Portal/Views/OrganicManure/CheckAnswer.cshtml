@@ -755,7 +755,7 @@
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value class="margin-bottom-thirty" id="nutrient_list">
+                                    <govuk-summary-list-row-value   class="margin-bottom-thirty"   id="nutrient_list">
                                         @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.ManureType.DryMatter.Value)</span></span>
@@ -828,7 +828,7 @@
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value id="nutrient_list">
+                                    <govuk-summary-list-row-value class="margin-bottom-thirty" id="nutrient_list">
                                         @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value >= 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
@@ -893,7 +893,7 @@
                                 <govuk-summary-list-row-key>
                                     @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                 </govuk-summary-list-row-key>
-                           <govuk-summary-list-row-value id="nutrient_list">
+                           <govuk-summary-list-row-value  class="margin-bottom-thirty"  id="nutrient_list">
                                         @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value >= 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
@@ -958,7 +958,7 @@
                             <govuk-summary-list-row-key>
                                 @string.Format(Resource.lblNutrientValuesForMixedManure, Model.ManureTypeName)
                             </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value id="nutrient_list">
+                            <govuk-summary-list-row-value  class="margin-bottom-thirty" id="nutrient_list">
                                 @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                                 {
                                    @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value >= 0)
