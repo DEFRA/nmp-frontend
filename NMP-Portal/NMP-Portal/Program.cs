@@ -109,7 +109,13 @@ builder.Services.AddControllersWithViews(options =>
         .RequireAuthenticatedUser()
         .Build();
     options.Filters.Add(new AuthorizeFilter(policy));
-}).AddMicrosoftIdentityUI();
+    options.Filters.Add(new ResponseCacheAttribute
+    {
+        NoStore = true,
+        Location = ResponseCacheLocation.None
+    });
+}).AddMicrosoftIdentityUI()
+.AddSessionStateTempDataProvider();
 
 builder.Services.AddRazorPages().AddMvcOptions(options =>
 {
@@ -117,10 +123,15 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
                   .RequireAuthenticatedUser()
                   .Build();
     options.Filters.Add(new AuthorizeFilter(policy));
-}).AddMicrosoftIdentityUI();
+    options.Filters.Add(new ResponseCacheAttribute
+    {
+        NoStore = true,
+        Location = ResponseCacheLocation.None
+    });
+}).AddMicrosoftIdentityUI().AddSessionStateTempDataProvider();
 
 builder.Services.AddDataProtection();
-builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
+
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "NMP-Portal.Session";
