@@ -7313,4 +7313,34 @@ livestock manure.</value>
   <data name="lblTotalSurfaceAreaOfUncoveredStores" xml:space="preserve">
     <value>Total surface area of uncovered stores</value>
   </data>
+  <data name="lblCreateNutrientManagementPlansAndNVZReports" xml:space="preserve">
+    <value>Create nutrient management plans and NVZ reports</value>
+  </data>
+  <data name="lblAddAFarmToStartCreatingNutrientManagementPlans" xml:space="preserve">
+    <value>Add a farm to start creating nutrient management plans.</value>
+  </data>
+  <data name="lblYouCanCreateNVZReportsAndOtherFarmManagementReports" xml:space="preserve">
+    <value>You can create NVZ reports and other farm management reports once you have added a farm.</value>
+  </data>
+  <data name="lblCreateANutrientSupplyEstimate" xml:space="preserve">
+    <value>Create a nutrient supply estimate</value>
+  </data>
+  <data name="lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans" xml:space="preserve">
+    <value>Select a farm to create or update it's nutrient management plans or to create a report.</value>
+  </data>
+  <data name="lblCreateEstimateContent1" xml:space="preserve">
+    <value>Compare different organic material applications to see how nutrient supply could be affected (scenario planning).</value>
+  </data>
+  <data name="lblCreateEstimateContent2" xml:space="preserve">
+    <value>You can see the financial value of organic material applications, and how much you could save compared to buying inorganic fertiliser.</value>
+  </data>
+  <data name="lblMannerNPK" xml:space="preserve">
+    <value>(Manner-NPK)</value>
+  </data>
+  <data name="lblViewOrCreateANutrientSupplyEstimate" xml:space="preserve">
+    <value>View or create a nutrient supply estimate</value>
+  </data>
+  <data name="lblPlanningAndEstimating" xml:space="preserve">
+    <value>Planning and estimating</value>
+  </data>
 </root>

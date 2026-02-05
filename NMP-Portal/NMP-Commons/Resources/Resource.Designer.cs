@@ -1285,6 +1285,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a farm to start creating nutrient management plans..
+        /// </summary>
+        public static string lblAddAFarmToStartCreatingNutrientManagementPlans {
+            get {
+                return ResourceManager.GetString("lblAddAFarmToStartCreatingNutrientManagementPlans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a field.
         /// </summary>
         public static string lblAddAField {
@@ -3409,6 +3418,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a nutrient supply estimate.
+        /// </summary>
+        public static string lblCreateANutrientSupplyEstimate {
+            get {
+                return ResourceManager.GetString("lblCreateANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to create a plan and record for arable and grassland farms.
         /// </summary>
         public static string lblCreateAPlanandRecordForArableAndGrasslansFarms {
@@ -3445,11 +3463,38 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compare different organic material applications to see how nutrient supply could be affected (scenario planning)..
+        /// </summary>
+        public static string lblCreateEstimateContent1 {
+            get {
+                return ResourceManager.GetString("lblCreateEstimateContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can see the financial value of organic material applications, and how much you could save compared to buying inorganic fertiliser..
+        /// </summary>
+        public static string lblCreateEstimateContent2 {
+            get {
+                return ResourceManager.GetString("lblCreateEstimateContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a holding nitrogen limit ‘the 170 limit’ report for {0}.
         /// </summary>
         public static string lblCreateHoldingNitrogenLimitForYear {
             get {
                 return ResourceManager.GetString("lblCreateHoldingNitrogenLimitForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create nutrient management plans and NVZ reports.
+        /// </summary>
+        public static string lblCreateNutrientManagementPlansAndNVZReports {
+            get {
+                return ResourceManager.GetString("lblCreateNutrientManagementPlansAndNVZReports", resourceCulture);
             }
         }
         
@@ -8774,6 +8819,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Manner-NPK).
+        /// </summary>
+        public static string lblMannerNPK {
+            get {
+                return ResourceManager.GetString("lblMannerNPK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manual address.
         /// </summary>
         public static string lblManualAddress {
@@ -10916,6 +10970,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planning and estimating.
+        /// </summary>
+        public static string lblPlanningAndEstimating {
+            get {
+                return ResourceManager.GetString("lblPlanningAndEstimating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planning and recording.
         /// </summary>
         public static string lblPlanningAndRecording {
@@ -12262,6 +12325,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectADifferentCrop {
             get {
                 return ResourceManager.GetString("lblSelectADifferentCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a farm to create or update it&apos;s nutrient management plans or to create a report..
+        /// </summary>
+        public static string lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans {
+            get {
+                return ResourceManager.GetString("lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans", resourceCulture);
             }
         }
         
@@ -15661,6 +15733,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View or create a nutrient supply estimate.
+        /// </summary>
+        public static string lblViewOrCreateANutrientSupplyEstimate {
+            get {
+                return ResourceManager.GetString("lblViewOrCreateANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View recommendations.
         /// </summary>
         public static string lblViewRecommendations {
@@ -17556,6 +17637,15 @@ namespace NMP.Commons.Resources {
         public static string lblYouCanContinueButYouShouldConsiderAdjustingYour {
             get {
                 return ResourceManager.GetString("lblYouCanContinueButYouShouldConsiderAdjustingYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can create NVZ reports and other farm management reports once you have added a farm..
+        /// </summary>
+        public static string lblYouCanCreateNVZReportsAndOtherFarmManagementReports {
+            get {
+                return ResourceManager.GetString("lblYouCanCreateNVZReportsAndOtherFarmManagementReports", resourceCulture);
             }
         }
         
