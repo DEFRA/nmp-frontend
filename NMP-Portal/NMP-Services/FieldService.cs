@@ -9,6 +9,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -317,7 +318,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     {
         bool isFieldExist = false;
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = fieldId == null ? string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, name) : string.Format(APIURLHelper.IsFieldExistByFieldIdAsyncAPI, farmId, name, fieldId);
+        string url = fieldId == null ? string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, HttpUtility.UrlEncode(name)) : string.Format(APIURLHelper.IsFieldExistByFieldIdAsyncAPI, farmId, HttpUtility.UrlEncode(name), fieldId);
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();

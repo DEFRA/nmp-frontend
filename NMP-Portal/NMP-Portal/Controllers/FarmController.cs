@@ -528,10 +528,10 @@ namespace NMP.Portal.Controllers
 
         private void ValidateFieldLengths(FarmViewModel farm)
         {
-            ValidateMaxLength(farm.Address1, "Address1", Resource.lblAddressLine1, 50);
-            ValidateMaxLength(farm.Address2, "Address2", Resource.lblAddressLine2ForErrorMsg, 50);
-            ValidateMaxLength(farm.Address3, "Address3", Resource.lblTownOrCity, 50);
-            ValidateMaxLength(farm.Address4, "Address4", Resource.lblCountry, 50);
+            ValidateMaxLength(farm.Address1, "Address1", Resource.lblAddressLine1, 100);
+            ValidateMaxLength(farm.Address2, "Address2", Resource.lblAddressLine2ForErrorMsg, 100);
+            ValidateMaxLength(farm.Address3, "Address3", Resource.lblTownOrCity, 100);
+            ValidateMaxLength(farm.Address4, "Address4", Resource.lblCountry, 100);
         }
 
         private async Task ValidateFarmUniquenessAsync(FarmViewModel farm)
