@@ -48,7 +48,7 @@
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
             <govuk-service-navigation-nav-item asp-action="FarmList" asp-controller="Farm" active="@(isAllFarm)">
-                @Resource.lblAllFarm
+                @Resource.lblPlanningAndEstimating
             </govuk-service-navigation-nav-item>
             @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
             {

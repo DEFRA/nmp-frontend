@@ -61,10 +61,10 @@ namespace NMP.Portal.Controllers
                     model.Farms.AddRange(farms);
                     model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
                 }
-                if (model.Farms.Count == 0)
-                {
-                    return RedirectToAction("Name", "Farm");
-                }
+                //if (model.Farms.Count == 0)
+                //{
+                //    return RedirectToAction("Name", "Farm");
+                //}
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     ViewBag.Success = "true";
@@ -74,6 +74,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.Success = "false";
                 }
+                ViewBag.IsAnyRecordInMannerEstimate=false;
             }
             catch (HttpRequestException hre)
             {
