@@ -10,6 +10,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -102,7 +103,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id)
     {
         bool isFarmExist = false;
-        string url = string.Format(APIURLHelper.IsFarmExist, farmName, postcode.Trim(), Id);
+        string url = string.Format(APIURLHelper.IsFarmExist, HttpUtility.UrlEncode(farmName), postcode.Trim(), Id);
         HttpClient httpClient = await GetNMPAPIClient();
         var farmExist = await httpClient.GetAsync(url);
         farmExist.EnsureSuccessStatusCode();
