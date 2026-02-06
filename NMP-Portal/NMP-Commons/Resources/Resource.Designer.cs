@@ -772,6 +772,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About manner.
+        /// </summary>
+        public static string lblAboutManner {
+            get {
+                return ResourceManager.GetString("lblAboutManner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A new sward is one that is established in the current harvest year..
         /// </summary>
         public static string lblAboutNewSward {
@@ -8851,6 +8860,15 @@ namespace NMP.Commons.Resources {
         public static string lblMannerEstimateContent4 {
             get {
                 return ResourceManager.GetString("lblMannerEstimateContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manner hub page.
+        /// </summary>
+        public static string lblMannerHubPage {
+            get {
+                return ResourceManager.GetString("lblMannerHubPage", resourceCulture);
             }
         }
         

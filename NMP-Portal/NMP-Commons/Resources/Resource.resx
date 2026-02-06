@@ -7355,4 +7355,10 @@ livestock manure.</value>
   <data name="lblMannerEstimateContent4" xml:space="preserve">
     <value>You can save your estimates as a PDF and print them.</value>
   </data>
+  <data name="lblAboutManner" xml:space="preserve">
+    <value>About manner</value>
+  </data>
+  <data name="lblMannerHubPage" xml:space="preserve">
+    <value>Manner hub page</value>
+  </data>
 </root>

@@ -1,6 +1,8 @@
 ﻿@using NMP.Commons.Resources;
 @model NMP.Commons.ViewModels.AboutMannerViewModel;
-
+@{
+    ViewData["Title"] = Resource.lblAboutManner;
+}
 
 @section BeforeContent {
     <govuk-back-link asp-action="FarmList" asp-controller="Farm" asp-area="">@Resource.lblBack</govuk-back-link>
