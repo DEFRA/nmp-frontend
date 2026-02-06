@@ -772,6 +772,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About manner.
+        /// </summary>
+        public static string lblAboutManner {
+            get {
+                return ResourceManager.GetString("lblAboutManner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A new sward is one that is established in the current harvest year..
         /// </summary>
         public static string lblAboutNewSward {
@@ -8815,6 +8824,51 @@ namespace NMP.Commons.Resources {
         public static string lblManageStoreCapacity {
             get {
                 return ResourceManager.GetString("lblManageStoreCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How estimating nutrient supply from organic materials works using MANNER-NPK.
+        /// </summary>
+        public static string lblMannerEstimateContent1 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials..
+        /// </summary>
+        public static string lblMannerEstimateContent2 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving and printing.
+        /// </summary>
+        public static string lblMannerEstimateContent3 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can save your estimates as a PDF and print them..
+        /// </summary>
+        public static string lblMannerEstimateContent4 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manner hub page.
+        /// </summary>
+        public static string lblMannerHubPage {
+            get {
+                return ResourceManager.GetString("lblMannerHubPage", resourceCulture);
             }
         }
         
