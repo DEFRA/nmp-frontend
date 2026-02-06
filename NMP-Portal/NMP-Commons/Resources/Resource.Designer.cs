@@ -8819,6 +8819,42 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How estimating nutrient supply from organic materials works using MANNER-NPK.
+        /// </summary>
+        public static string lblMannerEstimateContent1 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials..
+        /// </summary>
+        public static string lblMannerEstimateContent2 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving and printing.
+        /// </summary>
+        public static string lblMannerEstimateContent3 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can save your estimates as a PDF and print them..
+        /// </summary>
+        public static string lblMannerEstimateContent4 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Manner-NPK).
         /// </summary>
         public static string lblMannerNPK {

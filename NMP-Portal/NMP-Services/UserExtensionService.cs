@@ -96,4 +96,29 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
 
         return userExtension;
     }
+    public async Task<UserExtension?> UpdateShowAboutMannerAsync(AboutManner aboutManner)
+    {
+        _logger.LogTrace("UpdateShowAboutMannerAsync method in UserExtensionService");
+        string jsonData = JsonConvert.SerializeObject(aboutManner);
+        UserExtension? userExtension = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.PutAsync(APIURLHelper.UpdateUserExtensionDoNotShowAboutMannerAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        if (response.IsSuccessStatusCode)
+        {
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                if (responseWrapper?.Data["UserExtension"] is JObject UserExtensionJObject)
+                {
+                    userExtension = UserExtensionJObject.ToObject<UserExtension>();
+                }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            }
+        }
+
+        return userExtension;
+    }
 }

@@ -7343,4 +7343,16 @@ livestock manure.</value>
   <data name="lblPlanningAndEstimating" xml:space="preserve">
     <value>Planning and estimating</value>
   </data>
+  <data name="lblMannerEstimateContent1" xml:space="preserve">
+    <value>How estimating nutrient supply from organic materials works using MANNER-NPK</value>
+  </data>
+  <data name="lblMannerEstimateContent2" xml:space="preserve">
+    <value>MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials.</value>
+  </data>
+  <data name="lblMannerEstimateContent3" xml:space="preserve">
+    <value>Saving and printing</value>
+  </data>
+  <data name="lblMannerEstimateContent4" xml:space="preserve">
+    <value>You can save your estimates as a PDF and print them.</value>
+  </data>
 </root>

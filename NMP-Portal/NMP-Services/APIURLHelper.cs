@@ -171,7 +171,8 @@ internal static class APIURLHelper
     //UserExtension API Urls
     public const string FetchUserExtensionAPI = "user-extension";
     public const string UpdateUserExtensionTermsOfUseAPI = "user-extension/accept-terms-of-use";
-    public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service";
+    public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service"; 
+    public const string UpdateUserExtensionDoNotShowAboutMannerAPI = "user-extension/do-not-show-about-manner";
 
     public const string FetchSnsAnalysisByCropIdAsyncAPI = "sns-analyses/crop/{0}";
     public const string AddSnsAnalysisAsyncAPI = "sns-analyses";
