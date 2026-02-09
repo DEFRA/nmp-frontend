@@ -20,7 +20,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private readonly IFarmLogic _farmLogic = farmLogic;
         private const string _checkAnswerActionName = "CheckAnswer";
         private readonly IDataProtector _mannerEstimateProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.MannerEstimateController");
-        private const string _mannerEstimateActionName = "MannerEstimate";
+        private const string _mannerEstimateSessionName = "MannerEstimate";
+        private const string _mannerEstimateControllerForLog = "MannerEstimate  Controller : ";
 
         public IActionResult Index()
         {
@@ -44,30 +45,30 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private MannerEstimateViewModel? GetMannerEstimateFromSession()
         {
-            if (HttpContext.Session.Exists(_mannerEstimateActionName))
+            if (HttpContext.Session.Exists(_mannerEstimateSessionName))
             {
-                return HttpContext.Session.GetObjectFromJson<MannerEstimateViewModel>(_mannerEstimateActionName);
+                return HttpContext.Session.GetObjectFromJson<MannerEstimateViewModel>(_mannerEstimateSessionName);
             }
             return null;
         }
 
         private void SetMannerEstimateToSession(MannerEstimateViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson(_mannerEstimateActionName, farm);
+            HttpContext.Session.SetObjectAsJson(_mannerEstimateSessionName, farm);
         }
 
         private void RemoveMannerEstimateSession()
         {
-            if (HttpContext.Session.Exists(_mannerEstimateActionName))
+            if (HttpContext.Session.Exists(_mannerEstimateSessionName))
             {
-                HttpContext.Session.Remove(_mannerEstimateActionName);
+                HttpContext.Session.Remove(_mannerEstimateSessionName);
             }
         }
 
         [HttpGet]
         public IActionResult FarmName()
         {
-            _logger.LogTrace("MannerEstimate  Controller : FarmName() action called");
+            _logger.LogTrace($"{_mannerEstimateControllerForLog} FarmName() action called");
             MannerEstimateViewModel? model = GetMannerEstimateFromSession();
             if (model == null)
             {
@@ -81,7 +82,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FarmName(MannerEstimateViewModel farm)
         {
-            _logger.LogTrace("MannerEstimate Controller : Name() post action called");
+            _logger.LogTrace($"{_mannerEstimateControllerForLog} FarmName() post action called");
 
             if (string.IsNullOrWhiteSpace(farm.Name))
             {
@@ -101,14 +102,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [HttpGet]
         public async Task<IActionResult> Country()
         {
-            _logger.LogTrace("MannerEstimate Controller : Country() action called");
+            _logger.LogTrace($"{_mannerEstimateControllerForLog}  Country() action called");
             MannerEstimateViewModel? model = GetMannerEstimateFromSession();
 
             try
             {
                 if (model == null)
                 {
-                    _logger.LogError("MannerEstimate Controller : Session not found in Country() action");
+                    _logger.LogError($"{_mannerEstimateControllerForLog} Session not found in Country() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
@@ -118,12 +119,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, "MannerEstimate Controller : HttpRequestException in Country() action");
+                _logger.LogError(hre, $"{_mannerEstimateControllerForLog}  HttpRequestException in Country() action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimate Controller : Exception in Country() action");
+                _logger.LogError(ex, $"{_mannerEstimateControllerForLog}  Exception in Country() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -132,7 +133,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Country(MannerEstimateViewModel model)
         {
-            _logger.LogTrace("MannerEstimate Controller : Country() post action called");
+            _logger.LogTrace($"{_mannerEstimateControllerForLog}  Country() post action called");
             try
             {
                 if (model.CountryID == null)
@@ -162,12 +163,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, "MannerEstimate Controller : HttpRequestException in Country() action");
+                _logger.LogError(hre, $"{_mannerEstimateControllerForLog}  HttpRequestException in Country() action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimate Controller : Exception in Country() post action");
+                _logger.LogError(ex, $"{_mannerEstimateControllerForLog}  Exception in Country() post action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -176,12 +177,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [HttpGet]
         public IActionResult FarmingRules()
         {
-            _logger.LogTrace("MannerEstimate Controller : FarmingRules() action called");
+            _logger.LogTrace($"{_mannerEstimateControllerForLog}  FarmingRules() action called");
             MannerEstimateViewModel? model = GetMannerEstimateFromSession();
 
             if (model == null)
             {
-                _logger.LogError("MannerEstimate Controller : Session not found in FarmingRules() action");
+                _logger.LogError($"{_mannerEstimateControllerForLog}  Session not found in FarmingRules() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             return View(model);
@@ -204,12 +205,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [HttpGet]
         public IActionResult PostCode()
         {
-            _logger.LogTrace("MannerEstimate Controller : PostCode() action called");
+            _logger.LogTrace($"{_mannerEstimateControllerForLog}  PostCode() action called");
             MannerEstimateViewModel? model = GetMannerEstimateFromSession();
 
             if (model == null)
             {
-                _logger.LogError("MannerEstimate Controller : Session not found in PostCode() action");
+                _logger.LogError($"{_mannerEstimateControllerForLog}  Session not found in PostCode() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
