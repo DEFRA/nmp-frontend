@@ -8828,6 +8828,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manner estimate.
+        /// </summary>
+        public static string lblMannerEstimate {
+            get {
+                return ResourceManager.GetString("lblMannerEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How estimating nutrient supply from organic materials works using MANNER-NPK.
         /// </summary>
         public static string lblMannerEstimateContent1 {
@@ -20888,6 +20897,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSampleForSoilMineralNitrogenForError {
             get {
                 return ResourceManager.GetString("MsgSampleForSoilMineralNitrogenForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a country before continuing..
+        /// </summary>
+        public static string MsgSelectACountryBeforContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectACountryBeforContinuing", resourceCulture);
             }
         }
         

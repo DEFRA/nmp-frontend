@@ -18,7 +18,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model.DoNotShowAboutManner = await _aboutMannerLogic.CheckDoNotShowAboutManner();
             if (model.DoNotShowAboutManner)
             {
-                return RedirectToAction("MannerHubPage", "MannerEstimate");
+                return RedirectToAction("MannerHubPage", "MannerEstimation");
             }
 
             return View(model);
@@ -34,7 +34,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await _aboutMannerLogic.UpdateShowAboutMannerAsync(model.DoNotShowAboutManner);
             }
 
-            return RedirectToAction("MannerHubPage", "MannerEstimate");
+            return RedirectToAction("MannerHubPage", "MannerEstimation");
         }
     }
 }
