@@ -36,7 +36,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"/>
@@ -96,7 +95,7 @@
                     {
                         @if (Model.IsStoreCapacityExist == true)
                         {
-                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
+                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel
                             </a>
                         }

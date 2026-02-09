@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    var heading = (!string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId) ? Resource.lblUpdateManureStorage : string.Format(Resource.lblAddStorageFor, Model.Year));
+    var heading = (!string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId) ? Resource.lblUpdateManureStorage : Resource.lblAddStorageFor);
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
@@ -49,7 +49,7 @@
                 else
                 {
                     <h1 class="govuk-heading-l">
-                        @string.Format(Resource.lblAddStorageFor, Model.Year)
+                        @Resource.lblAddStorageFor
                     </h1>
                     <h1 class="govuk-heading-m">
                         @Resource.lblCheckYourAnswers
@@ -66,7 +66,6 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateID"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
@@ -326,13 +325,13 @@
                             {
                                 <govuk-summary-list-row class=@(Model.CapacityWeight == null ? "govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @(string.Format(Resource.lblWhatIsTheWeightCapacityOf, Model.Year))
+                                        @Resource.lblWhatIsTheWeightCapacity
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @(Model.CapacityWeight != null ? string.Format("{0} {1}", Model.CapacityWeight.Value.ToString("#,0.0"), Resource.lblCubicMeters) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="WeightCapacity" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheWeightCapacityOf, Model.Year)</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="WeightCapacity" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheWeightCapacity</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }

@@ -1789,7 +1789,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add storage for {0}.
+        ///   Looks up a localized string similar to Add storage.
         /// </summary>
         public static string lblAddStorageFor {
             get {
@@ -5259,15 +5259,6 @@ namespace NMP.Commons.Resources {
         public static string lblExistingManureStorageCapacityReport {
             get {
                 return ResourceManager.GetString("lblExistingManureStorageCapacityReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Existing manure storage capacity {0}.
-        /// </summary>
-        public static string lblExistingManureStorageCapacityYear {
-            get {
-                return ResourceManager.GetString("lblExistingManureStorageCapacityYear", resourceCulture);
             }
         }
         
@@ -13517,7 +13508,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure storage on {0} in {1}.
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure storage on {0}.
         /// </summary>
         public static string lblStorageCapacityReportContentFour {
             get {
@@ -16579,6 +16570,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the weight capacity?.
+        /// </summary>
+        public static string lblWhatIsTheWeightCapacity {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheWeightCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the weight capacity of {0}?.
         /// </summary>
         public static string lblWhatIsTheWeightCapacityOf {
@@ -17830,11 +17830,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any organic manure storage for {0}.
+        ///   Looks up a localized string similar to You have not entered any organic manure storage.
         /// </summary>
-        public static string lblYouHaveNotEnteredAnyOrganicMaterialStorageFor {
+        public static string lblYouHaveNotEnteredAnyOrganicMaterialStorage {
             get {
-                return ResourceManager.GetString("lblYouHaveNotEnteredAnyOrganicMaterialStorageFor", resourceCulture);
+                return ResourceManager.GetString("lblYouHaveNotEnteredAnyOrganicMaterialStorage", resourceCulture);
             }
         }
         
@@ -21216,7 +21216,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter all the manure storage on {0} in {1}..
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter all the manure storage on {0}..
         /// </summary>
         public static string MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe {
             get {

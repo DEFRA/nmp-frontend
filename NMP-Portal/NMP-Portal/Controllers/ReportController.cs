@@ -1587,14 +1587,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
             {
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if ((model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value))
-                {
-                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear, isPlan = isComingFromPlan });
-                }
-                else
-                {
-                    return RedirectToAction("Year");
-                }
+               
+                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, isPlan = isComingFromPlan });
             }
             return View(model);
         }
@@ -1722,7 +1716,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
-                    (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, null);
+                    (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmId.Value);
                     if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
                     {
                         List<int> maxYearList = storeCapacities.Where(x => x.Year > maxYear).Select(x => x.Year.Value).ToList();
@@ -1743,16 +1737,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
             {
-                //(List<StoreCapacity> storeCapacityList, Error error) = await _reportService.FetchStoreCapacityByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-
-                //if (string.IsNullOrWhiteSpace(error.Message) && storeCapacityList.Count > 0)
-                //{
                 string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
 
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, y = model.EncryptedHarvestYear, isPlan = string.Empty });
-                //}
-                //return RedirectToAction("OrganicMaterialStorageNotAvailable");
+                return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, isPlan = string.Empty });
             }
             return RedirectToAction("ExportFieldsOrCropType");
         }

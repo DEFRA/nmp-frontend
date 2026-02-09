@@ -86,13 +86,13 @@
             <span class="name govuk-caption-l">@Model.FarmName</span>
             <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
 
-            <h2 class="govuk-heading-m">@Model.Year</h2>
+           @*  <h2 class="govuk-heading-m">@Model.Year</h2> *@
 
         </div>
         @if (TempData["succesMsgContent1"] == null && string.IsNullOrWhiteSpace(Model.IsRemovedRecently))
         {
             <div class="govuk-inset-text margin-bottom-thirty">
-                <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName, Model.Year)</p>
+                <p class="govuk-body">@string.Format(Resource.lblStorageCapacityReportContentFour, Model.FarmName)</p>
                 <p class="govuk-body"><a asp-action="StorageCapacityReport" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-x="@Model.IsComingFromManageToHubPage" asp-route-v="@ViewBag.IsPlan">@Resource.lblCreateAnExistingManureStorageCapacityReport</a></p>
             </div>
         }

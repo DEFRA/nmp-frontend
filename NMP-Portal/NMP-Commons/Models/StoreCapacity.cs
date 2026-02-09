@@ -5,7 +5,6 @@ public class StoreCapacity
 {
     public int? ID { get; set; }
     public int? FarmID { get; set; }
-    public int? Year { get; set; }
     public string? StoreName { get; set; }
     public int? MaterialStateID { get; set; }
     public int? StorageTypeID { get; set; }
