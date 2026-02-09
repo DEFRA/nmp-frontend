@@ -44,14 +44,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction("MannerHubPage", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
         }
 
-        private MannerEstimationViewModel? GetMannerEstimationFromSession()
-        {
-            if (HttpContext.Session.Exists(_mannerEstimationSessionName))
-            {
-                return HttpContext.Session.GetObjectFromJson<MannerEstimationViewModel>(_mannerEstimationSessionName);
-            }
-            return null;
-        }
 
 
         private void RemoveMannerEstimationSession()
