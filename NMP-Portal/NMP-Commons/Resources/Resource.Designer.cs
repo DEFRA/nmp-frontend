@@ -8828,6 +8828,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manner estimate.
+        /// </summary>
+        public static string lblMannerEstimate {
+            get {
+                return ResourceManager.GetString("lblMannerEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How estimating nutrient supply from organic materials works using MANNER-NPK.
         /// </summary>
         public static string lblMannerEstimateContent1 {

@@ -7361,4 +7361,7 @@ livestock manure.</value>
   <data name="lblMannerHubPage" xml:space="preserve">
     <value>Manner hub page</value>
   </data>
+  <data name="lblMannerEstimate" xml:space="preserve">
+    <value>Manner estimate</value>
+  </data>
 </root>
