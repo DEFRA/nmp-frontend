@@ -1,0 +1,49 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep2
+
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Country;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "FarmName")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="Country" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-radios asp-for="@Model.CountryID">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)
+                    </govuk-radios-fieldset-legend>
+                    @if (ViewBag.CountryList != null)
+                    {
+                        @foreach (var item in ViewBag.CountryList)
+                        {
+                            <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
+                        }
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (!Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>

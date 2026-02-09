@@ -7358,6 +7358,12 @@ livestock manure.</value>
   <data name="lblMannerHubPage" xml:space="preserve">
     <value>Manner hub page</value>
   </data>
+  <data name="lblMannerEstimate" xml:space="preserve">
+    <value>Manner estimate</value>
+  </data>
+  <data name="MsgSelectACountryBeforContinuing" xml:space="preserve">
+    <value>Select a country before continuing.</value>
+  </data>
   <data name="lblWhatIsTheWeightCapacity" xml:space="preserve">
     <value>What is the weight capacity?</value>
   </data>
