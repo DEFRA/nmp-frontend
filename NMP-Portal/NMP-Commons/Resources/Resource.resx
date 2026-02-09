@@ -7364,4 +7364,7 @@ livestock manure.</value>
   <data name="lblMannerEstimate" xml:space="preserve">
     <value>Manner estimate</value>
   </data>
+  <data name="MsgSelectACountryBeforContinuing" xml:space="preserve">
+    <value>Select a country before continuing.</value>
+  </data>
 </root>

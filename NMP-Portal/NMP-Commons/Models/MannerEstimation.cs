@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.Models
 {
-    public class MannerEstimate
+    public class MannerEstimation
     {
         public int? ID { get; set; }
         public string? Name { get; set; }

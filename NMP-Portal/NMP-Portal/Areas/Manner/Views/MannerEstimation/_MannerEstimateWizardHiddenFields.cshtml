@@ -1,7 +1,7 @@
-﻿@using NMP.Commons.Enums
+﻿@* @using NMP.Commons.Enums
 @using NMP.Commons.ViewModels;
 @using NMP.Commons.Resources;
-@model NMP.Commons.ViewModels.MannerEstimateViewModel
+@model NMP.Commons.ViewModels.MannerEstimationViewModel
 @{
     var currentStep = ViewBag.CurrentStep as int?;
 }
@@ -50,4 +50,4 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" value="@Model.ID" />
-</div>
+</div> *@

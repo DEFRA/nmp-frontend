@@ -1,26 +1,25 @@
 ﻿@using NMP.Commons.Enums
 @using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimateViewModel
+@model MannerEstimationStep2
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.Name)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Country;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmName")" asp-controller="MannerEstimate">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "FarmName")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="Country" method="post" asp-controller="MannerEstimate" autocomplete="off">
+        <form asp-action="Country" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            @await Html.PartialAsync("~/areas/manner/views/mannerestimate/_MannerEstimateWizardHiddenFields.cshtml", Model)
             <govuk-radios asp-for="@Model.CountryID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhichCountryIsIn, Model.Name)
+                        @string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)
                     </govuk-radios-fieldset-legend>
                     @if (ViewBag.CountryList != null)
                     {
@@ -39,11 +38,11 @@
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)
             {
-                <a class="govuk-link" asp-action="MannerEstimateCancel" asp-controller="MannerEstimate">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="MannerEstimateCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
             }
             else
             {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimate">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
             }
         </p>
     </div>

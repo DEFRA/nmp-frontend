@@ -20901,6 +20901,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a country before continuing..
+        /// </summary>
+        public static string MsgSelectACountryBeforContinuing {
+            get {
+                return ResourceManager.GetString("MsgSelectACountryBeforContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select an address.
         /// </summary>
         public static string MsgSelectAddress {

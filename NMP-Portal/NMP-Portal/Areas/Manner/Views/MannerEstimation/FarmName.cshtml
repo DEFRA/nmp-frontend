@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Enums
 @using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimateViewModel
+@model MannerEstimationStep1
 
 @{
     string title = Resource.lblMannerEstimate;
@@ -10,15 +10,14 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerHubPage")" asp-controller="MannerEstimate" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerHubPage")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="FarmName" method="post" asp-controller="MannerEstimate" autocomplete="off">
+        <form asp-action="FarmName" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            @await Html.PartialAsync("~/areas/manner/views/mannerestimate/_MannerEstimateWizardHiddenFields.cshtml", Model)
-            <govuk-input asp-for="@Model.Name">
+            <govuk-input asp-for="@Model.FarmName">
                 <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
                 <govuk-input-hint>@Resource.lblIfYouhaveMoreThanOneHolding</govuk-input-hint>
             </govuk-input>
@@ -27,14 +26,14 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            @if (Model != null && (Model.IsCheckAnswer))
+            @if (Model.IsCheckAnswer)
             {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimate">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
             }
             else
             {
 
-                <a class="govuk-link" asp-action="MannerEstimateCancel" asp-controller="MannerEstimate">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="MannerEstimateCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
             }
         </p>
     </div>
