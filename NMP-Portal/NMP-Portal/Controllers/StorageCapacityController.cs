@@ -2477,7 +2477,7 @@ namespace NMP.Portal.Controllers
             return model.IsCheckAnswer &&
                    model.MaterialStateID == storageModel.MaterialStateID;
         }
-        private void HandleMaterialTypeChange(StorageCapacityViewModel model, StorageCapacityViewModel storageModel)
+        private static void HandleMaterialTypeChange(StorageCapacityViewModel model, StorageCapacityViewModel storageModel)
         {
             if (!model.IsCheckAnswer)
                 return;
