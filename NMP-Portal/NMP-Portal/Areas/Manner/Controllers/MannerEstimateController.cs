@@ -44,23 +44,23 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private MannerEstimateViewModel? GetMannerEstimateFromSession()
         {
-            if (HttpContext.Session.Exists("MannerEstimate"))
+            if (HttpContext.Session.Exists(_mannerEstimateActionName))
             {
-                return HttpContext.Session.GetObjectFromJson<MannerEstimateViewModel>("MannerEstimate");
+                return HttpContext.Session.GetObjectFromJson<MannerEstimateViewModel>(_mannerEstimateActionName);
             }
             return null;
         }
 
         private void SetMannerEstimateToSession(MannerEstimateViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson("MannerEstimate", farm);
+            HttpContext.Session.SetObjectAsJson(_mannerEstimateActionName, farm);
         }
 
         private void RemoveMannerEstimateSession()
         {
-            if (HttpContext.Session.Exists("MannerEstimate"))
+            if (HttpContext.Session.Exists(_mannerEstimateActionName))
             {
-                HttpContext.Session.Remove("MannerEstimate");
+                HttpContext.Session.Remove(_mannerEstimateActionName);
             }
         }
 
