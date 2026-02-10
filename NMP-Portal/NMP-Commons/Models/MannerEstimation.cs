@@ -20,7 +20,7 @@ namespace NMP.Commons.Models
 
         public string? FieldName { get; set; }
         public bool? IsWithinNVZ { get; set; }
-        public int? NVZProgrammeID        { get; set; }
+        public int? NVZProgrammeID   { get; set; }
         public int? SoilTypeID { get; set; }
         public int? CropTypeID { get; set; }
         public bool? IsEarlySown { get; set; }

@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Enums
 @using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimationStep1ViewModel
+@model MannerEstimationStep5ViewModel
 
 @{
     string title = Resource.lblMannerEstimate;
@@ -10,20 +10,21 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerHubPage")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "AverageAnnualRainfall")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="FarmName" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="FieldName" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-input asp-for="@Model.FarmName">
-                <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
-                <govuk-input-hint>@Resource.lblFarmNamePageHint</govuk-input-hint>
+            <govuk-input asp-for="@Model.FieldName">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @Resource.AddFieldNameQuestion
+                </govuk-input-label>
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button>
+            </govuk-button> 
         </form>
         <p class="govuk-body cancel-link">
             @if (Model.IsCheckAnswer)

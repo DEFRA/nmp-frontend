@@ -2518,6 +2518,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AverageAnnualRainfall.
+        /// </summary>
+        public static string lblAverageAnnualRainfallForError {
+            get {
+                return ResourceManager.GetString("lblAverageAnnualRainfallForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the average rainfall for your postcode area. If you have more accurate data for your farm, you can change it now or later..
+        /// </summary>
+        public static string lblAverageAnnualRainfallHint {
+            get {
+                return ResourceManager.GetString("lblAverageAnnualRainfallHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average number for the year.
         /// </summary>
         public static string lblAverageForTheYear {
@@ -5650,6 +5668,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will be shown on the estimate.
+        /// </summary>
+        public static string lblFarmNamePageHint {
+            get {
+                return ResourceManager.GetString("lblFarmNamePageHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Farm remove.
         /// </summary>
         public static string lblFarmRemove {
@@ -7617,6 +7644,15 @@ namespace NMP.Commons.Resources {
         public static string lblIsThisFieldAboveForFieldCheckAnswere {
             get {
                 return ResourceManager.GetString("lblIsThisFieldAboveForFieldCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is {0} inside a Nitrate Vulnerable Zone (NVZ)?.
+        /// </summary>
+        public static string lblIsThisInNVZ {
+            get {
+                return ResourceManager.GetString("lblIsThisInNVZ", resourceCulture);
             }
         }
         

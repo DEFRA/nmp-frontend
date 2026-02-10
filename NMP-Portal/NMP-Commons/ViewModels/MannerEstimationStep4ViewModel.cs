@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep1
+    public class MannerEstimationStep4ViewModel
     {
-        public string FarmName { get; set; } = string.Empty;
+        public string Postcode { get; set; } = string.Empty;
+        public int AverageAnnualRainfall { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
     }
 }

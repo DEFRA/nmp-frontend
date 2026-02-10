@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep3
+    public class MannerEstimationStep6ViewModel
     {
-        public string? Postcode { get; set; }
-        public string FarmName { get; set; } = string.Empty;
+        public bool IsWithinNVZ { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
+        public string FieldName { get; set; } = string.Empty;
     }
 }

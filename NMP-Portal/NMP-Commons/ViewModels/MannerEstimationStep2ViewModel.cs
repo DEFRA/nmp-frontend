@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep2
+    public class MannerEstimationStep2ViewModel
     {
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgSelectACountryBeforContinuing))]
         public int CountryID { get; set; }
