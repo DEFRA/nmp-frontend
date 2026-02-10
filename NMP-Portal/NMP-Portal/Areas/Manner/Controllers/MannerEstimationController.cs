@@ -200,7 +200,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!ModelState.IsValid)
                 {
                     model = _mannerLogic.GetMannerEstimationStep3();
-                    return View("Country", model);
+                    return View(model);
                 }
 
                 model =await _mannerLogic.SetMannerEstimationStep3(model);
