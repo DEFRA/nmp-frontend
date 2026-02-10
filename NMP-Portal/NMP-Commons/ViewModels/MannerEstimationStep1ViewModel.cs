@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep1
+    public class MannerEstimationStep1ViewModel
     {
         public string FarmName { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;

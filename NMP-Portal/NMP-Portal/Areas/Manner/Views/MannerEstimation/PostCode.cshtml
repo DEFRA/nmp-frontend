@@ -1,10 +1,10 @@
 ﻿@using NMP.Commons.Enums
 @using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimationStep3
+@model MannerEstimationStep3ViewModel
 
 @{
-    string title =  Resource.lblMannerEstimate;
+    string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.FarmName)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Postcode;
 }
@@ -22,9 +22,9 @@
             <govuk-input input-class="govuk-input--width-5" asp-for="@Model.Postcode">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l ">@string.Format(Resource.lblWhatIsPostcode, Model.FarmName)</govuk-input-label>
             </govuk-input>
-            @* <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)

@@ -7367,4 +7367,16 @@ livestock manure.</value>
   <data name="lblWhatIsTheWeightCapacity" xml:space="preserve">
     <value>What is the weight capacity?</value>
   </data>
+  <data name="lblAverageAnnualRainfallForError" xml:space="preserve">
+    <value>AverageAnnualRainfall</value>
+  </data>
+  <data name="lblFarmNamePageHint" xml:space="preserve">
+    <value>This will be shown on the estimate</value>
+  </data>
+  <data name="lblAverageAnnualRainfallHint" xml:space="preserve">
+    <value>This is the average rainfall for your postcode area. If you have more accurate data for your farm, you can change it now or later.</value>
+  </data>
+  <data name="lblIsThisInNVZ" xml:space="preserve">
+    <value>Is {0} inside a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
 </root>
