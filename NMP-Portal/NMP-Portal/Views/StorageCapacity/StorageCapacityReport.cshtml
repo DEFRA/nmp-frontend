@@ -15,7 +15,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@Resource.lblBack</govuk-back-link>
 
     </div>
 
@@ -46,7 +46,7 @@
         <div class="govuk-grid-column-full">
             <span class="name govuk-caption-l">@Model.Farm.Name</span>
             <h1 class="govuk-heading-xl margin-bottom-twenty">
-                @string.Format(Resource.lblExistingManureStorageCapacityYear, Model.Year)
+                @Resource.lblExistingManureStorageCapacity
             </h1>
             <p class="govuk-body">@string.Format(Resource.lblCreatedOnDate, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</p>
         </div>
@@ -131,6 +131,8 @@
                         }
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblStoreCapacityReportContentTwo</th>
+                            <th scope="col" class="govuk-table__header">
+                            </th>
                             <th scope="col" class="govuk-table__header">
                                 @string.Format("{0:N0} {1}", totalSlurryCapacityVolume, Resource.lblCubicMeters)
                             </th>
@@ -252,6 +254,8 @@
                         }
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header storage_name">@Resource.lblSolidManureTotal</th>
+                            <th scope="col" class="govuk-table__header">
+                            </th>
                             <th scope="col" class="govuk-table__header">
                                 @string.Format("{0:N0} {1}", totalSolidCapacityVolume, Resource.lblCubicMeters)
                             </th>
