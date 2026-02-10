@@ -13643,7 +13643,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On a concrete base or in poultry houses..
+        ///   Looks up a localized string similar to on yards or in livestock housing..
         /// </summary>
         public static string lblStoreCapacityReportContentFour {
             get {
