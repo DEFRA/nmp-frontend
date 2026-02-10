@@ -174,9 +174,9 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode)
         {
-            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall != null ? responseWrapper.Data.avarageAnnualRainfall.value : 0;
+            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall?.value ?? 0;
         }
 
         return rainfallAverage;
