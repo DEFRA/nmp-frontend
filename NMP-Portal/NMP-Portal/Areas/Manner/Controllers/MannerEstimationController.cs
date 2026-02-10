@@ -317,19 +317,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
                 {
                     ModelState[key]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[key]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
-                    }
-                    else
-                    {
-                        ModelState[key]?.Errors.Add(RainfallError);
-                    }
+                    ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
                 }
             }
 
-            
+
             if (model.AverageAnnualRainfall == 0)
             {
                 ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);

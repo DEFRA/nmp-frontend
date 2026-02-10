@@ -138,12 +138,8 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(mannerEstimationStep4.Postcode);
 
-        decimal? rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
-        if (rainfall != null)
-        {
-            return (int)Math.Round(rainfall.Value);
-        }
-        return 0;
+        decimal rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
+        return (int)Math.Round(rainfall);
     }
 
     public MannerEstimationStep5ViewModel GetMannerEstimationStep5()
@@ -157,7 +153,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep5 = mannerEstimationStep5;
         SetMannerEstimationToSession(mannerEstimationViewModel);
-        return  GetMannerEstimationStep5();
+        return GetMannerEstimationStep5();
     }
 
     public MannerEstimationStep6ViewModel GetMannerEstimationStep6()
