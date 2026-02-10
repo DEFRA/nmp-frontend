@@ -15,11 +15,10 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerService, IFarmLogic farmLogic, IHttpContextAccessor httpContextAccessor) : IMannerLogic
+public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerService, IHttpContextAccessor httpContextAccessor) : IMannerLogic
 {
     private readonly ILogger<MannerLogic> _logger = logger;
     private readonly IMannerService _mannerService = mannerService;
-    private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private const string _mannerEstimationSessionName = "MannerEstimation";
     public async Task<int> FetchCategoryIdByCropTypeIdAsync(int cropTypeId)
@@ -121,7 +120,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep4.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
         if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0)
         {
-            mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = await FetchAverageAnnualRainfall(mannerEstimationViewModel.MannerEstimationStep4);
+            mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = await FetchAnnualRainfallAverageAsync(mannerEstimationViewModel.MannerEstimationStep4);
             SetMannerEstimationToSession(mannerEstimationViewModel);
         }
         return mannerEstimationViewModel.MannerEstimationStep4;
@@ -134,11 +133,10 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         return await GetMannerEstimationStep4();
     }
 
-    private async Task<int> FetchAverageAnnualRainfall(MannerEstimationStep4ViewModel mannerEstimationStep4)
+    private async Task<int> FetchAnnualRainfallAverageAsync(MannerEstimationStep4ViewModel mannerEstimationStep4)
     {
         string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(mannerEstimationStep4.Postcode);
-
-        decimal rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
+        decimal rainfall = await FetchRainfallAverageAsync(firstHalfPostcode);
         return (int)Math.Round(rainfall);
     }
 
@@ -170,5 +168,11 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep6 = mannerEstimationStep6;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep6();
+    }
+
+    public async Task<decimal> FetchRainfallAverageAsync(string postcode)
+    {
+        _logger.LogTrace("Fetching rainfall average for Postcode: {Postcode}", postcode);
+        return await _mannerService.FetchRainfallAverageAsync(postcode);
     }
 }

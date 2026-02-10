@@ -21,4 +21,6 @@ public interface IMannerLogic
 
     MannerEstimationStep6ViewModel GetMannerEstimationStep6();
     MannerEstimationStep6ViewModel SetMannerEstimationStep6(MannerEstimationStep6ViewModel mannerEstimationStep6);
+
+    Task<decimal> FetchRainfallAverageAsync(string postcode);
 }
