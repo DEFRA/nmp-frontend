@@ -5928,7 +5928,7 @@ livestock manure.</value>
     <value>Dirty water total</value>
   </data>
   <data name="lblStoreCapacityReportContentFour" xml:space="preserve">
-    <value>On a concrete base or in poultry houses.</value>
+    <value>on yards or in livestock housing.</value>
   </data>
   <data name="lblSolidManureStores" xml:space="preserve">
     <value>Solid manure stores</value>

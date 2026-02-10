@@ -1526,19 +1526,18 @@ namespace NMP.Portal.Controllers
                     surfaceArea = (decimal)Math.PI * r * r;
                     break;
                 case (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon:
+                    surfaceArea = l * w;
+
                     if (model.IsSlopeEdge == false)
                     {
                         capacity = l * w * effDepth;
-                        surfaceArea = l * w;
                     }
                     else
                     {
-                        decimal areaBottom = l * w;
-                        decimal lengthTop = l + 2m * slope * effDepth;
-                        decimal widthTop = w + 2m * slope * effDepth;
-                        decimal areaTop = lengthTop * widthTop;
-                        capacity = (effDepth / 3m) * (areaBottom + areaTop + (decimal)Math.Sqrt((double)(areaBottom * areaTop)));
-                        surfaceArea = areaTop;
+                        decimal totalVolume = CalculateSlopedLagoonVolume(d, l, w, slope);
+                        decimal freeboardVolume = CalculateSlopedLagoonVolume(freeboardDefault, l, w, slope);
+
+                        capacity = totalVolume - freeboardVolume;
                     }
 
                     break;
@@ -1550,6 +1549,14 @@ namespace NMP.Portal.Controllers
 
             return (capacity, surfaceArea);
         }
+        private static decimal CalculateSlopedLagoonVolume(decimal h, decimal A, decimal B, decimal slope)
+        {
+            decimal a = Math.Max(0m, A - (h * slope));
+            decimal b = Math.Max(0m, B - (h * slope));
+
+            return (h / 6m) * ((A * b + a * B) + 2m * (a * b + A * B));
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> StorageCapacityReport(string q, string? x, string v)
