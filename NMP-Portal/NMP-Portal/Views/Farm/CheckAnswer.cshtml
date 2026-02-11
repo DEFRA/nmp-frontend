@@ -50,6 +50,31 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                var action = Model.IsManualAddress ? "ManualAddress" : "Address";
+                var errorAction = "";
+                <govuk-error-summary>
+                    @foreach (var state in ViewData.ModelState)
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            if (error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit,Resource.lblFirstLineAddress))
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblSecondLineAddress)) 
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblTownOrCity)) 
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblCounty)))
+                            {
+                                errorAction = action;
+                                <govuk-error-summary-item href="@errorAction">
+                                    @error.ErrorMessage
+                                </govuk-error-summary-item>
+                            }
+
+                        }
+                    }
+                </govuk-error-summary>
+
+            }
             @if (TempData["AddFarmError"] != null)
             {
                 <govuk-error-summary>
@@ -80,6 +105,7 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode" />
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()" />
             </div>
             <div class="check-answers">
                 <govuk-summary-list>
