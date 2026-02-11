@@ -998,7 +998,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
                 }
-                ValidateFieldLengths(farm);  //Validate max length for address fields.
+                ValidateFieldLengths(model);  //Validate max length for address fields.
                 if (!ModelState.IsValid)
                 {
                     return View(model);
