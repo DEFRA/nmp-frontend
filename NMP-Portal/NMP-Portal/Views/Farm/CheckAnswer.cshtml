@@ -50,6 +50,31 @@
     @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                var action = Model.IsManualAddress ? "ManualAddress" : "Address";
+                var errorAction = "";
+                <govuk-error-summary>
+                    @foreach (var state in ViewData.ModelState)
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            if (error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit,Resource.lblFirstLineAddress))
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblSecondLineAddress)) 
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblTownOrCity)) 
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblCounty)))
+                            {
+                                errorAction = action;
+                                <govuk-error-summary-item href="@errorAction">
+                                    @error.ErrorMessage
+                                </govuk-error-summary-item>
+                            }
+
+                        }
+                    }
+                </govuk-error-summary>
+
+            }
             @if (TempData["AddFarmError"] != null)
             {
                 <govuk-error-summary>

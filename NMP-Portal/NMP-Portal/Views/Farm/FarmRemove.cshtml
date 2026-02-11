@@ -16,7 +16,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-back-link asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
     }
 
     <form asp-action="FarmRemove" asp-controller="Farm" method="post" autocomplete="off">

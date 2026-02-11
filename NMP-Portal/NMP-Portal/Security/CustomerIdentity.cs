@@ -65,7 +65,7 @@ namespace NMP.Portal.Security
                 cookieOptions.SlidingExpiration = true;
             })
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", configuration?["CustomerIdentityClientId"]?? string.Empty })
-            .AddDistributedTokenCaches();                        
+            .AddDistributedTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -80,10 +80,10 @@ namespace NMP.Portal.Security
                 options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
                 options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
-                options.Events.OnRemoteFailure += OnRemoteFailure;                
+                options.Events.OnRemoteFailure += OnRemoteFailure;
             });
             services.AddTokenAcquisition();
-            services.AddDistributedTokenCaches();            
+            services.AddDistributedTokenCaches();
             services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;

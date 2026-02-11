@@ -7379,4 +7379,13 @@ livestock manure.</value>
   <data name="lblIsThisInNVZ" xml:space="preserve">
     <value>Is {0} inside a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
+  <data name="MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit" xml:space="preserve">
+    <value>Your {0} has exceeded the maximum character limit.</value>
+  </data>
+  <data name="lblFirstLineAddress" xml:space="preserve">
+    <value>first line address</value>
+  </data>
+  <data name="lblSecondLineAddress" xml:space="preserve">
+    <value>second line address</value>
+  </data>
 </root>
