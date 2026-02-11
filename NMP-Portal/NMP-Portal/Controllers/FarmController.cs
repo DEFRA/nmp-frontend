@@ -528,10 +528,10 @@ namespace NMP.Portal.Controllers
 
         private void ValidateFieldLengths(FarmViewModel farm)
         {
-            ValidateMaxLength(farm.Address1, "Address1", Resource.lblAddressLine1, 100);
-            ValidateMaxLength(farm.Address2, "Address2", Resource.lblAddressLine2ForErrorMsg, 100);
-            ValidateMaxLength(farm.Address3, "Address3", Resource.lblTownOrCity, 100);
-            ValidateMaxLength(farm.Address4, "Address4", Resource.lblCountry, 100);
+            ValidateMaxLength(farm.Address1, "Address1", Resource.lblFirstLineAddress, 250);
+            ValidateMaxLength(farm.Address2, "Address2", Resource.lblSecondLineAddress, 250);
+            ValidateMaxLength(farm.Address3, "Address3", Resource.lblTownOrCity, 250);
+            ValidateMaxLength(farm.Address4, "Address4", Resource.lblCounty, 250);
         }
 
         private async Task ValidateFarmUniquenessAsync(FarmViewModel farm)
@@ -564,9 +564,8 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError(
                     key,
                     string.Format(
-                        Resource.lblModelPropertyCannotBeLongerThanNumberCharacters,
-                        label,
-                        maxLength));
+                        Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit,
+                        label));
             }
         }
 
@@ -996,6 +995,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
                 }
+                ValidateFieldLengths(farm);  //Validate max length for address fields.
                 if (!ModelState.IsValid)
                 {
                     return View(farm);

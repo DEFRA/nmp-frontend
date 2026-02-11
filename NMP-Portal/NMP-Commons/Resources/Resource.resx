@@ -7232,4 +7232,13 @@ livestock manure.</value>
   <data name="lblSampleDepthForErrorNotValidValue" xml:space="preserve">
     <value>SampleDepth</value>
   </data>
+  <data name="MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit" xml:space="preserve">
+    <value>Your {0} has exceeded the maximum character limit.</value>
+  </data>
+  <data name="lblFirstLineAddress" xml:space="preserve">
+    <value>first line address</value>
+  </data>
+  <data name="lblSecondLineAddress" xml:space="preserve">
+    <value>second line address</value>
+  </data>
 </root>

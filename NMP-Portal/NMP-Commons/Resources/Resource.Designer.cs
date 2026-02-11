@@ -5830,6 +5830,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to first line address.
+        /// </summary>
+        public static string lblFirstLineAddress {
+            get {
+                return ResourceManager.GetString("lblFirstLineAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England..
         /// </summary>
         public static string lblFirstRuleOfNVZForEngland {
@@ -12028,6 +12037,15 @@ namespace NMP.Commons.Resources {
         public static string lblSecondCrop {
             get {
                 return ResourceManager.GetString("lblSecondCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to second line address.
+        /// </summary>
+        public static string lblSecondLineAddress {
+            get {
+                return ResourceManager.GetString("lblSecondLineAddress", resourceCulture);
             }
         }
         
@@ -21248,6 +21266,15 @@ namespace NMP.Commons.Resources {
         public static string MsgYouCanContinueButYouShouldConsider {
             get {
                 return ResourceManager.GetString("MsgYouCanContinueButYouShouldConsider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your {0} has exceeded the maximum character limit..
+        /// </summary>
+        public static string MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit {
+            get {
+                return ResourceManager.GetString("MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit", resourceCulture);
             }
         }
         
