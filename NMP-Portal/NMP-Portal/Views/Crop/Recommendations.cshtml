@@ -297,16 +297,16 @@
                                         <hr class="seperator_five">
                                         <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent1
+                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContent1)
                                         </p>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent2
+                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
                                         </p>
                                         <p class="govuk-body margin-bottom-forty">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent3
+                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
                                         </p>
 
-                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#tab_crop-1">@Resource.lblBackToTheTop</a></p>
+                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#crop-1">@Resource.lblBackToTheTop</a></p>
 
                                     }
 
@@ -501,15 +501,15 @@
                                         <hr class="seperator_five">
                                         <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent1
+                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContent1)
                                         </p>
                                         <p class="govuk-body">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent2
+                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
                                         </p>
                                         <p class="govuk-body margin-bottom-forty">
-                                            @Resource.lblAboutRecommendationGuidenceAdviceContent3
+                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
                                         </p>
-                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#tab_crop-2">@Resource.lblBackToTheTop</a></p>
+                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link" href="#crop-2">@Resource.lblBackToTheTop</a></p>
                                     }
 
                                 </govuk-tabs-item>

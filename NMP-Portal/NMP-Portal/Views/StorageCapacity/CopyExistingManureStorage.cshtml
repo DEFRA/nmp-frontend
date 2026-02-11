@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
 
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{Resource.lblCopyExistingStorageManureContentOne} {Resource.lblHyphen} {title}";
 
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
@@ -28,7 +28,7 @@
 @section BeforeContent {
     @if (backController == Resource.lblStorageCapacityForControllerName)
     {
-        <govuk-back-link asp-action=@backAction asp-controller=@backController asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@backAction asp-controller=@backController asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan">@Resource.lblBack</govuk-back-link>
     }
     else
     {
@@ -59,7 +59,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"/>

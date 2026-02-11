@@ -3,4 +3,5 @@ public interface IMannerService
 {
     Task<int> FetchCategoryIdByCropTypeIdAsync(int cropTypeId);
     Task<int> FetchCropNUptakeDefaultAsync(int cropCategoryId);
+    Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode);
 }

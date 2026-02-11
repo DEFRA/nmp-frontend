@@ -5,7 +5,7 @@ public class Farm
 {
     public int ID { get; set; }
     [StringLength(250,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFarmNameMinMaxValidation))]
-    
+
     public string? Name { get; set; }
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblSelectTheFarmAddress))]
     public string? FullAddress { get; set; } = string.Empty;
@@ -24,12 +24,12 @@ public class Farm
 
     [StringLength(8, MinimumLength = 6 ,ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
     [RegularExpression(@"^[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s*\d[A-Za-z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
-    
+
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheFarmPostcode))]
     public string? Postcode { get; set; }=string.Empty;
     [StringLength(8, MinimumLength = 6, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
     [RegularExpression(@"^[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s*\d[A-Za-z]{2}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPostcodeMinMaxValidation))]
-    
+
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNearestPostcode))]
     public string? ClimateDataPostCode { get; set; } = string.Empty;
     public string? CPH { get; set; }
@@ -39,18 +39,18 @@ public class Farm
     public string? STD { get; set; }
     public string? Telephone { get; set; }
     public string? Mobile { get; set; }
-    public string? Email { get; set; }    
+    public string? Email { get; set; }
     public int? Rainfall { get; set; }
     public Guid? OrganisationID { get; set; }
     public decimal TotalFarmArea { get; set; } = 0;
     public int AverageAltitude { get; set; } = 0;
-    public bool? RegisteredOrganicProducer { get; set; } 
+    public bool? RegisteredOrganicProducer { get; set; }
     public bool MetricUnits { get; set; } = false;
     public bool EnglishRules { get; set; } = true;
     public int? NVZFields { get; set; } = null;
     public int? FieldsAbove300SeaLevel { get; set; } = null;
     public string? EncryptedFarmId { get; set; }
-    public int? CountryID { get; set; } 
+    public int? CountryID { get; set; }
     public DateTime CreatedOn { get; set; }
     public int? CreatedByID { get; set; }
     public DateTime? ModifiedOn { get; set; } = null;

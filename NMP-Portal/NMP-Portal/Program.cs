@@ -172,10 +172,10 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie = new CookieBuilder()
     {
         Name = "NMP-Portal",
-        HttpOnly = true,        
-        Path = "/",       
+        HttpOnly = true,
+        Path = "/",
         SecurePolicy = CookieSecurePolicy.Always,
-        SameSite = SameSiteMode.Strict 
+        SameSite = SameSiteMode.Strict
     };
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
@@ -248,7 +248,7 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.ico");
         return;
     }
-    else if(context.Request.Path == "/favicon.svg")
+    else if (context.Request.Path == "/favicon.svg")
     {
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
@@ -258,16 +258,17 @@ app.Use(async (context, next) =>
 
 app.UseCsp(csp =>
 {
+    const string browserLinkJsUrl = "https://*/-vs/browserLink.js";
     var pageTemplateHelper = app.Services.GetRequiredService<PageTemplateHelper>();
     csp.ByDefaultAllow
         .FromSelf();
     csp.AllowStyles
-           .FromSelf().AddNonce(); 
+           .FromSelf().AddNonce();
     csp.AllowScripts
         .FromSelf()
         .AddNonce()
         .From(pageTemplateHelper.GetCspScriptHashes())
-        .From("https://*/-vs/browserLink.js");
+        .From(browserLinkJsUrl);
     csp.AllowConnections.ToSelf().To("wss:").To("ws:").To("https:").To("http:");
     csp.AllowBaseUri.FromSelf();
     csp.AllowFrames.FromSelf();
@@ -285,9 +286,18 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<FarmContextMiddleware>();
+
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+  name: "Manner",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+  name: "Planet",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+name: "default",
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 await app.RunAsync();
 

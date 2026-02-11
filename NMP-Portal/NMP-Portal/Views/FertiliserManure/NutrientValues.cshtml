@@ -42,7 +42,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" value="@Model.isEnglishRules.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter"/>
@@ -310,7 +310,7 @@
                             <govuk-details-summary>
                                 @string.Format(Resource.lblShowRecommendationsFor, Model.FieldName)
                             </govuk-details-summary>
-                            <govuk-details-text>
+                            <govuk-details-text class="table-container">
                                 <h2 class="govuk-heading-m">
                                     @if (ViewBag.CropTypeId != null && ViewBag.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass&&ViewBag.DefoliationSequenceName!=null)
                                     {
