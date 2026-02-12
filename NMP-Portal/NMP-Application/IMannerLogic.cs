@@ -31,12 +31,6 @@ public interface IMannerLogic
 
     MannerEstimationStep9ViewModel GetMannerEstimationStep9();
     MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9);
-
-    //MannerEstimationStep7ViewModel GetMannerEstimationStep7();
-    //MannerEstimationStep7ViewModel SetMannerEstimationStep7(MannerEstimationStep7ViewModel mannerEstimationStep7);
-
-    //MannerEstimationStep7ViewModel GetMannerEstimationStep7();
-    //MannerEstimationStep7ViewModel SetMannerEstimationStep7(MannerEstimationStep7ViewModel mannerEstimationStep7);
     Task<decimal> FetchRainfallAverageAsync(string postcode);
     Task<List<SoilTypesResponse>> FetchSoilTypes();
     Task<Country?> FetchCountryById(int id);
