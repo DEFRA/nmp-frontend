@@ -190,7 +190,7 @@
                             @Resource.lblLandParcelIDForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.LPIDNumber
+                            @(Model.LPIDNumber == null ? Resource.lblNotEntered : Model.LPIDNumber)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblLandParcelIDForCheckAnswere)</span></govuk-summary-list-row-action>
