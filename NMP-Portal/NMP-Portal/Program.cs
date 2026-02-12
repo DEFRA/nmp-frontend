@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Identity.Web.UI;
 using NMP.Commons.Models;
 using NMP.Portal.Security;
@@ -62,16 +64,15 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
     });
 
     // 2. Use Redis cache using DI-bound multiplexer
-    builder.Services.AddStackExchangeRedisCache(options =>
+    builder.Services.AddSingleton<IDistributedCache>(sp =>
     {
-        options.ConnectionMultiplexerFactory = async () =>
-        {
-            return builder.Services
-                .BuildServiceProvider()
-                .GetRequiredService<IConnectionMultiplexer>();
-        };
+        var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
 
-        options.InstanceName = "nmp_ui_";
+        return new RedisCache(new RedisCacheOptions
+        {
+            ConnectionMultiplexerFactory = () => Task.FromResult(multiplexer),
+            InstanceName = "nmp_ui_"
+        });
     });
 }
 
