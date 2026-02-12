@@ -15,11 +15,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<CropController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, IDataProtectionProvider dataProtectionProvider) : Controller
+    public class MannerEstimationController(ILogger<CropController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
     {
         private readonly ILogger<CropController> _logger = logger;
         private readonly IFarmLogic _farmLogic = farmLogic;
         private readonly IMannerLogic _mannerLogic = mannerLogic;
+
+        private readonly IFieldLogic _fieldLogic = fieldLogic;
         private const string _checkAnswerActionName = "CheckAnswer";
         private readonly IDataProtector _mannerEstimationProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.MannerEstimationController");
         private const string _mannerEstimationSessionName = "MannerEstimation";
@@ -133,7 +135,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View("Country", model);
                 }
 
-                model = _mannerLogic.SetMannerEstimationStep2(model);
+                model =await _mannerLogic.SetMannerEstimationStep2(model);
 
                 return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("FarmingRules");
             }
@@ -203,7 +205,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                model =await _mannerLogic.SetMannerEstimationStep3(model);
+                model = await _mannerLogic.SetMannerEstimationStep3(model);
 
                 if (model.IsCheckAnswer && !model.IsPostCodeChange)
                 {
@@ -230,7 +232,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() action called");
             try
             {
-                MannerEstimationStep4ViewModel model =await _mannerLogic.GetMannerEstimationStep4();
+                MannerEstimationStep4ViewModel model = await _mannerLogic.GetMannerEstimationStep4();
 
                 if (model == null)
                 {
@@ -276,7 +278,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> AverageAnnualRainfallManual()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() action called");
-            MannerEstimationStep4ViewModel model =await _mannerLogic.GetMannerEstimationStep4();
+            MannerEstimationStep4ViewModel model = await _mannerLogic.GetMannerEstimationStep4();
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfallManual() action");
@@ -298,7 +300,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerLogic.GetMannerEstimationStep4();
                 return View(model);
             }
-            model =await _mannerLogic.SetMannerEstimationStep4(model);
+            model = await _mannerLogic.SetMannerEstimationStep4(model);
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction(_checkAnswerActionName);
@@ -381,6 +383,111 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NVZField(MannerEstimationStep6ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} NVZField() post action called");
 
+            if (!model.IsWithinNVZ.HasValue)
+            {
+                ModelState.AddModelError("IsWithinNVZ", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model = _mannerLogic.SetMannerEstimationStep6(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("SoilType");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SoilType()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilType() action called");
+            MannerEstimationStep7ViewModel model = _mannerLogic.GetMannerEstimationStep7();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            ViewBag.SoilTypesList =await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilType(MannerEstimationStep7ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilType() post action called");
+
+            if (model.SoilTypeId == null)
+            {
+                ModelState.AddModelError("SoilTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.SoilTypeList =await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
+                return View(model);
+            }
+
+            model = _mannerLogic.SetMannerEstimationStep7(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropGroup");
+        }
+        [HttpGet]
+        public async Task<IActionResult> CropGroup()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() action called");
+            MannerEstimationStep8ViewModel model = _mannerLogic.GetMannerEstimationStep8();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropGroup() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            ViewBag.CropGroupList =await _fieldLogic.FetchCropGroups();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CropGroup(MannerEstimationStep8ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() post action called");
+
+            if (model.CropGroupId == null)
+            {
+                ModelState.AddModelError("CropGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.CropGroupList =await _fieldLogic.FetchCropGroups();
+                return View(model);
+            }
+
+            model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId??0);
+            model = _mannerLogic.SetMannerEstimationStep8(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropType");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CropType()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() action called");
+            MannerEstimationStep9ViewModel model = _mannerLogic.GetMannerEstimationStep9();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropType() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            ViewBag.CropTypeList =await _fieldLogic.FetchCropTypes(model.CropGroupId??0,model.FarmRB209CountryId);
+            return View(model);
+        }
     }
 }

@@ -1,11 +1,11 @@
 ﻿@using NMP.Commons.Enums
 @using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimationStep6ViewModel
+@model MannerEstimationStep10ViewModel
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{string.Format(Resource.lblIsThisInNVZ, Model.FieldName)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{Resource.lblIsThisInNVZ} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
@@ -18,11 +18,11 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="NVZField" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsWithinNVZ">
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsEarlySown">
 
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblIsThisInNVZ, Model.FieldName)
+                        
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>

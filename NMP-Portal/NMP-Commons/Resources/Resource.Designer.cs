@@ -6091,7 +6091,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution..
         ///   Looks up a localized string similar to first line address.
         /// </summary>
         public static string lblFirstLineAddress {
@@ -6101,7 +6100,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England..
+        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution..
         /// </summary>
         public static string lblFirstRuleOfNVZForEngland {
             get {
@@ -12564,6 +12563,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one option. These options come from the AHDB Nutrient Management Guide (RB209)..
+        /// </summary>
+        public static string lblSelectOneOptionTheseOptionsComeFromAHDB {
+            get {
+                return ResourceManager.GetString("lblSelectOneOptionTheseOptionsComeFromAHDB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one option. You can add more livestock types later..
         /// </summary>
         public static string lblSelectOneOptionYouCanAddMoreLivestock {
@@ -16796,6 +16804,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of crop would you like to use?.
+        /// </summary>
+        public static string lblWhatTypeOfCropWouldYouLikeToUse {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfCropWouldYouLikeToUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of {0} would you like to add?.
         /// </summary>
         public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
@@ -17350,6 +17367,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichVarietyNameWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which {0} would you like to use?.
+        /// </summary>
+        public static string lblWhichWouldYouLikeToUse {
+            get {
+                return ResourceManager.GetString("lblWhichWouldYouLikeToUse", resourceCulture);
             }
         }
         

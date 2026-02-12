@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.Helpers;
+using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
@@ -56,12 +57,22 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep2.FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
         return mannerEstimationViewModel.MannerEstimationStep2;
     }
-    public MannerEstimationStep2ViewModel SetMannerEstimationStep2(MannerEstimationStep2ViewModel mannerEstimationStep2)
+    public async Task<MannerEstimationStep2ViewModel> SetMannerEstimationStep2(MannerEstimationStep2ViewModel mannerEstimationStep2)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep2 = mannerEstimationStep2;
+        mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerEstimationViewModel.MannerEstimationStep2.CountryID);
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep2();
+    }
+    
+    private async Task<int?> FetchFarmRB209CoutryId(int countryId)
+    {
+        Country? country = await FetchCountryById(countryId);
+
+        if (country == null)
+            return null;
+        return country.RB209CountryID;
     }
 
     public MannerEstimationStep3ViewModel GetMannerEstimationStep3()
@@ -175,4 +186,88 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         _logger.LogTrace("Fetching rainfall average for Postcode: {Postcode}", postcode);
         return await _mannerService.FetchRainfallAverageAsync(postcode);
     }
+    public MannerEstimationStep7ViewModel GetMannerEstimationStep7()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep7.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep7.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
+        mannerEstimationViewModel.MannerEstimationStep7.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId??0;
+        return mannerEstimationViewModel.MannerEstimationStep7;
+    }
+
+    public MannerEstimationStep7ViewModel SetMannerEstimationStep7(MannerEstimationStep7ViewModel mannerEstimationStep7)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep7 = mannerEstimationStep7;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep7();
+    }
+
+    public MannerEstimationStep8ViewModel GetMannerEstimationStep8()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep8.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep8;
+    }
+
+    public MannerEstimationStep8ViewModel SetMannerEstimationStep8(MannerEstimationStep8ViewModel mannerEstimationStep8)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep8 = mannerEstimationStep8;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep8();
+    }
+
+    public MannerEstimationStep9ViewModel GetMannerEstimationStep9()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep9.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep9.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep9.CropGroupName = mannerEstimationViewModel.MannerEstimationStep8.CropGroupName;
+        return mannerEstimationViewModel.MannerEstimationStep9;
+    }
+
+    public MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep9 = mannerEstimationStep9;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep9();
+    }
+
+    public MannerEstimationStep10ViewModel GetMannerEstimationStep10()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep10.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep10;
+    }
+
+    public MannerEstimationStep10ViewModel SetMannerEstimationStep10(MannerEstimationStep10ViewModel mannerEstimationStep10)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep10 = mannerEstimationStep10;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep10();
+    }
+    public async Task<List<SoilTypesResponse>> FetchSoilTypes()
+    {
+        _logger.LogTrace("Fetching soil types");
+        return await _mannerService.FetchSoilTypes();
+    }
+
+    public async Task<List<SoilTypesResponse>> FetchSoilTypesByRB209CountryId(int rb209CountryId)
+    {
+        _logger.LogTrace("Fetching soil types by RB209 Country Id");
+        List<SoilTypesResponse> soilTypes = await FetchSoilTypes();
+        return [.. soilTypes.Where(x => x.CountryId == rb209CountryId)];
+    }
+
+
+    public async Task<Country?> FetchCountryById(int id)
+    {
+        _logger.LogTrace("Fetching country by id");
+        return await _mannerService.FetchCountryById(id);
+    }
+
+
 }
