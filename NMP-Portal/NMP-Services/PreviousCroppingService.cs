@@ -24,7 +24,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchDataByFieldIdAndYearAsyncAPI, fieldId, year));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchDataByFieldIdAndYearAsyncAPI, fieldId, year));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -68,11 +68,11 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
             string url = "";
             if(year==null)
             {
-                url = string.Format(APIURLHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId);
+                url = string.Format(ApiurlHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId);
             }
             else
             {
-                url = string.Format(APIURLHelper.FetchFieldDataByFieldIdOldestHarvestYearAsyncAPI, fieldId, year);
+                url = string.Format(ApiurlHelper.FetchFieldDataByFieldIdOldestHarvestYearAsyncAPI, fieldId, year);
             }
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
@@ -113,7 +113,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(APIURLHelper.MergePreviousCropAPI), new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(string.Format(ApiurlHelper.MergePreviousCropAPI), new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -149,7 +149,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchPreviousCroppingYearByFarmIdAsyncAPI, farmId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchPreviousCroppingYearByFarmIdAsyncAPI, farmId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
