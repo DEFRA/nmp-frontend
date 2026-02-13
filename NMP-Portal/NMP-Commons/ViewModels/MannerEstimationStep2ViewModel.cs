@@ -14,5 +14,6 @@ namespace NMP.Commons.ViewModels
         public int CountryID { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
         public string FarmName { get; set; } = string.Empty;
+        public int? FarmRB209CountryId { get; set; }
     }
 }

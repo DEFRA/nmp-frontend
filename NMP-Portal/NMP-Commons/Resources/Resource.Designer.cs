@@ -4687,6 +4687,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Early sown (25th August to 14th September).
+        /// </summary>
+        public static string lblEarlySownContent {
+            get {
+                return ResourceManager.GetString("lblEarlySownContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Effective rainfall.
         /// </summary>
         public static string lblEffectiveRainfall {
@@ -8041,6 +8050,15 @@ namespace NMP.Commons.Resources {
         public static string lblLastUpdatedOnDate {
             get {
                 return ResourceManager.GetString("lblLastUpdatedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Late sown (15th September to 24th August).
+        /// </summary>
+        public static string lblLateSownContent {
+            get {
+                return ResourceManager.GetString("lblLateSownContent", resourceCulture);
             }
         }
         
@@ -12563,6 +12581,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one option. These options come from the AHDB Nutrient Management Guide (RB209)..
+        /// </summary>
+        public static string lblSelectOneOptionTheseOptionsComeFromAHDB {
+            get {
+                return ResourceManager.GetString("lblSelectOneOptionTheseOptionsComeFromAHDB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select one option. You can add more livestock types later..
         /// </summary>
         public static string lblSelectOneOptionYouCanAddMoreLivestock {
@@ -16795,6 +16822,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of crop would you like to use?.
+        /// </summary>
+        public static string lblWhatTypeOfCropWouldYouLikeToUse {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfCropWouldYouLikeToUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of {0} would you like to add?.
         /// </summary>
         public static string lblWhatTypeOfLivestockGroupWouldYouLikeToAdd {
@@ -17349,6 +17385,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {
             get {
                 return ResourceManager.GetString("lblWhichVarietyNameWouldYouLikeToPlanFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which {0} would you like to use?.
+        /// </summary>
+        public static string lblWhichWouldYouLikeToUse {
+            get {
+                return ResourceManager.GetString("lblWhichWouldYouLikeToUse", resourceCulture);
             }
         }
         

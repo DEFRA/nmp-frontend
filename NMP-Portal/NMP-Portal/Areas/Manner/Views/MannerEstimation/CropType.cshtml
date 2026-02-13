@@ -1,0 +1,50 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep9ViewModel
+
+@{
+    string title = Resource.lblMannerEstimate;
+    string heading =string.Format(Resource.lblWhichWouldYouLikeToUse,Model.CropGroupName.ToLower());
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "CropGroup")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="CropType" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-radios asp-for="@Model.CropTypeId">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @Resource.lblSelectOneOptionTheseOptionsComeFromAHDB
+                    </govuk-radios-hint>
+
+                        @foreach (var item in ViewBag.CropTypeList)
+                        {
+                            <govuk-radios-item value="@item.CropTypeId">@item.CropType</govuk-radios-item>
+                        }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+           @*  <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button> *@
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (!Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>

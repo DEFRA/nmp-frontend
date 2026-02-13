@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
@@ -181,5 +182,44 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
 
         return rainfallAverage;
     }
+
+    public async Task<List<SoilTypesResponse>> FetchSoilTypes()
+    {
+        List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(APIURLHelper.FetchSoilTypesAsyncAPI);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode &&
+responseWrapper?.Data is not null)
+        {
+            var soiltypeslist = responseWrapper.Data
+                .ToObject<List<SoilTypesResponse>>();
+
+            soilTypes.AddRange(soiltypeslist);
+        }
+
+        return soilTypes;
+    }
+
+    public async Task<Country?> FetchCountryById(int id)
+    {
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCountryByIdAsyncAPI, id));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper =
+            JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (responseWrapper?.Data?.records is { } records)
+        {
+            return records.ToObject<Country>();
+        }
+
+
+        return null;
+    }
+
 
 }

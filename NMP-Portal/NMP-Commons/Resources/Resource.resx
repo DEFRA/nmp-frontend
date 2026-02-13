@@ -7388,4 +7388,19 @@ livestock manure.</value>
   <data name="lblSecondLineAddress" xml:space="preserve">
     <value>second line address</value>
   </data>
+  <data name="lblWhatTypeOfCropWouldYouLikeToUse" xml:space="preserve">
+    <value>What type of crop would you like to use?</value>
+  </data>
+  <data name="lblSelectOneOptionTheseOptionsComeFromAHDB" xml:space="preserve">
+    <value>Select one option. These options come from the AHDB Nutrient Management Guide (RB209).</value>
+  </data>
+  <data name="lblWhichWouldYouLikeToUse" xml:space="preserve">
+    <value>Which {0} would you like to use?</value>
+  </data>
+  <data name="lblEarlySownContent" xml:space="preserve">
+    <value>Early sown (25th August to 14th September)</value>
+  </data>
+  <data name="lblLateSownContent" xml:space="preserve">
+    <value>Late sown (15th September to 24th August)</value>
+  </data>
 </root>
