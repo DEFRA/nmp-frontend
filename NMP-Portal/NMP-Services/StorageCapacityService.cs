@@ -23,7 +23,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchStorageTypesAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchStorageTypesAsyncAPI);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -69,7 +69,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             HttpClient httpClient = await GetNMPAPIClient();
             string url = string.Empty;
            
-                url = string.Format(APIURLHelper.FetchStoreCapacityAsyncAPI, farmId);
+                url = string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId);
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -114,7 +114,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchMaterialStatesListAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchMaterialStatesListAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -157,7 +157,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMaterialStatesListByIDAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -199,7 +199,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchStorageTypeByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -241,7 +241,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchSolidManureTypeAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchSolidManureTypeAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -283,7 +283,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSolidManureTypeByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSolidManureTypeByIdAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -326,7 +326,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchBankSlopeAnglesAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -369,7 +369,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchBankSlopeAngleByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -414,7 +414,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.AddStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -460,7 +460,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,storeName,ID??0));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,storeName,ID??0));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -503,7 +503,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchStoreCapacityByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchStoreCapacityByIdAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -548,7 +548,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.CopyStoreManureCapacityAsyncAPI, new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.CopyStoreManureCapacityAsyncAPI, new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -587,7 +587,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteStorageCapacityByIdAPI, id));
+            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -628,7 +628,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
