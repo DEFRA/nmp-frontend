@@ -16903,6 +16903,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of organic material would you like use?.
+        /// </summary>
+        public static string lblWhatTypeOfOrganicMaterialWouldYouLikeUse {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialWouldYouLikeUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of report do you want to create?.
         /// </summary>
         public static string lblWhatTypeOfReportDoYouWantToCreate {
