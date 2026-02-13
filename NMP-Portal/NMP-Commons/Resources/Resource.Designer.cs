@@ -11564,7 +11564,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;/HelpAndFeedback&quot;&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page).
+        ///   Looks up a localized string similar to &lt;a href=&quot;/HelpAndFeedback&quot;&gt;Get help or give your feedback &lt;/a&gt;.
         /// </summary>
         public static string lblReleaseScheduleContentTwentyTwo {
             get {
