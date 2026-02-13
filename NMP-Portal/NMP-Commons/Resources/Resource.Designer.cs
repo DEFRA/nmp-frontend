@@ -6091,7 +6091,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution..
         ///   Looks up a localized string similar to first line address.
         /// </summary>
         public static string lblFirstLineAddress {
@@ -6101,7 +6100,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England..
+        ///   Looks up a localized string similar to NVZs are areas designated as being at risk from agricultural nitrate pollution..
         /// </summary>
         public static string lblFirstRuleOfNVZForEngland {
             get {
@@ -11925,7 +11924,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;/HelpAndFeedback&quot;&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page).
+        ///   Looks up a localized string similar to &lt;a href=&quot;/HelpAndFeedback&quot;&gt;Get help or give your feedback &lt;/a&gt;.
         /// </summary>
         public static string lblReleaseScheduleContentTwentyTwo {
             get {
