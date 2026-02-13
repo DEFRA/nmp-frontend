@@ -248,7 +248,7 @@
                                     @Resource.lblPhosphorusPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus))
+                                    @((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})")
                                     @* @Model.PhosphorusIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -260,7 +260,7 @@
                                     @Resource.lblPotassiumPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium))
+                                    @((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndexValue})")
                                     @* @Model.PotassiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -272,7 +272,7 @@
                                     @Resource.lblMagnesiumPerLitreOfSoil
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium))
+                                    @((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})")
                                     @* @Model.MagnesiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
