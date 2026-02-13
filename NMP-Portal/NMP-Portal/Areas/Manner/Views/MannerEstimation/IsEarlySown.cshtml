@@ -8,10 +8,12 @@
     ViewData["Title"] = $"{Resource.lblIsThisInNVZ} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    var backAction = Model.IsCheckAnswer ? "CheckAnswer" : "CropType";
+    var cancelAction = Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FieldName")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -33,7 +35,7 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            <a class="govuk-link" asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel")" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            <a class="govuk-link" asp-action="@cancelAction" asp-controller="MannerEstimation">@Resource.lblCancel</a>
         </p>
     </div>
 </div>
