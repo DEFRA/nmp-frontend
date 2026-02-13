@@ -315,7 +315,7 @@
                             </govuk-summary-list-row-actions>
 
                         </govuk-summary-list-row>
-                        @if (Model.PreviousGrassYears.Count() > 0)
+                        @if (Model.PreviousGrassYears!=null&&Model.PreviousGrassYears.Count() > 0)
                         {
                             @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears?[0] == Model.LastHarvestYear))
                             {
