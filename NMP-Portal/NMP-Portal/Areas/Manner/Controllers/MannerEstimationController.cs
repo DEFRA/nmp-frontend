@@ -486,7 +486,63 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropType() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            ViewBag.CropTypeList =await _fieldLogic.FetchCropTypes(model.CropGroupId??0,model.FarmRB209CountryId);
+            ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CropType(MannerEstimationStep9ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() post action called");
+
+            if (model.CropTypeId == null)
+            {
+                ModelState.AddModelError("CropTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+
+                ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
+                return View(model);
+            }
+
+            model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId ?? 0);
+            model = _mannerLogic.SetMannerEstimationStep9(model);
+
+            if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId))
+            {
+                return RedirectToAction("EarlyOrLateSown");
+            }
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropType");
+        }
+
+        [HttpGet]
+        public IActionResult EarlyOrLateSown()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} EarlyOrLateSown() action called");
+            MannerEstimationStep10ViewModel model = _mannerLogic.GetMannerEstimationStep10();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in EarlyOrLateSown() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManureGroup()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() action called");
+            MannerEstimationStep9ViewModel model = _mannerLogic.GetMannerEstimationStep9();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManureGroup() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
             return View(model);
         }
     }
