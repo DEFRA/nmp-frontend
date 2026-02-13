@@ -6933,7 +6933,7 @@ livestock manure.</value>
     <value>The current functionality will continue to be updated based on feedback from our users.</value>
   </data>
   <data name="lblReleaseScheduleContentTwentyTwo" xml:space="preserve">
-    <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;(link to feedback page)</value>
+    <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
     <value>7th January 2026</value>
