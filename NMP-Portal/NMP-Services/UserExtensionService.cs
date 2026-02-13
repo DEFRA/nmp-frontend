@@ -21,7 +21,7 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         _logger.LogTrace("FetchUserExtensionAsync method in UserExtensionService");
         UserExtension? userExtension = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = APIURLHelper.FetchUserExtensionAPI;
+        var requestUrl = ApiurlHelper.FetchUserExtensionAPI;
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -51,7 +51,7 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
 
         HttpClient httpClient = await GetNMPAPIClient();
         // if new farm then save farm data
-        var response = await httpClient.PutAsync(APIURLHelper.UpdateUserExtensionTermsOfUseAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        var response = await httpClient.PutAsync(ApiurlHelper.UpdateUserExtensionTermsOfUseAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         if (response.IsSuccessStatusCode)
         {
@@ -77,7 +77,7 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         string jsonData = JsonConvert.SerializeObject(aboutService);
         UserExtension? userExtension = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.PutAsync(APIURLHelper.UpdateUserExtensionDoNotShowAboutServiceAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        var response = await httpClient.PutAsync(ApiurlHelper.UpdateUserExtensionDoNotShowAboutServiceAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         if (response.IsSuccessStatusCode)
         {

@@ -14,7 +14,10 @@ using NMP.Portal.Security;
 using NMP.Registrar;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using Polly;
+using Polly.Extensions.Http;
 using StackExchange.Redis; // Add this at the top of the file
+using System.Net;
 using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -156,14 +159,14 @@ builder.Services.AddHttpClient("NMPApi", httpClient =>
     httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("NMPApiUrl").Value ?? "/");
     httpClient.Timeout = TimeSpan.FromMinutes(5);
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-});
+}).AddPolicyHandler(GetRetryPolicy()).AddPolicyHandler(GetCircuitBreakerPolicy());
 
 builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
 {
     httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("CustomerIdentityInstance").Value ?? "/");
     httpClient.Timeout = TimeSpan.FromMinutes(5);
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-});
+}).AddPolicyHandler(GetRetryPolicy()).AddPolicyHandler(GetCircuitBreakerPolicy());
 
 builder.Services.AddScoped<FarmContext>();
 builder.Services.AddAntiforgery(options =>
@@ -291,5 +294,50 @@ app.MapControllerRoute(
 
 await app.RunAsync();
 
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(int numRetries = 10, int delayInMilliseconds = 10000)
+{
+    var retryPolicy = Policy
+        .Handle<HttpRequestException>()
+        .OrResult<HttpResponseMessage>(r => r.StatusCode == HttpStatusCode.TooManyRequests ||
+                                            r.StatusCode == HttpStatusCode.ServiceUnavailable)
+        .WaitAndRetryAsync(numRetries,
+            sleepDurationProvider: (retryCount, response, context) =>
+            {
+                var delay = TimeSpan.FromSeconds(0);
 
+                // if an exception was thrown, this will be null
+                if (response.Result != null)
+                {
+                    if (!response.Result.Headers.TryGetValues("Retry-After", out IEnumerable<string>? values))
+                        return delay;
+
+                    if (int.TryParse(values?.First(), out int delayInSeconds))
+                        delay = TimeSpan.FromSeconds(delayInSeconds);
+                }
+                else
+                {
+                    var exponentialBackoff = Math.Pow(2, retryCount);
+                    var delayInSeconds = exponentialBackoff * delayInMilliseconds;
+                    delay = TimeSpan.FromMilliseconds(delayInSeconds);
+                }
+
+                return delay;
+            },
+            onRetryAsync: async (response, timespan, retryCount, context) =>
+            {
+                // add your logging and what you want to do
+
+                await Task.CompletedTask;
+            }
+        );
+
+    return retryPolicy;
+}
+
+static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30));
+}
 

@@ -26,7 +26,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.AddNutrientsLoadingFarmDetailsAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddNutrientsLoadingFarmDetailsAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -71,7 +71,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingFarmDetailsByfarmIdAndYearAPI, farmId, year));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsLoadingFarmDetailsByfarmIdAndYearAPI, farmId, year));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -115,7 +115,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateNutrientsLoadingFarmDetailsAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateNutrientsLoadingFarmDetailsAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -159,7 +159,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsloadingFarmDetailsFarmIdAPI, farmId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsloadingFarmDetailsFarmIdAPI, farmId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -204,7 +204,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.AddNutrientsLoadingManureAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddNutrientsLoadingManureAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -248,7 +248,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingFarmDetailsByFarmIdAPI, farmId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsLoadingFarmDetailsByFarmIdAPI, farmId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -293,7 +293,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchLivestockGroupListAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchLivestockGroupListAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -337,7 +337,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchLivestockManureGroupByIdAsyncAPI, livestockGroupId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchLivestockManureGroupByIdAsyncAPI, livestockGroupId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -379,7 +379,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingManureByIdAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsLoadingManureByIdAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -420,7 +420,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateNutrientsLoadingManureAsyncAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateNutrientsLoadingManureAsyncAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -464,7 +464,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchLivestockTypesByGroupIdAsyncAPI, livestockGroupId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchLivestockTypesByGroupIdAsyncAPI, livestockGroupId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -507,7 +507,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteNutrientsLoadingManuresByIdAPI, nutrientsLoadingManureId));
+            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteNutrientsLoadingManuresByIdAPI, nutrientsLoadingManureId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -548,7 +548,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.AddNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -593,7 +593,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingLivestockByFarmIdAndYearAsyncAPI, farmId,year));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsLoadingLivestockByFarmIdAndYearAsyncAPI, farmId,year));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -638,7 +638,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchLivestockTypesAsyncAPI));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchLivestockTypesAsyncAPI));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -682,7 +682,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchNutrientsLoadingLiveStockByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsLoadingLiveStockByIdAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -723,7 +723,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteNutrientsLoadingLivestockByIdAPI, nutrientsLoadingLivestockId));
+            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteNutrientsLoadingLivestockByIdAPI, nutrientsLoadingLivestockId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -763,7 +763,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();            
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

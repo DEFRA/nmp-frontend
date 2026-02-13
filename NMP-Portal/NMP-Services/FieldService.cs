@@ -22,7 +22,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     {
         int fieldCount = 0;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchFieldCountByFarmIdAPI, farmId);
+        var requestUrl = string.Format(ApiurlHelper.FetchFieldCountByFarmIdAPI, farmId);
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -42,7 +42,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     {
         List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(APIURLHelper.FetchSoilTypesAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchSoilTypesAsyncAPI);
         response.EnsureSuccessStatusCode();
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -63,7 +63,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         List<NutrientResponseWrapper> nutrients = new List<NutrientResponseWrapper>();
         Error error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(APIURLHelper.FetchNutrientsAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchNutrientsAsyncAPI);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -94,7 +94,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         List<CropGroupResponse> soilTypes = new List<CropGroupResponse>();
         Error error = new Error();
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(APIURLHelper.FetchCropGroupsAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchCropGroupsAsyncAPI);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -129,7 +129,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypesAsyncAPI, cropGroupId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypesAsyncAPI, cropGroupId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -174,7 +174,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
 
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropGroupByIdAsyncAPI, cropGroupId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropGroupByIdAsyncAPI, cropGroupId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -214,7 +214,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
 
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeByIdAsyncAPI, cropTypeId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeByIdAsyncAPI, cropTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -270,7 +270,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     private async static Task<HttpResponseMessage> PostFieldAsync( HttpClient httpClient, int farmId, FieldData fieldData)
     {
         string jsonData = JsonConvert.SerializeObject(fieldData);
-        string url = string.Format(APIURLHelper.AddFieldAsyncAPI, farmId);
+        string url = string.Format(ApiurlHelper.AddFieldAsyncAPI, farmId);
 
         var response = await httpClient.PostAsync(
             url,
@@ -318,7 +318,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     {
         bool isFieldExist = false;
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = fieldId == null ? string.Format(APIURLHelper.IsFieldExistAsyncAPI, farmId, HttpUtility.UrlEncode(name)) : string.Format(APIURLHelper.IsFieldExistByFieldIdAsyncAPI, farmId, HttpUtility.UrlEncode(name), fieldId);
+        string url = fieldId == null ? string.Format(ApiurlHelper.IsFieldExistAsyncAPI, farmId, HttpUtility.UrlEncode(name)) : string.Format(ApiurlHelper.IsFieldExistByFieldIdAsyncAPI, farmId, HttpUtility.UrlEncode(name), fieldId);
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -332,7 +332,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     {
         List<Field> fields = new List<Field>();
         HttpClient httpClient = await GetNMPAPIClient();
-        var url = string.Format(APIURLHelper.FetchFieldsByFarmIdAsyncAPI, farmId);
+        var url = string.Format(ApiurlHelper.FetchFieldsByFarmIdAsyncAPI, farmId);
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -367,7 +367,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldByFieldIdAsyncAPI, fieldId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldByFieldIdAsyncAPI, fieldId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -409,7 +409,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();            
-            var response = await httpClient.GetAsync(APIURLHelper.FetchAllCropTypeAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchAllCropTypeAsyncAPI);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -447,7 +447,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilTypeBySoilTypeIdAsyncAPI, soilTypeId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilTypeBySoilTypeIdAsyncAPI, soilTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -487,7 +487,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
 
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId, shortSummary));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId, shortSummary));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -526,7 +526,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldDetailByFieldIdAndHarvestYearAsyncAPI, fieldId, year, "false"));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldDetailByFieldIdAndHarvestYearAsyncAPI, fieldId, year, "false"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -570,7 +570,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, cropTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -616,7 +616,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchSeasonsAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchSeasonsAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -661,7 +661,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(APIURLHelper.FetchSNSIndexByMeasurementMethodAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchSNSIndexByMeasurementMethodAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -704,7 +704,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateFieldAsyncAPI, fieldId), new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFieldAsyncAPI, fieldId), new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -744,7 +744,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteFieldByIdAPI, fieldId));
+            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteFieldByIdAPI, fieldId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -784,7 +784,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchGrassManagementOptionsAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchGrassManagementOptionsAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -827,7 +827,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchGrassTypicalCutsAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchGrassTypicalCutsAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -870,7 +870,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(APIURLHelper.FetchSoilNitrogenSupplyItemsAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchSoilNitrogenSupplyItemsAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -912,7 +912,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            string url= string.Format(APIURLHelper.FetchFieldByFarmIdAsyncAPI, farmId, shortSummary);
+            string url= string.Format(ApiurlHelper.FetchFieldByFarmIdAsyncAPI, farmId, shortSummary);
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -956,7 +956,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldSoilAnalysisAndSnsByIdAsyncAPI, fieldId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldSoilAnalysisAndSnsByIdAsyncAPI, fieldId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -997,7 +997,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCropAndFieldReportByIdAsyncAPI, fieldId, year));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropAndFieldReportByIdAsyncAPI, fieldId, year));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1039,7 +1039,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(APIURLHelper.UpdateOnlyFieldAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateOnlyFieldAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode &&
