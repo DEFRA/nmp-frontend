@@ -92,8 +92,10 @@
         </div>
         <div>
             <hr class="seperator_thirty">
-            <h2 class="govuk-heading-m">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
-                                Resource.lblFarmSummaryContentForWalesOne:Resource.lblFarmSummaryContent4)</h2>
+            <h2 class="govuk-heading-m">
+                @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                Resource.lblFarmSummaryContentForWalesOne : Resource.lblFarmSummaryContent4)
+            </h2>
             <p class="govuk-body">
                 @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                                 Resource.lblFarmSummaryContentForWalesTwo : Resource.lblFarmSummaryContent5)
@@ -106,9 +108,9 @@
                 <li>
                     @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                                         Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenNFarmLimit)
-                                                                                                                              </li>
-                                                                                                                              @* <li>@Resource.lblExistingManureStorageCapacity</li>
-                    <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li> *@
+                </li>
+                <li>@Resource.lblExistingManureStorageCapacity</li>
+                @* <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li> *@
             </ul>
 
             <ul class="menu-list govuk-list govuk-list--spaced">
