@@ -169,7 +169,7 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
     public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
     {
         decimal rainfallAverage = 0;
-        string url = string.Format(APIURLHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
+        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
@@ -187,7 +187,7 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
     {
         List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(APIURLHelper.FetchSoilTypesAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchSoilTypesAsyncAPI);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -207,7 +207,7 @@ responseWrapper?.Data is not null)
     public async Task<Country?> FetchCountryById(int id)
     {
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchCountryByIdAsyncAPI, id));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCountryByIdAsyncAPI, id));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper =
             JsonConvert.DeserializeObject<ResponseWrapper>(result);

@@ -23,7 +23,7 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchSnsAnalysisByCropIdAsyncAPI, cropId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSnsAnalysisByCropIdAsyncAPI, cropId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -72,7 +72,7 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
         {
             HttpClient httpClient = await GetNMPAPIClient();
             
-                var response = await httpClient.PostAsync(APIURLHelper.AddSnsAnalysisAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                var response = await httpClient.PostAsync(ApiurlHelper.AddSnsAnalysisAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
@@ -114,7 +114,7 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(APIURLHelper.DeleteSNSAnalysisAPI, snsAnalysisId));
+            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteSNSAnalysisAPI, snsAnalysisId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)

@@ -23,7 +23,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     {
         List<Farm> farmList = new List<Farm>();
         Error? error = new Error();
-        string url = string.Format(APIURLHelper.FetchFarmByOrgIdAPI, orgId);
+        string url = string.Format(ApiurlHelper.FetchFarmByOrgIdAPI, orgId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
@@ -58,7 +58,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
 
         HttpClient httpClient = await GetNMPAPIClient();        
-        var response = await httpClient.PostAsync(APIURLHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        var response = await httpClient.PostAsync(ApiurlHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -79,7 +79,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     {
         FarmResponse farm = new FarmResponse();
         Error? error = new Error();
-        string url = string.Format(APIURLHelper.FetchFarmByIdAPI, farmId);
+        string url = string.Format(ApiurlHelper.FetchFarmByIdAPI, farmId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
@@ -104,7 +104,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id)
     {
         bool isFarmExist = false;
-        string url = string.Format(APIURLHelper.IsFarmExist, HttpUtility.UrlEncode(farmName), postcode.Trim(), Id);
+        string url = string.Format(ApiurlHelper.IsFarmExist, HttpUtility.UrlEncode(farmName), postcode.Trim(), Id);
         HttpClient httpClient = await GetNMPAPIClient();
         var farmExist = await httpClient.GetAsync(url);
         farmExist.EnsureSuccessStatusCode();
@@ -121,7 +121,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
     {
         decimal rainfallAverage = 0;
-        string url = string.Format(APIURLHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
+        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
@@ -153,7 +153,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.PutAsync(APIURLHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        var response = await httpClient.PutAsync(ApiurlHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -178,7 +178,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     {
         Error? error = new Error();
         string message = string.Empty;
-        string url = string.Format(APIURLHelper.DeleteFarmByIdAPI, farmId);
+        string url = string.Format(ApiurlHelper.DeleteFarmByIdAPI, farmId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.DeleteAsync(url);
         response.EnsureSuccessStatusCode();
@@ -201,7 +201,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(APIURLHelper.FetchCountryListAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchCountryListAsyncAPI);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -224,7 +224,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     {
         ExcessRainfalls excessRainfalls = new ExcessRainfalls();
         Error? error = new Error();
-        string url = string.Format(APIURLHelper.FetchExcessRainfallByFarmIdAndYearAPI, farmId, year);
+        string url = string.Format(ApiurlHelper.FetchExcessRainfallByFarmIdAndYearAPI, farmId, year);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
@@ -247,7 +247,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(APIURLHelper.FetchExcessWinterRainfallOptionAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchExcessWinterRainfallOptionAPI);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -271,7 +271,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         HttpClient httpClient = await GetNMPAPIClient();
         string url = string.Empty;
         HttpResponseMessage response = null;
-        url = string.Format(APIURLHelper.AddOrUpdateExcessWinterRainfallAPI, farmId, year);
+        url = string.Format(ApiurlHelper.AddOrUpdateExcessWinterRainfallAPI, farmId, year);
         if (isUpdated != null && isUpdated)
         {
             response = await httpClient.PutAsync(url, new StringContent(excessWinterRainfallData, Encoding.UTF8, "application/json"));
@@ -302,7 +302,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         CommonResponse? excessWinterRainfallOption = new CommonResponse();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = string.Format(APIURLHelper.FetchExcessWinterRainfallOptionByIdAPI, id);
+        string url = string.Format(ApiurlHelper.FetchExcessWinterRainfallOptionByIdAPI, id);
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
