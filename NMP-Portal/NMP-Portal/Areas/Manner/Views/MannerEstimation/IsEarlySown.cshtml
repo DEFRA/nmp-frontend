@@ -28,20 +28,12 @@
                     <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            @if (Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
+            <a class="govuk-link" asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel")" asp-controller="MannerEstimation">@Resource.lblCancel</a>
         </p>
     </div>
 </div>

@@ -191,14 +191,16 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
+
+        if (response.IsSuccessStatusCode &&
+responseWrapper?.Data is not null)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                var soiltypeslist = responseWrapper.Data.ToObject<List<SoilTypesResponse>>();
-                soilTypes.AddRange(soiltypeslist);
-            }
+            var soiltypeslist = responseWrapper.Data
+                .ToObject<List<SoilTypesResponse>>();
+
+            soilTypes.AddRange(soiltypeslist);
         }
+
         return soilTypes;
     }
 
@@ -210,10 +212,11 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
         ResponseWrapper? responseWrapper =
             JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
-        if (responseWrapper?.Data?.records != null)
+        if (responseWrapper?.Data?.records is { } records)
         {
-            return responseWrapper.Data.records.ToObject<Country>();
+            return records.ToObject<Country>();
         }
+
 
         return null;
     }
