@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Identity.Web.UI;
 using NMP.Commons.Models;
 using NMP.Portal.Security;
@@ -65,16 +67,15 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
     });
 
     // 2. Use Redis cache using DI-bound multiplexer
-    builder.Services.AddStackExchangeRedisCache(options =>
+    builder.Services.AddSingleton<IDistributedCache>(sp =>
     {
-        options.ConnectionMultiplexerFactory = async () =>
-        {
-            return builder.Services
-                .BuildServiceProvider()
-                .GetRequiredService<IConnectionMultiplexer>();
-        };
+        var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
 
-        options.InstanceName = "nmp_ui_";
+        return new RedisCache(new RedisCacheOptions
+        {
+            ConnectionMultiplexerFactory = () => Task.FromResult(multiplexer),
+            InstanceName = "nmp_ui_"
+        });
     });
 }
 
@@ -175,10 +176,10 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie = new CookieBuilder()
     {
         Name = "NMP-Portal",
-        HttpOnly = true,        
-        Path = "/",       
+        HttpOnly = true,
+        Path = "/",
         SecurePolicy = CookieSecurePolicy.Always,
-        SameSite = SameSiteMode.Strict 
+        SameSite = SameSiteMode.Strict
     };
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
@@ -251,7 +252,7 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.ico");
         return;
     }
-    else if(context.Request.Path == "/favicon.svg")
+    else if (context.Request.Path == "/favicon.svg")
     {
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
@@ -261,16 +262,17 @@ app.Use(async (context, next) =>
 
 app.UseCsp(csp =>
 {
+    const string browserLinkJsUrl = "https://*/-vs/browserLink.js";
     var pageTemplateHelper = app.Services.GetRequiredService<PageTemplateHelper>();
     csp.ByDefaultAllow
         .FromSelf();
     csp.AllowStyles
-           .FromSelf().AddNonce(); 
+           .FromSelf().AddNonce();
     csp.AllowScripts
         .FromSelf()
         .AddNonce()
         .From(pageTemplateHelper.GetCspScriptHashes())
-        .From("https://*/-vs/browserLink.js");
+        .From(browserLinkJsUrl);
     csp.AllowConnections.ToSelf().To("wss:").To("ws:").To("https:").To("http:");
     csp.AllowBaseUri.FromSelf();
     csp.AllowFrames.FromSelf();
@@ -288,9 +290,18 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<FarmContextMiddleware>();
+
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+  name: "Manner",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+  name: "Planet",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+name: "default",
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 await app.RunAsync();
 
@@ -311,7 +322,7 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(int numRetries = 10, int
                     if (!response.Result.Headers.TryGetValues("Retry-After", out IEnumerable<string>? values))
                         return delay;
 
-                    if (int.TryParse(values?.First(), out int delayInSeconds))
+                    if (int.TryParse(values.First(), out int delayInSeconds))
                         delay = TimeSpan.FromSeconds(delayInSeconds);
                 }
                 else

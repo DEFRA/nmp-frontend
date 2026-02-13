@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{string.Format(Resource.lblRemovePropertyName, Model.StoreName)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
@@ -34,7 +34,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"/>

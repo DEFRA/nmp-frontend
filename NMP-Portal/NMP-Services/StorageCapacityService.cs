@@ -60,7 +60,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         }
         return (storageTypeList, error);
     }
-    public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmIdAndYear(int farmId, int? year)
+    public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmId(int farmId)
     {
         Error error = new Error();
         List<StoreCapacityResponse> storeCapacityList = new List<StoreCapacityResponse>();
@@ -68,14 +68,8 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         {
             HttpClient httpClient = await GetNMPAPIClient();
             string url = string.Empty;
-            if (year != null)
-            {
-                url = string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId) + $"?year={year}";
-            }
-            else
-            {
+           
                 url = string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId);
-            }
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -458,7 +452,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         return (storeCapacity, error);
     }
 
-    public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName, int? ID)
+    public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, string storeName, int? ID)
     {
         bool isExist = false;
         Error error = null;
@@ -466,7 +460,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,year,storeName,ID??0));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,storeName,ID??0));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)

@@ -3,7 +3,7 @@
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblStoreCapacity.ToLower())} {Resource.lblHyphen} {title}";
     var cancelViewModel = new CancelViewModel
     {
@@ -27,7 +27,6 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>

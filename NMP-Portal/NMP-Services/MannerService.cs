@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 namespace NMP.Services;
@@ -162,5 +165,61 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
 
         return cropUptakeFactor;
     }
+
+    public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
+    {
+        decimal rainfallAverage = 0;
+        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall?.value ?? 0;
+        }
+
+        return rainfallAverage;
+    }
+
+    public async Task<List<SoilTypesResponse>> FetchSoilTypes()
+    {
+        List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchSoilTypesAsyncAPI);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode &&
+responseWrapper?.Data is not null)
+        {
+            var soiltypeslist = responseWrapper.Data
+                .ToObject<List<SoilTypesResponse>>();
+
+            soilTypes.AddRange(soiltypeslist);
+        }
+
+        return soilTypes;
+    }
+
+    public async Task<Country?> FetchCountryById(int id)
+    {
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCountryByIdAsyncAPI, id));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper =
+            JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (responseWrapper?.Data?.records is { } records)
+        {
+            return records.ToObject<Country>();
+        }
+
+
+        return null;
+    }
+
 
 }
