@@ -4687,6 +4687,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Early sown (25th August to 14th September).
+        /// </summary>
+        public static string lblEarlySownContent {
+            get {
+                return ResourceManager.GetString("lblEarlySownContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Effective rainfall.
         /// </summary>
         public static string lblEffectiveRainfall {
@@ -8041,6 +8050,15 @@ namespace NMP.Commons.Resources {
         public static string lblLastUpdatedOnDate {
             get {
                 return ResourceManager.GetString("lblLastUpdatedOnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Late sown (15th September to 24th August).
+        /// </summary>
+        public static string lblLateSownContent {
+            get {
+                return ResourceManager.GetString("lblLateSownContent", resourceCulture);
             }
         }
         
