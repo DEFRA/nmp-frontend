@@ -21,7 +21,7 @@ namespace NMP.Portal.Controllers;
 [Authorize]
 public class CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
      IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IOrganicManureLogic organicManureLogic,
-     IPreviousCroppingLogic previousCroppingLogic) : Controller
+     IPreviousCroppingLogic previousCroppingLogic,IMannerLogic mannerLogic) : Controller
 {
     private readonly ILogger<CropController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -32,6 +32,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private readonly ICropLogic _cropLogic = cropLogic;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
+    private readonly IMannerLogic _mannerLogic = mannerLogic;
     private const string _cropInfoTwoActionName = "CropInfoTwo";
     private const string _cropDataSessionKey = "CropData";
     private const string _plansAndRecordsOverviewActionName = "PlansAndRecordsOverview";
@@ -3400,7 +3401,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedFieldName = _cropDataProtector.Protect(m.Field.ToString()));
                                 foreach (var organic in harvestYearPlans.OrganicManureList)
                                 {
-                                    (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
+                                    (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
                                     if (error == null && manureType != null)
                                     {
                                         organic.RateUnit = manureType.IsLiquid.HasValue && manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
@@ -3804,7 +3805,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
-        Error error = null;
+        Error? error = null;
         int decryptedFarmId = 0;
         int decryptedFieldId = 0;
         int decryptedHarvestYear = 0;
@@ -4148,7 +4149,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     {
                                         foreach (var item in recData.OrganicManures)
                                         {
-                                            (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
+                                            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
                                             if (error == null && manureType != null)
                                             {
                                                 var orgManure = new OrganicManureDataViewModel

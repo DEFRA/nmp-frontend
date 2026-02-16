@@ -3,15 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
 public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerService
 {
     private readonly ILogger<MannerService> _logger = logger;
+    private const string _errorLogTemplate = "{Code} : {Message} : {Stack} : {Path}";
     Dictionary<int, int> cropTypeToCategoryId = new Dictionary<int, int>
     {
         { 0, 2 },
@@ -221,5 +224,375 @@ responseWrapper?.Data is not null)
         return null;
     }
 
+    public async Task<(List<CommonResponse>, Error?)> FetchManureGroupList()
+    {
+        List<CommonResponse> manureGroupList = new List<CommonResponse>();
+        Error? error = null;
 
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(APIURLHelper.FetchMannerManureGroupListAsyncAPI);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            var manureGroups = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+            manureGroupList.AddRange(manureGroups);
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (manureGroupList, error);
+    }
+    public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
+    {
+        List<ManureType> manureTypeList = new List<ManureType>();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString()), HttpUtility.UrlEncode(countryId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                var manureTypes = responseWrapper?.Data?.ToObject<List<ManureType>>();
+                manureTypeList.AddRange(manureTypes);
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (manureTypeList, error);
+    }
+    public async Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId)
+    {
+        CommonResponse? manureGroup = new CommonResponse();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureGroupByIdAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                manureGroup = responseWrapper?.Data?.ToObject<CommonResponse>();
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (manureGroup, error);
+    }
+
+    public async Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId)
+    {
+        ManureType? manureType = null;
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(manureTypeId.ToString())));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                manureType = responseWrapper?.Data?.ToObject<ManureType>();
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (manureType, error);
+    }
+
+    public async Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid)
+    {
+        List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodsByApplicableForAsyncAPI, HttpUtility.UrlEncode(isLiquid.ToString()), HttpUtility.UrlEncode(fieldType.ToString())));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                var applicationMethods = responseWrapper?.Data?.ToObject<List<ApplicationMethodResponse>>();
+                applicationMethodList.AddRange(applicationMethods);
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (applicationMethodList, error);
+    }
+
+    public async Task<(List<IncorporationMethodResponse>, Error?)> FetchIncorporationMethodsByApplicationId(int appId, string? applicableFor)
+    {
+        List<IncorporationMethodResponse> incorporationMethods = new List<IncorporationMethodResponse>();
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodsByApplicationIdAsyncAPI, HttpUtility.UrlEncode(appId.ToString()), applicableFor));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                var methods = responseWrapper?.Data?.ToObject<List<IncorporationMethodResponse>>();
+                incorporationMethods.AddRange(methods);
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (incorporationMethods, error);
+    }
+
+    public async Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor)
+    {
+        List<IncorprationDelaysResponse> incorporationDelays = new List<IncorprationDelaysResponse>();
+        Error error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, HttpUtility.UrlEncode(methodId.ToString()), HttpUtility.UrlEncode(applicableFor)));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var delays = responseWrapper.Data.ToObject<List<IncorprationDelaysResponse>>();
+                    incorporationDelays.AddRange(delays);
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+
+        }
+        catch (Exception ex)
+        {
+            error = new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+
+        }
+        return (incorporationDelays, error);
+    }
+    public async Task<(string, Error)> FetchApplicationMethodById(int Id)
+    {
+        string applicationMethod = string.Empty;
+        Error error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerApplicationMethodByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    applicationMethod = responseWrapper.Data.name;
+
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+
+        }
+        catch (Exception ex)
+        {
+            error = new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+
+        }
+        return (applicationMethod, error);
+    }
+    public async Task<(string, Error)> FetchIncorporationMethodById(int Id)
+    {
+        string incorporationMethod = string.Empty;
+        Error error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationMethodByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    incorporationMethod = responseWrapper.Data.name;
+
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre.Message);
+            throw new Exception(error.Message, hre);
+        }
+        catch (Exception ex)
+        {
+            error = new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex.Message);
+            throw new Exception(error.Message, ex);
+        }
+        return (incorporationMethod, error);
+    }
+    public async Task<(string, Error)> FetchIncorporationDelayById(int Id)
+    {
+        string incorporationDelay = string.Empty;
+        Error error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchMannerIncorporationDelaysByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationDelay != null
+                {
+                    incorporationDelay = responseWrapper.Data.name;//.IncorporationDelay.Name;
+
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError(_errorLogTemplate, error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre.Message);
+            throw new Exception(error.Message, hre);
+        }
+        catch (Exception ex)
+        {
+            error = new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex.Message);
+            throw new Exception(error.Message, ex);
+        }
+        return (incorporationDelay, error);
+    }
 }

@@ -26,18 +26,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.DeleteOrganicManureByIdAsync(orgManureIds);
     }
 
-    public async Task<(string, Error)> FetchApplicationMethodById(int Id)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchApplicationMethodById() called");
-        return await _organicManureService.FetchApplicationMethodById(Id);
-    }
-
-    public async Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchApplicationMethodList() called");
-        return await _organicManureService.FetchApplicationMethodList(fieldType, isLiquid);
-    }
-
+   
     public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString)
     {
         _logger.LogTrace("OrganicManureLogic : FetchAutumnCropNitrogenUptake() called");
@@ -92,30 +81,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchFieldWithSameDateAndManureType(fertiliserId, farmId, harvestYear);
     }
 
-    public async Task<(string, Error)> FetchIncorporationDelayById(int Id)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchIncorporationDelayById() called");
-        return await _organicManureService.FetchIncorporationDelayById(Id);
-    }
-
-    public async Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchIncorporationDelaysByMethodIdAndApplicableFor() called");
-        return await _organicManureService.FetchIncorporationDelaysByMethodIdAndApplicableFor(methodId, applicableFor);
-    }
-
-    public async Task<(string, Error)> FetchIncorporationMethodById(int Id)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchIncorporationMethodById() called");
-        return await _organicManureService.FetchIncorporationMethodById(Id);
-    }
-
-    public async Task<(List<IncorporationMethodResponse>, Error?)> FetchIncorporationMethodsByApplicationId(int appId, string? applicableFor)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchIncorporationMethodsByApplicationId() called");
-        return await _organicManureService.FetchIncorporationMethodsByApplicationId(appId, applicableFor);
-    }
-
+    
     public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchIsPerennialByCropTypeId() called");
@@ -134,30 +100,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchMannerCalculateNutrient(jsonData);
     }
 
-    public async Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchManureGroupById() called");
-        return await _organicManureService.FetchManureGroupById(manureGroupId);
-    }
-
-    public async Task<(List<CommonResponse>, Error?)> FetchManureGroupList()
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchManureGroupList() called");
-        return await _organicManureService.FetchManureGroupList();
-    }
-
-    public async Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchManureTypeByManureTypeId() called");
-        return await _organicManureService.FetchManureTypeByManureTypeId(manureTypeId);
-    }
-
-    public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchManureTypeList() called");
-        (List < ManureType > manures, Error? error) = await _organicManureService.FetchManureTypeList(manureGroupId, countryId);
-        return (manures.OrderBy(m => m.SortOrder).ToList(), error);
-    }
+  
 
     public async Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
     {
