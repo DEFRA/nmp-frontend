@@ -19,7 +19,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         Error error = null;
         string nutrientIndex = string.Empty;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchSoilNutrientIndexAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(nutrientValue.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()));
+        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientIndexAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(nutrientValue.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
@@ -46,7 +46,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
     {
         string soilType = string.Empty;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchSoilTypeByIdAsyncAPI, HttpUtility.UrlEncode(soilTypeId.ToString()));
+        var requestUrl = string.Format(ApiurlHelper.FetchSoilTypeByIdAsyncAPI, HttpUtility.UrlEncode(soilTypeId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();

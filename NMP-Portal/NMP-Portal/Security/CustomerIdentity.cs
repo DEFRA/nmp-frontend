@@ -5,8 +5,6 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
-using NMP.Portal.Helpers;
-using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -14,7 +12,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Security
 {
@@ -275,6 +272,7 @@ namespace NMP.Portal.Security
         private static async Task SaveUserDetails(string accessToken, ClaimsIdentity? identity, UserData userData)
         { 
             string jsonData = JsonConvert.SerializeObject(userData);
+            
             if (configuration != null)
             {
                 const string dafaultlocalUrl = $"http://localhost:3000/";
@@ -282,7 +280,7 @@ namespace NMP.Portal.Security
                 httpClient.Timeout = TimeSpan.FromMinutes(5);
                 httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? dafaultlocalUrl);
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-                var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                var response = await httpClient.PostAsync("users", new StringContent(jsonData, Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
