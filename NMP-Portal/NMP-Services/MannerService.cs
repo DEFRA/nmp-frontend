@@ -232,7 +232,7 @@ responseWrapper?.Data is not null)
 
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerManureGroupListAsyncAPI);
-        response.EnsureSuccessStatusCode();
+
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -253,7 +253,7 @@ responseWrapper?.Data is not null)
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString()), HttpUtility.UrlEncode(countryId.ToString())));
-        response.EnsureSuccessStatusCode();
+
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -271,13 +271,13 @@ responseWrapper?.Data is not null)
 
         return (manureTypeList, error);
     }
-    public async Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId)
+    public async Task<(CommonResponse?, Error?)> FetchManureGroupById(int manureGroupId)
     {
         CommonResponse? manureGroup = new CommonResponse();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureGroupByIdAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString())));
-        response.EnsureSuccessStatusCode();
+
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -302,7 +302,7 @@ responseWrapper?.Data is not null)
 
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(manureTypeId.ToString())));
-        response.EnsureSuccessStatusCode();
+
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -370,10 +370,10 @@ responseWrapper?.Data is not null)
         return (incorporationMethods, error);
     }
 
-    public async Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor)
+    public async Task<(List<IncorprationDelaysResponse>?, Error?)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor)
     {
         List<IncorprationDelaysResponse> incorporationDelays = new List<IncorprationDelaysResponse>();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -384,7 +384,7 @@ responseWrapper?.Data is not null)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var delays = responseWrapper.Data.ToObject<List<IncorprationDelaysResponse>>();
+                    var delays = responseWrapper?.Data?.ToObject<List<IncorprationDelaysResponse>>();
                     incorporationDelays.AddRange(delays);
                 }
             }
@@ -409,10 +409,10 @@ responseWrapper?.Data is not null)
         }
         return (incorporationDelays, error);
     }
-    public async Task<(string, Error)> FetchApplicationMethodById(int Id)
+    public async Task<(string?, Error?)> FetchApplicationMethodById(int Id)
     {
-        string applicationMethod = string.Empty;
-        Error error = null;
+        string? applicationMethod = string.Empty;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -423,7 +423,7 @@ responseWrapper?.Data is not null)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    applicationMethod = responseWrapper.Data.name;
+                    applicationMethod = responseWrapper?.Data?.name;
 
                 }
             }
@@ -448,10 +448,10 @@ responseWrapper?.Data is not null)
         }
         return (applicationMethod, error);
     }
-    public async Task<(string, Error)> FetchIncorporationMethodById(int Id)
+    public async Task<(string?, Error?)> FetchIncorporationMethodById(int Id)
     {
-        string incorporationMethod = string.Empty;
-        Error error = null;
+        string? incorporationMethod = string.Empty;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -462,7 +462,7 @@ responseWrapper?.Data is not null)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    incorporationMethod = responseWrapper.Data.name;
+                    incorporationMethod = responseWrapper?.Data?.name;
 
                 }
             }
@@ -475,22 +475,22 @@ responseWrapper?.Data is not null)
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);
+
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);
+
         }
         return (incorporationMethod, error);
     }
-    public async Task<(string, Error)> FetchIncorporationDelayById(int Id)
+    public async Task<(string?, Error?)> FetchIncorporationDelayById(int Id)
     {
-        string incorporationDelay = string.Empty;
-        Error error = null;
+        string? incorporationDelay = string.Empty;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -514,15 +514,15 @@ responseWrapper?.Data is not null)
         {
             error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);
+
         }
         catch (Exception ex)
         {
             error = new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);
+
         }
         return (incorporationDelay, error);
     }
