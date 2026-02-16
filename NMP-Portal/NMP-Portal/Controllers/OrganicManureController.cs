@@ -2195,7 +2195,7 @@ namespace NMP.Portal.Controllers
                                 (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                                 if (error == null &&  incorporationDelaysList!=null&& incorporationDelaysList.Count == 1)
                                 {
-                                    model.IncorporationDelay = incorporationDelaysList.First().ID;
+                                    model.IncorporationDelay = incorporationDelaysList.FirstOrDefault().ID;
                                     (model.IncorporationDelayName, error) = await _mannerLogic.FetchIncorporationDelayById(model.IncorporationDelay.Value);
                                     if (error == null)
                                     {

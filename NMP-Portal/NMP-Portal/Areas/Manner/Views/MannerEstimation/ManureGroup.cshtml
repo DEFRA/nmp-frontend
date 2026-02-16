@@ -8,6 +8,7 @@
     string heading = Resource.lblWhatTypeOfOrganicMaterialWouldYouLikeUse;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     string backAction = (Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), Model.CropTypeId) ? "IsEarlySown" : "CropType");
+    var cancelAction = Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel";
 
 }
 @section BeforeContent {
@@ -39,14 +40,8 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
+            <a class="govuk-link" asp-action="@cancelAction" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+
         </p>
     </div>
 </div>

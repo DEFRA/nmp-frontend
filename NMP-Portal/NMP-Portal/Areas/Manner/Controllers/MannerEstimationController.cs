@@ -138,7 +138,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View("Country", model);
                 }
 
-                model =await _mannerLogic.SetMannerEstimationStep2(model);
+                model = await _mannerLogic.SetMannerEstimationStep2(model);
 
                 return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("FarmingRules");
             }
@@ -417,7 +417,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            ViewBag.SoilTypesList =await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
+            ViewBag.SoilTypesList = await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
             return View(model);
         }
 
@@ -435,7 +435,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!ModelState.IsValid)
             {
                 model = _mannerLogic.GetMannerEstimationStep7();
-                ViewBag.SoilTypesList =await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
+                ViewBag.SoilTypesList = await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
                 return View(model);
             }
 
@@ -453,7 +453,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropGroup() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            ViewBag.CropGroupList =await _fieldLogic.FetchCropGroups();
+            ViewBag.CropGroupList = await _fieldLogic.FetchCropGroups();
             return View(model);
         }
 
@@ -470,7 +470,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.CropGroupList =await _fieldLogic.FetchCropGroups();
+                ViewBag.CropGroupList = await _fieldLogic.FetchCropGroups();
                 return View(model);
             }
 
@@ -613,16 +613,29 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             (List<CommonResponse> manureGroupList, Error? error) = await _mannerLogic.FetchManureGroupList();
-            if (error == null)
+            if (error == null && manureGroupList.Count > 0)
             {
-                if (manureGroupList.Count > 0)
+                selectListItems = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
                 {
-                    selectListItems = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
-                    {
-                        Value = f.Id.ToString(),
-                        Text = f.Name.ToString()
-                    }).ToList();
-                }
+                    Value = f.Id.ToString(),
+                    Text = f.Name.ToString()
+                }).ToList();
+
+            }
+            return (selectListItems, error);
+        }
+
+        private async Task<(List<SelectListItem>, Error?)> FetchManureType(MannerEstimationStep12ViewModel model)
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            (List<ManureType> manureTypeList, Error? error) = await _mannerLogic.FetchManureTypeList(model.ManureGroupId, model.FarmRB209CountryId);
+            if (error == null && manureTypeList.Count > 0)
+            {
+                selectListItems = manureTypeList.OrderBy(x => x.Name).Select(f => new SelectListItem
+                {
+                    Value = f.Id.ToString(),
+                    Text = f.Name
+                }).ToList();
             }
             return (selectListItems, error);
         }
@@ -642,23 +655,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ViewBag.ManureTypeList = manureTypeList;
             }
             return View(model);
-        }
-        private async Task<(List<SelectListItem>, Error?)> FetchManureType(MannerEstimationStep12ViewModel model)
-        {
-            List<SelectListItem> selectListItems = new List<SelectListItem>();
-            (List<ManureType> manureTypeList, Error? error) = await _mannerLogic.FetchManureTypeList(model.ManureGroupId, model.FarmRB209CountryId);
-            if (error == null)
-            {
-                if (manureTypeList.Count > 0)
-                {
-                    selectListItems = manureTypeList.OrderBy(x => x.Name).Select(f => new SelectListItem
-                    {
-                        Value = f.Id.ToString(),
-                        Text = f.Name
-                    }).ToList();
-                }
-            }
-            return (selectListItems, error);
         }
 
         [HttpPost]

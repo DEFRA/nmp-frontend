@@ -499,9 +499,9 @@ responseWrapper?.Data is not null)
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)// && responseWrapper.Data.IncorporationDelay != null
+                if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    incorporationDelay = responseWrapper?.Data?.name;//.IncorporationDelay.Name;
+                    incorporationDelay = responseWrapper?.Data?.name;
 
                 }
             }
