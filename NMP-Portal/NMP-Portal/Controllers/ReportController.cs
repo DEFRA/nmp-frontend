@@ -3184,8 +3184,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else
                 {
-                    (ManureType manureType, Error error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                    model.ManureType = manureType;
+                    (ManureType? manureType, Error? error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                    if (error == null && manureType != null)
+                    {
+                        model.ManureType = manureType;
+                    }
                     if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
                     {
                         model.IsThisDefaultValueOfRB209 = true;
@@ -6160,8 +6163,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             model.ManureGroupId = manureGroupList.FirstOrDefault(x => x.Name.Equals(Resource.lblOtherOrganicMaterials, StringComparison.OrdinalIgnoreCase))?.Id ?? 0;
                             model.ManureTypeId = model.ManureGroupIdForFilter;
                             model.ManureTypeName = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter)?.ManureTypeName;
-                            (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureGroupIdForFilter.Value);
-                            if (error == null)
+                            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureGroupIdForFilter.Value);
+                            if (error == null && manureType != null)
                             {
                                 model.IsManureTypeLiquid = manureType.IsLiquid;
                             }
