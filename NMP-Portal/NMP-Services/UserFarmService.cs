@@ -19,7 +19,7 @@ public class UserFarmService(ILogger<UserFarmService> logger, IHttpContextAccess
         UserFarmResponse userFarmList = new UserFarmResponse();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(APIURLHelper.FetchFarmByUserIdAPI, HttpUtility.UrlEncode(userId.ToString()));
+        var requestUrl = string.Format(ApiurlHelper.FetchFarmByUserIdAPI, HttpUtility.UrlEncode(userId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

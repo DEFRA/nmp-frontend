@@ -26,7 +26,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Format(APIURLHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
+            string url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
             if (cropOrder == null)
             {
                 url = url.Replace("&cropOrder=", "");
@@ -82,7 +82,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Format(APIURLHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
+            string url = string.Format(ApiurlHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
@@ -133,11 +133,11 @@ public class FertiliserManureService : Service, IFertiliserManureService
             string url = string.Empty;
             if (!string.IsNullOrWhiteSpace(cropGroupName))
             {
-                url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
+                url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
             }
             else
             {
-                url = string.Format(APIURLHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
+                url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
             }
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
@@ -186,7 +186,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchInOrganicManureDurationsAsyncAPI));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchInOrganicManureDurationsAsyncAPI));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -235,7 +235,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchInOrganicManureDurationsByIdAsyncAPI, id));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchInOrganicManureDurationsByIdAsyncAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -286,7 +286,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {            
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(APIURLHelper.AddFertiliserManuresAsyncAPI, new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddFertiliserManuresAsyncAPI, new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -331,7 +331,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            string url = APIURLHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI;
+            string url = ApiurlHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI;
 
             if (fertiliserId.HasValue)
             {
@@ -393,7 +393,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var content = new StringContent(fertiliserIds, Encoding.UTF8, "application/json");
-            var url = APIURLHelper.DeleteFertiliserByIdsAPI;
+            var url = ApiurlHelper.DeleteFertiliserByIdsAPI;
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
                 Content = content
@@ -439,7 +439,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFertiliserByIdAPI, fertiliserId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFertiliserByIdAPI, fertiliserId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -484,7 +484,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId,farmId,harvestYear));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId,farmId,harvestYear));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -525,7 +525,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(APIURLHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -570,7 +570,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(APIURLHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
