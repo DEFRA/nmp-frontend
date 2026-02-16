@@ -81,7 +81,7 @@ namespace NMP.Portal.Security
                 options.Events.OnRemoteFailure += OnRemoteFailure;                
             });            
             services.AddDistributedTokenCaches();            
-            services.AddSingleton<TokenRefreshService>();
+            //services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;
         }

@@ -14,10 +14,11 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 {
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
     private readonly IConfiguration _config = config;
-
+    private const string refreshTokenKey = "refresh_token";
     public async Task<string> RefreshUserAccessTokenAsync(HttpContext context)
     {
-        var refreshToken = await context.GetTokenAsync("refresh_token");
+        
+        var refreshToken = await context.GetTokenAsync(refreshTokenKey);
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true,
@@ -25,7 +26,7 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
             AllowRefresh = true
         };
 
-        if (refreshToken == null)
+        if (string.IsNullOrWhiteSpace(refreshToken))
         {
             await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
         }
@@ -42,17 +43,17 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 
             var formData = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("refresh_token", refreshToken),
+                new KeyValuePair<string, string>(refreshTokenKey, refreshToken?? string.Empty),
                 new KeyValuePair<string, string>("redirect_uri", ""),
-                new KeyValuePair<string, string>("client_id", _config["CustomerIdentityClientId"]),
-                new KeyValuePair<string, string>("client_secret", _config["CustomerIdentityClientSecret"]),
-                new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                new KeyValuePair<string, string>("client_id", _config["CustomerIdentityClientId"]?? string.Empty),
+                new KeyValuePair<string, string>("client_secret", _config["CustomerIdentityClientSecret"] ?? string.Empty),
+                new KeyValuePair<string, string>("grant_type", refreshTokenKey),
                 new KeyValuePair<string, string>("scope", scopes)
             });
 #pragma warning disable CS8604 // Possible null reference argument.
             Uri uri = new Uri(uriString: issuer);
 #pragma warning restore CS8604 // Possible null reference argument.
-            var url = $"https://{uri.Authority}/{_config["CustomerIdentityTenantId"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
+            var url = $"https://{uri.Authority}/{_config["CustomerIdentityDomain"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
 
             var response = await client.PostAsync(url, formData);
             response.EnsureSuccessStatusCode();
@@ -70,7 +71,7 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
             if (auth != null && auth.Principal != null && tokens != null && !string.IsNullOrEmpty(tokens.AccessToken))
             {
                 auth.Properties?.UpdateTokenValue("access_token", tokens.AccessToken);
-                auth.Properties?.UpdateTokenValue("refresh_token", tokens.RefreshToken);
+                auth.Properties?.UpdateTokenValue(refreshTokenKey, tokens.RefreshToken);
                 await context.SignInAsync(auth.Principal, auth.Properties);
             }
         }

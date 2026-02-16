@@ -19,6 +19,7 @@
     <Compile Remove="Security\ReauthenticationMiddleware.cs" />
     <Compile Remove="Security\RedisTokenProvider.cs" />
     <Compile Remove="Security\TokenCacheHelper.cs" />
+    <Compile Remove="Security\TokenRefreshService.cs" />
   </ItemGroup>
 
   <ItemGroup>
