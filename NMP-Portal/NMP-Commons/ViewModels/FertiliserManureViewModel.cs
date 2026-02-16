@@ -11,7 +11,7 @@ public class FertiliserManureViewModel
     public int? FarmId { get; set; }
     public int? HarvestYear { get; set; }
     public string? FarmName { get; set; }
-    public bool isEnglishRules { get; set; }
+    public int? FarmRB209CountryID { get; set; }
     public List<string>? FieldList { get; set; }
     public bool IsComingFromRecommendation { get; set; } = false;
     public bool IsCheckAnswer { get; set; } = false;        

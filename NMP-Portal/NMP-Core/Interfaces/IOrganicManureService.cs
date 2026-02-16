@@ -26,11 +26,11 @@ public interface IOrganicManureService
     Task<(RainTypeResponse, Error)> FetchRainTypeDefault();
     Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString);
 
-    Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault();
+    Task<(WindspeedResponse?, Error?)> FetchWindspeedDataDefault();
     Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate);
 
     Task<(List<RainTypeResponse>, Error)> FetchRainTypeList();
-    Task<(List<WindspeedResponse>, Error)> FetchWindspeedList();
+    Task<(List<WindspeedResponse>, Error?)> FetchWindspeedList();
     Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
     Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
     Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
@@ -44,7 +44,7 @@ public interface IOrganicManureService
     Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly);
     Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString);
     Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId);
-    Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId);
+    Task<(WindspeedResponse?, Error?)> FetchWindspeedById(int windspeedId);
     Task<(MoistureTypeResponse, Error)> FetchMoisterTypeById(int moisterTypeId);
 
     Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmId(int farmId);

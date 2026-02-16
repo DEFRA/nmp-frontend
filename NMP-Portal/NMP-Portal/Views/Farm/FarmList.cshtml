@@ -14,43 +14,67 @@
 else
 {
     <div class="govuk-grid-row">
-        <div id="all-plans-table" class="govuk-grid-column-two-thirds-from-desktop">
-
+        <div class="govuk-grid-column-two-thirds">
             @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
-                    <div class="">
-                        <h3 class="govuk-notification-banner__heading"> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</h3>
-                    </div>
+                    <govuk-notification-banner-heading> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</govuk-notification-banner-heading>
                 </govuk-notification-banner>
             }
-
             <h1 class="govuk-heading-l">
-                @Resource.lblYourFarms
+                @Resource.lblPlanAndRecordNutrientApplications
             </h1>
+            <h2 class="govuk-heading-m">@Resource.lblCreateNutrientManagementPlansAndNVZReports</h2>
+
+
             @if (Model != null && Model.Farms.Count > 0)
             {
+                <p class="govuk-body">@Resource.lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans</p>
+                <h3 class="govuk-heading-s margin-top-none">
+                    @Resource.lblYourFarms
+                </h3>
                 @foreach (var farm in Model.Farms)
                 {
                     <p class="govuk-body">
                         <a asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@farm.EncryptedFarmId">@farm.Name</a>
                     </p>
                 }
-                <hr class="seperator_five" />
+                @* <hr class="seperator_five" /> *@
                 <div>
-                    <p class="govuk-heading-m">
-                        @Resource.lblAddANewFarm
-                    </p>                    
                     <p class="govuk-body">
-                        <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
+                        @Resource.lblYouCanAlso
+                        <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddANewFarm.ToLower()</a>
                     </p>
                 </div>
             }
             else
             {
-                <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyFarms</p>
-                <govuk-button-link asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</govuk-button-link>
+                <p class="govuk-body">@Resource.lblAddAFarmToStartCreatingNutrientManagementPlans</p>
+                <p class="govuk-body">@Resource.lblYouCanCreateNVZReportsAndOtherFarmManagementReports</p>
+                <p class="govuk-body">
+                <a asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
+                </p>
             }
+
+
+            <hr class="seperator_five" />
+            @* </div> *@
+            <h2 class="govuk-heading-m">@string.Format("{0} {1}", Resource.lblCreateANutrientSupplyEstimate, Resource.lblMannerNPK)</h2>
+            <p class="govuk-body">
+                @Resource.lblCreateEstimateContent1
+            </p>
+            <p class="govuk-body">
+                @Resource.lblCreateEstimateContent2
+            </p>
+            <p class="govuk-body">
+                <a class="govuk-link" asp-area="Manner" asp-action="Index" asp-controller="AboutManner">
+                    @((ViewBag.IsAnyRecordInMannerEstimate != null && (!ViewBag.IsAnyRecordInMannerEstimate)) ? Resource.lblCreateANutrientSupplyEstimate : Resource.lblViewOrCreateANutrientSupplyEstimate)
+                </a>
+            </p>
+            <hr class="seperator_five" />
         </div>
+        @* <div id="all-plans-table" class="govuk-grid-column-two-thirds-from-desktop"> *@
+
+
     </div>
 }

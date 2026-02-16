@@ -1,0 +1,139 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep2ViewModel
+
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{Resource.lblFarmingRulesForWater} {Resource.lblHyphen} {title}";
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Country")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+         <form asp-action="FarmingRules" method="post" asp-controller="MannerEstimation" autocomplete="off"> 
+        @Html.AntiForgeryToken()
+
+        @if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+        {
+            <h1 class="govuk-heading-l">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ? Resource.lblRegulations_for_England : Resource.lblRegulations_for_Scotland)</h1>
+            <h2 class="govuk-heading-m">@Resource.lblFarmingRulesForWater</h2>
+            <p class="govuk-body">
+                @Resource.lblFarmingRuleOfWaterFirstForEngland
+            </p>
+            <p class="govuk-body">
+                @Resource.lblFarmingRuleOfWaterSecondForEngland
+            </p>
+            <p class="govuk-body">
+                @Resource.lblFarmingRuleOfWaterThirdForEngland
+            </p>
+            <p class="govuk-body margin-bottom-forty">
+                @Resource.lblFarmingRuleOfWaterFourthForEngland
+                <a target="_blank" href="https://www.gov.uk/guidance/rules-for-farmers-and-land-managers-to-prevent-water-pollution#assess-pollution-risks">@Resource.lblFarmingRuleOfWaterFifthForEngland</a>
+                @Resource.lblOpenInANewWindow
+            </p>
+        }
+        @if (Model != null && (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England || Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland))
+        {
+            @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+            {
+                <h2 class="govuk-heading-m">
+                    @Resource.lblNitrateVulnerableZones
+                </h2>
+            }
+            else
+            {
+
+                <h1 class="govuk-heading-l">
+                    @Resource.lblFarmingRuleForScotlandContent9
+                </h1>
+
+            }
+            <p class="govuk-body">
+                @Resource.lblFirstRuleOfNVZForEngland
+                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                {
+                    @Resource.lblFarmingRuleForEnglandContent1
+                }
+
+            </p>
+            @if (Model.CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                <p class="govuk-body">@Html.Raw(Resource.lblFarmingRuleForScotlandContent1)</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>
+                        @Resource.lblFarmingRuleForScotlandContent2
+                    </li>
+                    <li>
+                        @Resource.lblFarmingRuleForScotlandContent3
+                    </li>
+                    <li>
+                        @Resource.lblFarmingRuleForScotlandContent4
+                    </li>
+                    <li>
+                        @Resource.lblFarmingRuleForScotlandContent5
+                    </li>
+                    <li>
+                        @Resource.lblFarmingRuleForScotlandContent6
+                    </li>
+                </ul>
+            }
+            <p class="govuk-body">
+                @Resource.lblSecondRuleOfNVZForEngland
+            </p>
+
+            @if (Model.CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                <p class="govuk-body">
+                    @Resource.lblThirdRuleOfNVZForEngland
+                    <a target="_blank" href="https://www.gov.uk/government/collections/nitrate-vulnerable-zones">@Resource.lblFourthRuleOfNVZForEngland</a>
+                    @Resource.lblOpenInANewWindow
+                </p>
+            }
+            else
+            {
+                <p class="govuk-body">
+                    @Html.Raw(Resource.lblFarmingRuleForScotlandContent7)
+                </p>
+                <p class="govuk-body">
+                    @Html.Raw(Resource.lblFarmingRuleForScotlandContent8)
+                </p>
+            }
+        }
+        else if (Model != null && Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+        {
+            <h1 class="govuk-heading-l">@Resource.lblTheWaterResourcesRegulations2021</h1>
+            <p class="govuk-body">
+                @Resource.lblFarmingRuleOfWaterFirstForWale
+            </p>
+            <p class="govuk-body">
+                @Resource.lblFarmingRuleOfWaterSecondForWale
+            </p>
+            <p class="govuk-body">
+                @Resource.lblRead
+                <a target="_blank" href="https://www.gov.wales/water-resources-control-agricultural-pollution-wales-regulations-2021-guidance-farmers-and-land">@Resource.lblFarmingRuleOfWaterThirdForWale</a>
+                @Resource.lblOpenInANewWindow
+            </p>
+        }
+
+        <govuk-button type="submit" data-prevent-double-click="true" class="margin-bottom-forty">
+            @Resource.lblContinue
+        </govuk-button>
+
+        </form> 
+        <p class="govuk-body cancel-link">
+            @if (!Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>

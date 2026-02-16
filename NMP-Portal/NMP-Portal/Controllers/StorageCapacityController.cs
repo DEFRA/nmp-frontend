@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NMP.Application;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using Error = NMP.Commons.ServiceResponses.Error;
-using NMP.Application;
 
 namespace NMP.Portal.Controllers
 {
@@ -25,223 +26,63 @@ namespace NMP.Portal.Controllers
         private readonly IStorageCapacityLogic _storageCapacityLogic = storageCapacityLogic;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
+        private const string _storageCapacityActionName = "StorageCapacity";
+        private const string _storageCapacityDataSessionKey = "StorageCapacityData";
+        private const string _farmSummaryActionName = "FarmSummary";
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string q, string y, string? r, string? s, string? isPlan, string? t, string? u)
+        public async Task<IActionResult> ManageStorageCapacity(string q, string? r, string? s, string? isPlan, string? t, string? u)
         {
-            _logger.LogTrace($"StorageCapacity Controller : ManageStorageCapacity() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            _logger.LogTrace("StorageCapacity Controller : ManageStorageCapacity() action called");
+
+            var model = new StorageCapacityViewModel();
+            ClearStorageSessions();
+
+            if (string.IsNullOrWhiteSpace(q))
+                return View(model);
+
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+            var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+
+            if (!string.IsNullOrWhiteSpace(farmError.Message) || farm == null)
+                return RedirectToFarmSummary(q, farmError.Message);
+
+            PopulateFarmDetails(model, farm, farmId, q, isPlan, t);
+
+            var (storeCapacityList, storeError) =
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
+
+            HandleSuccessMessages(r, s, model, storeCapacityList);
+
+            if (string.IsNullOrWhiteSpace(storeError.Message) && storeCapacityList.Any())
+                await PopulateStorageLists(storeCapacityList);
+
+            PopulateTotals(storeCapacityList);
+            PopulateEncryptedStateIds();
+
+            var storageCapacityList =
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID!.Value)
+                .ContinueWith(t => t.Result.Item1);
+
+            //copy logic write here...
+
+            if (!string.IsNullOrWhiteSpace(u))
+                model.IsRemovedRecently = u;
+
+            if (storeCapacityList.Any() || !string.IsNullOrWhiteSpace(u))
             {
-                HttpContext?.Session.Remove("StorageCapacityData");
-            }
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityDataBeforeUpdate"))
-            {
-                HttpContext?.Session.Remove("StorageCapacityDataBeforeUpdate");
-            }
-            List<StoreCapacityResponse> storeCapacityList = new List<StoreCapacityResponse>();
-            Error storeCapacityError = new Error();
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
-                {
-                    model.FarmName = farm.Name;
-                    model.FarmID = decryptedFarmId;
-                    model.EncryptedFarmID = q;
-                    if (!string.IsNullOrWhiteSpace(y))
-                    {
-                        model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-                        model.EncryptedHarvestYear = y;
-                    }
-                    if (!string.IsNullOrWhiteSpace(isPlan))
-                    {
-                        model.IsComingFromPlan = isPlan;
-                        ViewBag.IsPlan = isPlan;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(t))
-                    {
-                        model.IsComingFromManageToHubPage = t;
-                    }
-
-                    (storeCapacityList,  storeCapacityError) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
-                    if (!string.IsNullOrWhiteSpace(r))
-                    {
-                        string succesMsg = _reportDataProtector.Unprotect(r);
-                        if (succesMsg == Resource.lblRemove)
-                        {
-                            TempData["succesMsgContent1"] = string.Format(Resource.lblYouHaveRemovedJourneyName, Resource.lblManureStorage.ToLower());
-                            TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
-                            if (storeCapacityList.Count > 0)
-                            {
-                                TempData["succesMsgContent3"] = Resource.lblCreateAnExistingManureStorageCapacityReport;
-                            }
-                        }
-                        else
-                        {
-                            TempData["succesMsgContent1"] = succesMsg;
-                        }
-                        if (!string.IsNullOrWhiteSpace(s))
-                        {
-                            ViewBag.isComingFromSuccessMsg = _reportDataProtector.Protect(Resource.lblTrue);
-                            TempData["succesMsgContent1Detail"] = string.Format(Resource.MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe, model.FarmName, model.Year);
-                            TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
-                            TempData["succesMsgContent3"] = Resource.lblCreateAnExistingManureStorageCapacityReport;
-                        }
-                    }
-
-                    List<HarvestYear> harvestYearList = new List<HarvestYear>();
-
-                    if (string.IsNullOrWhiteSpace(storeCapacityError.Message))
-                    {
-                        if (storeCapacityList != null && storeCapacityList.Count > 0)
-                        {
-                            model.IsStoreCapacityExist = true;
-                            (List<CommonResponse> materialStateList, error) = await _storageCapacityLogic.FetchMaterialStates();
-                            if (materialStateList != null && materialStateList.Count > 0)
-                            {
-                                if (storeCapacityList
-                                .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage))
-                                {
-                                    ViewBag.DirtyWaterList = storeCapacityList
-                                    .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
-                                    .Select(x => new
-                                    {
-                                        MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)?.Name,
-                                        x.StoreName,
-                                        x.Length,
-                                        x.Width,
-                                        x.Depth,
-                                        x.Diameter,
-                                        x.CapacityWeight,
-                                        x.CapacityVolume,
-                                        x.Circumference,
-                                        x.BankSlopeAngleID,
-                                        x.SurfaceArea,
-                                        x.StorageTypeID,
-                                        x.StorageTypeName,
-                                        x.SolidManureTypeName,
-                                        EncryptedStoreCapacityId = _storageCapacityProtector.Protect(
-    Convert.ToString(x.ID) ?? string.Empty)
-                                    })
-                                    .ToList();
-                                }
-
-                                if (storeCapacityList
-                                .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage))
-                                {
-                                    ViewBag.SlurryStorageList = storeCapacityList
-                                .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
-                                .Select(x => new
-                                {
-                                    MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)?.Name,
-                                    x.StoreName,
-                                    x.Length,
-                                    x.Width,
-                                    x.Depth,
-                                    x.Diameter,
-                                    x.CapacityWeight,
-                                    x.CapacityVolume,
-                                    x.Circumference,
-                                    x.BankSlopeAngleID,
-                                    x.SurfaceArea,
-                                    x.StorageTypeID,
-                                    x.StorageTypeName,
-                                    x.SolidManureTypeName,
-                                    EncryptedStoreCapacityId = _storageCapacityProtector.Protect(
-    Convert.ToString(x.ID) ?? string.Empty)
-                                })
-                                .ToList();
-                                }
-
-
-                                if (storeCapacityList
-                              .Any(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage))
-                                {
-                                    ViewBag.SolidManureStorageList = storeCapacityList
-                                .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
-                                .Select(x => new
-                                {
-                                    MaterialStateName = materialStateList.FirstOrDefault(m => m.Id == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)?.Name,
-                                    x.StoreName,
-                                    x.Length,
-                                    x.Width,
-                                    x.Depth,
-                                    x.Diameter,
-                                    x.CapacityWeight,
-                                    x.CapacityVolume,
-                                    x.Circumference,
-                                    x.BankSlopeAngleID,
-                                    x.SurfaceArea,
-                                    x.StorageTypeID,
-                                    x.StorageTypeName,
-                                    x.SolidManureTypeName,
-                                    EncryptedStoreCapacityId = _storageCapacityProtector.Protect(
-    Convert.ToString(x.ID) ?? string.Empty)
-                                })
-                                .ToList();
-                                }
-                            }
-                        }
-                    }
-
-                    ViewBag.TotalLiquidCapacity = storeCapacityList.Count>0? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).Sum(x => x.CapacityVolume):0;
-
-                    ViewBag.TotalSolidCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityVolume):0;
-
-                    ViewBag.TotalSolidWeightCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year && x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).Sum(x => x.CapacityWeight):0;
-
-                    ViewBag.TotalSurfaceCapacity = storeCapacityList.Count > 0 ? storeCapacityList
-                        .Where(x => x.Year == model.Year).Sum(x => x.SurfaceArea):0;
-
-                    ViewBag.EncryptedSolidStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SolidManureStorage));
-                    ViewBag.EncryptedSlurryStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.SlurryStorage));
-                    ViewBag.EncryptedDirtyWaterStateId = _storageCapacityProtector.Protect(Convert.ToString((int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage));
-                    (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                    if (string.IsNullOrWhiteSpace(u))
-                    {
-                        (List<StoreCapacityResponse> currentStorageCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
-                        if (string.IsNullOrWhiteSpace(error.Message) && currentStorageCapacityList.Count == 0)
-                        {
-                            if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
-                            {
-                                return RedirectToAction("CopyExistingManureStorage", new { q = q, r = y, isPlan = isPlan });
-                            }
-                        }
-                    }
-                    else
-                    {
-                        model.IsRemovedRecently = u;
-                    }
-
-                    if (storeCapacityList.Count > 0 || !string.IsNullOrWhiteSpace(u) || !string.IsNullOrWhiteSpace(model.IsRemovedRecently))
-                    {
-                        ViewBag.StorageCapacityList = storageCapacityList.Count > 0 ? storageCapacityList : null;
-                        return View(model);
-                    }
-                    return RedirectToAction("OrganicMaterialStorageNotAvailable", "StorageCapacity", new { f = q, y = y, isPlan = isPlan });
-                }
-                else
-                {
-                    TempData["Error"] = error.Message;
-                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
-                }
-            }
-            if (!string.IsNullOrWhiteSpace(y))
-            {
-                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-                model.EncryptedHarvestYear = y;
+                ViewBag.StorageCapacityList = storageCapacityList.Any() ? storageCapacityList : null;
+                return View(model);
             }
 
-            return View(model);
+            return RedirectToAction(
+                "OrganicMaterialStorageNotAvailable",
+                _storageCapacityActionName,
+                new { f = q, isPlan });
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? y, string? isPlan)
+        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? isPlan)
         {
             _logger.LogTrace("StorageCapacity Controller : OrganicMaterialStorageNotAvailable() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -250,17 +91,12 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(f))
                 {
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
                         model.FarmID = decryptedFarmId;
                         model.EncryptedFarmID = f;
-                        if (!string.IsNullOrWhiteSpace(y))
-                        {
-                            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-                            model.EncryptedHarvestYear = y;
-                        }
                         if (!string.IsNullOrWhiteSpace(isPlan))
                         {
                             model.IsComingFromPlan = isPlan;
@@ -280,272 +116,95 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MaterialStates(string? f, string? y, string? isPlan, string? x, string? v, string? w)
+        public async Task<IActionResult> MaterialStates(string? f, string? isPlan, string? x, string? v, string? w)
         {
             _logger.LogTrace("StorageCapacity Controller : MaterialStates() action called");
-            StorageCapacityViewModel? model = new StorageCapacityViewModel();
-            Error? error = null;
-            int? decryptedFarmId = null;
+
+            StorageCapacityViewModel model = GetOrCreateSessionModel();
+
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
-                {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
-                }
-                else
-                {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
-                }
+                await LoadMaterialStatesAsync();
+                await PopulateFarmDetailsAsync(model, f, isPlan, w);
+                PopulateNavigationFlags(model, x, v);
 
-                (List<CommonResponse> materialStateList, error) = await _storageCapacityLogic.FetchMaterialStates();
-                if (error == null)
-                {
-                    materialStateList.RemoveAll(x => x.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage);
-                    ViewBag.MaterialStateList = materialStateList;
-                }
-                else
-                {
-                    TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = error.Message;
-                    return RedirectToAction("OrganicMaterialStorageNotAvailable");
-                }
+                await CheckStoreCapacityAsync(model);
 
-                if (!string.IsNullOrWhiteSpace(f))
-                {
-                    decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId ?? 0);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
-                    {
-                        model.FarmName = farm.Name;
-                        model.FarmID = decryptedFarmId;
-                        model.EncryptedFarmID = f;
-                        if (!string.IsNullOrWhiteSpace(y))
-                        {
-                            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-                            model.EncryptedHarvestYear = y;
-                        }
-                        if (!string.IsNullOrWhiteSpace(isPlan))
-                        {
-                            model.IsComingFromPlan = isPlan;
-                        }
-                        if (!string.IsNullOrWhiteSpace(w))
-                        {
-                            model.IsRemovedRecently = w;
-                        }
-
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(x))
-                {
-                    model.IsComingFromManageToHubPage = x;
-                }
-                if (!string.IsNullOrWhiteSpace(v))
-                {
-                    model.IsComingFromMaterialToHubPage = v;
-                    model.IsComingFromManageToHubPage = v;
-                }
-                int farmId = decryptedFarmId ?? model.FarmID ?? 0;
-                (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(farmId, model.Year ?? 0);
-
-                if (string.IsNullOrWhiteSpace(error.Message))
-                {
-                    if (storeCapacityList.Count > 0)
-                    {
-                        model.IsStoreCapacityExist = true;
-                    }
-                }
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
-
+                SaveSessionModel(model);
+                return View(model);
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in MaterialStates() action : {ex.Message}, {ex.StackTrace}");
-                if (model != null)
-                {
-                    if (model.IsStoreCapacityExist)
-                    {
-                        (List<StoreCapacityResponse> currentStorageCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
-                        if (string.IsNullOrWhiteSpace(error.Message) && currentStorageCapacityList.Count == 0)
-                        {
-                            (List<StoreCapacityResponse> storageCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                            if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
-                            {
-                                TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
-                                return RedirectToAction("CopyExistingManureStorage");
-                            }
-                        }
-                        TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = ex.Message;
-                        return RedirectToAction("OrganicMaterialStorageNotAvailable");
-                    }
-                    else if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
-                    {
-                        TempData["ErrorOnStorageCapacityManagement"] = ex.Message;
-                        return RedirectToAction("StorageCapacityManagement", new { q = model.EncryptedFarmID });
-
-                    }
-                    else
-                    {
-                        TempData["ErrorOnYear"] = ex.Message;
-                        return RedirectToAction("Year", "Report");
-
-                    }
-                }
-                else
-                {
-                    TempData["Error"] = ex.Message;
-                    return RedirectToAction("FarmSummary", "Farm", new { q = f });
-
-                }
-
+                _logger.LogTrace($"Exception in MaterialStates(): {ex.Message}, {ex.StackTrace}");
+                return await HandleMaterialStatesExceptionAsync(model, ex, f);
             }
-            return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MaterialStates(StorageCapacityViewModel model)
         {
             _logger.LogTrace("StorageCapacity Controller : MaterialStates() post action called");
+
             try
             {
-                if (model.MaterialStateID == null)
-                {
-                    ModelState.AddModelError("MaterialStateId", Resource.MsgSelectAnOptionBeforeContinuing);
-                }
-                Error error = null;
+                ValidateMaterialState(model);
+
                 if (!ModelState.IsValid)
                 {
-                    (List<CommonResponse> materialStateList, error) = await _storageCapacityLogic.FetchMaterialStates();
-                    if (error == null)
-                    {
-                        materialStateList.RemoveAll(x => x.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage);
-                        ViewBag.MaterialStateList = materialStateList;
-                    }
+                    await LoadMaterialStatesAsync();
                     return View(model);
                 }
-                var dirtyWater = (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage;
-                var slurry = (int)NMP.Commons.Enums.MaterialState.SlurryStorage;
-                var solid = (int)NMP.Commons.Enums.MaterialState.SolidManureStorage;
 
-                StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                var storageModel = GetStorageCapacityFromSession();
+
+                if (ShouldRedirectToCheckAnswer(model, storageModel))
                 {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
-                }
-                if (model.IsCheckAnswer)
-                {
-                    if (model.MaterialStateID == storageModel.MaterialStateID)
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
-                    else
-                    {
-                        if (model.MaterialStateID == solid && (storageModel.MaterialStateID == dirtyWater || storageModel.MaterialStateID == slurry))
-                        {
-                            model.StorageTypeID = null;
-                            model.StorageTypeName = null;
-                        }
-                        if ((model.MaterialStateID == dirtyWater || model.MaterialStateID == slurry) && storageModel.MaterialStateID == solid)
-                        {
-                            model.StorageTypeID = null;
-                            model.StorageTypeName = null;
-                        }
-                        model.IsMaterialTypeChange = true;
-                    }
+                    return RedirectToAction("CheckAnswer");
                 }
 
-                (CommonResponse materialState, error) = await _storageCapacityLogic.FetchMaterialStateById(model.MaterialStateID.Value);
-                if (error == null)
-                {
-                    model.MaterialStateName = materialState.Name;
-                }
+                HandleMaterialTypeChange(model, storageModel);
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                await PopulateMaterialStateNameAsync(model);
+
+                SaveStorageCapacityToSession(model);
+
                 return RedirectToAction("StoreName");
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in MaterialStates() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace(
+                    $"StorageCapacity Controller : Exception in MaterialStates() post action : {ex.Message}, {ex.StackTrace}");
+
                 TempData["ErrorOnMaterialStates"] = ex.Message;
                 return View(model);
             }
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> StoreName(string? f, string? y, string? isPlan, string? q, string? x, string? w)
+        public async Task<IActionResult> StoreName(string? f, string? isPlan, string? q, string? x, string? w)
         {
             _logger.LogTrace("StorageCapacity Controller : StoreName() action called");
-            StorageCapacityViewModel? model = new StorageCapacityViewModel();
-            Error? error = null;
+
+            StorageCapacityViewModel model = GetSessionModel();
+
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
-                {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
-                }
-                else
-                {
-                    //return RedirectToAction("FarmList", "Farm");
-                }
-                if (!string.IsNullOrWhiteSpace(f))
-                {
-                    int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
-                    {
-                        model.FarmName = farm.Name;
-                        model.FarmID = decryptedFarmId;
-                        model.EncryptedFarmID = f;
-                        if (!string.IsNullOrWhiteSpace(y))
-                        {
-                            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-                            model.EncryptedHarvestYear = y;
-                        }
-                        if (!string.IsNullOrWhiteSpace(isPlan))
-                        {
-                            model.IsComingFromPlan = isPlan;
-                        }
+                await PopulateFarmAndStoreCapacityAsync(model, f, isPlan, x, w);
+                await PopulateMaterialStateAsync(model, q);
 
-                        if (!string.IsNullOrWhiteSpace(x))
-                        {
-                            model.IsComingFromManageToHubPage = x;
-                        }
-                        if (!string.IsNullOrWhiteSpace(w))
-                        {
-                            model.IsRemovedRecently = w;
-                        }
-                        (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
-
-                        if (string.IsNullOrWhiteSpace(error.Message))
-                        {
-                            if (storeCapacityList.Count > 0)
-                            {
-                                ViewBag.StoreCapacityList = storeCapacityList;
-                                model.IsStoreCapacityExist = true;
-                            }
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrWhiteSpace(q))
-                {
-                    model.EncryptedMaterialStateID = q;
-                    model.MaterialStateID = Convert.ToInt32(_storageCapacityProtector.Unprotect(q));
-                    (CommonResponse materialState, error) = await _storageCapacityLogic.FetchMaterialStateById(model.MaterialStateID.Value);
-                    if (error == null)
-                    {
-                        model.MaterialStateName = materialState.Name;
-                    }
-                }
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model ?? new StorageCapacityViewModel());
+                SaveSessionModel(model);
+                return View(model);
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StoreName() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace($"Exception in StoreName(): {ex.Message}, {ex.StackTrace}");
                 TempData["ErrorOnMaterialStates"] = ex.Message;
                 return RedirectToAction("MaterialStates");
-
             }
-            return View(model);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -562,7 +221,7 @@ namespace NMP.Portal.Controllers
                 {
                     int? Id = !string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Convert.ToInt32(_storageCapacityProtector.Unprotect(model.EncryptedStoreCapacityId)) : null;
 
-                    (bool isStoreNameExists, Error error) = await _storageCapacityLogic.IsStoreNameExistAsync(model.FarmID ?? 0, model.Year ?? 0, model.StoreName, Id);
+                    (bool isStoreNameExists, Error error) = await _storageCapacityLogic.IsStoreNameExistAsync(model.FarmID ?? 0, model.StoreName, Id);
 
                     if (error == null)
                     {
@@ -577,7 +236,7 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (model.IsCheckAnswer)
                 {
                     if (!model.IsMaterialTypeChange)
@@ -587,7 +246,7 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 return RedirectToAction("StorageTypes");
             }
@@ -605,9 +264,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -688,9 +347,9 @@ namespace NMP.Portal.Controllers
                 }
 
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 if (model.IsCheckAnswer)
                 {
@@ -722,7 +381,7 @@ namespace NMP.Portal.Controllers
                         model.StorageTypeName = solidManureTypeResponse.Name;
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                 {
                     model.Length = null;
@@ -735,7 +394,7 @@ namespace NMP.Portal.Controllers
                     model.BankSlopeAngleID = null;
                     model.BankSlopeAngleName = null;
                     model.IsSlopeEdge = null;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                     return RedirectToAction("StorageBagCapacity");
                 }
                 else
@@ -758,9 +417,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -836,7 +495,7 @@ namespace NMP.Portal.Controllers
                                         ModelState.AddModelError("Circumference", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblCircumference.ToLower()));
                                     }
                                     model.Diameter = null;
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                                 }
                                 else
                                 {
@@ -845,7 +504,7 @@ namespace NMP.Portal.Controllers
                                         ModelState.AddModelError("Diameter", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDiameter.ToLower()));
                                     }
                                     model.Circumference = null;
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                                 }
                             }
                             if (model.Depth == null)
@@ -861,19 +520,155 @@ namespace NMP.Portal.Controllers
 
                 }
 
+                if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag)
+                {
+                    if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ||
+                        model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.SquareOrRectangularTank ||
+                        model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
+                    {
+                        if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblLength))
+                        {
+
+                            var lengthError = ModelState[Resource.lblLength]?.Errors.Count > 0 ?
+                                            ModelState[Resource.lblLength]?.Errors[0].ErrorMessage.ToString() : null;
+
+                            if (lengthError != null && lengthError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblLength]?.RawValue, Resource.lblLength)))
+                            {
+                                ModelState[Resource.lblLength]?.Errors.Clear();
+                                decimal decimalValue;
+                                if (decimal.TryParse(ModelState[Resource.lblLength]?.RawValue?.ToString(), out decimalValue))
+                                {
+                                    ModelState[Resource.lblLength]?.Errors.Add(lengthError);
+                                }
+                                else
+                                {
+                                    ModelState[Resource.lblLength]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                                }
+                            }
+                        }
+                        if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDepth))
+                        {
+
+                            var depthError = ModelState[Resource.lblDepth]?.Errors.Count > 0 ?
+                                            ModelState[Resource.lblDepth]?.Errors[0].ErrorMessage.ToString() : null;
+
+                            if (depthError != null && depthError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDepth]?.RawValue, Resource.lblDepth)))
+                            {
+                                ModelState[Resource.lblDepth]?.Errors.Clear();
+                                decimal decimalValue;
+                                if (decimal.TryParse(ModelState[Resource.lblDepth]?.RawValue?.ToString(), out decimalValue))
+                                {
+                                    ModelState[Resource.lblDepth]?.Errors.Add(depthError);
+                                }
+                                else
+                                {
+                                    ModelState[Resource.lblDepth]?.Errors.Add(Resource.MsgEnterAValueBetween0And99);
+                                }
+                            }
+                        }
+                        if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblWidth))
+                        {
+
+                            var widthError = ModelState[Resource.lblWidth]?.Errors.Count > 0 ?
+                                            ModelState[Resource.lblWidth]?.Errors[0].ErrorMessage.ToString() : null;
+
+                            if (widthError != null && widthError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblWidth]?.RawValue, Resource.lblWidth)))
+                            {
+                                ModelState[Resource.lblWidth]?.Errors.Clear();
+                                decimal decimalValue;
+                                if (decimal.TryParse(ModelState[Resource.lblWidth]?.RawValue?.ToString(), out decimalValue))
+                                {
+                                    ModelState[Resource.lblWidth]?.Errors.Add(widthError);
+                                }
+                                else
+                                {
+                                    ModelState[Resource.lblWidth]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                                }
+                            }
+                        }
+                    }
+                    else if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank && model.IsCircumference.HasValue)
+                    {
+                        if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCircumference) && model.IsCircumference.Value)
+                        {
+
+                            var circumferenceError = ModelState[Resource.lblCircumference]?.Errors.Count > 0 ?
+                                            ModelState[Resource.lblCircumference]?.Errors[0].ErrorMessage.ToString() : null;
+
+                            if (circumferenceError != null && circumferenceError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCircumference]?.RawValue, Resource.lblCircumference)))
+                            {
+                                ModelState[Resource.lblCircumference]?.Errors.Clear();
+                                ModelState[Resource.lblDiameter]?.Errors.Clear();
+                                decimal decimalValue;
+                                if (decimal.TryParse(ModelState[Resource.lblCircumference]?.RawValue?.ToString(), out decimalValue))
+                                {
+                                    ModelState[Resource.lblCircumference]?.Errors.Add(circumferenceError);
+                                }
+                                else
+                                {
+                                    ModelState[Resource.lblCircumference]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                                }
+                            }
+                        }
+                        else if (!model.IsCircumference.Value && (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDiameter))
+                        {
+                            var diameterError = ModelState[Resource.lblDiameter]?.Errors.Count > 0 ?
+                                            ModelState[Resource.lblDiameter]?.Errors[0].ErrorMessage.ToString() : null;
+
+                            if (diameterError != null && diameterError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDiameter]?.RawValue, Resource.lblDiameter)))
+                            {
+                                ModelState[Resource.lblCircumference]?.Errors.Clear();
+                                ModelState[Resource.lblDiameter]?.Errors.Clear();
+                                decimal decimalValue;
+                                if (decimal.TryParse(ModelState[Resource.lblDiameter]?.RawValue?.ToString(), out decimalValue))
+                                {
+                                    ModelState[Resource.lblDiameter]?.Errors.Add(diameterError);
+                                }
+                                else
+                                {
+                                    ModelState[Resource.lblDiameter]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                                }
+                            }
+                        }
+                        if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDepth))
+                        {
+
+                            var depthError = ModelState[Resource.lblDepth]?.Errors.Count > 0 ?
+                                            ModelState[Resource.lblDepth]?.Errors[0].ErrorMessage.ToString() : null;
+
+                            if (depthError != null && depthError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDepth]?.RawValue, Resource.lblDepth)))
+                            {
+                                ModelState[Resource.lblDepth]?.Errors.Clear();
+                                decimal decimalValue;
+                                if (decimal.TryParse(ModelState[Resource.lblDepth]?.RawValue?.ToString(), out decimalValue))
+                                {
+                                    ModelState[Resource.lblDepth]?.Errors.Add(depthError);
+                                }
+                                else
+                                {
+                                    ModelState[Resource.lblDepth]?.Errors.Add(Resource.MsgEnterAValueBetween0And99);
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
 
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
 
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
                     if (model.IsCheckAnswer)
@@ -919,9 +714,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -932,7 +727,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.SolidManureDensity = solidManureTypeResponse.Density;
                     model.CapacityWeight = Math.Round((model.Length * model.Width * model.Depth) * (solidManureTypeResponse.Density) ?? 0);  //solid manure weight capacity calculation
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
 
             }
@@ -951,25 +746,17 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : Dimension() post action called");
             try
             {
-                if (model.CapacityWeight == null)
-                {
-                    ModelState.AddModelError("WeightCapacity", Resource.MsgEnterTheWeightCapacityBeforeContinuing);
-                }
+                ValidateWeightCapacity(model);
 
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
-                //if (model.CapacityWeight != Math.Round((model.Length * model.Width * model.Depth) * (model.SolidManureDensity) ?? 0))
-                //{
-                //    model.Length = null;
-                //    model.Width = null;
-                //    model.Depth = null;
-                //}
+
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 if (model.IsCheckAnswer)
                 {
@@ -979,7 +766,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 return RedirectToAction("CheckAnswer");
             }
@@ -991,6 +778,36 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        private void ValidateWeightCapacity(StorageCapacityViewModel model)
+        {
+            if (model.CapacityWeight == null)
+            {
+                ModelState.AddModelError("WeightCapacity", Resource.MsgEnterTheWeightCapacityBeforeContinuing);
+            }
+
+            if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage &&
+                (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCapacityWeight))
+            {
+
+                var capacityWeightError = ModelState[Resource.lblCapacityWeight]?.Errors.Count > 0 ?
+                                ModelState[Resource.lblCapacityWeight]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (capacityWeightError != null && capacityWeightError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCapacityWeight]?.RawValue, Resource.lblCapacityWeight)))
+                {
+                    ModelState[Resource.lblCapacityWeight]?.Errors.Clear();
+                    decimal decimalValue;
+                    if (decimal.TryParse(ModelState[Resource.lblCapacityWeight]?.RawValue?.ToString(), out decimalValue))
+                    {
+                        ModelState[Resource.lblCapacityWeight]?.Errors.Add(capacityWeightError);
+                    }
+                    else
+                    {
+                        ModelState[Resource.lblCapacityWeight]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999999999);
+                    }
+                }
+
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> StorageBagCapacity()
         {
@@ -998,9 +815,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -1023,19 +840,15 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : StorageBagCapacity() post action called");
             try
             {
-                if (model.StorageBagCapacity == null)
-                {
-                    ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
-                }
-
+                ValidateStorageBagcapacity(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 if (model.IsCheckAnswer)
                 {
@@ -1044,7 +857,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("CheckAnswer");
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 return RedirectToAction("CheckAnswer");
             }
@@ -1056,14 +869,36 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        private void ValidateStorageBagcapacity(StorageCapacityViewModel model)
+        {
+            if (model.StorageBagCapacity == null)
+            {
+                ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
+            }
+
+            if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag &&
+                (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
+            {
+                var storageBagCapacityError = ModelState[Resource.lblStorageBagCapacity]?.Errors.Count > 0 ?
+                                ModelState[Resource.lblStorageBagCapacity]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (storageBagCapacityError != null && storageBagCapacityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblStorageBagCapacity]?.RawValue, Resource.lblStorageBagCapacity)) &&
+                    !decimal.TryParse(ModelState[Resource.lblStorageBagCapacity]?.RawValue?.ToString(), out _))
+                {
+                    ModelState[Resource.lblStorageBagCapacity]?.Errors.Clear();
+                    ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
+                }
+            }
+        }
+
         [HttpGet]
         public IActionResult SlopeQuestion()
         {
             _logger.LogTrace($"StorageCapacity Controller : SlopeQuestion() action called");
             StorageCapacityViewModel? model = new StorageCapacityViewModel();
-            if (HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            if (HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
             {
-                model = HttpContext.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                model = HttpContext.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
             }
             else
             {
@@ -1089,25 +924,25 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 if (model.IsCheckAnswer)
                 {
                     if (model.IsSlopeEdge == storageModel.IsSlopeEdge && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                         return RedirectToAction("CheckAnswer");
                     }
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (model.IsSlopeEdge == false)
                 {
                     model.BankSlopeAngleID = null;
                     model.Slope = null;
                     model.BankSlopeAngleName = null;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                     return RedirectToAction("CheckAnswer");
                 }
                 return RedirectToAction("BankSlopeAngle");
@@ -1127,9 +962,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -1191,7 +1026,7 @@ namespace NMP.Portal.Controllers
                     TempData["ErrorOnBankSlopeAngle"] = error.Message;
                     return RedirectToAction("BankSlopeAngle");
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 return RedirectToAction("CheckAnswer");
             }
@@ -1204,18 +1039,18 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer(string? id, string? q, string? r)
+        public async Task<IActionResult> CheckAnswer(string? storeCapId, string? q, string? r)
         {
             _logger.LogTrace("StorageCapacity Controller : CheckAnswer() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
                 Error error = null;
-                if (string.IsNullOrWhiteSpace(id))
+                if (string.IsNullOrWhiteSpace(storeCapId))
                 {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                     {
-                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                     }
                     else
                     {
@@ -1237,14 +1072,13 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    int storeCapacityId = Convert.ToInt32(_storageCapacityProtector.Unprotect(id));
+                    int storeCapacityId = Convert.ToInt32(_storageCapacityProtector.Unprotect(storeCapId));
                     (StoreCapacity storeCapacity, error) = await _storageCapacityLogic.FetchStoreCapacityByIdAsync(storeCapacityId);
 
                     model = new StorageCapacityViewModel
                     {
                         ID = storeCapacity.ID,
                         FarmID = storeCapacity.FarmID,
-                        Year = storeCapacity.Year,
                         StoreName = storeCapacity.StoreName,
                         MaterialStateID = storeCapacity.MaterialStateID,
                         StorageTypeID = storeCapacity.StorageTypeID,
@@ -1274,12 +1108,11 @@ namespace NMP.Portal.Controllers
                     {
                         model.IsComingFromPlan = r;
                     }
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
                         model.EncryptedFarmID = _farmDataProtector.Protect(storeCapacity.FarmID.ToString() ?? string.Empty);
-                        model.EncryptedHarvestYear = _farmDataProtector.Protect(storeCapacity.Year.ToString() ?? string.Empty);
                     }
 
                     (CommonResponse materialState, error) = await _storageCapacityLogic.FetchMaterialStateById(storeCapacity.MaterialStateID.Value);
@@ -1313,7 +1146,7 @@ namespace NMP.Portal.Controllers
                     }
                     model.IsCircumference = storeCapacity.Circumference != null ? true : false;
 
-                    model.EncryptedStoreCapacityId = id;
+                    model.EncryptedStoreCapacityId = storeCapId;
 
                 }
                 if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
@@ -1357,9 +1190,9 @@ namespace NMP.Portal.Controllers
                 model.IsCheckAnswer = true;
                 model.IsMaterialTypeChange = false;
                 model.IsStorageTypeChange = false;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(storeCapId))
                 {
                     _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityDataBeforeUpdate", model);
 
@@ -1462,7 +1295,7 @@ namespace NMP.Portal.Controllers
                                         ModelState.AddModelError("Circumference", Resource.MsgWhatIsTheCircumferenceNotSet);
                                     }
                                     model.Diameter = null;
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                                 }
                                 else
                                 {
@@ -1471,7 +1304,7 @@ namespace NMP.Portal.Controllers
                                         ModelState.AddModelError("Diameter", Resource.MsgWhatIsTheDiameterNotSet);
                                     }
                                     model.Circumference = null;
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                                 }
                             }
                             if (model.Depth == null)
@@ -1515,7 +1348,7 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
@@ -1531,7 +1364,6 @@ namespace NMP.Portal.Controllers
                 {
                     ID = !string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Convert.ToInt32(_storageCapacityProtector.Unprotect(model.EncryptedStoreCapacityId)) : null,
                     FarmID = model.FarmID,
-                    Year = model.Year,
                     StoreName = model.StoreName,
                     MaterialStateID = model.MaterialStateID,
                     StorageTypeID = model.StorageTypeID,
@@ -1556,7 +1388,7 @@ namespace NMP.Portal.Controllers
                 {
                     (StoreCapacity StoreCapacityData, error) = await _storageCapacityLogic.UpdateStoreCapacityAsync(storeCapacityData);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (!string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["ErrorOnCheckAnswer"] = error.Message;
@@ -1564,7 +1396,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    HttpContext?.Session.Remove("StorageCapacityData");
+                    HttpContext?.Session.Remove(_storageCapacityDataSessionKey);
                     bool success = true;
                     string successMsg = string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Resource.lblYouHaveAddedManureStorage : Resource.lblYouHaveUpdatedManureStorage;
 
@@ -1584,11 +1416,10 @@ namespace NMP.Portal.Controllers
 
                     return RedirectToAction(
                            actionName: "ManageStorageCapacity",
-                           controllerName: "StorageCapacity",
+                           controllerName: _storageCapacityActionName,
                            routeValues: new
                            {
                                q = model.EncryptedFarmID,
-                               y = model.EncryptedHarvestYear,
                                r = _reportDataProtector.Protect(successMsg),
                                s = _reportDataProtector.Protect(success.ToString()),
                                isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
@@ -1611,16 +1442,16 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : BackLivestockCheckAnswer() action called");
             StorageCapacityViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
             }
             else
             {
                 return RedirectToAction("FarmList", "Farm");
             }
             model.IsCheckAnswer = false;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
+            _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
             if (string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId))
             {
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
@@ -1655,9 +1486,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("ManageStorageCapacity", new
                 {
-                    q = model.EncryptedFarmID,
-                    y = model.EncryptedHarvestYear
-
+                    q = model.EncryptedFarmID
                 });
             }
 
@@ -1666,7 +1495,6 @@ namespace NMP.Portal.Controllers
         public static (decimal CapacityVolume, decimal? SurfaceArea) CalculateCapacityAndArea(StorageCapacityViewModel model)
         {
             int typeId = model.StorageTypeID ?? 0;
-            bool covered = model.IsCovered ?? false;
             decimal l = model.Length ?? 0m;
             decimal w = model.Width ?? 0m;
             decimal d = model.Depth ?? 0m;
@@ -1675,8 +1503,8 @@ namespace NMP.Portal.Controllers
             decimal slope = model.Slope ?? 0m;
             decimal freeboardDefault = model.FreeBoardHeight ?? 0m;
 
-            decimal freeboardToUse = covered ? 0m : freeboardDefault;
-            decimal effDepth = d - freeboardToUse;
+            //decimal freeboardToUse = covered ? 0m : freeboardDefault;// not using 
+            decimal effDepth = d - freeboardDefault;
             if (effDepth < 0m) effDepth = 0m;
 
             decimal capacity = 0m;
@@ -1698,19 +1526,18 @@ namespace NMP.Portal.Controllers
                     surfaceArea = (decimal)Math.PI * r * r;
                     break;
                 case (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon:
+                    surfaceArea = l * w;
+
                     if (model.IsSlopeEdge == false)
                     {
                         capacity = l * w * effDepth;
-                        surfaceArea = l * w;
                     }
                     else
                     {
-                        decimal areaBottom = l * w;
-                        decimal lengthTop = l + 2m * slope * effDepth;
-                        decimal widthTop = w + 2m * slope * effDepth;
-                        decimal areaTop = lengthTop * widthTop;
-                        capacity = (effDepth / 3m) * (areaBottom + areaTop + (decimal)Math.Sqrt((double)(areaBottom * areaTop)));
-                        surfaceArea = areaTop;
+                        decimal totalVolume = CalculateSlopedLagoonVolume(d, l, w, slope);
+                        decimal freeboardVolume = CalculateSlopedLagoonVolume(freeboardDefault, l, w, slope);
+
+                        capacity = totalVolume - freeboardVolume;
                     }
 
                     break;
@@ -1722,68 +1549,65 @@ namespace NMP.Portal.Controllers
 
             return (capacity, surfaceArea);
         }
+        private static decimal CalculateSlopedLagoonVolume(decimal h, decimal A, decimal B, decimal slope)
+        {
+            decimal a = Math.Max(0m, A - (h * slope));
+            decimal b = Math.Max(0m, B - (h * slope));
+
+            return (h / 6m) * ((A * b + a * B) + 2m * (a * b + A * B));
+        }
+
 
         [HttpGet]
-        public async Task<IActionResult> StorageCapacityReport(string q, string y, string? x, string v)
+        public async Task<IActionResult> StorageCapacityReport(string q, string? x, string v)
         {
             StorageCapacityViewModel model = new StorageCapacityViewModel();
+
             try
             {
-                if (!(string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(y)))
-                {
-                    if (!string.IsNullOrWhiteSpace(x))
-                    {
-                        model.IsComingFromManageToHubPage = x;
-                    }
-                    if (!string.IsNullOrWhiteSpace(v))
-                    {
-                        model.IsComingFromPlan = v;
-                        ViewBag.IsPlan = v;
-                    }
-                    model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                    model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-                    (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year);
-                    if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0)
-                    {
-                        (model.Farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message) && model.Farm != null)
-                        {
-                            model.EncryptedFarmID = q;
-                            model.EncryptedHarvestYear = y;
+                if (string.IsNullOrWhiteSpace(q))
+                    return View(model);
 
-                            List<StoreCapacityResponse> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).ToList();
-                            if (solidStoreCapacities.Count > 0)
-                            {
-                                ViewBag.SolidStoreCapacities = solidStoreCapacities;
-                            }
-                            List<StoreCapacityResponse> dirtyWaterStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage).ToList();
-                            if (dirtyWaterStoreCapacities.Count > 0)
-                            {
-                                ViewBag.DirtyWaterStoreCapacities = dirtyWaterStoreCapacities;
-                            }
-                            List<StoreCapacityResponse> slurryStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).ToList();
-                            if (slurryStoreCapacities.Count > 0)
-                            {
-                                ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
-                            }
-                        }
-                    }
-                }
+                PopulateNavigationFlagsReport(model, x, v);
+
+                model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+
+                var (storeCapacities, error) =
+                    await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value);
+
+                if (!IsValidResult(error, storeCapacities))
+                    return View(model);
+
+                var (farm, farmError) =
+                    await _farmLogic.FetchFarmByIdAsync(model.FarmID.Value);
+
+                if (!IsValidResult(farmError, farm))
+                    return View(model);
+
+                model.Farm = farm;
+                model.EncryptedFarmID = q;
+
+                PopulateStoreCapacitiesByMaterialState(storeCapacities);
+
+                return View(model);
             }
             catch (Exception ex)
             {
                 TempData["ErrorOnManageStorageCapacity"] = ex.Message;
                 _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() get action called");
+
                 return RedirectToAction("ManageStorageCapacity", new
                 {
                     q = q,
-                    y = y,
-                    t = x//IsComingFromManagementPage
+                    t = x
                 });
             }
-            _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() get action called");
-            return View(model);
+            finally
+            {
+                _logger.LogTrace("StorageCapacity Controller : StorageCapacityReport() get action called");
+            }
         }
+
 
         [HttpGet]
         public IActionResult Cancel()
@@ -1792,9 +1616,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -1818,9 +1642,9 @@ namespace NMP.Portal.Controllers
             {
                 try
                 {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                     {
-                        HttpContext?.Session.Remove("StorageCapacityData");
+                        HttpContext?.Session.Remove(_storageCapacityDataSessionKey);
                     }
                     if (!string.IsNullOrWhiteSpace(r))
                     {
@@ -1829,12 +1653,12 @@ namespace NMP.Portal.Controllers
                     ViewBag.EncryptedFarmId = q;
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     List<int> fixedYearList = GetReportYearsList();
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
                     {
                         ViewBag.FarmName = farm.Name;
                     }
-                    (List<StoreCapacityResponse> storeCapacities,error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(decryptedFarmId, null);
+                    (List<StoreCapacityResponse> storeCapacities, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmId(decryptedFarmId);
 
                     if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0)
                     {
@@ -1918,7 +1742,7 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["ErrorOnStorageCapacityManagement"] = ex.Message;
                     _logger.LogTrace("StorageCapacity Controller : StorageCapacityManagement() get action called");
-                    return RedirectToAction("FarmSummary", "Farm", new
+                    return RedirectToAction(_farmSummaryActionName, "Farm", new
                     {
                         id = q
                     });
@@ -1971,10 +1795,9 @@ namespace NMP.Portal.Controllers
                 if (model.IsStoreCapacityExist == true)
                 {
 
-                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
+                    return RedirectToAction("ManageStorageCapacity", _storageCapacityActionName, new
                     {
-                        q = model.EncryptedFarmID,
-                        y = model.EncryptedHarvestYear
+                        q = model.EncryptedFarmID
                     });
                 }
                 else
@@ -1990,7 +1813,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("FarmSummary", "Farm", new
+                        return RedirectToAction(_farmSummaryActionName, "Farm", new
                         {
                             id = model.EncryptedFarmID,
                         });
@@ -2001,80 +1824,25 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CopyExistingManureStorage(string q, string r, string? isPlan, string? x, string? v)
+        public async Task<IActionResult> CopyExistingManureStorage(string q, string? isPlan, string? x, string? v)
         {
             _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorage() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
-            }
-            else
-            {
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
-            }
+
+            StorageCapacityViewModel model = GetSessionModel();
+
             try
             {
-                if (!string.IsNullOrWhiteSpace(q))
-                {
-                    int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
-                    {
-                        model.FarmName = farm.Name;
-                        model.FarmID = decryptedFarmId;
-                        model.EncryptedFarmID = q;
-                        if (!string.IsNullOrWhiteSpace(r))
-                        {
-                            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
-                            model.EncryptedHarvestYear = r;
-                        }
-                        if (!string.IsNullOrWhiteSpace(isPlan))
-                        {
-                            model.IsComingFromPlan = isPlan;
-                        }
-                        if (!string.IsNullOrWhiteSpace(v))
-                        {
-                            model.IsComingFromMaterialToHubPage = v;
-                            model.IsComingFromManageToHubPage = v;
-                        }
-                        _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
-                    }
-                }
+                await PopulateFarmForCopyAsync(model, q, isPlan, v);
+                SaveSessionModel(model);
+
+                return View(model);
             }
             catch (Exception ex)
             {
-                if (model != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(model.IsComingFromPlan))
-                    {
-                        TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-                        return RedirectToAction("HarvestYearOverview", "Crop", new
-                        {
-                            id = model.EncryptedFarmID,
-                            year = model.EncryptedHarvestYear
-                        });
-                    }
-                    else if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
-                    {
-                        TempData["ErrorOnStorageCapacityManagement"] = ex.Message;
-                        return RedirectToAction("StorageCapacityManagement", new { q = model.EncryptedFarmID });
-                    }
-                    else
-                    {
-                        TempData["ErrorOnYear"] = ex.Message;
-                        return RedirectToAction("Year", "Report");
-                    }
-                }
-                else
-                {
-                    TempData["Error"] = ex.Message;
-                    return RedirectToAction("FarmSummary", "Farm", new { q = q });
-
-                }
+                return HandleCopyExistingException(ex, model, q);
             }
-            return View(model);
         }
+
         [HttpPost]
         public IActionResult CopyExistingManureStorage(StorageCapacityViewModel model)
         {
@@ -2091,7 +1859,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (!model.IsCopyExistingManureStorage.Value)
                 {
                     return RedirectToAction("MaterialStates");
@@ -2115,31 +1883,47 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CopyExistingManureStorageYearList()
         {
             _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorageYearList() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
-            {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
-            }
-            else
+
+            if (_httpContextAccessor.HttpContext == null ||
+                !_httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
             {
                 return RedirectToAction("FarmList", "Farm");
             }
+
+            var model = _httpContextAccessor.HttpContext.Session
+                .GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+
+            if (model == null || !model.FarmID.HasValue)
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
+
             try
             {
-                (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
+                var (storageCapacityList, error) =
+                    await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value);
+
+                if (string.IsNullOrWhiteSpace(error?.Message) && storageCapacityList.Any())
                 {
-                    ViewBag.YearList = storageCapacityList.Select(x => x.Year).Distinct().OrderByDescending(x => x.Value).ToList();
+                    ViewBag.YearList = storageCapacityList
+                        .Select(x => x.Year)
+                        .Distinct()
+                        .OrderByDescending(x => x.Value)
+                        .ToList();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorage() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex,
+                    "StorageCapacity Controller : Exception in CopyExistingManureStorageYearList");
+
                 TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
                 return RedirectToAction("CopyExistingManureStorage");
             }
+
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> CopyExistingManureStorageYearList(StorageCapacityViewModel model)
         {
@@ -2151,7 +1935,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("YearToCopyFrom", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
-                (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
+                (List<StoreCapacityResponse> storageCapacityList, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value);
                 if (string.IsNullOrWhiteSpace(error.Message) && storageCapacityList.Count > 0)
                 {
                     ViewBag.YearList = storageCapacityList.Select(x => x.Year).Distinct().OrderByDescending(x => x.Value).ToList();
@@ -2162,11 +1946,10 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityData", model);
+                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 var data = new
                 {
                     FarmID = model.FarmID.Value,
-                    Year = model.Year.Value,
                     CopyYear = model.YearToCopyFrom.Value
                 };
 
@@ -2189,11 +1972,9 @@ namespace NMP.Portal.Controllers
                         }
                     }
 
-                    model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                    return RedirectToAction("ManageStorageCapacity", "StorageCapacity", routeValues: new
+                    return RedirectToAction("ManageStorageCapacity", _storageCapacityActionName, routeValues: new
                     {
                         q = model.EncryptedFarmID,
-                        y = model.EncryptedHarvestYear,
                         r = _reportDataProtector.Protect(successMsgContent.ToString()),
                         s = _reportDataProtector.Protect(Resource.lblTrue),
                         isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
@@ -2223,9 +2004,9 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel model = new StorageCapacityViewModel();
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains("StorageCapacityData"))
+                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityData");
+                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
                 else
                 {
@@ -2264,16 +2045,15 @@ namespace NMP.Portal.Controllers
                 else
                 {
 
-                    (string message,Error error) = await _storageCapacityLogic.RemoveStorageCapacity(model.ID.Value);
+                    (string message, Error error) = await _storageCapacityLogic.RemoveStorageCapacity(model.ID.Value);
                     if (string.IsNullOrWhiteSpace(error.Message))
                     {
-                        (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, model.Year.Value);
+                        (List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value);
                         if (string.IsNullOrWhiteSpace(error.Message))
                         {
-                            return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
+                            return RedirectToAction("ManageStorageCapacity", _storageCapacityActionName, new
                             {
                                 q = model.EncryptedFarmID,
-                                y = model.EncryptedHarvestYear,
                                 r = _reportDataProtector.Protect(Resource.lblRemove),
                                 isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
                                 t = model.IsComingFromManageToHubPage,
@@ -2285,58 +2065,6 @@ namespace NMP.Portal.Controllers
                             TempData["ErrorOnRemove"] = error.Message;
                             return View("RemoveStorageCapacity", model);
                         }
-                        //(List<StoreCapacityResponse> storeCapacityList, error) = await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(model.FarmID.Value, null);
-                        //if (string.IsNullOrWhiteSpace(error.Message))
-                        //{
-                        //    string successMsg = string.Format(Resource.lblYouHaveRemovedJourneyName, Resource.lblManureStorage.ToLower());
-                        //    bool isHaveData = storeCapacityList.Any(x => x.Year == model.Year);
-                        //    if (isHaveData)
-                        //    {
-                        //        return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new
-                        //        {
-                        //            q = model.EncryptedFarmID,
-                        //            y = model.EncryptedHarvestYear,
-                        //            r = _reportDataProtector.Protect(Resource.lblRemove),
-                        //            isPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString()),
-                        //            t = model.IsComingFromManageToHubPage
-                        //        });
-                        //    }
-                        //    else if (storeCapacityList.Count > 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
-                        //    {
-                        //        return RedirectToAction("StorageCapacityManagement", "StorageCapacity",
-                        //            new
-                        //            {
-                        //                q = model.EncryptedFarmID,
-                        //                r = _storageCapacityProtector.Protect(successMsg)
-                        //            });
-                        //    }
-                        //    else
-                        //    {
-                        //        if (model.IsComingFromPlan.HasValue && (model.IsComingFromPlan.Value))
-                        //        {
-                        //            return RedirectToAction("NVZComplianceReports", "Report", new
-                        //            {
-                        //                q = _reportDataProtector.Protect(successMsg)
-                        //            });
-                        //        }
-                        //        else if (storeCapacityList.Count == 0 && ((!string.IsNullOrWhiteSpace(model.IsComingFromManageToHubPage)) || (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))))
-                        //        {
-                        //            return RedirectToAction("FarmSummary", "Farm", new
-                        //            {
-                        //                id = model.EncryptedFarmID,
-                        //                q = _farmDataProtector.Protect(Resource.lblTrue),
-                        //                r = _farmDataProtector.Protect(successMsg)
-                        //            });
-                        //        }
-                        //        else
-                        //        {
-                        //            return RedirectToAction("Year", "Report", new
-                        //            {
-                        //                q = _reportDataProtector.Protect(successMsg)
-                        //            });
-                        //        }
-                        //    }
-                        //}
                     }
                     else
                     {
@@ -2351,7 +2079,473 @@ namespace NMP.Portal.Controllers
                 return View("RemoveStorageCapacity", model);
 
             }
-            return View("RemoveStorageCapacity", model);
         }
+
+        private void ClearStorageSessions()
+        {
+            var session = _httpContextAccessor.HttpContext?.Session;
+            session?.Remove(_storageCapacityDataSessionKey);
+            session?.Remove("StorageCapacityDataBeforeUpdate");
+        }
+        private void PopulateFarmDetails(StorageCapacityViewModel model, FarmResponse farm, int farmId, string encryptedFarmId, string? isPlan, string? t)
+        {
+            model.FarmName = farm.Name;
+            model.FarmID = farmId;
+            model.EncryptedFarmID = encryptedFarmId;
+
+            if (!string.IsNullOrWhiteSpace(isPlan))
+            {
+                model.IsComingFromPlan = isPlan;
+                ViewBag.IsPlan = isPlan;
+            }
+
+            if (!string.IsNullOrWhiteSpace(t))
+                model.IsComingFromManageToHubPage = t;
+        }
+        private void HandleSuccessMessages(string? r, string? s, StorageCapacityViewModel model, List<StoreCapacityResponse> storeCapacityList)
+        {
+            if (string.IsNullOrWhiteSpace(r)) return;
+
+            string successMsg = _reportDataProtector.Unprotect(r);
+
+            if (successMsg == Resource.lblRemove)
+            {
+                TempData["succesMsgContent1"] =
+                    string.Format(Resource.lblYouHaveRemovedJourneyName,
+                    Resource.lblManureStorage.ToLower());
+
+                TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
+
+                if (storeCapacityList.Any())
+                    TempData["succesMsgContent3"] =
+                        Resource.lblCreateAnExistingManureStorageCapacityReport;
+            }
+            else
+            {
+                TempData["succesMsgContent1"] = successMsg;
+            }
+
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                ViewBag.isComingFromSuccessMsg =
+                    _reportDataProtector.Protect(Resource.lblTrue);
+
+                TempData["succesMsgContent1Detail"] =
+                    string.Format(
+                        Resource.MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe,
+                        model.FarmName);
+
+                TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
+                TempData["succesMsgContent3"] =
+                    Resource.lblCreateAnExistingManureStorageCapacityReport;
+            }
+        }
+        private async Task PopulateStorageLists(List<StoreCapacityResponse> storeCapacityList)
+        {
+            var (materialStates, _) = await _storageCapacityLogic.FetchMaterialStates();
+            if (!materialStates.Any()) return;
+
+            PopulateViewBagList(storeCapacityList, materialStates,
+                NMP.Commons.Enums.MaterialState.DirtyWaterStorage,
+                "DirtyWaterList");
+
+            PopulateViewBagList(storeCapacityList, materialStates,
+                NMP.Commons.Enums.MaterialState.SlurryStorage,
+                "SlurryStorageList");
+
+            PopulateViewBagList(storeCapacityList, materialStates,
+                NMP.Commons.Enums.MaterialState.SolidManureStorage,
+                "SolidManureStorageList");
+        }
+        private void PopulateViewBagList(List<StoreCapacityResponse> list, List<CommonResponse> materialStates, NMP.Commons.Enums.MaterialState state, string viewBagName)
+        {
+            if (!list.Any(x => x.MaterialStateID == (int)state))
+                return;
+
+            var materialStateName = materialStates
+                .FirstOrDefault(m => m.Id == (int)state)?.Name;
+
+            ViewData[viewBagName] = list
+                .Where(x => x.MaterialStateID == (int)state)
+                .Select(x => new
+                {
+                    MaterialStateName = materialStateName,
+                    x.StoreName,
+                    x.Length,
+                    x.Width,
+                    x.Depth,
+                    x.Diameter,
+                    x.CapacityWeight,
+                    x.CapacityVolume,
+                    x.Circumference,
+                    x.BankSlopeAngleID,
+                    x.SurfaceArea,
+                    x.StorageTypeID,
+                    x.StorageTypeName,
+                    x.SolidManureTypeName,
+                    EncryptedStoreCapacityId =
+                        _storageCapacityProtector.Protect(
+                            Convert.ToString(x.ID) ?? string.Empty)
+                })
+                .ToList();
+        }
+
+        private void PopulateTotals(List<StoreCapacityResponse> list)
+        {
+            ViewBag.TotalLiquidCapacity =
+                list.Where(x =>
+                    x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
+                    x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
+                .Sum(x => x.CapacityVolume);
+
+            ViewBag.TotalSolidCapacity =
+                list.Where(x =>
+                    x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                .Sum(x => x.CapacityVolume);
+
+            ViewBag.TotalSolidWeightCapacity =
+                list.Where(x =>
+                    x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                .Sum(x => x.CapacityWeight);
+
+            ViewBag.TotalSurfaceCapacity =
+                list.Where(x => x.IsCovered == false)
+                .Sum(x => x.SurfaceArea);
+        }
+
+        private void PopulateEncryptedStateIds()
+        {
+            ViewBag.EncryptedSolidStateId =
+                _storageCapacityProtector.Protect(((int)NMP.Commons.Enums.MaterialState.SolidManureStorage).ToString());
+
+            ViewBag.EncryptedSlurryStateId =
+                _storageCapacityProtector.Protect(((int)NMP.Commons.Enums.MaterialState.SlurryStorage).ToString());
+
+            ViewBag.EncryptedDirtyWaterStateId =
+                _storageCapacityProtector.Protect(((int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage).ToString());
+        }
+
+        private IActionResult RedirectToFarmSummary(string q, string error)
+        {
+            TempData["Error"] = error;
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { q });
+        }
+        private StorageCapacityViewModel GetOrCreateSessionModel()
+        {
+            if (_httpContextAccessor.HttpContext?.Session.Keys.Contains(_storageCapacityDataSessionKey) == true)
+            {
+                return _httpContextAccessor.HttpContext!
+                    .Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey)
+                    ?? new StorageCapacityViewModel();
+            }
+
+            var model = new StorageCapacityViewModel();
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+            return model;
+        }
+
+        private void SaveSessionModel(StorageCapacityViewModel model)
+        {
+            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+        }
+        private async Task LoadMaterialStatesAsync()
+        {
+            var (materialStates, error) = await _storageCapacityLogic.FetchMaterialStates();
+            if (error == null)
+            {
+                materialStates.RemoveAll(x =>
+                x.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage);
+
+                ViewBag.MaterialStateList = materialStates;
+            }
+        }
+        private async Task PopulateFarmDetailsAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? removedRecently)
+        {
+            if (string.IsNullOrWhiteSpace(encryptedFarmId))
+                return;
+
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
+            var (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+
+            if (!string.IsNullOrWhiteSpace(error?.Message) || farm == null)
+                return;
+
+            model.FarmName = farm.Name;
+            model.FarmID = farmId;
+            model.EncryptedFarmID = encryptedFarmId;
+            model.IsComingFromPlan = isPlan;
+            model.IsRemovedRecently = removedRecently;
+        }
+        private static void PopulateNavigationFlags(StorageCapacityViewModel model, string? manageToHub, string? materialToHub)
+        {
+            if (!string.IsNullOrWhiteSpace(manageToHub))
+                model.IsComingFromManageToHubPage = manageToHub;
+
+            if (!string.IsNullOrWhiteSpace(materialToHub))
+            {
+                model.IsComingFromMaterialToHubPage = materialToHub;
+                model.IsComingFromManageToHubPage = materialToHub;
+            }
+        }
+        private async Task CheckStoreCapacityAsync(StorageCapacityViewModel model)
+        {
+            int farmId = model.FarmID ?? 0;
+
+            var (storeCapacityList, error) =
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && storeCapacityList.Any())
+            {
+                model.IsStoreCapacityExist = true;
+            }
+        }
+        private async Task<IActionResult> HandleMaterialStatesExceptionAsync(StorageCapacityViewModel model, Exception ex, string? encryptedFarmId)
+        {
+            if (model == null)
+                return RedirectToAction(_farmSummaryActionName, "Farm", new { q = encryptedFarmId });
+
+            if (model.IsStoreCapacityExist)
+            {
+                var (list, _) =
+                    await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID ?? 0);
+
+                if (!list.Any())
+                {
+                    TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
+                    return RedirectToAction("CopyExistingManureStorage");
+                }
+
+                TempData["ErrorOnOrganicMaterialStorageNotAvailable"] = ex.Message;
+                return RedirectToAction("OrganicMaterialStorageNotAvailable");
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
+            {
+                TempData["ErrorOnStorageCapacityManagement"] = ex.Message;
+                return RedirectToAction("StorageCapacityManagement", new { q = model.EncryptedFarmID });
+            }
+
+            TempData["ErrorOnYear"] = ex.Message;
+            return RedirectToAction("Year", "Report");
+        }
+        private StorageCapacityViewModel GetSessionModel()
+        {
+            if (_httpContextAccessor.HttpContext?.Session.Keys.Contains(_storageCapacityDataSessionKey) == true)
+            {
+                return _httpContextAccessor.HttpContext!
+                    .Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey)
+                    ?? new StorageCapacityViewModel();
+            }
+
+            return new StorageCapacityViewModel();
+        }
+
+        
+        private async Task PopulateFarmAndStoreCapacityAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? manageToHub, string? removedRecently)
+        {
+            if (string.IsNullOrWhiteSpace(encryptedFarmId))
+                return;
+
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
+            var (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+
+            if (!string.IsNullOrWhiteSpace(error?.Message) || farm == null)
+                return;
+
+            model.FarmName = farm.Name;
+            model.FarmID = farmId;
+            model.EncryptedFarmID = encryptedFarmId;
+            model.IsComingFromPlan = isPlan;
+            model.IsComingFromManageToHubPage = manageToHub;
+            model.IsRemovedRecently = removedRecently;
+
+            var (storeCapacityList, storeError) =
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
+
+            if (string.IsNullOrWhiteSpace(storeError?.Message) && storeCapacityList.Any())
+            {
+                ViewBag.StoreCapacityList = storeCapacityList;
+                model.IsStoreCapacityExist = true;
+            }
+        }
+
+        private async Task PopulateMaterialStateAsync(StorageCapacityViewModel model, string? encryptedMaterialStateId)
+        {
+            if (string.IsNullOrWhiteSpace(encryptedMaterialStateId))
+                return;
+
+            model.EncryptedMaterialStateID = encryptedMaterialStateId;
+            model.MaterialStateID =
+                Convert.ToInt32(_storageCapacityProtector.Unprotect(encryptedMaterialStateId));
+
+            var (materialState, error) =
+                await _storageCapacityLogic.FetchMaterialStateById(model.MaterialStateID.Value);
+
+            if (error == null && materialState != null)
+            {
+                model.MaterialStateName = materialState.Name;
+            }
+        }
+        private void PopulateNavigationFlagsReport(StorageCapacityViewModel model, string? manageToHub, string? isPlan)
+        {
+            if (!string.IsNullOrWhiteSpace(manageToHub))
+            {
+                model.IsComingFromManageToHubPage = manageToHub;
+            }
+
+            if (!string.IsNullOrWhiteSpace(isPlan))
+            {
+                model.IsComingFromPlan = isPlan;
+                ViewBag.IsPlan = isPlan;
+            }
+        }
+        private static bool IsValidResult<T>(Error error, T result) where T : class
+        {
+            return string.IsNullOrWhiteSpace(error?.Message) && result != null;
+        }
+
+
+        private static bool IsValidResult<T>(Error error, List<T> result)
+        {
+            return string.IsNullOrWhiteSpace(error?.Message) && result.Any();
+        }
+        private void PopulateStoreCapacitiesByMaterialState(List<StoreCapacityResponse> storeCapacities)
+        {
+            List<StoreCapacityResponse> solidStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage).ToList();
+            if (solidStoreCapacities.Count > 0)
+            {
+                ViewBag.SolidStoreCapacities = solidStoreCapacities;
+            }
+            List<StoreCapacityResponse> dirtyWaterStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage).ToList();
+            if (dirtyWaterStoreCapacities.Count > 0)
+            {
+                ViewBag.DirtyWaterStoreCapacities = dirtyWaterStoreCapacities;
+            }
+            List<StoreCapacityResponse> slurryStoreCapacities = storeCapacities.Where(x => x.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage).ToList();
+            if (slurryStoreCapacities.Count > 0)
+            {
+                ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
+            }
+        }
+        
+        private async Task PopulateFarmForCopyAsync(StorageCapacityViewModel model, string encryptedFarmId, string? isPlan, string? materialToHub)
+        {
+            if (string.IsNullOrWhiteSpace(encryptedFarmId))
+                return;
+
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
+            var (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+
+            if (!string.IsNullOrWhiteSpace(error?.Message) || farm == null)
+                return;
+
+            model.FarmName = farm.Name;
+            model.FarmID = farmId;
+            model.EncryptedFarmID = encryptedFarmId;
+            model.IsComingFromPlan = isPlan;
+
+            if (!string.IsNullOrWhiteSpace(materialToHub))
+            {
+                model.IsComingFromMaterialToHubPage = materialToHub;
+                model.IsComingFromManageToHubPage = materialToHub;
+            }
+        }
+        private IActionResult HandleCopyExistingException(Exception ex, StorageCapacityViewModel model, string q)
+        {
+            if (model != null)
+            {
+                if (!string.IsNullOrWhiteSpace(model.IsComingFromPlan))
+                {
+                    TempData["ErrorOnHarvestYearOverview"] = ex.Message;
+                    return RedirectToAction("HarvestYearOverview", "Crop", new
+                    {
+                        id = model.EncryptedFarmID,
+                        year = model.EncryptedHarvestYear
+                    });
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
+                {
+                    TempData["ErrorOnStorageCapacityManagement"] = ex.Message;
+                    return RedirectToAction(
+                        "StorageCapacityManagement",
+                        new { q = model.EncryptedFarmID });
+                }
+
+                TempData["ErrorOnYear"] = ex.Message;
+                return RedirectToAction("Year", "Report");
+            }
+
+            TempData["Error"] = ex.Message;
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { q });
+        }
+        private static bool ShouldRedirectToCheckAnswer(StorageCapacityViewModel model, StorageCapacityViewModel storageModel)
+        {
+            return model.IsCheckAnswer &&
+                   model.MaterialStateID == storageModel.MaterialStateID;
+        }
+        private static void HandleMaterialTypeChange(StorageCapacityViewModel model, StorageCapacityViewModel storageModel)
+        {
+            if (!model.IsCheckAnswer)
+                return;
+
+            if (IsMaterialTypeChanged(
+                model.MaterialStateID,
+                storageModel.MaterialStateID))
+            {
+                model.StorageTypeID = null;
+                model.StorageTypeName = null;
+                model.IsMaterialTypeChange = true;
+            }
+        }
+        private static bool IsMaterialTypeChanged(int? current, int? previous)
+        {
+            int dirtyWater = (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage;
+            int slurry = (int)NMP.Commons.Enums.MaterialState.SlurryStorage;
+            int solid = (int)NMP.Commons.Enums.MaterialState.SolidManureStorage;
+
+            return
+                (current == solid && (previous == dirtyWater || previous == slurry)) ||
+                ((current == dirtyWater || current == slurry) && previous == solid);
+        }
+        private void ValidateMaterialState(StorageCapacityViewModel model)
+        {
+            if (model.MaterialStateID == null)
+            {
+                ModelState.AddModelError(
+                    "MaterialStateId",
+                    Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+        }
+        private StorageCapacityViewModel GetStorageCapacityFromSession()
+        {
+            if (_httpContextAccessor.HttpContext != null &&
+                _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+            {
+                return _httpContextAccessor.HttpContext
+                    .Session
+                    .GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+            }
+
+            return new StorageCapacityViewModel();
+        }
+        
+        private async Task PopulateMaterialStateNameAsync(StorageCapacityViewModel model)
+        {
+            var (materialState, error) =
+                await _storageCapacityLogic.FetchMaterialStateById(model.MaterialStateID.Value);
+
+            if (error == null)
+            {
+                model.MaterialStateName = materialState.Name;
+            }
+        }
+        private void SaveStorageCapacityToSession(StorageCapacityViewModel model)
+        {
+            _httpContextAccessor.HttpContext
+                ?.Session
+                .SetObjectAsJson(_storageCapacityDataSessionKey, model);
+        }
+
     }
 }

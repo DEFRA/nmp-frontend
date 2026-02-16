@@ -265,19 +265,19 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, confirm, fertiliserId, organicManureId);
     }
 
-    public async Task<(WindspeedResponse, Error)> FetchWindspeedById(int windspeedId)
+    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedById(int windspeedId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchWindspeedById() called");
         return await _organicManureService.FetchWindspeedById(windspeedId);
     }
 
-    public async Task<(WindspeedResponse, Error)> FetchWindspeedDataDefault()
+    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedDataDefault()
     {
         _logger.LogTrace("OrganicManureLogic : FetchWindspeedDataDefault() called");
         return await _organicManureService.FetchWindspeedDataDefault();
     }
 
-    public async Task<(List<WindspeedResponse>, Error)> FetchWindspeedList()
+    public async Task<(List<WindspeedResponse>, Error?)> FetchWindspeedList()
     {
         _logger.LogTrace("OrganicManureLogic : FetchWindspeedList() called");
         return await _organicManureService.FetchWindspeedList();

@@ -80,6 +80,12 @@ namespace NMP.Portal.Controllers
                     int currentYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
                     model.HarvestYear = currentYear - 1;
                     SetPreviousCroppingToSession(model);
+                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                    {
+                        model.FarmRB209CountryID = farm.RB209CountryID;
+                    }
                 }
             }
             catch (Exception ex)
@@ -245,29 +251,21 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
 
-                List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value);
-                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmID));
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value, model.FarmRB209CountryID);
 
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                ViewBag.CropTypeList = cropTypeList;
+                if (cropTypeList.Count == 1 && cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
                 {
-                    var country = (farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.England ||
-                        farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.Wales) ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
+                    model.CropTypeID = cropTypeList[0].CropTypeId;
+                    model.CropTypeName = cropTypeList[0].CropType;
+                    SetPreviousCroppingToSession(model);
 
-                    ViewBag.CropTypeList = cropTypeList;
-                    if (cropTypeList.Count == 1 && cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
+                    if (model.IsCheckAnswer)
                     {
-                        model.CropTypeID = cropTypeList[0].CropTypeId;
-                        model.CropTypeName = cropTypeList[0].CropType;
-                        SetPreviousCroppingToSession(model);
-
-                        if (model.IsCheckAnswer)
-                        {
-                            return RedirectToAction(_checkAnswerActionName);
-                        }
+                        return RedirectToAction(_checkAnswerActionName);
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -290,16 +288,8 @@ namespace NMP.Portal.Controllers
             }
             if (!ModelState.IsValid)
             {
-                List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value);
-                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmID));
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
-                {
-                    var country = (farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.England ||
-                        farm.CountryID.Value == (int)NMP.Commons.Enums.FarmCountry.Wales) ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-                    var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
-                    ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
-                }
+                List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value, model.FarmRB209CountryID);
+                ViewBag.CropTypeList = cropTypes;
 
                 return View(model);
             }
@@ -703,7 +693,7 @@ namespace NMP.Portal.Controllers
                 model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
                 model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
                 foreach (var year in model.PreviousGrassYears)
-                {                    
+                {
                     id = null;
                     if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
                     {
@@ -792,7 +782,7 @@ namespace NMP.Portal.Controllers
                     model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
                     model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
                     foreach (var year in model.PreviousGrassYears)
-                    {                       
+                    {
                         id = null;
                         if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
                         {
@@ -898,7 +888,7 @@ namespace NMP.Portal.Controllers
                 }
 
             }
-            
+
             var previousDataWrapper = new
             {
                 PreviousCroppings = previousCropping
@@ -906,7 +896,7 @@ namespace NMP.Portal.Controllers
 
             string jsonData = JsonConvert.SerializeObject(previousDataWrapper);
             (bool success, error) = await _previousCroppingLogic.MergePreviousCropping(jsonData);
-            
+
             if (string.IsNullOrWhiteSpace(error.Message) && success)
             {
                 RemovePreviousCroppingFromSession();
@@ -923,7 +913,7 @@ namespace NMP.Portal.Controllers
                 TempData["Error"] = error.Message;
                 List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
-                
+
                 if (model.CropGroupID != null)
                 {
                     ViewBag.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupID.Value);
@@ -945,9 +935,9 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Previous cropping Controller : BackCheckAnswer() action : PreviousCropping data is not available in session");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
-            
-            model.IsCheckAnswer = false;            
-            SetPreviousCroppingToSession(model);            
+
+            model.IsCheckAnswer = false;
+            SetPreviousCroppingToSession(model);
 
             if (model.HasGrassInLastThreeYear != null && model.HasGrassInLastThreeYear.Value)
             {
@@ -999,17 +989,17 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Cancel(PreviousCroppingViewModel model)
         {
             _logger.LogTrace("Previous cropping Controller : Cancel() post action called");
-            
+
             if (model.IsCancel == null)
             {
                 ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return await Task.FromResult(View("Cancel", model));
             }
-            
+
             if (model.IsCancel.HasValue && !model.IsCancel.Value)
             {
                 return await Task.FromResult(RedirectToAction(_checkAnswerActionName));

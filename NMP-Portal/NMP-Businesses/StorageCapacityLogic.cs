@@ -73,10 +73,10 @@ public class StorageCapacityLogic(ILogger<StorageCapacityLogic> logger, IStorage
         return await _storageCapacityService.FetchStorageTypes();
     }
 
-    public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmIdAndYear(int farmId, int? year)
+    public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmId(int farmId)
     {
         _logger.LogTrace("Fetching store capacity by FarmId and Year");
-        return await _storageCapacityService.FetchStoreCapacityByFarmIdAndYear(farmId, year);
+        return await _storageCapacityService.FetchStoreCapacityByFarmId(farmId);
     }
 
     public async Task<(StoreCapacity, Error)> FetchStoreCapacityByIdAsync(int id)
@@ -85,10 +85,10 @@ public class StorageCapacityLogic(ILogger<StorageCapacityLogic> logger, IStorage
         return await _storageCapacityService.FetchStoreCapacityByIdAsync(id);
     }
 
-    public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, int year, string storeName, int? ID)
+    public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, string storeName, int? ID)
     {
         _logger.LogTrace("Is store name exist");
-        return await _storageCapacityService.IsStoreNameExistAsync(farmId, year, storeName, ID);
+        return await _storageCapacityService.IsStoreNameExistAsync(farmId, storeName, ID);
     }
 
     public async Task<(string, Error)> RemoveStorageCapacity(int id)
