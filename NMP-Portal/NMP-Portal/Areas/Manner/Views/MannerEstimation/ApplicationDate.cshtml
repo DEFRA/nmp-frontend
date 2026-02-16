@@ -1,0 +1,53 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep13ViewModel
+
+@{
+    string title = Resource.lblMannerEstimate; 
+    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
+    ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "ManureType")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="ApplicationDate" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-date-input asp-for="ApplicationDate">
+                <govuk-date-input-fieldset>
+                    <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @pageHeader
+                    </govuk-date-input-fieldset-legend>
+                    <govuk-date-input-hint>
+                        <p class="govuk-body">
+                            @Resource.MsgManureApplyingDateDontHaveExactDate
+                        </p>
+                        @string.Format(Resource.lblSampleDate, DateTime.Now.Year - 1)
+                    </govuk-date-input-hint>
+
+                    <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                    <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                    <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
+                </govuk-date-input-fieldset>
+            </govuk-date-input>
+        @*     <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button> *@
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>
