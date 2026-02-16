@@ -37,6 +37,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()" />
     </div>
     @await Html.PartialAsync("~/views/shared/_cancelconfirmation.cshtml", cancelViewModel)
     <govuk-button type="submit" class="margin-bottom-forty">

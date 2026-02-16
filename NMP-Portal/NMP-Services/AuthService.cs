@@ -23,7 +23,7 @@ public class AuthService(ILogger<AuthService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(APIURLHelper.AddOrUpdateUserAsyncAPI,new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddOrUpdateUserAsyncAPI,new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
