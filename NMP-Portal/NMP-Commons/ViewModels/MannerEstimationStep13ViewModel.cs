@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep12ViewModel
+    public class MannerEstimationStep13ViewModel
     {
-        public int ManureGroupId { get; set; }
-        public string ManureGroupName { get; set; } = string.Empty;
-        public int? ManureTypeId { get; set; }
+        public DateTime? ApplicationDate { get; set; }
+        public string FieldName { get; set; } = string.Empty;
         public string ManureTypeName { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;
         public int FarmRB209CountryId { get; set; }

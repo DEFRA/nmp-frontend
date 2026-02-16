@@ -4,8 +4,8 @@
 @model MannerEstimationStep10ViewModel
 
 @{
-    string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblIsThisInNVZ} {Resource.lblHyphen} {title}";
+    string header = Resource.lblIsTheWheatEarlyOrLateSown;
+    ViewData["Title"] = $"{header} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = Model.IsCheckAnswer ? "CheckAnswer" : "CropType";
@@ -13,18 +13,18 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="NVZField" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="IsEarlySown" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsEarlySown">
 
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        
+                        @header
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value=@yes>@Resource.lblEarlySownContent</govuk-radios-item>
                     <govuk-radios-item value=@no>@Resource.lblLateSownContent</govuk-radios-item>

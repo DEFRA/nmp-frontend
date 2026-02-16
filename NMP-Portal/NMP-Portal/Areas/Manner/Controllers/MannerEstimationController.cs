@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NMP.Application;
 using NMP.Businesses;
 using NMP.Commons.Helpers;
+using NMP.Commons.Models;
 using NMP.Commons.Resources;
+using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Controllers;
 using System.Diagnostics.CodeAnalysis;
@@ -431,7 +434,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.SoilTypeList =await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
+                model = _mannerLogic.GetMannerEstimationStep7();
+                ViewBag.SoilTypesList =await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
                 return View(model);
             }
 
@@ -470,7 +474,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-            model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId??0);
+            model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId ?? 0);
             model = _mannerLogic.SetMannerEstimationStep8(model);
 
             return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropType");
@@ -513,36 +517,194 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId))
             {
-                return RedirectToAction("EarlyOrLateSown");
+                return RedirectToAction("IsEarlySown");
             }
 
-            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropType");
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ManureGroup");
         }
 
         [HttpGet]
-        public IActionResult EarlyOrLateSown()
+        public IActionResult IsEarlySown()
         {
-            _logger.LogTrace($"{_mannerEstimationControllerForLog} EarlyOrLateSown() action called");
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} IsEarlySown() action called");
             MannerEstimationStep10ViewModel model = _mannerLogic.GetMannerEstimationStep10();
             if (model == null)
             {
-                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in EarlyOrLateSown() action");
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsEarlySown() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IsEarlySown(MannerEstimationStep10ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} IsEarlySown() post action called");
+
+            if (model.IsEarlySown == null)
+            {
+                ModelState.AddModelError("IsEarlySown", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model = _mannerLogic.SetMannerEstimationStep10(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ManureGroup");
+        }
         [HttpGet]
         public async Task<IActionResult> ManureGroup()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() action called");
-            MannerEstimationStep9ViewModel model = _mannerLogic.GetMannerEstimationStep9();
+            MannerEstimationStep11ViewModel model = _mannerLogic.GetMannerEstimationStep11();
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManureGroup() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
+
+            (List<SelectListItem> manureGroupList, Error? error) = await FetchManureGroup();
+            if (error == null)
+            {
+                ViewBag.ManureGroupList = manureGroupList;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManureGroup(MannerEstimationStep11ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() post action called");
+
+            if (model.ManureGroupId == null)
+            {
+                ModelState.AddModelError("ManureGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            Error? error = null;
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep11();
+                (List<SelectListItem> manureGroupList, error) = await FetchManureGroup();
+                if (error == null)
+                {
+                    ViewBag.ManureGroupList = manureGroupList;
+                }
+                return View(model);
+            }
+
+            if (model.ManureGroupId.HasValue)
+            {
+                (CommonResponse manureGroup, error) = await _mannerLogic.FetchManureGroupById(model.ManureGroupId.Value);
+                if (error == null && manureGroup != null)
+                {
+                    model.ManureGroupName = manureGroup.Name;
+                }
+            }
+            model = _mannerLogic.SetMannerEstimationStep11(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ManureType");
+        }
+        private async Task<(List<SelectListItem>, Error?)> FetchManureGroup()
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            (List<CommonResponse> manureGroupList, Error? error) = await _mannerLogic.FetchManureGroupList();
+            if (error == null)
+            {
+                if (manureGroupList.Count > 0)
+                {
+                    selectListItems = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name.ToString()
+                    }).ToList();
+                }
+            }
+            return (selectListItems, error);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ManureType()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() action called");
+            MannerEstimationStep12ViewModel model = _mannerLogic.GetMannerEstimationStep12();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManureType() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            (List<SelectListItem> manureTypeList, Error? error) = await FetchManureType(model);
+            if (error == null)
+            {
+                ViewBag.ManureTypeList = manureTypeList;
+            }
+            return View(model);
+        }
+        private async Task<(List<SelectListItem>, Error?)> FetchManureType(MannerEstimationStep12ViewModel model)
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            (List<ManureType> manureTypeList, Error? error) = await _mannerLogic.FetchManureTypeList(model.ManureGroupId, model.FarmRB209CountryId);
+            if (error == null)
+            {
+                if (manureTypeList.Count > 0)
+                {
+                    selectListItems = manureTypeList.OrderBy(x => x.Name).Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name
+                    }).ToList();
+                }
+            }
+            return (selectListItems, error);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManureType(MannerEstimationStep12ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() post action called");
+
+            if (model.ManureTypeId == null)
+            {
+                ModelState.AddModelError("ManureTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            Error? error = null;
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep12();
+                (List<SelectListItem> manureTypeList, error) = await FetchManureType(model);
+                if (error == null)
+                {
+                    ViewBag.ManureTypeList = manureTypeList;
+                }
+                return View(model);
+            }
+
+            if (model.ManureTypeId.HasValue)
+            {
+                (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+                if (error == null && manureType != null && !string.IsNullOrWhiteSpace(manureType.Name))
+                {
+                    model.ManureTypeName = manureType.Name;
+                }
+            }
+            model = _mannerLogic.SetMannerEstimationStep12(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ApplicationDate");
+        }
+        [HttpGet]
+        public IActionResult ApplicationDate()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationDate() action called");
+            MannerEstimationStep13ViewModel model = _mannerLogic.GetMannerEstimationStep13();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
             return View(model);
         }
     }

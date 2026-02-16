@@ -8,8 +8,9 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationStep11ViewModel
     {
-        public int ManureGroupId { get; set; }
+        public int? ManureGroupId { get; set; }
         public string ManureGroupName { get; set; } = string.Empty;
-        public bool IsCheckAnswer { get; set; } = false;
+        public bool IsCheckAnswer { get; set; } = false; 
+        public int CropTypeId { get; set; }
     }
 }

@@ -7639,6 +7639,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the wheat early or late sown?.
+        /// </summary>
+        public static string lblIsTheWheatEarlyOrLateSown {
+            get {
+                return ResourceManager.GetString("lblIsTheWheatEarlyOrLateSown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this a new sward or existing sward?.
         /// </summary>
         public static string lblIsThisANewSwardOrExistingSward {
@@ -16872,6 +16881,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatTypeOfManureGroupAreYouUsingInThisApplication {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfManureGroupAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of {0} would you like use?.
+        /// </summary>
+        public static string lblWhatTypeOfManureGroupWouldYouLikeUse {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfManureGroupWouldYouLikeUse", resourceCulture);
             }
         }
         

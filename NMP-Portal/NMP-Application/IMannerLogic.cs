@@ -33,6 +33,12 @@ public interface IMannerLogic
     MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9);
     MannerEstimationStep10ViewModel GetMannerEstimationStep10();
     MannerEstimationStep10ViewModel SetMannerEstimationStep10(MannerEstimationStep10ViewModel mannerEstimationStep10);
+    MannerEstimationStep11ViewModel GetMannerEstimationStep11();
+    MannerEstimationStep11ViewModel SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11);
+    MannerEstimationStep12ViewModel GetMannerEstimationStep12();
+    MannerEstimationStep12ViewModel SetMannerEstimationStep12(MannerEstimationStep12ViewModel mannerEstimationStep12);
+    MannerEstimationStep13ViewModel GetMannerEstimationStep13();
+    MannerEstimationStep13ViewModel SetMannerEstimationStep13(MannerEstimationStep13ViewModel mannerEstimationStep13);
     Task<decimal> FetchRainfallAverageAsync(string postcode);
     Task<List<SoilTypesResponse>> FetchSoilTypes();
     Task<Country?> FetchCountryById(int id);
