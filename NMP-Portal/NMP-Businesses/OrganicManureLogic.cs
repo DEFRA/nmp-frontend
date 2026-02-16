@@ -80,13 +80,8 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchFieldWithSameDateAndManureType() called");
         return await _organicManureService.FetchFieldWithSameDateAndManureType(fertiliserId, farmId, harvestYear);
     }
-
-    
-    public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
-    {
-        _logger.LogTrace("OrganicManureLogic : FetchIsPerennialByCropTypeId() called");
-        return await _organicManureService.FetchIsPerennialByCropTypeId(cropTypeId);
-    }
+       
+   
 
     public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {

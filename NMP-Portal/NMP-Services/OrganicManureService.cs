@@ -526,39 +526,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (moistureTypeResponse, error);
     }
-    public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
-    {
-        Error? error = null;
-        bool isPerennial = false;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    isPerennial = cropTypeLinkingResponse?.IsPerennial ?? false;
-                }
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            _logger.LogError(hre, hre.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.Message);
-        }
-        return isPerennial;
-    }
+  
 
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {

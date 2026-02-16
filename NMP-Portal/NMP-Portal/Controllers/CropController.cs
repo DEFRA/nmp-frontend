@@ -20,7 +20,7 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IOrganicManureLogic organicManureLogic,
+     IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic,
      IPreviousCroppingLogic previousCroppingLogic,IMannerLogic mannerLogic) : Controller
 {
     private readonly ILogger<CropController> _logger = logger;
@@ -30,7 +30,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
-    private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private readonly IMannerLogic _mannerLogic = mannerLogic;
     private const string _cropInfoTwoActionName = "CropInfoTwo";
@@ -1371,7 +1370,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
             }
 
-            bool isPerennial = await _organicManureLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
+            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
             //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
             DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00, 00, 00, DateTimeKind.Unspecified);

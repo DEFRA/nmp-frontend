@@ -21,7 +21,6 @@ public interface IOrganicManureLogic
     Task<(List<RainTypeResponse>, Error)> FetchRainTypeList();
     Task<(List<WindspeedResponse>, Error?)> FetchWindspeedList();
     Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList();
-    Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
     Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
     Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDate(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
     Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year, bool confirm);

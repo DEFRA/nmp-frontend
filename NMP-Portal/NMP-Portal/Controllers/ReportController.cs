@@ -2831,7 +2831,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     (ManureType? manureType, Error? manureTypeError) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                    model.ManureType = manureType ?? new Commons.Models.ManureType();
+                    if (manureTypeError == null && manureType != null)
+                    {
+                        model.ManureType = manureType;
+                    }
 
                     if (error == null)
                     {
@@ -2963,7 +2966,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     (ManureType? manureType, Error? manureTypeError) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                    model.ManureType = manureType??new Commons.Models.ManureType();
+                    model.ManureType = manureType ?? new Commons.Models.ManureType();
                     if (error == null)
                     {
                         if (farmManureTypeList.Count > 0)
