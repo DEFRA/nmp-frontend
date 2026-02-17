@@ -249,6 +249,58 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep10();
     }
+
+    public MannerEstimationStep11ViewModel GetMannerEstimationStep11()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep11.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep11.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId??0;
+        return mannerEstimationViewModel.MannerEstimationStep11;
+    }
+
+    public MannerEstimationStep11ViewModel SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep11 = mannerEstimationStep11;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep11();
+    }
+
+    public MannerEstimationStep12ViewModel GetMannerEstimationStep12()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep12.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep12.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId??0;
+        mannerEstimationViewModel.MannerEstimationStep12.ManureGroupName = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName;
+        mannerEstimationViewModel.MannerEstimationStep12.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId??0;
+        return mannerEstimationViewModel.MannerEstimationStep12;
+    }
+
+    public MannerEstimationStep12ViewModel SetMannerEstimationStep12(MannerEstimationStep12ViewModel mannerEstimationStep12)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep12 = mannerEstimationStep12;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep12();
+    }
+
+    public MannerEstimationStep13ViewModel GetMannerEstimationStep13()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep13.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep13.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
+        mannerEstimationViewModel.MannerEstimationStep13.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        return mannerEstimationViewModel.MannerEstimationStep13;
+    }
+
+    public MannerEstimationStep13ViewModel SetMannerEstimationStep13(MannerEstimationStep13ViewModel mannerEstimationStep13)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep13 = mannerEstimationStep13;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep13();
+    }
     public async Task<List<SoilTypesResponse>> FetchSoilTypes()
     {
         _logger.LogTrace("Fetching soil types");
@@ -267,6 +319,65 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         _logger.LogTrace("Fetching country by id");
         return await _mannerService.FetchCountryById(id);
+    }
+    public async Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId)
+    {
+        _logger.LogTrace("MannerLogic : FetchManureGroupById() called");
+        return await _mannerService.FetchManureGroupById(manureGroupId);
+    }
+
+    public async Task<(List<CommonResponse>, Error?)> FetchManureGroupList()
+    {
+        _logger.LogTrace("MannerLogic : FetchManureGroupList() called");
+        return await _mannerService.FetchManureGroupList();
+    }
+
+    public async Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId)
+    {
+        _logger.LogTrace("MannerLogic : FetchManureTypeByManureTypeId() called");
+        return await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
+    }
+
+    public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
+    {
+        _logger.LogTrace("MannerLogic : FetchManureTypeList() called");
+        (List<ManureType> manures, Error? error) = await _mannerService.FetchManureTypeList(manureGroupId, countryId);
+        return (manures.OrderBy(m => m.SortOrder).ToList(), error);
+    }
+    public async Task<(string, Error)> FetchApplicationMethodById(int Id)
+    {
+        _logger.LogTrace("MannerLogic : FetchApplicationMethodById() called");
+        return await _mannerService.FetchApplicationMethodById(Id);
+    }
+
+    public async Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid)
+    {
+        _logger.LogTrace("MannerLogic : FetchApplicationMethodList() called");
+        return await _mannerService.FetchApplicationMethodList(fieldType, isLiquid);
+    }
+
+    public async Task<(string, Error)> FetchIncorporationDelayById(int Id)
+    {
+        _logger.LogTrace("MannerLogic : FetchIncorporationDelayById() called");
+        return await _mannerService.FetchIncorporationDelayById(Id);
+    }
+
+    public async Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor)
+    {
+        _logger.LogTrace("MannerLogic : FetchIncorporationDelaysByMethodIdAndApplicableFor() called");
+        return await _mannerService.FetchIncorporationDelaysByMethodIdAndApplicableFor(methodId, applicableFor);
+    }
+
+    public async Task<(string, Error)> FetchIncorporationMethodById(int Id)
+    {
+        _logger.LogTrace("ManureLogic : FetchIncorporationMethodById() called");
+        return await _mannerService.FetchIncorporationMethodById(Id);
+    }
+
+    public async Task<(List<IncorporationMethodResponse>, Error?)> FetchIncorporationMethodsByApplicationId(int appId, string? applicableFor)
+    {
+        _logger.LogTrace("MannerLogic : FetchIncorporationMethodsByApplicationId() called");
+        return await _mannerService.FetchIncorporationMethodsByApplicationId(appId, applicableFor);
     }
 
 

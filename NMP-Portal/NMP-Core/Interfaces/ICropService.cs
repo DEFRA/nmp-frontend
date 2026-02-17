@@ -46,4 +46,6 @@ public interface ICropService
     Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
     Task<(bool, Error)> MergeCrop(string cropData);
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId,int year);
+
+    Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
 }

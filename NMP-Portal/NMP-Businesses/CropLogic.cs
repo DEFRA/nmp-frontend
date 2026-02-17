@@ -246,4 +246,9 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         _logger.LogTrace("SnsAnalysisLogic : FetchSnsAnalysisByCropIdAsync() called");
         return await _snsAnalysisService.FetchSnsAnalysisByCropIdAsync(cropId);
     }
+    public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
+    {
+        _logger.LogTrace("CropLogic : FetchIsPerennialByCropTypeId() called");
+        return await _cropService.FetchIsPerennialByCropTypeId(cropTypeId);
+    }
 }

@@ -31,8 +31,30 @@ public interface IMannerLogic
 
     MannerEstimationStep9ViewModel GetMannerEstimationStep9();
     MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9);
+    MannerEstimationStep10ViewModel GetMannerEstimationStep10();
+    MannerEstimationStep10ViewModel SetMannerEstimationStep10(MannerEstimationStep10ViewModel mannerEstimationStep10);
+    MannerEstimationStep11ViewModel GetMannerEstimationStep11();
+    MannerEstimationStep11ViewModel SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11);
+    MannerEstimationStep12ViewModel GetMannerEstimationStep12();
+    MannerEstimationStep12ViewModel SetMannerEstimationStep12(MannerEstimationStep12ViewModel mannerEstimationStep12);
+    MannerEstimationStep13ViewModel GetMannerEstimationStep13();
+    MannerEstimationStep13ViewModel SetMannerEstimationStep13(MannerEstimationStep13ViewModel mannerEstimationStep13);
     Task<decimal> FetchRainfallAverageAsync(string postcode);
     Task<List<SoilTypesResponse>> FetchSoilTypes();
     Task<Country?> FetchCountryById(int id);
     Task<List<SoilTypesResponse>> FetchSoilTypesByRB209CountryId(int rb209CountryId);
+    Task<(List<CommonResponse>, Error?)> FetchManureGroupList();
+    Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId);
+    Task<(CommonResponse, Error?)> FetchManureGroupById(int manureGroupId);
+
+    Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId);
+
+    Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid);
+
+    Task<(List<IncorporationMethodResponse>, Error?)> FetchIncorporationMethodsByApplicationId(int appId, string? applicableFor);
+    Task<(List<IncorprationDelaysResponse>, Error)> FetchIncorporationDelaysByMethodIdAndApplicableFor(int methodId, string applicableFor);
+
+    Task<(string, Error)> FetchApplicationMethodById(int Id);
+    Task<(string, Error)> FetchIncorporationMethodById(int Id);
+    Task<(string, Error)> FetchIncorporationDelayById(int Id);
 }

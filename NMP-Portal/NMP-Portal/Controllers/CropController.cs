@@ -20,8 +20,8 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IOrganicManureLogic organicManureLogic,
-     IPreviousCroppingLogic previousCroppingLogic) : Controller
+     IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic,
+     IPreviousCroppingLogic previousCroppingLogic,IMannerLogic mannerLogic) : Controller
 {
     private readonly ILogger<CropController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -30,8 +30,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
-    private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
+    private readonly IMannerLogic _mannerLogic = mannerLogic;
     private const string _cropInfoTwoActionName = "CropInfoTwo";
     private const string _cropDataSessionKey = "CropData";
     private const string _plansAndRecordsOverviewActionName = "PlansAndRecordsOverview";
@@ -1370,7 +1370,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
             }
 
-            bool isPerennial = await _organicManureLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
+            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
             //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
             DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00, 00, 00, DateTimeKind.Unspecified);
@@ -3400,7 +3400,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedFieldName = _cropDataProtector.Protect(m.Field.ToString()));
                                 foreach (var organic in harvestYearPlans.OrganicManureList)
                                 {
-                                    (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
+                                    (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
                                     if (error == null && manureType != null)
                                     {
                                         organic.RateUnit = manureType.IsLiquid.HasValue && manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
@@ -3804,7 +3804,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
-        Error error = null;
+        Error? error = null;
         int decryptedFarmId = 0;
         int decryptedFieldId = 0;
         int decryptedHarvestYear = 0;
@@ -4148,7 +4148,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     {
                                         foreach (var item in recData.OrganicManures)
                                         {
-                                            (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
+                                            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
                                             if (error == null && manureType != null)
                                             {
                                                 var orgManure = new OrganicManureDataViewModel

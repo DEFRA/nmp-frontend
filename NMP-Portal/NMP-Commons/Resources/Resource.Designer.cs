@@ -7639,6 +7639,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the wheat early or late sown?.
+        /// </summary>
+        public static string lblIsTheWheatEarlyOrLateSown {
+            get {
+                return ResourceManager.GetString("lblIsTheWheatEarlyOrLateSown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this a new sward or existing sward?.
         /// </summary>
         public static string lblIsThisANewSwardOrExistingSward {
@@ -16876,6 +16885,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of {0} would you like use?.
+        /// </summary>
+        public static string lblWhatTypeOfManureGroupWouldYouLikeUse {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfManureGroupWouldYouLikeUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of organic material are you {0}?.
         /// </summary>
         public static string lblWhatTypeOfOrganicMaterialAreYouImportingOrExporting {
@@ -16899,6 +16917,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication {
             get {
                 return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of organic material would you like use?.
+        /// </summary>
+        public static string lblWhatTypeOfOrganicMaterialWouldYouLikeUse {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfOrganicMaterialWouldYouLikeUse", resourceCulture);
             }
         }
         
