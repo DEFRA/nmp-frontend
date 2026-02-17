@@ -1842,7 +1842,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     }
                     else if (!isDecimal)
                     {
-                        errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
+                        errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, nutrientNameWithFormula));
                     }
                 }
             }
