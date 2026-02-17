@@ -8531,7 +8531,7 @@ namespace NMP.Portal.Controllers
 
                                     string jsonString = JsonConvert.SerializeObject(jsonData);
                                     (List<OrganicManure> organicManures, error) = await _organicManureLogic.UpdateOrganicManure(jsonString);
-                                    if (string.IsNullOrWhiteSpace(error.Message) && organicManures.Count > 0)
+                                    if (error == null && organicManures.Count > 0)
                                     {
                                         bool success = true;
                                         HttpContext.Session.Remove(_organicManureSessionKey);
