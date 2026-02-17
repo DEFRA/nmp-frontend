@@ -1262,7 +1262,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
         {
-            if (int.TryParse(model.PotassiumIndexValue, out int value))
+            string potassiumIndex = model.PotassiumIndexValue.Replace(" ", "");
+            if (int.TryParse(potassiumIndex, out int value))
             {
                 if (value > 9 || value < 0)
                 {
@@ -1275,8 +1276,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
             else
             {
-                if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
-                                       (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
+                if ((potassiumIndex.ToString() != Resource.lblTwoMinus) &&
+                                       (potassiumIndex.ToString() != Resource.lblTwoPlus))
                 {
                     ModelState.AddModelError("PotassiumIndexValue", Resource.MsgValidationForPotasium);
                 }
@@ -1706,6 +1707,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
             {
+                model.PotassiumIndexValue=model.PotassiumIndexValue.Replace(" ", "");
                 if (model.PotassiumIndexValue == Resource.lblTwoMinus)
                 {
                     model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);
