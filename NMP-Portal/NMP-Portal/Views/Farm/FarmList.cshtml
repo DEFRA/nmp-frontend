@@ -18,7 +18,7 @@ else
             @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
-                    <govuk-notification-banner-heading> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</govuk-notification-banner-heading>
+                    <govuk-notification-banner-heading class="text-wrap-anywhere"> @string.Format(Resource.lblYouHaveRemoved, ViewBag.FarmName)</govuk-notification-banner-heading>
                 </govuk-notification-banner>
             }
             <h1 class="govuk-heading-l">

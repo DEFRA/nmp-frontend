@@ -22,9 +22,9 @@
                     @if (@TempData["successMsg"] == null)
                     {
                         <div class="">
-                            <h3 class="govuk-notification-banner__heading"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
+                            <h3 class="govuk-notification-banner__heading text-wrap-anywhere"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
                             <p class="govuk-body"></p>
-                            <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                            <a class="govuk-notification-banner__link text-wrap-anywhere" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
                         </div>
                     }
                     else
@@ -37,7 +37,7 @@
             }
 
             <div id="farm-title">
-                <h1 class="govuk-heading-xl">@Model.Name</h1>
+                <h1 class="govuk-heading-xl text-wrap-anywhere">@Model.Name</h1>
                 <p class="govuk-body address">@Model.FullAddress</p>
                 @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
                 {

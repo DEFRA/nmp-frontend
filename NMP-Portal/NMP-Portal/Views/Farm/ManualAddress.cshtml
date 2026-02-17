@@ -17,7 +17,7 @@
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)            
             <govuk-fieldset>
-                <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                <govuk-fieldset-legend class="govuk-fieldset__legend--l text-wrap-anywhere">
                     @(string.Format(Resource.lblEnterTheAddressFor, Model.Name))
                 </govuk-fieldset-legend>
                 <govuk-input asp-for="@Model.Address1"></govuk-input>

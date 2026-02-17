@@ -847,3 +847,7 @@ hr.seperator_five_report {
     border: 0;
     background: transparent;
 }
+.text-wrap-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
