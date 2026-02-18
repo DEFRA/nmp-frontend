@@ -37,7 +37,7 @@
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)            
             <govuk-radios asp-for="@Model.FieldsAbove300SeaLevel">
                 <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l text-wrap-anywhere">
                         @string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@AllFieldsAbove300m">@Resource.lblAllTheFieldsAreAbove300m</govuk-radios-item>

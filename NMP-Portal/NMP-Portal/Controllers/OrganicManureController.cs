@@ -8602,7 +8602,7 @@ namespace NMP.Portal.Controllers
         [HttpGet]
         public async Task<IActionResult> DoubleCrop(string q)
         {
-            _logger.LogTrace($"Organic Manure Controller : DoubleCrop({q}) action called");
+            _logger.LogTrace("Organic Manure Controller : DoubleCrop() action called");
             OrganicManureViewModel model = new OrganicManureViewModel();
             if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
             {
