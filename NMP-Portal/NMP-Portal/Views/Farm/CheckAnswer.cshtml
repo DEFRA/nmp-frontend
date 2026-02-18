@@ -81,7 +81,7 @@
                     <govuk-error-summary-item href="#passport-issued-day">@TempData["AddFarmError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <h1 class="govuk-heading-l">
+            <h1 class="govuk-heading-l text-wrap-anywhere">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblCheckYourAnswers)
             </h1>
                       

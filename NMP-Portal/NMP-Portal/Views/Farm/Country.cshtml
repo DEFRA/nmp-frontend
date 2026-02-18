@@ -19,7 +19,7 @@
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)            
             <govuk-radios asp-for="@Model.CountryID">
                 <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l text-wrap-anywhere">
                         @string.Format(Resource.lblWhichCountryIsIn, Model.Name)
                     </govuk-radios-fieldset-legend>
                     @if (ViewBag.CountryList != null)
