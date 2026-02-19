@@ -15,7 +15,7 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
         {
             string? closedPeriod = null;
-            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            DateTime september16 = new DateTime(harvestYear - 1, 9, 16,00,00,00, DateTimeKind.Unspecified);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
@@ -81,13 +81,13 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? closedPeriod = null;
-            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            //DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
-            DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
+            //DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
 
             if (isFieldTypeGrass)
             {
@@ -202,44 +202,25 @@ namespace NMP.Portal.Helpers
                     string startMonthStr = match.Groups[2].Value;
                     int endDay = int.Parse(match.Groups[3].Value);
                     string endMonthStr = match.Groups[4].Value;
+                    Dictionary<int, string> dtfi = GetMonths();
+                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
 
-                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                    dtfi.Add(0, Resource.lblJanuary);
-                    dtfi.Add(1, Resource.lblFebruary);
-                    dtfi.Add(2, Resource.lblMarch);
-                    dtfi.Add(3, Resource.lblApril);
-                    dtfi.Add(4, Resource.lblMay);
-                    dtfi.Add(5, Resource.lblJune);
-                    dtfi.Add(6, Resource.lblJuly);
-                    dtfi.Add(7, Resource.lblAugust);
-                    dtfi.Add(8, Resource.lblSeptember);
-                    dtfi.Add(9, Resource.lblOctober);
-                    dtfi.Add(10, Resource.lblNovember);
-                    dtfi.Add(11, Resource.lblDecember);
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
-
-                    DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
-                    DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
+                    DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+                    DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
 
                     int applicationMonth = applicationDate.Month;
-                    int applicationDay = applicationDate.Day;
 
-                    if (startMonth <= endMonth)
+
+                    if (startMonth <= endMonth && applicationMonth >= startMonth && applicationMonth <= endMonth && applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
                     {
-                        if (applicationMonth >= startMonth && applicationMonth <= endMonth)
-                        {
-                            if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
-                            {
-                                isWithinClosedPeriod = true;
-                            }
-                        }
+                        isWithinClosedPeriod = true;
                     }
                     if (startMonth > endMonth)
                     {
                         if (applicationDate >= closedPeriodEnd)
                         {
-                            DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
+                            DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                             if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
                             {
                                 isWithinClosedPeriod = true;
@@ -247,22 +228,37 @@ namespace NMP.Portal.Helpers
                         }
                         if (applicationDate <= closedPeriodEnd)
                         {
-                            DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                            DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
 
                             if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= closedPeriodEnd)
                             {
                                 isWithinClosedPeriod = true;
                             }
                         }
-
-
                     }
-
                     return isWithinClosedPeriod;
                 }
             }
 
             return isWithinClosedPeriod;
+        }
+
+        private static Dictionary<int, string> GetMonths()
+        {
+            Dictionary<int, string> dtfi = new Dictionary<int, string>();
+            dtfi.Add(0, Resource.lblJanuary);
+            dtfi.Add(1, Resource.lblFebruary);
+            dtfi.Add(2, Resource.lblMarch);
+            dtfi.Add(3, Resource.lblApril);
+            dtfi.Add(4, Resource.lblMay);
+            dtfi.Add(5, Resource.lblJune);
+            dtfi.Add(6, Resource.lblJuly);
+            dtfi.Add(7, Resource.lblAugust);
+            dtfi.Add(8, Resource.lblSeptember);
+            dtfi.Add(9, Resource.lblOctober);
+            dtfi.Add(10, Resource.lblNovember);
+            dtfi.Add(11, Resource.lblDecember);
+            return dtfi;
         }
 
         public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string? closedPeriod, decimal? applicationRate, bool isSlurry, bool isPoultryManure)
@@ -299,15 +295,15 @@ namespace NMP.Portal.Helpers
                     string endMonthFullName = dtfi[endMonth - 1];
 
                     DateTime? endDateFebruary = null;
-                    endDateFebruary = new DateTime(applicationDate.Year, 3, 1);
+                    endDateFebruary = new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
 
-                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay);
-                    DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
+                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00,00,00, DateTimeKind.Unspecified);
+                    DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day, 00, 00, 00, DateTimeKind.Unspecified);
 
 
                     if (startMonth < endMonth)
                     {
-                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay);
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                         {
                             if (isSlurry)
@@ -330,7 +326,7 @@ namespace NMP.Portal.Helpers
                     {
                         if (applicationDate > ClosedPeriodEndDate)
                         {
-                            DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay);
+                            DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                             if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
                             {
                                 if (isSlurry)
@@ -349,7 +345,7 @@ namespace NMP.Portal.Helpers
                                 }
                             }
 
-                            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                             if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                             {
                                 if (isSlurry)
@@ -452,7 +448,7 @@ namespace NMP.Portal.Helpers
         public bool? CheckEndClosedPeriodAndFebruary(DateTime applicationDate, string? closedPeriod)
         {
             bool? isWithinClosedPeriodAndFebruary = null;
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+            const string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
             Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
@@ -464,60 +460,39 @@ namespace NMP.Portal.Helpers
                     int endDay = int.Parse(match.Groups[3].Value);
                     string endMonthStr = match.Groups[4].Value;
 
-                    //DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
-                    //int startMonth = Array.IndexOf(dtfi.MonthNames, startMonthStr) + 1;
-                    //int endMonth = Array.IndexOf(dtfi.MonthNames, endMonthStr) + 1;
-                    //string endMonthFullName = dtfi.MonthNames[endMonth - 1];
 
-                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                    dtfi.Add(0, Resource.lblJanuary);
-                    dtfi.Add(1, Resource.lblFebruary);
-                    dtfi.Add(2, Resource.lblMarch);
-                    dtfi.Add(3, Resource.lblApril);
-                    dtfi.Add(4, Resource.lblMay);
-                    dtfi.Add(5, Resource.lblJune);
-                    dtfi.Add(6, Resource.lblJuly);
-                    dtfi.Add(7, Resource.lblAugust);
-                    dtfi.Add(8, Resource.lblSeptember);
-                    dtfi.Add(9, Resource.lblOctober);
-                    dtfi.Add(10, Resource.lblNovember);
-                    dtfi.Add(11, Resource.lblDecember);
+                    Dictionary<int, string> dtfi = GetMonths();                    
                     int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
-                    string endMonthFullName = dtfi[endMonth - 1];
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;                   
 
                     DateTime? endDateFebruary = null;
-                    endDateFebruary = new DateTime(applicationDate.Year, 3, 1);
+                    endDateFebruary = new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
 
-                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay);
-                    DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day);
+                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+                    DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day, 00, 00, 00, DateTimeKind.Unspecified);
 
 
                     if (startMonth < endMonth)
                     {
-                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay);
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                         {
                             isWithinClosedPeriodAndFebruary = true;
                         }
                     }
-                    if (startMonth > endMonth)
+                    if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
-                        if (applicationDate > ClosedPeriodEndDate)
+                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
                         {
-                            DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay);
-                            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
-                            {
-                                isWithinClosedPeriodAndFebruary = true;
-                            }
-
-                            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay);
-                            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
-                            {
-                                isWithinClosedPeriodAndFebruary = true;
-                            }
+                            isWithinClosedPeriodAndFebruary = true;
                         }
 
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                        {
+                            isWithinClosedPeriodAndFebruary = true;
+                        }
                     }
 
                 }
@@ -529,7 +504,7 @@ namespace NMP.Portal.Helpers
         public string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? WarningPeriod = null;
-            DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            DateTime september16 = new DateTime(harvestYear - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified);
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
@@ -537,7 +512,7 @@ namespace NMP.Portal.Helpers
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
 
-            DateTime endDateFebruary = new DateTime(harvestYear, 2, 28);
+            DateTime endDateFebruary = new DateTime(harvestYear, 2, 28, 00, 00, 00, DateTimeKind.Unspecified);
             int lastDayOfFeb = endDateFebruary.Day;
 
             if (isFieldTypeGrass)
@@ -689,8 +664,8 @@ namespace NMP.Portal.Helpers
                     int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
                     int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
 
-                    DateTime warningPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay);
-                    DateTime warningPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay);
+                    DateTime warningPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+                    DateTime warningPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
 
                     int applicationMonth = applicationDate.Month;
                     int applicationDay = applicationDate.Day;
@@ -709,7 +684,7 @@ namespace NMP.Portal.Helpers
                     {
                         if (applicationDate >= warningPeriodEnd)
                         {
-                            DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay);
+                            DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                             if (applicationDate >= warningPeriodStart && applicationDate <= closedPeriodEndNextYear)
                             {
                                 isWithinWarningPeriod = true;
@@ -717,7 +692,7 @@ namespace NMP.Portal.Helpers
                         }
                         if (applicationDate <= warningPeriodEnd)
                         {
-                            DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay);
+                            DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
 
                             if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= warningPeriodEnd)
                             {
