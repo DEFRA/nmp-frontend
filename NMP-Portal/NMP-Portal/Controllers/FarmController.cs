@@ -229,8 +229,45 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-
+            if(model.CountryID==(int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("BusinessInformation");
+            }
             return RedirectToAction("PostCode");
+        }
+
+        [HttpGet]
+        public IActionResult BusinessInformation()
+        {
+            _logger.LogTrace("Farm Controller : BusinessInformation() action called");
+            FarmViewModel? model = GetFarmFromSession();
+            if (model == null)
+            {
+                model = new FarmViewModel();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BusinessInformation(FarmViewModel model)
+        {
+            _logger.LogTrace("Farm Controller : BusinessInformation() post action called");
+
+            if (string.IsNullOrWhiteSpace(model.BusinessName))
+            {
+                ModelState.AddModelError("BusinessName", Resource.MsgEnterTheBusinessName);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            SetFarmToSession(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("PostCode");
         }
 
         [HttpGet]
