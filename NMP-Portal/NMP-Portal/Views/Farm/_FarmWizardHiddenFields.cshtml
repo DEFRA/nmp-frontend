@@ -50,6 +50,12 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode" />
     }
+    @if (currentStep != (int)FarmWizardSteps.BusinessInformation)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BusinessName" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SBI" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CPH" />
+    }
 
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />

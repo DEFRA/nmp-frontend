@@ -7,10 +7,12 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.Name)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)FarmWizardSteps.Postcode;
+    bool isScotland = Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+    var actionName = Model.IsCheckAnswer ? "CheckAnswer" : (isScotland ? "BusinessInformation" : "FarmingRules");
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmingRules")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@actionName" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

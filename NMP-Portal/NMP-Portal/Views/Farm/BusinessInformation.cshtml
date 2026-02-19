@@ -1,0 +1,51 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model FarmViewModel
+
+@{
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
+    ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = (int)FarmWizardSteps.BusinessInformation;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmingRules")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="BusinessInformation" method="post" asp-controller="Farm" autocomplete="off">
+            @Html.AntiForgeryToken()
+            @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
+            <h1 class="govuk-heading-l">
+                @string.Format(Resource.lblBusinessInformationFor, Model.Name)
+            </h1>
+            <govuk-input asp-for="@Model.BusinessName">
+                <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheBusinessName</govuk-input-label>
+            </govuk-input>
+            <govuk-input asp-for="@Model.SBI">
+                <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheBusinessReferenceNumber</govuk-input-label>
+                <govuk-input-hint>@Resource.lblForExample123456</govuk-input-hint>
+            </govuk-input>
+            <govuk-input asp-for="@Model.CPH">
+                <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheMainLocationCode</govuk-input-label>
+                <govuk-input-hint>@Resource.lblForExample223334444</govuk-input-hint>
+            </govuk-input>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (Model != null && (Model.IsCheckAnswer))
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+            }
+            else
+            {
+
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>
