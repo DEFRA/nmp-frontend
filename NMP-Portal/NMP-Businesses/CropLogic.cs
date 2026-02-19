@@ -32,7 +32,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.CopyCropNutrientManagementPlan(farmID, harvestYear, copyYear, isOrganic, isFertiliser);
     }
 
-    public async Task<(Crop, Error)> FetchCropById(int id)
+    public async Task<(Crop?, Error?)> FetchCropById(int id)
     {
         _logger.LogTrace("Fetching crop by ID: {CropId}", id);
         return await _cropService.FetchCropById(id);
@@ -127,13 +127,13 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchGrassSeasons();
     }
 
-    public async Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId)
+    public async Task<(List<HarvestYearPlanResponse>, Error?)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId)
     {
         _logger.LogTrace("Fetching harvest year plans for FarmId: {FarmId}, HarvestYear: {HarvestYear}", farmId, harvestYear);
         return await _cropService.FetchHarvestYearPlansByFarmId(harvestYear, farmId);
     }
 
-    public async Task<(HarvestYearResponseHeader, Error)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId)
+    public async Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId)
     {
         _logger.LogTrace("Fetching harvest year plan details for FarmId: {FarmId}, HarvestYear: {HarvestYear}", farmId, harvestYear);
         return await _cropService.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
@@ -145,7 +145,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchManagementperiodByCropId(cropId, isShortSummary);
     }
 
-    public async Task<(ManagementPeriod, Error)> FetchManagementperiodById(int id)
+    public async Task<(ManagementPeriod?, Error?)> FetchManagementperiodById(int id)
     {
         _logger.LogTrace("Fetching management period by ID: {Id}", id);
         return await _cropService.FetchManagementperiodById(id);
@@ -169,7 +169,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchPotentialCutsBySwardTypeIdAndSwardManagementId(swardTypeId, swardManagementId);
     }
 
-    public async Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear)
+    public async Task<(List<RecommendationHeader>, Error?)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear)
     {
         _logger.LogTrace("Fetching recommendations for FieldId: {FieldId}, HarvestYear: {HarvestYear}", fieldId, harvestYear);
         return await _cropService.FetchRecommendationByFieldIdAndYear(fieldId, harvestYear);
@@ -217,7 +217,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(sequenceId, grassGrowthClassId);
     }
 
-    public async Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId)
+    public async Task<(bool, Error?)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId)
     {
         _logger.LogTrace("Checking if crop group name exists for update: {CropGroupName} in FarmId: {FarmId}, Year: {Year}", cropGroupName, farmId, year);
         return await _cropService.IsCropsGroupNameExistForUpdate(cropIds, cropGroupName, year, farmId);
@@ -229,7 +229,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.MergeCrop(cropData);
     }
 
-    public async Task<(string, Error)> RemoveCropPlan(List<int> cropIds)
+    public async Task<(string, Error?)> RemoveCropPlan(List<int> cropIds)
     {
         _logger.LogTrace("Removing crop plans for CropIds: {CropIds}", string.Join(", ", cropIds));
         return await _cropService.RemoveCropPlan(cropIds);

@@ -8,10 +8,10 @@ public interface ICropService
     Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId);
     Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId();
     Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId, int type);
-    Task<(List<HarvestYearPlanResponse>, Error)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId);
+    Task<(List<HarvestYearPlanResponse>, Error?)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId);
 
     Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData);
-    Task<(List<RecommendationHeader>, Error)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear);
+    Task<(List<RecommendationHeader>, Error?)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear);
     Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id);
     Task<string> FetchCropInfo2NameByCropInfo2Id(int cropInfo2Id);
 
@@ -19,12 +19,12 @@ public interface ICropService
 
     Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland);
     Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
-    Task<(HarvestYearResponseHeader, Error)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
+    Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
     Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId);
-    Task<(ManagementPeriod, Error)> FetchManagementperiodById(int id);
-    Task<(Crop, Error)> FetchCropById(int id);
-    Task<(string, Error)> RemoveCropPlan(List<int> cropIds);
-    Task<(bool, Error)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year, int farmId);
+    Task<(ManagementPeriod?, Error?)> FetchManagementperiodById(int id);
+    Task<(Crop?, Error?)> FetchCropById(int id);
+    Task<(string, Error?)> RemoveCropPlan(List<int> cropIds);
+    Task<(bool, Error?)> IsCropsGroupNameExistForUpdate(string cropIds,string cropGroupName,int year, int farmId);
     Task<(List<Crop>, Error)> UpdateCrop(string cropData);
     Task<List<GrassSeasonResponse>> FetchGrassSeasons();
     Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
