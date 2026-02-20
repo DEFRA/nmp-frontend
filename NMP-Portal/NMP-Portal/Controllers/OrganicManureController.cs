@@ -8002,7 +8002,7 @@ namespace NMP.Portal.Controllers
 
                         string jsonString = JsonConvert.SerializeObject(result);
                         (string success, error) = await _organicManureLogic.DeleteOrganicManureByIdAsync(jsonString);
-                        if (string.IsNullOrWhiteSpace(error.Message))
+                        if (error==null)
                         {
                             HttpContext.Session.Remove(_organicManureSessionKey);
                             if (model.IsComingFromRecommendation)
