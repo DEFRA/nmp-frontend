@@ -56,6 +56,16 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SBI" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CPH" />
     }
+    @if (currentStep != (int)FarmWizardSteps.NitrateVulnerableZones)
+    {
+        @if (Model.NitrateVulnerableZoneList != null && Model.NitrateVulnerableZoneList.Count > 0)
+        {
+            @for (int i = 0; i < Model.NitrateVulnerableZoneList.Count; i++)
+            {
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrateVulnerableZoneList[i]" value="@Model.NitrateVulnerableZoneList[i]" />
+            }
+        }
+    }
 
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />

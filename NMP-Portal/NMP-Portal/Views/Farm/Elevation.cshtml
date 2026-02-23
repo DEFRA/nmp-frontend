@@ -15,7 +15,11 @@
     }
     else
     {
-        if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+        if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ)
+        {
+            backAction = "NitrateVulnerableZones";
+        }
+        else if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
         {
             backAction = "Rainfall";
         }
