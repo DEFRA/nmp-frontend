@@ -1761,7 +1761,7 @@ namespace NMP.Portal.Controllers
                 if (snsAnalysis != null)
                 {
                     (string message, Error error) = await _snsAnalysisLogic.RemoveSnsAnalysisAsync(snsAnalysis.ID.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message) && (!string.IsNullOrWhiteSpace(message)))
+                    if (string.IsNullOrWhiteSpace(error?.Message) && (!string.IsNullOrWhiteSpace(message)))
                     {
                         return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(string.Format(Resource.MsgYourDataSuccessfullyRemoved, Resource.lblSoilNitrogenSupplyAnalysis)) });
                     }

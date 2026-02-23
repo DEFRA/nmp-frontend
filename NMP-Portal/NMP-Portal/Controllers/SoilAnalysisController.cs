@@ -74,7 +74,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace("SoilAnalysisController: farms/{J} called.", j);
                     (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
 
-                    if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                    if (error != null && string.IsNullOrWhiteSpace(error?.Message))
                     {
                         int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(j));
                         _logger.LogTrace("SoilAnalysisController: fields/{FieldId} called.", fieldId);
@@ -842,7 +842,7 @@ namespace NMP.Portal.Controllers
                 int soilAnalysisId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
                 (string success, Error error) = await _soilAnalysisLogic.DeleteSoilAnalysisByIdAsync(soilAnalysisId);
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     _ = _soilAnalysisDataProtector.Protect(Resource.lblFalse);
                     TempData["RemoveSoilAnalysisError"] = error.Message;
