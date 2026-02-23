@@ -9,28 +9,30 @@ using System.Security.Principal;
 
 namespace NMP.Portal.Controllers
 {
+
+
     [AllowAnonymous]
-    public class AccountController(ILogger<AccountController> logger) : Controller
+    public class AccountController(ILogger<AccountController> logger, IConfiguration configuration) : Controller
     {
         private readonly ILogger _logger = logger;
-
+        private readonly IConfiguration _configuration = configuration;
         public async Task<IActionResult> Logout()
         {
-            _logger.LogTrace("Account Controller : Logout action called");            
+            _logger.LogTrace("Account Controller : Logout action called");
             HttpContext.Session.Clear();
-            return await Task.FromResult( SignOut(
-                new AuthenticationProperties
-                {
-                    RedirectUri = Url.Action("Index", "Home")
-                },
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                OpenIdConnectDefaults.AuthenticationScheme
+            return await Task.FromResult(SignOut(
+            new AuthenticationProperties
+            {
+                RedirectUri = $"{_configuration["CusromerIdentityBaseUrl"]}idphub/b2c/{_configuration["CustomerIdentityPolicyId"]}/signout"
+            },
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            OpenIdConnectDefaults.AuthenticationScheme
             ));
         }
 
         public IActionResult ChangeOrganisation()
         {
             return RedirectToAction("SignIn", "Account", new { Area = "MicrosoftIdentity", redirectUri = "/Farm/FarmList" });
-        }           
+        }
     }
 }
