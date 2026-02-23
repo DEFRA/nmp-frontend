@@ -19,6 +19,7 @@ using OpenTelemetry.Trace;
 using Polly;
 using Polly.Extensions.Http;
 using StackExchange.Redis; // Add this at the top of the file
+using System;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -209,20 +210,9 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 else
-{
-    // Configure the HTTP request pipeline.    
-    app.Use(async (ctx, next) =>
-    {
-        await next();
-        if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-        {
-            //Re-execute the request so the user gets the error page
-            string originalPath = ctx.Request.Path.Value;
-            ctx.Items["originalPath"] = originalPath;
-            ctx.Request.Path = "/Error/404";
-            await next();
-        }
-    });
+{        
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
@@ -231,9 +221,9 @@ else
 app.Use(async (context, next) =>
 {
     // Do work that doesn't write to the Response.
-    if (context.Request.Method is "OPTIONS" or "TRACE" or "HEAD")
+    if (context.Request.Method == HttpMethods.Trace)
     {
-        context.Response.StatusCode = 405;
+        context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
         return;
     }
     await next.Invoke();
