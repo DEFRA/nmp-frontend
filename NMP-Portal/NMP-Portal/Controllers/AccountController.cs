@@ -23,7 +23,8 @@ namespace NMP.Portal.Controllers
             return await Task.FromResult(SignOut(
             new AuthenticationProperties
             {
-                RedirectUri = $"{_configuration["CusromerIdentityBaseUrl"]}idphub/b2c/{_configuration["CustomerIdentityPolicyId"]}/signout"
+                RedirectUri = Url.Action("SignOut", "Account", new { Area = "MicrosoftIdentity" })
+                //$"{_configuration["CusromerIdentityBaseUrl"]}idphub/b2c/{_configuration["CustomerIdentityPolicyId"]}/signout"
             },
             CookieAuthenticationDefaults.AuthenticationScheme,
             OpenIdConnectDefaults.AuthenticationScheme

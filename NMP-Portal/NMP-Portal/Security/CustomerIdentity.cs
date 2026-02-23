@@ -153,6 +153,7 @@ namespace NMP.Portal.Security
 
         private static async Task OnSignedOutCallbackRedirect(RemoteSignOutContext context)
         {
+            var uri = context.Properties.RedirectUri;
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -175,7 +176,24 @@ namespace NMP.Portal.Security
         /// <param name="context"></param>
         /// <returns></returns>
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
-        {            
+        {
+            var logoutUri = configuration?["CusromerIdentityBaseUrl"] + "idphub/b2c/" + configuration?["CustomerIdentityPolicyId"] + "/signout";
+            string postLogoutUri = context.Options.SignedOutCallbackPath.ToString();   //configuration?["CustomerIdentitySignedOutCallbackPath"];
+            
+            if (!string.IsNullOrEmpty(postLogoutUri))
+            {
+                if (postLogoutUri.StartsWith('/'))
+                {
+                    var request = context.Request;
+                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+                }
+                logoutUri += "?post_logout_redirect_uri=" + Uri.EscapeDataString(postLogoutUri);
+            }
+            context.Response.Redirect(logoutUri);
+            context.HandleResponse();
+
+
+
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
