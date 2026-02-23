@@ -318,4 +318,23 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (excessWinterRainfallOption, error);
     }
+    public async Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId)
+    {
+        List<NvzActionProgramResponse> nvzActionProgramResponses = new List<NvzActionProgramResponse>();
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(ApiurlHelper.FetchNvzActionProgramsByCountryIdAsyncAPI, countryId);
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                nvzActionProgramResponses.AddRange(responseWrapper?.Data.ToObject<List<NvzActionProgramResponse>>());
+            }
+        }
+
+        return nvzActionProgramResponses;
+    }
 }

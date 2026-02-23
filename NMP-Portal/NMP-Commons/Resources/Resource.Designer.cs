@@ -15868,6 +15868,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/&quot;  target=&quot;_blank&quot;&gt;View a map of Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window)..
+        /// </summary>
+        public static string lblViewAMapOfNitrateVulnerableZones {
+            get {
+                return ResourceManager.GetString("lblViewAMapOfNitrateVulnerableZones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View, create or update a nutrient management plan.
         /// </summary>
         public static string lblViewCreateOrUpdateAPlan {
@@ -17452,6 +17461,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?.
+        /// </summary>
+        public static string lblWhichNVZAreTheFieldsAtYourFarmIn {
+            get {
+                return ResourceManager.GetString("lblWhichNVZAreTheFieldsAtYourFarmIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which {0} report do you want to create?.
         /// </summary>
         public static string lblWhichNVZComplianceReport {
@@ -17835,6 +17853,15 @@ namespace NMP.Commons.Resources {
         public static string lblYouCan {
             get {
                 return ResourceManager.GetString("lblYouCan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can add fields to different NVZs later if you need to..
+        /// </summary>
+        public static string lblYouCanAddFieldsToDifferentNVZs {
+            get {
+                return ResourceManager.GetString("lblYouCanAddFieldsToDifferentNVZs", resourceCulture);
             }
         }
         

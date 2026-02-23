@@ -233,4 +233,5 @@ internal static class ApiurlHelper
     public const string FetchAllWarningAsyncAPI = "warning";
     public const string FetchTotalNByManagementIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-management-period/{0}?fromDate={1}&toDate={2}&confirm={3}";
     public const string FetchTotalNByCropIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-crop-id/{0}?fromDate={1}&toDate={2}&confirm={3}";
+    public const string FetchNvzActionProgramsByCountryIdAsyncAPI = "vendors/rb209/Soil/NvzActionProgram/{0}";
 }
