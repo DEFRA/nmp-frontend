@@ -4754,37 +4754,12 @@ namespace NMP.Portal.Controllers
                                         organicManure.IsGrass = true;
                                         model.IsAnyCropIsGrass = true;
 
-                                        int grassCounter = 1;
+                                        
                                         if (model.DefoliationList == null)
                                         {
                                             model.DefoliationList = new List<DefoliationList>();
                                         }
-                                        //(List<Crop> cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(crop.FieldID.Value, decryptedHarvestYear);
-                                        //if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                                        //{
-                                        //    if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId) && (model.IsComingFromRecommendation))
-                                        //    {
-                                        //        TempData["NutrientRecommendationsError"] = error.Message;
-                                        //        string fieldId = model.FieldList[0];
-                                        //        return RedirectToAction("Recommendations", "Crop", new
-                                        //        {
-                                        //            q = model.EncryptedFarmId,
-                                        //            r = _fieldDataProtector.Protect(fieldId),
-                                        //            s = model.EncryptedHarvestYear
-
-                                        //        });
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                        //        return RedirectToAction("HarvestYearOverview", "Crop", new
-                                        //        {
-                                        //            id = model.EncryptedFarmId,
-                                        //            year = model.EncryptedHarvestYear
-                                        //        });
-
-                                        //    }
-                                        //}
+                                        
                                         if (managementPeriod != null)
                                         {
                                             (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
