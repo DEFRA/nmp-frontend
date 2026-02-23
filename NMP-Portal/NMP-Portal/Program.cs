@@ -107,31 +107,26 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
+var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+var authorizeFilter = new AuthorizeFilter(policy);
+var responseCacheAttribute = new ResponseCacheAttribute
+{
+    NoStore = true,
+    Location = ResponseCacheLocation.None
+};
+
 builder.Services.AddControllersWithViews(options =>
 {
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-    options.Filters.Add(new ResponseCacheAttribute
-    {
-        NoStore = true,
-        Location = ResponseCacheLocation.None
-    });
+    
+    options.Filters.Add(authorizeFilter);
+    options.Filters.Add(responseCacheAttribute);
 }).AddMicrosoftIdentityUI()
 .AddSessionStateTempDataProvider();
 
 builder.Services.AddRazorPages().AddMvcOptions(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-                  .RequireAuthenticatedUser()
-                  .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-    options.Filters.Add(new ResponseCacheAttribute
-    {
-        NoStore = true,
-        Location = ResponseCacheLocation.None
-    });
+{    
+    options.Filters.Add(authorizeFilter);
+    options.Filters.Add(responseCacheAttribute);
 }).AddMicrosoftIdentityUI().AddSessionStateTempDataProvider();
 
 builder.Services.AddDataProtection();
