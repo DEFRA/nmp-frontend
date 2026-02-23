@@ -202,6 +202,7 @@ builder.Services.AddCsp(nonceByteAmount: 32);
 
 var app = builder.Build();
 app.UseGovUkFrontend();
+
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 
@@ -217,19 +218,6 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-app.Use(async (context, next) =>
-{
-    // Do work that doesn't write to the Response.
-    if (context.Request.Method == HttpMethods.Trace)
-    {
-        context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
-        return;
-    }
-    await next.Invoke();
-    // Do logging or other work that doesn't write to the Response.
-});
-
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/favicon.ico")
@@ -242,6 +230,21 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
     }
+    // 1️ Always allow Azure metadata requests to pass through untouched
+    if (context.Request.Path.StartsWithSegments("/metadata"))
+    {
+        await next();
+        return;
+    }
+
+    // 2️ Block TRACE requests (security hardening)
+    if (context.Request.Method == HttpMethods.Trace)
+    {
+        context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+        return;
+    }       
+
+    // 3️ Continue normal pipeline
     await next();
 });
 
