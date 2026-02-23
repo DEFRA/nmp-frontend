@@ -16,17 +16,21 @@ namespace NMP.Portal.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            _logger.LogTrace("Account Controller : Logout action called");
-            base.SignOut();
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            _logger.LogTrace("Account Controller : Logout action called");            
             HttpContext.Session.Clear();
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home", new { Area = ""});
+            return await Task.FromResult( SignOut(
+                new AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("Index", "Home")
+                },
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme
+            ));
         }
 
         public IActionResult ChangeOrganisation()
         {
             return RedirectToAction("SignIn", "Account", new { Area = "MicrosoftIdentity", redirectUri = "/Farm/FarmList" });
-        }
+        }           
     }
 }
