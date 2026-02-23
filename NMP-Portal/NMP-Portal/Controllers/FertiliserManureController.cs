@@ -510,36 +510,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             foreach (string field in model.FieldList)
                             {
                                 List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
+                                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList,true);
 
-                                if (cropList.Count > 0)
-                                {
-                                    if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
-                                    {
-                                        cropList = cropList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).ToList();
-                                    }
-                                    else
-                                    {
-                                        cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
-                                    }
-                                    if (cropList.Count > 0 && cropList.Count == 2)
-                                    {
-                                        model.IsDoubleCropAvailable = true;
-                                        model.DoubleCropCurrentCounter = 0;
-                                        model.FieldName = fieldList?.FirstOrDefault(x => x.Id == Convert.ToInt32(field))?.Name;
 
-                                        model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
-                                    }
-                                    else if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-                                    {
-                                        model.DoubleCrop.RemoveAll(x => x.FieldID == Convert.ToInt32(field));
-                                    }
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                                    {
-                                        model.IsAnyCropIsGrass = true;
-                                        model.DefoliationCurrentCounter = 0;
-                                        model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
-                                    }
-                                }
                             }
                             string fieldIds = string.Join(",", model.FieldList);
                             List<int> managementIds = new List<int>();
@@ -648,7 +621,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     {
                                         grassCropCounter++;
                                         (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
-                                        model=RemoveListItem(model, managementPeriod);
+                                        model = RemoveListItem(model, managementPeriod);
                                         model.IsAnyCropIsGrass = true;
                                     }
                                 }
@@ -824,6 +797,39 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return View(model);
     }
 
+    private async Task<FertiliserManureViewModel> BindGrassProperty(FertiliserManureViewModel model, List<HarvestYearPlanResponse> cropList, int fieldId, List<CommonResponse> fieldList, bool isFieldGet)
+    {
+        if (cropList.Count > 0)
+        {
+            if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+            {
+                cropList = cropList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).ToList();
+            }
+            else if (isFieldGet)
+            {
+                cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
+            }
+            if (cropList.Count > 0 && cropList.Count == 2)
+            {
+                model.IsDoubleCropAvailable = true;
+                model.DoubleCropCurrentCounter = 0;
+                model.FieldName = fieldList?.FirstOrDefault(x => x.Id == fieldId)?.Name;
+
+                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
+            }
+            else if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
+            {
+                model.DoubleCrop.RemoveAll(x => x.FieldID == fieldId);
+            }
+            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+            {
+                model.IsAnyCropIsGrass = true;
+                model.DefoliationCurrentCounter = 0;
+                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
+            }
+        }
+        return model;
+    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Fields(FertiliserManureViewModel model)
@@ -892,30 +898,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                     List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
 
-                    if (cropList.Count > 0)
-                    {
-                        if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
-                        {
-                            cropList = cropList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).ToList();
-                        }
-                        if (cropList.Count > 0 && cropList.Count == 2)
-                        {
-                            model.IsDoubleCropAvailable = true;
-                            model.DoubleCropCurrentCounter = 0;
-                            model.FieldName = fieldList?.FirstOrDefault(x => x.Id == Convert.ToInt32(field))?.Name;
-                            model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
-                        }
-                        else if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-                        {
-                            model.DoubleCrop.RemoveAll(x => x.FieldID == Convert.ToInt32(field));
-                        }
-                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                        {
-                            model.IsAnyCropIsGrass = true;
-                            model.DefoliationCurrentCounter = 0;
-                            model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
-                        }
-                    }
+                    model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList,false);
                 }
                 string fieldIds = string.Join(",", model.FieldList);
                 List<int> managementIds = new List<int>();
