@@ -51,7 +51,7 @@ namespace NMP.Portal.Security
                     new KeyValuePair<string, string>("scope", scopes)
                 });
                 Uri uri = new Uri(uriString: issuer);
-                var url = $"https://{uri.Authority}/{_config["CustomerIdentityTenantId"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
+                var url = $"https://{uri.Authority}/{_config["CustomerIdentityDomain"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
 
                 var response = await client.PostAsync(url, formData);
                 var json = await response.Content.ReadAsStringAsync();
