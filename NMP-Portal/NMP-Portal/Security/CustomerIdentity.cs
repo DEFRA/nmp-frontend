@@ -50,6 +50,7 @@ namespace NMP.Portal.Security
                 extraQueryParameters.Add("forceReselection", value: "true");
                 options.ExtraQueryParameters = extraQueryParameters;
                 options.CallbackPath = "/signin-oidc";
+                options.SignedOutCallbackPath = "/signout-callback-oidc";
                 options.SignUpSignInPolicyId = configuration?["CustomerIdentityPolicyId"];
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
