@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc;
 using NMP.Portal.Helpers;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace NMP.Portal.Controllers
 {
@@ -19,7 +20,8 @@ namespace NMP.Portal.Controllers
             base.SignOut();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
-            return RedirectToAction("SignOut", "Account", new { Area = "MicrosoftIdentity" });
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home", new { Area = ""});
         }
 
         public IActionResult ChangeOrganisation()

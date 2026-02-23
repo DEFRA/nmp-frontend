@@ -77,11 +77,10 @@ namespace NMP.Portal.Security
                 options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
                 options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
-                options.Events.OnRemoteFailure += OnRemoteFailure;
-            });
-            services.AddTokenAcquisition();
-            services.AddDistributedTokenCaches();
-            services.AddSingleton<TokenRefreshService>();
+                options.Events.OnRemoteFailure += OnRemoteFailure;                
+            });            
+            services.AddDistributedTokenCaches();            
+            //services.AddSingleton<TokenRefreshService>();
             services.AddSingleton<TokenAcquisitionService>();
             return services;
         }
