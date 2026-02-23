@@ -53,7 +53,7 @@ namespace NMP.Portal.Controllers
                 string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
                 (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
-                if (error != null && (!string.IsNullOrWhiteSpace(error?.Message)))
+                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
                     return View("~/Views/Home/Index.cshtml");
@@ -1140,7 +1140,7 @@ namespace NMP.Portal.Controllers
 
                 (Farm? farmResponse, Error? error) = await _farmLogic.AddFarmAsync(farmData);
 
-                if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
                     return View(model);
@@ -1443,7 +1443,7 @@ namespace NMP.Portal.Controllers
 
                 (Farm? farmResponse, Error? error) = await _farmLogic.UpdateFarmAsync(farmData);
 
-                if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());

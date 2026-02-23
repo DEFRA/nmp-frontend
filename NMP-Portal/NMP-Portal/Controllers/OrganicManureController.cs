@@ -276,7 +276,7 @@ namespace NMP.Portal.Controllers
         {
             var (cropTypes, error) = await _fertiliserManureLogic.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
 
-            if ((error != null && !string.IsNullOrWhiteSpace(error?.Message)) || !cropTypes.Any())
+            if ((error != null && !string.IsNullOrWhiteSpace(error.Message)) || !cropTypes.Any())
             {
                 TempData["FieldGroupError"] = error.Message;
                 return;
@@ -6293,7 +6293,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             (List<RainTypeResponse> rainType, Error error) = await _organicManureLogic.FetchRainTypeList();
-            if (error != null && (!string.IsNullOrWhiteSpace(error?.Message)))
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
                 ViewBag.Error = error.Message;
             }
@@ -6429,7 +6429,7 @@ namespace NMP.Portal.Controllers
 
             (List<WindspeedResponse> windspeeds, Error? error) = await _organicManureLogic.FetchWindspeedList();
 
-            if (error != null && (!string.IsNullOrWhiteSpace(error?.Message)))
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
                 ViewBag.Error = error.Message;
             }
@@ -6475,7 +6475,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmList", "Farm");
             }
             (List<MoistureTypeResponse> moisterTypes, Error error) = await _organicManureLogic.FetchMoisterTypeList();
-            if (error != null && (!string.IsNullOrWhiteSpace(error?.Message)))
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
             {
                 ViewBag.Error = error.Message;
             }

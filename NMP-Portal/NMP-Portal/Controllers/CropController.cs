@@ -4820,7 +4820,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         List<int> cropIds = harvestYearPlanResponse.Select(x => x.CropID).ToList();
                         (string? message, error) = await _cropLogic.RemoveCropPlan(cropIds);
-                        if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                         {
                             TempData["RemoveGroupError"] = error.Message;
                             return View(model);
@@ -6210,7 +6210,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<PotentialCutResponse> potentialCuts, Error error) = await _cropLogic.FetchPotentialCutsBySwardTypeIdAndSwardManagementId(model.SwardTypeId ?? 0, model.SwardManagementId ?? 0);
-            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["SwardManagementError"] = error.Message;
                 return RedirectToAction("SwardType");
@@ -6288,7 +6288,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
             (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? true : false);
-            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["DefoliationError"] = error.Message;
                 return RedirectToAction("Defoliation");
@@ -6441,7 +6441,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
-            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["GrassGrowthClassError"] = error.Message;
                 return RedirectToAction("DefoliationSequence");
@@ -6470,7 +6470,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
                     ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
                     (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-                    if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["GrassGrowthClassError"] = error.Message;
                         return RedirectToAction("DefoliationSequence");
@@ -6525,7 +6525,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
 
                 (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-                if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
                     return RedirectToAction("DefoliationSequence");
@@ -6591,7 +6591,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
             ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
             (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["GrassGrowthClassError"] = error.Message;
                 return RedirectToAction("DefoliationSequence");
@@ -6633,7 +6633,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         (grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
 
-        if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["GrassGrowthClassError"] = error.Message;
             return RedirectToAction("DefoliationSequence");
@@ -6664,7 +6664,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     ViewBag.FieldName = model.Crops[i + 1].FieldName;
                     ViewBag.GrassGrowthClass = grassGrowthClasses[i + 1].GrassGrowthClassName;
                     (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[i + 1].GrassGrowthClassId);
-                    if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["GrassGrowthClassError"] = error.Message;
                         return RedirectToAction("GrassGrowthClass");
@@ -6744,7 +6744,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
-            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["GrassGrowthClassError"] = error.Message;
                 return RedirectToAction("DefoliationSequence");
@@ -6766,7 +6766,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
 
                 (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[0].GrassGrowthClassId);
-                if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
                     return RedirectToAction("GrassGrowthClass");
@@ -6795,7 +6795,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
 
                 (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[index].GrassGrowthClassId);
-                if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
                     return RedirectToAction("GrassGrowthClass");
@@ -6846,7 +6846,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 (grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
                 (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
 
-                if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
                     return RedirectToAction("DefoliationSequence");
@@ -6872,7 +6872,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         (grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
 
-        if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["DryMatterYieldError"] = error.Message;
             return RedirectToAction("GrassGrowthClass");
@@ -6899,7 +6899,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.FieldID = model.Crops[i + 1].FieldID.Value;
                         (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[i + 1].GrassGrowthClassId);
 
-                        if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+                        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                         {
                             TempData["DryMatterYieldError"] = error.Message;
                             return RedirectToAction("GrassGrowthClass");
