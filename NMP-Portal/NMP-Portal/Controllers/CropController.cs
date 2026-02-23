@@ -3023,7 +3023,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (string.IsNullOrWhiteSpace(model.CropGroupName))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (harvestYearPlanResponse != null && error.Message == null)
+                if (harvestYearPlanResponse != null && error == null)
                 {
                     var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
                                      int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
