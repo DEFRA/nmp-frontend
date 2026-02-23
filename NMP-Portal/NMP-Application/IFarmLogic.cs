@@ -19,4 +19,5 @@ public interface IFarmLogic
     Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated);
     Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id);
     Task<int> FetchFieldCountByFarmIdAsync(int farmId);
+    Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId);
 }

@@ -23,6 +23,10 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l text-wrap-anywhere">
                          @string.Format(Resource.lblHowManyFieldsInNVZ,Model.Name)
                     </govuk-radios-fieldset-legend>
+                     @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                     {
+                        <govuk-radios-hint>@Resource.lblYouCanAddFieldsToDifferentNVZs</govuk-radios-hint>
+                     }
                     <govuk-radios-item value="@AllFieldsInNVZ">@Resource.lblAllTheFieldsAreInAnNVZ</govuk-radios-item>
                     <govuk-radios-item value="@SomeFieldsInNVZ">@Resource.lblSomeOfTheFieldsAreInAnNVZ</govuk-radios-item>
                     <govuk-radios-item value="@NoFieldsInNVZ">@Resource.lblNoneOfTheFieldsAreInAnNVZ</govuk-radios-item>

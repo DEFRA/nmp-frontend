@@ -7439,4 +7439,13 @@ livestock manure.</value>
   <data name="MsgEnterTheBusinessName" xml:space="preserve">
     <value>Enter the business name</value>
   </data>
+  <data name="lblWhichNVZAreTheFieldsAtYourFarmIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?</value>
+  </data>
+  <data name="lblViewAMapOfNitrateVulnerableZones" xml:space="preserve">
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View a map of Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblYouCanAddFieldsToDifferentNVZs" xml:space="preserve">
+    <value>You can add fields to different NVZs later if you need to.</value>
+  </data>
 </root>
