@@ -3,19 +3,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NMP.Portal.Helpers;
-using System.Security.Claims;
-using System.Security.Principal;
 
 namespace NMP.Portal.Controllers
 {
-
-
     [AllowAnonymous]
-    public class AccountController(ILogger<AccountController> logger, IConfiguration configuration) : Controller
+    public class AccountController(ILogger<AccountController> logger) : Controller
     {
         private readonly ILogger _logger = logger;
-        private readonly IConfiguration _configuration = configuration;
+        
         public async Task<IActionResult> Logout()
         {
             _logger.LogTrace("Account Controller : Logout action called");
@@ -23,8 +18,7 @@ namespace NMP.Portal.Controllers
             return await Task.FromResult(SignOut(
             new AuthenticationProperties
             {
-                RedirectUri = Url.Action("SignOut", "Account", new { Area = "MicrosoftIdentity" })
-                //$"{_configuration["CusromerIdentityBaseUrl"]}idphub/b2c/{_configuration["CustomerIdentityPolicyId"]}/signout"
+                RedirectUri = Url.Action("SignOut", "Account", new { Area = "MicrosoftIdentity" })                
             },
             CookieAuthenticationDefaults.AuthenticationScheme,
             OpenIdConnectDefaults.AuthenticationScheme
