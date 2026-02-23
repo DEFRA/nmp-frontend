@@ -80,7 +80,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotentialCut"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationSequenceId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"/>
-
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId" />
             @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
             {
                 @for (int i = 0; i < Model.HarvestYear.Count; i++)

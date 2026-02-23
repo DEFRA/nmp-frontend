@@ -188,7 +188,6 @@
                     }
 
 
-                    <div class="check-answers">
                         <govuk-summary-list>
                             @if (ViewBag.LiveStockList != null && ViewBag.LiveStockList.Count == 0)
                             {
@@ -383,7 +382,6 @@
                                 </govuk-summary-list-row>
                             }
                         </govuk-summary-list>
-                    </div>
                 </govuk-fieldset>
 
                 @if (!string.IsNullOrWhiteSpace(Model.EncryptedNLLivestockID))

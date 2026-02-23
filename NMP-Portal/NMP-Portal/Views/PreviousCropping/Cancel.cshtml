@@ -35,6 +35,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
         @if (Model != null)
         {
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)

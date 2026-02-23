@@ -72,7 +72,7 @@ namespace NMP.Portal.Controllers
                 {
                     Error? error;
                     _logger.LogTrace("SoilAnalysisController: farms/{J} called.", j);
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
+                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(k)));
 
                     if (error != null && string.IsNullOrWhiteSpace(error.Message))
                     {
@@ -367,7 +367,8 @@ namespace NMP.Portal.Controllers
                 {
                     if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
                     {
-                        if (int.TryParse(model.PotassiumIndexValue, out int value))
+                        string potassiumIndex = model.PotassiumIndexValue.Replace(" ", "");
+                        if (int.TryParse(potassiumIndex, out int value))
                         {
                             if (value > 9 || value < 0)
                             {
@@ -380,8 +381,8 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
-                                                   (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
+                            if ((potassiumIndex.ToString() != Resource.lblTwoMinus) &&
+                                                   (potassiumIndex.ToString() != Resource.lblTwoPlus))
                             {
                                 ModelState.AddModelError("PotassiumIndexValue", Resource.MsgValidationForPotasium);
                             }
@@ -696,6 +697,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
                 {
+                    model.PotassiumIndexValue = model.PotassiumIndexValue.Replace(" ", "");
                     if (model.PotassiumIndexValue == Resource.lblTwoMinus)
                     {
                         model.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);

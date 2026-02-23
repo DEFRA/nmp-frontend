@@ -22,9 +22,9 @@
                     @if (@TempData["successMsg"] == null)
                     {
                         <div class="">
-                            <h3 class="govuk-notification-banner__heading"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
+                            <h3 class="govuk-notification-banner__heading text-wrap-anywhere"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
                             <p class="govuk-body"></p>
-                            <a class="govuk-notification-banner__link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                            <a class="govuk-notification-banner__link text-wrap-anywhere" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
                         </div>
                     }
                     else
@@ -37,7 +37,7 @@
             }
 
             <div id="farm-title">
-                <h1 class="govuk-heading-xl">@Model.Name</h1>
+                <h1 class="govuk-heading-xl text-wrap-anywhere">@Model.Name</h1>
                 <p class="govuk-body address">@Model.FullAddress</p>
                 @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
                 {
@@ -92,8 +92,10 @@
         </div>
         <div>
             <hr class="seperator_thirty">
-            <h2 class="govuk-heading-m">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
-                                Resource.lblFarmSummaryContentForWalesOne:Resource.lblFarmSummaryContent4)</h2>
+            <h2 class="govuk-heading-m">
+                @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
+                                Resource.lblFarmSummaryContentForWalesOne : Resource.lblFarmSummaryContent4)
+            </h2>
             <p class="govuk-body">
                 @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                                 Resource.lblFarmSummaryContentForWalesTwo : Resource.lblFarmSummaryContent5)
@@ -106,9 +108,9 @@
                 <li>
                     @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                                         Resource.lblHoldingNitrogenLimitThe170Limit : Resource.lblLivestockManureNitrogenNFarmLimit)
-                                                                                                                              </li>
-                                                                                                                              @* <li>@Resource.lblExistingManureStorageCapacity</li>
-                    <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li> *@
+                </li>
+                <li>@Resource.lblExistingManureStorageCapacity</li>
+                @* <li>@Resource.lblOrganicManureInventoryAndStorageRequirement</li> *@
             </ul>
 
             <ul class="menu-list govuk-list govuk-list--spaced">

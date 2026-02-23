@@ -21,7 +21,7 @@ public class OrganicManureViewModel
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblEnterTheDateInCorrectFormat))]
     public DateTime? ApplicationDate { get; set; }
     public string? DefaultNutrientValue { get; set; }
-    public bool IsEnglishRules { get; set; }
+    public int? FarmRB209CountryID { get; set; }
     public List<OrganicManureDataViewModel>? OrganicManures { get; set; }
     public ManureType ManureType { get; set; }
     public string? ManureGroupName { get; set; }

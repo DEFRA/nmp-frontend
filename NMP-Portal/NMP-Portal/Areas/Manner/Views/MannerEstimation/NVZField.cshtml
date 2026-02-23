@@ -1,0 +1,41 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep6ViewModel
+
+@{
+    ViewData["Title"] = $"{string.Format(Resource.lblIsThisInNVZ, Model.FieldName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    var backAction = Model.IsCheckAnswer ? "CheckAnswer" : "FieldName";
+    var cancelAction = Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel";
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="NVZField" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsWithinNVZ">
+
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblIsThisInNVZ, Model.FieldName)
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="@cancelAction" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+
+        </p>
+    </div>
+</div>

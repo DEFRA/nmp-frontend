@@ -2,7 +2,7 @@
 using NMP.Commons.Models;
 namespace NMP.Commons.ServiceResponses;
 
-public class FarmReportResponse  : Farm
+public class FarmReportResponse  : FarmResponse
 {
     public int? GrassArea {  get; set; }
     public int? ArableArea { get; set; }

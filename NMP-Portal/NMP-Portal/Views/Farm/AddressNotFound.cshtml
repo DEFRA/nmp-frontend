@@ -1,9 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
 @model FarmViewModel
-@{
-
-    // ViewData["Title"] = string.Format("{0} - {1}", string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode), Resource.lblSectionAddFarm);
+@{    
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode)} {Resource.lblHyphen} {title}";
 }
