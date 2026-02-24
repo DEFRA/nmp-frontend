@@ -1451,7 +1451,10 @@ namespace NMP.Portal.Controllers
                 }
 
                 string success = _dataProtector.Protect("true");
-                farmResponse?.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                if (farmResponse != null)
+                {
+                    farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                }
                 RemoveFarmSession();
                 RemoveAddressesSession();
                 string isUpdate = _dataProtector.Protect("true");
