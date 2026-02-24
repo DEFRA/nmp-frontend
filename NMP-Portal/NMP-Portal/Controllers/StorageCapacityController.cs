@@ -1109,7 +1109,7 @@ namespace NMP.Portal.Controllers
                         model.IsComingFromPlan = r;
                     }
                     (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
                         model.EncryptedFarmID = _farmDataProtector.Protect(storeCapacity.FarmID.ToString() ?? string.Empty);
