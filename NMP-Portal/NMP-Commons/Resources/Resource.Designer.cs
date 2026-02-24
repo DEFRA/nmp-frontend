@@ -20532,6 +20532,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid farm data.
+        /// </summary>
+        public static string MsgInvalidFarmData {
+            get {
+                return ResourceManager.GetString("MsgInvalidFarmData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is {0} covered not set.
         /// </summary>
         public static string MsgIsCoveredNotSet {
