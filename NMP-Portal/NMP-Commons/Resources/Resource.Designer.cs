@@ -6847,6 +6847,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example,AA/12345/12345.This will only be shown on your reports..
+        /// </summary>
+        public static string lblHintOfLPIDNumber {
+            get {
+                return ResourceManager.GetString("lblHintOfLPIDNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holding nitrogen limit ‘the 170 limit’ 2026.
         /// </summary>
         public static string lblHoldingNitrogenLimitForYear {
@@ -16525,6 +16534,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the land parcel identification number (LPID) (optional)?.
+        /// </summary>
+        public static string lblWhatIsTheLPIDNumber {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheLPIDNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the main location code (MLC) (optional)?.
         /// </summary>
         public static string lblWhatIsTheMainLocationCode {
@@ -20514,6 +20532,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid farm data.
+        /// </summary>
+        public static string MsgInvalidFarmData {
+            get {
+                return ResourceManager.GetString("MsgInvalidFarmData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is {0} covered not set.
         /// </summary>
         public static string MsgIsCoveredNotSet {
@@ -20564,6 +20591,15 @@ namespace NMP.Commons.Resources {
         public static string MsgLivestockTypeNotSet {
             get {
                 return ResourceManager.GetString("MsgLivestockTypeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LPID number format must be like AA/12345/12345..
+        /// </summary>
+        public static string MsgLPIDNumberFormatError {
+            get {
+                return ResourceManager.GetString("MsgLPIDNumberFormatError", resourceCulture);
             }
         }
         

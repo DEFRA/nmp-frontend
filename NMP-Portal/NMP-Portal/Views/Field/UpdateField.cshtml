@@ -160,10 +160,10 @@
                             @Resource.lblLandParcelIDForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.LPIDNumber
+                            @(string.IsNullOrWhiteSpace(Model.LPIDNumber) ? Resource.lblNotEntered : Model.LPIDNumber)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblLandParcelIDForCheckAnswere)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="LPIDNumber" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblLandParcelIDForCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
