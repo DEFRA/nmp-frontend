@@ -10,6 +10,7 @@
     decimal totalDirtySurfaceArea = 0;
     decimal totalSolidCapacityVolume = 0;
     decimal totalSolidSurfaceArea = 0;
+    decimal totalUnconverdSlurrySurfaceArea = 0;
     decimal totalSolidWeight = 0;
 }
 
@@ -115,9 +116,10 @@
                         @foreach (var slurryStorage in ViewBag.SlurryStoreCapacities)
                         {
                             totalSlurryCapacityVolume += slurryStorage.CapacityVolume;
+                            totalSlurrySurfaceArea += slurryStorage.SurfaceArea ?? 0;
                             @if (slurryStorage.IsCovered == null || (slurryStorage.IsCovered != null && !slurryStorage.IsCovered))
                             {
-                                totalSlurrySurfaceArea += slurryStorage.SurfaceArea ?? 0;
+                                totalUnconverdSlurrySurfaceArea += slurryStorage.SurfaceArea ?? 0;                                
                             }
                             string isCoveredText;
                             if (slurryStorage.IsCovered == null)
@@ -313,7 +315,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblTotalSurfaceAreaOfUncoveredStores</th>
-                        <th scope="row" class="govuk-table__header"> @string.Format("{0:N0} {1}", totalSlurrySurfaceArea + totalDirtySurfaceArea, Resource.lblMetresSquared) </th>
+                        <th scope="row" class="govuk-table__header"> @string.Format("{0:N0} {1}", totalUnconverdSlurrySurfaceArea + totalDirtySurfaceArea, Resource.lblMetresSquared) </th>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblTotalSolidCapacity</th>

@@ -43,7 +43,7 @@ namespace NMP.Portal.Controllers
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
-            if (!string.IsNullOrWhiteSpace(farmError.Message) || farm == null)
+            if (!string.IsNullOrWhiteSpace(farmError?.Message) || farm == null)
                 return RedirectToFarmSummary(q, farmError.Message);
 
             PopulateFarmDetails(model, farm, farmId, q, isPlan, t);
