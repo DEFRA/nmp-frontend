@@ -59,13 +59,13 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.FetchExcessWinterRainfallOptionByIdAsync(id);
     }
 
-    public async Task<(FarmResponse, Error)> FetchFarmByIdAsync(int farmId)
+    public async Task<(FarmResponse?, Error?)> FetchFarmByIdAsync(int farmId)
     {
         _logger.LogTrace("Fetching farm with ID: {FarmId}", farmId);
         return await _farmService.FetchFarmByIdAsync(farmId);
     }
 
-    public async Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(Guid orgId)
+    public async Task<(List<Farm>, Error?)> FetchFarmByOrgIdAsync(Guid orgId)
     {
         _logger.LogTrace("Fetching farms for Organization ID: {OrgId}", orgId);
         return await _farmService.FetchFarmByOrgIdAsync(orgId);

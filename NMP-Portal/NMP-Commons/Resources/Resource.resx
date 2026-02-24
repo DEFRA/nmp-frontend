@@ -7457,4 +7457,7 @@ livestock manure.</value>
   <data name="MsgLPIDNumberFormatError" xml:space="preserve">
     <value>LPID number format must be like AA/12345/12345.</value>
   </data>
+  <data name="MsgInvalidFarmData" xml:space="preserve">
+    <value>Invalid farm data</value>
+  </data>
 </root>

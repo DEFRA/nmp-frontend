@@ -5,9 +5,9 @@ namespace NMP.Application;
 
 public interface IFarmLogic
 {
-    Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(Guid orgId);
+    Task<(List<Farm>, Error?)> FetchFarmByOrgIdAsync(Guid orgId);
     Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData);
-    Task<(FarmResponse, Error)> FetchFarmByIdAsync(int farmId);
+    Task<(FarmResponse?, Error?)> FetchFarmByIdAsync(int farmId);
     Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id);
 
     Task<decimal> FetchRainfallAverageAsync(string postcode);
