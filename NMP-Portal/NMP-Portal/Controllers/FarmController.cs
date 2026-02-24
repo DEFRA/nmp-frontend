@@ -32,6 +32,7 @@ namespace NMP.Portal.Controllers
         private const string _checkAnswerActionName = "CheckAnswer";
         private const string _rainfallActionName = "Rainfall";
         private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
+        private const string _organisationId = "organisationId";
 
         public IActionResult Index()
         {
@@ -49,7 +50,7 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
-                Claim? claim = HttpContext.User.FindFirst("organisationId");
+                Claim? claim = HttpContext.User.FindFirst(_organisationId);
                 string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
                 (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
@@ -352,7 +353,7 @@ namespace NMP.Portal.Controllers
             int farmId = farm.EncryptedFarmId != null
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
-            Claim? claim = HttpContext.User.FindFirst("organisationId");
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
             string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
             Guid.TryParse(orgId, out Guid organisationId);
             bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId, organisationId).Result;
@@ -581,7 +582,7 @@ namespace NMP.Portal.Controllers
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
 
-            Claim? claim = HttpContext.User.FindFirst("organisationId");
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
             string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
             Guid.TryParse(orgId, out Guid organisationId);
 
@@ -1099,7 +1100,7 @@ namespace NMP.Portal.Controllers
                 model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
 #pragma warning disable CS8604 // Possible null reference argument.
-                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst(_organisationId)?.Value);
 #pragma warning restore CS8604 // Possible null reference argument.
 
                 if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
@@ -1381,7 +1382,7 @@ namespace NMP.Portal.Controllers
                 model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
 #pragma warning disable CS8604 // Possible null reference argument.
-                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst(_organisationId)?.Value);
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning disable CS8604 // Possible null reference argument.
                 int farmId = Convert.ToInt32(_dataProtector.Unprotect(model.EncryptedFarmId));
