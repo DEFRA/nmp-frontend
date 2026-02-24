@@ -3902,7 +3902,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
-            if (harvestYearPlanResponse != null && error.Message == null)
+            if (harvestYearPlanResponse != null && error == null)
             {
                 bool isAllBasePlan = harvestYearPlanResponse.All(h => ((h.IsBasePlan != null) && (h.IsBasePlan.Value)));
                 if (isAllBasePlan)
