@@ -44,7 +44,7 @@ namespace NMP.Portal.Controllers
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
             if (!string.IsNullOrWhiteSpace(farmError?.Message) || farm == null)
-                return RedirectToFarmSummary(q, farmError.Message);
+                return RedirectToFarmSummary(q, farmError?.Message ?? "");
 
             PopulateFarmDetails(model, farm, farmId, q, isPlan, t);
 
@@ -2340,7 +2340,7 @@ namespace NMP.Portal.Controllers
             return new StorageCapacityViewModel();
         }
 
-        
+
         private async Task PopulateFarmAndStoreCapacityAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? manageToHub, string? removedRecently)
         {
             if (string.IsNullOrWhiteSpace(encryptedFarmId))
@@ -2427,7 +2427,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
             }
         }
-        
+
         private async Task PopulateFarmForCopyAsync(StorageCapacityViewModel model, string encryptedFarmId, string? isPlan, string? materialToHub)
         {
             if (string.IsNullOrWhiteSpace(encryptedFarmId))
@@ -2529,7 +2529,7 @@ namespace NMP.Portal.Controllers
 
             return new StorageCapacityViewModel();
         }
-        
+
         private async Task PopulateMaterialStateNameAsync(StorageCapacityViewModel model)
         {
             var (materialState, error) =
