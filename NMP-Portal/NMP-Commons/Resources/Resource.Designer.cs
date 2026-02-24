@@ -2851,7 +2851,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capacity weight.
+        ///   Looks up a localized string similar to Capacity weigth.
         /// </summary>
         public static string lblCapacityWeightForSummary {
             get {
@@ -7396,7 +7396,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and existing manure storage capacity reports.
+        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports.
         /// </summary>
         public static string lblIncludesNmaxLivestockManureNitrogen {
             get {
@@ -15130,7 +15130,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total surface area of uncovered slurry stores.
+        ///   Looks up a localized string similar to Total surface area of uncovered stores.
         /// </summary>
         public static string lblTotalSurfaceAreaOfUncoveredStores {
             get {
@@ -18136,7 +18136,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any manure stores.
+        ///   Looks up a localized string similar to You have not entered any organic manure storage.
         /// </summary>
         public static string lblYouHaveNotEnteredAnyOrganicMaterialStorage {
             get {
