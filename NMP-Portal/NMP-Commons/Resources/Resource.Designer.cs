@@ -6847,6 +6847,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For example,AA/12345/12345.This will only be shown on your reports..
+        /// </summary>
+        public static string lblHintOfLPIDNumber {
+            get {
+                return ResourceManager.GetString("lblHintOfLPIDNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holding nitrogen limit ‘the 170 limit’ 2026.
         /// </summary>
         public static string lblHoldingNitrogenLimitForYear {
@@ -16521,6 +16530,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheLengthOfGrowingSeason {
             get {
                 return ResourceManager.GetString("lblWhatIsTheLengthOfGrowingSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the land parcel identification number (LPID) (optional)?.
+        /// </summary>
+        public static string lblWhatIsTheLPIDNumber {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheLPIDNumber", resourceCulture);
             }
         }
         

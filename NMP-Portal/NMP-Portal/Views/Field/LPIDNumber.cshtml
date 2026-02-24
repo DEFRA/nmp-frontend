@@ -1,9 +1,10 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
 @using NMP.Commons.ViewModels
 @model FieldViewModel
 
 @{
-    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblAddField}";
+    string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblWhatIsTheLPIDNumber} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblWhatIsTheLPIDNumber} {Resource.lblHyphen} {Resource.lblAddField}";
     ViewData["Title"] = title;
     var cancelAction = "CheckAnswer";
     if (Model != null && !Model.IsCheckAnswer)
@@ -17,7 +18,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackActionForAddField" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model != null && Model.IsCheckAnswer ? "CheckAnswer" : "AddField")" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -28,9 +29,8 @@
                 <govuk-error-summary-item href="#passport-issued-day">@TempData["AddFieldError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="AddField" method="post" asp-controller="Field" autocomplete="off">
-            @Html.AntiForgeryToken()
-            @if (Model != null)
+        <form asp-action="LPIDNumber" method="post" asp-controller="Field" autocomplete="off">
+            @Html.AntiForgeryToken()  @if (Model != null)
             {
                 <div hidden="hidden">
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea" />
@@ -117,17 +117,17 @@
                     }
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" />
                 </div>
             }
-            <govuk-input asp-for="@Model.Name">
+            <govuk-input asp-for="LPIDNumber">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                    @Resource.AddFieldNameQuestion
+                    @Resource.lblWhatIsTheLPIDNumber
                 </govuk-input-label>
+                <govuk-input-hint>@Resource.lblHintOfLPIDNumber</govuk-input-hint>
             </govuk-input>
 
-
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
