@@ -115,23 +115,7 @@
                         @foreach (var slurryStorage in ViewBag.SlurryStoreCapacities)
                         {
                             totalSlurryCapacityVolume += slurryStorage.CapacityVolume;
-                            @if (slurryStorage.IsCovered == null || (slurryStorage.IsCovered != null && !slurryStorage.IsCovered))
-                            {
-                                totalSlurrySurfaceArea += slurryStorage.SurfaceArea ?? 0;
-                            }
-                            string isCoveredText;
-                            if (slurryStorage.IsCovered == null)
-                            {
-                                isCoveredText = Resource.lblHyphen;
-                            }
-                            else if (slurryStorage.IsCovered != null && slurryStorage.IsCovered)
-                            {
-                                isCoveredText = Resource.lblYes;
-                            }
-                            else
-                            {
-                                isCoveredText = Resource.lblNo;
-                            }
+                            totalSlurrySurfaceArea += slurryStorage.SurfaceArea ?? 0;
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                 <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
@@ -141,9 +125,7 @@
                                 <td class="govuk-table__cell">
                                     @(slurryStorage.SurfaceArea != null ? string.Format("{0:N0} {1}", slurryStorage.SurfaceArea, Resource.lblMetresSquared) : Resource.lblHyphen)
                                 </td>
-                                <td class="govuk-table__cell">
-                                    @isCoveredText
-                                </td>
+                                <td class="govuk-table__cell">@(slurryStorage.IsCovered != null ? slurryStorage.IsCovered == Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True) ? Resource.lblYes : Resource.lblNo : Resource.lblHyphen)</td>
                             </tr>
 
                         }
@@ -312,16 +294,16 @@
                         </th>
                     </tr>
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@Resource.lblTotalSurfaceAreaOfUncoveredStores</th>
-                        <th scope="row" class="govuk-table__header"> @string.Format("{0:N0} {1}", totalSlurrySurfaceArea + totalDirtySurfaceArea, Resource.lblMetresSquared) </th>
-                    </tr>
-                    <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblTotalSolidCapacity</th>
                         <th scope="row" class="govuk-table__header"> @string.Format("{0:N0} {1}", totalSolidCapacityVolume, Resource.lblCubicMeters) </th>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblTotalSolidCapacityFreshWeight</th>
                         <th scope="row" class="govuk-table__header"> @string.Format("{0:N0} {1}", totalSolidWeight, Resource.lbltonnes) </th>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalSurfaceArea</th>
+                        <th scope="row" class="govuk-table__header"> @string.Format("{0:N0} {1}", totalSlurrySurfaceArea + totalDirtySurfaceArea, Resource.lblMetresSquared) </th>
                     </tr>
                 </tbody>
             </table>
