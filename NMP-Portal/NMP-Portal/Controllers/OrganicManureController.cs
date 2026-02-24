@@ -10299,16 +10299,13 @@ namespace NMP.Portal.Controllers
         {
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             (List<CommonResponse> manureGroupList, Error? error) = await _mannerLogic.FetchManureGroupList();
-            if (error == null)
+            if (error == null && manureGroupList.Count > 0)
             {
-                if (manureGroupList.Count > 0)
+                selectListItems = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
                 {
-                    selectListItems = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
-                    {
-                        Value = f.Id.ToString(),
-                        Text = f.Name.ToString()
-                    }).ToList();
-                }
+                    Value = f.Id.ToString(),
+                    Text = f.Name.ToString()
+                }).ToList();
             }
             return (selectListItems, error);
         }
