@@ -3710,17 +3710,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
     [HttpGet]
     public IActionResult LPIDNumber()
     {
