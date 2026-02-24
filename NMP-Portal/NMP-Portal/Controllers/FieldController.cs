@@ -265,6 +265,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_recentSoilAnalysisQuestion);
         }
 
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("LPIDNumber");
+        }
         return RedirectToAction("FieldMeasurements");
     }
 
@@ -1707,7 +1711,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
             {
-                model.PotassiumIndexValue=model.PotassiumIndexValue.Replace(" ", "");
+                model.PotassiumIndexValue = model.PotassiumIndexValue.Replace(" ", "");
                 if (model.PotassiumIndexValue == Resource.lblTwoMinus)
                 {
                     model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);
@@ -3705,4 +3709,50 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             HttpContext.Session.Remove("FieldData");
         }
     }
+
+    [HttpGet]
+    public IActionResult LPIDNumber()
+    {
+        _logger.LogTrace("Field Controller : LPIDNumber() action called");
+        FieldViewModel? model = LoadFieldDataFromSession();
+
+        if (model == null)
+        {
+            _logger.LogTrace("Field Controller : LPIDNumber() action : Field data is not available in session");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult LPIDNumber(FieldViewModel model)
+    {
+        _logger.LogTrace("Field Controller : LPIDNumber() post action called");
+
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        SetFieldDataToSession(model);
+
+        if (model.IsCheckAnswer)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+        {
+            return RedirectToAction(_updateFieldActionName);
+        }
+
+        return RedirectToAction("FieldMeasurements");
+    }
+
+
+
+
 }

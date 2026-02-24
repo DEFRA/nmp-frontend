@@ -16,7 +16,7 @@
     }
     else
     {
-        backAction = "AddField";
+        backAction = (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? "LPIDNumber" : "AddField";
     }
 }
 @section BeforeContent {

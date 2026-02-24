@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 namespace NMP.Commons.Models;
 public class Field
 {
-    public int? ID { get; set; }    
+    public int? ID { get; set; }
     public int? SoilTypeID { get; set; }
-    public int?  NVZProgrammeID { get; set; }
+    public int? NVZProgrammeID { get; set; }
 
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]
     [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFieldNameMaxLengthValidation))]
@@ -13,6 +13,9 @@ public class Field
 
     [StringLength(14, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgLandParcelIdMinMaxValidation))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblLandParcelID))]
+    [RegularExpression(@"^[A-Za-z]{2}/\d{5}/\d{5}$",
+    ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgLPIDNumberFormatError))]
+
     public string? LPIDNumber { get; set; }
 
     [StringLength(4, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgNationalGridReferenceMinMaxValidation))]
@@ -21,20 +24,20 @@ public class Field
 
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
     public string? OtherReference { get; set; }
-    
+
     [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgTotalAreaShouldNotMoreThanTwoDecimal))]
     public decimal? TotalArea { get; set; }
-    
+
     [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCroppedAreaShouldNotMoreThanTwoDecimal))]
     public decimal? CroppedArea { get; set; }
-   
+
     [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgManureNonSpreadingAreaNotMoreThanTwoDecimal))]
     public decimal? ManureNonSpreadingArea { get; set; }
     public bool? SoilReleasingClay { get; set; }
     public bool? SoilOverChalk { get; set; }
     public bool? IsWithinNVZ { get; set; }
     public bool? IsAbove300SeaLevel { get; set; }
-    public bool IsActive { get; set; }        
+    public bool IsActive { get; set; }
     public DateTime? CreatedOn { get; set; }
     public int? CreatedByID { get; set; }
     public DateTime? ModifiedOn { get; set; }
