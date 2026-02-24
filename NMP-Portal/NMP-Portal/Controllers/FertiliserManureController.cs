@@ -3347,7 +3347,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     string jsonString = JsonConvert.SerializeObject(result);
                     (string success, error) = await _fertiliserManureLogic.DeleteFertiliserByIdAsync(jsonString);
 
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         RemoveFertiliserManureSession();
 

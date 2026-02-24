@@ -2081,7 +2081,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!cropPlans.Any())
         {
             (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, null);
-            if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
+            if ((error == null ||string.IsNullOrWhiteSpace(error.Message)) && prevCroppings.Count > 0)
             {
                 model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
             }
@@ -2108,7 +2108,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.LastHarvestYear = oldestYearWithPlan - 1;
             (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, oldestYearWithPlan);
 
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 List<int> previousYears = new List<int>();
 
@@ -2524,7 +2524,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (!cropPlans.Any())
                 {
                     (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decrptedFieldId, null);
-                    if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && prevCroppings.Count > 0)
                     {
                         model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
                     }
@@ -2990,7 +2990,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(field.EncryptedFieldId));
             (string message, Error error) = await _fieldLogic.DeleteFieldByIdAsync(fieldId);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.DeleteFieldError = error.Message;
                 return View(field);
@@ -3074,7 +3074,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmID, Resource.lblTrue);
 
-        if (string.IsNullOrWhiteSpace(error.Message))
+        if (error == null || string.IsNullOrWhiteSpace(error.Message))
         {
             ViewBag.FieldList = fieldList;
         }
@@ -3097,7 +3097,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!ModelState.IsValid)
         {
             (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(field.FarmID, Resource.lblTrue);
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.FieldList = fieldList;
             }

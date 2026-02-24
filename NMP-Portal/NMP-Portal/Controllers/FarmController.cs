@@ -1512,7 +1512,7 @@ namespace NMP.Portal.Controllers
                 {
                     int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
                     (string message, Error error) = await _farmLogic.DeleteFarmByIdAsync(id);
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["AddFarmError"] = error.Message;
                         return View(farm);

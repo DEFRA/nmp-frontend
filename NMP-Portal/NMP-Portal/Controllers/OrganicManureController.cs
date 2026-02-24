@@ -868,7 +868,7 @@ namespace NMP.Portal.Controllers
                     if (decryptedId > 0 && model.FarmId != null && model.HarvestYear != null)
                     {
                         (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
+                        if ((error == null ||string.IsNullOrWhiteSpace(error.Message)) && organicManureResponse != null && organicManureResponse.Count > 0)
                         {
                             var SelectListItem = organicManureResponse.Select(f => new SelectListItem
                             {
@@ -933,7 +933,7 @@ namespace NMP.Portal.Controllers
                     {
                         (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
 
-                        if (string.IsNullOrWhiteSpace(error.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
+                        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && organicManureResponse != null && organicManureResponse.Count > 0)
                         {
                             selectListItem = organicManureResponse.Select(f => new SelectListItem
                             {
@@ -962,7 +962,7 @@ namespace NMP.Portal.Controllers
                             if (decryptedId > 0 && model.FarmId != null && model.HarvestYear != null)
                             {
                                 (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
-                                if (string.IsNullOrWhiteSpace(error.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
+                                if ((error == null ||string.IsNullOrWhiteSpace(error.Message)) && organicManureResponse != null && organicManureResponse.Count > 0)
                                 {
                                     var SelectListItem = organicManureResponse.Select(f => new SelectListItem
                                     {
@@ -4585,7 +4585,7 @@ namespace NMP.Portal.Controllers
                         {
                             int counter = 1;
                             (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(decryptedId, decryptedFarmId, decryptedHarvestYear);
-                            if (string.IsNullOrWhiteSpace(error.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
+                            if ((error == null ||string.IsNullOrWhiteSpace(error.Message)) && organicManureResponse != null && organicManureResponse.Count > 0)
                             {
                                 model.UpdatedOrganicIds = organicManureResponse;
                                 if (model.IsComingFromRecommendation)
@@ -5128,7 +5128,7 @@ namespace NMP.Portal.Controllers
                         if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                         {
                             (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
-                            if (string.IsNullOrWhiteSpace(error.Message) && organicResponse != null && organicResponse.Count > 0)
+                            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && organicResponse != null && organicResponse.Count > 0)
                             {
                                 var SelectListItem = organicResponse.Select(f => new SelectListItem
                                 {
@@ -5626,7 +5626,7 @@ namespace NMP.Portal.Controllers
                         if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                         {
                             (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
-                            if (string.IsNullOrWhiteSpace(error.Message) && organicResponse != null && organicResponse.Count > 0)
+                            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && organicResponse != null && organicResponse.Count > 0)
                             {
                                 var SelectListItem = organicResponse.Select(f => new SelectListItem
                                 {
@@ -7760,7 +7760,7 @@ namespace NMP.Portal.Controllers
                             model.OtherMaterialName
                         );
 
-                    if (string.IsNullOrWhiteSpace(error.Message) && farmManureExist)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureExist)
                         ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
                 }
                 if (!ModelState.IsValid)
@@ -8297,7 +8297,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     //for updated manner output
                                     (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organic.ManagementPeriodID);
-                                    if (string.IsNullOrWhiteSpace(error.Message) && managementPeriod != null)
+                                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && managementPeriod != null)
                                     {
                                         (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
                                         if (crop != null && string.IsNullOrWhiteSpace(error.Message))
@@ -8803,7 +8803,7 @@ namespace NMP.Portal.Controllers
                 if (model.DoubleCrop.Count > 0)
                 {
                     (List<ManagementPeriod> managementPeriods, error) = await _cropLogic.FetchManagementperiodByCropId(model.DoubleCrop[model.DoubleCropCurrentCounter].CropID, true);
-                    if (string.IsNullOrWhiteSpace(error.Message) && managementPeriods != null && managementPeriods.Count > 0)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && managementPeriods != null && managementPeriods.Count > 0)
                     {
                         foreach (var organicManure in model.OrganicManures)
                         {
@@ -8830,7 +8830,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
                 (Crop cropData, error) = await _cropLogic.FetchCropById(model.DoubleCrop[model.DoubleCropCurrentCounter].CropID);
-                if (string.IsNullOrWhiteSpace(error.Message) && cropData != null && cropData.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass &&
+                if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && cropData != null && cropData.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass &&
                     model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID))
                 {
                     int fieldIdToRemove = model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID;
@@ -8861,7 +8861,7 @@ namespace NMP.Portal.Controllers
                         if (doubleCrop.CropID > 0)
                         {
                             (Crop crop, error) = await _cropLogic.FetchCropById(doubleCrop.CropID);
-                            if (string.IsNullOrWhiteSpace(error.Message) && crop != null)
+                            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && crop != null)
                             {
                                 if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                                 {
@@ -9339,7 +9339,7 @@ namespace NMP.Portal.Controllers
                             List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
                             (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
 
-                            if (string.IsNullOrWhiteSpace(error.Message) && defoliationSequenceID != null)
+                            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && defoliationSequenceID != null)
                             {
                                 (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
                                 if (error == null && defoliationSequence != null)
