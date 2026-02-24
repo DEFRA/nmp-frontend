@@ -7448,4 +7448,7 @@ livestock manure.</value>
   <data name="lblYouCanAddFieldsToDifferentNVZs" xml:space="preserve">
     <value>You can add fields to different NVZs later if you need to.</value>
   </data>
+  <data name="MsgInvalidFarmData" xml:space="preserve">
+    <value>Invalid farm data</value>
+  </data>
 </root>

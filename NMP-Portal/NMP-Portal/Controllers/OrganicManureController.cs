@@ -131,15 +131,18 @@ namespace NMP.Portal.Controllers
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
             model.EncryptedFarmId = q;
             model.EncryptedHarvestYear = r;
-            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
+            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["FieldGroupError"] = error.Message;
                 return model;
             }
-            model.FarmName = farm.Name;
-            model.FarmRB209CountryID = farm.RB209CountryID;
-            model.FarmCountryId = farm.CountryID;
+            if (farm != null)
+            {
+                model.FarmName = farm.Name;
+                model.FarmRB209CountryID = farm.RB209CountryID;
+                model.FarmCountryId = farm.CountryID;
+            }
 
             SetOrganicManureToSession(model);
             return model;
@@ -1652,14 +1655,14 @@ namespace NMP.Portal.Controllers
 
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
 
-                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     TempData["Error"] = error.Message;
                 }
                 if (farm != null)
                 {
-                    (FieldDetailResponse fieldDetail, Error error2) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
+                    (FieldDetailResponse fieldDetail, _) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
                     WarningWithinPeriod warningMessage = new WarningWithinPeriod();
                     string closedPeriod = string.Empty;
@@ -1741,7 +1744,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 int farmId = 0;
-                FarmResponse farm = new FarmResponse();
+                FarmResponse? farm = new FarmResponse();
                 Error error = new Error();
                 if (model.ApplicationDate == null)
                 {
@@ -1927,7 +1930,7 @@ namespace NMP.Portal.Controllers
 
 
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-            (FarmResponse farm, Error farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            (FarmResponse? farm, Error? farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
             if (farmError != null && !string.IsNullOrWhiteSpace(farmError.Message))
             {
                 TempData["Error"] = farmError.Message;
@@ -3232,7 +3235,7 @@ namespace NMP.Portal.Controllers
 
                     if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                     {
-                        (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                        (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                         foreach (var organicManure in model.OrganicManures)
                         {
                             int? fieldId = organicManure.FieldID ?? null;
@@ -3454,7 +3457,7 @@ namespace NMP.Portal.Controllers
 
                 if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                 {
-                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     foreach (var organicManure in model.OrganicManures)
                     {
                         int? fieldId = organicManure.FieldID ?? null;
@@ -3463,7 +3466,7 @@ namespace NMP.Portal.Controllers
                             Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
                             if (field != null)
                             {
-                                bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
+                                bool isFieldIsInNVZ = field.IsWithinNVZ != null && field.IsWithinNVZ.Value;
                                 if (isFieldIsInNVZ)
                                 {
 

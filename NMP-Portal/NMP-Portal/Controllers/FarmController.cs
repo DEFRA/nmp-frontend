@@ -1225,22 +1225,22 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
-                    (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
                         return RedirectToAction(_farmListActionName);
                     }
 
-                    HttpContext.Session.SetString("current_farm_name", farm.Name ?? "");
+                    HttpContext.Session.SetString("current_farm_name", farm?.Name ?? "");
                     HttpContext.Session.SetString("current_farm_id", id);
 
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
                         farmData.Name = farm.Name;
-                        farmData.CountryID = farm.CountryID.Value;
-                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
+                        farmData.CountryID = farm?.CountryID;
+                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm?.Address1, farm?.Address2 != null ? farm.Address2 + "," : string.Empty, farm?.Address3, farm?.Address4, farm?.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
@@ -1278,9 +1278,9 @@ namespace NMP.Portal.Controllers
                 }
 
                 farmId = _dataProtector.Unprotect(id);
-                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (error!= null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["Error"] = error.Message;
                     return RedirectToAction(_farmListActionName);
@@ -1383,9 +1383,9 @@ namespace NMP.Portal.Controllers
 
                 int createdByID = 0;
                 DateTime createdOn = DateTime.Now;
-                (FarmResponse farmDetail, Error apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse? farmDetail, Error? apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
-                if (!string.IsNullOrWhiteSpace(apiError.Message))
+                if (apiError != null && !string.IsNullOrWhiteSpace(apiError.Message))
                 {
                     TempData["Error"] = apiError.Message;
                     return RedirectToAction(_farmListActionName);
@@ -1451,11 +1451,11 @@ namespace NMP.Portal.Controllers
                 }
 
                 string success = _dataProtector.Protect("true");
-                farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                farmResponse?.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
                 RemoveFarmSession();
                 RemoveAddressesSession();
                 string isUpdate = _dataProtector.Protect("true");
-                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
+                return RedirectToAction("FarmSummary", new { id = farmResponse?.EncryptedFarmId, q = success, u = isUpdate });
             }
             catch (HttpRequestException hre)
             {
