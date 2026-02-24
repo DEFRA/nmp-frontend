@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NMP.Application;
+using NMP.Businesses;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -14,6 +15,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -229,8 +231,45 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-
+            if(model.CountryID==(int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("BusinessInformation");
+            }
             return RedirectToAction("PostCode");
+        }
+
+        [HttpGet]
+        public IActionResult BusinessInformation()
+        {
+            _logger.LogTrace("Farm Controller : BusinessInformation() action called");
+            FarmViewModel? model = GetFarmFromSession();
+            if (model == null)
+            {
+                model = new FarmViewModel();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BusinessInformation(FarmViewModel model)
+        {
+            _logger.LogTrace("Farm Controller : BusinessInformation() post action called");
+
+            if (string.IsNullOrWhiteSpace(model.BusinessName))
+            {
+                ModelState.AddModelError("BusinessName", Resource.MsgEnterTheBusinessName);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            SetFarmToSession(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("PostCode");
         }
 
         [HttpGet]
@@ -855,6 +894,50 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
+            if(farm.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ && farm.CountryID== (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("NitrateVulnerableZones");
+            }
+            return RedirectToAction("Elevation");
+        }
+        [HttpGet]
+        public async Task<IActionResult> NitrateVulnerableZones()
+        {
+            _logger.LogTrace("Farm Controller : NitrateVulnerableZones() action called");
+            FarmViewModel? model = GetFarmFromSession();
+
+            if (model == null)
+            {
+                _logger.LogError("Farm Controller : Session not found in Elevation() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID??0);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NitrateVulnerableZones(FarmViewModel farm)
+        {
+            _logger.LogTrace("Farm Controller : NitrateVulnerableZones() post action called");
+
+            if (farm.NitrateVulnerableZoneList == null)
+            {
+                ModelState.AddModelError("NitrateVulnerableZoneList", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(farm.CountryID ?? 0);
+                return View(farm);
+            }
+
+            SetFarmToSession(farm);
+
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction(_checkAnswerActionName);
+            }
 
             return RedirectToAction("Elevation");
         }
@@ -942,7 +1025,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CheckAnswer(string id, string? q)
+        public async Task<IActionResult> CheckAnswer(string id, string? q)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer({Q}) action called", q);
             FarmViewModel? model = GetFarmFromSession();
@@ -971,6 +1054,7 @@ namespace NMP.Portal.Controllers
                 SetFarmDataBeforeUpdateToSession(model);
 
             }
+
             var previousModel = GetFarmDataBeforeUpdateFromSession();
 
             bool isDataChanged = false;
@@ -1567,6 +1651,17 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext.Session.Remove("AddressList");
             }
+        }
+        private async Task<List<SelectListItem>> GetNvzActionProgramItemsByCountryIdAsync(int countryId)
+        {
+            var nvzActionPrograms = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(countryId);
+
+            return nvzActionPrograms
+                .Select(f => new SelectListItem
+                {
+                    Value = f.NvzId.ToString(),
+                    Text = f.NvzName
+                }).OrderBy(x => x.Text).ToList();
         }
     }
 }

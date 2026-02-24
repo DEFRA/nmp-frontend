@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Principal;
-using NMP.Portal.Helpers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace NMP.Portal.Controllers
 {
@@ -12,14 +10,19 @@ namespace NMP.Portal.Controllers
     public class AccountController(ILogger<AccountController> logger) : Controller
     {
         private readonly ILogger _logger = logger;
-
+        
         public async Task<IActionResult> Logout()
         {
             _logger.LogTrace("Account Controller : Logout action called");
-            base.SignOut();
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
-            return RedirectToAction("SignOut", "Account", new { Area = "MicrosoftIdentity" });
+            return await Task.FromResult(SignOut(
+            new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("SignOut", "Account", new { Area = "MicrosoftIdentity" })                
+            },
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            OpenIdConnectDefaults.AuthenticationScheme
+            ));
         }
 
         public IActionResult ChangeOrganisation()

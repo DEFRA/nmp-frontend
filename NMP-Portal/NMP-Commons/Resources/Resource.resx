@@ -226,7 +226,7 @@
     <value>How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
-    <value>If you have more than one holding, add a separate farm for each.</value>
+    <value>If you have more than one holding, add a separate farm for each one.</value>
   </data>
   <data name="lblManualAddress" xml:space="preserve">
     <value>Manual address</value>
@@ -3922,7 +3922,7 @@ cubic metres per hectare  not set</value>
     <value>Read</value>
   </data>
   <data name="lblSecondRuleOfNVZForEngland" xml:space="preserve">
-    <value>If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+    <value>If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules.</value>
   </data>
   <data name="lblTheWaterResourcesRegulations2021" xml:space="preserve">
     <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
@@ -7164,7 +7164,7 @@ livestock manure.</value>
     <value>Regulations for Scotland</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent1" xml:space="preserve">
-    <value>There are currently &lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt; 5 NVZs in Scotland &lt;/a&gt;:</value>
+    <value>There are currently five NVZs in Scotland:</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent2" xml:space="preserve">
     <value>Lower Nithsdale</value>
@@ -7185,7 +7185,7 @@ livestock manure.</value>
     <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent8" xml:space="preserve">
-    <value>You should &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;follow the guidance in the Technical Notes &lt;/a&gt; when making plans for your nutrients and crops.</value>
+    <value>You should follow the guidance in the &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops.</value>
   </data>
   <data name="lblFarmingRuleForEnglandContent1" xml:space="preserve">
     <value>They include about 55% of land in England.</value>
@@ -7411,5 +7411,41 @@ livestock manure.</value>
   </data>
   <data name="lblIsTheWheatEarlyOrLateSown" xml:space="preserve">
     <value>Is the wheat early or late sown?</value>
+  </data>
+  <data name="lblViewMapsOfTheNitrateVulnerableZonesInScotland" xml:space="preserve">
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland.&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblItWillAlsoTellYou" xml:space="preserve">
+    <value>It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+  </data>
+  <data name="lblBusinessInformationFor" xml:space="preserve">
+    <value>Business information for {0}</value>
+  </data>
+  <data name="lblWhatIsTheBusinessName" xml:space="preserve">
+    <value>What is the business name?</value>
+  </data>
+  <data name="lblWhatIsTheBusinessReferenceNumber" xml:space="preserve">
+    <value>What is the business reference number (optional)?</value>
+  </data>
+  <data name="lblForExample123456" xml:space="preserve">
+    <value>For example, 123456</value>
+  </data>
+  <data name="lblWhatIsTheMainLocationCode" xml:space="preserve">
+    <value>What is the main location code (MLC) (optional)?</value>
+  </data>
+  <data name="lblForExample223334444" xml:space="preserve">
+    <value>For example, 22/333/4444</value>
+  </data>
+  <data name="MsgEnterTheBusinessName" xml:space="preserve">
+    <value>Enter the business name</value>
+  </data>
+  <data name="lblWhichNVZAreTheFieldsAtYourFarmIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?</value>
+  </data>
+  <data name="lblViewAMapOfNitrateVulnerableZones" xml:space="preserve">
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View a map of Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblYouCanAddFieldsToDifferentNVZs" xml:space="preserve">
+    <value>You can add fields to different NVZs later if you need to.</value>
   </data>
 </root>

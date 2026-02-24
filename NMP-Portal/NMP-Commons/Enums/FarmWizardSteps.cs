@@ -13,5 +13,7 @@ public enum FarmWizardSteps
     Nvz = 9,
     FieldAbove300Level = 10,
     OrganicFarm=11,
-    ClimateDataPostcode=12
+    ClimateDataPostcode=12,
+    BusinessInformation=13,
+    NitrateVulnerableZones = 14
 }

@@ -19,6 +19,7 @@ using OpenTelemetry.Trace;
 using Polly;
 using Polly.Extensions.Http;
 using StackExchange.Redis; // Add this at the top of the file
+using System;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -107,31 +108,26 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
+var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+var authorizeFilter = new AuthorizeFilter(policy);
+var responseCacheAttribute = new ResponseCacheAttribute
+{
+    NoStore = true,
+    Location = ResponseCacheLocation.None
+};
+
 builder.Services.AddControllersWithViews(options =>
 {
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-    options.Filters.Add(new ResponseCacheAttribute
-    {
-        NoStore = true,
-        Location = ResponseCacheLocation.None
-    });
+    
+    options.Filters.Add(authorizeFilter);
+    options.Filters.Add(responseCacheAttribute);
 }).AddMicrosoftIdentityUI()
 .AddSessionStateTempDataProvider();
 
 builder.Services.AddRazorPages().AddMvcOptions(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-                  .RequireAuthenticatedUser()
-                  .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-    options.Filters.Add(new ResponseCacheAttribute
-    {
-        NoStore = true,
-        Location = ResponseCacheLocation.None
-    });
+{    
+    options.Filters.Add(authorizeFilter);
+    options.Filters.Add(responseCacheAttribute);
 }).AddMicrosoftIdentityUI().AddSessionStateTempDataProvider();
 
 builder.Services.AddDataProtection();
@@ -206,6 +202,7 @@ builder.Services.AddCsp(nonceByteAmount: 32);
 
 var app = builder.Build();
 app.UseGovUkFrontend();
+
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 
@@ -214,37 +211,13 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 else
-{
-    // Configure the HTTP request pipeline.    
-    app.Use(async (ctx, next) =>
-    {
-        await next();
-        if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-        {
-            //Re-execute the request so the user gets the error page
-            string originalPath = ctx.Request.Path.Value;
-            ctx.Items["originalPath"] = originalPath;
-            ctx.Request.Path = "/Error/404";
-            await next();
-        }
-    });
+{        
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-app.Use(async (context, next) =>
-{
-    // Do work that doesn't write to the Response.
-    if (context.Request.Method is "OPTIONS" or "TRACE" or "HEAD")
-    {
-        context.Response.StatusCode = 405;
-        return;
-    }
-    await next.Invoke();
-    // Do logging or other work that doesn't write to the Response.
-});
-
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/favicon.ico")
@@ -257,6 +230,21 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
     }
+    // 1️ Always allow Azure metadata requests to pass through untouched
+    if (context.Request.Path.StartsWithSegments("/metadata"))
+    {
+        await next();
+        return;
+    }
+
+    // 2️ Block TRACE requests (security hardening)
+    if (context.Request.Method == HttpMethods.Trace)
+    {
+        context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+        return;
+    }       
+
+    // 3️ Continue normal pipeline
     await next();
 });
 
