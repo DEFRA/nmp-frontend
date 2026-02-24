@@ -352,8 +352,10 @@ namespace NMP.Portal.Controllers
             int farmId = farm.EncryptedFarmId != null
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
-
-            bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
+            Claim? claim = HttpContext.User.FindFirst("organisationId");
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+            bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId, organisationId).Result;
             if (exists)
             {
                 ModelState.AddModelError(key, Resource.MsgFarmAlreadyExist);
@@ -579,7 +581,11 @@ namespace NMP.Portal.Controllers
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
 
-            if (await _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId))
+            Claim? claim = HttpContext.User.FindFirst("organisationId");
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+
+            if (await _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId, organisationId))
             {
                 ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
             }
@@ -1137,8 +1143,8 @@ namespace NMP.Portal.Controllers
                     UserID = userId,
                     RoleID = 2
                 };
-
-                (Farm? farmResponse, Error? error) = await _farmLogic.AddFarmAsync(farmData);
+                
+                (Farm? farmResponse, Error? error) = await _farmLogic.AddFarmAsync(farmData, organisationId);
 
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1441,7 +1447,7 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm? farmResponse, Error? error) = await _farmLogic.UpdateFarmAsync(farmData);
+                (Farm? farmResponse, Error? error) = await _farmLogic.UpdateFarmAsync(farmData, organisationId);
 
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {

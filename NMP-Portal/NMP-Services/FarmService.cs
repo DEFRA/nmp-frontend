@@ -10,6 +10,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 namespace NMP.Services;
@@ -43,14 +44,14 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         return (farmList, error);
     }
-    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData, Guid orgId)
     {
         string jsonData = JsonConvert.SerializeObject(farmData);
         Farm? farm = null;
         Error? error = new Error();
         
         // check if farm already exists or not
-        bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
+        bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID, orgId);
         if (IsFarmExist)
         {
             error.Message = string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
@@ -101,10 +102,10 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         return (farm, error);
     }
 
-    public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id)
+    public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id, Guid orgId)
     {
         bool isFarmExist = false;
-        string url = string.Format(ApiurlHelper.IsFarmExist, HttpUtility.UrlEncode(farmName), postcode.Trim(), Id);
+        string url = string.Format(ApiurlHelper.IsFarmExist, HttpUtility.UrlEncode(farmName), postcode.Trim(), Id, orgId);
         HttpClient httpClient = await GetNMPAPIClient();
         var farmExist = await httpClient.GetAsync(url);
         farmExist.EnsureSuccessStatusCode();
@@ -135,14 +136,14 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         return rainfallAverage;
     }
 
-    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData, Guid orgId)
     {
         string jsonData = JsonConvert.SerializeObject(farmData);
         Farm? farm = null;
         Error? error = null;
 
         //check if Updated farm Name already exist or not in the Postcode...
-        bool IsFarmNameWithInPostCodeAlreadyExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID);
+        bool IsFarmNameWithInPostCodeAlreadyExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID, orgId);
         if (IsFarmNameWithInPostCodeAlreadyExist)
         {
             error = new Error
