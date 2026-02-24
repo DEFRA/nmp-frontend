@@ -7448,6 +7448,15 @@ livestock manure.</value>
   <data name="lblYouCanAddFieldsToDifferentNVZs" xml:space="preserve">
     <value>You can add fields to different NVZs later if you need to.</value>
   </data>
+  <data name="lblWhatIsTheLPIDNumber" xml:space="preserve">
+    <value>What is the land parcel identification number (LPID) (optional)?</value>
+  </data>
+  <data name="lblHintOfLPIDNumber" xml:space="preserve">
+    <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
+  </data>
+  <data name="MsgLPIDNumberFormatError" xml:space="preserve">
+    <value>LPID number format must be like AA/12345/12345.</value>
+  </data>
   <data name="MsgInvalidFarmData" xml:space="preserve">
     <value>Invalid farm data</value>
   </data>

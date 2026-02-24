@@ -117,6 +117,7 @@
                     }
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber" />
                 </div>
             }
             <govuk-input asp-for="@Model.Name">
@@ -124,11 +125,6 @@
                     @Resource.AddFieldNameQuestion
                 </govuk-input-label>
             </govuk-input>
-            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-            {
-                <govuk-input class="input-width-15 margin-bottom-forty" asp-for="@Model.LPIDNumber"></govuk-input>
-            }
-
 
 
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
