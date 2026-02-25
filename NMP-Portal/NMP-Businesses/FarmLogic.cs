@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
+using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
@@ -36,8 +37,9 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     public async Task<List<Country>> FetchCountryAsync()
     {
         _logger.LogTrace("Fetching list of countries");
-        (List<Country> countryList, Error error) = await _farmService.FetchCountryAsync();
-        return countryList.OrderBy(c => c.Name).ToList();
+        (List<Country> countryList, _) = await _farmService.FetchCountryAsync();
+        
+        return countryList.Where(c=>c.ID != (int) FarmCountry.Scotland).OrderBy(c => c.Name).ToList();
 
     }
 

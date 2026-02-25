@@ -75,7 +75,7 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         return new RedisCache(new RedisCacheOptions
         {
             ConnectionMultiplexerFactory = () => Task.FromResult(multiplexer),
-            InstanceName = "nmp_ui_"
+            InstanceName = "NMP-Portal.Redis_"
         });
     });
 }
