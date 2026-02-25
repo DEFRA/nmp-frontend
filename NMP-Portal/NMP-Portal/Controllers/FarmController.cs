@@ -1033,7 +1033,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in CheckAnswer({Q}) action", q);
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
             }
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
