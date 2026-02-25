@@ -1155,17 +1155,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
                         if (field != null)
                         {
-                            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
+                            (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
                             if (error == null && managementPeriod != null && managementPeriod.CropID != null)
                             {
-                                (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
+                                (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
                                 if (error == null && crop != null && crop.CropTypeID != null)
                                 {
                                     (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                     if (error == null)
                                     {
                                         WarningWithinPeriod warning = new WarningWithinPeriod();
-                                        string closedPeriod = warning.ClosedPeriodForFertiliser(crop.CropTypeID.Value);
+                                        string? closedPeriod = warning.ClosedPeriodForFertiliser(crop.CropTypeID.Value);
 
                                         if (!string.IsNullOrWhiteSpace(closedPeriod))
                                         {
@@ -1189,13 +1189,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                     DateTime? closedPeriodEndDate = null;
                                                     if (startMonth <= endMonth)
                                                     {
-                                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                                                        closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay,00,00,00,DateTimeKind.Unspecified);
+                                                        closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                                                     }
                                                     else if (startMonth >= endMonth)
                                                     {
-                                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                                                        closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
+                                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+                                                        closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                                                     }
 
                                                     string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
@@ -1228,7 +1228,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Farm Controller : Exception in InOrgnaicManureDuration() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            if (model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+            if (model != null && model.FieldGroup!= null && model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
             {
                 TempData["FieldError"] = ex.Message;
                 if (TempData["InOrgnaicManureDurationError"] != null)
@@ -1248,14 +1248,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
         }
 
-        if (model.FieldList.Count == 1)
+        if (model != null && model.FieldList != null && model.FieldList.Count == 1)
         {
             Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
             model.FieldName = field.Name;
         }
-        model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
-        model.IsWarningMsgNeedToShow = false;
-        SetFertiliserManureToSession(model);
+        if (model != null)
+        {
+            model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
+            model.IsWarningMsgNeedToShow = false;
+            SetFertiliserManureToSession(model);
+        }
+        
         return View(model);
     }
 
@@ -4587,50 +4591,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (model != null && model.N > 0 && model.FertiliserManures != null && model.FertiliserManures.Count > 0)
             {
                 (ManagementPeriod? managementPeriod, _) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
-                if (!string.IsNullOrWhiteSpace(model.ClosedPeriodWarningPara1))
-                {
-                    WarningMessage warningMessage = new WarningMessage();
-                    warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
-                    warningMessage.CropID = managementPeriod == null ? 0 : managementPeriod?.CropID ?? 0;
-                    warningMessage.JoiningID = null;
-                    warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
-                    warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
-                    warningMessage.Header = model.ClosedPeriodWarningHeader;
-                    warningMessage.Para1 = model.ClosedPeriodWarningPara1;
-                    warningMessage.Para2 = null;
-                    warningMessage.Para3 = model.ClosedPeriodWarningPara3;
-                    warningMessages.Add(warningMessage);
-                }
 
-                if (model.IsNitrogenExceedWarning)
-                {
-                    WarningMessage warningMessage = new WarningMessage();
-                    warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
-                    warningMessage.CropID = managementPeriod == null ? 0 : managementPeriod?.CropID ?? 0;
-                    warningMessage.JoiningID = null;
-                    warningMessage.WarningLevelID = model.ClosedPeriodNitrogenExceedWarningLevelID;
-                    warningMessage.WarningCodeID = model.ClosedPeriodNitrogenExceedWarningCodeID;
-                    warningMessage.Header = model.ClosedPeriodNitrogenExceedWarningHeader;
-                    warningMessage.Para1 = model.ClosedPeriodNitrogenExceedWarningPara1;
-                    warningMessage.Para2 = model.ClosedPeriodNitrogenExceedWarningPara2;
-                    warningMessage.Para3 = model.ClosedPeriodNitrogenExceedWarningPara3;
-                    warningMessages.Add(warningMessage);
-                }
-                if (model.IsNMaxLimitWarning)
-                {
-                    WarningMessage warningMessage = new WarningMessage();
-
-                    warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
-                    warningMessage.CropID = managementPeriod == null ? 0 : managementPeriod?.CropID ?? 0;
-                    warningMessage.JoiningID = null;
-                    warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
-                    warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
-                    warningMessage.Header = model.CropNmaxLimitWarningHeader;
-                    warningMessage.Para1 = model.CropNmaxLimitWarningPara1;
-                    warningMessage.Para2 = model.CropNmaxLimitWarningPara2;
-                    warningMessage.Para3 = model.CropNmaxLimitWarningPara3;
-                    warningMessages.Add(warningMessage);
-                }
+                ClosedPeriodWarning(model, fertiliserManure, warningMessages, managementPeriod);
+                NitrogenExceedWarning(model, fertiliserManure, warningMessages, managementPeriod);
+                NMaxLimitWarning(model, fertiliserManure, warningMessages, managementPeriod);
             }
         }
         catch (Exception ex)
@@ -4638,6 +4602,61 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogTrace(ex, "OrganicManure Controller : Exception in GetWarningMessages() method : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
         }
         return warningMessages;
+    }
+
+    private static void NMaxLimitWarning(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliserManure, List<WarningMessage> warningMessages, ManagementPeriod? managementPeriod)
+    {
+        if (model.IsNMaxLimitWarning)
+        {
+            WarningMessage warningMessage = new WarningMessage();
+
+            warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
+            warningMessage.CropID = managementPeriod == null ? 0 : managementPeriod?.CropID ?? 0;
+            warningMessage.JoiningID = null;
+            warningMessage.WarningLevelID = model.CropNmaxLimitWarningLevelID;
+            warningMessage.WarningCodeID = model.CropNmaxLimitWarningCodeID;
+            warningMessage.Header = model.CropNmaxLimitWarningHeader;
+            warningMessage.Para1 = model.CropNmaxLimitWarningPara1;
+            warningMessage.Para2 = model.CropNmaxLimitWarningPara2;
+            warningMessage.Para3 = model.CropNmaxLimitWarningPara3;
+            warningMessages.Add(warningMessage);
+        }
+    }
+
+    private static void ClosedPeriodWarning(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliserManure, List<WarningMessage> warningMessages, ManagementPeriod? managementPeriod)
+    {
+        if (!string.IsNullOrWhiteSpace(model.ClosedPeriodWarningPara1))
+        {
+            WarningMessage warningMessage = new WarningMessage();
+            warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
+            warningMessage.CropID = managementPeriod == null ? 0 : managementPeriod?.CropID ?? 0;
+            warningMessage.JoiningID = null;
+            warningMessage.WarningLevelID = model.ClosedPeriodWarningLevelID;
+            warningMessage.WarningCodeID = model.ClosedPeriodWarningCodeID;
+            warningMessage.Header = model.ClosedPeriodWarningHeader;
+            warningMessage.Para1 = model.ClosedPeriodWarningPara1;
+            warningMessage.Para2 = null;
+            warningMessage.Para3 = model.ClosedPeriodWarningPara3;
+            warningMessages.Add(warningMessage);
+        }
+    }
+
+    private static void NitrogenExceedWarning(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliserManure, List<WarningMessage> warningMessages, ManagementPeriod? managementPeriod)
+    {
+        if (model.IsNitrogenExceedWarning)
+        {
+            WarningMessage warningMessage = new WarningMessage();
+            warningMessage.FieldID = fertiliserManure.FieldID ?? 0;
+            warningMessage.CropID = managementPeriod == null ? 0 : managementPeriod?.CropID ?? 0;
+            warningMessage.JoiningID = null;
+            warningMessage.WarningLevelID = model.ClosedPeriodNitrogenExceedWarningLevelID;
+            warningMessage.WarningCodeID = model.ClosedPeriodNitrogenExceedWarningCodeID;
+            warningMessage.Header = model.ClosedPeriodNitrogenExceedWarningHeader;
+            warningMessage.Para1 = model.ClosedPeriodNitrogenExceedWarningPara1;
+            warningMessage.Para2 = model.ClosedPeriodNitrogenExceedWarningPara2;
+            warningMessage.Para3 = model.ClosedPeriodNitrogenExceedWarningPara3;
+            warningMessages.Add(warningMessage);
+        }
     }
 
     private async Task<(List<SelectListItem>, Error?)> GetDefoliationList(FertiliserManureViewModel model)
