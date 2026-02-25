@@ -81,7 +81,7 @@ namespace NMP.Portal.Controllers
                         _logger.LogTrace("SoilAnalysisController: fields/{FieldId} called.", fieldId);
                         var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
                         model.FieldName = field.Name;
-                        model.FarmName = farm.Name;
+                        model.FarmName = farm?.Name;
                         model.FieldID = fieldId;
                         int decryptedSoilId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                         _logger.LogTrace("SoilAnalysisController: soil-analyses/{DecryptedSoilId} called", decryptedSoilId);
@@ -799,7 +799,7 @@ namespace NMP.Portal.Controllers
                 (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(j)));
                 if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                 {
-                    model.FarmRB209CountryID = farm?.RB209CountryID;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
                 }
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                 var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
