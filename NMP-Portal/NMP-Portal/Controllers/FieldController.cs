@@ -174,11 +174,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
-                (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
-                model.FarmRB209CountryID = farm.RB209CountryID;
-                model.FarmName = farm.Name;
-                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
+                if (farm != null)
+                {
+                    model.FarmRB209CountryID = farm?.RB209CountryID;
+                    model.FarmName = farm?.Name;
+                    model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(r) && model != null)
@@ -326,11 +329,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
-        (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-        field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-        field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+        if (farm != null)
+        {
+            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+        }
         SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer)
@@ -456,9 +460,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-        (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-        model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+        if (farm != null)
+        {
+            model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+        }
         SetFieldDataToSession(model);
         return RedirectToAction(_elevationFieldActionName);
     }
@@ -512,8 +518,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-        (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-        model.IsAbove300SeaLevel = Convert.ToBoolean(farm.FieldsAbove300SeaLevel);
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+        if (farm != null)
+        {
+            model.IsAbove300SeaLevel = Convert.ToBoolean(farm.FieldsAbove300SeaLevel);
+        }
         SetFieldDataToSession(model);
         return RedirectToAction("SoilType");
     }
@@ -1541,10 +1550,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
 
             int? lastGroupNumber = null;
-            Error error = new Error();
-            (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+            Error? error = new Error();
+            (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
+            if (farm != null && (error == null || string.IsNullOrWhiteSpace(error.Message)))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
 
@@ -2015,8 +2024,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 model.Fields.ForEach(x => x.EncryptedFieldId = _fieldDataProtector.Protect(x.ID.ToString()));
             }
-            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-            model.FarmName = farm.Name;
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            if (farm != null)
+            {
+                model.FarmName = farm.Name;
+            }
             if (string.IsNullOrWhiteSpace(isDeleted) && name != null)
             {
                 model.FieldName = _farmDataProtector.Unprotect(name);
@@ -2058,8 +2070,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         FieldViewModel model = new FieldViewModel();
-        Error error = new Error();
-        (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+        Error? error = new Error();
+        (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
         int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
         var field = await _fieldLogic.FetchFieldByFieldId(decryptedFieldId);
         List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(decryptedFieldId);
@@ -2069,7 +2081,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!cropPlans.Any())
         {
             (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, null);
-            if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
+            if ((error == null ||string.IsNullOrWhiteSpace(error.Message)) && prevCroppings.Count > 0)
             {
                 model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
             }
@@ -2096,7 +2108,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.LastHarvestYear = oldestYearWithPlan - 1;
             (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, oldestYearWithPlan);
 
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 List<int> previousYears = new List<int>();
 
@@ -2217,12 +2229,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         model.EncryptedFieldId = fieldId;
         model.ID = decryptedFieldId;
-        model.FarmRB209CountryID = farm.RB209CountryID;
+        model.FarmRB209CountryID = farm?.RB209CountryID;
         model.SoilOverChalk = field.SoilOverChalk;
         if (farm != null)
         {
-            model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
-            model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            model.IsAbove300SeaLevelForFarm = farm?.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
         }
         else
         {
@@ -2253,7 +2265,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
         }
         model.EncryptedFarmId = farmId;
-        model.FarmName = farm.Name;
+        model.FarmName = farm?.Name;
         List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldLogic.FetchSoilAnalysisByFieldId(decryptedFieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
         if (soilAnalysisResponse != null && soilAnalysisResponse.Count > 0)
         {
@@ -2498,7 +2510,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             List<Crop> cropPlans = new List<Crop>();
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
-                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+                (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
                 int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
                 var field = await _fieldLogic.FetchFieldByFieldId(decrptedFieldId);
 
@@ -2512,7 +2524,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (!cropPlans.Any())
                 {
                     (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decrptedFieldId, null);
-                    if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && prevCroppings.Count > 0)
                     {
                         model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
                     }
@@ -2599,14 +2611,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
                 model.SoilTypeID = field.SoilTypeID;
                 model.EncryptedFieldId = fieldId;
-                model.ID = decrptedFieldId;
-                model.FarmRB209CountryID = farm.RB209CountryID;
+                model.ID = decrptedFieldId;                
                 model.SoilOverChalk = field.SoilOverChalk;
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;
-                model.FarmName = farm.Name;
+               
                 if (farm != null)
                 {
+                    model.FarmRB209CountryID = farm?.RB209CountryID;
+                    model.FarmName = farm?.Name;
                     model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                     model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                 }
@@ -2977,7 +2990,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(field.EncryptedFieldId));
             (string message, Error error) = await _fieldLogic.DeleteFieldByIdAsync(fieldId);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.DeleteFieldError = error.Message;
                 return View(field);
@@ -3061,7 +3074,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmID, Resource.lblTrue);
 
-        if (string.IsNullOrWhiteSpace(error.Message))
+        if (error == null || string.IsNullOrWhiteSpace(error.Message))
         {
             ViewBag.FieldList = fieldList;
         }
@@ -3084,7 +3097,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!ModelState.IsValid)
         {
             (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(field.FarmID, Resource.lblTrue);
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.FieldList = fieldList;
             }

@@ -2851,7 +2851,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capacity weigth.
+        ///   Looks up a localized string similar to Capacity weight.
         /// </summary>
         public static string lblCapacityWeightForSummary {
             get {
@@ -7396,7 +7396,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports.
+        ///   Looks up a localized string similar to Including N-max, livestock manure nitrogen (N) farm limit, and existing manure storage capacity reports.
         /// </summary>
         public static string lblIncludesNmaxLivestockManureNitrogen {
             get {
@@ -15130,7 +15130,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total surface area of uncovered stores.
+        ///   Looks up a localized string similar to Total surface area of uncovered slurry stores.
         /// </summary>
         public static string lblTotalSurfaceAreaOfUncoveredStores {
             get {
@@ -18136,7 +18136,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any organic manure storage.
+        ///   Looks up a localized string similar to You have not entered any manure stores.
         /// </summary>
         public static string lblYouHaveNotEnteredAnyOrganicMaterialStorage {
             get {
@@ -20528,6 +20528,15 @@ namespace NMP.Commons.Resources {
         public static string MsgInvalidAuthentication {
             get {
                 return ResourceManager.GetString("MsgInvalidAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid farm data.
+        /// </summary>
+        public static string MsgInvalidFarmData {
+            get {
+                return ResourceManager.GetString("MsgInvalidFarmData", resourceCulture);
             }
         }
         

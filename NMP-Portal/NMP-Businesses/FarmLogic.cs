@@ -21,10 +21,10 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.AddExcessWinterRainfallAsync(farmId, year, excessWinterRainfallData, isUpdated);
     }
 
-    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> AddFarmAsync(FarmData farmData, Guid orgId)
     {
         _logger.LogTrace("Adding new farm: {FarmName}", farmData.Farm.Name);
-        return await _farmService.AddFarmAsync(farmData);
+        return await _farmService.AddFarmAsync(farmData, orgId);
     }
 
     public async Task<(string, Error)> DeleteFarmByIdAsync(int farmId)
@@ -59,13 +59,13 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.FetchExcessWinterRainfallOptionByIdAsync(id);
     }
 
-    public async Task<(FarmResponse, Error)> FetchFarmByIdAsync(int farmId)
+    public async Task<(FarmResponse?, Error?)> FetchFarmByIdAsync(int farmId)
     {
         _logger.LogTrace("Fetching farm with ID: {FarmId}", farmId);
         return await _farmService.FetchFarmByIdAsync(farmId);
     }
 
-    public async Task<(List<Farm>, Error)> FetchFarmByOrgIdAsync(Guid orgId)
+    public async Task<(List<Farm>, Error?)> FetchFarmByOrgIdAsync(Guid orgId)
     {
         _logger.LogTrace("Fetching farms for Organization ID: {OrgId}", orgId);
         return await _farmService.FetchFarmByOrgIdAsync(orgId);
@@ -77,16 +77,16 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         return await _farmService.FetchRainfallAverageAsync(postcode);
     }
 
-    public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id)
+    public async Task<bool> IsFarmExistAsync(string farmName, string postcode, int Id, Guid orgId)
     {
         _logger.LogTrace("Checking existence of farm: {FarmName} and Postcode: {Postcode} with ID: {Id}", farmName, postcode, Id);
-        return await _farmService.IsFarmExistAsync(farmName, postcode, Id);
+        return await _farmService.IsFarmExistAsync(farmName, postcode, Id, orgId);
     }
 
-    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData)
+    public async Task<(Farm?, Error?)> UpdateFarmAsync(FarmData farmData, Guid orgId)
     {
         _logger.LogTrace("Updating farm: {FarmName}", farmData.Farm.Name);
-        return await _farmService.UpdateFarmAsync(farmData);
+        return await _farmService.UpdateFarmAsync(farmData, orgId);
     }
 
     public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
