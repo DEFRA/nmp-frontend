@@ -647,7 +647,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
-                if (error.Message == null)
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     model.SnsIndex = snsResponse.SnsIndex;
                     model.SnsValue = snsResponse.SnsValue;
@@ -1679,7 +1679,7 @@ namespace NMP.Portal.Controllers
                 };
 
                 (SnsAnalysis snsResponse, error) = await _snsAnalysisLogic.AddSnsAnalysisAsync(sns);
-                if (error.Message == null && snsResponse != null)
+                if (string.IsNullOrWhiteSpace(error?.Message) && snsResponse != null)
                 {
                     string success = _cropDataProtector.Protect("true");
                     HttpContext.Session.Remove("SnsData");
@@ -1761,13 +1761,13 @@ namespace NMP.Portal.Controllers
                 if (snsAnalysis != null)
                 {
                     (string message, Error error) = await _snsAnalysisLogic.RemoveSnsAnalysisAsync(snsAnalysis.ID.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message) && (!string.IsNullOrWhiteSpace(message)))
+                    if (string.IsNullOrWhiteSpace(error?.Message) && (!string.IsNullOrWhiteSpace(message)))
                     {
                         return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(string.Format(Resource.MsgYourDataSuccessfullyRemoved, Resource.lblSoilNitrogenSupplyAnalysis)) });
                     }
                     else
                     {
-                        TempData["RemoveSNSError"] = error.Message;
+                        TempData["RemoveSNSError"] = error?.Message;
                         return View(model);
                     }
                 }
