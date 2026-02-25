@@ -35,7 +35,7 @@ namespace NMP.Portal.Security
             })
             .AddCookie(nmpCookieScheme, cookieOptions =>
             {
-                cookieOptions.Cookie.Name = "NMP.Auth";
+                cookieOptions.Cookie.Name = "NMP-Portal.Auth";
                 // How long your app's cookie is valid
                 cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
                 cookieOptions.SlidingExpiration = true;
