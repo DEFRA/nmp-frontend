@@ -93,7 +93,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
                 {
                     (List<HarvestYearPlanResponse> fieldList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         var SelectListItem = fieldList.Select(f => new SelectListItem
                         {
@@ -337,7 +337,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
             {
                 (List<HarvestYearPlanResponse> fieldList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     var selectListItem = fieldList.Select(f => new SelectListItem
                     {

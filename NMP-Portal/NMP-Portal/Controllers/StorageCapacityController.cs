@@ -43,8 +43,8 @@ namespace NMP.Portal.Controllers
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
-            if (!string.IsNullOrWhiteSpace(farmError.Message) || farm == null)
-                return RedirectToFarmSummary(q, farmError.Message);
+            if (!string.IsNullOrWhiteSpace(farmError?.Message) || farm == null)
+                return RedirectToFarmSummary(q, farmError?.Message ?? "");
 
             PopulateFarmDetails(model, farm, farmId, q, isPlan, t);
 
@@ -1109,7 +1109,7 @@ namespace NMP.Portal.Controllers
                         model.IsComingFromPlan = r;
                     }
                     (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(storeCapacity.FarmID ?? 0);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {
                         model.FarmName = farm.Name;
                         model.EncryptedFarmID = _farmDataProtector.Protect(storeCapacity.FarmID.ToString() ?? string.Empty);
@@ -2340,7 +2340,7 @@ namespace NMP.Portal.Controllers
             return new StorageCapacityViewModel();
         }
 
-        
+
         private async Task PopulateFarmAndStoreCapacityAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? manageToHub, string? removedRecently)
         {
             if (string.IsNullOrWhiteSpace(encryptedFarmId))
@@ -2427,7 +2427,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.SlurryStoreCapacities = slurryStoreCapacities;
             }
         }
-        
+
         private async Task PopulateFarmForCopyAsync(StorageCapacityViewModel model, string encryptedFarmId, string? isPlan, string? materialToHub)
         {
             if (string.IsNullOrWhiteSpace(encryptedFarmId))
@@ -2529,7 +2529,7 @@ namespace NMP.Portal.Controllers
 
             return new StorageCapacityViewModel();
         }
-        
+
         private async Task PopulateMaterialStateNameAsync(StorageCapacityViewModel model)
         {
             var (materialState, error) =
