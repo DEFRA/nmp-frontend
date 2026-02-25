@@ -42,9 +42,6 @@
                     <h1 class="govuk-heading-m">
                         @Resource.lblUpdateManureStorage
                     </h1>
-                    <govuk-inset-text>
-                        @string.Format(Resource.lblChangesHereWillBeAppliedToThisManureStorage, Model.FarmName)
-                    </govuk-inset-text>
                 }
                 else
                 {
@@ -81,7 +78,6 @@
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
@@ -279,19 +275,7 @@
 
                     @if (Model.StorageTypeID == earthBankedLagoon)
                     {
-                        <govuk-summary-list-row class=@(Model.IsSlopeEdge == null ? "govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblDoesStoreHaveSlopedEdges, Model.StoreName)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.IsSlopeEdge != null ? (Model.IsSlopeEdge == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SlopeQuestion" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDoesStoreHaveSlopedEdges, Model.StoreName)</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                        @if (Model.IsSlopeEdge == true)
-                        {
+                       
                             <govuk-summary-list-row class=@(Model.BankSlopeAngleID == null ? "govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblWhatIsTheEstimatedAngleOfTheBankSlope
@@ -303,7 +287,7 @@
                                     <govuk-summary-list-row-action asp-action="BankSlopeAngle" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheEstimatedAngleOfTheBankSlope</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                        }
+                        
                     }
                     @if (Model.StorageTypeID == storageBag)
                     {

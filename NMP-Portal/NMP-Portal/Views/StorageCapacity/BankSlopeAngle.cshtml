@@ -10,7 +10,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer==true && !Model.IsMaterialTypeChange && !Model.IsStorageTypeChange) ? "CheckAnswer" : "SlopeQuestion")" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && !Model.IsMaterialTypeChange && !Model.IsStorageTypeChange) ? "CheckAnswer" : "Dimensions")" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnBankSlopeAngle"] != null)
 {
@@ -50,7 +50,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"/>
