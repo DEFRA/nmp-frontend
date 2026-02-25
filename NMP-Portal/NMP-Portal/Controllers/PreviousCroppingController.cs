@@ -81,8 +81,8 @@ namespace NMP.Portal.Controllers
                     model.HarvestYear = currentYear - 1;
                     SetPreviousCroppingToSession(model);
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                    (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                    if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {
                         model.FarmRB209CountryID = farm.RB209CountryID;
                     }
@@ -695,7 +695,7 @@ namespace NMP.Portal.Controllers
                 foreach (var year in model.PreviousGrassYears)
                 {
                     id = null;
-                    if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
                         id = previousCropList.Where(x => x.HarvestYear == year).Select(x => x.ID).FirstOrDefault(); ;
                     }
@@ -717,7 +717,7 @@ namespace NMP.Portal.Controllers
                 if (model.PreviousGrassYears.Count < 3)
                 {
                     id = null;
-                    if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
                         id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault(); ;
                     }
@@ -736,7 +736,7 @@ namespace NMP.Portal.Controllers
                     }
 
                     id = null;
-                    if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
                         id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault(); ;
                     }
@@ -758,7 +758,7 @@ namespace NMP.Portal.Controllers
             else
             {
                 id = null;
-                if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                 {
                     id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear.Value).Select(x => x.ID).FirstOrDefault(); ;
                 }
@@ -784,7 +784,7 @@ namespace NMP.Portal.Controllers
                     foreach (var year in model.PreviousGrassYears)
                     {
                         id = null;
-                        if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                        if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                         {
                             var firstPreviousCrop = previousCropList.FirstOrDefault(x => x.HarvestYear == year);
                             id = firstPreviousCrop?.ID;
@@ -812,7 +812,7 @@ namespace NMP.Portal.Controllers
                         if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 1))
                         {
                             id = null;
-                            if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                            if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                             {
                                 id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault();
                             }
@@ -832,7 +832,7 @@ namespace NMP.Portal.Controllers
                         if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 2))
                         {
                             id = null;
-                            if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                            if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                             {
                                 id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault();
                             }
@@ -853,7 +853,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     id = null;
-                    if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
                         id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault();
                     }
@@ -871,7 +871,7 @@ namespace NMP.Portal.Controllers
                     previousCropping.Add(newPreviousCropping);
 
                     id = null;
-                    if (string.IsNullOrWhiteSpace(error.Message) && previousCropList.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
                         id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault(); ;
                     }
@@ -897,7 +897,7 @@ namespace NMP.Portal.Controllers
             string jsonData = JsonConvert.SerializeObject(previousDataWrapper);
             (bool success, error) = await _previousCroppingLogic.MergePreviousCropping(jsonData);
 
-            if (string.IsNullOrWhiteSpace(error.Message) && success)
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
             {
                 RemovePreviousCroppingFromSession();
                 return RedirectToAction("Recommendations", "Crop", new

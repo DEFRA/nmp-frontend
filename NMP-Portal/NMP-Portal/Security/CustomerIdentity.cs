@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using NMP.Commons.Models;
@@ -23,49 +25,33 @@ namespace NMP.Portal.Security
             configuration = builder.Configuration;
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-
+            string nmpCookieScheme = "NMP-Portal";
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = nmpCookieScheme;
+                options.DefaultSignInScheme = nmpCookieScheme;
+                options.DefaultAuthenticateScheme = nmpCookieScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-            .AddCookie("NMPCookie", cookieOptions =>
+            .AddCookie(nmpCookieScheme, cookieOptions =>
             {
+                cookieOptions.Cookie.Name = "NMP.Auth";
                 // How long your app's cookie is valid
                 cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
                 cookieOptions.SlidingExpiration = true;
             })
-            .AddMicrosoftIdentityWebApp(options =>
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
-                options.Instance = configuration?["CustomerIdentityInstance"] ?? string.Empty;
+                options.SignInScheme = nmpCookieScheme;
+                options.MetadataAddress = configuration?["CustomerIdentityMataDataUrl"];
                 options.ClientId = configuration?["CustomerIdentityClientId"];
-                options.ClientSecret = configuration?["CustomerIdentityClientSecret"];
-                options.TenantId = configuration?["CustomerIdentityTenantId"];
-                options.Domain = configuration?["CustomerIdentityDomain"];
-                var extraQueryParameters = new Dictionary<string, string>();
-                string serviceId = configuration?["CustomerIdentityServiceId"] ?? string.Empty;
-                extraQueryParameters.Add("serviceId", value: serviceId);
-                extraQueryParameters.Add("forceReselection", value: "true");
-                options.ExtraQueryParameters = extraQueryParameters;
+                options.ClientSecret = configuration?["CustomerIdentityClientSecret"];                
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.Scope.Add("offline_access");
+                options.Scope.Add(configuration?["CustomerIdentityClientId"] ?? string.Empty);                
+                options.ResponseType = "code";
                 options.CallbackPath = "/signin-oidc";                
-                options.SignUpSignInPolicyId = configuration?["CustomerIdentityPolicyId"];
-                options.SaveTokens = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.ErrorPath = "/Error/index";
-            },
-            cookieOptions =>
-            {
-                // How long your app's cookie is valid
-                cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(60); // e.g. 8 hours
-                cookieOptions.SlidingExpiration = true;
-            })
-            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "openid", "profile", "offline_access", configuration?["CustomerIdentityClientId"]?? string.Empty })
-            .AddDistributedTokenCaches();
-
-            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;  // Save tokens in the authentication session                
                 options.Events ??= new OpenIdConnectEvents();
@@ -77,10 +63,9 @@ namespace NMP.Portal.Security
                 options.Events.OnSignedOutCallbackRedirect += OnSignedOutCallbackRedirect;
                 options.Events.OnAuthenticationFailed += OnAuthenticationFailed;
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
-                options.Events.OnRemoteFailure += OnRemoteFailure;                
+                options.Events.OnRemoteFailure += OnRemoteFailure;               
             });            
-            services.AddDistributedTokenCaches();            
-            //services.AddSingleton<TokenRefreshService>();
+            services.AddDistributedTokenCaches();
             services.AddSingleton<TokenAcquisitionService>();
             return services;
         }
@@ -152,51 +137,20 @@ namespace NMP.Portal.Security
         }
 
         private static async Task OnSignedOutCallbackRedirect(RemoteSignOutContext context)
-        {
-            var uri = context.Properties.RedirectUri;
+        { 
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// /* var logoutUri = configuration?["CustomerIdentityInstance"] + configuration?["CustomerIdentityDomain"] + "/" + configuration?["CustomerIdentityPolicyId"] + "/signout";
-        //        var postLogoutUri = configuration?["CustomerIdentitySignedOutCallbackPath"]; //context.Properties.RedirectUri;
-        //            if (!string.IsNullOrEmpty(postLogoutUri))
-        //            {
-        //                if (postLogoutUri.StartsWith("/"))
-        //                {
-        //                    var request = context.Request;
-        //        postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
-        //                }
-        //    logoutUri += "?post_logout_redirect_uri=" + Uri.EscapeDataString(postLogoutUri);
-        //            }
-        //context.Response.Redirect(logoutUri);
-        //context.HandleResponse(); */
+        /// <summary>        
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
         {
-            var logoutUri = configuration?["CusromerIdentityBaseUrl"] + "idphub/b2c/" + configuration?["CustomerIdentityPolicyId"] + "/signout";
-            string postLogoutUri = context.Options.SignedOutCallbackPath.ToString();   //configuration?["CustomerIdentitySignedOutCallbackPath"];
-            
-            if (!string.IsNullOrEmpty(postLogoutUri))
-            {
-                if (postLogoutUri.StartsWith('/'))
-                {
-                    var request = context.Request;
-                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
-                }
-                logoutUri += "?post_logout_redirect_uri=" + Uri.EscapeDataString(postLogoutUri);
-            }
-            context.Response.Redirect(logoutUri);
-            context.HandleResponse();
-
-
-
-            // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
+
 
         private static async Task OnAccessDenied(AccessDeniedContext context)
         {
@@ -208,8 +162,10 @@ namespace NMP.Portal.Security
         {
             if (!string.IsNullOrWhiteSpace(configuration?["CustomerIdentityReturnURI"]?.ToString()))
             {
-                context.ProtocolMessage.RedirectUri = configuration?["CustomerIdentityReturnURI"]?.ToString(); // "https://your-gateway.com/signin-oidc";
+                context.ProtocolMessage.RedirectUri = configuration?["CustomerIdentityReturnURI"]?.ToString();                
             }
+            context.ProtocolMessage.Parameters["serviceId"] = configuration?["CustomerIdentityServiceId"]?.ToString() ?? string.Empty;
+            context.ProtocolMessage.Parameters["forceReselection"] = "true";
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -227,16 +183,15 @@ namespace NMP.Portal.Security
             string traceId = context.HttpContext.TraceIdentifier;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             string path = context.HttpContext.Request.Path;
-            string? ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();            
+            string? ip = context.HttpContext.Connection.RemoteIpAddress?.ToString();
             try
             {
                 var accessToken = context?.TokenEndpointResponse?.AccessToken;
                 var refreshToken = context?.TokenEndpointResponse?.RefreshToken;
                 var identity = context?.Principal?.Identity as ClaimsIdentity;
-
                 CheckTokens(accessToken, refreshToken);
 
-                if (identity != null)
+                if (identity != null && !string.IsNullOrWhiteSpace(accessToken) && !string.IsNullOrWhiteSpace(refreshToken))
                 {
                     await RecordRequiredClaims(accessToken, identity);
                 }

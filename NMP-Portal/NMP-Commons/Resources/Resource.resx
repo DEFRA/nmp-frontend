@@ -4693,7 +4693,7 @@ cubic metres per hectare  not set</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and existing manure storage capacity reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -5554,7 +5554,7 @@ cubic metres per hectare  not set</value>
     <value>Not entered storage</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorage" xml:space="preserve">
-    <value>You have not entered any organic manure storage</value>
+    <value>You have not entered any manure stores</value>
   </data>
   <data name="lblAddAManureStore" xml:space="preserve">
     <value>Add a manure store</value>
@@ -7299,7 +7299,7 @@ livestock manure.</value>
     <value>SampleDepth</value>
   </data>
   <data name="lblCapacityWeightForSummary" xml:space="preserve">
-    <value>Capacity weigth</value>
+    <value>Capacity weight</value>
   </data>
   <data name="lblSolidManureStorageTotal" xml:space="preserve">
     <value>Solid manure storage total</value>
@@ -7308,7 +7308,7 @@ livestock manure.</value>
     <value>Slurry storage total</value>
   </data>
   <data name="lblTotalSurfaceAreaOfUncoveredStores" xml:space="preserve">
-    <value>Total surface area of uncovered stores</value>
+    <value>Total surface area of uncovered slurry stores</value>
   </data>
   <data name="lblCreateNutrientManagementPlansAndNVZReports" xml:space="preserve">
     <value>Create nutrient management plans and NVZ reports</value>
@@ -7447,5 +7447,17 @@ livestock manure.</value>
   </data>
   <data name="lblYouCanAddFieldsToDifferentNVZs" xml:space="preserve">
     <value>You can add fields to different NVZs later if you need to.</value>
+  </data>
+  <data name="lblWhatIsTheLPIDNumber" xml:space="preserve">
+    <value>What is the land parcel identification number (LPID) (optional)?</value>
+  </data>
+  <data name="lblHintOfLPIDNumber" xml:space="preserve">
+    <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
+  </data>
+  <data name="MsgLPIDNumberFormatError" xml:space="preserve">
+    <value>LPID number format must be like AA/12345/12345.</value>
+  </data>
+  <data name="MsgInvalidFarmData" xml:space="preserve">
+    <value>Invalid farm data</value>
   </data>
 </root>

@@ -4,7 +4,7 @@ internal static class ApiurlHelper
     public const string GetToken = "Token";
     public const string AddressLookupAPI = "vendors/address-lookup/addresses?postcode={0}&offset={1}";
     public const string AddFarmAPI = "farms/createFarm";
-    public const string IsFarmExist = "farms/exists?Name={0}&Postcode={1}&Id={2}";
+    public const string IsFarmExist = "farms/exists?Name={0}&Postcode={1}&Id={2}&OrganisationID={3}";
     public const string FetchFarmByUserIdAPI = "farms/users/{0}";
     public const string FetchFarmByOrgIdAPI = "farms/organisations/{0}";
     public const string FetchFarmByIdAPI = "farms/{0}";
