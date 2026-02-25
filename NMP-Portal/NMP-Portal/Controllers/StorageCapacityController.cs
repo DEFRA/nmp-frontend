@@ -1983,7 +1983,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    TempData["ErrorOnCopyExistingManureStorageYearList"] = error.Message;
+                    TempData["ErrorOnCopyExistingManureStorageYearList"] = error?.Message;
                     return View(model);
                 }
             }

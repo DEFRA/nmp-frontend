@@ -1767,7 +1767,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        TempData["RemoveSNSError"] = error.Message;
+                        TempData["RemoveSNSError"] = error?.Message;
                         return View(model);
                     }
                 }

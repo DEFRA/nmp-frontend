@@ -2782,21 +2782,21 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     }
                     else
                     {
-                        TempData["Error"] = error.Message;
+                        TempData["Error"] = error?.Message;
                         return RedirectToAction("FarmSummary", "Farm", new { q = q });
                     }
 
                 }
                 else
                 {
-                    TempData["Error"] = error.Message;
+                    TempData["Error"] = error?.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             else
             {
-                TempData["Error"] = error.Message;
+                TempData["Error"] = error?.Message;
                 return RedirectToAction("FarmSummary", "Farm", new { q = q });
             }
 
@@ -4074,7 +4074,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
-                TempData["Error"] = error.Message;
+                TempData["Error"] = error?.Message;
                 return RedirectToAction("FarmSummary", "Farm", new { q = q });
             }
             HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5778,7 +5778,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
-                TempData["Error"] = error.Message;
+                TempData["Error"] = error?.Message;
                 return RedirectToAction("FarmSummary", "Farm", new { q = q });
             }
             HttpContext.Session.SetObjectAsJson("ReportData", model);
