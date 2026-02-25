@@ -34,6 +34,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly IStorageCapacityLogic _storageCapacityLogic = storageCapacityLogic;
     private readonly IWarningLogic _warningLogic = warningLogic;
     private readonly IMannerLogic _mannerLogic = mannerLogic;
+    private readonly string _error = "Error";
     public IActionResult Index()
     {
         _logger.LogTrace($"Report Controller : Index() action called");
@@ -2782,21 +2783,21 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     }
                     else
                     {
-                        TempData["Error"] = error?.Message;
+                        TempData[_error] = error.Message;
                         return RedirectToAction("FarmSummary", "Farm", new { q = q });
                     }
 
                 }
                 else
                 {
-                    TempData["Error"] = error?.Message;
+                    TempData[_error] = error?.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
             }
             else
             {
-                TempData["Error"] = error?.Message;
+                TempData[_error] = error?.Message;
                 return RedirectToAction("FarmSummary", "Farm", new { q = q });
             }
 
@@ -4052,7 +4053,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else
                 {
-                    TempData["Error"] = error.Message;
+                    TempData[_error] = error.Message;
                     return RedirectToAction("FarmSummary", "Farm", new { q = q });
                 }
                 if (nutrientsLoadingManuresList.Count > 0)
@@ -4074,7 +4075,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
-                TempData["Error"] = error?.Message;
+                TempData[_error] = error?.Message;
                 return RedirectToAction("FarmSummary", "Farm", new { q = q });
             }
             HttpContext.Session.SetObjectAsJson("ReportData", model);
@@ -5778,7 +5779,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
-                TempData["Error"] = error?.Message;
+                TempData[_error] = error?.Message;
                 return RedirectToAction("FarmSummary", "Farm", new { q = q });
             }
             HttpContext.Session.SetObjectAsJson("ReportData", model);
