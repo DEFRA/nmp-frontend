@@ -5910,7 +5910,7 @@ livestock manure.</value>
     <value>Slurry stores</value>
   </data>
   <data name="lblStoreCapacityReportContentOne" xml:space="preserve">
-    <value>Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm.</value>
+    <value>The capacity for earth banked stores allow for a freeboard of 75 cm. The capacity for all other stores allow for a freeboard of 30 cm.</value>
   </data>
   <data name="lblTotalCapacity" xml:space="preserve">
     <value> Total capacity</value>

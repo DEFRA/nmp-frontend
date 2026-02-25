@@ -13751,7 +13751,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm..
+        ///   Looks up a localized string similar to The capacity for earth banked stores allow for a freeboard of 75 cm. The capacity for all other stores allow for a freeboard of 30 cm..
         /// </summary>
         public static string lblStoreCapacityReportContentOne {
             get {
