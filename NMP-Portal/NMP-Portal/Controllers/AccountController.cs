@@ -21,17 +21,18 @@ namespace NMP.Portal.Controllers
         private readonly IOptionsMonitor<OpenIdConnectOptions> _openIdConnectOptions = openIdConnectOptions;
         public async Task<IActionResult> Logout()
         {
-            _logger.LogTrace("Account Controller : Logout action called");
+            _logger.LogTrace("Account Controller : Logout action called");            
+            base.SignOut();
             HttpContext.Session.Clear();
-            base.SignOut("NMPCookie", OpenIdConnectDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync("NMP-Portal");            
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
             IConfigurationManager<OpenIdConnectConfiguration>? configurationManager = GetConfigurationManager();
-            string url = Url.Action("index", "home", new { area =""})?? "/";
-            if(configurationManager != null)
+            string url = Url.Action("index", "home", new { area = "" }) ?? "/";
+            if (configurationManager != null)
             {
                 var metadata = await configurationManager.GetConfigurationAsync(CancellationToken.None);
                 url = metadata.EndSessionEndpoint;
-            }
-            
+            }            
             return Redirect(url);
         }
         public IActionResult ChangeOrganisation()

@@ -25,7 +25,7 @@ namespace NMP.Portal.Security
             configuration = builder.Configuration;
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-            string nmpCookieScheme = "NMPCookie";
+            string nmpCookieScheme = "NMP-Portal";
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = nmpCookieScheme;
