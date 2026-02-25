@@ -2059,13 +2059,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             else
                             {
                                 defoliation = managementPeriod.Defoliation;
-                                (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                                if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
+                                if (crop?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
                                     fertiliserManure.IsGrass = true;
                                     model.IsAnyCropIsGrass = true;
-
-                                    int grassCounter = 1;
+                                    
                                     if (model.DefoliationList == null)
                                     {
                                         model.DefoliationList = new List<DefoliationList>();

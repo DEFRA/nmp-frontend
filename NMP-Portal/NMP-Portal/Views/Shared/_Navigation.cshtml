@@ -9,7 +9,6 @@
     var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
 }
 
-
 @if (User.Identity?.IsAuthenticated == true)
 {
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
@@ -48,7 +47,7 @@
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
             <govuk-service-navigation-nav-item asp-action="FarmList" asp-controller="Farm" active="@(isAllFarm)" asp-area="">
-                @Resource.lblPlanningAndEstimating
+                @Resource.lblAllFarm
             </govuk-service-navigation-nav-item>
             @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
             {
@@ -60,15 +59,15 @@
             {
                 <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation">
                     @Resource.lblChangeCompany
-            </govuk-service-navigation-nav-item>
+                </govuk-service-navigation-nav-item>
             }
-            <govuk-service-navigation-nav-item asp-controller="Account" asp-action="Logout">
+            <govuk-service-navigation-nav-item asp-controller="Account"  asp-action="Logout">
                 @Resource.lblSignout
             </govuk-service-navigation-nav-item>
-            <govuk-service-navigation-nav-end></govuk-service-navigation-nav-end>
+            <govuk-service-navigation-nav-end>               
+            </govuk-service-navigation-nav-end>
         </govuk-service-navigation-nav>
         <govuk-service-navigation-end>
-
         </govuk-service-navigation-end>
     </govuk-service-navigation>
 }

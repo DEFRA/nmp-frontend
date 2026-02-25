@@ -75,7 +75,7 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         return new RedisCache(new RedisCacheOptions
         {
             ConnectionMultiplexerFactory = () => Task.FromResult(multiplexer),
-            InstanceName = "nmp_ui_"
+            InstanceName = "NMP-Portal.Redis_"
         });
     });
 }
@@ -160,7 +160,7 @@ builder.Services.AddHttpClient("NMPApi", httpClient =>
 
 builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
 {
-    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("CustomerIdentityInstance").Value ?? "/");
+    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("CustomerIdentityMataDataUrl").Value ?? "/");
     httpClient.Timeout = TimeSpan.FromMinutes(5);
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 }).AddPolicyHandler(GetRetryPolicy()).AddPolicyHandler(GetCircuitBreakerPolicy());
