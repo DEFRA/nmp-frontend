@@ -7,7 +7,6 @@ namespace NMP.Commons.Helpers
 {
     public static class Functions
     {
-
         public static Error? ExtractError(this ILogger logger, ResponseWrapper? wrapper, Error? error)
         {
             if (wrapper != null && wrapper.Error != null)

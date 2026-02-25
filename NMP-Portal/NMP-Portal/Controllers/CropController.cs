@@ -506,7 +506,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
             List<Field> allFields = await _fieldLogic.FetchFieldsByFarmId(farmID);
             List<Field> fieldList = new List<Field>(allFields);
-            Error error = null;
+            Error? error = null;
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
