@@ -4982,7 +4982,7 @@ namespace NMP.Portal.Controllers
                             model.IncorporationDelay = organicManure.IncorporationDelayID;
 
                             (model.IncorporationDelayName, error) = await _mannerLogic.FetchIncorporationDelayById(model.IncorporationDelay.Value);
-                            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
@@ -4993,7 +4993,7 @@ namespace NMP.Portal.Controllers
                             }
                             model.IncorporationMethod = organicManure.IncorporationMethodID;
                             (model.IncorporationMethodName, error) = await _mannerLogic.FetchIncorporationMethodById(model.IncorporationMethod.Value);
-                            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
@@ -5004,7 +5004,7 @@ namespace NMP.Portal.Controllers
                             }
                             model.MoistureTypeId = organicManure.MoistureID;
                             (MoistureTypeResponse moistureTypeResponse, error) = await _organicManureLogic.FetchMoisterTypeById(model.MoistureTypeId.Value);
-                            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
@@ -5020,7 +5020,7 @@ namespace NMP.Portal.Controllers
 
                             model.RainfallWithinSixHoursID = organicManure.RainfallWithinSixHoursID;
                             (RainTypeResponse rainTypeResponse, error) = await _organicManureLogic.FetchRainTypeById(model.RainfallWithinSixHoursID.Value);
-                            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
@@ -5037,7 +5037,7 @@ namespace NMP.Portal.Controllers
                             model.WindspeedID = organicManure.WindspeedID;
                             (WindspeedResponse? windspeedResponse, error) = await _organicManureLogic.FetchWindspeedById(model.WindspeedID.Value);
 
-                            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+                            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                                 return RedirectToAction("HarvestYearOverview", "Crop", new
