@@ -59,7 +59,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
             {
                 (error, List<Field> fields) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     if (fields.Count > 0)
                     {
@@ -106,10 +106,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 else if (model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport)
                 {
                     (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {
                         (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message) && cropTypeList != null && cropTypeList.Count > 0)
+                        if (string.IsNullOrWhiteSpace(error?.Message) && cropTypeList != null && cropTypeList.Count > 0)
                         {
                             List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
 
@@ -367,10 +367,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 //fetch crop type
                 (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                 {
                     (List<HarvestYearPlanResponse> cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
 
@@ -589,10 +589,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.Nutrients = nutrients;
         }
         (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
-        if (string.IsNullOrWhiteSpace(error.Message) && excessRainfalls != null)
+        if (string.IsNullOrWhiteSpace(error?.Message) && excessRainfalls != null)
         {
             (List<CommonResponse> excessWinterRainfallOption, error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-            if (string.IsNullOrWhiteSpace(error.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
             {
                 string excessRainfallName = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == excessRainfalls.WinterRainfall)).Name;
                 string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
@@ -638,7 +638,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
                                 (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
-                                if (string.IsNullOrWhiteSpace(error.Message))
+                                if (string.IsNullOrWhiteSpace(error?.Message))
                                 {
 
                                     if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
@@ -884,11 +884,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.NMaxLimitReport = new List<NMaxReportResponse>();
             Error? error = null;
             (model.Farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-            if (model.Farm != null && string.IsNullOrWhiteSpace(error.Message))
+            if (model.Farm != null && string.IsNullOrWhiteSpace(error?.Message))
             {
                 model.FarmRB209CountryID = model.Farm.RB209CountryID;
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+                if (string.IsNullOrWhiteSpace(error?.Message) && harvestYearPlanResponse.Count > 0)
                 {
                     // Get your dictionary of groups
                     var cropGroups = GetNmaxReportCropGroups();
@@ -995,7 +995,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         foreach (var cropData in cropDetails)
         {
             (Crop crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (string.IsNullOrWhiteSpace(error?.Message))
             {
                 (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                 if (error == null && cropTypeLinkingResponse != null && model.Farm != null && model.Farm.CountryID.HasValue)
@@ -1175,7 +1175,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 decimal? totalFertiliserN = null;
                                 decimal? totalOrganicAvailableN = null;
                                 (List<ManagementPeriod> ManPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
-                                if (string.IsNullOrWhiteSpace(error.Message) && ManPeriodList != null && ManPeriodList.Count > 0)
+                                if (string.IsNullOrWhiteSpace(error?.Message) && ManPeriodList != null && ManPeriodList.Count > 0)
                                 {
                                     foreach (var managementPeriod in ManPeriodList)
                                     {
@@ -1709,7 +1709,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
                 {
                     (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetail, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmId(model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail.Count > 0 && nutrientsLoadingFarmDetail.Any(x => x.CalendarYear > maxYear))
+                    if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingFarmDetail.Count > 0 && nutrientsLoadingFarmDetail.Any(x => x.CalendarYear > maxYear))
                     {
                         List<int> maxYearList = nutrientsLoadingFarmDetail.Where(x => x.CalendarYear > maxYear).Select(x => x.CalendarYear.Value).ToList();
                         yearList.AddRange(maxYearList);
@@ -1718,7 +1718,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 else if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
                 {
                     (List<StoreCapacityResponse> storeCapacities, Error error) = await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmId.Value);
-                    if (string.IsNullOrWhiteSpace(error.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
+                    if (string.IsNullOrWhiteSpace(error?.Message) && storeCapacities.Count > 0 && storeCapacities.Any(x => x.Year > maxYear))
                     {
                         List<int> maxYearList = storeCapacities.Where(x => x.Year > maxYear).Select(x => x.Year.Value).ToList();
                         yearList.AddRange(maxYearList);
@@ -1772,7 +1772,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
 
                 (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["FetchNutrientsLoadingFarmDetailsError"] = error.Message;
                     return View(model);
@@ -1802,7 +1802,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 model.IsGrasslandDerogation = false;
                 var (savedData, error) = await SaveGrasslandDerogationAsync(model);
-                if (savedData == null && !string.IsNullOrWhiteSpace(error.Message))
+                if (savedData == null && !string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["DerogationSaveError"] = error.Message;
                     return View(model);
@@ -1845,7 +1845,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
 
             var (savedData, error) = await SaveGrasslandDerogationAsync(model);
-            if (savedData == null && !string.IsNullOrWhiteSpace(error.Message))
+            if (savedData == null && !string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["DerogationSaveError"] = error.Message;
                 return View(model);
@@ -1915,7 +1915,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 TempData["succesMsgContent"] = _reportDataProtector.Unprotect(r);
             }
             (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-            if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManuresList.Count > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManuresList.Count > 0)
             {
                 nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
                 if (nutrientsLoadingManuresList.Count > 0)
@@ -1964,13 +1964,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
             ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
             (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (string.IsNullOrWhiteSpace(error?.Message)&& nutrientsLoadingManuresList.Count > 0)
             {
-                if (nutrientsLoadingManuresList.Count > 0)
-                {
                     nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
                     ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManuresList;
-                }
+                
             }
             (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
             if (nutrientsLoadingFarmDetails != null)
@@ -2150,7 +2148,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 null : (nutrientsLoadingLiveStockList.Count > 0 ? true : false),
             };
             (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["FarmDetailsSaveError"] = error.Message;
                 return View(model);
@@ -2205,7 +2203,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
-        if (!string.IsNullOrWhiteSpace(error.Message))
+        if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
             return RedirectToAction("LivestockManureNitrogenReportChecklist");
@@ -2277,7 +2275,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
                 (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     if (nutrientsLoadingManuresList.Count > 0)
                     {
@@ -2306,7 +2304,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 };
                 (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
                     return RedirectToAction("LivestockManureNitrogenReportChecklist");
@@ -2413,7 +2411,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return RedirectToAction("FarmList", "Farm");
             }
             (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-            if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+            if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
             {
                 int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
                 : model.ManureGroupIdForFilter.Value;
@@ -2486,7 +2484,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (!ModelState.IsValid)
             {
                 (FarmResponse farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+                if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                 {
                     int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
                     : model.ManureGroupIdForFilter.Value;
@@ -2736,7 +2734,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-            if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+            if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
             {
                 model.FarmName = farm.Name;
                 model.FarmId = decryptedFarmId;
@@ -2745,10 +2743,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                 model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
                 (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmId(decryptedFarmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetailList != null && nutrientsLoadingFarmDetailList.Count > 0)
+                if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingFarmDetailList != null && nutrientsLoadingFarmDetailList.Count > 0)
                 {
                     (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
-                    if (string.IsNullOrWhiteSpace(error.Message))
+                    if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         var uniqueYears = nutrientsLoadingFarmDetailList
                             .Where(x => x.CalendarYear.HasValue)
@@ -3680,7 +3678,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 if (decryptedId > 0)
                 {
                     (NutrientsLoadingManures nutrientsLoadingManure, error) = await _reportLogic.FetchNutrientsLoadingManuresByIdAsync(decryptedId);
-                    if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManure != null)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManure != null)
                     {
                         model.ImportExport = (int)Enum.Parse(typeof(NMP.Commons.Enums.ImportExport), nutrientsLoadingManure.ManureLookupType);
                         model.ManureTypeId = nutrientsLoadingManure.ManureTypeID;
@@ -3924,7 +3922,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (nutrientsLoadingManureData, error) = await _reportLogic.AddNutrientsLoadingManuresAsync(jsonString);
         }
 
-        if (nutrientsLoadingManureData != null && string.IsNullOrWhiteSpace(error.Message))
+        if (nutrientsLoadingManureData != null && string.IsNullOrWhiteSpace(error?.Message))
         {
             string successMsg = _reportDataProtector.Protect(string.Format(Resource.MsgImportExportSuccessMsgContent1, string.IsNullOrWhiteSpace(model.EncryptedId) ? Resource.lblAdded : Resource.lblUpdated, model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
             model = ResetReportDataFromSession(false);
@@ -3968,8 +3966,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             model.IsComingFromSuccessMsg = false;
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-            (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-            if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+            (FarmResponse farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+            if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
             {
                 if (!string.IsNullOrWhiteSpace(r))
                 {
@@ -3991,7 +3989,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 List<HarvestYear> harvestYearList = new List<HarvestYear>();
                 (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     if (nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
                     {
@@ -4012,7 +4010,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
                             string unit = "";
                             (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                            if (string.IsNullOrWhiteSpace(error.Message) && farmData != null)
+                            if (string.IsNullOrWhiteSpace(error?.Message) && farmData != null)
                             {
                                 (List<ManureType> ManureTypes, error) = await _mannerLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.LivestockManure, farmData.CountryID.Value);
                                 if (error == null && ManureTypes != null && ManureTypes.Count > 0)
@@ -4158,7 +4156,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
                 (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     if (nutrientsLoadingManuresList.Count > 0)
                     {
@@ -4182,7 +4180,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 };
                 (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                 HttpContext.Session.SetObjectAsJson("ReportData", model);
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
                     return RedirectToAction("LivestockManureNitrogenReportChecklist");
@@ -5553,7 +5551,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (NutrientsLoadingLiveStock nutrientsLoadingLiveStockData, error) = await _reportLogic.UpdateNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
             }
             HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["ErrorOnLivestockCheckAnswer"] = error.Message;
                 return RedirectToAction("LivestockCheckAnswer");
@@ -5634,7 +5632,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.IsComingFromSuccessMsg = false;
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-            if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+            if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
             {
                 if (!string.IsNullOrWhiteSpace(r))
                 {
@@ -5666,7 +5664,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 List<HarvestYear> harvestYearList = new List<HarvestYear>();
                 (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
 
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     if (nutrientsLoadingLiveStockList != null && nutrientsLoadingLiveStockList.Count > 0)
                     {
@@ -6282,12 +6280,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
 
             (bool farmManureExist, Error error) = await _organicManureLogic.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(model.FarmId.Value, model.ManureTypeId.Value, model.OtherMaterialName);
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (string.IsNullOrWhiteSpace(error?.Message)&& farmManureExist)
             {
-                if (farmManureExist)
-                {
+               
                     ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
-                }
+                
             }
             if (!ModelState.IsValid)
             {
@@ -6362,7 +6359,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     Error error = null;
                     int id = Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedId));
                     (string success, error) = await _reportLogic.DeleteNutrientsLoadingManureByIdAsync(id);
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         TempData["DeleteLivestockImportExportError"] = error.Message;
                         return View(model);
@@ -6373,12 +6370,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
                         Resource.lblExport.ToLower()));
                         (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-                        if (!string.IsNullOrWhiteSpace(error.Message))
+                        if (!string.IsNullOrWhiteSpace(error?.Message))
                         {
                             TempData["DeleteLivestockImportExportError"] = error.Message;
                             return View(model);
                         }
-                        else if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManureList.Count > 0)
+                        else if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManureList.Count > 0)
                         {
                             if (nutrientsLoadingManureList.Any(x => x.ManureDate.Value.Year == model.Year))
                             {
@@ -6452,7 +6449,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         int totalLivestockManureCapacity = 0;
         (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-        if (string.IsNullOrWhiteSpace(error.Message) && farm != null)
+        if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
         {
             model.Farm = new FarmResponse();
             model.Farm = farm;
@@ -6463,7 +6460,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction("LivestockManureNitrogenReportChecklist");
         }
         (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.Farm.ID, model.Year.Value);
-        if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingFarmDetail != null)
+        if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingFarmDetail != null)
         {
             model.IsGrasslandDerogation = nutrientsLoadingFarmDetail.Derogation.Value;
             if (nutrientsLoadingFarmDetail.Derogation.Value)
@@ -6496,8 +6493,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.TotalLivestockManureCapacity = totalLivestockManureCapacity;
         ViewBag.AreaInsideNVZ = nutrientsLoadingFarmDetail.LandInNVZ;
         ViewBag.AreaOutsideNVZ = nutrientsLoadingFarmDetail.LandNotNVZ;
-        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);
-        //if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingLiveStockList.Count > 0)
+        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);        
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
@@ -6516,7 +6512,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         decimal totalQuantityExportedLivestock = 0;
 
         (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.Farm.ID);
-        if (string.IsNullOrWhiteSpace(error.Message) && nutrientsLoadingManureList.Count > 0)
+        if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManureList.Count > 0)
         {
             nutrientsLoadingManureList = nutrientsLoadingManureList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
             (List<ManureType> selectedManureTypes, error) = await _mannerLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.LivestockManure, model.Farm.CountryID.Value);
@@ -6917,7 +6913,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     Error error = null;
                     int id = Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedNLLivestockID));
                     (string success, error) = await _reportLogic.DeleteNutrientsLoadingLivestockByIdAsync(id);
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         TempData["DeleteNLLivestockError"] = error.Message;
                         return View(model);
@@ -6925,7 +6921,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     else
                     {
                         (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year.Value);
-                        if (string.IsNullOrWhiteSpace(error.Message))
+                        if (string.IsNullOrWhiteSpace(error?.Message))
                         {
                             string successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedJourneyName, model.LivestockGroupName));
                             bool Issuccess = true;

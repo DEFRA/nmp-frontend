@@ -144,7 +144,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 model.EncryptedHarvestYear = r;
                 model.CropOrder = 1;
                 (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (error == null || string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     model.FarmName = farm?.Name;
                     model.FarmRB209CountryID = farm?.RB209CountryID;
@@ -1897,10 +1897,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     (FertiliserManureDataViewModel fertiliserManure, error) = await _fertiliserManureLogic.FetchFertiliserByIdAsync(decryptedId);
 
                     int counter = 1;
-                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && fertiliserManure != null)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && fertiliserManure != null)
                     {
                         (List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse, error) = await _fertiliserManureLogic.FetchFieldWithSameDateAndNutrient(decryptedId, decryptedFarmId, decryptedHarvestYear);
-                        if ((error== null || string.IsNullOrWhiteSpace(error.Message)) && fertiliserResponse != null && fertiliserResponse.Count > 0)
+                        if (string.IsNullOrWhiteSpace(error?.Message) && fertiliserResponse != null && fertiliserResponse.Count > 0)
                         {
                             model.UpdatedFertiliserIds = fertiliserResponse;
                             if (model.IsComingFromRecommendation)
@@ -3347,7 +3347,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     string jsonString = JsonConvert.SerializeObject(result);
                     (string success, error) = await _fertiliserManureLogic.DeleteFertiliserByIdAsync(jsonString);
 
-                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
+                    if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         RemoveFertiliserManureSession();
 
