@@ -518,9 +518,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
         return (fertiliserResponse, error);
     }
-    public async Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData)
+    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
     {
-        Error error = new Error();
+        Error? error =null;
         List<FertiliserManure> fertiliser = new List<FertiliserManure>();
         try
         {
