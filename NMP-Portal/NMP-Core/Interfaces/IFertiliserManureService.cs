@@ -16,7 +16,7 @@ namespace NMP.Core.Interfaces
         Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds);
         Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdAsync(int fertiliserId);
         Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId,int farmId,int harvestYear);
-        Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData);
+        Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData);
         Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID);
     }
 }
