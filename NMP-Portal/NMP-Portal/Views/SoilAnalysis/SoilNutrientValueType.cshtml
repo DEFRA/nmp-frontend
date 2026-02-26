@@ -1,4 +1,5 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.SoilAnalysisViewModel
 @{
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
@@ -6,6 +7,7 @@
     $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
     var AsAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.SoilNutrientValueType;
 }
 
 @section BeforeContent {
@@ -21,27 +23,7 @@
 }
 <form asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="hidden">
-        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
-    </div>
+    @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">

@@ -90,6 +90,7 @@ namespace NMP.Portal.Controllers
 
                         if (error == null)
                         {
+                            model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblFalse);
                             model.Phosphorus = soilAnalysis.Phosphorus;
                             model.PH = soilAnalysis.PH;
                             model.Potassium = soilAnalysis.Potassium;
