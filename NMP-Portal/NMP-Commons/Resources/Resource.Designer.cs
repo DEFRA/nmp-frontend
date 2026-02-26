@@ -13715,7 +13715,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to on yards or in livestock housing..
+        ///   Looks up a localized string similar to On yards or in livestock housing..
         /// </summary>
         public static string lblStoreCapacityReportContentFour {
             get {
@@ -13724,7 +13724,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm..
+        ///   Looks up a localized string similar to The capacity for earth banked stores allow for a freeboard of 75 cm. The capacity for all other stores allow for a freeboard of 30 cm..
         /// </summary>
         public static string lblStoreCapacityReportContentOne {
             get {

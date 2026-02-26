@@ -62,7 +62,10 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         options.ConnectRetry = 5;           // Retry 5 times
         options.ConnectTimeout = 15000;     // 15 seconds
         options.ReconnectRetryPolicy = new ExponentialRetry(5000); // Backoff strategy
-        options.ConfigureForAzureWithTokenCredentialAsync(credential); // ⭐ Critical: auto-refresh AAD token
+        options.SyncTimeout = 10000;
+        options.AsyncTimeout = 10000;
+        options.KeepAlive = 30;
+        options.ConfigureForAzureWithTokenCredentialAsync(credential).GetAwaiter().GetResult();  // ⭐ Critical: auto-refresh AAD token
 
         return ConnectionMultiplexer.Connect(options);
     });
