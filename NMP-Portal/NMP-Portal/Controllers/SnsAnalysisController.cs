@@ -1495,7 +1495,7 @@ namespace NMP.Portal.Controllers
 
                     if (!decimal.TryParse(value, out decimal num))
                     {
-                        ModelState[_soilMineralNitrogen]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilOrganicMatter, 0, 999));
+                        ModelState[_soilMineralNitrogen]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogen, 0, 999));
                     }
                     else if (num % 1 != 0)
                     {

@@ -37,6 +37,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilDataChanged" value="@Model.IsSoilDataChanged"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
     </div>
     @await Html.PartialAsync("~/views/shared/_cancelconfirmation.cshtml", cancelViewModel)
     <govuk-button type="submit" class="margin-bottom-forty">
