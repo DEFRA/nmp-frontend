@@ -95,21 +95,21 @@
                 </div>
 
 
-                <govuk-summary-list>
-                    @if (string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
-                    {
-                        <govuk-summary-list-row class=@(Model.MaterialStateID == null ? "govuk-error-message":"")>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @(Model.MaterialStateID != null ? Model.MaterialStateName : Resource.lblNotSet)
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatKindOfManureStorageDoYouWantToAdd</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
+                    <govuk-summary-list>
+                        @if (string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
+                        {
+                            <govuk-summary-list-row class=@(Model.MaterialStateID == null ? "govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                @Resource.lblWhatKindOfManureStoreDoYouWantToAdd
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.MaterialStateID != null ? Model.MaterialStateName : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="MaterialStates" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatKindOfManureStoreDoYouWantToAdd</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
 
                     <govuk-summary-list-row class=@(Model.StoreName == null ? "govuk-error-message":"")>
                         <govuk-summary-list-row-key>
@@ -144,14 +144,14 @@
                                 }
                                 else
                                 {
-                                    @Resource.lblWhatIsTheLength
+                                    @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageLength : Resource.lblWhatIsTheLength)
                                 }
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.Length != null ? string.Format("{0} {1}", Model.Length.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.StorageTypeID == earthBankedLagoon ? Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon : Resource.lblWhatIsTheLength)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.StorageTypeID == earthBankedLagoon ? Resource.lblWhatIsTheLengthAtTheTopEdgeOfTheLagoon : (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageLength : Resource.lblWhatIsTheLength))</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row class=@(Model.Width == null ? "govuk-error-message":"")>
@@ -162,14 +162,15 @@
                                 }
                                 else
                                 {
-                                    @Resource.lblWhatIsTheWidth
+                                    @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageWidth : Resource.lblWhatIsTheWidth)
+                                    
                                 }
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @(Model.Width != null ? string.Format("{0} {1}", Model.Width.Value.ToString("#.#"), Resource.lblMetres) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.StorageTypeID == earthBankedLagoon ? Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon : Resource.lblWhatIsTheWidth)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.StorageTypeID == earthBankedLagoon ? Resource.lblWhatIsTheWidthAtTheTopEdgeOfTheLagoon : (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageWidth : Resource.lblWhatIsTheWidth))</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -237,9 +238,9 @@
                     {                        
                         <govuk-summary-list-row class=@(Model.Depth == null ? "govuk-error-message":"")>
                             <govuk-summary-list-row-key>
-                                @if (Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                                @if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                                 {
-                                    @Resource.lblWhatIsTheDepth
+                                    @Resource.lblWhatIsTheAverageDepth
                                 }
                                 else
                                 {
@@ -252,7 +253,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="Dimensions" asp-controller="StorageCapacity">
                                     @Resource.lblChange<span class="govuk-visually-hidden">
-                                        @((Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage) ? Resource.lblWhatIsTheDepth : Resource.lblWhatIsTheTotalDepth)
+                                        @((Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage) ? Resource.lblWhatIsTheAverageDepth : Resource.lblWhatIsTheTotalDepth)
                                     </span>
                                 </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>

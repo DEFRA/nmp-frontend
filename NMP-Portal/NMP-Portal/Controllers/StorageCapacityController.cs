@@ -291,7 +291,7 @@ namespace NMP.Portal.Controllers
                     (List<SolidManureTypeResponse> solidManureTypeList, Error error) = await _storageCapacityLogic.FetchSolidManureType();
                     if (error == null)
                     {
-                        ViewBag.SolidManureTypeList = solidManureTypeList;
+                        ViewBag.SolidManureTypeList = solidManureTypeList.OrderByDescending(x=>x.ID).ToList();
                     }
                     else
                     {
