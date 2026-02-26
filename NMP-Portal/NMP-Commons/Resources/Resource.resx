@@ -6447,7 +6447,7 @@ livestock manure.</value>
     <value>What is the diameter</value>
   </data>
   <data name="lblWhatIsTheDepthSuffix" xml:space="preserve">
-    <value>What is the depth</value>
+    <value>What is the average depth</value>
   </data>
   <data name="lblWhatIsTheTotalDepthSuffix" xml:space="preserve">
     <value>What is the total depth</value>
@@ -7450,5 +7450,20 @@ livestock manure.</value>
   </data>
   <data name="MsgInvalidFarmData" xml:space="preserve">
     <value>Invalid farm data</value>
+  </data>
+  <data name="lblWhatIsTheAverageDepthSuffix" xml:space="preserve">
+    <value>What is the average depth</value>
+  </data>
+  <data name="lblWhatIsTheAverageWidthSuffix" xml:space="preserve">
+    <value>What is the average width</value>
+  </data>
+  <data name="lblWhatIsTheAverageLength" xml:space="preserve">
+    <value>What is the average length?</value>
+  </data>
+  <data name="lblWhatIsTheAverageWidth" xml:space="preserve">
+    <value>What is the average width?</value>
+  </data>
+  <data name="lblWhatIsTheAverageDepth" xml:space="preserve">
+    <value>What is the average depth?</value>
   </data>
 </root>

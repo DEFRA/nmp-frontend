@@ -16156,6 +16156,33 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the average depth?.
+        /// </summary>
+        public static string lblWhatIsTheAverageDepth {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average depth.
+        /// </summary>
+        public static string lblWhatIsTheAverageDepthSuffix {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageDepthSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average length?.
+        /// </summary>
+        public static string lblWhatIsTheAverageLength {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the average total number of {0} in {1}.
         /// </summary>
         public static string lblWhatIsTheAverageNumberOfSuffix {
@@ -16197,6 +16224,24 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheAverageTotalNumberOfThisSuffix {
             get {
                 return ResourceManager.GetString("lblWhatIsTheAverageTotalNumberOfThisSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average width?.
+        /// </summary>
+        public static string lblWhatIsTheAverageWidth {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the average width.
+        /// </summary>
+        public static string lblWhatIsTheAverageWidthSuffix {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAverageWidthSuffix", resourceCulture);
             }
         }
         
@@ -16300,7 +16345,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the depth.
+        ///   Looks up a localized string similar to What is the average depth.
         /// </summary>
         public static string lblWhatIsTheDepthSuffix {
             get {
