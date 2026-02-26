@@ -78,18 +78,18 @@
             }
 
             <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)</h1>
-            @* <p class="govuk-body">@Resource.lblIfYouThinkThisIsWrongYouCanChangeItNowOrLater</p> *@
+            
             <h3 class="govuk-heading-s">@Resource.lblSnsIndex</h3>
-            @if (Model.SnsIndex != null)
+            @if (Model.SnsIndex > -1)
             {
                 <p class="govuk-body">
-    @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}",Model.SnsValue))</p>
+                @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}",Model.SnsValue))</p>
             }
 
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p> *@
+            
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {

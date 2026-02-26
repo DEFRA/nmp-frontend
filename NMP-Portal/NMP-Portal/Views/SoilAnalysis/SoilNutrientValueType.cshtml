@@ -21,7 +21,7 @@
 }
 <form asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="true">
+    <div hidden="hidden">
         <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex"/>
@@ -40,6 +40,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
     </div>
     <div class="govuk-grid-row">
 

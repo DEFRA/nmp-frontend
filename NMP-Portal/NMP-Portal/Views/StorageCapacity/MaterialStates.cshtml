@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
-    ViewData["Title"] = $"{Resource.lblWhatKindOfManureStorageDoYouWantToAdd} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{Resource.lblWhatKindOfManureStoreDoYouWantToAdd} {Resource.lblHyphen} {title}";
     var backAction = "";
     if (Model.IsCheckAnswer == true)
     {
@@ -74,7 +74,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
@@ -97,7 +96,7 @@
                 <govuk-radios class="govuk-radios" asp-for="@Model.MaterialStateID">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
+                            @Resource.lblWhatKindOfManureStoreDoYouWantToAdd
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                         @if (ViewBag.MaterialStateList != null && ViewBag.MaterialStateList.Count > 0)

@@ -1051,7 +1051,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return View(model);
             }
 
-            model.SoilAnalyses.PhosphorusMethodologyID = (int)PhosphorusMethodology.Olsens;
+            model.SoilAnalyses.PhosphorusMethodologyID = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)PhosphorusMethodology.Resin : (int)PhosphorusMethodology.Olsens;
 
             if (HasAnyNutrientValue(model))
             {
@@ -1107,7 +1107,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return false;
         }
 
-        if (!await TryPopulateIndexAsync(Resource.lblPhosphate, model.SoilAnalyses.Phosphorus, (id, value) => model.SoilAnalyses.PhosphorusIndex = value, (int)PhosphorusMethodology.Olsens, nutrients))
+        if (!await TryPopulateIndexAsync(Resource.lblPhosphate, model.SoilAnalyses.Phosphorus, (id, value) => model.SoilAnalyses.PhosphorusIndex = value, model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)PhosphorusMethodology.Resin : (int)PhosphorusMethodology.Olsens, nutrients))
         {
             return false;
         }
@@ -2513,7 +2513,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
                 int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
                 var field = await _fieldLogic.FetchFieldByFieldId(decrptedFieldId);
-
+                model.FarmRB209CountryID = farm?.RB209CountryID;
                 //get plans of field
                 cropPlans = await _cropLogic.FetchCropsByFieldId(decrptedFieldId);
                 bool? hasGrassInLastThreeYear = null;
@@ -2611,11 +2611,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilType = !string.IsNullOrWhiteSpace(soilType) ? soilType : string.Empty;
                 model.SoilTypeID = field.SoilTypeID;
                 model.EncryptedFieldId = fieldId;
-                model.ID = decrptedFieldId;                
+                model.ID = decrptedFieldId;
                 model.SoilOverChalk = field.SoilOverChalk;
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;
-               
+
                 if (farm != null)
                 {
                     model.FarmRB209CountryID = farm?.RB209CountryID;

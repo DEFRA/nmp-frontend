@@ -18,4 +18,5 @@ public class SoilAnalysisViewModel : SoilAnalysis
     public bool? SoilAnalysisRemove { get; set; }
     public bool? IsCancel { get; set; }
     public bool IsCheckAnswer { get; set; } = false;
+    public int? FarmRB209CountryID { get; set; }
 }

@@ -15,7 +15,7 @@ public class HomeService(ILogger<HomeService> logger, IHttpClientFactory clientF
     {
         _logger.LogTrace($"Home Service : IsDefraCustomerIdentifyConfigurationWorkingAsync() method called");
         HttpClient client = _clientFactory.CreateClient("DefraIdentityConfiguration");
-        var uri = new Uri($"{_configuration["CustomerIdentityMataDataUrl"]}");
+        var uri = new Uri($"{_configuration["CustomerIdentityMetaDataUrl"]}");
         var response = await client.GetAsync(uri);        
         return response != null && response.IsSuccessStatusCode;  
     }

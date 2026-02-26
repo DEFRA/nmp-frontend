@@ -42,7 +42,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
@@ -104,7 +103,7 @@
                         else
                         {
                             <govuk-input-label is-page-heading="false">
-                                @Resource.lblWhatIsTheLength
+                                @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageLength : Resource.lblWhatIsTheLength)
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
                             </govuk-input-label>
                         }
@@ -120,7 +119,7 @@
                         else
                         {
                             <govuk-input-label is-page-heading="false">
-                                @Resource.lblWhatIsTheWidthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                                @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageWidthSuffix : Resource.lblWhatIsTheWidthSuffix)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
                             </govuk-input-label>
                         }
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
@@ -163,7 +162,7 @@
 
                 <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
 
-                    @if (Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                    @if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         <govuk-input-label is-page-heading="false">
                             @Resource.lblWhatIsTheDepthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark

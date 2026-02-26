@@ -291,7 +291,7 @@ namespace NMP.Portal.Controllers
                     (List<SolidManureTypeResponse> solidManureTypeList, Error error) = await _storageCapacityLogic.FetchSolidManureType();
                     if (error == null)
                     {
-                        ViewBag.SolidManureTypeList = solidManureTypeList;
+                        ViewBag.SolidManureTypeList = solidManureTypeList.OrderByDescending(x=>x.ID).ToList();
                     }
                     else
                     {
@@ -393,7 +393,6 @@ namespace NMP.Portal.Controllers
                     model.IsCircumference = null;
                     model.BankSlopeAngleID = null;
                     model.BankSlopeAngleName = null;
-                    model.IsSlopeEdge = null;
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                     return RedirectToAction("StorageBagCapacity");
                 }
@@ -691,7 +690,7 @@ namespace NMP.Portal.Controllers
                                 return RedirectToAction("CheckAnswer");
                             }
                         }
-                        return RedirectToAction("SlopeQuestion");
+                        return RedirectToAction("BankSlopeAngle");
                     }
                     else
                     {
@@ -891,69 +890,6 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult SlopeQuestion()
-        {
-            _logger.LogTrace($"StorageCapacity Controller : SlopeQuestion() action called");
-            StorageCapacityViewModel? model = new StorageCapacityViewModel();
-            if (HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-            {
-                model = HttpContext.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-            return View(model);
-
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SlopeQuestion(StorageCapacityViewModel model)
-        {
-            _logger.LogTrace("StorageCapacity Controller : SlopeQuestion() post action called");
-            try
-            {
-                if (model.IsSlopeEdge == null)
-                {
-                    ModelState.AddModelError("IsSlopeEdge", Resource.MsgSelectAnOptionBeforeContinuing);
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-                StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-                {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
-                if (model.IsCheckAnswer)
-                {
-                    if (model.IsSlopeEdge == storageModel.IsSlopeEdge && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
-                    {
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                        return RedirectToAction("CheckAnswer");
-                    }
-                }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                if (model.IsSlopeEdge == false)
-                {
-                    model.BankSlopeAngleID = null;
-                    model.Slope = null;
-                    model.BankSlopeAngleName = null;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                    return RedirectToAction("CheckAnswer");
-                }
-                return RedirectToAction("BankSlopeAngle");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in SlopeQuestion() post action : {ex.Message}, {ex.StackTrace}");
-                TempData["ErrorOnSlopeQuestion"] = ex.Message;
-                return View(model);
-            }
-        }
 
         [HttpGet]
         public async Task<IActionResult> BankSlopeAngle()
@@ -1089,7 +1025,6 @@ namespace NMP.Portal.Controllers
                         Circumference = storeCapacity.Circumference,
                         Diameter = storeCapacity.Diameter,
                         BankSlopeAngleID = storeCapacity.BankSlopeAngleID,
-                        IsSlopeEdge = storeCapacity.BankSlopeAngleID != null ? true : null,
                         IsCovered = storeCapacity.IsCovered,
                         CapacityVolume = storeCapacity.CapacityVolume,
                         CapacityWeight = storeCapacity.CapacityWeight,
@@ -1151,14 +1086,12 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                 {
-                    model.IsSlopeEdge = null;
                     model.BankSlopeAngleID = null;
                     model.BankSlopeAngleName = null;
                     model.Slope = null;
                 }
                 if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                 {
-                    model.IsSlopeEdge = model.BankSlopeAngleID != null ? true : false;
                     if (model.BankSlopeAngleID != null)
                     {
                         (BankSlopeAnglesResponse bankSlopeAngle, error) = await _storageCapacityLogic.FetchBankSlopeAngleById(model.BankSlopeAngleID ?? 0);
@@ -1329,16 +1262,9 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("StorageBagCapacity", string.Format(Resource.MsgWhatIsTheTotalCapacityOfNotSet, model.StoreName));
                 }
-                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
+                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon && model.BankSlopeAngleID == null)
                 {
-                    if (model.IsSlopeEdge == null)
-                    {
-                        ModelState.AddModelError("IsSlopeEdge", string.Format(Resource.MsgDoesHaveSlopedEdgesNotSet, model.StoreName));
-                    }
-                    if (model.BankSlopeAngleID == null && model.IsSlopeEdge == true)
-                    {
-                        ModelState.AddModelError("BankSlopeAngleId", Resource.MsgWhatIsTheEstimatedAngleOfTheBankNotSet);
-                    }
+                    ModelState.AddModelError("BankSlopeAngleId", Resource.MsgWhatIsTheEstimatedAngleOfTheBankNotSet);
                 }
                 //validation end
 
@@ -1466,14 +1392,7 @@ namespace NMP.Portal.Controllers
                     }
                     else if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                     {
-                        if (model.IsSlopeEdge == false)
-                        {
-                            return RedirectToAction("SlopeQuestion");
-                        }
-                        else
-                        {
-                            return RedirectToAction("BankSlopeAngle");
-                        }
+                        return RedirectToAction("BankSlopeAngle");
 
                     }
                     else
@@ -1527,18 +1446,11 @@ namespace NMP.Portal.Controllers
                     break;
                 case (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon:
                     surfaceArea = l * w;
+                                      
+                    decimal totalVolume = CalculateSlopedLagoonVolume(d, l, w, slope);
+                    decimal freeboardVolume = CalculateSlopedLagoonVolume(freeboardDefault, l, w, slope);
 
-                    if (model.IsSlopeEdge == false)
-                    {
-                        capacity = l * w * effDepth;
-                    }
-                    else
-                    {
-                        decimal totalVolume = CalculateSlopedLagoonVolume(d, l, w, slope);
-                        decimal freeboardVolume = CalculateSlopedLagoonVolume(freeboardDefault, l, w, slope);
-
-                        capacity = totalVolume - freeboardVolume;
-                    }
+                    capacity = totalVolume - freeboardVolume;                 
 
                     break;
                 case (int)NMP.Commons.Enums.StorageTypes.StorageBag:

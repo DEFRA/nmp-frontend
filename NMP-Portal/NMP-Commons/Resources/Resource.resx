@@ -4714,7 +4714,7 @@ cubic metres per hectare  not set</value>
     <value>Update organic material imports and exports</value>
   </data>
   <data name="lblFarmSummaryContent11" xml:space="preserve">
-    <value>Update organic manure storage</value>
+    <value>Update organic manure store</value>
   </data>
   <data name="lblFarmSummaryContent7" xml:space="preserve">
     <value>Manage farm and field details</value>
@@ -5544,17 +5544,14 @@ cubic metres per hectare  not set</value>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
   </data>
-  <data name="ExistingManureStorageCapacityReportHint" xml:space="preserve">
-    <value>Assess compliance with rules for organic manure storage for your farm.</value>
-  </data>
   <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
     <value>Which year would you like to create an Existing manure storage capacity report for?</value>
   </data>
   <data name="lblNotEnteredStorage" xml:space="preserve">
-    <value>Not entered storage</value>
+    <value>Not entered store</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorage" xml:space="preserve">
-    <value>You have not entered any manure stores</value>
+    <value>You have not entered any organic manure store</value>
   </data>
   <data name="lblAddAManureStore" xml:space="preserve">
     <value>Add a manure store</value>
@@ -5604,7 +5601,7 @@ livestock manure.</value>
     <value>do not compliance</value>
   </data>
   <data name="lblOrganicMaterialStorage" xml:space="preserve">
-    <value>Organic manure storage</value>
+    <value>Organic manure store</value>
   </data>
   <data name="lblMetres" xml:space="preserve">
     <value>metres</value>
@@ -5628,13 +5625,13 @@ livestock manure.</value>
     <value>metres cubed</value>
   </data>
   <data name="lblSlurryStorage" xml:space="preserve">
-    <value>Slurry storage</value>
+    <value>Slurry store</value>
   </data>
   <data name="lblDirtyWater" xml:space="preserve">
     <value>Dirty water</value>
   </data>
   <data name="lblSolidManureStorage" xml:space="preserve">
-    <value>Solid manure storage</value>
+    <value>Solid manure store</value>
   </data>
   <data name="lblManageStoreCapacity" xml:space="preserve">
     <value>Manage store capacity</value>
@@ -5648,8 +5645,8 @@ livestock manure.</value>
   <data name="lblStorageType" xml:space="preserve">
     <value>Storage type</value>
   </data>
-  <data name="lblWhatKindOfManureStorageDoYouWantToAdd" xml:space="preserve">
-    <value>What type of manure storage do you want to add?</value>
+  <data name="lblWhatKindOfManureStoreDoYouWantToAdd" xml:space="preserve">
+    <value>What type of manure store do you want to add?</value>
   </data>
   <data name="lblStorageName" xml:space="preserve">
     <value>Storage name</value>
@@ -5667,7 +5664,7 @@ livestock manure.</value>
     <value>Dimensions</value>
   </data>
   <data name="WhatKindOfStorageIsStoreName" xml:space="preserve">
-    <value>What kind of storage is {0}?</value>
+    <value>What kind of store is {0}?</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Additional" xml:space="preserve">
     <value>Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall.</value>
@@ -5688,7 +5685,7 @@ livestock manure.</value>
     <value>{0} dimensions</value>
   </data>
   <data name="MsgEnterTheDimensionOfYourStorageBeforeContinuing" xml:space="preserve">
-    <value>Enter the {0} of your storage before continuing.</value>
+    <value>Enter the {0} of your store before continuing.</value>
   </data>
   <data name="lblIsThisCovered" xml:space="preserve">
     <value>Is {0} covered?</value>
@@ -5766,7 +5763,7 @@ livestock manure.</value>
     <value>What is the total capacity of {0}?</value>
   </data>
   <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
-    <value>Enter the total capacity of your storage</value>
+    <value>Enter the total capacity of your store</value>
   </data>
   <data name="lblDoesStoreHaveSlopedEdges" xml:space="preserve">
     <value>Does {0} have sloped edges?</value>
@@ -5781,7 +5778,7 @@ livestock manure.</value>
     <value>What is the estimated angle of the bank slope?</value>
   </data>
   <data name="lblAddThisManureStorage" xml:space="preserve">
-    <value>Add this manure storage</value>
+    <value>Add this manure store</value>
   </data>
   <data name="lblTotalCapacityMinusTheFreeBoard" xml:space="preserve">
     <value>Total capacity (minus the freeboard)</value>
@@ -5793,7 +5790,7 @@ livestock manure.</value>
     <value>metres squared</value>
   </data>
   <data name="lblAddStorageFor" xml:space="preserve">
-    <value>Add storage</value>
+    <value>Add store</value>
   </data>
   <data name="lblSortByCropType" xml:space="preserve">
     <value>sort by crop</value>
@@ -5889,28 +5886,25 @@ livestock manure.</value>
     <value>Livestock group</value>
   </data>
   <data name="lblYouHaveAddedManureStorage" xml:space="preserve">
-    <value>You have added manure storage</value>
+    <value>You have added manure store</value>
   </data>
   <data name="MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe" xml:space="preserve">
     <value>To create an existing manure storage capacity report, enter all the manure storage on {0}.</value>
   </data>
   <data name="lblAddMoreManureStorage" xml:space="preserve">
-    <value>Add more manure storage</value>
+    <value>Add more manure store</value>
   </data>
   <data name="lblCreateAnExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Create an existing manure storage capacity report</value>
   </data>
   <data name="lblManureStorage" xml:space="preserve">
-    <value>Manure storage</value>
-  </data>
-  <data name="lblStorageCapacity" xml:space="preserve">
-    <value>Storage capacity report</value>
+    <value>Manure store</value>
   </data>
   <data name="lblSlurryStores" xml:space="preserve">
     <value>Slurry stores</value>
   </data>
   <data name="lblStoreCapacityReportContentOne" xml:space="preserve">
-    <value>Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm.</value>
+    <value>The capacity for earth banked stores allow for a freeboard of 75 cm. The capacity for all other stores allow for a freeboard of 30 cm.</value>
   </data>
   <data name="lblTotalCapacity" xml:space="preserve">
     <value> Total capacity</value>
@@ -5919,7 +5913,7 @@ livestock manure.</value>
     <value>Covered</value>
   </data>
   <data name="lblStoreCapacityReportContentTwo" xml:space="preserve">
-    <value>Slurry storage totals</value>
+    <value>Slurry store totals</value>
   </data>
   <data name="lblDirtyWaterStores" xml:space="preserve">
     <value>Dirty water stores</value>
@@ -5928,7 +5922,7 @@ livestock manure.</value>
     <value>Dirty water total</value>
   </data>
   <data name="lblStoreCapacityReportContentFour" xml:space="preserve">
-    <value>on yards or in livestock housing.</value>
+    <value>On yards or in livestock housing.</value>
   </data>
   <data name="lblSolidManureStores" xml:space="preserve">
     <value>Solid manure stores</value>
@@ -5952,7 +5946,7 @@ livestock manure.</value>
     <value>Total area of uncovered stores</value>
   </data>
   <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
-    <value>To create an existing manure storage capacity report, enter the manure storage on {0}</value>
+    <value>To create an existing manure storage capacity report, enter the manure store on {0}</value>
   </data>
   <data name="lblNoSlurryStoresRecorded" xml:space="preserve">
     <value> No slurry stores recorded</value>
@@ -5979,25 +5973,25 @@ livestock manure.</value>
     <value>A store with that name and year has already been added. You or someone else who works on the farm may have already added it.</value>
   </data>
   <data name="lblManureStorageTotals" xml:space="preserve">
-    <value>Manure storage totals</value>
+    <value>Manure store totals</value>
   </data>
   <data name="lblTotalSlurryCapacity" xml:space="preserve">
     <value>Total slurry capacity</value>
   </data>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
-    <value>You have not added any Solid manure storage</value>
+    <value>You have not added any Solid manure store</value>
   </data>
   <data name="lblAddASolidManureStore" xml:space="preserve">
     <value>Add a solid manure store</value>
   </data>
   <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
-    <value>You have not added any dirty water storage</value>
+    <value>You have not added any dirty water store</value>
   </data>
   <data name="lblAddDirtyWaterStorage" xml:space="preserve">
-    <value>Add dirty water storage</value>
+    <value>Add dirty water store</value>
   </data>
   <data name="lblYouHaveNotAddedAnySlurryStorage" xml:space="preserve">
-    <value>You have not added any slurry storage</value>
+    <value>You have not added any slurry store</value>
   </data>
   <data name="lblWhatIsTheCircumference" xml:space="preserve">
     <value>What is the circumference?</value>
@@ -6006,13 +6000,13 @@ livestock manure.</value>
     <value>What is the diameter?</value>
   </data>
   <data name="lblFarmSummaryContent12" xml:space="preserve">
-    <value>Update manure storage</value>
+    <value>Update manure store</value>
   </data>
   <data name="lblUpdateYearStorage" xml:space="preserve">
-    <value>Update {0} storage</value>
+    <value>Update {0} store</value>
   </data>
   <data name="lblAddYearStorage" xml:space="preserve">
-    <value>Add {0} storage</value>
+    <value>Add {0} store</value>
   </data>
   <data name="lblBackToFarmName" xml:space="preserve">
     <value>Back to {0}</value>
@@ -6021,7 +6015,7 @@ livestock manure.</value>
     <value>Store Capacity</value>
   </data>
   <data name="lblCopyExistingManureStorage" xml:space="preserve">
-    <value>Copy existing manure storage</value>
+    <value>Copy existing manure store</value>
   </data>
   <data name="lblCopyExistingStorageManureContentOne" xml:space="preserve">
     <value>Would you like to start with a copy of another existing manure storage capacity report?</value>
@@ -6030,16 +6024,16 @@ livestock manure.</value>
     <value>StorageCapacity</value>
   </data>
   <data name="lblUpdateManureStorage" xml:space="preserve">
-    <value>Update manure storage</value>
+    <value>Update manure store</value>
   </data>
   <data name="lblChangesHereWillBeAppliedToThisManureStorage" xml:space="preserve">
-    <value>Changes here will be applied to this manure store storage across {0}.</value>
+    <value>Changes here will be applied to this manure store across {0}.</value>
   </data>
   <data name="lblUpdateThisManureStorage" xml:space="preserve">
-    <value>Update this manure storage</value>
+    <value>Update this manure store</value>
   </data>
   <data name="lblRemoveThisManureStorage" xml:space="preserve">
-    <value>Remove this manure storage</value>
+    <value>Remove this manure store</value>
   </data>
   <data name="SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater" xml:space="preserve">
     <value>Select one {0} type. You can add more {0} types later.</value>
@@ -6192,7 +6186,7 @@ livestock manure.</value>
     <value>What we’re doing to improve accessibility</value>
   </data>
   <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
-    <value>You have updated manure storage</value>
+    <value>You have updated manure store</value>
   </data>
   <data name="MsgWhatIsTheWeightCapacityOfNotSet" xml:space="preserve">
     <value>What is the weight capacity of {0} not set.</value>
@@ -6228,7 +6222,7 @@ livestock manure.</value>
     <value>What is the length not set.</value>
   </data>
   <data name="MsgWhatKindOFManureStorageDoYouWantToAddNotSet" xml:space="preserve">
-    <value>What kind of manure storage do you want to add not set.</value>
+    <value>What kind of manure store do you want to add not set.</value>
   </data>
   <data name="MsgWhatDoYouWantToCallThisManureStoreNotSet" xml:space="preserve">
     <value>What do you want to call this manure store not set.</value>
@@ -6360,7 +6354,7 @@ livestock manure.</value>
     <value>, in {0}</value>
   </data>
   <data name="lblUpdateOrganicMaterialStorage" xml:space="preserve">
-    <value>Update organic manure storage</value>
+    <value>Update organic manure store</value>
   </data>
   <data name="AddASoilMineralNitrogenAnalysisResult" xml:space="preserve">
     <value>Add a soil mineral nitrogen analysis result</value>
@@ -6453,7 +6447,7 @@ livestock manure.</value>
     <value>What is the diameter</value>
   </data>
   <data name="lblWhatIsTheDepthSuffix" xml:space="preserve">
-    <value>What is the depth</value>
+    <value>What is the average depth</value>
   </data>
   <data name="lblWhatIsTheTotalDepthSuffix" xml:space="preserve">
     <value>What is the total depth</value>
@@ -6851,9 +6845,6 @@ livestock manure.</value>
   <data name="MsgEnterTheCroppedArea" xml:space="preserve">
     <value>Enter the cropped area</value>
   </data>
-  <data name="ExistingManureStorageCapacityReportHintReword" xml:space="preserve">
-    <value>Calculate the storage capacity of your existing manure stores.</value>
-  </data>
   <data name="lblYourDataContentOne" xml:space="preserve">
     <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
   </data>
@@ -6951,7 +6942,7 @@ livestock manure.</value>
     <value>Livestock manure nitrogen (N) farm limit</value>
   </data>
   <data name="lblExistingManureStorageCapacity" xml:space="preserve">
-    <value>Existing manure storage capacity</value>
+    <value>Existing manure store capacity</value>
   </data>
   <data name="lblOrganicManureInventoryAndStorageRequirement" xml:space="preserve">
     <value>Organic manure inventory and storage requirement</value>
@@ -7302,10 +7293,10 @@ livestock manure.</value>
     <value>Capacity weight</value>
   </data>
   <data name="lblSolidManureStorageTotal" xml:space="preserve">
-    <value>Solid manure storage total</value>
+    <value>Solid manure store total</value>
   </data>
   <data name="lblSlurryStorageTotal" xml:space="preserve">
-    <value>Slurry storage total</value>
+    <value>Slurry store total</value>
   </data>
   <data name="lblTotalSurfaceAreaOfUncoveredStores" xml:space="preserve">
     <value>Total surface area of uncovered slurry stores</value>
@@ -7459,5 +7450,20 @@ livestock manure.</value>
   </data>
   <data name="MsgInvalidFarmData" xml:space="preserve">
     <value>Invalid farm data</value>
+  </data>
+  <data name="lblWhatIsTheAverageDepthSuffix" xml:space="preserve">
+    <value>What is the average depth</value>
+  </data>
+  <data name="lblWhatIsTheAverageWidthSuffix" xml:space="preserve">
+    <value>What is the average width</value>
+  </data>
+  <data name="lblWhatIsTheAverageLength" xml:space="preserve">
+    <value>What is the average length?</value>
+  </data>
+  <data name="lblWhatIsTheAverageWidth" xml:space="preserve">
+    <value>What is the average width?</value>
+  </data>
+  <data name="lblWhatIsTheAverageDepth" xml:space="preserve">
+    <value>What is the average depth?</value>
   </data>
 </root>
