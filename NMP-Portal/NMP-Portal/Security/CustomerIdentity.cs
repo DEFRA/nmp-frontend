@@ -43,7 +43,7 @@ namespace NMP.Portal.Security
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
                 options.SignInScheme = nmpCookieScheme;
-                options.MetadataAddress = configuration?["CustomerIdentityMataDataUrl"];
+                options.MetadataAddress = configuration?["CustomerIdentityMetaDataUrl"];
                 options.ClientId = configuration?["CustomerIdentityClientId"];
                 options.ClientSecret = configuration?["CustomerIdentityClientSecret"];                
                 options.Scope.Add("openid");
