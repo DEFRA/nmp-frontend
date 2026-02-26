@@ -18154,7 +18154,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any organic manure store.
+        ///   Looks up a localized string similar to You have not entered any manure stores.
         /// </summary>
         public static string lblYouHaveNotEnteredAnyOrganicMaterialStorage {
             get {

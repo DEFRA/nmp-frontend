@@ -5551,7 +5551,7 @@ cubic metres per hectare  not set</value>
     <value>Not entered store</value>
   </data>
   <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorage" xml:space="preserve">
-    <value>You have not entered any organic manure store</value>
+    <value>You have not entered any manure stores</value>
   </data>
   <data name="lblAddAManureStore" xml:space="preserve">
     <value>Add a manure store</value>

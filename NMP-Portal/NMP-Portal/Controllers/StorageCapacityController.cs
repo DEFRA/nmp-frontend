@@ -874,6 +874,10 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
             }
+            else if (model.StorageBagCapacity < 0 || model.StorageBagCapacity > 9999)
+            {
+                ModelState.AddModelError(nameof(model.StorageBagCapacity), Resource.MsgEnterAValueBetween0And9999);
+            }
 
             if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag &&
                 (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
@@ -888,6 +892,7 @@ namespace NMP.Portal.Controllers
                     ModelState[Resource.lblStorageBagCapacity]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
                 }
             }
+
         }
 
 
