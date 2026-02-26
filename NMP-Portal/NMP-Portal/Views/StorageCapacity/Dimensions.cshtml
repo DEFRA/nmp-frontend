@@ -103,7 +103,7 @@
                         else
                         {
                             <govuk-input-label is-page-heading="false">
-                                @Resource.lblWhatIsTheLength
+                                @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageLength : Resource.lblWhatIsTheLength)
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
                             </govuk-input-label>
                         }
@@ -119,7 +119,7 @@
                         else
                         {
                             <govuk-input-label is-page-heading="false">
-                                @Resource.lblWhatIsTheWidthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                                @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageWidthSuffix : Resource.lblWhatIsTheWidthSuffix)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
                             </govuk-input-label>
                         }
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
@@ -162,7 +162,7 @@
 
                 <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
 
-                    @if (Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                    @if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         <govuk-input-label is-page-heading="false">
                             @Resource.lblWhatIsTheDepthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
