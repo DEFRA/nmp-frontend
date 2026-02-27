@@ -1445,7 +1445,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 int fieldId;
                 try
                 {
-                    (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
+                    (fieldId, ViewBag.CropTypeId, ViewBag.CropGroupId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
                 }
                 catch (Exception ex)
                 {
@@ -1486,7 +1486,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     int fieldId;
                     try
                     {
-                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
+                        (fieldId, ViewBag.CropTypeId, ViewBag.CropGroupId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
                     }
                     catch (Exception ex)
                     {
@@ -1646,9 +1646,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(int fieldId, int? cropTypeId, string? defoliationSequenceName)> PopulateRecommendationData(FertiliserManureViewModel model, Error? error)
+    private async Task<(int fieldId, int? cropTypeId,int? cropGroupId, string? defoliationSequenceName)> PopulateRecommendationData(FertiliserManureViewModel model, Error? error)
     {
         int? cropTypeId = null;
+        int? cropGroupId = null;
         string? defoliationSequenceName = null;
         int fieldId = 0;
         if (model.FieldList != null && int.TryParse(model.FieldList[0], out fieldId))
@@ -1671,6 +1672,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (matchedHeader.Crops != null)
                     {
                         cropTypeId = matchedHeader.Crops.CropTypeID;
+                        cropGroupId = matchedHeader.Crops.CropGroupID;
                         if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                         {
                             (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
@@ -1752,7 +1754,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
         }
 
-        return (fieldId, cropTypeId, defoliationSequenceName);
+        return (fieldId, cropTypeId, cropGroupId, defoliationSequenceName);
     }
 
     private void ValidateNutrientValues(FertiliserManureViewModel model)
