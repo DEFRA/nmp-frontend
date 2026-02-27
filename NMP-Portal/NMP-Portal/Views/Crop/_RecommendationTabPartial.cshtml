@@ -2,12 +2,12 @@
 @model NMP.Commons.Models.RecommendationData
 @if (Model != null && Model.Recommendation != null)
 {
-    @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass && (!string.IsNullOrWhiteSpace(Model.DefoliationSequenceName)))
+    @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass || Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(Model.DefoliationSequenceName)))
     {
         <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, Model.ManagementTableIndex, Model.DefoliationSequenceName)</h2>
     }
     <div class="table-container">
-        @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+        @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass || Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
         {
             <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
         }

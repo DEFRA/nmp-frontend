@@ -16,13 +16,13 @@
         <tr class="govuk-table__row">
             <td class="govuk-table__cell">@Resource.lblNitrogen</td>
             <td class="govuk-table__cell">
-                @if (Model.CropGroupID != (int)NMP.Commons.Enums.CropGroup.Grass)
+                @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass || Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                 {
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
+                    @Resource.lblHyphen
                 }
                 else
                 {
-                    @Resource.lblHyphen
+                    @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)                    
                 }
             </td>
             <td class="govuk-table__cell">

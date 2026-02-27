@@ -325,7 +325,7 @@
                                     var recommendationData = new RecommendationData
                                     {
                                         Recommendation = Model.Recommendation,
-                                        CropGroupID = ViewBag.CropGroupId
+                                        CropTypeID = ViewBag.CropTypeId
                                     };
                                 }
                                 @await Html.PartialAsync("~/Views/Crop/_RecommendationTabPartial.cshtml", recommendationData)
