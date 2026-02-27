@@ -217,16 +217,19 @@
                                                                 <td class="govuk-table__cell">@(recommendation.FertiliserAppliedSO3 == null ? Resource.lblHyphen : recommendation.FertiliserAppliedSO3 == 0 ? recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
                                                             </tr>
 
-                                                            @*<tr class="govuk-table__row">
+                                                            <tr class="govuk-table__row">
                                                         <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
                                                         <td class="govuk-table__cell">
                                                         @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.NaIndex)
                                                         </td>
                                                         <td class="govuk-table__cell">@(recommendation.CropNa2O == null ? Resource.lblHyphen : recommendation.CropNa2O == 0 ? recommendation.CropNa2O : string.Concat(recommendation.CropNa2O, Resource.lblkg))</td>
+                                                                <td class="govuk-table__cell">
+                                                                    @(recommendation.NaBalance == null ? Resource.lblHyphen : recommendation.NaBalance == 0 ? recommendation.NaBalance : string.Format("{0:N0}", recommendation.NaBalance))
+                                                                </td>
                                                         <td class="govuk-table__cell">@(recommendation.ManureNa2O == null ? 0 : recommendation.ManureNa2O == 0 ? recommendation.ManureNa2O : string.Concat(recommendation.ManureNa2O, Resource.lblkg))</td>
                                                         <td class="govuk-table__cell">@(recommendation.FertilizerNa2O == null ? Resource.lblHyphen : recommendation.FertilizerNa2O < 0 ? 0 : recommendation.FertilizerNa2O == 0 ? recommendation.FertilizerNa2O : string.Concat(recommendation.FertilizerNa2O, Resource.lblkg))</td>
                                                         <td class="govuk-table__cell">@(recommendation.FertiliserAppliedNa2O == null ? Resource.lblHyphen : recommendation.FertiliserAppliedNa2O == 0 ? recommendation.FertiliserAppliedNa2O : string.Concat(recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
-                                                        </tr> *@
+                                                        </tr>
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                                 <td class="govuk-table__cell">
@@ -424,16 +427,19 @@
                                                                 <td class="govuk-table__cell">@(recommendation.FertilizerSO3 == null ? Resource.lblHyphen : recommendation.FertilizerSO3 < 0 ? 0 : recommendation.FertilizerSO3 == 0 ? recommendation.FertilizerSO3 : string.Format("{0:N0}{1}", recommendation.FertilizerSO3, Resource.lblkg))</td>
                                                                 <td class="govuk-table__cell">@(recommendation.FertiliserAppliedSO3 == null ? 0 : recommendation.FertiliserAppliedSO3 == 0 ? recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
                                                             </tr>
-                                                            @* <tr class="govuk-table__row">
+                                                            <tr class="govuk-table__row">
                         <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
                         <td class="govuk-table__cell">
                         @(recommendation.SIndex == null ? Resource.lblHyphen : recommendation.NaIndex)
                         </td>
                         <td class="govuk-table__cell">@(recommendation.CropNa2O == null ? Resource.lblHyphen : recommendation.CropNa2O == 0 ? recommendation.CropNa2O : string.Concat(recommendation.CropNa2O, Resource.lblkg))</td>
+                                                                <td class="govuk-table__cell">
+                                                                    @(recommendation.NaBalance == null ? Resource.lblHyphen : recommendation.NaBalance == 0 ? recommendation.NaBalance : string.Format("{0:N0}", recommendation.NaBalance))
+                                                                </td>
                         <td class="govuk-table__cell">@(recommendation.ManureNa2O == null ? 0 : recommendation.ManureNa2O == 0 ? recommendation.ManureNa2O : string.Concat(recommendation.ManureNa2O, Resource.lblkg))</td>
                         <td class="govuk-table__cell">@(recommendation.FertilizerNa2O == null ? Resource.lblHyphen : recommendation.FertilizerNa2O < 0 ? 0 : recommendation.FertilizerNa2O == 0 ? recommendation.FertilizerNa2O : string.Concat(recommendation.FertilizerNa2O, Resource.lblkg))</td>
                         <td class="govuk-table__cell">@(recommendation.FertiliserAppliedNa2O == null ? 0 : recommendation.FertiliserAppliedNa2O == 0 ? recommendation.FertiliserAppliedNa2O : string.Concat(recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
-                        </tr> *@
+                        </tr>
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
                                                                 <td class="govuk-table__cell">

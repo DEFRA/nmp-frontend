@@ -104,6 +104,10 @@
                                     <td class="govuk-table__cell">@Resource.lblPotassiumPerLitreOfSoil</td>
                                     <td class="govuk-table__cell">@(Model.Potassium != null ? Model.Potassium : Resource.lblNotEntered)</td>
                                 </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblOrganicMatter</td>
+                            <td class="govuk-table__cell">@(Model.OrganicMatterPercentage != null ? Model.OrganicMatterPercentage : Resource.lblNotEntered)</td>
+                        </tr>
 
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblPotassiumIndex</td>

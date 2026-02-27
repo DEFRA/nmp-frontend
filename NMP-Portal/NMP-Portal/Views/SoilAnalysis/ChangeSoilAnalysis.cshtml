@@ -140,10 +140,10 @@
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
+                            
                         }
                         else
                         {
-
                             <govuk-summary-list-row class=@((!Model.PH.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblPh
@@ -191,6 +191,7 @@
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
+                            
                         }
                     }
                     else
@@ -296,9 +297,20 @@
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
-
+                       
                     }
 
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblOrganicMatter
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((!Model.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : Model.OrganicMatterPercentage)                            
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
                 </govuk-summary-list>
 
                 @if (Model.isSoilAnalysisAdded == null)
