@@ -1680,7 +1680,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (fieldId, cropTypeId, defoliationSequenceName);
     }
 
-    private RecommendationHeader? FindMatchedHeader(IEnumerable<RecommendationHeader> headers, int manId)
+    private static RecommendationHeader? FindMatchedHeader(
+     IEnumerable<RecommendationHeader> headers,
+     int manId)
     {
         return headers.FirstOrDefault(header =>
             header.RecommendationData?.Any(rd => rd.ManagementPeriod?.ID == manId) == true);
