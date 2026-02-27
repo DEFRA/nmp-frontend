@@ -100,7 +100,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectToAction(_doubleCropActionName, new { q = model.DoubleCropEncryptedCounter });
         }
 
-        return BackActionForInOrganicAndDoubleCrop(model); 
+        return BackActionForInOrganicAndDoubleCrop(model);
 
     }
 
@@ -1646,7 +1646,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(int fieldId, int? cropTypeId,int? cropGroupId, string? defoliationSequenceName)> PopulateRecommendationData(FertiliserManureViewModel model, Error? error)
+    private async Task<(int fieldId, int? cropTypeId, int? cropGroupId, string? defoliationSequenceName)> PopulateRecommendationData(FertiliserManureViewModel model, Error? error)
     {
         int? cropTypeId = null;
         int? cropGroupId = null;
@@ -1692,64 +1692,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             }
                         }
                     }
+                    model=BindRecommendation(model, matchedHeader, manId);
 
-                    if (matchedHeader.RecommendationData != null)
-                    {
-                        matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
-                        foreach (var recData in matchedHeader.RecommendationData)
-                        {
-                            model.Recommendation = new Recommendation
-                            {
-                                ID = recData.Recommendation.ID,
-                                ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
-                                CropN = recData.Recommendation.CropN,
-                                CropP2O5 = recData.Recommendation.CropP2O5,
-                                CropK2O = recData.Recommendation.CropK2O,
-                                CropSO3 = recData.Recommendation.CropSO3,
-                                CropMgO = recData.Recommendation.CropMgO,
-                                CropNa2O = recData.Recommendation.CropNa2O,
-                                CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
-                                ManureN = recData.Recommendation.ManureN,
-                                ManureP2O5 = recData.Recommendation.ManureP2O5,
-                                ManureK2O = recData.Recommendation.ManureK2O,
-                                ManureSO3 = recData.Recommendation.ManureSO3,
-                                ManureMgO = recData.Recommendation.ManureMgO,
-                                ManureLime = recData.Recommendation.ManureLime,
-                                ManureNa2O = recData.Recommendation.ManureNa2O,
-                                FertilizerN = recData.Recommendation.FertilizerN,
-                                FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                FertilizerMgO = recData.Recommendation.FertilizerMgO,
-                                FertilizerLime = recData.Recommendation.FertilizerLime,
-                                FertilizerNa2O = recData.Recommendation.FertilizerNa2O,
-                                SNSIndex = recData.Recommendation.SNSIndex,
-                                NIndex = recData.Recommendation.NIndex,
-                                SIndex = recData.Recommendation.SIndex,
-                                LimeIndex = recData.Recommendation.PH,
-                                KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
-                                MgIndex = recData.Recommendation.MgIndex,
-                                PIndex = recData.Recommendation.PIndex,
-                                NaIndex = recData.Recommendation.NaIndex,
-                                PBalance = recData.Recommendation.PBalance,
-                                SBalance = recData.Recommendation.SBalance,
-                                KBalance = recData.Recommendation.KBalance,
-                                MgBalance = recData.Recommendation.MgBalance,
-                                LimeBalance = recData.Recommendation.LimeBalance,
-                                NaBalance = recData.Recommendation.NaBalance,
-                                NBalance = recData.Recommendation.NBalance,
-                                FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
-                                FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
-                                FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
-                                FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
-                                FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
-                                FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
-                                FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
-                                FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
-                                FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
-                            };
-                        }
-                    }
+
                 }
             }
         }
@@ -1757,6 +1702,73 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (fieldId, cropTypeId, cropGroupId, defoliationSequenceName);
     }
 
+    private FertiliserManureViewModel BindRecommendation(FertiliserManureViewModel model, RecommendationHeader matchedHeader, int manId)
+    {
+        if (matchedHeader.RecommendationData != null)
+        {
+            matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
+            foreach (var recData in matchedHeader.RecommendationData)
+            {
+              model=  FetchRecommendation(model, recData);
+            }
+        }
+        return model;
+    }
+
+    private FertiliserManureViewModel FetchRecommendation(FertiliserManureViewModel model, RecommendationData recData)
+    {
+        model.Recommendation = new Recommendation
+        {
+            ID = recData.Recommendation.ID,
+            ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
+            CropN = recData.Recommendation.CropN,
+            CropP2O5 = recData.Recommendation.CropP2O5,
+            CropK2O = recData.Recommendation.CropK2O,
+            CropSO3 = recData.Recommendation.CropSO3,
+            CropMgO = recData.Recommendation.CropMgO,
+            CropNa2O = recData.Recommendation.CropNa2O,
+            CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
+            ManureN = recData.Recommendation.ManureN,
+            ManureP2O5 = recData.Recommendation.ManureP2O5,
+            ManureK2O = recData.Recommendation.ManureK2O,
+            ManureSO3 = recData.Recommendation.ManureSO3,
+            ManureMgO = recData.Recommendation.ManureMgO,
+            ManureLime = recData.Recommendation.ManureLime,
+            ManureNa2O = recData.Recommendation.ManureNa2O,
+            FertilizerN = recData.Recommendation.FertilizerN,
+            FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
+            FertilizerK2O = recData.Recommendation.FertilizerK2O,
+            FertilizerSO3 = recData.Recommendation.FertilizerSO3,
+            FertilizerMgO = recData.Recommendation.FertilizerMgO,
+            FertilizerLime = recData.Recommendation.FertilizerLime,
+            FertilizerNa2O = recData.Recommendation.FertilizerNa2O,
+            SNSIndex = recData.Recommendation.SNSIndex,
+            NIndex = recData.Recommendation.NIndex,
+            SIndex = recData.Recommendation.SIndex,
+            LimeIndex = recData.Recommendation.PH,
+            KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
+            MgIndex = recData.Recommendation.MgIndex,
+            PIndex = recData.Recommendation.PIndex,
+            NaIndex = recData.Recommendation.NaIndex,
+            PBalance = recData.Recommendation.PBalance,
+            SBalance = recData.Recommendation.SBalance,
+            KBalance = recData.Recommendation.KBalance,
+            MgBalance = recData.Recommendation.MgBalance,
+            LimeBalance = recData.Recommendation.LimeBalance,
+            NaBalance = recData.Recommendation.NaBalance,
+            NBalance = recData.Recommendation.NBalance,
+            FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
+            FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
+            FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
+            FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
+            FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
+            FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
+            FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
+            FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
+            FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
+        };
+       return  model;
+    }
     private void ValidateNutrientValues(FertiliserManureViewModel model)
     {
         NValidations(model);
@@ -4184,7 +4196,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     }
                     else
                     {
-                       return BackActionForInOrganicAndDoubleCrop(model);
+                        return BackActionForInOrganicAndDoubleCrop(model);
                     }
 
                 }
