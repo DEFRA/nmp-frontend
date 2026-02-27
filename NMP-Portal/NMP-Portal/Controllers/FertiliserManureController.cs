@@ -1445,7 +1445,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 int fieldId;
                 try
                 {
-                    (fieldId, ViewBag.CropTypeId, ViewBag.CropGroupId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
+                    if (int.TryParse(model.FieldList[0], out fieldId))
+                    {
+                        (fieldId, ViewBag.CropTypeId, ViewBag.CropGroupId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error,fieldId);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1486,7 +1489,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     int fieldId;
                     try
                     {
-                        (fieldId, ViewBag.CropTypeId, ViewBag.CropGroupId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error);
+                        if (int.TryParse(model.FieldList[0], out fieldId))
+                        {
+                            (fieldId, ViewBag.CropTypeId, ViewBag.CropGroupId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error,fieldId);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -1646,73 +1652,65 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(int fieldId, int? cropTypeId, int? cropGroupId, string? defoliationSequenceName)> PopulateRecommendationData(FertiliserManureViewModel model, Error? error)
+    private async Task<(int fieldId, int? cropTypeId, int? cropGroupId, string? defoliationSequenceName)> PopulateRecommendationData(FertiliserManureViewModel model, Error? error, int fieldId)
     {
         int? cropTypeId = null;
         int? cropGroupId = null;
         string? defoliationSequenceName = null;
-        int fieldId = 0;
-        if (model.FieldList != null && int.TryParse(model.FieldList[0], out fieldId))
+
+        model.FieldName = (await _fieldLogic.FetchFieldByFieldId(fieldId)).Name;
+        List<RecommendationHeader>? recommendationsHeader = null;
+
+        (recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
+        if (error == null && recommendationsHeader.Count > 0)
         {
-            model.FieldName = (await _fieldLogic.FetchFieldByFieldId(fieldId)).Name;
-            List<RecommendationHeader>? recommendationsHeader = null;
+            int manId = model.FertiliserManures.FirstOrDefault().ManagementPeriodID;
 
-            (recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
-            if (error == null && recommendationsHeader.Count > 0)
+            var matchedHeader = recommendationsHeader?
+            .FirstOrDefault(header => header.RecommendationData != null &&
+            header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
+                                               rd.ManagementPeriod.ID == manId));
+
+            if (matchedHeader != null && matchedHeader.Crops != null)
             {
-                int manId = model.FertiliserManures.FirstOrDefault().ManagementPeriodID;
-
-                var matchedHeader = recommendationsHeader?
-                .FirstOrDefault(header => header.RecommendationData != null &&
-                header.RecommendationData.Any(rd => rd.ManagementPeriod != null &&
-                                                   rd.ManagementPeriod.ID == manId));
-
-                if (matchedHeader != null)
+                cropTypeId = matchedHeader.Crops.CropTypeID;
+                cropGroupId = matchedHeader.Crops.CropGroupID;
+                if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                 {
-                    if (matchedHeader.Crops != null)
+                    (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
+                    if (error == null && defoliationSequence != null)
                     {
-                        cropTypeId = matchedHeader.Crops.CropTypeID;
-                        cropGroupId = matchedHeader.Crops.CropGroupID;
-                        if (matchedHeader.Crops.CropTypeID != null && matchedHeader.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                        int? defoliation = model.FertiliserManures?.FirstOrDefault()?.Defoliation;
+                        if (defoliation != null)
                         {
-                            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(matchedHeader.Crops.DefoliationSequenceID.Value);
-                            if (error == null && defoliationSequence != null)
-                            {
-                                int? defoliation = model.FertiliserManures?.FirstOrDefault()?.Defoliation;
-                                if (defoliation != null)
-                                {
-                                    var parts = defoliationSequence.DefoliationSequenceDescription?
-                                   .Split(',', StringSplitOptions.RemoveEmptyEntries);
+                            var parts = defoliationSequence.DefoliationSequenceDescription?
+                           .Split(',', StringSplitOptions.RemoveEmptyEntries);
 
-                                    var part = parts?[defoliation.Value - 1].Trim();
-                                    defoliationSequenceName = string.IsNullOrWhiteSpace(part)
-                                                                        ? string.Empty
-                                                                        : char.ToUpper(part[0]) + part[1..];
-                                }
-                            }
+                            var part = parts?[defoliation.Value - 1].Trim();
+                            defoliationSequenceName = string.IsNullOrWhiteSpace(part)
+                                                                ? string.Empty
+                                                                : char.ToUpper(part[0]) + part[1..];
                         }
                     }
-                    model=BindRecommendation(model, matchedHeader, manId);
-
-
                 }
+                BindRecommendation(model, matchedHeader, manId);
+
+
             }
         }
-
         return (fieldId, cropTypeId, cropGroupId, defoliationSequenceName);
     }
 
-    private FertiliserManureViewModel BindRecommendation(FertiliserManureViewModel model, RecommendationHeader matchedHeader, int manId)
+    private void BindRecommendation(FertiliserManureViewModel model, RecommendationHeader matchedHeader, int manId)
     {
         if (matchedHeader.RecommendationData != null)
         {
             matchedHeader.RecommendationData = matchedHeader.RecommendationData.Where(x => x.ManagementPeriod.ID == manId).ToList();
             foreach (var recData in matchedHeader.RecommendationData)
             {
-              model=  FetchRecommendation(model, recData);
+                model = FetchRecommendation(model, recData);
             }
         }
-        return model;
     }
 
     private FertiliserManureViewModel FetchRecommendation(FertiliserManureViewModel model, RecommendationData recData)
@@ -1767,7 +1765,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
             FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
         };
-       return  model;
+        return model;
     }
     private void ValidateNutrientValues(FertiliserManureViewModel model)
     {
