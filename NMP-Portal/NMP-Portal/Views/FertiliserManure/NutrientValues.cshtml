@@ -396,7 +396,7 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
                                             <td class="govuk-table__cell">
-                                                @(Model.Recommendation.SIndex == null ? Resource.lblHyphen : Model.Recommendation.NaIndex)
+                                                @(Model.Recommendation.NaIndex == null ? Resource.lblHyphen : Model.Recommendation.NaIndex)
                                             </td>
                                             <td class="govuk-table__cell">
                                                 @{
@@ -422,18 +422,18 @@
                                                     }
                                                     else
                                                     {
-                                                        var naBalanceValue = (Model.Recommendation.NaBalance.HasValue && Model.Recommendation.NaBalance == 0)
+                                                        @((Model.Recommendation.NaBalance.HasValue && Model.Recommendation.NaBalance == 0)
                                                         ? "0"
-                                                        : string.Format("{0:N0}", Model.Recommendation.NaBalance);
+                                                        : string.Format("{0:N0}", Model.Recommendation.NaBalance))
                                                     }
                                                 }
                                                 
                                             </td>
                                             <td class="govuk-table__cell">
                                                 @{
-                                                    var output = (!Model.Recommendation.ManureNa2O.HasValue || (Model.Recommendation.ManureNa2O.HasValue && Model.Recommendation.ManureNa2O == 0))
+                                                    @((!Model.Recommendation.ManureNa2O.HasValue || (Model.Recommendation.ManureNa2O.HasValue && Model.Recommendation.ManureNa2O == 0))
                                                     ? "0"
-                                                    : $"{Model.Recommendation.ManureNa2O}{Resource.lblkg}";
+                                                    : $"{Model.Recommendation.ManureNa2O}{Resource.lblkg}")
                                                 }
                                             </td>
                                             <td class="govuk-table__cell">
@@ -445,17 +445,17 @@
                                                     }
                                                     else
                                                     {
-                                                        var fertiliserOutput = (Model.Recommendation.FertilizerNa2O == 0 || Model.Recommendation.FertilizerNa2O < 0)
+                                                       @((Model.Recommendation.FertilizerNa2O == 0 || Model.Recommendation.FertilizerNa2O < 0)
                                                         ? "0"
-                                                        : $"{Model.Recommendation.FertilizerNa2O}{Resource.lblkg}";
+                                                        : $"{Model.Recommendation.FertilizerNa2O}{Resource.lblkg}")
                                                     }
                                                 }
                                             </td>
                                             <td class="govuk-table__cell">
                                                 @{
-                                                    var fertiliserAppliedOutput = ((!Model.Recommendation.FertiliserAppliedNa2O.HasValue) || (Model.Recommendation.FertiliserAppliedNa2O.HasValue && Model.Recommendation.FertiliserAppliedNa2O == 0))
+                                                    @(((!Model.Recommendation.FertiliserAppliedNa2O.HasValue) || (Model.Recommendation.FertiliserAppliedNa2O.HasValue && Model.Recommendation.FertiliserAppliedNa2O == 0))
                                                     ? "0"
-                                                    : $"{Model.Recommendation.FertiliserAppliedNa2O}{Resource.lblkg}";
+                                                    : $"{Model.Recommendation.FertiliserAppliedNa2O}{Resource.lblkg}")
                                                 }
 
                                             </td>
