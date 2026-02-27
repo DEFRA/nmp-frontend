@@ -7299,7 +7299,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CopyPlanYears() action posted");
 
-        if (model.CopyYear == null)
+        if (!model.CopyYear.HasValue)
         {
             ModelState.AddModelError("CopyYear", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
         }

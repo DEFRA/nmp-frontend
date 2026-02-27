@@ -113,7 +113,7 @@
                 </govuk-fieldset>
              
             </div>
-            <govuk-input asp-for=@Model.SoilAnalyses.OrganicMatterPercentage type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input asp-for=@Model.SoilAnalyses.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblOrganicMatter
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblOptional
