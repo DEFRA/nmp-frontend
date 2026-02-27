@@ -2,175 +2,187 @@
 @model NMP.Commons.Models.RecommendationData
 @if (Model != null && Model.Recommendation != null)
 {
-    <table class="govuk-table new-recomendation-table data-table">
-        <thead class="govuk-table__header">
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
-                <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
-                <th id="totalCropNeed" class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
-                <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
-                <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
-                <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
-                <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
-            </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@Resource.lblNitrogen</td>
-                <td class="govuk-table__cell">
-                    @if (Model.CropGroupID != (int)NMP.Commons.Enums.CropGroup.Grass)
-                    {
-                        @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
-                    }
-                    else
-                    {
-                        @Resource.lblHyphen
-                    }
-                </td>
-                <td class="govuk-table__cell">
-                    @{
-                        @if (!Model.Recommendation.CropN.HasValue)
+    @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass && (!string.IsNullOrWhiteSpace(Model.DefoliationSequenceName)))
+    {
+        <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, Model.ManagementTableIndex, Model.DefoliationSequenceName)</h2>
+    }
+    <div class="table-container">
+        @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+        {
+            <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+        }
+        <table class="govuk-table new-recomendation-table data-table">
+            <thead class="govuk-table__header">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">@Resource.lblNutrient</th>
+                    <th class="govuk-table__header" scope="col">@Resource.lblIndexPH</th>
+                    <th id="totalCropNeed" class="govuk-table__header" scope="col">@Resource.lblTotalCropNeed</th>
+                    <th class="govuk-table__header" scope="col">@Resource.lblPhosphateP2O5AndPotashK2OBalance</th>
+                    <th class="govuk-table__header" scope="col">@Resource.lblSupplyFromManures</th>
+                    <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeRecommendation</th>
+                    <th class="govuk-table__header" scope="col">@Resource.lblFertiliserOrLimeApplied</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@Resource.lblNitrogen</td>
+                    <td class="govuk-table__cell">
+                        @if (Model.CropGroupID != (int)NMP.Commons.Enums.CropGroup.Grass)
                         {
-                            @Resource.lblHyphen
+                            @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
                         }
                         else
                         {
-                            @if ((Model.Recommendation.CropN.HasValue && Model.Recommendation.CropN == 0))
-                            {
-                                @Model.Recommendation.CropN
-
-                            }
-                            else
-                            {
-                                @string.Format("{0:N0}{1}", Model.Recommendation.CropN, Resource.lblkg)
-                            }
-                        }
-                    }
-                </td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.NBalance == null ? Resource.lblHyphen : Model.Recommendation.NBalance == 0 ? Model.Recommendation.NBalance : string.Format("{0:N0}", Model.Recommendation.NBalance))
-                </td>
-                <td class="govuk-table__cell">
-                    @{
-                        @if (!Model.Recommendation.ManureN.HasValue)
-                        {
                             @Resource.lblHyphen
                         }
-                        else
-                        {
-                            @if ((Model.Recommendation.ManureN.HasValue && Model.Recommendation.ManureN == 0))
+                    </td>
+                    <td class="govuk-table__cell">
+                        @{
+                            @if (!Model.Recommendation.CropN.HasValue)
                             {
-                                @Model.Recommendation.ManureN
-
+                                @Resource.lblHyphen
                             }
                             else
                             {
-                                @string.Format("{0:N0}{1}", Model.Recommendation.ManureN, Resource.lblkg)
+                                @if ((Model.Recommendation.CropN.HasValue && Model.Recommendation.CropN == 0))
+                                {
+                                    @Model.Recommendation.CropN
+
+                                }
+                                else
+                                {
+                                    @string.Format("{0:N0}{1}", Model.Recommendation.CropN, Resource.lblkg)
+                                }
                             }
                         }
-                    }
-                </td>
-                <td class="govuk-table__cell">
-                    @{
-                        @if (!Model.Recommendation.FertilizerN.HasValue)
-                        {
-                            @Resource.lblHyphen
-                        }
-                        else
-                        {
-                            @if (Model.Recommendation.FertilizerN.HasValue && (Model.Recommendation.FertilizerN == 0 || Model.Recommendation.FertilizerN < 0))
+                    </td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.NBalance == null ? Resource.lblHyphen : Model.Recommendation.NBalance == 0 ? Model.Recommendation.NBalance : string.Format("{0:N0}", Model.Recommendation.NBalance))
+                    </td>
+                    <td class="govuk-table__cell">
+                        @{
+                            @if (!Model.Recommendation.ManureN.HasValue)
                             {
-                                @Model.Recommendation.FertilizerN
+                                @Resource.lblHyphen
                             }
                             else
                             {
-                                @string.Format("{0:N0}{1}", Model.Recommendation.FertilizerN, Resource.lblkg)
+                                @if ((Model.Recommendation.ManureN.HasValue && Model.Recommendation.ManureN == 0))
+                                {
+                                    @Model.Recommendation.ManureN
+
+                                }
+                                else
+                                {
+                                    @string.Format("{0:N0}{1}", Model.Recommendation.ManureN, Resource.lblkg)
+                                }
                             }
                         }
-                    }                    
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedN == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedN == 0 ? Model.Recommendation.FertiliserAppliedN : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedN, Resource.lblkg))</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
-                <td class="govuk-table__cell">
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.PIndex) ? Resource.lblHyphen : Model.Recommendation.PIndex)
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.CropP2O5 == null ? Resource.lblHyphen : Model.Recommendation.CropP2O5 == 0 ? Model.Recommendation.CropP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.CropP2O5, Resource.lblkg))</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.PBalance == null ? Resource.lblHyphen : Model.Recommendation.PBalance == 0 ? Model.Recommendation.PBalance : string.Format("{0:N0}", Model.Recommendation.PBalance))
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.ManureP2O5 == null ? Resource.lblHyphen : Model.Recommendation.ManureP2O5 == 0 ? Model.Recommendation.ManureP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.ManureP2O5, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerP2O5 < 0 ? 0 : Model.Recommendation.FertilizerP2O5 == 0 ? Model.Recommendation.FertilizerP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedP2O5 == 0 ? Model.Recommendation.FertiliserAppliedP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedP2O5, Resource.lblkg))</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
-                <td class="govuk-table__cell">
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.KIndex) ? Resource.lblHyphen : Model.Recommendation.KIndex)
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.CropK2O == null ? Resource.lblHyphen : Model.Recommendation.CropK2O == 0 ? Model.Recommendation.CropK2O : string.Format("{0:N0}{1}", Model.Recommendation.CropK2O, Resource.lblkg))</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.KBalance == null ? Resource.lblHyphen : Model.Recommendation.KBalance == 0 ? Model.Recommendation.KBalance : string.Format("{0:N0}", Model.Recommendation.KBalance))
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.ManureK2O == null ? Resource.lblHyphen : Model.Recommendation.ManureK2O == 0 ? Model.Recommendation.ManureK2O : string.Format("{0:N0}{1}", Model.Recommendation.ManureK2O, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerK2O < 0 ? 0 : Model.Recommendation.FertilizerK2O == 0 ? Model.Recommendation.FertilizerK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerK2O, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedK2O == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedK2O == 0 ? Model.Recommendation.FertiliserAppliedK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedK2O, Resource.lblkg))</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
-                <td class="govuk-table__cell">
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.SIndex) ? Resource.lblHyphen : Model.Recommendation.SIndex)
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.CropSO3 == null ? Resource.lblHyphen : Model.Recommendation.CropSO3 == 0 ? Model.Recommendation.CropSO3 : string.Format("{0:N0}{1}", Model.Recommendation.CropSO3, Resource.lblkg))</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.SBalance == null ? Resource.lblHyphen : Model.Recommendation.SBalance == 0 ? Model.Recommendation.SBalance : string.Format("{0:N0}", Model.Recommendation.SBalance))
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.ManureSO3 == null ? Resource.lblHyphen : Model.Recommendation.ManureSO3 == 0 ? Model.Recommendation.ManureSO3 : string.Format("{0:N0}{1}", Model.Recommendation.ManureSO3, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerSO3 < 0 ? 0 : Model.Recommendation.FertilizerSO3 == 0 ? Model.Recommendation.FertilizerSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerSO3, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedSO3 == 0 ? Model.Recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
-            </tr>
+                    </td>
+                    <td class="govuk-table__cell">
+                        @{
+                            @if (!Model.Recommendation.FertilizerN.HasValue)
+                            {
+                                @Resource.lblHyphen
+                            }
+                            else
+                            {
+                                @if (Model.Recommendation.FertilizerN.HasValue && (Model.Recommendation.FertilizerN == 0 || Model.Recommendation.FertilizerN < 0))
+                                {
+                                    @Model.Recommendation.FertilizerN
+                                }
+                                else
+                                {
+                                    @string.Format("{0:N0}{1}", Model.Recommendation.FertilizerN, Resource.lblkg)
+                                }
+                            }
+                        }
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedN == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedN == 0 ? Model.Recommendation.FertiliserAppliedN : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedN, Resource.lblkg))</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
+                    <td class="govuk-table__cell">
+                        @(string.IsNullOrWhiteSpace(Model.Recommendation.PIndex) ? Resource.lblHyphen : Model.Recommendation.PIndex)
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.CropP2O5 == null ? Resource.lblHyphen : Model.Recommendation.CropP2O5 == 0 ? Model.Recommendation.CropP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.CropP2O5, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.PBalance == null ? Resource.lblHyphen : Model.Recommendation.PBalance == 0 ? Model.Recommendation.PBalance : string.Format("{0:N0}", Model.Recommendation.PBalance))
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.ManureP2O5 == null ? Resource.lblHyphen : Model.Recommendation.ManureP2O5 == 0 ? Model.Recommendation.ManureP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.ManureP2O5, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertilizerP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerP2O5 < 0 ? 0 : Model.Recommendation.FertilizerP2O5 == 0 ? Model.Recommendation.FertilizerP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerP2O5, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedP2O5 == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedP2O5 == 0 ? Model.Recommendation.FertiliserAppliedP2O5 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedP2O5, Resource.lblkg))</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
+                    <td class="govuk-table__cell">
+                        @(string.IsNullOrWhiteSpace(Model.Recommendation.KIndex) ? Resource.lblHyphen : Model.Recommendation.KIndex)
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.CropK2O == null ? Resource.lblHyphen : Model.Recommendation.CropK2O == 0 ? Model.Recommendation.CropK2O : string.Format("{0:N0}{1}", Model.Recommendation.CropK2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.KBalance == null ? Resource.lblHyphen : Model.Recommendation.KBalance == 0 ? Model.Recommendation.KBalance : string.Format("{0:N0}", Model.Recommendation.KBalance))
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.ManureK2O == null ? Resource.lblHyphen : Model.Recommendation.ManureK2O == 0 ? Model.Recommendation.ManureK2O : string.Format("{0:N0}{1}", Model.Recommendation.ManureK2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertilizerK2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerK2O < 0 ? 0 : Model.Recommendation.FertilizerK2O == 0 ? Model.Recommendation.FertilizerK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerK2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedK2O == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedK2O == 0 ? Model.Recommendation.FertiliserAppliedK2O : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedK2O, Resource.lblkg))</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"> @Resource.lblSulphurSO3</td>
+                    <td class="govuk-table__cell">
+                        @(string.IsNullOrWhiteSpace(Model.Recommendation.SIndex) ? Resource.lblHyphen : Model.Recommendation.SIndex)
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.CropSO3 == null ? Resource.lblHyphen : Model.Recommendation.CropSO3 == 0 ? Model.Recommendation.CropSO3 : string.Format("{0:N0}{1}", Model.Recommendation.CropSO3, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.SBalance == null ? Resource.lblHyphen : Model.Recommendation.SBalance == 0 ? Model.Recommendation.SBalance : string.Format("{0:N0}", Model.Recommendation.SBalance))
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.ManureSO3 == null ? Resource.lblHyphen : Model.Recommendation.ManureSO3 == 0 ? Model.Recommendation.ManureSO3 : string.Format("{0:N0}{1}", Model.Recommendation.ManureSO3, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertilizerSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertilizerSO3 < 0 ? 0 : Model.Recommendation.FertilizerSO3 == 0 ? Model.Recommendation.FertilizerSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerSO3, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedSO3 == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedSO3 == 0 ? Model.Recommendation.FertiliserAppliedSO3 : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedSO3, Resource.lblkg))</td>
+                </tr>
 
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.NaIndex == null ? Resource.lblHyphen : Model.Recommendation.NaIndex)
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.CropNa2O == null ? Resource.lblHyphen : Model.Recommendation.CropNa2O == 0 ? Model.Recommendation.CropNa2O : string.Concat(Model.Recommendation.CropNa2O, Resource.lblkg))</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.NaBalance == null ? Resource.lblHyphen : Model.Recommendation.NaBalance == 0 ? Model.Recommendation.NaBalance : string.Format("{0:N0}", Model.Recommendation.NaBalance))
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.ManureNa2O == null ? 0 : Model.Recommendation.ManureNa2O == 0 ? Model.Recommendation.ManureNa2O : string.Concat(Model.Recommendation.ManureNa2O, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerNa2O < 0 ? 0 : Model.Recommendation.FertilizerNa2O == 0 ? Model.Recommendation.FertilizerNa2O : string.Concat(Model.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedNa2O == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedNa2O == 0 ? Model.Recommendation.FertiliserAppliedNa2O : string.Concat(Model.Recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
-                <td class="govuk-table__cell">
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.MgIndex) ? Resource.lblHyphen : Model.Recommendation.MgIndex)
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.CropMgO == null ? Resource.lblHyphen : Model.Recommendation.CropMgO == 0 ? Model.Recommendation.CropMgO : string.Format("{0:N0}{1}", Model.Recommendation.CropMgO, Resource.lblkg))</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.MgBalance == null ? Resource.lblHyphen : Model.Recommendation.MgBalance == 0 ? Model.Recommendation.MgBalance : string.Format("{0:N0}", Model.Recommendation.MgBalance))
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.ManureMgO == null ? Resource.lblHyphen : Model.Recommendation.ManureMgO == 0 ? Model.Recommendation.ManureMgO : string.Format("{0:N0}{1}", Model.Recommendation.ManureMgO, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : Model.Recommendation.FertilizerMgO < 0 ? 0 : Model.Recommendation.FertilizerMgO == 0 ? Model.Recommendation.FertilizerMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerMgO, Resource.lblkg))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedMgO == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedMgO == 0 ? Model.Recommendation.FertiliserAppliedMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedMgO, Resource.lblkg))</td>
-            </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"> @Resource.lblSodiumNa2O</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.NaIndex == null ? Resource.lblHyphen : Model.Recommendation.NaIndex)
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.CropNa2O == null ? Resource.lblHyphen : Model.Recommendation.CropNa2O == 0 ? Model.Recommendation.CropNa2O : string.Concat(Model.Recommendation.CropNa2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.NaBalance == null ? Resource.lblHyphen : Model.Recommendation.NaBalance == 0 ? Model.Recommendation.NaBalance : string.Format("{0:N0}", Model.Recommendation.NaBalance))
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.ManureNa2O == null ? 0 : Model.Recommendation.ManureNa2O == 0 ? Model.Recommendation.ManureNa2O : string.Concat(Model.Recommendation.ManureNa2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : Model.Recommendation.FertilizerNa2O < 0 ? 0 : Model.Recommendation.FertilizerNa2O == 0 ? Model.Recommendation.FertilizerNa2O : string.Concat(Model.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedNa2O == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedNa2O == 0 ? Model.Recommendation.FertiliserAppliedNa2O : string.Concat(Model.Recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"> @Resource.lblMagnesiumMgO</td>
+                    <td class="govuk-table__cell">
+                        @(string.IsNullOrWhiteSpace(Model.Recommendation.MgIndex) ? Resource.lblHyphen : Model.Recommendation.MgIndex)
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.CropMgO == null ? Resource.lblHyphen : Model.Recommendation.CropMgO == 0 ? Model.Recommendation.CropMgO : string.Format("{0:N0}{1}", Model.Recommendation.CropMgO, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.MgBalance == null ? Resource.lblHyphen : Model.Recommendation.MgBalance == 0 ? Model.Recommendation.MgBalance : string.Format("{0:N0}", Model.Recommendation.MgBalance))
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.ManureMgO == null ? Resource.lblHyphen : Model.Recommendation.ManureMgO == 0 ? Model.Recommendation.ManureMgO : string.Format("{0:N0}{1}", Model.Recommendation.ManureMgO, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertilizerMgO == null ? Resource.lblHyphen : Model.Recommendation.FertilizerMgO < 0 ? 0 : Model.Recommendation.FertilizerMgO == 0 ? Model.Recommendation.FertilizerMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertilizerMgO, Resource.lblkg))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedMgO == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedMgO == 0 ? Model.Recommendation.FertiliserAppliedMgO : string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedMgO, Resource.lblkg))</td>
+                </tr>
 
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@Resource.lblLime</td>
-                <td class="govuk-table__cell">
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.LimeIndex) ? Resource.lblHyphen : Model.Recommendation.LimeIndex)
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.CropLime == null ? Resource.lblHyphen : Model.Recommendation.CropLime == 0 ? Model.Recommendation.CropLime : string.Format("{0:N1} {1}", Model.Recommendation.CropLime, Resource.lbltonnes))</td>
-                <td class="govuk-table__cell">
-                    @(Model.Recommendation.LimeBalance == null ? Resource.lblHyphen : Model.Recommendation.LimeBalance == 0 ? Model.Recommendation.LimeBalance : string.Format("{0:N0}", Model.Recommendation.LimeBalance))
-                </td>
-                <td class="govuk-table__cell">@(Model.Recommendation.ManureLime == null ? Resource.lblHyphen : Model.Recommendation.ManureLime == 0 ? Model.Recommendation.ManureLime : string.Format("{0:N1} {1}", Model.Recommendation.ManureLime, Resource.lbltonnes))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertilizerLime == null ? Resource.lblHyphen : Model.Recommendation.FertilizerLime < 0 ? 0 : Model.Recommendation.FertilizerLime == 0 ? Model.Recommendation.FertilizerLime : string.Format("{0:N1} {1}", Model.Recommendation.FertilizerLime, Resource.lbltonnes))</td>
-                <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedLime == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedLime == 0 ? Model.Recommendation.FertiliserAppliedLime : string.Format("{0:N1} {1}", Model.Recommendation.FertiliserAppliedLime, Resource.lbltonnes))</td>
-            </tr>
-        </tbody>
-    </table>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@Resource.lblLime</td>
+                    <td class="govuk-table__cell">
+                        @(string.IsNullOrWhiteSpace(Model.Recommendation.LimeIndex) ? Resource.lblHyphen : Model.Recommendation.LimeIndex)
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.CropLime == null ? Resource.lblHyphen : Model.Recommendation.CropLime == 0 ? Model.Recommendation.CropLime : string.Format("{0:N1} {1}", Model.Recommendation.CropLime, Resource.lbltonnes))</td>
+                    <td class="govuk-table__cell">
+                        @(Model.Recommendation.LimeBalance == null ? Resource.lblHyphen : Model.Recommendation.LimeBalance == 0 ? Model.Recommendation.LimeBalance : string.Format("{0:N0}", Model.Recommendation.LimeBalance))
+                    </td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.ManureLime == null ? Resource.lblHyphen : Model.Recommendation.ManureLime == 0 ? Model.Recommendation.ManureLime : string.Format("{0:N1} {1}", Model.Recommendation.ManureLime, Resource.lbltonnes))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertilizerLime == null ? Resource.lblHyphen : Model.Recommendation.FertilizerLime < 0 ? 0 : Model.Recommendation.FertilizerLime == 0 ? Model.Recommendation.FertilizerLime : string.Format("{0:N1} {1}", Model.Recommendation.FertilizerLime, Resource.lbltonnes))</td>
+                    <td class="govuk-table__cell">@(Model.Recommendation.FertiliserAppliedLime == null ? Resource.lblHyphen : Model.Recommendation.FertiliserAppliedLime == 0 ? Model.Recommendation.FertiliserAppliedLime : string.Format("{0:N1} {1}", Model.Recommendation.FertiliserAppliedLime, Resource.lbltonnes))</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
 }

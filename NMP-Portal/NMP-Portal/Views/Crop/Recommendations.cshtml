@@ -135,26 +135,16 @@
                                             var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
                                             @foreach (var recommendation in rec)
                                             {
-                                                @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
+                                                var recommendationData = new RecommendationData
                                                 {
-                                                    <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h2>
-                                                }
-                                                <div class="table-container">
-                                                    @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                                    {
-                                                        <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
-                                                    }
-                                                    @{
-                                                        var recommendationData = new RecommendationData
-                                                        {
 
-                                                            Recommendation = recommendation,
-                                                            CropGroupID = crop.CropGroupID
-                                                        };
-                                                        @await Html.PartialAsync("~/Views/Crop/_RecommendationTablePartial.cshtml", recommendationData)
-                                                    }
-                                                    
-                                                </div>
+                                                    Recommendation = recommendation,
+                                                    CropGroupID = crop.CropGroupID,
+                                                    ManagementTableIndex = managementTableIndex,
+                                                    DefoliationSequenceName = mp.DefoliationSequenceName,
+                                                };
+                                                @await Html.PartialAsync("~/Views/Crop/_RecommendationTablePartial.cshtml", recommendationData)
+
                                             }
                                             managementTableIndex++;
                                         }
@@ -162,8 +152,6 @@
                                         <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
 
 
-                                        @*                                         @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
-                                        { *@
                                         @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                         {
 
@@ -219,7 +207,7 @@
                                                     && Model.Recommendations.Count > 0)
                                     {
                                         var cropManagementPeriods = Model.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
-                                        <h3 id="cropone" class="govuk-heading-m">
+                                        <h3 id="cropTwo" class="govuk-heading-m">
                                             @string.Format(Resource.lblNutrientAndLimeRecommendationsForCropInField, crop.CropTypeName, Model.FieldName)
                                         </h3>
 
@@ -239,35 +227,18 @@
                                             var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
                                             @foreach (var recommendation in rec)
                                             {
-                                                @* Recommendation *@
-                                                @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(mp.DefoliationSequenceName)))
+                                                var recommendationData = new RecommendationData
                                                 {
-                                                    <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, managementTableIndex, mp.DefoliationSequenceName)</h2>
-                                                }
+                                                    Recommendation = recommendation,
+                                                    CropGroupID = crop.CropGroupID,
+                                                    ManagementTableIndex = managementTableIndex,
+                                                    DefoliationSequenceName = mp.DefoliationSequenceName,
+                                                };
+                                                @await Html.PartialAsync("~/Views/Crop/_RecommendationTablePartial.cshtml", recommendationData)
 
-                                                <div class="table-container">
-                                                    @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                                    {
-                                                        <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
-                                                    }
-                                                    @{
-                                                        var recommendationData = new RecommendationData
-                                                        {
-
-                                                            Recommendation = recommendation,
-                                                            CropGroupID = crop.CropGroupID
-                                                        };
-                                                        @await Html.PartialAsync("~/Views/Crop/_RecommendationTablePartial.cshtml", recommendationData)
-                                                    }
-                                                    
-                                                </div>
                                             }
                                             managementTableIndex++;
                                         }
-                                        <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
-
-                                        @*    @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
-                                        { *@
                                         @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                         {
 
