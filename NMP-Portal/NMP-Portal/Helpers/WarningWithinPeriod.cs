@@ -81,13 +81,13 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? closedPeriod = null;
-            //DateTime september16 = new DateTime(harvestYear - 1, 9, 16);
+            
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
-            //DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
+            
 
             if (isFieldTypeGrass)
             {
@@ -98,85 +98,7 @@ namespace NMP.Portal.Helpers
             else if (isFieldTypeArable)
             {
                 switch (cropTypeId)
-                {
-                    //case (int)NMP.Commons.Enums.CropTypes.Asparagus:             //Asparagus
-                    //case (int)NMP.Commons.Enums.CropTypes.BulbOnions:            //Bulb Onions
-                    //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                    //    {
-                    //        closedPeriod = null;
-                    //    }
-                    //    if (isSandyShallowSoil && (sowingDate < september16))
-                    //    {
-                    //        closedPeriod = null;
-                    //    }
-                    //    if (!isSandyShallowSoil)
-                    //    {
-                    //        closedPeriod = null;
-                    //    }
-                    //    break;
-
-                    //case (int)NMP.Commons.Enums.CropTypes.SaladOnions:            //Salad Onions
-
-                    //    if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
-                    //    {
-                    //        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                    //        {
-                    //            closedPeriod = null;
-                    //        }
-                    //        if (isSandyShallowSoil && (sowingDate < september16))
-                    //        {
-                    //            closedPeriod = null;
-                    //        }
-                    //        if (!isSandyShallowSoil)
-                    //        {
-                    //            closedPeriod = null;
-                    //        }
-                    //    }
-                    //    break;
-
-                    ////Brassica is a crop group. under this below crop type comes..
-                    //case (int)NMP.Commons.Enums.CropTypes.ForageRape:
-                    //case (int)NMP.Commons.Enums.CropTypes.ForageSwedes:
-                    //case (int)NMP.Commons.Enums.CropTypes.KaleGrazed:
-                    //case (int)NMP.Commons.Enums.CropTypes.StubbleTurnips:
-                    //case (int)NMP.Commons.Enums.CropTypes.Swedes:
-                    //case (int)NMP.Commons.Enums.CropTypes.Turnips:
-                    //case (int)NMP.Commons.Enums.CropTypes.BrusselSprouts:
-                    //case (int)NMP.Commons.Enums.CropTypes.Cabbage:
-                    //case (int)NMP.Commons.Enums.CropTypes.Calabrese:
-                    //case (int)NMP.Commons.Enums.CropTypes.Cauliflower:
-                    //case (int)NMP.Commons.Enums.CropTypes.Radish:
-                    //case (int)NMP.Commons.Enums.CropTypes.WildRocket:
-                    //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                    //    {
-                    //        closedPeriod = null;
-                    //    }
-                    //    if (isSandyShallowSoil && (sowingDate < september16))
-                    //    {
-                    //        closedPeriod = null;
-                    //    }
-                    //    if (!isSandyShallowSoil)
-                    //    {
-                    //        closedPeriod = null;
-                    //    }
-
-                    //    break;
-
-                    //case (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
-
-                    //    if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                    //    {
-                    //        closedPeriod = string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember);
-                    //    }
-                    //    if (isSandyShallowSoil && (sowingDate < september16))
-                    //    {
-                    //        closedPeriod = string.Format(Resource.lbl1Novto31Dec,Resource.lblNovember,Resource.lblDecember);
-                    //    }
-                    //    if (!isSandyShallowSoil)
-                    //    {
-                    //        closedPeriod = string.Format(Resource.lbl1Novto31Dec, Resource.lblNovember, Resource.lblDecember);
-                    //    }
-                    //    break;
+                {                   
 
                     default:
                         closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial);
