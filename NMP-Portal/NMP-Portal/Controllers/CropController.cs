@@ -133,7 +133,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : HarvestYearForPlan() action posted");
 
-        if (model.Year == null)
+        if (!model.Year.HasValue)
         {
             ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
         }
@@ -149,7 +149,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             for (int i = 0; i < model?.Crops?.Count; i++)
             {
-                model.Crops[i].Year = model.Year.Value;
+                model.Crops[i].Year = model.Year??0;
             }
 
             SetCropToSession(model);

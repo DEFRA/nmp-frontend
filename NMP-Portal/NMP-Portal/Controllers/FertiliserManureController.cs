@@ -100,11 +100,22 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectToAction(_doubleCropActionName, new { q = model.DoubleCropEncryptedCounter });
         }
 
-        if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+        return BackActionForInOrganicAndDoubleCrop(model); 
+
+    }
+
+    private IActionResult BackActionForInOrganicAndDoubleCrop(FertiliserManureViewModel model)
+    {
+        if (model == null)
+            return RedirectToAction(_fieldGroupActionName);
+
+        if (model.FieldGroup == Resource.lblSelectSpecificFields)
         {
-            if (model.FieldList != null && model.FieldList.Count > 0 && model.FieldList.Count == 1)
+            if (model.IsComingFromRecommendation &&
+                model.FieldList?.Count == 1)
             {
-                string fieldId = model.FieldList[0];
+                var fieldId = model.FieldList[0];
+
                 return RedirectToAction(_recommendationsActionName, "Crop", new
                 {
                     q = model.EncryptedFarmId,
@@ -112,15 +123,15 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     s = model.EncryptedHarvestYear
                 });
             }
-        }
-        else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
-        {
-            return RedirectToAction(_fieldsActionName);
+
+            if (!model.IsComingFromRecommendation)
+            {
+                return RedirectToAction(_fieldsActionName);
+            }
         }
 
         return RedirectToAction(_fieldGroupActionName);
     }
-
     [HttpGet]
     public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
     {
@@ -897,10 +908,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList, false);
                 }
                 string fieldIds = string.Join(",", model.FieldList);
-                
+
                 List<int> managementIds = new List<int>();
                 (managementIds, error) = await _fertiliserManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldIds, (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) ? null : model.FieldGroup, (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) ? 1 : null);
-                
+
                 if (managementIds.Count > 0)
                 {
                     if (model.FertiliserManures == null)
@@ -1547,7 +1558,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                     string endMonthStr = match.Groups[4].Value;
 
                                                     Dictionary<int, string> dtfi = GetMonthDictionary();
-                                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; 
+                                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
                                                     int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
 
                                                     DateTime startDate = new();
@@ -1555,13 +1566,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                                                     if (startMonth <= endMonth)
                                                     {
-                                                        startDate = new DateTime(year - 1, startMonth, startDay, 00,00,00,DateTimeKind.Unspecified);
+                                                        startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                                                         endDate = new DateTime(year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                                                     }
                                                     else if (startMonth >= endMonth)
                                                     {
                                                         startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        endDate = new DateTime(year, endMonth, endDay,00, 00, 00, DateTimeKind.Unspecified);
+                                                        endDate = new DateTime(year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                                                     }
 
 
@@ -2243,7 +2254,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                                                         Dictionary<int, string> dtfi = GetMonthDictionary();
 
-                                                        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; 
+                                                        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
                                                         int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
 
                                                         DateTime startDate = new();
@@ -2252,7 +2263,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                         if (startMonth <= endMonth)
                                                         {
                                                             startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                            endDate = new DateTime(year - 1, endMonth, endDay,00,00,00,DateTimeKind.Unspecified);
+                                                            endDate = new DateTime(year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                                                         }
                                                         else if (startMonth >= endMonth)
                                                         {
@@ -4169,25 +4180,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         return RedirectToAction(_checkAnswerActionName);
                     }
-                    else if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+                    else
                     {
-                        if (model.FieldList != null && model.FieldList.Count > 0 && model.FieldList.Count == 1)
-                        {
-                            string fieldId = model.FieldList[0];
-                            return RedirectToAction(_recommendationsActionName, "Crop", new
-                            {
-                                q = model.EncryptedFarmId,
-                                r = _fieldDataProtector.Protect(fieldId),
-                                s = model.EncryptedHarvestYear
+                       return BackActionForInOrganicAndDoubleCrop(model);
+                    }
 
-                            });
-                        }
-                    }
-                    else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
-                    {
-                        return RedirectToAction(_fieldsActionName);
-                    }
-                    return RedirectToAction(_fieldGroupActionName);
                 }
                 model.FieldID = model.DoubleCrop[index].FieldID;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DoubleCrop[index].FieldID)).Name;
@@ -4234,7 +4231,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     CropName = cropTypeName,
                                     CropOrder = cropList[0].CropOrder ?? 1,
                                     FieldID = fieldId,
-                                    FieldName = field.Name?? string.Empty,
+                                    FieldName = field.Name ?? string.Empty,
                                     EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
                                     Counter = counter,
                                 };
