@@ -2734,13 +2734,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            // action = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals ? _cropInfoTwoActionName
-
-            //    : (((model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other) || cropInfoOneList.Count == 1) ?
-            //    ((model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
-            //    model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield) ?
-            //"YieldQuestion" : "Yield") : "CropInfoOne");
-
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals)
             {
                 action = _cropInfoTwoActionName;
@@ -2994,7 +2987,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (string.IsNullOrWhiteSpace(harvestYearError.Message))
                 {
                     //Fetch fields allowed for second crop based on first crop
-                    var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
                     List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
                         .Where(x => x.IsBasePlan != null && (!x.IsBasePlan.Value)).ToList();
 
@@ -3061,7 +3053,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 crop.FieldName = null;
                 crop.EncryptedCounter = null;
                 crop.FieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-                //crop.CropOrder = 1;
+                
                 if (string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     if (lastGroupNumber != null)
@@ -3186,7 +3178,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater; //error.Message; //
+                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater; 
                 return RedirectToAction(_checkAnswerActionName);
             }
         }
@@ -3832,13 +3824,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model.HarvestYear?.Count > 0)
             {
-                model.HarvestYear = model?.HarvestYear.OrderByDescending(x => x.Year).ToList();
+                model.HarvestYear = model.HarvestYear.OrderByDescending(x => x.Year).ToList();
             }
 
-            if (model != null)
-            {
-                model.EncryptedFarmId = id;
-            }
+            
+             model.EncryptedFarmId = id;
+            
         }
 
         return View(model);
@@ -3945,22 +3936,27 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         {
                             model.Crops = new List<CropViewModel>();
                         }
+
                         if (model.ManagementPeriods == null)
                         {
                             model.ManagementPeriods = new List<ManagementPeriodViewModel>();
                         }
+
                         if (model.Recommendations == null)
                         {
                             model.Recommendations = new List<Recommendation>();
                         }
+
                         if (model.RecommendationComments == null)
                         {
                             model.RecommendationComments = new List<RecommendationComment>();
                         }
+
                         if (model.OrganicManures == null)
                         {
                             model.OrganicManures = new List<OrganicManureDataViewModel>();
                         }
+
                         if (model.FertiliserManures == null)
                         {
                             model.FertiliserManures = new List<FertiliserManureDataViewModel>();
@@ -5064,8 +5060,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             };
 
             string jsonData = JsonConvert.SerializeObject(excessRainfalls);
-            (ExcessRainfalls excessRainfall, Error error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessWinterRainfallUpdated.Value);
-            if ((error == null || string.IsNullOrWhiteSpace(error?.Message)) && excessRainfall != null)
+            (ExcessRainfalls? excessRainfall, Error? error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessWinterRainfallUpdated.Value);
+            if (excessRainfall != null)
             {
                 return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value)), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
             }

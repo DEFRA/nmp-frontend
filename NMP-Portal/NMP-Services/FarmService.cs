@@ -315,10 +315,10 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (excessWinterRainfallOption, error);
     }
-    public async Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
+    public async Task<(ExcessRainfalls?, Error?)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
         ExcessRainfalls? excessRainfalls = null;
-        Error? error = new Error();
+        Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
         string url = string.Empty;
