@@ -1173,23 +1173,7 @@ namespace NMP.Portal.Controllers
                     RoleID = 2
                 };
 
-                (Farm? farmResponse, Error? error) = await _farmLogic.AddFarmAsync(farmData, organisationId);
-
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["AddFarmError"] = error.Message;
-                    ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString())).Select(s => s.NvzName).ToList();
-                    return View(model);
-                }
-                string success = _dataProtector.Protect("true");
-                RemoveFarmSession();
-                RemoveAddressesSession();
-                RemoveFarmDataBeforeUpdateFromSession();
-                if (farmResponse != null)
-                {
-                    farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-                }
-                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
+                return await SaveFarmAsync(farmData, organisationId, model, nvzs);
             }
             catch (HttpRequestException hre)
             {
@@ -1201,6 +1185,37 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
+        }
+        private async Task<IActionResult> SaveFarmAsync(FarmData farmData, Guid organisationId, FarmViewModel model, List<NvzActionProgramResponse> nvzs)
+        {
+            (Farm? farmResponse, Error? error) =
+                await _farmLogic.AddFarmAsync(farmData, organisationId);
+
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["AddFarmError"] = error.Message;
+
+                ViewBag.SelectedNVZs = nvzs
+                    .Where(n => model.NitrateVulnerableZoneList != null &&
+                                model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString()))
+                    .Select(s => s.NvzName)
+                    .ToList();
+
+                return View(model);
+            }
+
+            string success = _dataProtector.Protect("true");
+
+            RemoveFarmSession();
+            RemoveAddressesSession();
+            RemoveFarmDataBeforeUpdateFromSession();
+
+            if (farmResponse != null)
+                farmResponse.EncryptedFarmId =
+                    _dataProtector.Protect(farmResponse.ID.ToString());
+
+            return RedirectToAction("FarmSummary",
+                new { id = farmResponse?.EncryptedFarmId, q = success });
         }
 
         public IActionResult BackCheckAnswer()
