@@ -3864,7 +3864,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         _logger.LogTrace("Field Controller : NitrateVulnerableZones() post action called");
         if (model.NVZProgrammeID == null)
         {
-            ModelState.AddModelError("NVZProgrammeID", Resource.lblSelectAOptionBeforeContinuing);
+            ModelState.AddModelError("NVZProgrammeID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
         if (!ModelState.IsValid)
