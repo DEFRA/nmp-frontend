@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    ViewData["Title"] = $"{Resource.lblManureStorage} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
+    ViewData["Title"] = $"{Resource.lblManureStores} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
     var dataLists = new List<(string Name, IEnumerable<object> Data)>
 {
     ("SlurryStorage",
@@ -102,7 +102,7 @@
     <div class="govuk-grid-column-two-thirds">
         <div class="margin-bottom-thirty">
             <span class="name govuk-caption-l">@Model.FarmName</span>
-            <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStorage</h1>
+            <h1 class="govuk-heading-l margin-bottom-ten">@Resource.lblManureStores</h1>
 
             @*  <h2 class="govuk-heading-m">@Model.Year</h2> *@
 
@@ -265,8 +265,8 @@
                 }
             </govuk-tabs-item>
 
-            <govuk-tabs-item id="totals" label=@Resource.lblManureStorageTotals>
-                <h2 class="govuk-heading-m non-standard">@Resource.lblManureStorageTotals</h2>
+            <govuk-tabs-item id="totals" label=@Resource.lblTotalManureStorage>
+                <h2 class="govuk-heading-m non-standard">@Resource.lblTotalManureStorage</h2>
                 @if (ViewBag.TotalLiquidCapacity != null && ViewBag.TotalSolidCapacity != null)
                 {
                     <div class="table-container">
