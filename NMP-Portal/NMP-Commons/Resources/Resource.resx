@@ -2422,10 +2422,7 @@ cubic metres per hectare  not set</value>
     <value>Potassium (K) per litre of soil (optional)</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint1" xml:space="preserve">
-    <value>Enter the values of your soil analysis. You must enter at least one value.</value>
-  </data>
-  <data name="MsgEnterTheValueOYourSoilAnalysisHint2" xml:space="preserve">
-    <value>If your soil analysis does not include results for a particular nutrient, leave it blank.</value>
+    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one value.</value>
@@ -3877,7 +3874,7 @@ cubic metres per hectare  not set</value>
     <value>Total area</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
-    <value>For Potassium (K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
+    <value>When the value for Potassium (K)  is 2, enter it as 2+ or 2-</value>
   </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
@@ -7465,5 +7462,8 @@ livestock manure.</value>
   </data>
   <data name="lblWhatIsTheAverageDepth" xml:space="preserve">
     <value>What is the average depth?</value>
+  </data>
+  <data name="lblOrganicMatter" xml:space="preserve">
+    <value>Organic matter</value>
   </data>
 </root>

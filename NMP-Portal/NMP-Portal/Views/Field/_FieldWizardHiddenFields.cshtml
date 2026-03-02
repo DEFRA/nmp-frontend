@@ -31,11 +31,12 @@
     @if (currentStep != (int)FieldWizardSteps.NVZField)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZProgrammeID" value="@Model.NVZProgrammeID" />
     }
-    @if (currentStep != (int)FieldWizardSteps.NVZProgramme)
+  @*   @if (currentStep != (int)FieldWizardSteps.NVZProgramme)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZProgrammeID" />
-    }
+    } *@
     @if (currentStep != (int)FieldWizardSteps.ElevationField)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel" />
@@ -50,11 +51,11 @@
     }
     @if (currentStep != (int)FieldWizardSteps.SoilOverChalk)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk?.ToString().ToLower()" />
     }
     @if (currentStep != (int)FieldWizardSteps.RecentSoilAnalysisQuestion)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion?.ToString().ToLower()" />
     }
     @if (currentStep != (int)FieldWizardSteps.SulphurDeficiency)
     {
@@ -70,7 +71,7 @@
     } *@
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValueType)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex?.ToString().ToLower()" />
     }
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValue)
     {
@@ -83,6 +84,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumIndex" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.OrganicMatterPercentage" />
     }
     @if (currentStep != (int)FieldWizardSteps.LastHarvestYear)
     {
@@ -126,8 +128,7 @@
     @if (currentStep != (int)FieldWizardSteps.FieldRemove)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldRemove" />
-    }
-
+    }    
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" value="@Model.CropGroup" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" value="@Model.CropType" />
@@ -135,20 +136,21 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID" value="@Model.FarmID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm.ToString().ToLower()" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevelForFarm" value="@Model.IsAbove300SeaLevelForFarm?.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsActive" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRecentSoilAnalysisQuestionChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilReleasingClay" value="@Model.IsSoilReleasingClay.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HarvestYear" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm.ToString().ToLower()" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm?.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
     @if (Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
     {
         @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)

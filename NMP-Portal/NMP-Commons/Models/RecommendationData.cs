@@ -8,5 +8,9 @@ public class RecommendationData
     public List<RecommendationComment>? RecommendationComments { get; set; }
     public ManagementPeriod? ManagementPeriod { get; set; }
     public List<OrganicManureDataViewModel>? OrganicManures { get; set; }
-    public List<FertiliserManure>? FertiliserManures { get; set; }        
+    public List<FertiliserManure>? FertiliserManures { get; set; }
+    public int? CropGroupID { get; set; }
+    public int? CropTypeID { get; set; }
+    public int? ManagementTableIndex  { get; set; }
+    public string? DefoliationSequenceName { get; set; }
 }

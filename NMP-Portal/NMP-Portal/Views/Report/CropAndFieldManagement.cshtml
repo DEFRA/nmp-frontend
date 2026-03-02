@@ -281,6 +281,19 @@
                                                         </tr>
                                                         <tr class="govuk-table__row">
                                                             <td class="govuk-table__cell">
+                                                                @Resource.lblSodiumNa2O
+                                                            </td>
+                                                            <td class="govuk-table__cell">@(mp.Recommendation.NaIndex == null ? Resource.lblHyphen : mp.Recommendation.NaIndex)</td>
+                                                            <td class="govuk-table__cell">@(mp.Recommendation.CropNa2O == null ? Resource.lblHyphen : mp.Recommendation.CropNa2O == 0 ? mp.Recommendation.CropNa2O : string.Format("{0:N0}{1}", mp.Recommendation.CropNa2O, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">
+                                                                @(mp.Recommendation.NaBalance == null ? Resource.lblHyphen : mp.Recommendation.NaBalance == 0 ? mp.Recommendation.NaBalance : string.Format("{0:N0}", mp.Recommendation.NaBalance))
+                                                            </td>
+                                                            <td class="govuk-table__cell">@(mp.Recommendation.ManureNa2O == null ? Resource.lblHyphen : mp.Recommendation.ManureNa2O == 0 ? mp.Recommendation.ManureNa2O : string.Format("{0:N0}{1}", mp.Recommendation.ManureNa2O, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">@(mp.Recommendation.FertilizerNa2O == null ? Resource.lblHyphen : mp.Recommendation.FertilizerNa2O < 0 ? 0 : mp.Recommendation.FertilizerNa2O == 0 ? mp.Recommendation.FertilizerNa2O : string.Format("{0:N0}{1}", mp.Recommendation.FertilizerNa2O, Resource.lblkg))</td>
+                                                            <td class="govuk-table__cell">@(mp.Recommendation.FertiliserAppliedNa2O == null ? 0 : mp.Recommendation.FertiliserAppliedNa2O < 0 ? 0 : mp.Recommendation.FertiliserAppliedNa2O == 0 ? mp.Recommendation.FertiliserAppliedNa2O : string.Format("{0:N0}{1}", mp.Recommendation.FertiliserAppliedNa2O, Resource.lblkg))</td>
+                                                        </tr>
+                                                        <tr class="govuk-table__row">
+                                                            <td class="govuk-table__cell">
                                                                 @Resource.lblMagnesiumMgO
                                                             </td>
                                                             <td class="govuk-table__cell">@(mp.Recommendation.MgIndex == null ? Resource.lblHyphen : mp.Recommendation.MgIndex)</td>
@@ -462,7 +475,7 @@
                                                                     }
                                                                 </td>
                                                                 <td class="govuk-table__cell">
-                                                                    @if(fertManure.K2O == null)
+                                                                    @if (fertManure.K2O == null)
                                                                     {
                                                                         @Resource.lblHyphen
                                                                     }
@@ -476,10 +489,10 @@
                                                                         {
                                                                             @string.Format(Resource.lblValueKg, fertManure.K2O.Value)
                                                                         }
-                                                                    }                                        
+                                                                    }
                                                                 </td>
                                                                 <td class="govuk-table__cell">
-                                                                    @if(fertManure.SO3 == null)
+                                                                    @if (fertManure.SO3 == null)
                                                                     {
                                                                         @Resource.lblHyphen
                                                                     }
@@ -493,10 +506,10 @@
                                                                         {
                                                                             @string.Format(Resource.lblValueKg, fertManure.SO3.Value)
                                                                         }
-                                                                    }                                        
+                                                                    }
                                                                 </td>
                                                                 <td class="govuk-table__cell">
-                                                                    @if(fertManure.Lime == null)
+                                                                    @if (fertManure.Lime == null)
                                                                     {
                                                                         @Resource.lblHyphen
                                                                     }
@@ -510,7 +523,7 @@
                                                                         {
                                                                             @string.Format(Resource.lblRateWithTonnes, string.Format("{0:N1}", fertManure.Lime))
                                                                         }
-                                                                    }                                        
+                                                                    }
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -915,5 +928,5 @@
         }
     }
 
-    @await Html.PartialAsync("_ReposrtDisclamer",Model)
+    @await Html.PartialAsync("_ReposrtDisclamer", Model)
 }
