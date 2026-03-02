@@ -5281,6 +5281,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Existing manure storage capacity.
+        /// </summary>
+        public static string lblExistingManureStorageCapacityForHint {
+            get {
+                return ResourceManager.GetString("lblExistingManureStorageCapacityForHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Existing manure storage capacity report.
         /// </summary>
         public static string lblExistingManureStorageCapacityReport {
@@ -6253,7 +6262,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Freeboard is the distance between the top of the stores and the level of the slurry inside. You must always keep this distance clear..
+        ///   Looks up a localized string similar to Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear..
         /// </summary>
         public static string lblFreeboardIsTheDistanceBetweenTheTopOfTheTank {
             get {
@@ -7369,7 +7378,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Including for the maximum nitrogen (N) limit, and the holding nitrogen limit ‘the 170 limit’.
+        ///   Looks up a localized string similar to Including for the maximum nitrogen (N) limit, the holding nitrogen (N) limit ‘the 170 limit’, and existing manure storage capacity.
         /// </summary>
         public static string lblIncludesMaximumNitrogenHoldingNitrogenForWales {
             get {
@@ -9085,6 +9094,15 @@ namespace NMP.Commons.Resources {
         public static string lblManureStorageTotals {
             get {
                 return ResourceManager.GetString("lblManureStorageTotals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manure stores.
+        /// </summary>
+        public static string lblManureStores {
+            get {
+                return ResourceManager.GetString("lblManureStores", resourceCulture);
             }
         }
         
@@ -12833,7 +12851,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Slurry store.
+        ///   Looks up a localized string similar to Slurry stores.
         /// </summary>
         public static string lblSlurryStorage {
             get {
@@ -13400,7 +13418,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Solid manure store.
+        ///   Looks up a localized string similar to Solid manure stores.
         /// </summary>
         public static string lblSolidManureStorage {
             get {
@@ -13688,7 +13706,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure store on {0}.
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter the manure stores on {0}.
         /// </summary>
         public static string lblStorageCapacityReportContentFour {
             get {
@@ -14892,6 +14910,15 @@ namespace NMP.Commons.Resources {
         public static string lblTotalMagnesiumOxide {
             get {
                 return ResourceManager.GetString("lblTotalMagnesiumOxide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total manure storage.
+        /// </summary>
+        public static string lblTotalManureStorage {
+            get {
+                return ResourceManager.GetString("lblTotalManureStorage", resourceCulture);
             }
         }
         
@@ -18055,7 +18082,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have added manure store.
+        ///   Looks up a localized string similar to You have added a manure store.
         /// </summary>
         public static string lblYouHaveAddedManureStorage {
             get {
@@ -18136,7 +18163,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not added any Solid manure store.
+        ///   Looks up a localized string similar to You have not added any solid manure stores.
         /// </summary>
         public static string lblYouHaveNotAddedAnySolidMaterialStorage {
             get {
@@ -21585,7 +21612,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter all the manure storage on {0}..
+        ///   Looks up a localized string similar to To create an existing manure storage capacity report, enter all the manure stores on {0}..
         /// </summary>
         public static string MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe {
             get {

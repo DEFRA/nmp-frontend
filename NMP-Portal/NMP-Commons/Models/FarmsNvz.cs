@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NMP.Commons.Models
 {
     public class FarmsNvz
-    {      
+    {
         public int ID { get; set; }
         public int? FarmID { get; set; }
         public int NVZProgrammeID { get; set; }

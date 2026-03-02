@@ -5622,13 +5622,13 @@ livestock manure.</value>
     <value>metres cubed</value>
   </data>
   <data name="lblSlurryStorage" xml:space="preserve">
-    <value>Slurry store</value>
+    <value>Slurry stores</value>
   </data>
   <data name="lblDirtyWater" xml:space="preserve">
     <value>Dirty water</value>
   </data>
   <data name="lblSolidManureStorage" xml:space="preserve">
-    <value>Solid manure store</value>
+    <value>Solid manure stores</value>
   </data>
   <data name="lblManageStoreCapacity" xml:space="preserve">
     <value>Manage store capacity</value>
@@ -5697,7 +5697,7 @@ livestock manure.</value>
     <value>About freeboard</value>
   </data>
   <data name="lblFreeboardIsTheDistanceBetweenTheTopOfTheTank" xml:space="preserve">
-    <value>Freeboard is the distance between the top of the stores and the level of the slurry inside. You must always keep this distance clear.</value>
+    <value>Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear.</value>
   </data>
   <data name="lblForASteelOrConcreteStore" xml:space="preserve">
     <value>For a steel or concrete store, you must keep a minimum of 30cm of freeboard.</value>
@@ -5883,10 +5883,10 @@ livestock manure.</value>
     <value>Livestock group</value>
   </data>
   <data name="lblYouHaveAddedManureStorage" xml:space="preserve">
-    <value>You have added manure store</value>
+    <value>You have added a manure store</value>
   </data>
   <data name="MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe" xml:space="preserve">
-    <value>To create an existing manure storage capacity report, enter all the manure storage on {0}.</value>
+    <value>To create an existing manure storage capacity report, enter all the manure stores on {0}.</value>
   </data>
   <data name="lblAddMoreManureStorage" xml:space="preserve">
     <value>Add more manure store</value>
@@ -5943,7 +5943,7 @@ livestock manure.</value>
     <value>Total area of uncovered stores</value>
   </data>
   <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
-    <value>To create an existing manure storage capacity report, enter the manure store on {0}</value>
+    <value>To create an existing manure storage capacity report, enter the manure stores on {0}</value>
   </data>
   <data name="lblNoSlurryStoresRecorded" xml:space="preserve">
     <value> No slurry stores recorded</value>
@@ -5976,7 +5976,7 @@ livestock manure.</value>
     <value>Total slurry capacity</value>
   </data>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
-    <value>You have not added any Solid manure store</value>
+    <value>You have not added any solid manure stores</value>
   </data>
   <data name="lblAddASolidManureStore" xml:space="preserve">
     <value>Add a solid manure store</value>
@@ -7110,7 +7110,7 @@ livestock manure.</value>
     <value>Create field and crop level reports, including for the:</value>
   </data>
   <data name="lblIncludesMaximumNitrogenHoldingNitrogenForWales" xml:space="preserve">
-    <value>Including for the maximum nitrogen (N) limit, and the holding nitrogen limit ‘the 170 limit’</value>
+    <value>Including for the maximum nitrogen (N) limit, the holding nitrogen (N) limit ‘the 170 limit’, and existing manure storage capacity</value>
   </data>
   <data name="lblHoldingNitrogenLimitForYear" xml:space="preserve">
     <value>Holding nitrogen limit ‘the 170 limit’ 2026</value>
@@ -7465,6 +7465,15 @@ livestock manure.</value>
   </data>
   <data name="lblOrganicMatter" xml:space="preserve">
     <value>Organic matter</value>
+  </data>
+  <data name="lblManureStores" xml:space="preserve">
+    <value>Manure stores</value>
+  </data>
+  <data name="lblTotalManureStorage" xml:space="preserve">
+    <value>Total manure storage</value>
+  </data>
+  <data name="lblExistingManureStorageCapacityForHint" xml:space="preserve">
+    <value>Existing manure storage capacity</value>
   </data>
   <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
     <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
