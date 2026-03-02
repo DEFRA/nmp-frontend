@@ -17506,6 +17506,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone(NVZ) is {0} in ?.
+        /// </summary>
+        public static string lblWhichNitrateVulnerableZoneNVZIsIn {
+            get {
+                return ResourceManager.GetString("lblWhichNitrateVulnerableZoneNVZIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?.
         /// </summary>
         public static string lblWhichNVZAreTheFieldsAtYourFarmIn {

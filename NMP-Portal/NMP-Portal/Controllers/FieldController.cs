@@ -14,12 +14,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IPreviousCroppingLogic previousCroppingLogic) : Controller
+     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -45,6 +46,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private const string _cropTypesActionName = "CropTypes";
     private const string _lastHarvestYearActionName = "LastHarvestYear";
     private const string _stringFormat = "{0} {1}";
+    private readonly IFarmsNvzLogic _farmsNvzLogic = farmsNvzLogic;
     public async Task<IActionResult> Index()
     {
         _logger.LogTrace("Field Controller : Index() action called");
@@ -459,11 +461,20 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
+        SetFieldDataToSession(model);
         string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
         (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
         if (farm != null)
         {
             model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+            if (farm.NVZFields.HasValue && farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
+            {
+                int farmNvzListCount = await BindNitrateVulnerableZones(model);
+                if (farmNvzListCount > 1)
+                {
+                    return RedirectToAction("NitrateVulnerableZones");
+                }
+            }
         }
         SetFieldDataToSession(model);
         return RedirectToAction(_elevationFieldActionName);
@@ -471,7 +482,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult NVZField(FieldViewModel model)
+    public async Task<IActionResult> NVZField(FieldViewModel model)
     {
         _logger.LogTrace("Field Controller : NVZField() post action called");
 
@@ -497,7 +508,37 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_updateFieldActionName);
         }
 
+        if ((model.IsWithinNVZ.HasValue && model.IsWithinNVZ.Value) && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            int farmNvzListCount = await BindNitrateVulnerableZones(model);
+            if (farmNvzListCount > 1)
+            {
+                return RedirectToAction("NitrateVulnerableZones");
+            }
+        }
+
         return RedirectToAction(_elevationFieldActionName);
+
+    }
+    private async Task<int> BindNitrateVulnerableZones(FieldViewModel model)
+    {
+
+        (List<FarmsNvz> farmsNvzList, Error? error) = await _farmsNvzLogic.FetchFarmNVZByID(model.FarmID);
+        if (error == null && farmsNvzList.Any())
+        {
+            if (farmsNvzList.Count == 1)
+            {
+                model.NVZProgrammeID = farmsNvzList[0].NVZProgrammeID;
+                SetFieldDataToSession(model);
+                return farmsNvzList.Count;
+            }
+            else
+            {
+                ViewBag.FarmsNvzList = farmsNvzList.OrderBy(x => x.NVZProgrammeName);
+                return farmsNvzList.Count;
+            }
+        }
+        return farmsNvzList.Count;
     }
 
     [HttpGet]
@@ -1562,6 +1603,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.PKBalance = null;
             }
 
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                model.NVZProgrammeID = (model.IsWithinNVZ.HasValue && model.IsWithinNVZ.Value) ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
+            }
+
             int? lastGroupNumber = null;
             Error? error = new Error();
             (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
@@ -1791,7 +1837,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 {
                     //ID= model.ID,
                     SoilTypeID = model.SoilTypeID,
-                    NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
+                    NVZProgrammeID = model.NVZProgrammeID,
                     Name = model.Name,
                     LPIDNumber = model.LPIDNumber,
                     NationalGridReference = model.NationalGridReference,
@@ -3779,6 +3825,49 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return RedirectToAction("FieldMeasurements");
     }
 
+    [HttpGet]
+    public async Task<IActionResult> NitrateVulnerableZones()
+    {
+        _logger.LogTrace("Field Controller : NitrateVulnerableZones() action called");
+        FieldViewModel? model = LoadFieldDataFromSession();
 
+        if (model == null)
+        {
+            _logger.LogTrace("Field Controller : NitrateVulnerableZones() action : Field data is not available in session");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+        await BindNitrateVulnerableZones(model);
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> NitrateVulnerableZones(FieldViewModel model)
+    {
+        _logger.LogTrace("Field Controller : NitrateVulnerableZones() post action called");
+        if (model.NVZProgrammeID == null)
+        {
+            ModelState.AddModelError("NVZProgrammeID", Resource.lblSelectAOptionBeforeContinuing);
+        }
+
+        if (!ModelState.IsValid)
+        {
+            await BindNitrateVulnerableZones(model);
+            return View(model);
+        }
+        model.IsNVZProgrammeNeedToShow = true;
+        SetFieldDataToSession(model);
+
+        if (model.IsCheckAnswer)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+        {
+            return RedirectToAction(_updateFieldActionName);
+        }
+        return RedirectToAction(_elevationFieldActionName);
+    }
 
 }

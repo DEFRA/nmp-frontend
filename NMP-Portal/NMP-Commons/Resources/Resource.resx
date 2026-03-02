@@ -7466,4 +7466,7 @@ livestock manure.</value>
   <data name="lblOrganicMatter" xml:space="preserve">
     <value>Organic matter</value>
   </data>
+  <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
+  </data>
 </root>
