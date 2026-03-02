@@ -901,7 +901,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            if(farm.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ && farm.CountryID== (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            if (farm.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ && farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 return RedirectToAction("NitrateVulnerableZones");
             }
@@ -918,7 +918,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID??0);
+            ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
             return View(model);
         }
 
@@ -1073,16 +1073,20 @@ namespace NMP.Portal.Controllers
             }
 
             ViewBag.IsDataChange = isDataChanged;
-
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                var nvzs = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
+                ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.Value)).Select(s => s.Text).ToList();
+            }
             return View(model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]        
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAnswer(FarmViewModel model)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
-            
+
             try
             {
                 if (model.Rainfall == null)
@@ -1090,8 +1094,21 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
                 }
                 ValidateFieldLengths(model);  //Validate max length for address fields.
+                var nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.CountryID ?? 0);
+                int nvzProgramId = 0;
+                if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync((int)NMP.Commons.Enums.FarmCountry.England);
+                    nvzProgramId = model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ: (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
+                    model.NitrateVulnerableZoneList = new List<string>();
+                    model.NitrateVulnerableZoneList.Add(nvzProgramId.ToString());
+                }
                 if (!ModelState.IsValid)
                 {
+                    if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
+                        ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString())).Select(s => s.NvzName).ToList();
+                    }
                     return View(model);
                 }
 
@@ -1141,26 +1158,22 @@ namespace NMP.Portal.Controllers
                         ModifiedByID = model.ModifiedByID,
                         ModifiedOn = model.ModifiedOn
                     },
+                    FarmsNvz = model.NitrateVulnerableZoneList?
+                    .Select(selectedId =>
+                    {
+                        var nvz = nvzs.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
+                    
+                        return new FarmsNvz
+                        {
+                            NVZProgrammeID = Convert.ToInt32(selectedId),
+                            NVZProgrammeName = nvz?.NvzName ?? string.Empty,
+                        };
+                    }).ToList() ?? new List<FarmsNvz>(),
                     UserID = userId,
                     RoleID = 2
                 };
-                
-                (Farm? farmResponse, Error? error) = await _farmLogic.AddFarmAsync(farmData, organisationId);
 
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["AddFarmError"] = error.Message;
-                    return View(model);
-                }
-                string success = _dataProtector.Protect("true");
-                RemoveFarmSession();
-                RemoveAddressesSession();
-                RemoveFarmDataBeforeUpdateFromSession();
-                if (farmResponse != null)
-                {  
-                    farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());                                      
-                }
-                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
+                return await SaveFarmAsync(farmData, organisationId, model, nvzs);
             }
             catch (HttpRequestException hre)
             {
@@ -1172,6 +1185,37 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
+        }
+        private async Task<IActionResult> SaveFarmAsync(FarmData farmData, Guid organisationId, FarmViewModel model, List<NvzActionProgramResponse> nvzs)
+        {
+            (Farm? farmResponse, Error? error) =
+                await _farmLogic.AddFarmAsync(farmData, organisationId);
+
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["AddFarmError"] = error.Message;
+
+                ViewBag.SelectedNVZs = nvzs
+                    .Where(n => model.NitrateVulnerableZoneList != null &&
+                                model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString()))
+                    .Select(s => s.NvzName)
+                    .ToList();
+
+                return View(model);
+            }
+
+            string success = _dataProtector.Protect("true");
+
+            RemoveFarmSession();
+            RemoveAddressesSession();
+            RemoveFarmDataBeforeUpdateFromSession();
+
+            if (farmResponse != null)
+                farmResponse.EncryptedFarmId =
+                    _dataProtector.Protect(farmResponse.ID.ToString());
+
+            return RedirectToAction("FarmSummary",
+                new { id = farmResponse?.EncryptedFarmId, q = success });
         }
 
         public IActionResult BackCheckAnswer()
@@ -1287,7 +1331,7 @@ namespace NMP.Portal.Controllers
                 farmId = _dataProtector.Unprotect(id);
                 (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-                if (error!= null && !string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["Error"] = error.Message;
                     return RedirectToAction(_farmListActionName);
