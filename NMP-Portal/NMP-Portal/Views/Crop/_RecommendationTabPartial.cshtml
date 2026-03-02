@@ -1,0 +1,17 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.Models.RecommendationData
+@if (Model != null && Model.Recommendation != null)
+{
+    @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass || Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(Model.DefoliationSequenceName)))
+    {
+        <h2 class="govuk-heading-m">  @string.Format(Resource.lblRecommendationsForGrass, Model.ManagementTableIndex, Model.DefoliationSequenceName)</h2>
+    }
+    <div class="table-container">
+        @if (Model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass || Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+        {
+            <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+        }
+        @await Html.PartialAsync("~/Views/Crop/_RecommendationTablePartial.cshtml", Model)
+    </div>
+
+}
