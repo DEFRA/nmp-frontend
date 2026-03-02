@@ -71,9 +71,6 @@
                     <p class="govuk-body">
                         @Resource.MsgEnterTheValueOYourSoilAnalysisHint1
                     </p>
-                    <p class="govuk-body">
-                        @Resource.MsgEnterTheValueOYourSoilAnalysisHint2
-                    </p>
                     @if (isFieldsEmpty)
                     {
                         <govuk-error-message asp-for="@Model.PH">
@@ -82,19 +79,17 @@
                     }
                     @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)
                     {
-                        <p class="govuk-body">
-                            @Resource.MsgEnterTheValueOYourSoilAnalysisHint3
-                        </p>
                         <govuk-input asp-for="@Model.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
                             <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
                         </govuk-input>
 
                         <govuk-input asp-for="@Model.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
-                            <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
+                            <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>                            
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" asp-for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="false">@Resource.lblPotassiumIndexOptional</govuk-input-label>
+                            <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" asp-for="@Model.MagnesiumIndex" type="number" step="1">
@@ -133,8 +128,17 @@
                         </govuk-input>
 
                     }
-                </govuk-fieldset>
+                    
+                </govuk-fieldset>              
             </div>
+
+            <govuk-input asp-for=@Model.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="false">
+                    @Resource.lblOrganicMatter
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblOptional
+                </govuk-input-label>
+                <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
+            </govuk-input>
 
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue

@@ -97,7 +97,7 @@ namespace NMP.Portal.Controllers
                             model.Magnesium = soilAnalysis.Magnesium;
                             model.PhosphorusMethodologyID = soilAnalysis.PhosphorusMethodologyID;
                             model.PhosphorusIndex = soilAnalysis.PhosphorusIndex;
-
+                            model.OrganicMatterPercentage = soilAnalysis.OrganicMatterPercentage;
                             if (soilAnalysis.PotassiumIndex != null)
                             {
                                 model.PotassiumIndexValue = soilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex.ToString());
@@ -467,6 +467,18 @@ namespace NMP.Portal.Controllers
                     }
 
                 }
+                if (model.OrganicMatterPercentage != null)
+                {
+                    if (model.OrganicMatterPercentage < 0 || model.OrganicMatterPercentage > 100)
+                    {
+                        ModelState.AddModelError("OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
+                    }
+
+                    if (model.OrganicMatterPercentage.Value % 1 != 0)
+                    {
+                        ModelState.AddModelError("OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
+                    }
+                }
 
                 if (!ModelState.IsValid)
                 {
@@ -742,6 +754,7 @@ namespace NMP.Portal.Controllers
                         MagnesiumAnalysis = model.MagnesiumAnalysis,
                         MagnesiumStatus = model.MagnesiumStatus,
                         NitrogenResidueGroup = model.NitrogenResidueGroup,
+                        OrganicMatterPercentage=model.OrganicMatterPercentage,
                         Comments = model.Comments,
                         PreviousID = model.PreviousID,
                         FieldID = model.FieldID

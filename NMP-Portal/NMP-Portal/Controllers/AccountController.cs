@@ -36,7 +36,8 @@ namespace NMP.Portal.Controllers
             return Redirect(url);
         }
         public IActionResult ChangeOrganisation()
-        {            
+        {
+            HttpContext.Session.Clear();
             return RedirectToAction("SignIn", "Account", new { Area = "MicrosoftIdentity", redirectUri = "/Farm/FarmList" });
         }
 

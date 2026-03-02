@@ -1246,8 +1246,8 @@ namespace NMP.Portal.Controllers
                     {
                         farmData = new FarmViewModel();
                         farmData.Name = farm.Name;
-                        farmData.CountryID = farm?.CountryID;
-                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm?.Address1, farm?.Address2 != null ? farm.Address2 + "," : string.Empty, farm?.Address3, farm?.Address4, farm?.Postcode);
+                        farmData.CountryID = farm.CountryID;
+                        farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));

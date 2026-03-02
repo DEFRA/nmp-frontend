@@ -10664,6 +10664,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic matter.
+        /// </summary>
+        public static string lblOrganicMatter {
+            get {
+                return ResourceManager.GetString("lblOrganicMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to lblOrgenisation.
         /// </summary>
         public static string lblOrgenisation {
@@ -20001,7 +20010,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the values of your soil analysis. You must enter at least one value..
+        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank..
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint1 {
             get {
@@ -20010,16 +20019,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If your soil analysis does not include results for a particular nutrient, leave it blank..
-        /// </summary>
-        public static string MsgEnterTheValueOYourSoilAnalysisHint2 {
-            get {
-                return ResourceManager.GetString("MsgEnterTheValueOYourSoilAnalysisHint2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For Potassium (K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-..
+        ///   Looks up a localized string similar to When the value for Potassium (K)  is 2, enter it as 2+ or 2-.
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint3 {
             get {

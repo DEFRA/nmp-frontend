@@ -1171,7 +1171,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ValidatePotassiumIndex(model);
 
             if (model.SoilAnalyses.PH == null && (string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) &&
-            model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
+            model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null && model.SoilAnalyses.OrganicMatterPercentage == null)
             {
                 ViewData["IsPostRequest"] = true;
                 ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
@@ -1191,6 +1191,19 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 ViewData["IsPostRequest"] = true;
                 ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
+            }
+        }
+
+        if (model.SoilAnalyses.OrganicMatterPercentage != null)
+        {
+            if (model.SoilAnalyses.OrganicMatterPercentage < 0 || model.SoilAnalyses.OrganicMatterPercentage > 100)
+            {
+                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
+            }
+
+            if (model.SoilAnalyses.OrganicMatterPercentage.Value % 1 != 0)
+            {
+                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
             }
         }
     }
@@ -1762,6 +1775,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     MagnesiumAnalysis = model.SoilAnalyses.MagnesiumAnalysis,
                     MagnesiumStatus = model.SoilAnalyses.MagnesiumStatus,
                     NitrogenResidueGroup = model.SoilAnalyses.NitrogenResidueGroup,
+                    OrganicMatterPercentage=model.SoilAnalyses.OrganicMatterPercentage,
                     Comments = model.SoilAnalyses.Comments,
                     PreviousID = model.SoilAnalyses.PreviousID,
                     CreatedOn = DateTime.Now,
@@ -1878,7 +1892,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!model.SoilAnalyses.Date.HasValue)
         {
-            ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgSampleDateNotSet);
+            ModelState.AddModelError("SoilAnalyses.Date", string.Format(Resource.lblDateSampleTaken, model.Name));
         }
         if (!model.SoilAnalyses.SulphurDeficient.HasValue)
         {
@@ -3764,7 +3778,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return RedirectToAction("FieldMeasurements");
     }
-
 
 
 

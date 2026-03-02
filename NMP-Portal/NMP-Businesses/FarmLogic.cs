@@ -16,7 +16,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     private readonly IFarmService _farmService = farmService;
     private readonly IFieldService _fieldService = fieldService;
 
-    public async Task<(ExcessRainfalls, Error)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
+    public async Task<(ExcessRainfalls?, Error?)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
         _logger.LogTrace("Adding excess winter rainfall for FarmId: {FarmId}, Year: {Year}", farmId, year);
         return await _farmService.AddExcessWinterRainfallAsync(farmId, year, excessWinterRainfallData, isUpdated);
