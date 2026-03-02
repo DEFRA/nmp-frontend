@@ -34,7 +34,7 @@
                         @string.Format(Resource.lblWhichNitrateVulnerableZoneNVZIsIn, Model.Name)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblViewAMapOfNitrateVulnerableZones
+                        @Html.Raw(Resource.lblViewAMapOfNitrateVulnerableZones)
                     </govuk-radios-hint>
                     @foreach (var item in ViewBag.FarmsNvzList ?? Enumerable.Empty<dynamic>())
                     {

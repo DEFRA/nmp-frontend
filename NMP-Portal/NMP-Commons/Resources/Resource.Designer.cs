@@ -20649,7 +20649,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LPID number format must be like AA/12345/12345..
+        ///   Looks up a localized string similar to LPID number should match the following format AA/12345/12345..
         /// </summary>
         public static string MsgLPIDNumberFormatError {
             get {

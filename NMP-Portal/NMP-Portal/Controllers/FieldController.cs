@@ -464,15 +464,25 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         SetFieldDataToSession(model);
         string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
         (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-        if (farm != null)
+        if (farm != null &&farm.NVZFields.HasValue)
         {
             model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
-            if (farm.NVZFields.HasValue && farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                int farmNvzListCount = await BindNitrateVulnerableZones(model);
-                if (farmNvzListCount > 1)
+                if (farm.NVZFields.HasValue && farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
                 {
-                    return RedirectToAction("NitrateVulnerableZones");
+                    int farmNvzListCount = await BindNitrateVulnerableZones(model);
+                    if (farmNvzListCount > 1)
+                    {
+                        model.IsNVZProgrammeNeedToShow = true;
+                        SetFieldDataToSession(model);
+                        return RedirectToAction("NitrateVulnerableZones");
+                    }
+                }
+                else
+                {
+                    model.IsNVZProgrammeNeedToShow = false;
+                    model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
                 }
             }
         }
@@ -516,6 +526,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return RedirectToAction("NitrateVulnerableZones");
             }
         }
+
+        if (model.IsWithinNVZ.HasValue && !model.IsWithinNVZ.Value)
+        {
+            model.IsNVZProgrammeNeedToShow = false;
+            model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
+        }
+        SetFieldDataToSession(model);
 
         return RedirectToAction(_elevationFieldActionName);
 
