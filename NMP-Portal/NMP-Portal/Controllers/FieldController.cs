@@ -443,6 +443,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError(_totalAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
         }
     }
+  
 
     [HttpGet]
     public async Task<IActionResult> NVZField()
@@ -462,43 +463,16 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         SetFieldDataToSession(model);
-        await HandleNvzLogicAsync(model);
+        var result = await HandleNvzLogicAsync(model);
+
+        if (result != null)
+        {
+            return result;
+        }
         SetFieldDataToSession(model);
         return RedirectToAction(_elevationFieldActionName);
     }
 
-    private async Task<IActionResult?> HandleNvzLogicAsync(FieldViewModel model)
-    {
-        string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-        if (farm != null && farm.NVZFields.HasValue)
-        {
-            model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
-
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-            {
-                if (farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
-                {
-                    int farmNvzListCount = await BindNitrateVulnerableZones(model);
-
-                    if (farmNvzListCount > 1)
-                    {
-                        model.IsNVZProgrammeNeedToShow = true;
-                        SetFieldDataToSession(model);
-                        return RedirectToAction("NitrateVulnerableZones");
-                    }
-                }
-                else
-                {
-                    model.IsNVZProgrammeNeedToShow = false;
-                    model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
-                }
-            }
-        }
-
-        return null;
-    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> NVZField(FieldViewModel model)
@@ -545,6 +519,38 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return RedirectToAction(_elevationFieldActionName);
 
+    }
+    private async Task<IActionResult?> HandleNvzLogicAsync(FieldViewModel model)
+    {
+        string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+
+        if (farm != null && farm.NVZFields.HasValue)
+        {
+            model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                if (farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
+                {
+                    int farmNvzListCount = await BindNitrateVulnerableZones(model);
+
+                    if (farmNvzListCount > 1)
+                    {
+                        model.IsNVZProgrammeNeedToShow = true;
+                        SetFieldDataToSession(model);
+                        return RedirectToAction("NitrateVulnerableZones");
+                    }
+                }
+                else
+                {
+                    model.IsNVZProgrammeNeedToShow = false;
+                    model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
+                }
+            }
+        }
+
+        return null;
     }
     private async Task<int> BindNitrateVulnerableZones(FieldViewModel model)
     {
