@@ -3908,7 +3908,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
           await   FetchPscIndexList();
             return View(model);
         }
-        model.IsNVZProgrammeNeedToShow = true;
+        
         SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
