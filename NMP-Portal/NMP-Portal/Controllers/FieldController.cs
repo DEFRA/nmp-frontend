@@ -1639,7 +1639,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.NVZProgrammeID = (model.IsWithinNVZ.HasValue && model.IsWithinNVZ.Value) ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
             }
 
-            int? lastGroupNumber = null;
             Error? error = new Error();
             (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
