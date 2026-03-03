@@ -46,6 +46,10 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID" />
     }
+    @if (currentStep != (int)FieldWizardSteps.PscIndex)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PscIndexID" />
+    }
     @if (currentStep != (int)FieldWizardSteps.SoilReleasingClay)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" />

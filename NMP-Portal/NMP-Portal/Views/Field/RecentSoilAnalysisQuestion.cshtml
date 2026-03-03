@@ -6,7 +6,12 @@
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = "";
-    if (Model.IsSoilReleasingClay == true)
+
+     if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
+    {
+        backAction = "PscIndex";
+    }
+    else if(Model.IsSoilReleasingClay)
     {
         backAction = "SoilReleasingClay";
     }

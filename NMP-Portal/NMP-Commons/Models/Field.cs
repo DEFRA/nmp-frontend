@@ -38,6 +38,7 @@ public class Field
     public bool? IsWithinNVZ { get; set; }
     public bool? IsAbove300SeaLevel { get; set; }
     public bool IsActive { get; set; }
+    public int? PscIndexID { get; set; }
     public DateTime? CreatedOn { get; set; }
     public int? CreatedByID { get; set; }
     public DateTime? ModifiedOn { get; set; }

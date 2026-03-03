@@ -200,4 +200,9 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, 
         _logger.LogTrace("Fetch crop By field ID: {FieldId}", fieldId);
         return await _cropService.FetchCropsByFieldId(fieldId);
     }
+    public async Task<List<CommonResponse>> FetchPscIndex()
+    {
+        _logger.LogTrace("Fetch Psc index");
+        return await _fieldService.FetchPscIndex();
+    }
 }

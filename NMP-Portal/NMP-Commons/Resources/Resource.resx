@@ -7478,4 +7478,28 @@ livestock manure.</value>
   <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
     <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
   </data>
+  <data name="lblPhosphorusSorptionCapacity" xml:space="preserve">
+    <value>Phosphorus sorption capacity (PSC)</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentOne" xml:space="preserve">
+    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentTwo" xml:space="preserve">
+    <value>If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentThree" xml:space="preserve">
+    <value>&lt;a href="https://map.environment.gov.scot/Soil_maps/?layer=16"  target="_blank"&gt;View the map&lt;/a&gt; (open a new window)</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentFour" xml:space="preserve">
+    <value>You can also read the SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentFive" xml:space="preserve">
+    <value>&lt;a href="https://www.fas.scot/downloads/managing-soil-phosphorus/"  target="_blank"&gt;View the SRUC technical notes&lt;/a&gt; (open in a new window).</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentSix" xml:space="preserve">
+    <value>If you are still unsure, use PSC Index 1.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
+    <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
+  </data>
 </root>
