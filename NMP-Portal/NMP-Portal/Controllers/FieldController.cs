@@ -462,16 +462,26 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         SetFieldDataToSession(model);
+        await HandleNvzLogicAsync(model);
+        SetFieldDataToSession(model);
+        return RedirectToAction(_elevationFieldActionName);
+    }
+
+    private async Task<IActionResult?> HandleNvzLogicAsync(FieldViewModel model)
+    {
         string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
         (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-        if (farm != null &&farm.NVZFields.HasValue)
+
+        if (farm != null && farm.NVZFields.HasValue)
         {
             model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                if (farm.NVZFields.HasValue && farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
+                if (farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
                 {
                     int farmNvzListCount = await BindNitrateVulnerableZones(model);
+
                     if (farmNvzListCount > 1)
                     {
                         model.IsNVZProgrammeNeedToShow = true;
@@ -486,10 +496,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 }
             }
         }
-        SetFieldDataToSession(model);
-        return RedirectToAction(_elevationFieldActionName);
-    }
 
+        return null;
+    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> NVZField(FieldViewModel model)
@@ -1838,7 +1847,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     MagnesiumAnalysis = model.SoilAnalyses.MagnesiumAnalysis,
                     MagnesiumStatus = model.SoilAnalyses.MagnesiumStatus,
                     NitrogenResidueGroup = model.SoilAnalyses.NitrogenResidueGroup,
-                    OrganicMatterPercentage=model.SoilAnalyses.OrganicMatterPercentage,
+                    OrganicMatterPercentage = model.SoilAnalyses.OrganicMatterPercentage,
                     Comments = model.SoilAnalyses.Comments,
                     PreviousID = model.SoilAnalyses.PreviousID,
                     CreatedOn = DateTime.Now,
