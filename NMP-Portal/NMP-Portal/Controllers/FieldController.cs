@@ -20,7 +20,7 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
+     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic,  IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -29,7 +29,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic ?? throw new ArgumentNullException(nameof(fieldLogic));
     private readonly ISoilLogic _soilService = soilLogic;
-    private readonly ICropLogic _cropLogic = cropLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
@@ -1644,37 +1643,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             Error? error = new Error();
             (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
-            if (farm != null && string.IsNullOrWhiteSpace(error?.Message))
-            {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-
-                if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
-                {
-                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
-                                     int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
-                                    .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
-                                    .FirstOrDefault();
-                    if (lastGroup != null)
-                    {
-                        lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
-                    }
-                }
-
-                if (lastGroupNumber != null)
-                {
-                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
-                }
-                else
-                {
-                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
-                }
-            }
-            else
-            {
-                TempData[_addFieldErrorTempData] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                return RedirectToAction(_checkAnswerActionName);
-            }
-
             List<PreviousCroppingData> previousCropping = new List<PreviousCroppingData>();
 
             if (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
@@ -2166,7 +2134,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
         int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
         var field = await _fieldLogic.FetchFieldByFieldId(decryptedFieldId);
-        List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(decryptedFieldId);
+        List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(decryptedFieldId);
         List<PreviousCroppingData> prevCroppings = new List<PreviousCroppingData>();
 
         bool isPreviousCroppingBindRequired = false;
@@ -2400,7 +2368,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                             {
                                 ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveRemovedASoilAnalysisForFieldName, model.Name);
                             }
-                            List<Crop> crop = (await _cropLogic.FetchCropsByFieldId(model.ID.Value)).ToList();
+                            List<Crop> crop = (await _fieldLogic.FetchCropsByFieldId(model.ID.Value)).ToList();
                             if (crop != null && crop.Count > 0)
                             {
                                 if (soilAnalysisResponse.Count > 0)
@@ -2607,7 +2575,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 var field = await _fieldLogic.FetchFieldByFieldId(decrptedFieldId);
                 model.FarmRB209CountryID = farm?.RB209CountryID;
                 //get plans of field
-                cropPlans = await _cropLogic.FetchCropsByFieldId(decrptedFieldId);
+                cropPlans = await _fieldLogic.FetchCropsByFieldId(decrptedFieldId);
                 bool? hasGrassInLastThreeYear = null;
 
                 //get oldest plan
@@ -2740,7 +2708,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (model != null && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
                     int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-                    cropPlans = await _cropLogic.FetchCropsByFieldId(decrptedFieldId);
+                    cropPlans = await _fieldLogic.FetchCropsByFieldId(decrptedFieldId);
                 }
 
                 if (model == null)
@@ -2962,7 +2930,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ValidateCheckAnwser(model, false);
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-            List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(fieldId);
+            List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
             if (!ModelState.IsValid)
             {
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
@@ -3346,7 +3314,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
         {
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-            List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(fieldId);
+            List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
 
             if (cropPlans.Any())
             {
