@@ -53,7 +53,7 @@
             </div>
             <ul class="menu-list govuk-list">
                 <li>
-                    <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblUpdateFarmDetails</a>
+                    <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblUpdateFarmOrBusinessDetails : Resource.lblUpdateFarmDetails)</a>
                 </li>
                 @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                 {

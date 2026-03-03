@@ -7475,4 +7475,7 @@ livestock manure.</value>
   <data name="lblExistingManureStorageCapacityForHint" xml:space="preserve">
     <value>Existing manure storage capacity</value>
   </data>
+  <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
+    <value>Update farm or business details</value>
+  </data>
 </root>

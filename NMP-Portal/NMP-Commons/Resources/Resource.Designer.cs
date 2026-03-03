@@ -15382,6 +15382,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update farm or business details.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessDetails {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Field.
         /// </summary>
         public static string lblUpdateField {
