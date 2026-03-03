@@ -17,7 +17,11 @@
     {
         backAction = "UpdateField";
     }
-    else if (Model.IsWithinNVZForFarm.Value)
+    else if (Model.IsNVZProgrammeNeedToShow)
+    {
+        backAction = "NitrateVulnerableZones";
+    }
+    else if (Model.IsWithinNVZForFarm.HasValue&&Model.IsWithinNVZForFarm.Value)
     {
         backAction = "NVZField";
     }

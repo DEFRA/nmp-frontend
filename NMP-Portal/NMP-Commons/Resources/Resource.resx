@@ -7443,7 +7443,7 @@ livestock manure.</value>
     <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
   </data>
   <data name="MsgLPIDNumberFormatError" xml:space="preserve">
-    <value>LPID number format must be like AA/12345/12345.</value>
+    <value>LPID number should match the following format AA/12345/12345.</value>
   </data>
   <data name="MsgInvalidFarmData" xml:space="preserve">
     <value>Invalid farm data</value>
@@ -7474,5 +7474,8 @@ livestock manure.</value>
   </data>
   <data name="lblExistingManureStorageCapacityForHint" xml:space="preserve">
     <value>Existing manure storage capacity</value>
+  </data>
+  <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
   </data>
 </root>

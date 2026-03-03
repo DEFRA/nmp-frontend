@@ -17533,6 +17533,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone(NVZ) is {0} in ?.
+        /// </summary>
+        public static string lblWhichNitrateVulnerableZoneNVZIsIn {
+            get {
+                return ResourceManager.GetString("lblWhichNitrateVulnerableZoneNVZIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?.
         /// </summary>
         public static string lblWhichNVZAreTheFieldsAtYourFarmIn {
@@ -20640,7 +20649,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LPID number format must be like AA/12345/12345..
+        ///   Looks up a localized string similar to LPID number should match the following format AA/12345/12345..
         /// </summary>
         public static string MsgLPIDNumberFormatError {
             get {

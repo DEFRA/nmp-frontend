@@ -10,10 +10,11 @@ using System.Diagnostics.Metrics;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) : IFieldLogic
+public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, ICropService cropService) : IFieldLogic
 {
     private readonly ILogger<FieldLogic> _logger = logger;
     private readonly IFieldService _fieldService = fieldService;
+    private readonly ICropService _cropService = cropService;
     public async Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
     {
         _logger.LogTrace("Adding new field: {FieldName} to FarmId: {FarmId}", fieldData.Field.Name, farmId);
@@ -194,5 +195,9 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService) 
         _logger.LogTrace("Updating field : {Field}", field);
         return await _fieldService.UpdateFieldDataAsync(field);
     }
-
+    public async Task<List<Crop>> FetchCropsByFieldId(int fieldId)
+    {
+        _logger.LogTrace("Fetch crop By field ID: {FieldId}", fieldId);
+        return await _cropService.FetchCropsByFieldId(fieldId);
+    }
 }
