@@ -2031,7 +2031,7 @@ namespace NMP.Portal.Controllers
                     string.Format(Resource.lblYouHaveRemovedJourneyName,
                     Resource.lblManureStorage.ToLower());
 
-                TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
+                TempData["succesMsgContent2"] = Resource.lblAddAManureStore;
 
                 if (storeCapacityList.Any())
                     TempData["succesMsgContent3"] =
@@ -2052,7 +2052,7 @@ namespace NMP.Portal.Controllers
                         Resource.MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe,
                         model.FarmName);
 
-                TempData["succesMsgContent2"] = Resource.lblAddMoreManureStorage;
+                TempData["succesMsgContent2"] = Resource.lblAddAManureStore;
                 TempData["succesMsgContent3"] =
                     Resource.lblCreateAnExistingManureStorageCapacityReport;
             }
