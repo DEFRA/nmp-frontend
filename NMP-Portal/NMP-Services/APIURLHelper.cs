@@ -140,6 +140,7 @@ internal static class ApiurlHelper
     public const string FetchFarmManureTypeByIdAPI = "farm-manure-type/farm-manure-type-by-id/{0}";
     public const string UpdateOnlyFieldAsyncAPI = "fields-update";
     public const string FetchCountryByIdAsyncAPI = "countries/By-Id/{0}";
+    public const string FetchPscIndexesAsyncAPI = "psc-indexes";
 
     //Manner APi Url
     public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

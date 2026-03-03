@@ -663,7 +663,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_elevationFieldActionName);
         }
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SoilType(FieldViewModel model)
@@ -741,6 +741,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace(ex, "Field Controller : Exception in SoilType() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorTempData] = ex.Message;
             return View(model);
+        }
+
+        if(model.FarmRB209CountryID.HasValue&&model.FarmRB209CountryID.Value==(int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("PscIndex");
         }
         return RedirectToAction(_recentSoilAnalysisQuestion);
     }
@@ -3867,6 +3872,55 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_updateFieldActionName);
         }
         return RedirectToAction(_elevationFieldActionName);
+    }
+    [HttpGet]
+    private  async Task FetchPscIndexList()
+    {
+        List<CommonResponse> pscIndexList = await _fieldLogic.FetchPscIndex();
+        ViewBag.PscIndexList = pscIndexList;
+    }
+    public async Task<IActionResult> PscIndex()
+    {
+        _logger.LogTrace("Field Controller : PscIndex() action called");
+        FieldViewModel? model = LoadFieldDataFromSession();
+
+        if (model == null)
+        {
+            _logger.LogTrace("Field Controller : PscIndex() action : Field data is not available in session");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+       await  FetchPscIndexList();
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PscIndex(FieldViewModel model)
+    {
+        _logger.LogTrace("Field Controller : PscIndex() post action called");
+        if (model.PscIndexId == null)
+        {
+            ModelState.AddModelError("PscIndexId", Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+
+        if (!ModelState.IsValid)
+        {
+          await   FetchPscIndexList();
+            return View(model);
+        }
+        model.IsNVZProgrammeNeedToShow = true;
+        SetFieldDataToSession(model);
+
+        if (model.IsCheckAnswer)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+        {
+            return RedirectToAction(_updateFieldActionName);
+        }
+        return RedirectToAction(_recentSoilAnalysisQuestion);
     }
 
 }

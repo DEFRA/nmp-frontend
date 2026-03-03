@@ -19,7 +19,7 @@ namespace NMP.Commons.Enums
         SoilType = 9,
         SoilReleasingClay = 10,
         SoilOverChalk = 11,
-        PSC = 12,
+        PscIndex = 12,
         RecentSoilAnalysisQuestion = 13,
         SulphurDeficiency = 14,
         SoilAnalysisDate = 15,
