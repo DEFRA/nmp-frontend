@@ -3898,9 +3898,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> PscIndex(FieldViewModel model)
     {
         _logger.LogTrace("Field Controller : PscIndex() post action called");
-        if (model.PscIndexId == null)
+        if (model.PscIndexID == null)
         {
-            ModelState.AddModelError("PscIndexId", Resource.MsgSelectAnOptionBeforeContinuing);
+            ModelState.AddModelError("PscIndexID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
         if (!ModelState.IsValid)

@@ -10,12 +10,11 @@ using System.Diagnostics.Metrics;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, ICropService cropService, IPscIndexService pscService) : IFieldLogic
+public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, ICropService cropService) : IFieldLogic
 {
     private readonly ILogger<FieldLogic> _logger = logger;
     private readonly IFieldService _fieldService = fieldService;
     private readonly ICropService _cropService = cropService;
-    private readonly IPscIndexService _pscService = pscService;
     public async Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
     {
         _logger.LogTrace("Adding new field: {FieldName} to FarmId: {FarmId}", fieldData.Field.Name, farmId);
@@ -204,6 +203,6 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, 
     public async Task<List<CommonResponse>> FetchPscIndex()
     {
         _logger.LogTrace("Fetch Psc index");
-        return await _pscService.FetchPscIndex();
+        return await _fieldService.FetchPscIndex();
     }
 }

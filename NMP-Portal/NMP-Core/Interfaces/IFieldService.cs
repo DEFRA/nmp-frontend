@@ -32,4 +32,5 @@ public interface IFieldService : IService
     Task<(FieldResponse?, Error?)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
     Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId,int year);
     Task<(Field?, Error)> UpdateFieldDataAsync(Field field);
+    Task<List<CommonResponse>> FetchPscIndex();
 }
