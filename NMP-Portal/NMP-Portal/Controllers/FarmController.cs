@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NMP.Application;
 using NMP.Businesses;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -1463,15 +1464,8 @@ namespace NMP.Portal.Controllers
                 {
                     model.ClimateDataPostCode = model.Postcode;
                 }
-                var nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.CountryID ?? 0);
-                int nvzProgramId = 0;
-                if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
-                {
-                    nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync((int)NMP.Commons.Enums.FarmCountry.England);
-                    nvzProgramId = model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ : (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
-                    model.NitrateVulnerableZoneList = new List<string>();
-                    model.NitrateVulnerableZoneList.Add(nvzProgramId.ToString());
-                }
+                
+                var nvzData = await PrepareNvzDataAsync(model);
 
                 var farmData = new FarmData
                 {
@@ -1511,7 +1505,7 @@ namespace NMP.Portal.Controllers
                     FarmsNvz = model.NitrateVulnerableZoneList?
                     .Select(selectedId =>
                     {
-                        var nvz = nvzs.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
+                        var nvz = nvzData.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
 
                         return new FarmsNvz
                         {
@@ -1553,7 +1547,25 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
+        private async Task<List<NvzActionProgramResponse>> PrepareNvzDataAsync(FarmViewModel model)
+        {
+            var nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.CountryID ?? 0);
 
+            if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(
+                    (int)NMP.Commons.Enums.FarmCountry.England);
+
+                int nvzProgramId =
+                    model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ
+                        ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ
+                        : (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
+
+                model.NitrateVulnerableZoneList = new List<string> { nvzProgramId.ToString() };
+            }
+
+            return nvzs;
+        }
         [HttpGet]
         public IActionResult FarmRemove()
         {
