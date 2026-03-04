@@ -73,7 +73,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.Success = "false";
                 }
-                ViewBag.IsAnyRecordInMannerEstimate=false;
+                ViewBag.IsAnyRecordInMannerEstimate = false;
             }
             catch (HttpRequestException hre)
             {
@@ -232,7 +232,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            if(model.CountryID==(int)NMP.Commons.Enums.FarmCountry.Scotland)
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 return RedirectToAction("BusinessInformation");
             }
@@ -1077,6 +1077,7 @@ namespace NMP.Portal.Controllers
             {
                 var nvzs = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
                 ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.Value)).Select(s => s.Text).ToList();
+                ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(model.ID);
             }
             return View(model);
         }
@@ -1099,7 +1100,7 @@ namespace NMP.Portal.Controllers
                 if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                 {
                     nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync((int)NMP.Commons.Enums.FarmCountry.England);
-                    nvzProgramId = model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ: (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
+                    nvzProgramId = model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ : (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
                     model.NitrateVulnerableZoneList = new List<string>();
                     model.NitrateVulnerableZoneList.Add(nvzProgramId.ToString());
                 }
@@ -1162,7 +1163,7 @@ namespace NMP.Portal.Controllers
                     .Select(selectedId =>
                     {
                         var nvz = nvzs.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
-                    
+
                         return new FarmsNvz
                         {
                             NVZProgrammeID = Convert.ToInt32(selectedId),
@@ -1295,6 +1296,7 @@ namespace NMP.Portal.Controllers
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                        farmData.EncryptedIsUpdate = u;
                     }
                 }
             }
@@ -1329,7 +1331,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 farmId = _dataProtector.Unprotect(id);
-                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (FarmAndFarmsNvzResponse? farmsNvz, error) = await _farmLogic.FetchFarmAndFarmsNvzByFarmIdAsync(Convert.ToInt32(farmId));
 
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1337,8 +1339,10 @@ namespace NMP.Portal.Controllers
                     return RedirectToAction(_farmListActionName);
                 }
 
-                if (farm != null)
+                if (farmsNvz.Farm != null)
                 {
+                    var farm = farmsNvz.Farm;
+
                     farmData = new FarmViewModel();
                     farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                     farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
@@ -1376,7 +1380,14 @@ namespace NMP.Portal.Controllers
 
                     bool update = true;
                     farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
+                    farmData.NitrateVulnerableZoneList = farmsNvz.FarmsNvz?.Select(n => n.NVZProgrammeID.ToString()).ToList() ?? new List<string>();
                     SetFarmToSession(farmData);
+
+                    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
+                        var nvzs = await GetNvzActionProgramItemsByCountryIdAsync(farm.CountryID ?? 0);
+                        ViewBag.SelectedNVZs = nvzs.Where(n => farmData.NitrateVulnerableZoneList != null && farmData.NitrateVulnerableZoneList.Contains(n.Value)).Select(s => s.Text).ToList();
+                    }
                 }
             }
             catch (HttpRequestException hre)
@@ -1452,6 +1463,15 @@ namespace NMP.Portal.Controllers
                 {
                     model.ClimateDataPostCode = model.Postcode;
                 }
+                var nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.CountryID ?? 0);
+                int nvzProgramId = 0;
+                if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync((int)NMP.Commons.Enums.FarmCountry.England);
+                    nvzProgramId = model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ : (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
+                    model.NitrateVulnerableZoneList = new List<string>();
+                    model.NitrateVulnerableZoneList.Add(nvzProgramId.ToString());
+                }
 
                 var farmData = new FarmData
                 {
@@ -1488,6 +1508,17 @@ namespace NMP.Portal.Controllers
                         ModifiedByID = userId,
                         ModifiedOn = model.ModifiedOn
                     },
+                    FarmsNvz = model.NitrateVulnerableZoneList?
+                    .Select(selectedId =>
+                    {
+                        var nvz = nvzs.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
+
+                        return new FarmsNvz
+                        {
+                            NVZProgrammeID = Convert.ToInt32(selectedId),
+                            NVZProgrammeName = nvz?.NvzName ?? string.Empty,
+                        };
+                    }).ToList() ?? new List<FarmsNvz>(),
                     UserID = userId,
                     RoleID = 2
                 };
