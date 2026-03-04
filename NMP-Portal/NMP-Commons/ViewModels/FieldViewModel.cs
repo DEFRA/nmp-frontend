@@ -56,4 +56,5 @@ public class FieldViewModel : Field
     public bool? IsCancel { get; set; }
     public List<PreviousCroppingData> PreviousCroppingsList { get; set; }
     public bool IsLastHarvestYearChange { get; set; } = false;
+    public bool IsNVZProgrammeNeedToShow { get; set; } = false;
 }

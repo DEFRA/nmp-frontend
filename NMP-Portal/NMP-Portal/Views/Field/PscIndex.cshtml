@@ -1,0 +1,93 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.FieldViewModel
+@{
+    var heading = Resource.lblPhosphorusSorptionCapacity;
+    ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{heading} {Resource.lblHyphen} {Resource.lblAddField}";
+
+    var backAction = "";
+    if (Model != null && Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (Model != null && !string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
+    else
+    {
+        backAction = "SoilType";
+    }
+    ViewBag.CurrentStep = (int)FieldWizardSteps.PscIndex;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="PscIndex" asp-controller="Field" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            @if (TempData["Error"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+            @if (Model != null)
+            {
+                <h1 class="govuk-heading-l">@heading</h1>
+                <p class="govuk-body">
+                    @Resource.lblPhosphorusSorptionCapacityContentOne
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblPhosphorusSorptionCapacityContentTwo
+                </p>
+                <p class="govuk-body">
+                    @Html.Raw(Resource.lblPhosphorusSorptionCapacityContentThree)
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblPhosphorusSorptionCapacityContentFour
+                </p>
+                <p class="govuk-body">
+                    @Html.Raw(Resource.lblPhosphorusSorptionCapacityContentFive)
+                </p>
+                <p class="govuk-body">
+                    @Resource.lblPhosphorusSorptionCapacityContentSix
+                </p>
+                <govuk-radios asp-for="@Model.PscIndexID">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="false">
+                            @string.Format(Resource.lblPhosphorusSorptionCapacityContentSeven, Model.Name)
+                        </govuk-radios-fieldset-legend>
+                        @if (ViewBag.PscIndexList != null)
+                        {
+                            @foreach (var item in ViewBag.PscIndexList)
+                            {
+                                <govuk-radios-item value="@item.Id">@item.Name</govuk-radios-item>
+                            }
+                        }
+
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+            
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+                }
+            </p>
+            }
+        </div>
+
+    </div>
+</form>

@@ -994,5 +994,38 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         return (fieldData, error);
     }
-    
+    public async Task<List<CommonResponse>> FetchPscIndex()
+    {
+        List<CommonResponse> pscIndexList = [];
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchPscIndexesAsyncAPI);
+
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var pscIndexes = responseWrapper?.Data?.records.ToObject<List<CommonResponse>>();
+                    pscIndexList.AddRange(pscIndexes);
+                }
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, null);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+        }
+        return pscIndexList;
+    }
+
 }

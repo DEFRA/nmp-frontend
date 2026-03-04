@@ -36,4 +36,6 @@ public interface IFieldLogic
     Task<(FieldResponse?, Error?)> FetchFieldSoilAnalysisAndSnsById(int fieldId);
     Task<(Field?, Error)> UpdateFieldDataAsync(Field field);
     Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year);
+   Task<List<Crop>> FetchCropsByFieldId(int fieldId);
+    Task<List<CommonResponse>> FetchPscIndex();
 }

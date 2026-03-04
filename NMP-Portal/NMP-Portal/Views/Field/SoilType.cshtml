@@ -23,6 +23,10 @@
     {
         backAction = "ElevationField";
     }
+    else if (Model.IsNVZProgrammeNeedToShow)
+    {
+        backAction = "NitrateVulnerableZones";
+    }
     else if (Model.IsWithinNVZForFarm.HasValue && Model.IsWithinNVZForFarm.Value)
     {
         backAction = "NVZField";
