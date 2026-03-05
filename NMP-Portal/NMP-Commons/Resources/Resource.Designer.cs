@@ -20118,7 +20118,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank..
+        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank..
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint1 {
             get {

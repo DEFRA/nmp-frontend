@@ -2422,7 +2422,7 @@ cubic metres per hectare  not set</value>
     <value>Potassium (K) per litre of soil (optional)</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint1" xml:space="preserve">
-    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank.</value>
+    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one value.</value>
