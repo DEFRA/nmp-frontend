@@ -7502,4 +7502,7 @@ livestock manure.</value>
   <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
     <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
   </data>
+  <data name="lblBackslopHint" xml:space="preserve">
+    <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
+  </data>
 </root>

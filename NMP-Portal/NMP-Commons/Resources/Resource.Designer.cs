@@ -2590,6 +2590,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A &quot;1 in X&quot; slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit.
+        /// </summary>
+        public static string lblBackslopHint {
+            get {
+                return ResourceManager.GetString("lblBackslopHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to {0}.
         /// </summary>
         public static string lblBackToFarmName {
