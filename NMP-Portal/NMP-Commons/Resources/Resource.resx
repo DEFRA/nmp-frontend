@@ -7502,4 +7502,7 @@ livestock manure.</value>
   <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
     <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
   </data>
+  <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
+    <value>Which soil analysis method was used?</value>
+  </data>
 </root>

@@ -7,4 +7,5 @@ public interface ISoilAnalysisService
     Task<(SoilAnalysis, Error)> UpdateSoilAnalysisAsync(int id, string soilData);
     Task<(SoilAnalysis, Error)> AddSoilAnalysisAsync(string soilAnalysisData);
     Task<(string, Error)> DeleteSoilAnalysisByIdAsync(int soilAnalysisId);
+    Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod();
 }

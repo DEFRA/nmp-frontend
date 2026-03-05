@@ -1,0 +1,65 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.SoilAnalysisViewModel
+@{
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
+    var AsAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.SoilAnalysesMethod;
+}
+
+@section BeforeContent {
+    @if (Model!=null&& Model.isSoilAnalysisAdded.HasValue && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+    {
+        <govuk-back-link asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
+
+    }
+    else @if (Model!=null)
+    {
+        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+
+    }
+}
+<form asp-action="SoilAnalysesMethod" asp-controller="SoilAnalysis" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        @if (Model != null)
+        {
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-radios class="govuk-radios" asp-for="@Model.SoilAnalysesMethodID">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblWhichSoilAnalysisMethodWasUsed
+                        </govuk-radios-fieldset-legend>
+                        @if (ViewBag.SoilAnalysesMethodList != null)
+                        {
+                            @foreach (var item in ViewBag.SoilAnalysesMethodList)
+                            {
+                                <govuk-radios-item value=@item.Id">@item.Name</govuk-radios-item>
+                            }
+                        }
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+
+                @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+                {
+                    <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
+
+                }
+                else
+                {
+                    <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+                }
+
+            </div>
+        }
+    </div>
+</form>

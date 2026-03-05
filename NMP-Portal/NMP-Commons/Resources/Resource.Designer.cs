@@ -17650,6 +17650,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which soil analysis method was used?.
+        /// </summary>
+        public static string lblWhichSoilAnalysisMethodWasUsed {
+            get {
+                return ResourceManager.GetString("lblWhichSoilAnalysisMethodWasUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which variety name would you like to plan for?.
         /// </summary>
         public static string lblWhichVarietyNameWouldYouLikeToPlanFor {

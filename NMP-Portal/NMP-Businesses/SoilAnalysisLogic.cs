@@ -35,4 +35,10 @@ public class SoilAnalysisLogic(ILogger<SoilAnalysisLogic> logger, ISoilAnalysisS
         _logger.LogTrace("Update soil analysis");
         return await _soilAnalysisService.UpdateSoilAnalysisAsync(id, soilData);
     }
+
+    public async Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod()
+    {
+        _logger.LogTrace("Fetch all soil analysis method");
+        return await _soilAnalysisService.FetchAllSoilAnalysesMethod();
+    }
 }

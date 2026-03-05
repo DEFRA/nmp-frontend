@@ -11,12 +11,14 @@
 }
 
 @section BeforeContent {
-    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+    @if (Model!=null&&Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
-        <govuk-back-link asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
-
+        <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "Date" : "SoilAnalysesMethod")"
+                         asp-controller="SoilAnalysis">
+            @Resource.lblBack
+        </govuk-back-link>
     }
-    else
+    else @if (Model!=null)
     {
         <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
     }
@@ -25,7 +27,8 @@
     @Html.AntiForgeryToken()
     @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
-
+        @if(Model!=null)
+        {
         <div class="govuk-grid-column-two-thirds">
             <govuk-radios class="govuk-radios" asp-for="@Model.IsSoilNutrientValueTypeIndex">
                 <govuk-radios-fieldset>
@@ -53,6 +56,6 @@
             }
 
         </div>
-
+        }
     </div>
 </form>
