@@ -8,7 +8,7 @@ public class SoilAnalysisViewModel : SoilAnalysis
 
     public string EncryptedFieldId { get; set; } = string.Empty;
     public string? EncryptedSoilAnalysisId { get; set; } = string.Empty;
-    public bool? IsSoilNutrientValueTypeIndex { get; set; }
+    public int? SoilNutrientValueType { get; set; }
     public string IsSoilDataChanged { get; set; } = string.Empty;
 
     public PKBalance? PKBalance { get; set; }

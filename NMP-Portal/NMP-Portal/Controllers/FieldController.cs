@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
 using NMP.Application;
+using NMP.Businesses;
 using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
@@ -20,7 +22,7 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic,  IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
+     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -442,7 +444,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError(_totalAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
         }
     }
-  
+
 
     [HttpGet]
     public async Task<IActionResult> NVZField()
@@ -663,7 +665,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_elevationFieldActionName);
         }
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SoilType(FieldViewModel model)
@@ -743,7 +745,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        if(model.FarmRB209CountryID.HasValue&&model.FarmRB209CountryID.Value==(int)NMP.Commons.Enums.RB209Country.Scotland)
+        if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
             return RedirectToAction("PscIndex");
         }
@@ -3874,7 +3876,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return RedirectToAction(_elevationFieldActionName);
     }
     [HttpGet]
-    private  async Task FetchPscIndexList()
+    private async Task FetchPscIndexList()
     {
         List<CommonResponse> pscIndexList = await _fieldLogic.FetchPscIndex();
         ViewBag.PscIndexList = pscIndexList;
@@ -3889,7 +3891,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : PscIndex() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
-       await  FetchPscIndexList();
+        await FetchPscIndexList();
         return View(model);
     }
 
@@ -3905,10 +3907,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (!ModelState.IsValid)
         {
-          await   FetchPscIndexList();
+            await FetchPscIndexList();
             return View(model);
         }
-        
+
         SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
@@ -3923,4 +3925,54 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return RedirectToAction(_recentSoilAnalysisQuestion);
     }
 
+    private async Task FetchAllSoilAnalysesMethod()
+    {
+        (List<CommonResponse>? SoilAnalysesMethodList, Error? error) = await _soilService.FetchAllSoilAnalysesMethod();
+        if (error == null && SoilAnalysesMethodList != null && SoilAnalysesMethodList.Count > 0)
+        {
+            var selectListItems = SoilAnalysesMethodList.OrderBy(x => x.Name).Select(f => new SelectListItem
+            {
+                Value = f.Id.ToString(),
+                Text = f.Name
+            }).ToList();
+            ViewBag.SoilAnalysesMethodList = selectListItems;
+
+        }
+    }
+    [HttpGet]
+    public async Task<IActionResult> SoilAnalysesMethod()
+    {
+        _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() action called.");
+        FieldViewModel? model = LoadFieldDataFromSession();
+        if (model == null)
+        {
+            _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
+            return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+        }
+        await FetchAllSoilAnalysesMethod();
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SoilAnalysesMethod(FieldViewModel model)
+    {
+        _logger.LogTrace($"Field Controller: SoilAnalysesMethod() post action called.");
+
+        if (model.SoilAnalyses.SoilAnalysesMethodID == null)
+        {
+            ModelState.AddModelError("SoilAnalyses.SoilAnalysesMethodID", Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+
+        if (!ModelState.IsValid)
+        {
+            await FetchAllSoilAnalysesMethod();
+            return await Task.FromResult(View(model));
+        }
+                
+        SetFieldDataToSession(model);
+
+        return await Task.FromResult(RedirectToAction("SoilNutrientValueType"));
+
+    }
 }

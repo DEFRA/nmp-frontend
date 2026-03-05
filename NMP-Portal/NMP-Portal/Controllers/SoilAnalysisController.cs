@@ -129,11 +129,11 @@ namespace NMP.Portal.Controllers
                         if (model.Phosphorus == null &&
                              model.Potassium == null && model.Magnesium == null)
                         {
-                            model.IsSoilNutrientValueTypeIndex = true;// @Resource.lblMiligramValues
+                            model.SoilAnalysesMethodID = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)NMP.Commons.Enums.SoilNutrientValueType.Index : (int)NMP.Commons.Enums.SoilNutrientValueType.Status);// @Resource.lblMiligramValues
                         }
                         else
                         {
-                            model.IsSoilNutrientValueTypeIndex = false;// @Resource.lblMiligramValues
+                            model.SoilAnalysesMethodID = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
                         }
                     }
                     else
@@ -260,7 +260,7 @@ namespace NMP.Portal.Controllers
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                if(model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland)
+                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
                     return RedirectToAction("SoilNutrientValueType");
                 }
@@ -292,9 +292,9 @@ namespace NMP.Portal.Controllers
         public IActionResult SoilNutrientValueType(SoilAnalysisViewModel model)
         {
             _logger.LogTrace("Soil Analysis Controller: SoilNutrientValueType() post action called.");
-            if (model.IsSoilNutrientValueTypeIndex == null)
+            if (model.SoilNutrientValueType == null)
             {
-                ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError("SoilNutrientValueType", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
             if (!ModelState.IsValid)
@@ -311,9 +311,9 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
 
-            if (model.IsSoilNutrientValueTypeIndex.HasValue && model.IsSoilNutrientValueTypeIndex.Value &&
-                (soilAnalysisViewModel != null && soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.HasValue &&
-                (!soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value)))
+            if (model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value==(int)NMP.Commons.Enums.SoilNutrientValueType.Index &&
+                (soilAnalysisViewModel != null &&
+                (soilAnalysisViewModel.SoilNutrientValueType.HasValue&& soilAnalysisViewModel.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index)))
             {
                 model.Magnesium = null;
                 model.Potassium = null;
@@ -321,7 +321,7 @@ namespace NMP.Portal.Controllers
             }
 
             SetSoilAnalysisDataToSession(model);
-            if (soilAnalysisViewModel != null && soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.HasValue && model.IsSoilNutrientValueTypeIndex.Value != soilAnalysisViewModel.IsSoilNutrientValueTypeIndex.Value)
+            if (soilAnalysisViewModel != null && soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
             {
                 return RedirectToAction("SoilNutrientValue");
             }
@@ -373,7 +373,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if (model.IsSoilNutrientValueTypeIndex != null && model.IsSoilNutrientValueTypeIndex.Value)
+                if (model.SoilNutrientValueType != null && model.SoilNutrientValueType==(int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                 {
                     if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
                     {
@@ -496,7 +496,7 @@ namespace NMP.Portal.Controllers
                 model.PhosphorusMethodologyID = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)PhosphorusMethodology.Resin : (int)PhosphorusMethodology.Olsens;
 
 
-                if (model.IsSoilNutrientValueTypeIndex != null && (!model.IsSoilNutrientValueTypeIndex.Value))
+                if (model.SoilNutrientValueType != null && model.SoilNutrientValueType != (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                 {
                     if (model.Phosphorus != null || model.Potassium != null ||
                    model.Magnesium != null)
@@ -647,9 +647,9 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Soil Analysis Controller: UpdateSoil() post action called.");
             try
             {
-                if (model.IsSoilNutrientValueTypeIndex.HasValue)
+                if (model.SoilNutrientValueType.HasValue)
                 {
-                    if (!model.IsSoilNutrientValueTypeIndex.Value)
+                    if (model.SoilNutrientValueType != (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                     {
                         if (!model.PH.HasValue && !model.Potassium.HasValue &&
                             !model.Phosphorus.HasValue && !model.Magnesium.HasValue)
@@ -973,7 +973,7 @@ namespace NMP.Portal.Controllers
 
         private async Task FetchAllSoilAnalysesMethod()
         {
-            (List<CommonResponse>? SoilAnalysesMethodList, Error? error) = await _soilAnalysisLogic.FetchAllSoilAnalysesMethod();
+            (List<CommonResponse>? SoilAnalysesMethodList, Error? error) = await _soilLogic.FetchAllSoilAnalysesMethod();
             if (error == null && SoilAnalysesMethodList != null && SoilAnalysesMethodList.Count > 0)
             {
                 var selectListItems = SoilAnalysesMethodList.OrderBy(x => x.Name).Select(f => new SelectListItem
@@ -1004,6 +1004,52 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SoilAnalysesMethod(SoilAnalysisViewModel model)
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() post action called.");
+
+            if (model.SoilAnalysesMethodID == null)
+            {
+                ModelState.AddModelError("SoilAnalysesMethodID", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await FetchAllSoilAnalysesMethod();
+                return await Task.FromResult(View(model));
+            }
+
+            model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
+            SetSoilAnalysisDataToSession(model);
+
+            if (model.IsCheckAnswer)
+            {
+                return await Task.FromResult(RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged }));
+            }
+
+            if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
+            {
+                return await Task.FromResult(RedirectToAction("SoilNutrientValueType"));
+            }
+
+            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+        }
+        [HttpGet]
+        public async Task<IActionResult> SacMethod()
+        {
+            _logger.LogTrace($"Soil Analysis Controller: SacMethod() action called.");
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            if (model == null)
+            {
+                _logger.LogTrace("SoilAnalysisController: Session expired in SacMethod() action.");
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+            }
+            await FetchAllSoilAnalysesMethod();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SacMethod(SoilAnalysisViewModel model)
+        {
+            _logger.LogTrace($"Soil Analysis Controller: SacMethod() post action called.");
 
             if (model.SoilAnalysesMethodID == null)
             {

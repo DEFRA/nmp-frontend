@@ -2365,6 +2365,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to As a status.
+        /// </summary>
+        public static string lblAsAStatus {
+            get {
+                return ResourceManager.GetString("lblAsAStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asc.
         /// </summary>
         public static string lblAsc {

@@ -77,7 +77,7 @@
                             @Resource.MsgForPhPhosphorusPotassiumMagnesium
                         </govuk-error-message>
                     }
-                    @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)
+                    @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                     {
                         <govuk-input asp-for="@Model.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
                             <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>

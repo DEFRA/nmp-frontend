@@ -59,4 +59,33 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         return soilType;
     }
 
+    public async Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod()
+    {
+        List<CommonResponse>? soilAnalysesMethodList = null;
+        Error? error = null;
+
+        _logger.LogTrace("SoilAnalysisService: soil-analyses-methods called.");
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchAllSoilAnalysesMethodAsyncAPI);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            var soilAnalysesMethods = responseWrapper?.Data?.records.ToObject<List<CommonResponse>>();
+            if (soilAnalysesMethods != null)
+            {
+                soilAnalysesMethodList = soilAnalysesMethods?.ToObject<List<CommonResponse?>>();
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                _logger.LogError($"{error?.Code} : {error?.Message} : {error?.Stack} : {error?.Path}");
+            }
+        }
+        return (soilAnalysesMethodList, error);
+    }
+
 }
