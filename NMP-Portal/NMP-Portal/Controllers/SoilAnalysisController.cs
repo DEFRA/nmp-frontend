@@ -435,67 +435,87 @@ namespace NMP.Portal.Controllers
                         ViewData["IsPostRequest"] = true;
                         ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey("PhosphorusIndex"))
+                    if (!ModelState.IsValid)
                     {
-                        var InvalidFormatError = ModelState["PhosphorusIndex"]?.Errors.Count > 0 ?
-                                        ModelState["PhosphorusIndex"]?.Errors[0].ErrorMessage.ToString() : null;
+                        var phosphorusIndexkey = "PhosphorusIndex";
 
-                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["PhosphorusIndex"]?.AttemptedValue, Resource.lblPhosphorusIndex)))
+                        if (ModelState.TryGetValue(phosphorusIndexkey, out var entry) && entry.Errors.Count > 0)
                         {
-                            ModelState["PhosphorusIndex"]?.Errors.Clear();
-                            ModelState["PhosphorusIndex"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 9));
+                            var errorMessage = entry.Errors[0].ErrorMessage;
+
+                            if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblPhosphorusIndex))
+                            {
+                                entry.Errors.Clear();
+                                entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 9));
+                            }
                         }
                     }
 
-
-
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey("MagnesiumIndex"))
+                    if (!ModelState.IsValid)
                     {
-                        var InvalidFormatError = ModelState["MagnesiumIndex"]?.Errors.Count > 0 ?
-                                        ModelState["MagnesiumIndex"]?.Errors[0].ErrorMessage.ToString() : null;
+                        var key = "MagnesiumIndex";
 
-                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MagnesiumIndex"].AttemptedValue, Resource.lblMagnesiumIndex)))
+                        if (ModelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0)
                         {
-                            ModelState["MagnesiumIndex"]?.Errors.Clear();
-                            ModelState["MagnesiumIndex"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9));
+                            var errorMessage = entry.Errors[0].ErrorMessage;
+
+                            if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblMagnesiumIndex))
+                            {
+                                entry.Errors.Clear();
+                                entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9));
+                            }
                         }
                     }
                 }
                 else
                 {
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey("Potassium"))
+                    if (!ModelState.IsValid)
                     {
-                        var InvalidFormatError = ModelState["Potassium"]?.Errors.Count > 0 ?
-                                        ModelState["Potassium"]?.Errors[0].ErrorMessage.ToString() : null;
+                        var potassiumkey = "Potassium";
 
-                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Potassium"].AttemptedValue, Resource.lblPotassiumPerLitreOfSoil)))
+                        if (ModelState.TryGetValue(potassiumkey, out var entry) && entry.Errors.Count > 0)
                         {
-                            ModelState["Potassium"]?.Errors.Clear();
-                            ModelState["Potassium"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
+                            var errorMessage = entry.Errors[0].ErrorMessage;
+
+                            if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblPotassiumPerLitreOfSoil))
+                            {
+                                entry.Errors.Clear();
+                                entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
+                            }
                         }
                     }
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey("Phosphorus"))
+                    if (!ModelState.IsValid)
                     {
-                        var InvalidFormatError = ModelState["Phosphorus"]?.Errors.Count > 0 ?
-                                        ModelState["Phosphorus"]?.Errors[0].ErrorMessage.ToString() : null;
+                        var phosphoruskey = "Phosphorus";
 
-                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Phosphorus"].AttemptedValue, Resource.lblPhosphorusPerLitreOfSoil)))
+                        if (ModelState.TryGetValue(phosphoruskey, out var entry) && entry.Errors.Count > 0)
                         {
-                            ModelState["Phosphorus"]?.Errors.Clear();
-                            ModelState["Phosphorus"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 999));
+                            var errorMessage = entry.Errors[0].ErrorMessage;
+
+                            if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblPhosphorusPerLitreOfSoil))
+                            {
+                                entry.Errors.Clear();
+                                entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 999));
+                            }
                         }
                     }
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey("Magnesium"))
+                    if (!ModelState.IsValid)
                     {
-                        var InvalidFormatError = ModelState["Magnesium"]?.Errors.Count > 0 ?
-                                        ModelState["Magnesium"]?.Errors[0].ErrorMessage.ToString() : null;
+                        var magnesiumkey = "Magnesium";
 
-                        if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Magnesium"]?.AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil)))
+                        if (ModelState.TryGetValue(magnesiumkey, out var entry) && entry.Errors.Count > 0)
                         {
-                            ModelState["Magnesium"]?.Errors.Clear();
-                            ModelState["Magnesium"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
+                            var errorMessage = entry.Errors[0].ErrorMessage;
+
+                            if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil))
+                            {
+                                entry.Errors.Clear();
+                                entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
+                            }
                         }
                     }
+
+
                     if (ModelState.IsValid && model.PH == null && model.Potassium == null &&
                         model.Phosphorus == null && model.Magnesium == null)
                     {
