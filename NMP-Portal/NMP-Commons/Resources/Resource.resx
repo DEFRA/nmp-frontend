@@ -7504,5 +7504,32 @@ livestock manure.</value>
   </data>
   <data name="lblBackslopHint" xml:space="preserve">
     <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
+  </data>  
+  <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
+    <value>Update farm or business details</value>
+  </data>
+  <data name="lblBusinessReferenceNumber" xml:space="preserve">
+    <value>Business Reference Number</value>
+  </data>
+  <data name="lblMainLocationCode" xml:space="preserve">
+    <value>Main Location Code (MLC)</value>
+  </data>
+  <data name="lblBusinessReferenceNumberOptional" xml:space="preserve">
+    <value>Business Reference Number (optional)</value>
+  </data>
+  <data name="lblMainLocationCodeMCOptional" xml:space="preserve">
+    <value>Main Location Code (MC) (optional)</value>
+  </data>
+  <data name="MsgMLCMinMaxValidation" xml:space="preserve">
+    <value>Enter a main location code that is no more than 50 characters long</value>
+  </data>
+  <data name="MsgBusinessNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a business name that is no more than 128 characters long</value>
+  </data>
+  <data name="MsgSBIMinMaxValidation" xml:space="preserve">
+    <value>Enter a business reference number that is no more than 20 characters long</value>
+  </data>
+  <data name="lblUpdateFarmOrBusinessInformation" xml:space="preserve">
+    <value>Update farm or business information</value>
   </data>
 </root>

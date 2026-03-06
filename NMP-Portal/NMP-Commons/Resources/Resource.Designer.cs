@@ -2770,6 +2770,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business Reference Number.
+        /// </summary>
+        public static string lblBusinessReferenceNumber {
+            get {
+                return ResourceManager.GetString("lblBusinessReferenceNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Reference Number (optional).
+        /// </summary>
+        public static string lblBusinessReferenceNumberOptional {
+            get {
+                return ResourceManager.GetString("lblBusinessReferenceNumberOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate based on a recent soil mineral nitrogen (N) analysis result.
         /// </summary>
         public static string lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult {
@@ -8887,6 +8905,24 @@ namespace NMP.Commons.Resources {
         public static string lblMailtoHelpdesk {
             get {
                 return ResourceManager.GetString("lblMailtoHelpdesk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Location Code (MLC).
+        /// </summary>
+        public static string lblMainLocationCode {
+            get {
+                return ResourceManager.GetString("lblMainLocationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Location Code (MC) (optional).
+        /// </summary>
+        public static string lblMainLocationCodeMCOptional {
+            get {
+                return ResourceManager.GetString("lblMainLocationCodeMCOptional", resourceCulture);
             }
         }
         
@@ -15463,6 +15499,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update farm or business details.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessDetails {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update farm or business information.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessInformation {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Field.
         /// </summary>
         public static string lblUpdateField {
@@ -18867,6 +18921,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a business name that is no more than 128 characters long.
+        /// </summary>
+        public static string MsgBusinessNameMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgBusinessNameMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CLOSED PERIOD.
         /// </summary>
         public static string MsgClosedPeriod {
@@ -20856,6 +20919,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a main location code that is no more than 50 characters long.
+        /// </summary>
+        public static string MsgMLCMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgMLCMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a National Grid Reference that is no more than 4 characters long.
         /// </summary>
         public static string MsgNationalGridReferenceMinMaxValidation {
@@ -21302,6 +21374,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSampleForSoilMineralNitrogenForError {
             get {
                 return ResourceManager.GetString("MsgSampleForSoilMineralNitrogenForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a business reference number that is no more than 20 characters long.
+        /// </summary>
+        public static string MsgSBIMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgSBIMinMaxValidation", resourceCulture);
             }
         }
         

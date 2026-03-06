@@ -101,4 +101,9 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _logger.LogTrace("Fetching Nvz action programs for CountryId: {CountryId}", countryId);
         return await _farmService.FetchNvzActionProgramsByCountryIdAsync(countryId);
     }
+    public async Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId)
+    {
+        _logger.LogTrace("Fetching farm and farms nvz with ID: {FarmId}", farmId);
+        return await _farmService.FetchFarmAndFarmsNvzByFarmIdAsync(farmId);
+    }
 }
