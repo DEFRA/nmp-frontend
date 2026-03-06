@@ -2590,6 +2590,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A &quot;1 in X&quot; slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit.
+        /// </summary>
+        public static string lblBackslopHint {
+            get {
+                return ResourceManager.GetString("lblBackslopHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to {0}.
         /// </summary>
         public static string lblBackToFarmName {
@@ -2757,6 +2766,24 @@ namespace NMP.Commons.Resources {
         public static string lblBusinessName {
             get {
                 return ResourceManager.GetString("lblBusinessName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Reference Number.
+        /// </summary>
+        public static string lblBusinessReferenceNumber {
+            get {
+                return ResourceManager.GetString("lblBusinessReferenceNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Reference Number (optional).
+        /// </summary>
+        public static string lblBusinessReferenceNumberOptional {
+            get {
+                return ResourceManager.GetString("lblBusinessReferenceNumberOptional", resourceCulture);
             }
         }
         
@@ -8882,6 +8909,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Main Location Code (MLC).
+        /// </summary>
+        public static string lblMainLocationCode {
+            get {
+                return ResourceManager.GetString("lblMainLocationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Location Code (MC) (optional).
+        /// </summary>
+        public static string lblMainLocationCodeMCOptional {
+            get {
+                return ResourceManager.GetString("lblMainLocationCodeMCOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage farm fields.
         /// </summary>
         public static string lblManageFarmFields {
@@ -11065,6 +11110,78 @@ namespace NMP.Commons.Resources {
         public static string lblPhosphorusPPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("lblPhosphorusPPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus sorption capacity (PSC).
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacity {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.fas.scot/downloads/managing-soil-phosphorus/&quot;  target=&quot;_blank&quot;&gt;View the SRUC technical notes&lt;/a&gt; (open in a new window)..
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentFive {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can also read the SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website..
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentFour {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus.
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentOne {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the phosphorus sorption capacity (PSC) of the soil in {0}?.
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentSeven {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentSeven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are still unsure, use PSC Index 1..
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentSix {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentSix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://map.environment.gov.scot/Soil_maps/?layer=16&quot;  target=&quot;_blank&quot;&gt;View the map&lt;/a&gt; (open a new window).
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentThree {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices..
+        /// </summary>
+        public static string lblPhosphorusSorptionCapacityContentTwo {
+            get {
+                return ResourceManager.GetString("lblPhosphorusSorptionCapacityContentTwo", resourceCulture);
             }
         }
         
@@ -15382,6 +15499,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update farm or business details.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessDetails {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update farm or business information.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessInformation {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Field.
         /// </summary>
         public static string lblUpdateField {
@@ -17533,6 +17668,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone(NVZ) is {0} in ?.
+        /// </summary>
+        public static string lblWhichNitrateVulnerableZoneNVZIsIn {
+            get {
+                return ResourceManager.GetString("lblWhichNitrateVulnerableZoneNVZIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?.
         /// </summary>
         public static string lblWhichNVZAreTheFieldsAtYourFarmIn {
@@ -18773,6 +18917,15 @@ namespace NMP.Commons.Resources {
         public static string MsgAverageOccupancyNotSet {
             get {
                 return ResourceManager.GetString("MsgAverageOccupancyNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a business name that is no more than 128 characters long.
+        /// </summary>
+        public static string MsgBusinessNameMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgBusinessNameMinMaxValidation", resourceCulture);
             }
         }
         
@@ -20037,7 +20190,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank..
+        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank..
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint1 {
             get {
@@ -20640,7 +20793,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LPID number format must be like AA/12345/12345..
+        ///   Looks up a localized string similar to LPID number should match the following format AA/12345/12345..
         /// </summary>
         public static string MsgLPIDNumberFormatError {
             get {
@@ -20762,6 +20915,15 @@ namespace NMP.Commons.Resources {
         public static string MsgMinMaxValidation {
             get {
                 return ResourceManager.GetString("MsgMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a main location code that is no more than 50 characters long.
+        /// </summary>
+        public static string MsgMLCMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgMLCMinMaxValidation", resourceCulture);
             }
         }
         
@@ -21212,6 +21374,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSampleForSoilMineralNitrogenForError {
             get {
                 return ResourceManager.GetString("MsgSampleForSoilMineralNitrogenForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a business reference number that is no more than 20 characters long.
+        /// </summary>
+        public static string MsgSBIMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgSBIMinMaxValidation", resourceCulture);
             }
         }
         

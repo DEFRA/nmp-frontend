@@ -31,12 +31,13 @@
     @if (currentStep != (int)FieldWizardSteps.NVZField)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZProgrammeID" value="@Model.NVZProgrammeID" />
+        @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZProgrammeID" value="@Model.NVZProgrammeID" /> *@
     }
-  @*   @if (currentStep != (int)FieldWizardSteps.NVZProgramme)
+    @if (currentStep != (int)FieldWizardSteps.NVZProgramme)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZProgrammeID" />
-    } *@
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNVZProgrammeNeedToShow" />
+    }
     @if (currentStep != (int)FieldWizardSteps.ElevationField)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel" />
@@ -44,6 +45,10 @@
     @if (currentStep != (int)FieldWizardSteps.SoilType)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID" />
+    }
+    @if (currentStep != (int)FieldWizardSteps.PscIndex)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PscIndexID" />
     }
     @if (currentStep != (int)FieldWizardSteps.SoilReleasingClay)
     {
@@ -129,6 +134,7 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldRemove" />
     }    
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNVZProgrammeNeedToShow" value="@Model.IsNVZProgrammeNeedToShow.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" value="@Model.CropGroup" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" value="@Model.CropType" />

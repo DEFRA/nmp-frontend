@@ -32,9 +32,15 @@ public class Farm
 
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNearestPostcode))]
     public string? ClimateDataPostCode { get; set; } = string.Empty;
+
+    [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgMLCMinMaxValidation))]
     public string? CPH { get; set; }
     public string? FarmerName { get; set; }
+
+    [StringLength(128, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgBusinessNameMinMaxValidation))]
     public string? BusinessName { get; set; }
+
+    [StringLength(20, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgSBIMinMaxValidation))]
     public string? SBI { get; set; }
     public string? STD { get; set; }
     public string? Telephone { get; set; }

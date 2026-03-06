@@ -38,8 +38,8 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     {
         _logger.LogTrace("Fetching list of countries");
         (List<Country> countryList, _) = await _farmService.FetchCountryAsync();
-        
-        return countryList.Where(c=>c.ID != (int) FarmCountry.Scotland).OrderBy(c => c.Name).ToList();
+
+        return countryList;
 
     }
 
@@ -100,5 +100,10 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     {
         _logger.LogTrace("Fetching Nvz action programs for CountryId: {CountryId}", countryId);
         return await _farmService.FetchNvzActionProgramsByCountryIdAsync(countryId);
+    }
+    public async Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId)
+    {
+        _logger.LogTrace("Fetching farm and farms nvz with ID: {FarmId}", farmId);
+        return await _farmService.FetchFarmAndFarmsNvzByFarmIdAsync(farmId);
     }
 }

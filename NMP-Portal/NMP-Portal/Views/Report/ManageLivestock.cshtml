@@ -426,7 +426,7 @@
         }
         else if (nonEmptyLists.Count > 1)
         {
-            <p class="govuk-body"><a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-r="@ViewBag.IsManageLivestock">@Resource.lblCreateAReportFromThisInformation</a></p>
+            <p class="govuk-body"><a class="govuk-link" asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblCreateAReportFromThisInformation</a></p>
 
             <govuk-tabs>
                 @if (ViewBag.CattleList != null && ViewBag.CattleList.Count > 0)

@@ -2422,7 +2422,7 @@ cubic metres per hectare  not set</value>
     <value>Potassium (K) per litre of soil (optional)</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint1" xml:space="preserve">
-    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank.</value>
+    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one value.</value>
@@ -7443,7 +7443,7 @@ livestock manure.</value>
     <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
   </data>
   <data name="MsgLPIDNumberFormatError" xml:space="preserve">
-    <value>LPID number format must be like AA/12345/12345.</value>
+    <value>LPID number should match the following format AA/12345/12345.</value>
   </data>
   <data name="MsgInvalidFarmData" xml:space="preserve">
     <value>Invalid farm data</value>
@@ -7474,5 +7474,62 @@ livestock manure.</value>
   </data>
   <data name="lblExistingManureStorageCapacityForHint" xml:space="preserve">
     <value>Existing manure storage capacity</value>
+  </data>
+  <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacity" xml:space="preserve">
+    <value>Phosphorus sorption capacity (PSC)</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentOne" xml:space="preserve">
+    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentTwo" xml:space="preserve">
+    <value>If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentThree" xml:space="preserve">
+    <value>&lt;a href="https://map.environment.gov.scot/Soil_maps/?layer=16"  target="_blank"&gt;View the map&lt;/a&gt; (open a new window)</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentFour" xml:space="preserve">
+    <value>You can also read the SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentFive" xml:space="preserve">
+    <value>&lt;a href="https://www.fas.scot/downloads/managing-soil-phosphorus/"  target="_blank"&gt;View the SRUC technical notes&lt;/a&gt; (open in a new window).</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentSix" xml:space="preserve">
+    <value>If you are still unsure, use PSC Index 1.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
+    <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
+  </data>
+  <data name="lblBackslopHint" xml:space="preserve">
+    <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
+  </data>  
+  <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
+    <value>Update farm or business details</value>
+  </data>
+  <data name="lblBusinessReferenceNumber" xml:space="preserve">
+    <value>Business Reference Number</value>
+  </data>
+  <data name="lblMainLocationCode" xml:space="preserve">
+    <value>Main Location Code (MLC)</value>
+  </data>
+  <data name="lblBusinessReferenceNumberOptional" xml:space="preserve">
+    <value>Business Reference Number (optional)</value>
+  </data>
+  <data name="lblMainLocationCodeMCOptional" xml:space="preserve">
+    <value>Main Location Code (MC) (optional)</value>
+  </data>
+  <data name="MsgMLCMinMaxValidation" xml:space="preserve">
+    <value>Enter a main location code that is no more than 50 characters long</value>
+  </data>
+  <data name="MsgBusinessNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a business name that is no more than 128 characters long</value>
+  </data>
+  <data name="MsgSBIMinMaxValidation" xml:space="preserve">
+    <value>Enter a business reference number that is no more than 20 characters long</value>
+  </data>
+  <data name="lblUpdateFarmOrBusinessInformation" xml:space="preserve">
+    <value>Update farm or business information</value>
   </data>
 </root>
