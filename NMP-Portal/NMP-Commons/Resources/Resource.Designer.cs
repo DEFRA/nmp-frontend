@@ -16210,7 +16210,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass..
+        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass. AHDB publish guidance on measuring grass yields..
         /// </summary>
         public static string lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass {
             get {
@@ -21914,6 +21914,15 @@ namespace NMP.Commons.Resources {
         public static string MsgVarietyNameNotSet {
             get {
                 return ResourceManager.GetString("MsgVarietyNameNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View the AHDB guidance.
+        /// </summary>
+        public static string msgViewAhdbGuidence {
+            get {
+                return ResourceManager.GetString("msgViewAhdbGuidence", resourceCulture);
             }
         }
         

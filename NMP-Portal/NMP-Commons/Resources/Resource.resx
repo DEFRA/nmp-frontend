@@ -4111,7 +4111,7 @@ cubic metres per hectare  not set</value>
     <value>This growth class gives a range for annual dry matter yield of:</value>
   </data>
   <data name="lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass" xml:space="preserve">
-    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass.</value>
+    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass. AHDB publish guidance on measuring grass yields.</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForField" xml:space="preserve">
     <value>What is the total target dry matter yield for {0} in {1}?</value>
@@ -7534,5 +7534,8 @@ livestock manure.</value>
   </data>
   <data name="lblSolidManureStoresOnYardsOrInLivestockHousing" xml:space="preserve">
     <value>Solid manure stores (on yards or in livestock housing)</value>
+  </data>
+  <data name="msgViewAhdbGuidence" xml:space="preserve">
+    <value>View the AHDB guidance</value>
   </data>
 </root>
