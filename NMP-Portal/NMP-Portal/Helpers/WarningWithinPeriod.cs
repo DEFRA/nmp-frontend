@@ -78,27 +78,27 @@ namespace NMP.Portal.Helpers
 
         }
 
-        public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
+        public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial, int? countryId)
         {
             string? closedPeriod = null;
-            
+
 
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
-            
 
+            bool isWales = (countryId.HasValue && countryId.Value == (int)NMP.Commons.Enums.FarmCountry.Wales) ? true : false;
             if (isFieldTypeGrass)
             {
                 closedPeriod = isSandyShallowSoil
                     ? string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember)
-                    : string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                    : isWales ? string.Format(Resource.lbl15SeptemberTo15January, Resource.lblOctober, Resource.lblJanuary) : string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
             else if (isFieldTypeArable)
             {
                 switch (cropTypeId)
-                {                   
+                {
 
                     default:
                         closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial);
@@ -383,9 +383,9 @@ namespace NMP.Portal.Helpers
                     string endMonthStr = match.Groups[4].Value;
 
 
-                    Dictionary<int, string> dtfi = GetMonths();                    
+                    Dictionary<int, string> dtfi = GetMonths();
                     int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;                   
+                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
 
                     DateTime? endDateFebruary = null;
                     endDateFebruary = new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);

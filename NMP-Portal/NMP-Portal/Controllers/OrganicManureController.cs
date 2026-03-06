@@ -1665,7 +1665,7 @@ namespace NMP.Portal.Controllers
                     (FieldDetailResponse fieldDetail, _) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
                     WarningWithinPeriod warningMessage = new WarningWithinPeriod();
-                    string closedPeriod = string.Empty;
+                    string? closedPeriod = string.Empty;
                     bool isPerennial = false;
 
                     List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
@@ -1685,7 +1685,7 @@ namespace NMP.Portal.Controllers
 
                         isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                         int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-                        closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
+                        closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial, farm.CountryID);
                     }
                     model.ClosedPeriod = closedPeriod;
                     if (!string.IsNullOrWhiteSpace(closedPeriod))
@@ -1850,7 +1850,7 @@ namespace NMP.Portal.Controllers
                                                 if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                                 {
                                                     (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
-                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail);
+                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail,farm);
                                                 }
 
 
@@ -1958,7 +1958,7 @@ namespace NMP.Portal.Controllers
                     Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
 
                 WarningWithinPeriod warningMessage = new WarningWithinPeriod();
-                string closedPeriod = string.Empty;
+                string? closedPeriod = string.Empty;
                 bool isPerennial = false;
 
                 if (farm.RegisteredOrganicProducer == false && isHighReadilyAvailableNitrogen)
@@ -1979,7 +1979,7 @@ namespace NMP.Portal.Controllers
                     int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
                     isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                     int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-                    closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
+                    closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial,farm.CountryID);
                 }
 
                 ViewBag.ClosedPeriod = closedPeriod;
@@ -5213,7 +5213,7 @@ namespace NMP.Portal.Controllers
 
                                         isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                                         int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-                                        closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
+                                        closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial, farm.CountryID);
                                     }
                                     model.ClosedPeriod = closedPeriod;
                                     if (!string.IsNullOrWhiteSpace(closedPeriod))
@@ -5376,7 +5376,7 @@ namespace NMP.Portal.Controllers
                                             if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                             {
                                                 (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail);
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail,farm);
 
                                                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                                                 {
@@ -6816,7 +6816,7 @@ namespace NMP.Portal.Controllers
                         model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
                     }
                     WarningWithinPeriod warningMessage = new WarningWithinPeriod();
-                    string closedPeriod = string.Empty;
+                    string? closedPeriod = string.Empty;
                     bool isPerennial = false;
 
                     //Non Organic farm closed period
@@ -6843,7 +6843,7 @@ namespace NMP.Portal.Controllers
                             int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
                             isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                             int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-                            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
+                            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial,farm.CountryID);
                         }
                     }
                     bool isSlurry = false;
@@ -6909,7 +6909,7 @@ namespace NMP.Portal.Controllers
             return (model, error);
         }
         private async Task<(OrganicManureViewModel, Error?)> IsClosedPeriodWarningMessage(
-            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, FieldDetailResponse fieldDetail)
+            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, FieldDetailResponse fieldDetail,Farm farm)
         {
             Error? error = null;
             string? closedPeriod = string.Empty;
@@ -6932,7 +6932,7 @@ namespace NMP.Portal.Controllers
             }
 
             (model, error, closedPeriod, isWithinClosedPeriod) = await HandleClosedPeriodWarningLogic(
-                model, isWithinNVZ, registeredOrganicProducer, isHighReadilyAvailableNitrogen, fieldDetail);
+                model, isWithinNVZ, registeredOrganicProducer, isHighReadilyAvailableNitrogen, fieldDetail,farm);
             if (error != null) return (model, error);
 
             // Check for 20-day rule between closed period and end of February
@@ -6960,7 +6960,7 @@ namespace NMP.Portal.Controllers
         }
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleClosedPeriodWarningLogic(
-            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, bool isHighReadilyAvailableNitrogen, FieldDetailResponse fieldDetail)
+            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, bool isHighReadilyAvailableNitrogen, FieldDetailResponse fieldDetail,Farm farm)
         {
             Error? error = null;
             string closedPeriod = string.Empty;
@@ -6983,7 +6983,7 @@ namespace NMP.Portal.Controllers
             // Organic farm, high N, NVZ
             if (registeredOrganicProducer && isHighReadilyAvailableNitrogen && isWithinNVZ)
             {
-                (model, error, closedPeriod, isWithinClosedPeriod) = await HandleOrganicHighNWarning(model, fieldDetail, warningMessage);
+                (model, error, closedPeriod, isWithinClosedPeriod) = await HandleOrganicHighNWarning(model, fieldDetail, warningMessage,farm);
                 return (model, error, closedPeriod, isWithinClosedPeriod);
             }
 
@@ -7013,10 +7013,10 @@ namespace NMP.Portal.Controllers
         }
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleOrganicHighNWarning(
-            OrganicManureViewModel model, FieldDetailResponse fieldDetail, WarningWithinPeriod warningMessage)
+            OrganicManureViewModel model, FieldDetailResponse fieldDetail, WarningWithinPeriod warningMessage,Farm farm)
         {
             Error? error = null;
-            string closedPeriod = string.Empty;
+            string? closedPeriod = string.Empty;
             bool isWithinClosedPeriod = false;
 
             (CropTypeResponse cropTypeResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(
@@ -7027,7 +7027,7 @@ namespace NMP.Portal.Controllers
             int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
             bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
             int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial);
+            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial,farm.CountryID);
 
             isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(
                 model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
