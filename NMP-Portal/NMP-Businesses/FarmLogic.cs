@@ -39,7 +39,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _logger.LogTrace("Fetching list of countries");
         (List<Country> countryList, _) = await _farmService.FetchCountryAsync();
 
-        return countryList;
+        return countryList.Where(c => c.ID != (int)FarmCountry.Scotland).OrderBy(c => c.Name).ToList();
 
     }
 
