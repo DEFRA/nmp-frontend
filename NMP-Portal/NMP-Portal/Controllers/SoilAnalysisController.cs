@@ -139,7 +139,7 @@ namespace NMP.Portal.Controllers
                             else
                             {
                                 model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
-                                model.SoilNutrientValueTypeName = Resource.lblAsAnIndex;
+                                model.SoilNutrientValueTypeName = Resource.lblIndexValues;
                             }
 
                         }
@@ -331,6 +331,22 @@ namespace NMP.Portal.Controllers
                 model.Magnesium = null;
                 model.Potassium = null;
                 model.Phosphorus = null;
+            }
+            if (model.Phosphorus == null && model.Potassium == null && model.Magnesium == null)
+            {
+                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+                {
+                    model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
+                }
+                else
+                {
+                    model.SoilNutrientValueTypeName = Resource.lblIndexValues;
+                }
+
+            }
+            else
+            {
+                model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
             }
 
             SetSoilAnalysisDataToSession(model);
