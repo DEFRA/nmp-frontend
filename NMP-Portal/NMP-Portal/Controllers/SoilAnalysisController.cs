@@ -30,6 +30,7 @@ namespace NMP.Portal.Controllers
         private readonly IPKBalanceLogic _pKBalanceLogic = pKBalanceLogic;
         private const string _changeSoilAnalysisError = "ChangeSoilAnalysisError";
         private const string _changeSoilAnalysisActionName = "ChangeSoilAnalysis";
+        private const string _soilNutrientValueTypeActionName = "SoilNutrientValueType";
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
         {
             if (HttpContext.Session.Exists("SoilAnalysisData"))
@@ -141,7 +142,7 @@ namespace NMP.Portal.Controllers
                             return View(model);
                         }
 
-                        model.SoilAnalysesMethodID = model.SoilAnalysesMethodID;
+                        model.SoilAnalysesMethodID = soilAnalysis.SoilAnalysesMethodID;
 
                         if (model.Phosphorus == null &&
                              model.Potassium == null && model.Magnesium == null)
@@ -290,7 +291,7 @@ namespace NMP.Portal.Controllers
             {
                 if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    return RedirectToAction("SoilNutrientValueType");
+                    return RedirectToAction(_soilNutrientValueTypeActionName);
                 }
                 else
                 {
@@ -340,8 +341,7 @@ namespace NMP.Portal.Controllers
             }
 
             if (model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index &&
-                (soilAnalysisViewModel != null &&
-                (soilAnalysisViewModel.SoilNutrientValueType.HasValue && soilAnalysisViewModel.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index)))
+                (soilAnalysisViewModel.SoilNutrientValueType.HasValue && soilAnalysisViewModel.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index))
             {
                 model.Magnesium = null;
                 model.Potassium = null;
@@ -350,7 +350,7 @@ namespace NMP.Portal.Controllers
             
 
             SetSoilAnalysisDataToSession(model);
-            if (soilAnalysisViewModel != null && soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
+            if (soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
             {
                 return RedirectToAction("SoilNutrientValue");
             }
@@ -1055,7 +1055,7 @@ namespace NMP.Portal.Controllers
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                return await Task.FromResult(RedirectToAction("SoilNutrientValueType"));
+                return await Task.FromResult(RedirectToAction(_soilNutrientValueTypeActionName));
             }
 
             return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
@@ -1101,7 +1101,7 @@ namespace NMP.Portal.Controllers
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                return await Task.FromResult(RedirectToAction("SoilNutrientValueType"));
+                return await Task.FromResult(RedirectToAction(_soilNutrientValueTypeActionName));
             }
 
             return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
