@@ -2559,8 +2559,8 @@ cubic metres per hectare  not set</value>
   <data name="lblAllAmountsArePerHectare" xml:space="preserve">
     <value>All amounts are per hectare.</value>
   </data>
-  <data name="lblAddACropGroup" xml:space="preserve">
-    <value>Add a crop group</value>
+  <data name="lblAddACropToAField" xml:space="preserve">
+    <value>Add a crop to a field</value>
   </data>
   <data name="lblAddAnInorganicFertiliserApplication" xml:space="preserve">
     <value>Add an inorganic fertiliser application</value>

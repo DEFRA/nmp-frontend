@@ -1258,11 +1258,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a crop group.
+        ///   Looks up a localized string similar to Add a crop to a field.
         /// </summary>
-        public static string lblAddACropGroup {
+        public static string lblAddACropToAField {
             get {
-                return ResourceManager.GetString("lblAddACropGroup", resourceCulture);
+                return ResourceManager.GetString("lblAddACropToAField", resourceCulture);
             }
         }
         
