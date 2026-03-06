@@ -2348,7 +2348,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     {
                         ViewBag.Success = Resource.lblTrue;
                         ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveUpdated, model.Name);
-                        ViewBag.SuccessMsgContentLink = Resource.MsgViewYourFarmDetails;
+                        ViewBag.SuccessMsgContentLink = Resource.MsgCheckYourNutrientRecommendations;
                     }
                     else if (statusFor == Resource.lblSoilAnalysis)
                     {

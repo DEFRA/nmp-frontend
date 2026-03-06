@@ -1258,11 +1258,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a crop group.
+        ///   Looks up a localized string similar to Add a crop to a field.
         /// </summary>
-        public static string lblAddACropGroup {
+        public static string lblAddACropToAField {
             get {
-                return ResourceManager.GetString("lblAddACropGroup", resourceCulture);
+                return ResourceManager.GetString("lblAddACropToAField", resourceCulture);
             }
         }
         
@@ -13562,6 +13562,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solid manure stores (on yards or in livestock housing).
+        /// </summary>
+        public static string lblSolidManureStoresOnYardsOrInLivestockHousing {
+            get {
+                return ResourceManager.GetString("lblSolidManureStoresOnYardsOrInLivestockHousing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Solid manure total.
         /// </summary>
         public static string lblSolidManureTotal {
@@ -16201,7 +16210,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass..
+        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass. AHDB publish guidance on measuring grass yields..
         /// </summary>
         public static string lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass {
             get {
@@ -18926,6 +18935,15 @@ namespace NMP.Commons.Resources {
         public static string MsgBusinessNameMinMaxValidation {
             get {
                 return ResourceManager.GetString("MsgBusinessNameMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check your nutrient recommendations..
+        /// </summary>
+        public static string MsgCheckYourNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("MsgCheckYourNutrientRecommendations", resourceCulture);
             }
         }
         
@@ -21909,20 +21927,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View the AHDB guidance.
+        /// </summary>
+        public static string msgViewAhdbGuidence {
+            get {
+                return ResourceManager.GetString("msgViewAhdbGuidence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View {0} updated nutrient recommendations..
         /// </summary>
         public static string MsgViewFieldUpdatedNutrientRecommendations {
             get {
                 return ResourceManager.GetString("MsgViewFieldUpdatedNutrientRecommendations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View your farm details.
-        /// </summary>
-        public static string MsgViewYourFarmDetails {
-            get {
-                return ResourceManager.GetString("MsgViewYourFarmDetails", resourceCulture);
             }
         }
         
