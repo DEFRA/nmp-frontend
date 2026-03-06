@@ -7504,7 +7504,7 @@ livestock manure.</value>
   </data>
   <data name="lblBackslopHint" xml:space="preserve">
     <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
-  </data>  
+  </data>
   <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
     <value>Update farm or business details</value>
   </data>
@@ -7531,5 +7531,8 @@ livestock manure.</value>
   </data>
   <data name="lblUpdateFarmOrBusinessInformation" xml:space="preserve">
     <value>Update farm or business information</value>
+  </data>
+  <data name="lblSolidManureStoresOnYardsOrInLivestockHousing" xml:space="preserve">
+    <value>Solid manure stores (on yards or in livestock housing)</value>
   </data>
 </root>
