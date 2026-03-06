@@ -681,7 +681,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropTypeLinking, error);
     }
-    public async Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
+    public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
     {
         List<int> manureTypeIds = new List<int>();
         Error? error = null;
@@ -695,7 +695,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    manureTypeIds = responseWrapper.Data.ManureTypeIds.ToObject<List<int>>();
+                    var ids = responseWrapper?.Data?.ManureTypeIds.ToObject<List<int>>();
+                    if(ids != null)
+                    {
+                        manureTypeIds.AddRange(ids);
+                    }                       
                 }
             }
             else

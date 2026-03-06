@@ -97,7 +97,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
 
   
 
-    public async Task<(List<int>, Error)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
+    public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
     {
         _logger.LogTrace("OrganicManureLogic : FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure() called");
         return await _organicManureService.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(fieldId, year, confirm);
