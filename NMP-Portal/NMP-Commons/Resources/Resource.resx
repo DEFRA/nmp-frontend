@@ -3828,8 +3828,8 @@ cubic metres per hectare  not set</value>
   <data name="MsgIfGreenAreaIndexIsNull" xml:space="preserve">
     <value>Enter a value between 0 and 3.0</value>
   </data>
-  <data name="MsgViewYourFarmDetails" xml:space="preserve">
-    <value>View your farm details</value>
+  <data name="MsgCheckYourNutrientRecommendations" xml:space="preserve">
+    <value>Check your nutrient recommendations.</value>
   </data>
   <data name="lblAmmoniumHypenN" xml:space="preserve">
     <value>Ammonium-N​</value>

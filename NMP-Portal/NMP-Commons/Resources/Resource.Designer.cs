@@ -18939,6 +18939,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check your nutrient recommendations..
+        /// </summary>
+        public static string MsgCheckYourNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("MsgCheckYourNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CLOSED PERIOD.
         /// </summary>
         public static string MsgClosedPeriod {
@@ -21932,15 +21941,6 @@ namespace NMP.Commons.Resources {
         public static string MsgViewFieldUpdatedNutrientRecommendations {
             get {
                 return ResourceManager.GetString("MsgViewFieldUpdatedNutrientRecommendations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View your farm details.
-        /// </summary>
-        public static string MsgViewYourFarmDetails {
-            get {
-                return ResourceManager.GetString("MsgViewYourFarmDetails", resourceCulture);
             }
         }
         
