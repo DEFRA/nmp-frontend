@@ -19,4 +19,5 @@ public class SoilAnalysisViewModel : SoilAnalysis
     public bool? IsCancel { get; set; }
     public bool IsCheckAnswer { get; set; } = false;
     public int? FarmRB209CountryID { get; set; }
+    public string? SoilNutrientValueTypeName { get; set; } = string.Empty;
 }

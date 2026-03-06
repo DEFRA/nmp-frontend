@@ -38,7 +38,7 @@
                         {
                             @foreach (var item in ViewBag.SoilAnalysesMethodList)
                             {
-                                <govuk-radios-item value=@item.Id">@item.Name</govuk-radios-item>
+                                <govuk-radios-item value=@item.Value">@item.Text</govuk-radios-item>
                             }
                         }
                     </govuk-radios-fieldset>

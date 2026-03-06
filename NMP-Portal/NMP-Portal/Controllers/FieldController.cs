@@ -886,7 +886,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             return RedirectToAction(_checkAnswerActionName);
         }
-
+        if(model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("SoilAnalysesMethod");
+        }
+        
         return RedirectToAction("SoilNutrientValueType");
     }
 
@@ -3975,4 +3979,5 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return await Task.FromResult(RedirectToAction("SoilNutrientValueType"));
 
     }
+
 }

@@ -57,4 +57,5 @@ public class FieldViewModel : Field
     public List<PreviousCroppingData> PreviousCroppingsList { get; set; }
     public bool IsLastHarvestYearChange { get; set; } = false;
     public bool IsNVZProgrammeNeedToShow { get; set; } = false;
+    public string? SoilNutrientValueTypeName { get; set; } = string.Empty;
 }

@@ -126,14 +126,27 @@ namespace NMP.Portal.Controllers
                             return View(model);
                         }
 
+                        model.SoilAnalysesMethodID = model.SoilAnalysesMethodID;
+
                         if (model.Phosphorus == null &&
                              model.Potassium == null && model.Magnesium == null)
                         {
-                            model.SoilAnalysesMethodID = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)NMP.Commons.Enums.SoilNutrientValueType.Index : (int)NMP.Commons.Enums.SoilNutrientValueType.Status);// @Resource.lblMiligramValues
+                            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+                            {
+                                model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
+                                model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
+                            }
+                            else
+                            {
+                                model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
+                                model.SoilNutrientValueTypeName = Resource.lblAsAnIndex;
+                            }
+
                         }
                         else
                         {
-                            model.SoilAnalysesMethodID = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
+                            model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
+                            model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
                         }
                     }
                     else
@@ -311,9 +324,9 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
 
-            if (model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value==(int)NMP.Commons.Enums.SoilNutrientValueType.Index &&
+            if (model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index &&
                 (soilAnalysisViewModel != null &&
-                (soilAnalysisViewModel.SoilNutrientValueType.HasValue&& soilAnalysisViewModel.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index)))
+                (soilAnalysisViewModel.SoilNutrientValueType.HasValue && soilAnalysisViewModel.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index)))
             {
                 model.Magnesium = null;
                 model.Potassium = null;
@@ -373,7 +386,7 @@ namespace NMP.Portal.Controllers
             Error error = null;
             try
             {
-                if (model.SoilNutrientValueType != null && model.SoilNutrientValueType==(int)NMP.Commons.Enums.SoilNutrientValueType.Index)
+                if (model.SoilNutrientValueType != null && model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                 {
                     if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
                     {

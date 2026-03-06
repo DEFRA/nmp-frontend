@@ -5,16 +5,16 @@
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
     ? $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
     $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var asAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.SoilNutrientValueType.Index);
-    var inMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.SoilNutrientValueType.Miligram);
-    var asAnStatus = Convert.ToBoolean((int)NMP.Commons.Enums.SoilNutrientValueType.Status);
+    var asAnIndex =(int)NMP.Commons.Enums.SoilNutrientValueType.Index;
+    var inMilligramsPerLitre = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;
+    var asAnStatus = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.SoilNutrientValueType;
 }
 
 @section BeforeContent {
     @if (Model != null && Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
-        <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "Date" : "SoilAnalysesMethod")"
+        <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? "SoilAnalysesMethod" : "Date")"
                          asp-controller="SoilAnalysis">
             @Resource.lblBack
         </govuk-back-link>
@@ -37,7 +37,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
                         </govuk-radios-fieldset-legend>
-                        @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                        @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
                         {
                             <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
                         }
@@ -48,11 +48,12 @@
                         <govuk-radios-item value=@inMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                     </govuk-radios-fieldset>
                 </govuk-radios>
-
-                <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button>
-
+                @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+                }
 
                 @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
                 {

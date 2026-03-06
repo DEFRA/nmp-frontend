@@ -30,7 +30,7 @@
 @section BeforeContent {
     @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
-        <govuk-back-link asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "SoilAnalysesMethod" : "SoilNutrientValueType")" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
     }
     else
     {
