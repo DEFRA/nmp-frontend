@@ -88,12 +88,22 @@ namespace NMP.Portal.Helpers
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
 
-            bool isWales = (countryId.HasValue && countryId.Value == (int)NMP.Commons.Enums.FarmCountry.Wales) ? true : false;
+            bool isWales = (countryId.HasValue && countryId.Value == (int)NMP.Commons.Enums.FarmCountry.Wales);
             if (isFieldTypeGrass)
             {
-                closedPeriod = isSandyShallowSoil
-                    ? string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember)
-                    : isWales ? string.Format(Resource.lbl15SeptemberTo15January, Resource.lblOctober, Resource.lblJanuary) : string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                if (isSandyShallowSoil)
+                {
+                    closedPeriod = string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
+                }
+                else if (isWales)
+                {
+                    closedPeriod = string.Format(Resource.lbl15SeptemberTo15January, Resource.lblOctober, Resource.lblJanuary);
+                }
+                else
+                {
+                    closedPeriod = string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                }
+
             }
             else if (isFieldTypeArable)
             {
