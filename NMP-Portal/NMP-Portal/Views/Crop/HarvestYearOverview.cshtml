@@ -23,10 +23,6 @@
 {
     @section BeforeContent {
         <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-
-            @* <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                @Model.FarmName
-            </govuk-breadcrumbs-item> *@
             <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
                 @Resource.lblPlanningAndRecording
             </govuk-breadcrumbs-item>
@@ -85,7 +81,7 @@
                 <govuk-tabs>
                     <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
-                        <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropGroup  </a>
+                        <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropToAField</a>
                         <hr class="seperator_five">
 
                         <!-- Crops Table -->

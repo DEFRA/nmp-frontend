@@ -1258,11 +1258,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a crop group.
+        ///   Looks up a localized string similar to Add a crop to a field.
         /// </summary>
-        public static string lblAddACropGroup {
+        public static string lblAddACropToAField {
             get {
-                return ResourceManager.GetString("lblAddACropGroup", resourceCulture);
+                return ResourceManager.GetString("lblAddACropToAField", resourceCulture);
             }
         }
         
@@ -2599,6 +2599,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A &quot;1 in X&quot; slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit.
+        /// </summary>
+        public static string lblBackslopHint {
+            get {
+                return ResourceManager.GetString("lblBackslopHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to {0}.
         /// </summary>
         public static string lblBackToFarmName {
@@ -2766,6 +2775,24 @@ namespace NMP.Commons.Resources {
         public static string lblBusinessName {
             get {
                 return ResourceManager.GetString("lblBusinessName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Reference Number.
+        /// </summary>
+        public static string lblBusinessReferenceNumber {
+            get {
+                return ResourceManager.GetString("lblBusinessReferenceNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Reference Number (optional).
+        /// </summary>
+        public static string lblBusinessReferenceNumberOptional {
+            get {
+                return ResourceManager.GetString("lblBusinessReferenceNumberOptional", resourceCulture);
             }
         }
         
@@ -8891,6 +8918,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Main Location Code (MLC).
+        /// </summary>
+        public static string lblMainLocationCode {
+            get {
+                return ResourceManager.GetString("lblMainLocationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Location Code (MC) (optional).
+        /// </summary>
+        public static string lblMainLocationCodeMCOptional {
+            get {
+                return ResourceManager.GetString("lblMainLocationCodeMCOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage farm fields.
         /// </summary>
         public static string lblManageFarmFields {
@@ -13526,6 +13571,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solid manure stores (on yards or in livestock housing).
+        /// </summary>
+        public static string lblSolidManureStoresOnYardsOrInLivestockHousing {
+            get {
+                return ResourceManager.GetString("lblSolidManureStoresOnYardsOrInLivestockHousing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Solid manure total.
         /// </summary>
         public static string lblSolidManureTotal {
@@ -15463,6 +15517,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update farm or business details.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessDetails {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update farm or business information.
+        /// </summary>
+        public static string lblUpdateFarmOrBusinessInformation {
+            get {
+                return ResourceManager.GetString("lblUpdateFarmOrBusinessInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Field.
         /// </summary>
         public static string lblUpdateField {
@@ -16147,7 +16219,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass..
+        ///   Looks up a localized string similar to We use the target annual dry matter yield to give nitrogen (N) recommendations for grass. AHDB publish guidance on measuring grass yields..
         /// </summary>
         public static string lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass {
             get {
@@ -18876,6 +18948,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a business name that is no more than 128 characters long.
+        /// </summary>
+        public static string MsgBusinessNameMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgBusinessNameMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check your nutrient recommendations..
+        /// </summary>
+        public static string MsgCheckYourNutrientRecommendations {
+            get {
+                return ResourceManager.GetString("MsgCheckYourNutrientRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CLOSED PERIOD.
         /// </summary>
         public static string MsgClosedPeriod {
@@ -20136,7 +20226,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank..
+        ///   Looks up a localized string similar to Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank..
         /// </summary>
         public static string MsgEnterTheValueOYourSoilAnalysisHint1 {
             get {
@@ -20865,6 +20955,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a main location code that is no more than 50 characters long.
+        /// </summary>
+        public static string MsgMLCMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgMLCMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a National Grid Reference that is no more than 4 characters long.
         /// </summary>
         public static string MsgNationalGridReferenceMinMaxValidation {
@@ -21311,6 +21410,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSampleForSoilMineralNitrogenForError {
             get {
                 return ResourceManager.GetString("MsgSampleForSoilMineralNitrogenForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a business reference number that is no more than 20 characters long.
+        /// </summary>
+        public static string MsgSBIMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgSBIMinMaxValidation", resourceCulture);
             }
         }
         
@@ -21837,20 +21945,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View the AHDB guidance.
+        /// </summary>
+        public static string msgViewAhdbGuidence {
+            get {
+                return ResourceManager.GetString("msgViewAhdbGuidence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View {0} updated nutrient recommendations..
         /// </summary>
         public static string MsgViewFieldUpdatedNutrientRecommendations {
             get {
                 return ResourceManager.GetString("MsgViewFieldUpdatedNutrientRecommendations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View your farm details.
-        /// </summary>
-        public static string MsgViewYourFarmDetails {
-            get {
-                return ResourceManager.GetString("MsgViewYourFarmDetails", resourceCulture);
             }
         }
         

@@ -73,6 +73,7 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @Resource.lblWhatIsTheEstimatedAngleOfTheBankSlope
                         </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@Resource.lblBackslopHint</govuk-radios-hint>
                         @if (ViewBag.BankSlopeAngles != null && ViewBag.BankSlopeAngles.Count>0)
                         {
                             foreach (var slopeAngle in ViewBag.BankSlopeAngles)

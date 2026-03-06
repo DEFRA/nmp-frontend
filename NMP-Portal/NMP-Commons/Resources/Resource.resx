@@ -2422,7 +2422,7 @@ cubic metres per hectare  not set</value>
     <value>Potassium (K) per litre of soil (optional)</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint1" xml:space="preserve">
-    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank.</value>
+    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one value.</value>
@@ -2559,8 +2559,8 @@ cubic metres per hectare  not set</value>
   <data name="lblAllAmountsArePerHectare" xml:space="preserve">
     <value>All amounts are per hectare.</value>
   </data>
-  <data name="lblAddACropGroup" xml:space="preserve">
-    <value>Add a crop group</value>
+  <data name="lblAddACropToAField" xml:space="preserve">
+    <value>Add a crop to a field</value>
   </data>
   <data name="lblAddAnInorganicFertiliserApplication" xml:space="preserve">
     <value>Add an inorganic fertiliser application</value>
@@ -3828,8 +3828,8 @@ cubic metres per hectare  not set</value>
   <data name="MsgIfGreenAreaIndexIsNull" xml:space="preserve">
     <value>Enter a value between 0 and 3.0</value>
   </data>
-  <data name="MsgViewYourFarmDetails" xml:space="preserve">
-    <value>View your farm details</value>
+  <data name="MsgCheckYourNutrientRecommendations" xml:space="preserve">
+    <value>Check your nutrient recommendations.</value>
   </data>
   <data name="lblAmmoniumHypenN" xml:space="preserve">
     <value>Ammonium-N​</value>
@@ -4111,7 +4111,7 @@ cubic metres per hectare  not set</value>
     <value>This growth class gives a range for annual dry matter yield of:</value>
   </data>
   <data name="lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass" xml:space="preserve">
-    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass.</value>
+    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass. AHDB publish guidance on measuring grass yields.</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForField" xml:space="preserve">
     <value>What is the total target dry matter yield for {0} in {1}?</value>
@@ -7501,6 +7501,42 @@ livestock manure.</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
     <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
+  </data>
+  <data name="lblBackslopHint" xml:space="preserve">
+    <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
+  </data>
+  <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
+    <value>Update farm or business details</value>
+  </data>
+  <data name="lblBusinessReferenceNumber" xml:space="preserve">
+    <value>Business Reference Number</value>
+  </data>
+  <data name="lblMainLocationCode" xml:space="preserve">
+    <value>Main Location Code (MLC)</value>
+  </data>
+  <data name="lblBusinessReferenceNumberOptional" xml:space="preserve">
+    <value>Business Reference Number (optional)</value>
+  </data>
+  <data name="lblMainLocationCodeMCOptional" xml:space="preserve">
+    <value>Main Location Code (MC) (optional)</value>
+  </data>
+  <data name="MsgMLCMinMaxValidation" xml:space="preserve">
+    <value>Enter a main location code that is no more than 50 characters long</value>
+  </data>
+  <data name="MsgBusinessNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a business name that is no more than 128 characters long</value>
+  </data>
+  <data name="MsgSBIMinMaxValidation" xml:space="preserve">
+    <value>Enter a business reference number that is no more than 20 characters long</value>
+  </data>
+  <data name="lblUpdateFarmOrBusinessInformation" xml:space="preserve">
+    <value>Update farm or business information</value>
+  </data>
+  <data name="lblSolidManureStoresOnYardsOrInLivestockHousing" xml:space="preserve">
+    <value>Solid manure stores (on yards or in livestock housing)</value>
+  </data>
+  <data name="msgViewAhdbGuidence" xml:space="preserve">
+    <value>View the AHDB guidance</value>
   </data>
   <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
     <value>Which soil analysis method was used?</value>

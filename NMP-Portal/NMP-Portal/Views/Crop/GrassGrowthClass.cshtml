@@ -2,18 +2,15 @@
 @using NMP.Commons.ServiceResponses
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
-
-
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
-
+    
     var EnterDifferentFiguresForEachField = (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
     var EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     var pageHeading = "";
-    if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+    if (Model.Crops != null && Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
     {
         pageHeading = Resource.lblAnnualDryMatterYield;
     }
-    @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+    @if (Model.Crops != null && Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
     {
         pageHeading = string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName);
     }
@@ -36,7 +33,7 @@
             </div>
         </div>
     }
-    <div hidden="true">
+    <div hidden="hidden">
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId"/>
@@ -71,7 +68,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter" value="@Model.GrassGrowthClassCounter"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter" value="@Model.GrassGrowthClassEncryptedCounter"/>
-        @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion"/> *@
+        
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SwardTypeId"/>
@@ -80,7 +77,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationSequenceId"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsCropUpdate"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCropGroupName"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation.ToString().ToLower()"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromRecommendation" value="@Model.IsComingFromRecommendation?.ToString().ToLower()"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropType"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
@@ -110,15 +107,14 @@
     {
         @for (int i = 0; i < Model.Crops.Count; i++)
         {
-            <div hidden="true">
+            <div hidden="hidden">
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].ID" value="@Model.Crops[i].ID"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldID" value="@Model.Crops[i].FieldID"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Year" value="@Model.Crops[i].Year"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropTypeID" value="@Model.Crops[i].CropTypeID"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].OtherCropName" value="@Model.Crops[i].OtherCropName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Variety" value="@Model.Crops[i].Variety"/>
-                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
-                @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"/> *@
+                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>                
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropInfo1" value="@Model.Crops[i].CropInfo1"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].FieldName" value="@Model.Crops[i].FieldName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].EncryptedCounter" value="@Model.Crops[i].EncryptedCounter"/>
@@ -143,11 +139,10 @@
                                     @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName)
                                 </h1>                               
                             }
-                            <p class="govuk-body">@Resource.lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass</p>
+                        <p class="govuk-body">@Resource.lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass <a class="govuk-link" target="_blank"  href="https://ahdb.org.uk/knowledge-library/methods-for-measuring-forage-yield">@Resource.msgViewAhdbGuidence</a>.</p>
 
                             <h2 class="govuk-heading-m">@Resource.lblGrassGrowthClass</h2>
                             <div class="text_group">
-
                                 @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
                                 {
                                     <p class="govuk-body">@Resource.lblBasedOnYourDataTheGrassGrowthClassForTheseField</p>
@@ -160,21 +155,16 @@
                                 {
                                     <p class="govuk-body strong"><b>@ViewBag.GrassGrowthClass</b></p>
                                 }
-
                             </div>
                             @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
                             {
-                                <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>
-                                @* @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
-                                {
-                                    <p class="govuk-body"><b>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</b></p>
-                                }  *@                               
+                                <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>                                                            
                                 <govuk-radios asp-for="@Model.Crops[i].Yield">
                                     <govuk-radios-fieldset>
                                         <govuk-radios-fieldset-legend is-page-heading="false">
                                         @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)
                                         </govuk-radios-fieldset-legend>
-                                        @* <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblDryMatterYields)</govuk-radios-hint> *@
+                                        
                                         @if (ViewBag.YieldRanges != null)
                                         {
                                             @foreach (var yieldRanges in ViewBag.YieldRanges)
@@ -189,7 +179,6 @@
                                         }
                                     </govuk-radios-fieldset>
                                 </govuk-radios>
-
                             }
                             @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
                             {
@@ -209,22 +198,17 @@
                                     </govuk-radios-fieldset>
                                 </govuk-radios>
                                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"/>
-
-                            }
-                        
+                            }                        
                     </div>
-
                 </div>
             }
             else
             {
-                <div hidden="true">
+                <div hidden="hidden">
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield"/>
                 </div>
             }
-
         }
-
     }
     <govuk-button type="submit" class="margin-bottom-forty">
         @Resource.lblContinue
@@ -240,6 +224,4 @@
             <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
         }
     </p>
-
-
 </form>
