@@ -13562,6 +13562,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solid manure stores (on yards or in livestock housing).
+        /// </summary>
+        public static string lblSolidManureStoresOnYardsOrInLivestockHousing {
+            get {
+                return ResourceManager.GetString("lblSolidManureStoresOnYardsOrInLivestockHousing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Solid manure total.
         /// </summary>
         public static string lblSolidManureTotal {
