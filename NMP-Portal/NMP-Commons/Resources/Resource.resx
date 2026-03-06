@@ -2422,7 +2422,7 @@ cubic metres per hectare  not set</value>
     <value>Potassium (K) per litre of soil (optional)</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint1" xml:space="preserve">
-    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient. leave it blank.</value>
+    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one value.</value>
@@ -7502,6 +7502,9 @@ livestock manure.</value>
   <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
     <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
   </data>
+  <data name="lblBackslopHint" xml:space="preserve">
+    <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
+  </data>  
   <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
     <value>Update farm or business details</value>
   </data>
