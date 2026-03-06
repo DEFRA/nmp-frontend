@@ -1064,20 +1064,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                     paperCrumbleOrStrawMulch = 80;
                                 }
 
-
+                                //NMPT 2844 
                                 //if (crop.PotentialCut >= 3)
                                 //{
                                 //    grassCut = 40;
                                 //}
-                                //NMPT 
                                 // As per the discussion with RB209 team, DefoliationSequenceID will be used to identify the cuts for grass and if the sequence ID is 10,11,32,33,56,57,78 or 79 then it will be considered as 3 or more cuts and 40 points will be given for grass cut in that case.
                                 int[] threeOrMoreCutdefoliationSequenceIDs = { 10, 11, 32, 33, 56, 57, 78, 79 };                                
                                 if (crop.DefoliationSequenceID.HasValue && Array.Exists<int>(threeOrMoreCutdefoliationSequenceIDs, element => element == crop.DefoliationSequenceID))
                                 {                                    
                                     grassCut = 40;
                                 }
-                                
-                                
                             }
                             else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
                                 crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.SpringWheat ||
