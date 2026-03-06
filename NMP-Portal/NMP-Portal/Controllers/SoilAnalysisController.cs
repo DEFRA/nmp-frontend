@@ -68,6 +68,21 @@ namespace NMP.Portal.Controllers
                         _logger.LogTrace("SoilAnalysisController: Session expired in ChangeSoilAnalysis() action.");
                         return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                     }
+                    if (model.Phosphorus == null && model.Potassium == null && model.Magnesium == null)
+                    {
+                        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+                        {
+                            model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
+                        }
+                        else
+                        {
+                            model.SoilNutrientValueTypeName = Resource.lblIndexValues;
+                        }
+                    }
+                    else
+                    {
+                        model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
+                    }
                 }
                 else if (!string.IsNullOrWhiteSpace(i))
                 {
@@ -332,22 +347,7 @@ namespace NMP.Portal.Controllers
                 model.Potassium = null;
                 model.Phosphorus = null;
             }
-            if (model.Phosphorus == null && model.Potassium == null && model.Magnesium == null)
-            {
-                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
-                {
-                    model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
-                }
-                else
-                {
-                    model.SoilNutrientValueTypeName = Resource.lblIndexValues;
-                }
-
-            }
-            else
-            {
-                model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
-            }
+            
 
             SetSoilAnalysisDataToSession(model);
             if (soilAnalysisViewModel != null && soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
