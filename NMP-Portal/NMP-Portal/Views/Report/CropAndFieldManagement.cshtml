@@ -377,7 +377,7 @@
                                                     {
                                                         <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.Variety) ? Resource.lblHyphen : crop.Variety)</td>
                                                         <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
-                                                        <td class="govuk-table__cell">@(crop.Yield != null ? string.Format("{0:N2}", crop.Yield) : Resource.lblNotEntered)</td>
+                                                        <td class="govuk-table__cell">@(crop.Yield != null ? string.Format("{0:N1}",Math.Round(crop.Yield.Value,1)) : Resource.lblNotEntered)</td>
                                                         <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo1Name) ? Resource.lblHyphen : crop.CropInfo1Name)</td>
                                                         <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo2Name) ? Resource.lblHyphen : crop.CropInfo2Name)</td>
                                                     }
@@ -391,7 +391,7 @@
                                                         @if (crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
                                                         {
                                                             <td class="govuk-table__cell">@(crop.GrowthClass != null ? crop.GrowthClass : Resource.lblNotEntered)</td>
-                                                            <td class="govuk-table__cell">@(crop.Yield != null ? string.Format(Resource.lblYieldTonnesPerHectare, string.Format("{0:N2}", crop.Yield)) : Resource.lblNotEntered)</td>
+                                                            <td class="govuk-table__cell">@(crop.Yield != null ? string.Format(Resource.lblYieldTonnesPerHectare, string.Format("{0:N0}", crop.Yield)) : Resource.lblNotEntered)</td>
                                                             <td class="govuk-table__cell">@(Resource.lblTotalDryMatterYield)</td>
                                                         }
                                                     }
@@ -587,7 +587,7 @@
                                                                 {
                                                                     if (orgManure.N > 0)
                                                                     {
-                                                                        @string.Format("{0:N1}{1}", orgManure.N * orgManure.ApplicationRate, Resource.lblKgPerHectare)
+                                                                        @string.Format("{0:N0}{1}", Math.Round(orgManure.N.Value * orgManure.ApplicationRate ?? 1), Resource.lblKgPerHectare)
                                                                     }
                                                                     else
                                                                     {
@@ -607,7 +607,7 @@
                                                             <td class="govuk-table__cell">
                                                                 @if (orgManure.AvailableN > 0)
                                                                 {
-                                                                    @string.Format("{0:N1}{1}", orgManure.AvailableN, Resource.lblKgPerHectare)
+                                                                    @string.Format("{0:N0}{1}", Math.Round(orgManure.AvailableN), Resource.lblKgPerHectare)
                                                                 }
                                                                 else
                                                                 {
@@ -626,7 +626,7 @@
                                                                 {
                                                                     if (orgManure.P2O5 > 0)
                                                                     {
-                                                                        @string.Format("{0:N1}{1}", orgManure.P2O5 * orgManure.ApplicationRate, Resource.lblKgPerHectare)
+                                                                        @string.Format("{0:N0}{1}", Math.Round(orgManure.P2O5.Value * orgManure.ApplicationRate ?? 1), Resource.lblKgPerHectare)
                                                                     }
                                                                     else
                                                                     {
@@ -638,7 +638,7 @@
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailablePhosphate</th>
                                                             <td class="govuk-table__cell">
-                                                                @(orgManure.AvailableP2O5 > 0 ? string.Format("{0:N1}{1}", orgManure.AvailableP2O5, Resource.lblKgPerHectare) : orgManure.AvailableP2O5)
+                                                                @(orgManure.AvailableP2O5 > 0 ? string.Format("{0:N0}{1}", Math.Round(orgManure.AvailableP2O5), Resource.lblKgPerHectare) : orgManure.AvailableP2O5)
                                                             </td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
@@ -652,7 +652,7 @@
                                                                 {
                                                                     if (orgManure.K2O > 0)
                                                                     {
-                                                                        @string.Format("{0:N1}{1}", orgManure.K2O * orgManure.ApplicationRate, Resource.lblKgPerHectare)
+                                                                        @string.Format("{0:N0}{1}", Math.Round(orgManure.K2O.Value * orgManure.ApplicationRate ?? 1), Resource.lblKgPerHectare)
                                                                     }
                                                                     else
                                                                     {
@@ -664,7 +664,7 @@
                                                         <tr class="govuk-table__row">
                                                             <th scope="col" class="govuk-table__header">@Resource.lblAvailablePotash</th>
                                                             <td class="govuk-table__cell">
-                                                                @(orgManure.AvailableK2O > 0 ? string.Format("{0:N1}{1}", orgManure.AvailableK2O, Resource.lblKgPerHectare) : orgManure.AvailableK2O)
+                                                                @(orgManure.AvailableK2O > 0 ? string.Format("{0:N0}{1}", Math.Round(orgManure.AvailableK2O), Resource.lblKgPerHectare) : orgManure.AvailableK2O)
                                                             </td>
                                                         </tr>
                                                         <tr class="govuk-table__row">
@@ -676,7 +676,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    @string.Format("{0:N1}{1}", orgManure.SO3 * orgManure.ApplicationRate, Resource.lblKgPerHectare)
+                                                                    @string.Format("{0:N0}{1}", Math.Round(orgManure.SO3.Value * orgManure.ApplicationRate ?? 1), Resource.lblKgPerHectare)
                                                                 }
                                                             </td>
                                                         </tr>
@@ -689,7 +689,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    @string.Format("{0:N1}{1}", orgManure.AvailableSO3, Resource.lblKgPerHectare)
+                                                                    @string.Format("{0:N0}{1}", Math.Round(orgManure.AvailableSO3.Value), Resource.lblKgPerHectare)
                                                                 }
                                                             </td>
                                                         </tr>
