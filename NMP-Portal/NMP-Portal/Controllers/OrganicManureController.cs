@@ -397,33 +397,34 @@ namespace NMP.Portal.Controllers
         private async Task<OrganicManureDataViewModel> BindDefoliationName(OrganicManureDataViewModel organicManure, OrganicManureViewModel? organicManureViewModel, int manId, List<HarvestYearPlanResponse> cropPlans, int currentIndex)
         {
             organicManure.Defoliation = organicManureViewModel?.OrganicManures?[currentIndex].Defoliation;
-            if (organicManure.Defoliation != null)
+            if (organicManure.Defoliation == null)
+                return organicManure;
+            (ManagementPeriod? managementPeriod, Error? error) = await _cropLogic.FetchManagementperiodById(manId);
+            if (error != null)
+                return organicManure;
+            HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod?.CropID);
+
+            if (crop?.DefoliationSequenceID == null)
+                return organicManure;
+
+            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            if (error != null && defoliationSequence != null)
             {
-                (ManagementPeriod? managementPeriod, Error? error) = await _cropLogic.FetchManagementperiodById(manId);
-                if (error == null && managementPeriod != null)
-                {
-                    HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
+                string description = defoliationSequence.DefoliationSequenceDescription;
 
-                    if (crop != null && crop.DefoliationSequenceID != null)
-                    {
-                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                        if (error == null && defoliationSequence != null)
-                        {
-                            string description = defoliationSequence.DefoliationSequenceDescription;
+                string[] defoliationParts = description.Split(',')
+                                                       .Select(x => x.Trim())
+                                                       .ToArray();
 
-                            string[] defoliationParts = description.Split(',')
-                                                                   .Select(x => x.Trim())
-                                                                   .ToArray();
+                string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
+                    ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
+                    : $"{organicManure.Defoliation.Value}";
 
-                            string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
-                                ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
-                                : $"{organicManure.Defoliation.Value}";
-
-                            organicManure.DefoliationName = selectedDefoliation;
-                        }
-                    }
-                }
+                organicManure.DefoliationName = selectedDefoliation;
             }
+
+
+
             return organicManure;
         }
         [HttpGet]
