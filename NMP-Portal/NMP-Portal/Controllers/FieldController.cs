@@ -3946,7 +3946,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     [HttpGet]
     public async Task<IActionResult> SoilAnalysesMethod()
     {
-        _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() action called.");
+        _logger.LogTrace($"Field Controller: SoilAnalysesMethod() action called.");
         FieldViewModel? model = LoadFieldDataFromSession();
         if (model == null)
         {
