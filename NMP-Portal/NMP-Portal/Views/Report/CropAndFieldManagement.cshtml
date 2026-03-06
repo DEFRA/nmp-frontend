@@ -377,7 +377,7 @@
                                                     {
                                                         <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.Variety) ? Resource.lblHyphen : crop.Variety)</td>
                                                         <td class="govuk-table__cell">@(crop.SowingDate != null ? crop.SowingDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
-                                                        <td class="govuk-table__cell">@(crop.Yield != null ? string.Format("{0:N1}", crop.Yield) : Resource.lblNotEntered)</td>
+                                                        <td class="govuk-table__cell">@(crop.Yield != null ? string.Format("{0:N1}",Math.Round(crop.Yield.Value,1)) : Resource.lblNotEntered)</td>
                                                         <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo1Name) ? Resource.lblHyphen : crop.CropInfo1Name)</td>
                                                         <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(crop.CropInfo2Name) ? Resource.lblHyphen : crop.CropInfo2Name)</td>
                                                     }

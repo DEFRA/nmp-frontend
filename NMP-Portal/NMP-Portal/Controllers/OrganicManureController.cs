@@ -394,6 +394,38 @@ namespace NMP.Portal.Controllers
             return selectListItem;
         }
 
+        private async Task<OrganicManureDataViewModel> BindDefoliationName(OrganicManureDataViewModel organicManure, OrganicManureViewModel? organicManureViewModel, int manId, List<HarvestYearPlanResponse> cropPlans, int currentIndex)
+        {
+            organicManure.Defoliation = organicManureViewModel?.OrganicManures?[currentIndex].Defoliation;
+            if (organicManure.Defoliation != null)
+            {
+                (ManagementPeriod? managementPeriod, Error? error) = await _cropLogic.FetchManagementperiodById(manId);
+                if (error == null && managementPeriod != null)
+                {
+                    HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
+
+                    if (crop != null && crop.DefoliationSequenceID != null)
+                    {
+                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                        if (error == null && defoliationSequence != null)
+                        {
+                            string description = defoliationSequence.DefoliationSequenceDescription;
+
+                            string[] defoliationParts = description.Split(',')
+                                                                   .Select(x => x.Trim())
+                                                                   .ToArray();
+
+                            string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
+                                ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
+                                : $"{organicManure.Defoliation.Value}";
+
+                            organicManure.DefoliationName = selectedDefoliation;
+                        }
+                    }
+                }
+            }
+            return organicManure;
+        }
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
@@ -492,34 +524,7 @@ namespace NMP.Portal.Controllers
                                                     {
                                                         if (organicManureViewModel.OrganicManures[i].ManagementPeriodID == manIds)
                                                         {
-                                                            organicManure.Defoliation = organicManureViewModel.OrganicManures[i].Defoliation;
-                                                            if (organicManure.Defoliation != null)
-                                                            {
-                                                                (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
-                                                                if (error == null && managementPeriod != null)
-                                                                {
-                                                                    HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
-
-                                                                    if (crop != null && crop.DefoliationSequenceID != null)
-                                                                    {
-                                                                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                                                                        if (error == null && defoliationSequence != null)
-                                                                        {
-                                                                            string description = defoliationSequence.DefoliationSequenceDescription;
-
-                                                                            string[] defoliationParts = description.Split(',')
-                                                                                                                   .Select(x => x.Trim())
-                                                                                                                   .ToArray();
-
-                                                                            string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
-                                                                                ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
-                                                                                : $"{organicManure.Defoliation.Value}";
-
-                                                                            organicManure.DefoliationName = selectedDefoliation;
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
+                                                            organicManure = await BindDefoliationName(organicManure, organicManureViewModel, manIds, cropPlans, i);
                                                         }
                                                     }
                                                 }
@@ -1029,33 +1034,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (organicManureViewModel.OrganicManures[i].ManagementPeriodID == manIds)
                                             {
-                                                organicManure.Defoliation = organicManureViewModel.OrganicManures[i].Defoliation;
-                                                if (organicManure.Defoliation != null)
-                                                {
-                                                    (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
-                                                    if (error == null && managementPeriod != null)
-                                                    {
-                                                        HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
-                                                        if (crop != null && crop.DefoliationSequenceID != null)
-                                                        {
-                                                            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                                                            if (error == null && defoliationSequence != null)
-                                                            {
-                                                                string description = defoliationSequence.DefoliationSequenceDescription;
-
-                                                                string[] defoliationParts = description.Split(',')
-                                                                                                       .Select(x => x.Trim())
-                                                                                                       .ToArray();
-
-                                                                string selectedDefoliation = (organicManure.Defoliation.Value > 0 && organicManure.Defoliation.Value <= defoliationParts.Length)
-                                                                    ? $"{Enum.GetName(typeof(PotentialCut), organicManure.Defoliation.Value)} ({defoliationParts[organicManure.Defoliation.Value - 1]})"
-                                                                    : $"{organicManure.Defoliation.Value}";
-
-                                                                organicManure.DefoliationName = selectedDefoliation;
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                                                organicManure = await BindDefoliationName(organicManure, organicManureViewModel, manIds, cropPlans, i);
                                             }
                                         }
                                     }
@@ -1850,7 +1829,7 @@ namespace NMP.Portal.Controllers
                                                 if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                                 {
                                                     (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
-                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail,farm);
+                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail, farm);
                                                 }
 
 
@@ -1979,7 +1958,7 @@ namespace NMP.Portal.Controllers
                     int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
                     isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                     int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-                    closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial,farm.CountryID);
+                    closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial, farm.CountryID);
                 }
 
                 ViewBag.ClosedPeriod = closedPeriod;
@@ -5376,7 +5355,7 @@ namespace NMP.Portal.Controllers
                                             if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                             {
                                                 (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail,farm);
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail, farm);
 
                                                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                                                 {
@@ -6843,7 +6822,7 @@ namespace NMP.Portal.Controllers
                             int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
                             isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                             int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-                            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial,farm.CountryID);
+                            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial, farm.CountryID);
                         }
                     }
                     bool isSlurry = false;
@@ -6909,7 +6888,7 @@ namespace NMP.Portal.Controllers
             return (model, error);
         }
         private async Task<(OrganicManureViewModel, Error?)> IsClosedPeriodWarningMessage(
-            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, FieldDetailResponse fieldDetail,Farm farm)
+            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, FieldDetailResponse fieldDetail, Farm farm)
         {
             Error? error = null;
             string? closedPeriod = string.Empty;
@@ -6932,7 +6911,7 @@ namespace NMP.Portal.Controllers
             }
 
             (model, error, closedPeriod, isWithinClosedPeriod) = await HandleClosedPeriodWarningLogic(
-                model, isWithinNVZ, registeredOrganicProducer, isHighReadilyAvailableNitrogen, fieldDetail,farm);
+                model, isWithinNVZ, registeredOrganicProducer, isHighReadilyAvailableNitrogen, fieldDetail, farm);
             if (error != null) return (model, error);
 
             // Check for 20-day rule between closed period and end of February
@@ -6960,7 +6939,7 @@ namespace NMP.Portal.Controllers
         }
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleClosedPeriodWarningLogic(
-            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, bool isHighReadilyAvailableNitrogen, FieldDetailResponse fieldDetail,Farm farm)
+            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, bool isHighReadilyAvailableNitrogen, FieldDetailResponse fieldDetail, Farm farm)
         {
             Error? error = null;
             string closedPeriod = string.Empty;
@@ -6983,7 +6962,7 @@ namespace NMP.Portal.Controllers
             // Organic farm, high N, NVZ
             if (registeredOrganicProducer && isHighReadilyAvailableNitrogen && isWithinNVZ)
             {
-                (model, error, closedPeriod, isWithinClosedPeriod) = await HandleOrganicHighNWarning(model, fieldDetail, warningMessage,farm);
+                (model, error, closedPeriod, isWithinClosedPeriod) = await HandleOrganicHighNWarning(model, fieldDetail, warningMessage, farm);
                 return (model, error, closedPeriod, isWithinClosedPeriod);
             }
 
@@ -7013,7 +6992,7 @@ namespace NMP.Portal.Controllers
         }
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleOrganicHighNWarning(
-            OrganicManureViewModel model, FieldDetailResponse fieldDetail, WarningWithinPeriod warningMessage,Farm farm)
+            OrganicManureViewModel model, FieldDetailResponse fieldDetail, WarningWithinPeriod warningMessage, Farm farm)
         {
             Error? error = null;
             string? closedPeriod = string.Empty;
@@ -7027,7 +7006,7 @@ namespace NMP.Portal.Controllers
             int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
             bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
             int? cropInfo1 = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropInfo1).FirstOrDefault();
-            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial,farm.CountryID);
+            closedPeriod = warningMessage.ClosedPeriodOrganicFarm(fieldDetail, model.HarvestYear ?? 0, cropTypeId, cropInfo1, isPerennial, farm.CountryID);
 
             isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(
                 model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
