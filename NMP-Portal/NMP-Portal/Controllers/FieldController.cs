@@ -48,6 +48,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private const string _lastHarvestYearActionName = "LastHarvestYear";
     private const string _stringFormat = "{0} {1}";
     private readonly IFarmsNvzLogic _farmsNvzLogic = farmsNvzLogic;
+    private const string _potassiumIndexValue = "PotassiumIndexValue";
     public async Task<IActionResult> Index()
     {
         _logger.LogTrace("Field Controller : Index() action called");
@@ -1371,24 +1372,24 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
         {
-            string potassiumIndex = model.PotassiumIndexValue.Replace(" ", "");
-            if (int.TryParse(potassiumIndex, out int value))
+            string potassiumIndexValue = model.PotassiumIndexValue.Replace(" ", "");
+            if (int.TryParse(potassiumIndexValue, out int potassiumValue))
             {
-                if (value > 9 || value < 0)
+                if (potassiumValue > 9 || potassiumValue < 0)
                 {
-                    ModelState.AddModelError("PotassiumIndexValue", Resource.MsgEnterValidValueForNutrientIndex);
+                    ModelState.AddModelError(_potassiumIndexValue, Resource.MsgEnterValidValueForNutrientIndex);
                 }
-                if (value == 2)
+                if (potassiumValue == 2)
                 {
-                    ModelState.AddModelError("PotassiumIndexValue", string.Format(Resource.MsgValueIsNotAValidValueForPotassium, value));
+                    ModelState.AddModelError(_potassiumIndexValue, string.Format(Resource.MsgValueIsNotAValidValueForPotassium, potassiumValue));
                 }
             }
             else
             {
-                if ((potassiumIndex.ToString() != Resource.lblTwoMinus) &&
-                                       (potassiumIndex.ToString() != Resource.lblTwoPlus))
+                if ((potassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
+                                       (potassiumIndexValue.ToString() != Resource.lblTwoPlus))
                 {
-                    ModelState.AddModelError("PotassiumIndexValue", Resource.MsgValidationForPotasium);
+                    ModelState.AddModelError(_potassiumIndexValue, Resource.MsgValidationForPotasium);
                 }
             }
         }
@@ -1983,7 +1984,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
         {
-            ModelState.AddModelError("PotassiumIndexValue", Resource.MsgPotassiumIndexNotSet);
+            ModelState.AddModelError(_potassiumIndexValue, Resource.MsgPotassiumIndexNotSet);
         }
         if (!model.SoilAnalyses.PhosphorusIndex.HasValue)
         {
