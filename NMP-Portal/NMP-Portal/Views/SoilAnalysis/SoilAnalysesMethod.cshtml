@@ -29,20 +29,7 @@
         @if (Model != null)
         {
             <div class="govuk-grid-column-two-thirds">
-                <govuk-radios class="govuk-radios" asp-for="@Model.SoilAnalysesMethodID">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblWhichSoilAnalysisMethodWasUsed
-                        </govuk-radios-fieldset-legend>
-                        @if (ViewBag.SoilAnalysesMethodList != null)
-                        {
-                            @foreach (var item in ViewBag.SoilAnalysesMethodList)
-                            {
-                                <govuk-radios-item value=@item.Value">@item.Text</govuk-radios-item>
-                            }
-                        }
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                @await Html.PartialAsync("~/Views/Field/_SoilAnalysesMethod.cshtml", Model)
 
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue

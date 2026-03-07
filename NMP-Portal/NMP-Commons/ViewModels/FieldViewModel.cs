@@ -6,7 +6,7 @@ public class FieldViewModel : Field
 {
     public FieldViewModel()
     {
-        SoilAnalyses=new SoilAnalysis();
+        SoilAnalyses=new SoilAnalysisViewModel();
         Crops=new List<Crop>();
         Fields = new List<Field>();
         ManagementPeriods = new List<ManagementPeriod>();
@@ -17,7 +17,7 @@ public class FieldViewModel : Field
     public List<Field> Fields { get; set; }
     public List<ManagementPeriod> ManagementPeriods { get; set; }
     public bool IsSoilReleasingClay { get; set; } = false;
-    public SoilAnalysis SoilAnalyses { get; set; }
+    public SoilAnalysisViewModel SoilAnalyses { get; set; }
     public PreviousCropping PreviousCroppings { get; set; }
     public List<Crop> Crops { get; set; }
     public PKBalance PKBalance { get; set; }
