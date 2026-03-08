@@ -347,7 +347,7 @@ namespace NMP.Portal.Controllers
                 model.Potassium = null;
                 model.Phosphorus = null;
             }
-            
+
 
             SetSoilAnalysisDataToSession(model);
             if (soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
@@ -1034,6 +1034,18 @@ namespace NMP.Portal.Controllers
 
             }
         }
+        private void ValidateSoilAnalysisMethod(int? methodId, string key)
+        {
+            if (methodId == null)
+            {
+                ModelState.AddModelError(key, Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+        }
+        private async Task<IActionResult> ReturnViewWithMethods(SoilAnalysisViewModel model)
+        {
+            await FetchAllSoilAnalysesMethod();
+            return View(model);
+        }
         [HttpGet]
         public async Task<IActionResult> SoilAnalysesMethod()
         {
@@ -1054,15 +1066,11 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() post action called.");
 
-            if (model.SoilAnalysesMethodID == null)
-            {
-                ModelState.AddModelError("SoilAnalysesMethodID", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            ValidateSoilAnalysisMethod(model.SoilAnalysesMethodID, "SoilAnalysesMethodID");
 
             if (!ModelState.IsValid)
             {
-                await FetchAllSoilAnalysesMethod();
-                return await Task.FromResult(View(model));
+                await ReturnViewWithMethods(model);
             }
 
             model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
