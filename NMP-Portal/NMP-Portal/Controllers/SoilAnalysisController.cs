@@ -31,6 +31,7 @@ namespace NMP.Portal.Controllers
         private const string _changeSoilAnalysisError = "ChangeSoilAnalysisError";
         private const string _changeSoilAnalysisActionName = "ChangeSoilAnalysis";
         private const string _soilNutrientValueTypeActionName = "SoilNutrientValueType";
+        private const string _soilNutrientValueActionName = "SoilNutrientValue";
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
         {
             if (HttpContext.Session.Exists("SoilAnalysisData"))
@@ -352,7 +353,7 @@ namespace NMP.Portal.Controllers
             SetSoilAnalysisDataToSession(model);
             if (soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
             {
-                return RedirectToAction("SoilNutrientValue");
+                return RedirectToAction(_soilNutrientValueActionName);
             }
 
             if (model.IsCheckAnswer)
@@ -362,7 +363,7 @@ namespace NMP.Portal.Controllers
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                return RedirectToAction("SoilNutrientValue");
+                return RedirectToAction(_soilNutrientValueActionName);
             }
             return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
@@ -1005,7 +1006,7 @@ namespace NMP.Portal.Controllers
 
                 if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
                 {
-                    return RedirectToAction("SoilNutrientValue");
+                    return RedirectToAction(_soilNutrientValueActionName);
                 }
                 else
                 {
@@ -1100,7 +1101,7 @@ namespace NMP.Portal.Controllers
             {
                 return await Task.FromResult(View(model));
             }
-            return HandleSoilAnalysisRedirect(model, "SoilNutrientValue");
+            return HandleSoilAnalysisRedirect(model, _soilNutrientValueActionName);
         }
 
         private IActionResult HandleSoilAnalysisRedirect(SoilAnalysisViewModel model, string nextAction)
