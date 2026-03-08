@@ -1108,14 +1108,9 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Soil Analysis Controller: SacMethod() post action called.");
 
-            if (model.SoilAnalysesMethodID == null)
-            {
-                ModelState.AddModelError("SoilAnalysesMethodID", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
 
             if (!ModelState.IsValid)
             {
-                await FetchAllSoilAnalysesMethod();
                 return await Task.FromResult(View(model));
             }
 
