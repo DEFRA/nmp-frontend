@@ -1073,20 +1073,7 @@ namespace NMP.Portal.Controllers
                 await ReturnViewWithMethods(model);
             }
 
-            model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
-            SetSoilAnalysisDataToSession(model);
-
-            if (model.IsCheckAnswer)
-            {
-                return await Task.FromResult(RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged }));
-            }
-
-            if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
-            {
-                return await Task.FromResult(RedirectToAction(_soilNutrientValueTypeActionName));
-            }
-
-            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            return HandleSoilAnalysisRedirect(model, _soilNutrientValueTypeActionName);
         }
         [HttpGet]
         public async Task<IActionResult> SacMethod()
@@ -1113,21 +1100,39 @@ namespace NMP.Portal.Controllers
             {
                 return await Task.FromResult(View(model));
             }
+            return HandleSoilAnalysisRedirect(model, "SoilNutrientValue");
+        }
 
+        private IActionResult HandleSoilAnalysisRedirect(SoilAnalysisViewModel model, string nextAction)
+        {
             model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
             SetSoilAnalysisDataToSession(model);
 
             if (model.IsCheckAnswer)
             {
-                return await Task.FromResult(RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged }));
+                return RedirectToAction(_changeSoilAnalysisActionName,
+                    new
+                    {
+                        i = model.EncryptedSoilAnalysisId,
+                        j = model.EncryptedFieldId,
+                        k = model.EncryptedFarmId,
+                        l = model.IsSoilDataChanged
+                    });
             }
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                return await Task.FromResult(RedirectToAction(_soilNutrientValueTypeActionName));
+                return RedirectToAction(nextAction);
             }
 
-            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            return RedirectToAction(_changeSoilAnalysisActionName,
+                new
+                {
+                    i = model.EncryptedSoilAnalysisId,
+                    j = model.EncryptedFieldId,
+                    k = model.EncryptedFarmId,
+                    l = model.IsSoilDataChanged
+                });
         }
     }
 }
