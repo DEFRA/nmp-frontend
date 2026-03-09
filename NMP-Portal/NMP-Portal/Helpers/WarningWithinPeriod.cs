@@ -12,7 +12,7 @@ namespace NMP.Portal.Helpers
 {
     public class WarningWithinPeriod
     {
-        public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial)
+        public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
         {
             string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16,00,00,00, DateTimeKind.Unspecified);
@@ -22,6 +22,7 @@ namespace NMP.Portal.Helpers
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
             var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
             DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
+            bool isWales = (countryId.HasValue && countryId.Value == (int)NMP.Commons.Enums.FarmCountry.Wales);
 
             if (isSandyShallowSoil && isFieldTypeGrass)
             {
@@ -29,7 +30,14 @@ namespace NMP.Portal.Helpers
             }
             else if (!isSandyShallowSoil && isFieldTypeGrass)
             {
-                closedPeriod = string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                if (isWales)
+                {
+                    closedPeriod = string.Format(Resource.lbl15SeptemberTo15January, Resource.lblOctober, Resource.lblJanuary);
+                }
+                else
+                {
+                    closedPeriod = string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                }
             }
             if (!isPerennial)
             {
@@ -43,7 +51,7 @@ namespace NMP.Portal.Helpers
                 }
                 else if (isFieldTypeArable && !isSandyShallowSoil)
                 {
-                    closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                        closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
                 }
             }
             else
@@ -111,7 +119,7 @@ namespace NMP.Portal.Helpers
                 {
 
                     default:
-                        closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial);
+                        closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial,countryId);
 
                         break;
                 }

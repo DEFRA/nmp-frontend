@@ -7,7 +7,7 @@ namespace NMP.Portal.Helpers
     {       
 
         public int NMaxLimit(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId,
-            int potentialCut, bool hasSpecialManure)
+            int potentialCut, bool hasSpecialManure, int? defoliationSequenceId)
         {
             
             switch (cropTypeId)
@@ -42,7 +42,7 @@ namespace NMP.Portal.Helpers
                     break;
 
                 case (int)CropTypes.Grass:                    
-                        nmaxLimit += Functions.ApplyPotentialCutBonus(potentialCut);                   
+                        nmaxLimit += Functions.ApplyPotentialCutBonus(potentialCut, defoliationSequenceId);                   
                     break;
             }
 
