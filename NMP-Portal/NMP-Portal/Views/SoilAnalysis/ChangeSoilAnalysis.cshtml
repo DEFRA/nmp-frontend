@@ -73,23 +73,16 @@
                             @Resource.lblHowValuesAreEntered
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)
-                            {
-                                @Resource.lblIndexValues
-                            }
-                            else
-                            {
-                                @Resource.lblMiligramValues
-                            }
+                            @Model.SoilNutrientValueTypeName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblHowValuesAreEntered)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
-                    @if (((Model.IsSoilNutrientValueTypeIndex.HasValue && Model.IsSoilNutrientValueTypeIndex.Value)&&(Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
+                    @if (((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value==(int)NMP.Commons.Enums.SoilNutrientValueType.Index)&&(Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                                     (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue))
-                                    || ((Model.IsSoilNutrientValueTypeIndex.HasValue && !Model.IsSoilNutrientValueTypeIndex.Value) && ((Model.PH.HasValue) || Model.Potassium.HasValue ||
+                                    || ((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index) && ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                     Model.Phosphorus.HasValue || Model.Magnesium.HasValue)))
                     {
                         <govuk-summary-list-row>
@@ -106,7 +99,7 @@
 
                     }
 
-                    @if (Model.IsSoilNutrientValueTypeIndex.HasValue && Model.IsSoilNutrientValueTypeIndex.Value)
+                    @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                     {
                        
 

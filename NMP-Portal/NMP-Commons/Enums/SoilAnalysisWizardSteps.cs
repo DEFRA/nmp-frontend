@@ -14,6 +14,7 @@ namespace NMP.Commons.Enums
         SoilNutrientValue = 4,
         ChangeSoilAnalysis = 5,
         RemoveSoilAnalysis = 6,
-        Cancel = 7
+        Cancel = 7,
+        SoilAnalysesMethod=8
     }
 }

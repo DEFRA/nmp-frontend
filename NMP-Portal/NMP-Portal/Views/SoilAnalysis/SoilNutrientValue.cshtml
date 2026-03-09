@@ -30,7 +30,7 @@
 @section BeforeContent {
     @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
-        <govuk-back-link asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "SoilAnalysesMethod" : "SoilNutrientValueType")" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
     }
     else
     {
@@ -77,7 +77,7 @@
                             @Resource.MsgForPhPhosphorusPotassiumMagnesium
                         </govuk-error-message>
                     }
-                    @if (Model.IsSoilNutrientValueTypeIndex != null && Model.IsSoilNutrientValueTypeIndex.Value)
+                    @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                     {
                         <govuk-input asp-for="@Model.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
                             <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
@@ -145,14 +145,7 @@
             </govuk-button>
 
 
-            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
-            {
-                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
-            }
-            else
-            {
-                <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
-            }
+            @await Html.PartialAsync("~/Views/SoilAnalysis/_CancelAction.cshtml", Model)
         </form>
 
     </div>

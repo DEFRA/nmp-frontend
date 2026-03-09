@@ -7538,4 +7538,10 @@ livestock manure.</value>
   <data name="msgViewAhdbGuidence" xml:space="preserve">
     <value>View the AHDB guidance</value>
   </data>
+  <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
+    <value>Which soil analysis method was used?</value>
+  </data>
+  <data name="lblAsAStatus" xml:space="preserve">
+    <value>As a status</value>
+  </data>
 </root>

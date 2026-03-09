@@ -70,10 +70,10 @@
     {
         <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date"></govuk-date-input>
     }
-    @* @if (currentStep != (int)FieldWizardSteps.SoilAnalysisMethod)
+    @if (currentStep != (int)FieldWizardSteps.SoilAnalysisMethod)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysisMethod" />
-    } *@
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.SoilAnalysesMethodID" />
+    }
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValueType)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex?.ToString().ToLower()" />

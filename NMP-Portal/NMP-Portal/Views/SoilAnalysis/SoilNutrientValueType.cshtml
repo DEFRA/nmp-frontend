@@ -5,18 +5,22 @@
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
     ? $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
     $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var AsAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    var asAnIndex =(int)NMP.Commons.Enums.SoilNutrientValueType.Index;
+    var inMilligramsPerLitre = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;
+    var asAnStatus = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.SoilNutrientValueType;
 }
 
 @section BeforeContent {
-    @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+    @if (Model != null && Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
-        <govuk-back-link asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
-
+        <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? "SoilAnalysesMethod" : "Date")"
+                         asp-controller="SoilAnalysis">
+            @Resource.lblBack
+        </govuk-back-link>
     }
     else
+    @if (Model != null)
     {
         <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
     }
@@ -25,34 +29,43 @@
     @Html.AntiForgeryToken()
     @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
+        @if (Model != null)
+        {
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-radios class="govuk-radios" asp-for="@Model.SoilNutrientValueType">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
+                        </govuk-radios-fieldset-legend>
+                        @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
+                        {
+                            <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
+                        }
+                        else
+                        {
+                            <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
+                        }
+                        <govuk-radios-item value=@inMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    <govuk-button type="submit" class="margin-bottom-forty">
+                        @Resource.lblContinue
+                    </govuk-button>
+                }
 
-        <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios" asp-for="@Model.IsSoilNutrientValueTypeIndex">
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
-                    </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value=@AsAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
-                    <govuk-radios-item value=@InMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
-                </govuk-radios-fieldset>
-            </govuk-radios>
+                @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+                {
+                    <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
 
-            <govuk-button type="submit" class="margin-bottom-forty">
-                @Resource.lblContinue
-            </govuk-button>
+                }
+                else
+                {
+                    <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+                }
 
-
-            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
-            {
-                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
-
-            }
-            else
-            {
-                <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
-            }
-
-        </div>
-
+            </div>
+        }
     </div>
 </form>

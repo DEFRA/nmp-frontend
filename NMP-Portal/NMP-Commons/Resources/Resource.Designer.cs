@@ -2365,6 +2365,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to As a status.
+        /// </summary>
+        public static string lblAsAStatus {
+            get {
+                return ResourceManager.GetString("lblAsAStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asc.
         /// </summary>
         public static string lblAsc {
@@ -17718,6 +17727,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichPlanWouldYouLikeToCopyForNotSet {
             get {
                 return ResourceManager.GetString("lblWhichPlanWouldYouLikeToCopyForNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which soil analysis method was used?.
+        /// </summary>
+        public static string lblWhichSoilAnalysisMethodWasUsed {
+            get {
+                return ResourceManager.GetString("lblWhichSoilAnalysisMethodWasUsed", resourceCulture);
             }
         }
         

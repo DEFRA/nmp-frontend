@@ -1,0 +1,44 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.SoilAnalysisViewModel
+@{
+    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
+    ? $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
+    $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
+    var AsAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.SoilAnalysesMethod;
+}
+
+@section BeforeContent {
+    @if (Model!=null&& Model.isSoilAnalysisAdded.HasValue && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+    {
+        <govuk-back-link asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
+
+    }
+    else @if (Model!=null)
+    {
+        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+
+    }
+}
+<form asp-action="SoilAnalysesMethod" asp-controller="SoilAnalysis" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        @if (Model != null)
+        {
+            <div class="govuk-grid-column-two-thirds">
+                @await Html.PartialAsync("~/Views/Field/_SoilAnalysesMethod.cshtml", Model)
+
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+
+                @await Html.PartialAsync("~/Views/SoilAnalysis/_CancelAction.cshtml", Model)
+
+            </div>
+        }
+    </div>
+</form>

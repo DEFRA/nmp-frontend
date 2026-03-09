@@ -3,5 +3,6 @@ namespace NMP.Core.Interfaces;
 public interface ISoilService
 {
     Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId);
-    Task<string> FetchSoilTypeById(int soilTypeId);        
+    Task<string> FetchSoilTypeById(int soilTypeId);
+    Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod();
 }

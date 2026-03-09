@@ -1,0 +1,46 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.FieldViewModel
+@{
+    ViewData["Title"] = $"{Resource.lblWhichSoilAnalysisMethodWasUsed} {Resource.lblHyphen} {Resource.lblAddField}";
+    ViewBag.CurrentStep = (int)FieldWizardSteps.SoilAnalysisMethod;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer" : "SoilDate")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="SoilAnalysesMethod" asp-controller="Field" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        @if (Model != null)
+        {
+            <div class="govuk-grid-column-two-thirds">              
+
+                @await Html.PartialAsync(
+                "~/Views/Field/_SoilAnalysesMethod.cshtml",
+                        Model.SoilAnalyses,
+                        new ViewDataDictionary(ViewData)
+                        {
+                            TemplateInfo = { HtmlFieldPrefix = "SoilAnalyses" }
+                        });
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+
+                <p class="govuk-body cancel-link">
+                    @if (!Model.IsCheckAnswer)
+                    {
+                        <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    }
+                    else
+                    {
+                        <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+                    }
+                </p>
+
+            </div>
+        }
+    </div>
+</form>
