@@ -1076,33 +1076,6 @@ namespace NMP.Portal.Controllers
 
             return HandleSoilAnalysisRedirect(model, _soilNutrientValueTypeActionName);
         }
-        [HttpGet]
-        public async Task<IActionResult> SacMethod()
-        {
-            _logger.LogTrace($"Soil Analysis Controller: SacMethod() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
-            if (model == null)
-            {
-                _logger.LogTrace("SoilAnalysisController: Session expired in SacMethod() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
-            }
-            await FetchAllSoilAnalysesMethod();
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SacMethod(SoilAnalysisViewModel model)
-        {
-            _logger.LogTrace($"Soil Analysis Controller: SacMethod() post action called.");
-
-
-            if (!ModelState.IsValid)
-            {
-                return await Task.FromResult(View(model));
-            }
-            return HandleSoilAnalysisRedirect(model, _soilNutrientValueActionName);
-        }
 
         private IActionResult HandleSoilAnalysisRedirect(SoilAnalysisViewModel model, string nextAction)
         {

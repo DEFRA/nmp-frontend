@@ -12,9 +12,20 @@
 
         @if (ViewBag.SoilAnalysesMethodList != null)
         {
-            foreach (var item in ViewBag.SoilAnalysesMethodList)
-            {
-                <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+         @foreach (var item in ViewBag.SoilAnalysesMethodList)
+{
+                @if (item.Value == NMP.Commons.Enums.SoilAnalysesMethod.Sac.ToString())
+                {
+                    <govuk-radios-item value="@item.Value" disabled="true">
+                        @item.Text
+                    </govuk-radios-item>
+                }
+                else
+                {
+                    <govuk-radios-item value="@item.Value">
+                        @item.Text
+                    </govuk-radios-item>
+                }
             }
         }
 

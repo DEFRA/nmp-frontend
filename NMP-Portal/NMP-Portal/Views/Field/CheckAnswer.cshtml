@@ -264,11 +264,11 @@
                             @Resource.lblNutrientValueTypeForCheckAnswere
                         </govuk-summary-list-row-key>
                        <govuk-summary-list-row-value>
-                            @if (!Model.IsSoilNutrientValueTypeIndex.HasValue)
+                            @if (!Model.SoilNutrientValueTypeIndex.HasValue)
                             {
                                 @Resource.lblNotSet
                             }
-                            else if (Model.IsSoilNutrientValueTypeIndex.Value)
+                            else if (Model.SoilNutrientValueTypeIndex.Value==(int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                             {
                                 @Resource.lblIndexValues
                             }
@@ -281,7 +281,7 @@
                         <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblNutrientValueTypeForCheckAnswere)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (Model.IsSoilNutrientValueTypeIndex.HasValue)
+                @if (Model.SoilNutrientValueTypeIndex.HasValue)
                     {
 
                         if (Model.SoilAnalyses.PH != null)
@@ -298,7 +298,7 @@
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
-                        @if (!Model.IsSoilNutrientValueTypeIndex.Value)
+                        @if (Model.SoilNutrientValueTypeIndex.Value!=(int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                         {
                             if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.Potassium == null &&
                             Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Magnesium == null)
@@ -522,6 +522,8 @@
                         <govuk-summary-list-row-action asp-action="LastHarvestYear" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatIsYourLastHarvestYear, Model.Name))</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
+                @if(Model.FarmRB209CountryID!=(int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
                   <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
                         @string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name)
@@ -533,7 +535,8 @@
                         <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, Model.Name))</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
-                @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && (Model.PreviousCroppings.HasGrassInLastThreeYear.Value == false || Model.IsPreviousYearGrass == false))
+                }
+                @if (Model.PreviousCroppings.HasGrassInLastThreeYear != null && ((!Model.PreviousCroppings.HasGrassInLastThreeYear.Value) || Model.IsPreviousYearGrass == false))
                 {
                       <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
