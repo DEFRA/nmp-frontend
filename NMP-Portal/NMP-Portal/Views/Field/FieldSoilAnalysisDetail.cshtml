@@ -133,7 +133,7 @@
                             <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
                         </tr>
                     }
-                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && Model.NVZProgrammeID != (int)NMP.Commons.Enums.NvzProgram.NotInNVZ)
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblWhichNVZIsTheFieldIn</td>

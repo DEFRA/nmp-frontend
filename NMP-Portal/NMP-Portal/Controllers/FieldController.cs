@@ -491,6 +491,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
+        if (model.IsWithinNVZ.HasValue && !model.IsWithinNVZ.Value)
+        {
+            model.IsNVZProgrammeNeedToShow = false;
+            model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
+        }
         SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
@@ -512,11 +517,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
         }
 
-        if (model.IsWithinNVZ.HasValue && !model.IsWithinNVZ.Value)
-        {
-            model.IsNVZProgrammeNeedToShow = false;
-            model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
-        }
         SetFieldDataToSession(model);
 
         return RedirectToAction(_elevationFieldActionName);
@@ -562,7 +562,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             if (farmsNvzList.Count == 1)
             {
-                model.NVZProgrammeID = farmsNvzList[0].NVZProgrammeID;
+                if (model.IsWithinNVZ.HasValue && (model.IsWithinNVZ.Value))
+                {
+                    model.NVZProgrammeID = farmsNvzList[0].NVZProgrammeID;
+                }
                 SetFieldDataToSession(model);
                 return farmsNvzList.Count;
             }
@@ -1638,6 +1641,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             await FetchSelectedNVZName(model);
             await FetchSoilAnalysisMethodName(model);
             await FetchPscIndexName(model);
+            ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
             SetFieldDataToSession(model);
         }
         catch (Exception ex)
@@ -1664,6 +1668,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 await FetchSelectedNVZName(model);
                 await FetchSoilAnalysisMethodName(model);
                 await FetchPscIndexName(model);
+                ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
                 List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
 
@@ -1903,7 +1908,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     IsWithinNVZ = model.IsWithinNVZ,
                     IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                     IsActive = true,
-                    PscIndexID=model.PscIndexID,
+                    PscIndexID = model.PscIndexID,
                     CreatedOn = DateTime.Now,
                     CreatedByID = userId,
                     ModifiedOn = model.ModifiedOn,
@@ -1951,7 +1956,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
     private async Task FetchPscIndexName(FieldViewModel model)
     {
-        CommonResponse? pscIndexData= await _fieldLogic.FetchPscIndexById(model.PscIndexID ?? 0);
+        CommonResponse? pscIndexData = await _fieldLogic.FetchPscIndexById(model.PscIndexID ?? 0);
         if (pscIndexData != null)
         {
             ViewBag.PscIndexName = pscIndexData.Name;
@@ -2502,6 +2507,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         SetFieldDataToSession(model);
         await FetchSelectedNVZName(model);
         await FetchPscIndexName(model);
+        ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
         return View(model);
     }
 
@@ -2648,7 +2654,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
 
             List<Crop> cropPlans = new List<Crop>();
-          
+
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
                 (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
@@ -2930,6 +2936,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         await FetchSelectedNVZName(model);
         await FetchPscIndexName(model);
+        ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
         return View(model);
     }
 
@@ -3021,6 +3028,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 await FetchSelectedNVZName(model);
                 await FetchPscIndexName(model);
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
+                ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
                 ViewData["ModelStateErrors"] = ModelState;
                 return View(model);
             }
@@ -3053,7 +3061,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 IsWithinNVZ = model.IsWithinNVZ,
                 IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                 IsActive = true,
-                PscIndexID=model.PscIndexID,
+                PscIndexID = model.PscIndexID,
                 CreatedOn = model.CreatedOn,
                 CreatedByID = model.CreatedByID,
                 ModifiedOn = DateTime.Now,

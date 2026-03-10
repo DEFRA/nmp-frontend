@@ -153,7 +153,8 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && Model.NVZProgrammeID != (int)NMP.Commons.Enums.NvzProgram.NotInNVZ
+                                && (ViewBag.farmNvzListCount != null && ViewBag.farmNvzListCount > 1))
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -167,7 +168,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                @if (Model.IsAbove300SeaLevel != null)
+                @if (Model.IsAbove300SeaLevelForFarm == true)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>

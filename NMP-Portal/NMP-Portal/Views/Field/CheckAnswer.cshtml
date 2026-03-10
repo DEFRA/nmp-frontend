@@ -167,7 +167,8 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && Model.NVZProgrammeID != (int)NMP.Commons.Enums.NvzProgram.NotInNVZ
+                            &&(ViewBag.farmNvzListCount!=null&&ViewBag.farmNvzListCount>1))
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -177,7 +178,7 @@
                             @ViewBag.SelectNvz
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilAnalysesMethod" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblWhichNVZIsTheFieldIn</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="NitrateVulnerableZones" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblWhichNVZIsTheFieldIn</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
