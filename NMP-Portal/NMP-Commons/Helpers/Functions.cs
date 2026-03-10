@@ -84,9 +84,12 @@ namespace NMP.Commons.Helpers
             return 0;
         }
 
-        public static int ApplyPotentialCutBonus(int potentialCut)
+        public static int ApplyPotentialCutBonus(int potentialCut, int? defoliationSequenceId)
         {
-            if (potentialCut >= (int)PotentialCut.Three)
+            //NMPT 2844
+            // As per the discussion with RB209 team, DefoliationSequenceID will be used to identify the cuts for grass and if the sequence ID is 10,11,32,33,56,57,78 or 79 then it will be considered as 3 or more cuts and 40 points will be given for grass cut in that case.
+            int[] threeOrMoreCutdefoliationSequenceIDs = { 10, 11, 32, 33, 56, 57, 78, 79 };
+            if (defoliationSequenceId.HasValue && Array.Exists<int>(threeOrMoreCutdefoliationSequenceIDs, element => element == defoliationSequenceId))
             {
                 return 40;
             }

@@ -1658,7 +1658,7 @@ namespace NMP.Portal.Controllers
                         {
                             isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
                         }
-                        closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
+                        closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial, model.FarmCountryId);
                     }
                     else
                     {
@@ -1951,7 +1951,7 @@ namespace NMP.Portal.Controllers
                         isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
                     }
 
-                    closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
+                    closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial, model.FarmCountryId);
                 }
                 else
                 {
@@ -5186,7 +5186,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
                                         }
-                                        closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
+                                        closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial, model.FarmCountryId);
                                     }
                                     else
                                     {
@@ -6671,7 +6671,7 @@ namespace NMP.Portal.Controllers
 
                                         bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
 
-                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure);
+                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure,crop.DefoliationSequenceID);
 
                                         if (totalN > nMaxLimit)
                                         {
@@ -6712,7 +6712,7 @@ namespace NMP.Portal.Controllers
 
                                                 OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
                                                 bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
-                                                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure);
+                                                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
 
                                                 if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
                                                 {
@@ -6811,7 +6811,7 @@ namespace NMP.Portal.Controllers
                         {
                             return (model, error);
                         }
-                        closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
+                        closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial, model.FarmCountryId);
                     }
 
                     //Organic farm closed period
@@ -6954,7 +6954,7 @@ namespace NMP.Portal.Controllers
                 (CropTypeResponse cropTypeResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                 isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
 
-                closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial);
+                closedPeriod = warningMessage.ClosedPeriodNonOrganicFarm(fieldDetail, model.HarvestYear ?? 0, isPerennial, model.FarmCountryId);
 
                 (model, error) = await HandleNonOrganicHighNWarning(model, warningMessage);
                 return (model, error, closedPeriod, isWithinClosedPeriod);
