@@ -17,73 +17,79 @@ namespace NMP.Portal.Helpers
             string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16,00,00,00, DateTimeKind.Unspecified);
 
-            var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
-                                     fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
-            var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
-            var isFieldTypeArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
-            DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
-            bool isWales = (countryId.HasValue && countryId.Value == (int)NMP.Commons.Enums.FarmCountry.Wales);
+            bool isSandyShallowSoil = IsSandyOrShallowSoil(fieldDetail);
+            bool isGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
+            bool isArable = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Arable;
+            bool isWales = countryId == (int)NMP.Commons.Enums.FarmCountry.Wales;
 
-            if (isSandyShallowSoil && isFieldTypeGrass)
+            DateTime? sowingDate = fieldDetail.SowingDate?.ToLocalTime();
+
+            if (isGrass)
             {
-                closedPeriod = string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
+                return GetGrassClosedPeriod(isSandyShallowSoil, isWales);
             }
-            else if (!isSandyShallowSoil && isFieldTypeGrass)
+
+            if (isArable)
             {
-                if (isWales)
-                {
-                    closedPeriod = string.Format(Resource.lbl15SeptemberTo15January, Resource.lblOctober, Resource.lblJanuary);
-                }
-                else
-                {
-                    closedPeriod = string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
-                }
+                return GetArableClosedPeriod(isSandyShallowSoil, sowingDate, september16, harvestYear, isPerennial);
             }
-            if (!isPerennial)
+
+            return null;
+        }
+        private static bool IsSandyOrShallowSoil(FieldDetailResponse fieldDetail)
+        {
+            return fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
+                   fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
+        }
+        private static string GetGrassClosedPeriod(bool isSandyShallowSoil, bool isWales)
+        {
+            if (isSandyShallowSoil)
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (sowingDate >= september16 || sowingDate == null))
+                return string.Format(Resource.lbl1Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
+            }
+
+            if (isWales)
+            {
+                return string.Format(Resource.lbl15SeptemberTo15January, Resource.lblOctober, Resource.lblJanuary);
+            }
+
+            return string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+        }
+        private static string GetArableClosedPeriod(
+    bool isSandyShallowSoil,
+    DateTime? sowingDate,
+    DateTime september16,
+    int harvestYear,
+    bool isPerennial)
+        {
+            if (isSandyShallowSoil)
+            {
+                if (sowingDate == null || sowingDate >= september16)
                 {
-                    closedPeriod = string.Format(Resource.lbl1Augto31Dec, Resource.lblAugust, Resource.lblDecember);
+                    return string.Format(Resource.lbl1Augto31Dec, Resource.lblAugust, Resource.lblDecember);
                 }
-                else if (isSandyShallowSoil && isFieldTypeArable && sowingDate < september16)
+
+                if (sowingDate < september16)
                 {
-                    closedPeriod = string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
-                }
-                else if (isFieldTypeArable && !isSandyShallowSoil)
-                {
-                        closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+                    return string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
                 }
             }
             else
             {
-                if (isSandyShallowSoil && isFieldTypeArable && (sowingDate >= september16 || fieldDetail.SowingDate == null))
-                {
-                    closedPeriod = string.Format(Resource.lbl1Augto31Dec, Resource.lblAugust, Resource.lblDecember);
-                }
-                else if (isSandyShallowSoil && isFieldTypeArable && sowingDate < september16)
-                {
-                    closedPeriod = string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
-                }
-                else if (isFieldTypeArable && !isSandyShallowSoil)
-                {
-                    closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
-                }
-                if (fieldDetail.SowingDate != null)
-                {
-                    if (isSandyShallowSoil && isFieldTypeArable && sowingDate.Value.Year < harvestYear)
-                    {
-                        closedPeriod = string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
-                    }
-                    else if (!isSandyShallowSoil && isFieldTypeArable && sowingDate.Value.Year < harvestYear)
-                    {
-                        closedPeriod = string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
-                    }
-                }
-
+                return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
 
-            return closedPeriod;
+            if (isPerennial && sowingDate != null && sowingDate.Value.Year < harvestYear)
+            {
+                if (isSandyShallowSoil)
+                {
+                    return string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
+                }
 
+                return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+            }
+
+            return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
         }
 
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial, int? countryId)

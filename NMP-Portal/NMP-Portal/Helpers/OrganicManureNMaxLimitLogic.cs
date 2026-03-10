@@ -4,8 +4,8 @@ using NMP.Commons.Helpers;
 namespace NMP.Portal.Helpers
 {
     public class OrganicManureNMaxLimitLogic
-    {       
-
+    {
+#pragma warning disable S107
         public int NMaxLimit(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId,
             int potentialCut, bool hasSpecialManure, int? defoliationSequenceId)
         {
@@ -53,5 +53,6 @@ namespace NMP.Portal.Helpers
 
             return nmaxLimit;
         }
+#pragma warning restore S107
     }
 }
