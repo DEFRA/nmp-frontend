@@ -14,7 +14,7 @@
         {
          @foreach (var item in ViewBag.SoilAnalysesMethodList)
 {
-                @if (item.Value == NMP.Commons.Enums.SoilAnalysesMethod.Sac.ToString())
+                @if (item.Value == ((int)NMP.Commons.Enums.SoilAnalysesMethod.Sac).ToString())
                 {
                     <govuk-radios-item value="@item.Value" disabled="true">
                         @item.Text

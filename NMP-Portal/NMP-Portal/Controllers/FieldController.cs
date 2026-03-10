@@ -1289,7 +1289,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
             else if (model.SoilNutrientValueTypeIndex.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
             {
-                ValidateSoilNutrientStatus(model);                
+                ValidateSoilNutrientStatus(model);
             }
         }
         if (model.SoilAnalyses.OrganicMatterPercentage != null)
@@ -1635,6 +1635,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
             ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
             model.IsHasGrassInLastThreeYearChange = false;
+            await FetchSelectedNVZName(model);
+            await FetchSoilAnalysisMethodName(model);
+            await FetchPscIndexName(model);
             SetFieldDataToSession(model);
         }
         catch (Exception ex)
@@ -1658,6 +1661,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!ModelState.IsValid)
             {
+                await FetchSelectedNVZName(model);
+                await FetchSoilAnalysisMethodName(model);
+                await FetchPscIndexName(model);
                 List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
 
@@ -1868,6 +1874,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     MagnesiumStatus = model.SoilAnalyses.MagnesiumStatus,
                     NitrogenResidueGroup = model.SoilAnalyses.NitrogenResidueGroup,
                     OrganicMatterPercentage = model.SoilAnalyses.OrganicMatterPercentage,
+                    SoilAnalysesMethodID = model.SoilAnalyses.SoilAnalysesMethodID,
                     Comments = model.SoilAnalyses.Comments,
                     PreviousID = model.SoilAnalyses.PreviousID,
                     CreatedOn = DateTime.Now,
@@ -1896,6 +1903,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     IsWithinNVZ = model.IsWithinNVZ,
                     IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                     IsActive = true,
+                    PscIndexID=model.PscIndexID,
                     CreatedOn = DateTime.Now,
                     CreatedByID = userId,
                     ModifiedOn = model.ModifiedOn,
@@ -1924,6 +1932,29 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             TempData[_addFieldErrorTempData] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
+        }
+    }
+
+    private async Task FetchSelectedNVZName(FieldViewModel model)
+    {
+        var nvzActionPrograms = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.FarmRB209CountryID ?? 0);
+        ViewBag.SelectNvz = nvzActionPrograms?.FirstOrDefault(c => c.NvzId == model.NVZProgrammeID)?.NvzName;
+    }
+
+    private async Task FetchSoilAnalysisMethodName(FieldViewModel model)
+    {
+        (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilService.FetchSoilAnalysesMethodById(model.SoilAnalyses.SoilAnalysesMethodID ?? 0);
+        if (soilAnalysisMethodData != null && error != null)
+        {
+            ViewBag.SoilAnalysisMethodName = soilAnalysisMethodData.Name;
+        }
+    }
+    private async Task FetchPscIndexName(FieldViewModel model)
+    {
+        CommonResponse? pscIndexData= await _fieldLogic.FetchPscIndexById(model.PscIndexID ?? 0);
+        if (pscIndexData != null)
+        {
+            ViewBag.PscIndexName = pscIndexData.Name;
         }
     }
 
@@ -2337,6 +2368,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.ID = decryptedFieldId;
         model.FarmRB209CountryID = farm?.RB209CountryID;
         model.SoilOverChalk = field.SoilOverChalk;
+        model.PscIndexID = field.PscIndexID;
+        model.NVZProgrammeID = field.NVZProgrammeID;
         if (farm != null)
         {
             model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
@@ -2467,7 +2500,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         SetFieldDataToSession(model);
-
+        await FetchSelectedNVZName(model);
+        await FetchPscIndexName(model);
         return View(model);
     }
 
@@ -2614,6 +2648,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
 
             List<Crop> cropPlans = new List<Crop>();
+          
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
                 (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
@@ -2721,6 +2756,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilOverChalk = field.SoilOverChalk;
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;
+                model.PscIndexID = field.PscIndexID;
+                model.NVZProgrammeID = field.NVZProgrammeID;
 
                 if (farm != null)
                 {
@@ -2891,6 +2928,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             TempData[_errorTempData] = ex.Message;
             return View(model);
         }
+        await FetchSelectedNVZName(model);
+        await FetchPscIndexName(model);
         return View(model);
     }
 
@@ -2979,6 +3018,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
             if (!ModelState.IsValid)
             {
+                await FetchSelectedNVZName(model);
+                await FetchPscIndexName(model);
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 ViewData["ModelStateErrors"] = ModelState;
                 return View(model);
@@ -2999,9 +3040,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             Field field = new Field
             {
                 SoilTypeID = model.SoilTypeID,
-                NVZProgrammeID = model.IsWithinNVZ == true
-                    ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule
-                    : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
+                NVZProgrammeID = model.NVZProgrammeID,
                 Name = model.Name,
                 LPIDNumber = model.LPIDNumber,
                 NationalGridReference = model.NationalGridReference,
@@ -3014,6 +3053,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 IsWithinNVZ = model.IsWithinNVZ,
                 IsAbove300SeaLevel = model.IsAbove300SeaLevel,
                 IsActive = true,
+                PscIndexID=model.PscIndexID,
                 CreatedOn = model.CreatedOn,
                 CreatedByID = model.CreatedByID,
                 ModifiedOn = DateTime.Now,

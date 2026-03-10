@@ -7544,4 +7544,10 @@ livestock manure.</value>
   <data name="lblAsAStatus" xml:space="preserve">
     <value>As a status</value>
   </data>
+  <data name="lblWhichNVZIsTheFieldIn" xml:space="preserve">
+    <value>Which nitrate vulnerable zone (NVZ) is the field in?</value>
+  </data>
+  <data name="lblSoilAnalysisMethod" xml:space="preserve">
+    <value>Soil analysis method</value>
+  </data>
 </root>

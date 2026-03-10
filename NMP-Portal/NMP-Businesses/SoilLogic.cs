@@ -28,4 +28,9 @@ public class SoilLogic(ILogger<SoilLogic> logger, ISoilService soilService) : IS
         _logger.LogTrace("Fetch all soil analysis method");
         return await _soilService.FetchAllSoilAnalysesMethod();
     }
+    public async Task<(CommonResponse?, Error?)> FetchSoilAnalysesMethodById(int id)
+    {
+        _logger.LogTrace("Fetch all soil analysis method");
+        return await _soilService.FetchSoilAnalysesMethodById(id);
+    }
 }

@@ -204,6 +204,7 @@ namespace NMP.Portal.Controllers
                 TempData[_changeSoilAnalysisError] = ex.Message;
                 return View(model);
             }
+            await FetchSoilAnalysisMethodName(model);
             return View(model);
         }
 
@@ -749,6 +750,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+                await FetchSoilAnalysisMethodName(model);
                 if (!ModelState.IsValid)
                 {
                     return View(_changeSoilAnalysisActionName, model);
@@ -813,12 +815,12 @@ namespace NMP.Portal.Controllers
                         MagnesiumStatus = model.MagnesiumStatus,
                         NitrogenResidueGroup = model.NitrogenResidueGroup,
                         OrganicMatterPercentage = model.OrganicMatterPercentage,
+                        SoilAnalysesMethodID=model.SoilAnalysesMethodID,
                         Comments = model.Comments,
                         PreviousID = model.PreviousID,
-                        FieldID = model.FieldID
+                        FieldID = model.FieldID                        
                     },
                     PKBalance = model.PKBalance != null ? model.PKBalance : null
-
                 };
                 string jsonData = string.Empty;
                 Error? error = null;
@@ -1107,6 +1109,14 @@ namespace NMP.Portal.Controllers
                     k = model.EncryptedFarmId,
                     l = model.IsSoilDataChanged
                 });
+        }
+        private async Task FetchSoilAnalysisMethodName(SoilAnalysisViewModel model)
+        {
+            (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilLogic.FetchSoilAnalysesMethodById(model.SoilAnalysesMethodID ?? 0);
+            if (soilAnalysisMethodData != null && error != null)
+            {
+                ViewBag.SoilAnalysisMethodName = soilAnalysisMethodData.Name;
+            }
         }
     }
 }

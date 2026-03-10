@@ -167,6 +167,20 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblWhichNVZIsTheFieldIn
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @ViewBag.SelectNvz
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilAnalysesMethod" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblWhichNVZIsTheFieldIn</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
                 @if (Model.IsAbove300SeaLevelForFarm == true)
                 {
                     <govuk-summary-list-row>
@@ -192,6 +206,20 @@
                         <govuk-summary-list-row-action asp-action="SoilType" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblSoilTypeForCheckAnswer)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
+                  @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblPhosphorusSorptionCapacity
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @ViewBag.PscIndexName
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="PscIndex" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblPhosphorusSorptionCapacity)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                }
                 @if (Model.IsSoilReleasingClay)
                 {
                       <govuk-summary-list-row>
@@ -258,7 +286,20 @@
                             <govuk-summary-list-row-action asp-action="SoilDate" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblDateSampleTaken)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-
+                     @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblSoilAnalysisMethod
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @ViewBag.SoilAnalysisMethodName
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilAnalysesMethod" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblWhichNVZIsTheFieldIn</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
                       <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @Resource.lblNutrientValueTypeForCheckAnswere

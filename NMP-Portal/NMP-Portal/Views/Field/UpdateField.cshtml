@@ -153,6 +153,20 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
+                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblWhichNVZIsTheFieldIn
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @ViewBag.SelectNvz
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="NitrateVulnerableZones" asp-controller="Field">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblWhichNVZIsTheFieldIn</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
                 @if (Model.IsAbove300SeaLevel != null)
                 {
                     <govuk-summary-list-row>
@@ -181,6 +195,20 @@
                         }
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
+                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblPhosphorusSorptionCapacity
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @ViewBag.PscIndexName
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="PscIndex" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblPhosphorusSorptionCapacity)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
                 @if (Model.SoilReleasingClay != null)
                 {
                     <govuk-summary-list-row>
@@ -212,7 +240,7 @@
 
                 }
 
-                @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
+                @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null&&Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
@@ -343,6 +371,35 @@
                             }
                         </govuk-summary-list-row>
                     }
+                }
+                else
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear))</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType)
+                        </govuk-summary-list-row-value>
+                        @if (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+                        {
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear))</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        }
+                    </govuk-summary-list-row>
                 }
             </govuk-summary-list>
 

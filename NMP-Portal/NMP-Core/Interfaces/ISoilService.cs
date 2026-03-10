@@ -5,4 +5,5 @@ public interface ISoilService
     Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId);
     Task<string> FetchSoilTypeById(int soilTypeId);
     Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod();
+    Task<(CommonResponse?, Error?)> FetchSoilAnalysesMethodById(int id);
 }

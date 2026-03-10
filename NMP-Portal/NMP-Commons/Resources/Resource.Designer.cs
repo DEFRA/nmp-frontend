@@ -13184,6 +13184,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soil analysis method.
+        /// </summary>
+        public static string lblSoilAnalysisMethod {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil contains potash releasing clay.
         /// </summary>
         public static string lblSoilContainsPostashReleasingClay {
@@ -17709,6 +17718,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichNVZComplianceReport {
             get {
                 return ResourceManager.GetString("lblWhichNVZComplianceReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which nitrate vulnerable zone (NVZ) is the field in?.
+        /// </summary>
+        public static string lblWhichNVZIsTheFieldIn {
+            get {
+                return ResourceManager.GetString("lblWhichNVZIsTheFieldIn", resourceCulture);
             }
         }
         
