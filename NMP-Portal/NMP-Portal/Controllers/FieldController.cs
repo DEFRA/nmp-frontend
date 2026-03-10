@@ -1944,7 +1944,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private async Task FetchSoilAnalysisMethodName(FieldViewModel model)
     {
         (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilService.FetchSoilAnalysesMethodById(model.SoilAnalyses.SoilAnalysesMethodID ?? 0);
-        if (soilAnalysisMethodData != null && error != null)
+        if (soilAnalysisMethodData != null && error == null)
         {
             ViewBag.SoilAnalysisMethodName = soilAnalysisMethodData.Name;
         }

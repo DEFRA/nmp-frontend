@@ -1113,7 +1113,7 @@ namespace NMP.Portal.Controllers
         private async Task FetchSoilAnalysisMethodName(SoilAnalysisViewModel model)
         {
             (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilLogic.FetchSoilAnalysesMethodById(model.SoilAnalysesMethodID ?? 0);
-            if (soilAnalysisMethodData != null && error != null)
+            if (soilAnalysisMethodData != null && error == null)
             {
                 ViewBag.SoilAnalysisMethodName = soilAnalysisMethodData.Name;
             }
