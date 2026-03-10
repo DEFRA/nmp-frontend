@@ -79,13 +79,12 @@ namespace NMP.Portal.Helpers
                 return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
 
-            if (isPerennial && sowingDate != null && sowingDate.Value.Year < harvestYear)
+            if (isPerennial && sowingDate.HasValue && sowingDate.Value.Year < harvestYear && isSandyShallowSoil)
             {
-                if (isSandyShallowSoil)
-                {
-                    return string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
-                }
-
+                return string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
+            }
+            else if (isPerennial && sowingDate.HasValue && sowingDate.Value.Year < harvestYear && !isSandyShallowSoil)
+            {
                 return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
 
