@@ -55,13 +55,15 @@ namespace NMP.Portal.Helpers
 
             return string.Format(Resource.lbl15Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
         }
-        private static string GetArableClosedPeriod(
-    bool isSandyShallowSoil,
-    DateTime? sowingDate,
-    DateTime september16,
-    int harvestYear,
-    bool isPerennial)
+        private static string GetArableClosedPeriod(bool isSandyShallowSoil, DateTime? sowingDate, DateTime september16, int harvestYear,  bool isPerennial)
         {
+            if (isPerennial && sowingDate is DateTime sd && sd.Year < harvestYear)
+            {
+                return isSandyShallowSoil
+                    ? string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember)
+                    : string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
+            }
+
             if (isSandyShallowSoil)
             {
                 if (sowingDate == null || sowingDate >= september16)
@@ -69,23 +71,7 @@ namespace NMP.Portal.Helpers
                     return string.Format(Resource.lbl1Augto31Dec, Resource.lblAugust, Resource.lblDecember);
                 }
 
-                if (sowingDate < september16)
-                {
-                    return string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
-                }
-            }
-            else
-            {
-                return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
-            }
-
-            if (isPerennial && sowingDate.HasValue && sowingDate.Value.Year < harvestYear && isSandyShallowSoil)
-            {
                 return string.Format(Resource.lbl16Septo31Dec, Resource.lblSeptember, Resource.lblDecember);
-            }
-            else if (isPerennial && sowingDate.HasValue && sowingDate.Value.Year < harvestYear && !isSandyShallowSoil)
-            {
-                return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
             }
 
             return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
