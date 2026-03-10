@@ -14,7 +14,6 @@ namespace NMP.Portal.Helpers
     {
         public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
         {
-            string? closedPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified);
 
             bool isSandyShallowSoil = IsSandyOrShallowSoil(fieldDetail);
