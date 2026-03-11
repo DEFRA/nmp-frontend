@@ -5560,7 +5560,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read more about &lt;a href=&quot;https://www.gov.scot/policies/agriculture-and-the-environment/nvz/&quot;  target=&quot;_blank&quot;&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window)..
+        ///   Looks up a localized string similar to Read more about &lt;a href=&quot;https://www.gov.scot/policies/agriculture-and-the-environment/nvz/&quot;  target=&quot;_blank&quot;&gt;Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window)..
         /// </summary>
         public static string lblFarmingRuleForScotlandContent7 {
             get {
