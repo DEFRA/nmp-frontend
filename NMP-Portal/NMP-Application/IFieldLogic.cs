@@ -38,4 +38,5 @@ public interface IFieldLogic
     Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year);
    Task<List<Crop>> FetchCropsByFieldId(int fieldId);
     Task<List<CommonResponse>> FetchPscIndex();
+    Task<CommonResponse?> FetchPscIndexById(int id);
 }

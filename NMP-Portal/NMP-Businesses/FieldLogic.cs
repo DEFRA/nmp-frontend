@@ -205,4 +205,9 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, 
         _logger.LogTrace("Fetch Psc index");
         return await _fieldService.FetchPscIndex();
     }
+    public async Task<CommonResponse?> FetchPscIndexById(int id)
+    {
+        _logger.LogTrace("Fetch Psc index by id");
+        return await _fieldService.FetchPscIndexById(id);
+    }
 }

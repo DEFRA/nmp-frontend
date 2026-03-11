@@ -6874,7 +6874,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example,AA/12345/12345.This will only be shown on your reports..
+        ///   Looks up a localized string similar to For example, AA/12345/12345. This will only be shown on your reports..
         /// </summary>
         public static string lblHintOfLPIDNumber {
             get {
@@ -11150,7 +11150,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus.
+        ///   Looks up a localized string similar to The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus..
         /// </summary>
         public static string lblPhosphorusSorptionCapacityContentOne {
             get {
@@ -13180,6 +13180,15 @@ namespace NMP.Commons.Resources {
         public static string lblSoilAnalysisForFieldName {
             get {
                 return ResourceManager.GetString("lblSoilAnalysisForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soil analysis method.
+        /// </summary>
+        public static string lblSoilAnalysisMethod {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisMethod", resourceCulture);
             }
         }
         
@@ -17686,7 +17695,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone(NVZ) is {0} in ?.
+        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone (NVZ) is {0} in ?.
         /// </summary>
         public static string lblWhichNitrateVulnerableZoneNVZIsIn {
             get {
@@ -17709,6 +17718,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichNVZComplianceReport {
             get {
                 return ResourceManager.GetString("lblWhichNVZComplianceReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which nitrate vulnerable zone (NVZ) is the field in?.
+        /// </summary>
+        public static string lblWhichNVZIsTheFieldIn {
+            get {
+                return ResourceManager.GetString("lblWhichNVZIsTheFieldIn", resourceCulture);
             }
         }
         

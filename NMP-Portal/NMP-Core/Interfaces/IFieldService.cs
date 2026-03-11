@@ -33,4 +33,5 @@ public interface IFieldService : IService
     Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId,int year);
     Task<(Field?, Error)> UpdateFieldDataAsync(Field field);
     Task<List<CommonResponse>> FetchPscIndex();
+    Task<CommonResponse?> FetchPscIndexById(int id);
 }

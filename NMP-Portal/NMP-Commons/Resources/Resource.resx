@@ -7440,7 +7440,7 @@ livestock manure.</value>
     <value>What is the land parcel identification number (LPID) (optional)?</value>
   </data>
   <data name="lblHintOfLPIDNumber" xml:space="preserve">
-    <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
+    <value>For example, AA/12345/12345. This will only be shown on your reports.</value>
   </data>
   <data name="MsgLPIDNumberFormatError" xml:space="preserve">
     <value>LPID number should match the following format AA/12345/12345.</value>
@@ -7476,13 +7476,13 @@ livestock manure.</value>
     <value>Existing manure storage capacity</value>
   </data>
   <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
-    <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
+    <value>Which Nitrate Vulnerable Zone (NVZ) is {0} in ?</value>
   </data>
   <data name="lblPhosphorusSorptionCapacity" xml:space="preserve">
     <value>Phosphorus sorption capacity (PSC)</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentOne" xml:space="preserve">
-    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus</value>
+    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus.</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentTwo" xml:space="preserve">
     <value>If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices.</value>
@@ -7543,5 +7543,11 @@ livestock manure.</value>
   </data>
   <data name="lblAsAStatus" xml:space="preserve">
     <value>As a status</value>
+  </data>
+  <data name="lblWhichNVZIsTheFieldIn" xml:space="preserve">
+    <value>Which nitrate vulnerable zone (NVZ) is the field in?</value>
+  </data>
+  <data name="lblSoilAnalysisMethod" xml:space="preserve">
+    <value>Soil analysis method</value>
   </data>
 </root>

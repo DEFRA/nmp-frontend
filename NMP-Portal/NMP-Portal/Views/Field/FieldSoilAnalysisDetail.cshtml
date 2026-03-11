@@ -105,6 +105,13 @@
                         <td class="govuk-table__cell">@Resource.lblSoilType</td>
                         <td class="govuk-table__cell">@Model.SoilType</td>
                     </tr>
+                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblPhosphorusSorptionCapacity</td>
+                            <td class="govuk-table__cell">@ViewBag.PscIndexName</td>
+                        </tr>
+                    }
                     @if (ViewBag.IsSoilReleasingClay != null && ViewBag.IsSoilReleasingClay)
                     {
                         <tr class="govuk-table__row">
@@ -124,6 +131,13 @@
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblNVZFieldForFieldCheckAnswere</td>
                             <td class="govuk-table__cell">@(Model.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
+                        </tr>
+                    }
+                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && Model.NVZProgrammeID != (int)NMP.Commons.Enums.NvzProgram.NotInNVZ)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblWhichNVZIsTheFieldIn</td>
+                            <td class="govuk-table__cell">@ViewBag.SelectNvz</td>
                         </tr>
                     }
                     @if (Model.IsAbove300SeaLevelForFarm != null & Model.IsAbove300SeaLevelForFarm == true)

@@ -76,7 +76,7 @@
     }
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValueType)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex?.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeIndex" />
     }
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValue)
     {

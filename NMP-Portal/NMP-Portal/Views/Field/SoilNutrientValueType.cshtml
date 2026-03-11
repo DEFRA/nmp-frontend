@@ -3,8 +3,9 @@
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = $"{Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues} {Resource.lblHyphen} {Resource.lblAddField}";
-    var AsAnIndex = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var InMilligramsPerLitre = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    var asAnIndex = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
+    var inMilligramsPerLitre = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;
+    var asAnStatus = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
     ViewBag.CurrentStep = (int)FieldWizardSteps.SoilNutrientValueType;
 }
 
@@ -16,13 +17,20 @@
     @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios" asp-for="@Model.IsSoilNutrientValueTypeIndex">
+            <govuk-radios class="govuk-radios" asp-for="@Model.SoilNutrientValueTypeIndex">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value=@AsAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
-                    <govuk-radios-item value=@InMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
+                    @if (Model.SoilAnalyses.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
+                    {
+                        <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
+                    }
+                    else
+                    {
+                        <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
+                    }
+                    <govuk-radios-item value=@inMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">

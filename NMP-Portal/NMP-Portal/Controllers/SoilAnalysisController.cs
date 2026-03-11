@@ -204,6 +204,7 @@ namespace NMP.Portal.Controllers
                 TempData[_changeSoilAnalysisError] = ex.Message;
                 return View(model);
             }
+            await FetchSoilAnalysisMethodName(model);
             return View(model);
         }
 
@@ -749,6 +750,7 @@ namespace NMP.Portal.Controllers
                         }
                     }
                 }
+                await FetchSoilAnalysisMethodName(model);
                 if (!ModelState.IsValid)
                 {
                     return View(_changeSoilAnalysisActionName, model);
@@ -813,12 +815,12 @@ namespace NMP.Portal.Controllers
                         MagnesiumStatus = model.MagnesiumStatus,
                         NitrogenResidueGroup = model.NitrogenResidueGroup,
                         OrganicMatterPercentage = model.OrganicMatterPercentage,
+                        SoilAnalysesMethodID=model.SoilAnalysesMethodID,
                         Comments = model.Comments,
                         PreviousID = model.PreviousID,
-                        FieldID = model.FieldID
+                        FieldID = model.FieldID                        
                     },
                     PKBalance = model.PKBalance != null ? model.PKBalance : null
-
                 };
                 string jsonData = string.Empty;
                 Error? error = null;
@@ -1076,33 +1078,6 @@ namespace NMP.Portal.Controllers
 
             return HandleSoilAnalysisRedirect(model, _soilNutrientValueTypeActionName);
         }
-        [HttpGet]
-        public async Task<IActionResult> SacMethod()
-        {
-            _logger.LogTrace($"Soil Analysis Controller: SacMethod() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
-            if (model == null)
-            {
-                _logger.LogTrace("SoilAnalysisController: Session expired in SacMethod() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
-            }
-            await FetchAllSoilAnalysesMethod();
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SacMethod(SoilAnalysisViewModel model)
-        {
-            _logger.LogTrace($"Soil Analysis Controller: SacMethod() post action called.");
-
-
-            if (!ModelState.IsValid)
-            {
-                return await Task.FromResult(View(model));
-            }
-            return HandleSoilAnalysisRedirect(model, _soilNutrientValueActionName);
-        }
 
         private IActionResult HandleSoilAnalysisRedirect(SoilAnalysisViewModel model, string nextAction)
         {
@@ -1134,6 +1109,14 @@ namespace NMP.Portal.Controllers
                     k = model.EncryptedFarmId,
                     l = model.IsSoilDataChanged
                 });
+        }
+        private async Task FetchSoilAnalysisMethodName(SoilAnalysisViewModel model)
+        {
+            (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilLogic.FetchSoilAnalysesMethodById(model.SoilAnalysesMethodID ?? 0);
+            if (soilAnalysisMethodData != null && error == null)
+            {
+                ViewBag.SoilAnalysisMethodName = soilAnalysisMethodData.Name;
+            }
         }
     }
 }

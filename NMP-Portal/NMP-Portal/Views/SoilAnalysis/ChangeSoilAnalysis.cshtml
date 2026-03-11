@@ -79,7 +79,20 @@
                             <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblHowValuesAreEntered)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-
+                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblSoilAnalysisMethod
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @ViewBag.SoilAnalysisMethodName
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilAnalysesMethod" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblSoilAnalysisMethod</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
                     @if (((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value==(int)NMP.Commons.Enums.SoilNutrientValueType.Index)&&(Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                                     (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue))
                                     || ((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Index) && ((Model.PH.HasValue) || Model.Potassium.HasValue ||
