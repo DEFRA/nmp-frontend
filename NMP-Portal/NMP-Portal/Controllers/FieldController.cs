@@ -248,6 +248,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilReleasingClay = fieldResponse.Field.SoilReleasingClay;
                 model.SoilOverChalk = fieldResponse.Field.SoilOverChalk;
                 model.SoilTypeID = fieldResponse.Field.SoilTypeID;
+                model.NVZProgrammeID = fieldResponse.Field.NVZProgrammeID;
+                model.PscIndexID = fieldResponse.Field.PscIndexID;
                 List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypes();
                 SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == model.SoilTypeID);
 
@@ -1619,7 +1621,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : CheckAnswer() Field Data session not found");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-
+            ViewBag.IsAdding = true;
             model.IsRecentSoilAnalysisQuestionChange = false;
             model.IsCheckAnswer = true;
             model.IsLastHarvestYearChange = false;
@@ -1633,7 +1635,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.IsSoilReleasingClay = false;
             }
             List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
-            ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
+            ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
 
             List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
             ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
@@ -1662,7 +1664,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         try
         {
             ValidateCheckAnwser(model, true);
-
+            ViewBag.IsAdding = true;
             if (!ModelState.IsValid)
             {
                 await FetchSelectedNVZName(model);
@@ -1670,7 +1672,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 await FetchPscIndexName(model);
                 ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
                 List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
-                ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
+                ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
 
                 List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
                 ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
@@ -2968,12 +2970,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
             }
         }
-        if (!cropPlans.Any())
+        if (cropPlans.Any())
         {
-            ViewBag.IsAnyPlan = false;
-        }
-        else
-        {
+            ViewBag.IsAnyPlan = true;
             int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
             List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
             if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
