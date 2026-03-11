@@ -36,6 +36,7 @@
                     <govuk-radios-hint>
                         @Html.Raw(Resource.lblViewAMapOfNitrateVulnerableZones)
                         <br/>
+                        <br />
                         @Resource.lblSelectOneOption
                     </govuk-radios-hint>
                     @foreach (var item in ViewBag.FarmsNvzList ?? Enumerable.Empty<dynamic>())
