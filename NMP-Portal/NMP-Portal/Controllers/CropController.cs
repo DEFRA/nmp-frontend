@@ -239,6 +239,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
             model.FarmRB209CountryID = farm?.RB209CountryID;
+            model.CountryId = farm?.CountryID;
             if (model.FarmRB209CountryID.HasValue)
             {
                 ViewBag.CropGroupList =
