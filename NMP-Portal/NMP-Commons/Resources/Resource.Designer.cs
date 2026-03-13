@@ -16615,7 +16615,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the estimated angle of the bank slope?.
+        ///   Looks up a localized string similar to What is the bank slope?.
         /// </summary>
         public static string lblWhatIsTheEstimatedAngleOfTheBankSlope {
             get {
