@@ -1879,7 +1879,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         string? question =
             await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(
-                model.CropTypeID ?? 0);
+                model.CropTypeID ?? 0,model.FarmRB209CountryID??1);
 
         if (!string.IsNullOrWhiteSpace(question))
         {
@@ -2550,7 +2550,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                string? cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+                string? cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
                 if (!string.IsNullOrWhiteSpace(cropInfoOneQuestion))
                 {
                     ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
@@ -4789,7 +4789,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 string? cropInfoOneQuestion = string.Empty;
                 if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other)
                 {
-                    cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+                    cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
                     if (!string.IsNullOrWhiteSpace(cropInfoOneQuestion))
                     {
                         ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
@@ -5314,7 +5314,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.isBasePlan = isBasePlan;
             model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
             model.EncryptedIsCropUpdate = _cropDataProtector.Protect(Resource.lblTrue);
-            string? cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+            string? cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
             if (!string.IsNullOrWhiteSpace(cropInfoOneQuestion))
             {
                 ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;
@@ -5408,7 +5408,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             string? cropInfoOneQuestion = string.Empty;
             if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0);
+                cropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
                 if (!string.IsNullOrWhiteSpace(cropInfoOneQuestion))
                 {
                     ViewBag.CropInfoOneQuestion = (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.BulbOnions || model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SaladOnions) ? string.Format(cropInfoOneQuestion, model.CropType) : cropInfoOneQuestion;

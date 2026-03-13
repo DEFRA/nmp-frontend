@@ -302,7 +302,7 @@
                         ControllerName = "Field"
                     });
                 }
-                @if (Model.SoilNutrientValueTypeIndex.Value != (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
+                     @if (Model.SoilNutrientValueTypeIndex.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                 {
                     if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.Potassium == null &&
                 Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Magnesium == null)
