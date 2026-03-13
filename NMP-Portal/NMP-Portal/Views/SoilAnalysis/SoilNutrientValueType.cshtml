@@ -48,12 +48,11 @@
                         <govuk-radios-item value=@inMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                     </govuk-radios-fieldset>
                 </govuk-radios>
-                @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
-                {
+               
                     <govuk-button type="submit" class="margin-bottom-forty">
                         @Resource.lblContinue
                     </govuk-button>
-                }
+                
 
                 @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
                 {
