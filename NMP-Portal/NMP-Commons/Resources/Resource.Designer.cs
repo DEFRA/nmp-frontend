@@ -22035,7 +22035,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the estimated angle of the bank slope not set..
+        ///   Looks up a localized string similar to What is the bank slope not set..
         /// </summary>
         public static string MsgWhatIsTheEstimatedAngleOfTheBankNotSet {
             get {
