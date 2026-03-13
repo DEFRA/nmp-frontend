@@ -51,7 +51,7 @@
     {
         summaryRows.Add(new SummaryListRowViewModel
         {
-            Key = Resource.lblLandParcelIDForCheckAnswere,
+            Key = Resource.lblLandParcelIdentificationNumber,
             Value = Model.LPIDNumber == null ? Resource.lblNotEntered : Model.LPIDNumber,
             ActionName = "LPIDNumber",
             ControllerName = "Field",
@@ -296,7 +296,7 @@
                 {
                     summaryRows.Add(new SummaryListRowViewModel
                     {
-                        Key = Resource.lblSoilPHLevel,
+                        Key = (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
                         Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
                         ActionName = "SoilNutrientValue",
                         ControllerName = "Field"
@@ -309,7 +309,7 @@
                     {
                         summaryRows.Add(new SummaryListRowViewModel
                         {
-                            Key = Resource.lblSoilPHLevel,
+                            Key =(Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
                             Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
@@ -379,7 +379,7 @@
                     {
                         summaryRows.Add(new SummaryListRowViewModel
                         {
-                            Key = Resource.lblSoilPHLevel,
+                            Key = (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
                             Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
@@ -444,7 +444,7 @@
                 summaryRows.Add(new SummaryListRowViewModel
                 {
                     Key = Resource.lblOrganicMatter,
-                    Value = ((!Model.SoilAnalyses.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : (Model.SoilAnalyses.OrganicMatterPercentage.ToString())),
+                    Value = ((!Model.SoilAnalyses.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : (string.Format("{0}{1}", Model.SoilAnalyses.OrganicMatterPercentage.ToString(),Resource.lblPercentage))),
                     ActionName = "SoilNutrientValue",
                     ControllerName = "Field"
                 });

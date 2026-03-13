@@ -7401,7 +7401,7 @@ livestock manure.</value>
     <value>Is the wheat early or late sown?</value>
   </data>
   <data name="lblViewMapsOfTheNitrateVulnerableZonesInScotland" xml:space="preserve">
-    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland.&lt;/a&gt; (opens in a new window).</value>
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland&lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblItWillAlsoTellYou" xml:space="preserve">
     <value>It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
@@ -7549,5 +7549,8 @@ livestock manure.</value>
   </data>
   <data name="lblSoilAnalysisMethod" xml:space="preserve">
     <value>Soil analysis method</value>
+  </data>
+  <data name="lblLandParcelIdentificationNumber" xml:space="preserve">
+    <value>Land parcel identification number (LPID)</value>
   </data>
 </root>

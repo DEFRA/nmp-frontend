@@ -8081,6 +8081,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Land parcel identification number (LPID).
+        /// </summary>
+        public static string lblLandParcelIdentificationNumber {
+            get {
+                return ResourceManager.GetString("lblLandParcelIdentificationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Land Parcel ID.
         /// </summary>
         public static string lblLandParcelIDForCheckAnswere {
@@ -16093,7 +16102,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/&quot;  target=&quot;_blank&quot;&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland.&lt;/a&gt; (opens in a new window)..
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/&quot;  target=&quot;_blank&quot;&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland&lt;/a&gt; (opens in a new window)..
         /// </summary>
         public static string lblViewMapsOfTheNitrateVulnerableZonesInScotland {
             get {
