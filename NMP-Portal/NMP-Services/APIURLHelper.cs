@@ -169,7 +169,7 @@ internal static class ApiurlHelper
     public const string FetchGrassManagementOptionsAsyncAPI = "grassland/grassManagementOptions";
     public const string FetchGrassTypicalCutsAsyncAPI = "grassland/grassTypicalCuts";
     public const string FetchSoilNitrogenSupplyItemsAsyncAPI = "grassland/soilNitrogenSupply";
-    public const string FetchCropInfoOneQuestionByCropTypeIdAsyncAPI = "crop-info-questions/{0}";
+    public const string FetchCropInfoOneQuestionByCropTypeIdAsyncAPI = "crop-info-questions/{0}?countryID={1}";
     public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
     public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
     public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";

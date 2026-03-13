@@ -20,7 +20,7 @@ public interface ICropLogic
     Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland);
     Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
     Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
-    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId);
+    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId,int countryId);
     Task<(ManagementPeriod?, Error?)> FetchManagementperiodById(int id);
     Task<(Crop?, Error?)> FetchCropById(int id);
     Task<(string, Error?)> RemoveCropPlan(List<int> cropIds);

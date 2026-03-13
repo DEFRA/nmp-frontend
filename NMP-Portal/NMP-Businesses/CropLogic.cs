@@ -61,10 +61,10 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return cropInfoOneResponse;
     }
 
-    public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId)
+    public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId, int countryId)
     {
         _logger.LogTrace("Fetching CropInfoOne question for CropTypeId: {CropTypeId}", cropTypeId);
-        return await _cropService.FetchCropInfoOneQuestionByCropTypeId(cropTypeId);
+        return await _cropService.FetchCropInfoOneQuestionByCropTypeId(cropTypeId, countryId);
     }
 
     public async Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId()

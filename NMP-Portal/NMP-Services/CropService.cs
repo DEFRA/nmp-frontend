@@ -512,14 +512,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (harvestYearPlan, error);
     }
 
-    public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId)
+    public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId, int countryId)
     {
         string? cropInfoOneQuestion = null;
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropInfoOneQuestionByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropInfoOneQuestionByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString()),countryId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
