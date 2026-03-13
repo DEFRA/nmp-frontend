@@ -346,6 +346,19 @@ a:focus, .govuk-link:focus {
 }
 
 @media print {
+
+    @page {
+        size: A4;
+        margin: 10mm; /* Adjust as needed */
+    }
+
+    /* Reduce content size slightly to fit */
+    body {
+        transform: scale(0.95); /* 95% size */
+        transform-origin: top left;
+        width: 100%;
+    }
+
     .pagebreak {
         page-break-after: always;
         clear: both;
@@ -450,6 +463,17 @@ a:focus, .govuk-link:focus {
         font-size: 14pt !important;
         line-height: 1.2;
     }
+
+    .table-container {
+        overflow-x: unset !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+        .table-container table {
+            width: 100% !important;
+            min-width: 100px !important;
+            table-layout: unset;
+        }
 }
 
 .check-answers dt.govuk-summary-list__key {

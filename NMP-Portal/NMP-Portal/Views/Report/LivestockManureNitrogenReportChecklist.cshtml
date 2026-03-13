@@ -74,7 +74,7 @@
         <div class="govuk-grid-column-two-thirds-from-desktop">
             <form asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" method="post" autocomplete="off">
                 @Html.AntiForgeryToken()
-                <div hidden="true">
+                <div hidden="hidden">
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
@@ -272,7 +272,9 @@
                                         @Resource.lblIncomplete
                                     </strong>
                                 </div>
-                            }                           
+                            } 
+                            
+
                         </li>
 
                         <!-- IMPORTS AND EXPORTS -->
