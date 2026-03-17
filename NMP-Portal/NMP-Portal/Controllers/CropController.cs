@@ -265,12 +265,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<List<CropGroupResponse>> GetCropGroups(int farmRB209CountryID)
     {
         List<CropGroupResponse> cropGroups = await _fieldLogic.FetchCropGroups();
-        if (farmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
-        {
-            cropGroups = cropGroups
-                .Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
-                .ToList();
-        }
         var cropGroupsList = cropGroups.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
         return cropGroupsList.OrderBy(c => c.CropGroupName).ToList();
     }
