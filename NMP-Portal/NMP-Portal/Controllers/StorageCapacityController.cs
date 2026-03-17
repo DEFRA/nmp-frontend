@@ -510,7 +510,7 @@ namespace NMP.Portal.Controllers
 
                 }
 
-                if (model != null && model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag && (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank && model.IsCircumference.HasValue))
+                if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag && (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank && model.IsCircumference.HasValue))
                 {
                     if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCircumference) && model.IsCircumference.Value)
                     {
