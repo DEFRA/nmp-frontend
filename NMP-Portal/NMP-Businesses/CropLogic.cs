@@ -175,10 +175,10 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchRecommendationByFieldIdAndYear(fieldId, harvestYear);
     }
 
-    public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId)
+    public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId, int rb209CountryId)
     {
-        _logger.LogTrace("Fetching second crop list for FirstCropTypeId: {FirstCropTypeId}", firstCropTypeId);
-        return await _cropService.FetchSecondCropListByFirstCropId(firstCropTypeId);
+        _logger.LogTrace("Fetching second crop list for FirstCropTypeId: {0},Rb209CountryId: {1}", firstCropTypeId, rb209CountryId);
+        return await _cropService.FetchSecondCropListByFirstCropId(firstCropTypeId, rb209CountryId);
     }
 
     public async Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementId(int swardManagementId)
