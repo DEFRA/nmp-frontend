@@ -149,7 +149,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             for (int i = 0; i < model?.Crops?.Count; i++)
             {
-                model.Crops[i].Year = model.Year??0;
+                model.Crops[i].Year = model.Year ?? 0;
             }
 
             SetCropToSession(model);
@@ -553,7 +553,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         Text = x.Name.ToString()
                     }));
                 }
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
                 foreach (var removeFieldId in fieldRemoveList)
                 {
                     selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
@@ -577,7 +577,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 //Fetch fields allowed for second crop based on first crop
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) , model.Crops, model.FarmRB209CountryID ?? 3);
 
                 if (harvestYearPlanResponse.Any() || selectListItem.Count == 1)
                 {
@@ -808,7 +808,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             List<HarvestYearPlanResponse> harvestYearPlanResponse = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            if (error==null && harvestYearPlanResponse.Count > 0)
+            if (error == null && harvestYearPlanResponse.Count > 0)
             {
                 cropPlanForFirstCropFilter = harvestYearPlanResponse
                 .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
@@ -863,7 +863,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         }
                     }
                 }
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
                 foreach (var removeFieldId in fieldRemoveList)
                 {
                     selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
@@ -887,7 +887,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 //Fetch fields allowed for second crop based on first crop
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) , model.Crops, model.FarmRB209CountryID ?? 3);
                 if (harvestYearPlanResponse.Any() || selectListItem.Count == 1)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
@@ -925,7 +925,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<Field> fieldList = new List<Field>(allFields);
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            if (error==null && harvestYearPlanResponseForFilter.Count > 0)
+            if (error == null && harvestYearPlanResponseForFilter.Count > 0)
             {
                 cropPlanForFirstCropFilter = harvestYearPlanResponseForFilter.Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -981,7 +981,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     }
                 }
 
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
                 foreach (var removeFieldId in fieldRemoveList)
                 {
                     selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
@@ -1005,7 +1005,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 //Fetch fields allowed for second crop based on first crop
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
 
                 if (harvestYearPlanResponseForFilter.Count() > 0 || selectListItem.Count == 1)
                 {
@@ -1873,7 +1873,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         string? question =
             await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(
-                model.CropTypeID ?? 0,model.FarmRB209CountryID??1);
+                model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
 
         if (!string.IsNullOrWhiteSpace(question))
         {
@@ -2246,7 +2246,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<Field> allFieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmID);
-            if (error==null && harvestYearPlanResponse.Count > 0)
+            if (error == null && harvestYearPlanResponse.Count > 0)
             {
                 cropPlanForFirstCropFilter = harvestYearPlanResponse
                     .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
@@ -2428,7 +2428,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
 
-            if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
+            if ((harvestYearPlanResponse != null && harvestYearPlanResponse.Any()) || fieldsAllowedForSecondCrop.Any())
             {
                 var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                 fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
@@ -2720,7 +2720,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other || cropInfoOneList.Count == 1)
                 {
-                    if(model.YieldQuestion != (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
+                    if (model.YieldQuestion != (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
                     {
                         action = "YieldQuestion";
                     }
@@ -2991,7 +2991,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
                         .Where(x => x.IsBasePlan != null && (!x.IsBasePlan.Value)).ToList();
 
-                    (List<int> fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                    (List<int> fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
                     if (harvestYearPlanResponse.Any() || fieldsAllowedForSecondCrop.Any())
                     {
                         var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
@@ -4143,7 +4143,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         CropK2O = recData.Recommendation.CropK2O,
                                         CropSO3 = recData.Recommendation.CropSO3,
                                         CropMgO = recData.Recommendation.CropMgO,
-                                        CropNa2O=recData.Recommendation.CropNa2O,
+                                        CropNa2O = recData.Recommendation.CropNa2O,
                                         CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
                                         ManureN = recData.Recommendation.ManureN,
                                         ManureP2O5 = recData.Recommendation.ManureP2O5,
@@ -4341,9 +4341,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<(List<int>, List<int>)> FetchAllowedFieldsForSecondCrop(List<HarvestYearPlanResponse> harvestYearPlanResponse, int harvestYear, int cropTypeId, bool isUpdate = false, List<Crop>? updatedCrop = null, int? rb209CountryId = 3)
     {
-        List<int> secondCropList = new List<int>();
+        List<int>? secondCropList =null;
         List<int> fieldRemoveList = new List<int>();
-        List<int> fieldsAllowedForSecondCrop = new List<int>();
+        
         if (updatedCrop != null)
         {
             foreach (var crop in updatedCrop)
@@ -4355,51 +4355,38 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     int firstCropType = cropsResponse.Where(x => x.Year == harvestYear && !x.Confirm && x.CropOrder == 1).Select(c => c.CropTypeID.Value).FirstOrDefault();
                     if (isUpdate && cropPlanCount == 2)
                     {
-                        secondCropList = await _cropLogic.FetchSecondCropListByFirstCropId(firstCropType, rb209CountryId??3);
-                        if (secondCropList.Count > 0)
-                        {
-                            if (secondCropList.Any(x => x == cropTypeId))
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                fieldRemoveList.Add(crop.FieldID.Value);
-                                continue;
-                            }
-                        }
-                        else
+                        secondCropList = await _cropLogic.FetchSecondCropListByFirstCropId(firstCropType, rb209CountryId ?? 3);
+                        if (!secondCropList.Any() || !secondCropList.Contains(cropTypeId))
                         {
                             fieldRemoveList.Add(crop.FieldID.Value);
-                            continue;
                         }
                     }
                 }
             }
         }
 
+
+        List<int>  fieldsAllowedForSecondCrop =await BindFieldsAllowedForSecondCrop(harvestYearPlanResponse,harvestYear,cropTypeId,rb209CountryId??3);
+        return (fieldsAllowedForSecondCrop, fieldRemoveList);
+    }
+
+    private async Task<List<int>> BindFieldsAllowedForSecondCrop(List<HarvestYearPlanResponse> harvestYearPlanResponse,  int harvestYear,int cropTypeId, int? rb209CountryId = 3)
+    {        
+        List<int> fieldsAllowedForSecondCrop = new List<int>();
         foreach (var firstCropPlans in harvestYearPlanResponse)
         {
             List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(firstCropPlans.FieldID);
-            int cropPlanCount = cropsResponse.Count(x => x.Year == harvestYear && x.Confirm == false);
-            int firstCropType = cropsResponse.FirstOrDefault(x => x.Year == harvestYear && x.Confirm == false && x.CropOrder == 1).CropTypeID.Value;
+            int cropPlanCount = cropsResponse.Count(x => x.Year == harvestYear && !x.Confirm);
             if (cropPlanCount == 1)
             {
-                secondCropList = await _cropLogic.FetchSecondCropListByFirstCropId(firstCropPlans.CropTypeID, rb209CountryId??3);
-                if (secondCropList.Count > 0)
+                List<int> secondCropList = await _cropLogic.FetchSecondCropListByFirstCropId(firstCropPlans.CropTypeID, rb209CountryId ?? 3);
+                if (secondCropList.Contains(cropTypeId))
                 {
-                    foreach (int secondCropTypeId in secondCropList)
-                    {
-                        if (secondCropTypeId == cropTypeId)
-                        {
-                            fieldsAllowedForSecondCrop.Add(firstCropPlans.FieldID);
-                        }
-                    }
+                    fieldsAllowedForSecondCrop.Add(firstCropPlans.FieldID);
                 }
             }
         }
-
-        return (fieldsAllowedForSecondCrop, fieldRemoveList);
+        return fieldsAllowedForSecondCrop;
     }
 
     private async Task<bool> IsSecondCropAllowed(List<CropDetailResponse> CropDetailResponse, int rb209CountryId)
@@ -4766,7 +4753,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
                         ).ToList();
 
-                    (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops, model.FarmRB209CountryID ?? 3);
+                    (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) , model.Crops, model.FarmRB209CountryID ?? 3);
                     if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
                     {
                         var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
@@ -4970,7 +4957,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (!ModelState.IsValid)
             {
                 (List<CommonResponse> excessWinterRainfallOption, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-                if (string.IsNullOrWhiteSpace(error?.Message)&&excessWinterRainfallOption.Count>0)
+                if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption.Count > 0)
                 {
                     var SelectListItem = excessWinterRainfallOption.Select(f => new SelectListItem
                     {
@@ -5426,7 +5413,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 if (model.PotentialCut == null)
                 {
-                    string fieldText = (model.FieldList != null && model.FieldList.Count == 1) ? model.Crops[0]?.FieldName?? string.Empty : Resource.lblTheseFields;
+                    string fieldText = (model.FieldList != null && model.FieldList.Count == 1) ? model.Crops[0]?.FieldName ?? string.Empty : Resource.lblTheseFields;
 
                     string resourceText = model.SwardManagementId switch
                     {
@@ -5874,7 +5861,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         PlanViewModel? model = GetCropFromSession();
         try
         {
-            if (model== null)
+            if (model == null)
             {
                 return await Task.FromResult(RedirectToAction("FarmList", "Farm"));
             }
