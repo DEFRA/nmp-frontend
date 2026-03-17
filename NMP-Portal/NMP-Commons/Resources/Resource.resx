@@ -5957,9 +5957,6 @@ livestock manure.</value>
   <data name="MsgEnterAValueBetween0And999" xml:space="preserve">
     <value>Enter a value between 0 and 999.</value>
   </data>
-  <data name="MsgEnterAValueBetween0And1000" xml:space="preserve">
-    <value>Enter a value between 0 and 999.</value>
-  </data>
   <data name="MsgEnterAValueBetween0And99" xml:space="preserve">
     <value>Enter a value between 0 and 99.</value>
   </data>
