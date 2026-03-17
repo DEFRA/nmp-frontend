@@ -514,11 +514,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (error == null && harvestYearPlanResponseForFilter.Count > 0)
                 {
                     harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                    if (harvestYearPlanResponseForFilter != null)
-                    {
-                        var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
-                        fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
-                    }
+                    fieldList = FilterFieldList(fieldList, harvestYearPlanResponseForFilter);                    
                 }
             }
             var selectListItem = fieldList.Select(f => new SelectListItem
@@ -815,11 +811,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
                     harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                    if (harvestYearPlanResponse != null)
-                    {
-                        var fieldIds = harvestYearPlanResponse.Select(x => x.FieldID).ToList();
-                        fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
-                    }
+                    fieldList = FilterFieldList(fieldList, harvestYearPlanResponse);
                 }
             }
             var selectListItem = fieldList.Select(f => new SelectListItem
@@ -931,11 +923,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
                     harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                    if (harvestYearPlanResponseForFilter != null)
-                    {
-                        var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
-                        fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
-                    }
+                    fieldList = FilterFieldList(fieldList, harvestYearPlanResponseForFilter);
                 }
             }
 
@@ -1175,6 +1163,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
+    private static List<Field> FilterFieldList(List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter)
+    {
+        if (harvestYearPlanResponseForFilter != null)
+        {
+            var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
+            fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
+        }
+        return fieldList;
+    }
     [HttpGet]
     public async Task<IActionResult> SowingDateQuestion()
     {
@@ -2208,24 +2205,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.CropGroupName = harvestYearPlanResponse[0].CropGroupName;
                         model.PreviousCropGroupName = model.CropGroupName;
                         model.OtherCropName = harvestYearPlanResponse[0].OtherCropName;
-                        if (model.CropTypeID != null && model.CropInfo1 != null)
-                        {
-                            model.CropInfo1Name = await _cropLogic.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
-                        }
-
-                        if (model.CropInfo2 != null)
-                        {
-                            model.CropInfo2Name = await _cropLogic.FetchCropInfo2NameByCropInfo2Id(model.CropInfo2.Value);
-                        }
-
-                        ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType.ToString());
-                        if (!string.IsNullOrWhiteSpace(model.CropGroupName))
-                        {
-                            ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
-                        }
+                      await  BindCropInfo1AndCropInfo2(model);
                     }
                     model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                    model.EncryptedIsCropUpdate = _cropDataProtector.Protect(Resource.lblTrue);
+                    model.EncryptedIsCropUpdate = _cropDataProtector.Protect(Resource.lblTrue);                    
                 }
             }
             else
@@ -2431,7 +2414,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if ((harvestYearPlanResponse != null && harvestYearPlanResponse.Any()) || fieldsAllowedForSecondCrop.Any())
             {
                 var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
             }
 
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
@@ -2995,7 +2977,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse.Any() || fieldsAllowedForSecondCrop.Any())
                     {
                         var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                        fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
                     }
                 }
                 else
@@ -4766,7 +4747,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
                     {
                         var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                        fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
                     }
                 }
                 else
@@ -5219,21 +5199,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.Variety = harvestYearPlanResponse[0].CropVariety;
                         model.CropGroupName = harvestYearPlanResponse[0].CropGroupName;
                         model.PreviousCropGroupName = model.CropGroupName;
-                        if (model.CropTypeID != null && model.CropInfo1 != null)
-                        {
-                            model.CropInfo1Name = await _cropLogic.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
-                        }
-
-                        if (model.CropInfo2 != null)
-                        {
-                            model.CropInfo2Name = await _cropLogic.FetchCropInfo2NameByCropInfo2Id(model.CropInfo2.Value);
-                        }
-
-                        ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType.ToString());
-                        if (!string.IsNullOrWhiteSpace(model.CropGroupName))
-                        {
-                            ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
-                        }
+                        await BindCropInfo1AndCropInfo2(model);
                     }
                 }
             }
@@ -7053,6 +7019,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
+    private async Task BindCropInfo1AndCropInfo2(PlanViewModel model)
+    {
+        if (model.CropTypeID != null && model.CropInfo1 != null)
+        {
+            model.CropInfo1Name = await _cropLogic.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
+        }
+
+        if (model.CropInfo2 != null)
+        {
+            model.CropInfo2Name = await _cropLogic.FetchCropInfo2NameByCropInfo2Id(model.CropInfo2.Value);
+        }
+
+        ViewBag.EncryptedCropTypeId = _cropDataProtector.Protect(model.CropType.ToString());
+        if (!string.IsNullOrWhiteSpace(model.CropGroupName))
+        {
+            ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
+        }
+    }
     [HttpGet]
     public async Task<IActionResult> CheckYourPlanData(string? year, string? q)
     {
