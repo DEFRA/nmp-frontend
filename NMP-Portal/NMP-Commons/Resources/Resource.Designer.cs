@@ -19965,6 +19965,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 999..
+        /// </summary>
+        public static string MsgEnterAValueBetween0And1000 {
+            get {
+                return ResourceManager.GetString("MsgEnterAValueBetween0And1000", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a value between 0 and 99..
         /// </summary>
         public static string MsgEnterAValueBetween0And99 {

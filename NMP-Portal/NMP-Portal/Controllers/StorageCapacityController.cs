@@ -447,15 +447,15 @@ namespace NMP.Portal.Controllers
                     {
                         if (model.Length == null)
                         {
-                            ModelState.AddModelError("Length", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblLength.ToLower()));
+                            ModelState.AddModelError(Resource.lblLength, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblLength.ToLower()));
                         }
                         if (model.Width == null)
                         {
-                            ModelState.AddModelError("Width", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblWidth.ToLower()));
+                            ModelState.AddModelError(Resource.lblWidth, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblWidth.ToLower()));
                         }
                         if (model.Depth == null)
                         {
-                            ModelState.AddModelError("Depth", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
+                            ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
                         }
                     }
                     else
@@ -464,15 +464,15 @@ namespace NMP.Portal.Controllers
                         {
                             if (model.Length == null)
                             {
-                                ModelState.AddModelError("Length", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblLength.ToLower()));
+                                ModelState.AddModelError(Resource.lblLength, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblLength.ToLower()));
                             }
                             if (model.Width == null)
                             {
-                                ModelState.AddModelError("Width", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblWidth.ToLower()));
+                                ModelState.AddModelError(Resource.lblWidth, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblWidth.ToLower()));
                             }
                             if (model.Depth == null)
                             {
-                                ModelState.AddModelError("Depth", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
+                                ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
                             }
                             if (model.IsCovered == null)
                             {
@@ -491,7 +491,18 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (model.Circumference == null)
                                     {
-                                        ModelState.AddModelError("Circumference", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblCircumference.ToLower()));
+                                        ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblCircumference.ToLower()));
+                                    }
+                                    else
+                                    {
+                                        if (model.Circumference <= 0)
+                                        {
+                                            ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblCircumference));
+                                        }
+                                        if (model.Circumference > 999)
+                                        {
+                                            ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
+                                        }
                                     }
                                     model.Diameter = null;
                                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
@@ -500,7 +511,18 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (model.Diameter == null)
                                     {
-                                        ModelState.AddModelError("Diameter", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDiameter.ToLower()));
+                                        ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDiameter.ToLower()));
+                                    }
+                                    else
+                                    {
+                                        if (model.Diameter <= 0)
+                                        {
+                                            ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblDiameter));
+                                        }
+                                        if (model.Diameter > 999)
+                                        {
+                                            ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
+                                        }
                                     }
                                     model.Circumference = null;
                                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
@@ -508,7 +530,18 @@ namespace NMP.Portal.Controllers
                             }
                             if (model.Depth == null)
                             {
-                                ModelState.AddModelError("Depth", string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
+                                ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDepth.ToLower()));
+                            }
+                            else
+                            {
+                                if (model.Depth <= 0)
+                                {
+                                    ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblDepth));
+                                }
+                                if (model.Depth > 99)
+                                {
+                                    ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 99));
+                                }
                             }
                             if (model.IsCovered == null)
                             {
@@ -516,7 +549,39 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
-
+                    if (model.Length != null)
+                    {
+                        if (model.Length <= 0)
+                        {
+                            ModelState.AddModelError(Resource.lblLength, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblLength));
+                        }
+                        if (model.Length > 999)
+                        {
+                            ModelState.AddModelError(Resource.lblLength, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
+                        }
+                    }
+                    if (model.Width != null)
+                    {
+                        if (model.Width <= 0)
+                        {
+                            ModelState.AddModelError(Resource.lblWidth, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblWidth));
+                        }
+                        if (model.Width > 999)
+                        {
+                            ModelState.AddModelError(Resource.lblWidth, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
+                        }
+                    }
+                    if (model.Depth != null)
+                    {
+                        if (model.Depth <= 0)
+                        {
+                            ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblDepth));
+                        }
+                        if (model.Depth > 99)
+                        {
+                            ModelState.AddModelError(Resource.lblDepth, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 99));
+                        }
+                    }
                 }
 
                 if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag)
@@ -670,12 +735,9 @@ namespace NMP.Portal.Controllers
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
-                    if (model.IsCheckAnswer)
+                    if (model.IsCheckAnswer && (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
                     {
-                        if (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
-                        {
-                            return RedirectToAction("CheckAnswer");
-                        }
+                        return RedirectToAction("CheckAnswer");
                     }
                     return RedirectToAction("WeightCapacity");
                 }
@@ -683,12 +745,9 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                     {
-                        if (model.IsCheckAnswer)
+                        if (model.IsCheckAnswer && (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
                         {
-                            if (model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
-                            {
-                                return RedirectToAction("CheckAnswer");
-                            }
+                            return RedirectToAction("CheckAnswer");
                         }
                         return RedirectToAction("BankSlopeAngle");
                     }
@@ -779,9 +838,21 @@ namespace NMP.Portal.Controllers
 
         private void ValidateWeightCapacity(StorageCapacityViewModel model)
         {
+            string capacityWeight = "CapacityWeight";
             if (model.CapacityWeight == null)
             {
-                ModelState.AddModelError("WeightCapacity", Resource.MsgEnterTheWeightCapacityBeforeContinuing);
+                ModelState.AddModelError(capacityWeight, Resource.MsgEnterTheWeightCapacityBeforeContinuing);
+            }
+            else
+            {
+                if (model.CapacityWeight <= 0)
+                {
+                    ModelState.AddModelError(capacityWeight, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblCapacityWeightForSummary));
+                }
+                if (model.CapacityWeight > 9999999999)
+                {
+                    ModelState.AddModelError(capacityWeight, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 9999999999));
+                }
             }
 
             if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage &&
@@ -874,10 +945,18 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("StorageBagCapacity", Resource.MsgEnterTheTotalCapacityOfYourStorage);
             }
-            else if (model.StorageBagCapacity < 0 || model.StorageBagCapacity > 9999)
+            else
             {
-                ModelState.AddModelError(nameof(model.StorageBagCapacity), Resource.MsgEnterAValueBetween0And9999);
+                if (model.StorageBagCapacity <= 0)
+                {
+                    ModelState.AddModelError("StorageBagCapacity", string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblStorageCapacityForTitle));
+                }
+                if (model.StorageBagCapacity > 9999)
+                {
+                    ModelState.AddModelError("StorageBagCapacity", string.Format(Resource.MsgEnterAValueBetweenValue, 1, 9999));
+                }
             }
+
 
             if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag &&
                 (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblStorageBagCapacity))
@@ -1451,11 +1530,11 @@ namespace NMP.Portal.Controllers
                     break;
                 case (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon:
                     surfaceArea = l * w;
-                                      
+
                     decimal totalVolume = CalculateSlopedLagoonVolume(d, l, w, slope);
                     decimal freeboardVolume = CalculateSlopedLagoonVolume(freeboardDefault, l, w, slope);
 
-                    capacity = totalVolume - freeboardVolume;                 
+                    capacity = totalVolume - freeboardVolume;
 
                     break;
                 case (int)NMP.Commons.Enums.StorageTypes.StorageBag:
