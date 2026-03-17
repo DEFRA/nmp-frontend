@@ -548,27 +548,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         Value = x.ID.Value.ToString(),
                         Text = x.Name.ToString()
                     }));
-                }
+                }                
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                foreach (var removeFieldId in fieldRemoveList)
-                {
-                    selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
-                }
-                if (fieldsAllowedForSecondCrop.Any(addFieldId => !selectListItem.Any(x => x.Value == addFieldId.ToString())))
-                {
-                    foreach (int addFieldId in fieldsAllowedForSecondCrop)
-                    {
-                        if (!selectListItem.Any(x => x.Value == addFieldId.ToString()))
-                        {
-                            selectListItem.Add(new SelectListItem
-                            {
-                                Value = addFieldId.ToString(),
-                                Text = allFields.Where(x => x.ID == addFieldId).Select(x => x.Name).FirstOrDefault()
-                            });
-                            continue;
-                        }
-                    }
-                }
+                await BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -814,7 +796,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     fieldList = FilterFieldList(fieldList, harvestYearPlanResponse);
                 }
             }
-            var selectListItem = fieldList.Select(f => new SelectListItem
+            List<SelectListItem> selectListItem = fieldList.Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
                 Text = f.Name
@@ -854,27 +836,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             });
                         }
                     }
-                }
+                }                
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                foreach (var removeFieldId in fieldRemoveList)
-                {
-                    selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
-                }
-                if (fieldsAllowedForSecondCrop.Any(addFieldId => !selectListItem.Any(x => x.Value == addFieldId.ToString())))
-                {
-                    foreach (int addFieldId in fieldsAllowedForSecondCrop)
-                    {
-                        if (!selectListItem.Any(x => x.Value == addFieldId.ToString()))
-                        {
-                            selectListItem.Add(new SelectListItem
-                            {
-                                Value = addFieldId.ToString(),
-                                Text = allFields.Where(x => x.ID == addFieldId).Select(x => x.Name).FirstOrDefault()
-                            });
-                            continue;
-                        }
-                    }
-                }
+                await BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -970,25 +934,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
 
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                foreach (var removeFieldId in fieldRemoveList)
-                {
-                    selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
-                }
-                if (fieldsAllowedForSecondCrop.Any(addFieldId => !selectListItem.Any(x => x.Value == addFieldId.ToString())))
-                {
-                    foreach (int addFieldId in fieldsAllowedForSecondCrop)
-                    {
-                        if (!selectListItem.Any(x => x.Value == addFieldId.ToString()))
-                        {
-                            selectListItem.Add(new SelectListItem
-                            {
-                                Value = addFieldId.ToString(),
-                                Text = allFields.Where(x => x.ID == addFieldId).Select(x => x.Name).FirstOrDefault()
-                            });
-                            continue;
-                        }
-                    }
-                }
+                await BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -1163,6 +1109,27 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
+    private async Task BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
+    {        
+        foreach (var removeFieldId in fieldRemoveList)
+        {
+            selectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
+        }
+        if (fieldsAllowedForSecondCrop.Any(addFieldId => !selectListItem.Any(x => x.Value == addFieldId.ToString())))
+        {
+            foreach (int addFieldId in fieldsAllowedForSecondCrop)
+            {
+                if (!selectListItem.Any(x => x.Value == addFieldId.ToString()))
+                {
+                    selectListItem.Add(new SelectListItem
+                    {
+                        Value = addFieldId.ToString(),
+                        Text = allFields.Where(x => x.ID == addFieldId).Select(x => x.Name).FirstOrDefault()
+                    });
+                }
+            }
+        }
+    }
     private static List<Field> FilterFieldList(List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter)
     {
         if (harvestYearPlanResponseForFilter != null)
