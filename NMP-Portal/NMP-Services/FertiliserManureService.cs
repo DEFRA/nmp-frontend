@@ -641,9 +641,13 @@ public class FertiliserManureService : Service, IFertiliserManureService
             }
             else
             {
-                if(error != null)
+                if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    error = responseWrapper?.Error?.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
