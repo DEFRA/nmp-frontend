@@ -232,5 +232,10 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchFarmManureTypeById() called");
         return await _organicManureService.FetchFarmManureTypeById(id);
     }
+    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriod(int soilTypeId, int fieldType, int harvestYear, DateTime? sowingDate, int countryId, int? cropGroupId, int? cropTypeId, bool isPerennial)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchOrganicManureClosedPeriod() called");
+        return await _organicManureService.FetchOrganicManureClosedPeriod(soilTypeId, fieldType, harvestYear, sowingDate, countryId, cropGroupId, cropTypeId, isPerennial);
+    }
 
 }
