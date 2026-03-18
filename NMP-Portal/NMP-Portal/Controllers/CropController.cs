@@ -2862,7 +2862,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
 
-            return BackActionForCopyCheckAnswer(model, success, error);
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
+            {
+                return BackActionForCopyCheckAnswer(model, success);
+            }
+            else
+            {
+                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction(_checkAnswerActionName);
+            }
+
         }
         catch (Exception ex)
         {
@@ -2871,26 +2880,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private IActionResult BackActionForCopyCheckAnswer(PlanViewModel model, bool success, Error? error)
+    private IActionResult BackActionForCopyCheckAnswer(PlanViewModel model, bool success)
     {
-        if (string.IsNullOrWhiteSpace(error?.Message) && success)
+        model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
+        RemoveCropSession();
+        return RedirectToAction(_harvestYearOverviewActionName, new
         {
-
-            model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-            RemoveCropSession();
-            return RedirectToAction(_harvestYearOverviewActionName, new
-            {
-                id = model.EncryptedFarmId,
-                year = model.EncryptedHarvestYear,
-                q = _farmDataProtector.Protect(success.ToString()),
-                r = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblGrass, model.Year)) : _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblCrops, model.Year)),
-                v = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
-            });
-        }
-
-        TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-        return RedirectToAction("CopyCheckAnswer");
-
+            id = model.EncryptedFarmId,
+            year = model.EncryptedHarvestYear,
+            q = _farmDataProtector.Protect(success.ToString()),
+            r = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblGrass, model.Year)) : _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblCrops, model.Year)),
+            v = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
+        });
     }
     [HttpGet]
     public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v, string? w)//w is a link
@@ -5008,7 +5009,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int cerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
 
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-         await   ValidateCropData(model, otherGroupId, cerealsGroupId);
+            await ValidateCropData(model, otherGroupId, cerealsGroupId);
             if (!ModelState.IsValid)
             {
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
@@ -5328,7 +5329,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         await ValidateCropInfoOne(model, otherGroupId);
 
 
-      
+
         if (model.CropInfo2 == null && model.CropGroupId == cerealsGroupId)
         {
             ModelState.AddModelError("CropInfo2", string.Format(Resource.MsgCropInfo2NotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
@@ -5339,7 +5340,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ValidateGrassProperties(model);
         }
     }
-    private async  Task  ValidateCropInfoOne(PlanViewModel model,int otherGroupId)
+    private async Task ValidateCropInfoOne(PlanViewModel model, int otherGroupId)
     {
         string? cropInfoOneQuestion = string.Empty;
         if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
@@ -5359,58 +5360,58 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private void ValidateSowingDate(PlanViewModel model, int i, int otherGroupId)
     {
-       
-            foreach (var crop in model.Crops)
+
+        foreach (var crop in model.Crops)
+        {
+            if (crop.SowingDate == null)
             {
-                if (crop.SowingDate == null)
+                if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
                 {
-                    if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
-                    {
-                        ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
-                        break;
-                    }
-                    else if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
-                    {
-                        ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
-                    }
+                    ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                    break;
                 }
-                i++;
+                else if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
+                {
+                    ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                }
             }
-        
+            i++;
+        }
+
     }
     private async Task ValidateYield(PlanViewModel model, int otherGroupId)
     {
-       
-            int i = 0;
 
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(
-                model.CropTypeID.Value,
-                model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
+        int i = 0;
 
-            foreach (var crop in model.Crops)
+        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(
+            model.CropTypeID.Value,
+            model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
+
+        foreach (var crop in model.Crops)
+        {
+            if (crop.Yield == null && defaultYield == 0)
             {
-                if (crop.Yield == null && defaultYield == 0)
+                if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                 {
-                    if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
-                    {
-                        ModelState.AddModelError(
-                            $"Crops[{i}].Yield",
-                            string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet,
-                            model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                    ModelState.AddModelError(
+                        $"Crops[{i}].Yield",
+                        string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet,
+                        model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
 
-                        break;
-                    }
-                    else if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
-                    {
-                        ValidateDifferentYieldMessage(model, otherGroupId, crop, i);
-                    }
+                    break;
                 }
-
-                i++;
+                else if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+                {
+                    ValidateDifferentYieldMessage(model, otherGroupId, crop, i);
+                }
             }
-        
+
+            i++;
+        }
+
     }
-    private void ValidateDifferentYieldMessage(PlanViewModel model, int otherGroupId,Crop crop,int i)
+    private void ValidateDifferentYieldMessage(PlanViewModel model, int otherGroupId, Crop crop, int i)
     {
         ModelState.AddModelError(
                        $"Crops[{i}].Yield",
@@ -7180,7 +7181,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.InorganicFertiliser) != 0;
         (bool success, error) = await _cropLogic.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
 
-        return BackActionForCopyCheckAnswer(model, success, error);
+        if (string.IsNullOrWhiteSpace(error?.Message) && success)
+        {
+            return BackActionForCopyCheckAnswer(model, success);
+        }
+        else
+        {
+            TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+            return RedirectToAction("CopyCheckAnswer");
+        }
     }
 
     public async Task<IActionResult> BackCopyCheckAnswer()
