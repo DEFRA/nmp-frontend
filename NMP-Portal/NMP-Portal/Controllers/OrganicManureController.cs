@@ -1663,20 +1663,9 @@ namespace NMP.Portal.Controllers
 
                         isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                     }
-                    var organicClosedPeriodRequest = new OrganicClosedPeriodRequest
-                    {
-                        SoilTypeId = fieldDetail.SoilTypeID ?? 0,
-                        FieldType = fieldDetail.FieldType ?? 0,
-                        HarvestYear = model.HarvestYear ?? 0,
-                        SowingDate = fieldDetail.SowingDate,
-                        CountryId = farm.CountryID ?? 0,
-                        CropGroupId = cropTypeResponse.CropGroupId,
-                        CropTypeId = cropTypeId,
-                        IsPerennial = isPerennial
-                    };
+                    var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
 
-                    (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
-
+                    (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
                     model.ClosedPeriod = closedPeriod;
                     if (!string.IsNullOrWhiteSpace(closedPeriod))
                     {
@@ -1964,19 +1953,9 @@ namespace NMP.Portal.Controllers
                 {
                     isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                 }
-                var organicClosedPeriodRequest = new OrganicClosedPeriodRequest
-                {
-                    SoilTypeId = fieldDetail.SoilTypeID ?? 0,
-                    FieldType = fieldDetail.FieldType ?? 0,
-                    HarvestYear = model.HarvestYear ?? 0,
-                    SowingDate = fieldDetail.SowingDate,
-                    CountryId = farm.CountryID ?? 0,
-                    CropGroupId = cropTypeResponse.CropGroupId,
-                    CropTypeId = cropTypeId,
-                    IsPerennial = isPerennial
-                };
-                (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
+                var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
 
+                (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
                 ViewBag.ClosedPeriod = closedPeriod;
             }
         }
@@ -5204,18 +5183,9 @@ namespace NMP.Portal.Controllers
 
                                         isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                                     }
-                                    var organicClosedPeriodRequest = new OrganicClosedPeriodRequest
-                                    {
-                                        SoilTypeId = fieldDetail.SoilTypeID ?? 0,
-                                        FieldType = fieldDetail.FieldType ?? 0,
-                                        HarvestYear = model.HarvestYear ?? 0,
-                                        SowingDate = fieldDetail.SowingDate,
-                                        CountryId = farm.CountryID ?? 0,
-                                        CropGroupId = cropTypeResponse.CropGroupId,
-                                        CropTypeId = cropTypeId,
-                                        IsPerennial = isPerennial
-                                    };
-                                    (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
+                                    var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
+
+                                    (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
                                     model.ClosedPeriod = closedPeriod;
                                     if (!string.IsNullOrWhiteSpace(closedPeriod))
                                     {
@@ -6839,18 +6809,9 @@ namespace NMP.Portal.Controllers
                     {
                         isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
                     }
-                    var organicClosedPeriodRequest = new OrganicClosedPeriodRequest
-                    {
-                        SoilTypeId = fieldDetail.SoilTypeID ?? 0,
-                        FieldType = fieldDetail.FieldType ?? 0,
-                        HarvestYear = model.HarvestYear ?? 0,
-                        SowingDate = fieldDetail.SowingDate,
-                        CountryId = farm.CountryID ?? 0,
-                        CropGroupId = cropTypeResponse.CropGroupId,
-                        CropTypeId = cropTypeId,
-                        IsPerennial = isPerennial
-                    };
-                    (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
+                    var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
+
+                    (string? closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
                     bool isSlurry = false;
                     bool isPoultryManure = false;
 
@@ -6979,19 +6940,9 @@ namespace NMP.Portal.Controllers
                 (CropTypeResponse cropTypeResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
                 isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeResponse.CropTypeId);
 
-                var organicClosedPeriodRequest = new OrganicClosedPeriodRequest
-                {
-                    SoilTypeId = fieldDetail.SoilTypeID ?? 0,
-                    FieldType = fieldDetail.FieldType ?? 0,
-                    HarvestYear = model.HarvestYear ?? 0,
-                    SowingDate = fieldDetail.SowingDate,
-                    CountryId = farm.CountryID ?? 0,
-                    CropGroupId = cropTypeResponse.CropGroupId,
-                    CropTypeId = cropTypeResponse.CropTypeId,
-                    IsPerennial = isPerennial
-                };
+                var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeResponse.CropTypeId, isPerennial);
 
-                (closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
+                (closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
 
                 (model, error) = await HandleNonOrganicHighNWarning(model, warningMessage);
                 return (model, error, closedPeriod, isWithinClosedPeriod);
@@ -7043,18 +6994,9 @@ namespace NMP.Portal.Controllers
             List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
             int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
             bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(cropTypeId);
-            var organicClosedPeriodRequest = new OrganicClosedPeriodRequest
-            {
-                SoilTypeId = fieldDetail.SoilTypeID ?? 0,
-                FieldType = fieldDetail.FieldType ?? 0,
-                HarvestYear = model.HarvestYear ?? 0,
-                SowingDate = fieldDetail.SowingDate,
-                CountryId = farm.CountryID ?? 0,
-                CropGroupId = cropTypeResponse.CropGroupId,
-                CropTypeId = cropTypeId,
-                IsPerennial = isPerennial
-            };
-            (closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
+            var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
+
+            (closedPeriod, error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
 
             isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(
                 model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
@@ -10350,6 +10292,21 @@ namespace NMP.Portal.Controllers
                 .ToList();
             }
             return (farmManureTypeList, error);
+        }
+        private OrganicClosedPeriodRequest BuildOrganicClosedPeriodRequest(FieldDetailResponse fieldDetail,OrganicManureViewModel model,
+            Farm farm, CropTypeResponse cropTypeResponse, int cropTypeId, bool isPerennial)
+        {
+            return new OrganicClosedPeriodRequest
+            {
+                SoilTypeId = fieldDetail.SoilTypeID ?? 0,
+                FieldType = fieldDetail.FieldType ?? 0,
+                HarvestYear = model.HarvestYear ?? 0,
+                SowingDate = fieldDetail.SowingDate,
+                CountryId = farm.CountryID ?? 0,
+                CropGroupId = cropTypeResponse.CropGroupId,
+                CropTypeId = cropTypeId,
+                IsPerennial = isPerennial
+            };
         }
 
     }
