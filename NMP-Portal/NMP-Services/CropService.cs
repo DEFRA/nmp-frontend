@@ -438,14 +438,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return defaultYield ?? 0;
     }
 
-    public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId)
+    public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId, int rb209CountryId)
     {
         List<int> secondCropList = new List<int>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSecondCropListByFirstCropIdAsyncAPI, HttpUtility.UrlEncode(firstCropTypeId.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSecondCropListByFirstCropIdAsyncAPI, HttpUtility.UrlEncode(firstCropTypeId.ToString()), rb209CountryId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)

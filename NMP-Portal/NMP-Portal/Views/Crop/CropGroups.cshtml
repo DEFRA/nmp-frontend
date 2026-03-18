@@ -15,7 +15,7 @@
     {
         action = "CheckAnswer";
     }
-    else if (index>=0)
+    else if (index >= 0)
     {
         action = "CheckYourPlanData";
     }
@@ -23,7 +23,7 @@
     {
         action = "HarvestYearForPlan";
     }
-    
+
 }
 
 
@@ -79,7 +79,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" value="@Model.CropType"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Variety"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName"/>
@@ -117,10 +117,10 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropType"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropOrder"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFieldToBeRemoved"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId"/>
         @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
         {
             @for (int i = 0; i < Model.HarvestYear.Count; i++)
@@ -175,14 +175,14 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            @* @if (item.CropGroupId == grassGroupId)
+                            @if (item.CropGroupId == grassGroupId && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                             {
                                 <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
                             }
                             else
-                            { *@
-                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                            @* } *@
+                            {
+                                <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
+                            }
                         }
                     }
 
