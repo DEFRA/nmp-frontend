@@ -641,7 +641,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
             }
             else
             {
-                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
             }
         }
         catch (HttpRequestException hre)

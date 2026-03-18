@@ -1394,14 +1394,15 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (farmManureType, error);
     }
-    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriod(int soilTypeId, int fieldType, int harvestYear, DateTime?sowingDate, int countryId, int? cropGroupId, int? cropTypeId, bool isPerennial)
+    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriod(OrganicClosedPeriodRequest organicClosedPeriodRequest)
     {
         string? closedPeriod = null;
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodAsyncAPI, soilTypeId, fieldType, harvestYear, sowingDate, countryId, cropGroupId, cropTypeId, isPerennial));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodAsyncAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.SowingDate, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial));
+
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.ClosedPeriod != null)
@@ -1415,13 +1416,13 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }

@@ -1171,7 +1171,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                                     if (error == null)
                                     {
-                                        WarningWithinPeriod warning = new WarningWithinPeriod();
                                         (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId??0, crop.CropTypeID.Value, field.NVZProgrammeID);
                                         if (!string.IsNullOrWhiteSpace(closedPeriod))
                                         {
@@ -1353,7 +1352,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                                         if (error == null)
                                         {
-                                            WarningWithinPeriod warning = new WarningWithinPeriod();
                                             (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
                                             if (!string.IsNullOrWhiteSpace(closedPeriod))
                                             {
@@ -1545,7 +1543,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         if (error == null && crop != null && crop.CropTypeID != null)
                                         {
                                             int year = model.HarvestYear.Value;
-                                            WarningWithinPeriod warning = new WarningWithinPeriod();
                                             (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
                                             string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
                                             Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
@@ -2246,7 +2243,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                             if (error == null)
                                             {
                                                 int year = model.HarvestYear.Value;
-                                                WarningWithinPeriod warning = new WarningWithinPeriod();
                                                 (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
                                                 string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
                                                 Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMicroseconds(100));
@@ -2661,7 +2657,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         WarningWithinPeriod warning = new WarningWithinPeriod();
         int? fieldId = model.FieldID ?? null;
-        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId??0);
         (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, field.NVZProgrammeID);
         bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
 
