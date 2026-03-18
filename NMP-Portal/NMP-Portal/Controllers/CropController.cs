@@ -2671,7 +2671,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model != null)
             {
-                int i = 0;
                 int otherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
                 int cerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
                 int potatoesGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
@@ -2694,7 +2693,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         ViewBag.DefaultYield = defaultYield;
                     }
                 }
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
@@ -4447,7 +4446,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     fieldList = fieldList.Where(x => fieldIds.Contains(x.ID)).ToList();
                 }
 
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error? harvestYearError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
                     var fieldIdsForFilter = fieldList.Select(f => f.ID);
@@ -5005,7 +5004,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         try
         {
             Error? error = null;
-            int i = 0;
             int otherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
             int cerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
 
@@ -5318,9 +5316,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         int i = 0;
         ValidateSowingDate(model, i, otherGroupId);
-    
+        if (model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
+        {
             await ValidateYield(model, otherGroupId);
-        
+        }
 
         if (model.CropTypeID == null)
         {
@@ -5353,7 +5352,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (model.CropInfo1 == null && model.CropGroupId != otherGroupId && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            ModelState.AddModelError("CropInfo1", string.Format("{0} {1}", cropInfoOneQuestion, Resource.lblNotSet.ToLower()));
+            ModelState.AddModelError("CropInfo1", $"{cropInfoOneQuestion} {Resource.lblNotSet.ToLower()}");
         }
 
 
@@ -5381,8 +5380,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private async Task ValidateYield(PlanViewModel model, int otherGroupId)
     {
-        if (model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
-        {
+       
             int i = 0;
 
             decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(
@@ -5410,7 +5408,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
                 i++;
             }
-        }
+        
     }
     private void ValidateDifferentYieldMessage(PlanViewModel model, int otherGroupId,Crop crop,int i)
     {
