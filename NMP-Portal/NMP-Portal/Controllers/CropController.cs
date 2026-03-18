@@ -5326,7 +5326,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             ModelState.AddModelError("CropTypeID", Resource.MsgMainCropTypeNotSet);
         }
-        await ValidateCropInfoOne(model);
+        await ValidateCropInfoOne(model, otherGroupId);
 
 
       
@@ -5340,7 +5340,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ValidateGrassProperties(model);
         }
     }
-    private async  Task  ValidateCropInfoOne(PlanViewModel model)
+    private async  Task  ValidateCropInfoOne(PlanViewModel model,int otherGroupId)
     {
         string? cropInfoOneQuestion = string.Empty;
         if (model.CropTypeID != null && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
