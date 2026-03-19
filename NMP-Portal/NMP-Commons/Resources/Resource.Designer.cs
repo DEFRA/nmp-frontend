@@ -682,15 +682,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 450mm or less.
-        /// </summary>
-        public static string lbl450OrLess {
-            get {
-                return ResourceManager.GetString("lbl450OrLess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 450mm or more.
         /// </summary>
         public static string lbl450OrMore {
@@ -8248,6 +8239,15 @@ namespace NMP.Commons.Resources {
         public static string lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm {
             get {
                 return ResourceManager.GetString("lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to less than 450mm.
+        /// </summary>
+        public static string lblLessThan450 {
+            get {
+                return ResourceManager.GetString("lblLessThan450", resourceCulture);
             }
         }
         

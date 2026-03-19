@@ -2969,14 +2969,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.ExcessWinterRainfallValue = excessRainfalls.WinterRainfall.Value;
                             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                             {
-                                model.IsWinterRainfallMoreThan450 = excessRainfalls.WinterRainfall == 450;
+                                model.IsWinterRainfallMoreThan450 = excessRainfalls.WinterRainfall == 500;
                                 if (model.IsWinterRainfallMoreThan450.Value)
                                 {
                                     model.WinterRainfallName = Resource.lbl450OrMore;
                                 }
                                 else
                                 {
-                                    model.WinterRainfallName = Resource.lbl450OrLess;
+                                    model.WinterRainfallName = Resource.lblLessThan450;
                                 }
                             }
                             model.AnnualRainfall = excessRainfalls.WinterRainfall.Value;
@@ -4726,7 +4726,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                model.WinterRainfallName = Resource.lbl450OrLess;
+                model.WinterRainfallName = Resource.lblLessThan450;
             }
 
             if (!ModelState.IsValid)
@@ -4806,7 +4806,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model != null && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                model.ExcessWinterRainfallValue = (model.IsWinterRainfallMoreThan450.HasValue && model.IsWinterRainfallMoreThan450.Value) ? 450 : 0;
+                model.ExcessWinterRainfallValue = (model.IsWinterRainfallMoreThan450.HasValue && model.IsWinterRainfallMoreThan450.Value) ?500 : 400;
             }
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             var excessRainfalls = new ExcessRainfalls

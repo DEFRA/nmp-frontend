@@ -7583,8 +7583,8 @@ livestock manure.</value>
   <data name="lblUpdateWinterRainfall" xml:space="preserve">
     <value>Update winter rainfall</value>
   </data>
-  <data name="lbl450OrLess" xml:space="preserve">
-    <value>450mm or less</value>
+  <data name="lblLessThan450" xml:space="preserve">
+    <value>less than 450mm</value>
   </data>
   <data name="lbl450OrMore" xml:space="preserve">
     <value>450mm or more</value>
