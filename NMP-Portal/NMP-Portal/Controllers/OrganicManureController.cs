@@ -1807,8 +1807,7 @@ namespace NMP.Portal.Controllers
                                                 //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
                                                 if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                                 {
-                                                    (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
-                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail, farm);
+                                                    (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm);
                                                 }
 
 
@@ -5308,8 +5307,7 @@ namespace NMP.Portal.Controllers
                                             //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
                                             if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                             {
-                                                (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(Convert.ToInt32(fieldId), model.HarvestYear ?? 0, false);
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), fieldDetail, farm);
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm);
 
                                                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                                                 {
@@ -6762,7 +6760,7 @@ namespace NMP.Portal.Controllers
 
             return (list.FirstOrDefault(x => x.Id == model.ManureTypeId), null);
         }
-        private bool IsSlurry(int? manureTypeId)
+        private static bool IsSlurry(int? manureTypeId)
         {
             if (!manureTypeId.HasValue) return false;
 
@@ -6778,11 +6776,11 @@ namespace NMP.Portal.Controllers
 
             return slurryTypes.Contains(manureTypeId.Value);
         }
-        private bool IsPoultryManure(int? manureTypeId)
+        private static bool IsPoultryManure(int? manureTypeId)
         {
             return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
         }
-        private bool IsWithinClosedPeriodAndFeb(OrganicManureViewModel model, string? closedPeriod, WarningWithinPeriod helper)
+        private static bool IsWithinClosedPeriodAndFeb(OrganicManureViewModel model, string? closedPeriod, WarningWithinPeriod helper)
         {
             if (!model.ApplicationDate.HasValue)
                 return false;
@@ -6815,7 +6813,7 @@ namespace NMP.Portal.Controllers
                 SetWarning(model, warning);
             }
         }
-        private void SetWarning(OrganicManureViewModel model, WarningResponse? warning)
+        private static void SetWarning(OrganicManureViewModel model, WarningResponse? warning)
         {
             if (warning == null) return;
 
@@ -6828,7 +6826,7 @@ namespace NMP.Portal.Controllers
             model.EndClosedPeriodEndFebWarningPara3 = warning.Para3;
         }
         private async Task<(OrganicManureViewModel, Error?)> IsClosedPeriodWarningMessage(
-            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, FieldDetailResponse fieldDetail, Farm farm)
+            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, Farm farm)
         {
             Error? error = null;
             string? closedPeriod = string.Empty;
