@@ -4805,7 +4805,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             string successMsg = string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value);
-            if (model != null && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                  successMsg = string.Format(Resource.MsgAddWinterRainfallContentOne, model.Year.Value);
                 model.ExcessWinterRainfallValue = (model.IsWinterRainfallMoreThan450.HasValue && model.IsWinterRainfallMoreThan450.Value) ?500 : 400;
