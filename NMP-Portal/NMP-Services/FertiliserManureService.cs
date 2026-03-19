@@ -616,53 +616,100 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
         return (totalN, error);
     }
-    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId)
+    //public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId)
+    //{
+    //    string? closedPeriod = null;
+    //    Error? error = null;
+    //    try
+    //    {
+    //        HttpClient httpClient = await GetNMPAPIClient();
+    //        string url = string.Empty;
+    //        if (nvzProgramId == null)
+    //        {
+    //            url = string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodAsyncAPI, countryId, cropTypeId);
+    //        }
+    //        else
+    //        {
+    //            url = string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
+    //        }
+    //        var response = await httpClient.GetAsync(url);
+    //        string result = await response.Content.ReadAsStringAsync();
+    //        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+    //        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.ClosedPeriod != null)
+    //        {
+    //            closedPeriod = responseWrapper?.Data?.ClosedPeriod?.ToObject<string>();
+    //        }
+    //        else
+    //        {
+    //            if (responseWrapper != null && responseWrapper.Error != null)
+    //            {
+    //                error = responseWrapper?.Error?.ToObject<Error>();
+    //                if (error != null)
+    //                {
+    //                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+    //                }
+    //            }
+    //        }
+    //    }
+    //    catch (HttpRequestException hre)
+    //    {
+    //        error = new Error();
+    //        error.Message = Resource.MsgServiceNotAvailable;
+    //        _logger.LogError(hre, hre.Message);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        error = new Error();
+    //        error.Message = ex.Message;
+    //        _logger.LogError(ex, ex.Message);
+    //    }
+    //    return (closedPeriod, error);
+    //}
+
+    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(
+    int countryId, int cropTypeId, int? nvzProgramId)
     {
-        string? closedPeriod = null;
-        Error? error = null;
+        string url = nvzProgramId == null
+            ? string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodAsyncAPI, countryId, cropTypeId)
+            : string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
+
+        return await GetAsync<string>(url);
+    }
+
+    private async Task<(T?, Error?)> GetAsync<T>(string url)
+    {
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;
-            if (nvzProgramId == null)
-            {
-                url = string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodAsyncAPI, countryId, cropTypeId);
-            }
-            else
-            {
-                url = string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
-            }
+            var httpClient = await GetNMPAPIClient();
             var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.ClosedPeriod != null)
+            var result = await response.Content.ReadAsStringAsync();
+
+            var wrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode && wrapper?.Data != null)
             {
-                closedPeriod = responseWrapper?.Data?.ClosedPeriod?.ToObject<string>();
+                return (wrapper?.Data?.ClosedPeriod.ToObject<T>(), null);
             }
-            else
+
+            if (wrapper?.Error != null)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                var error = wrapper.Error.ToObject<Error>();
+                _logger.LogError("{Code} : {Message} : {Stack} : {Path}",
+                    (object?)error?.Code, (object?)error?.Message, (object?)error?.Stack, (object?)error?.Path);
+                return (default, error);
             }
+
+            return (default, null);
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
+            return (default, new Error { Message = Resource.MsgServiceNotAvailable });
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
+            return (default, new Error { Message = ex.Message });
         }
-        return (closedPeriod, error);
     }
 }
