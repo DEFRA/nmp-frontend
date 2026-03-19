@@ -1,21 +1,26 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
-    string title = string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName);
-    ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {title}";
+    int previousYear = Model.Year.Value - 1;
+    string heading = string.Format(Resource.lblIsTheWinterRainfallFrom1OctTo1March, previousYear, Model.Year, Model.FarmName);
+    string title = Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? heading: string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName);
+
+    ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {heading}";
+    string backOrChangeAction = Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "IsWinterRainfallMoreThan450" : "ExcessWinterRainFall";
+    string isWinterRainfall450OrMore = (Model.IsWinterRainfallMoreThan450.HasValue && Model.IsWinterRainfallMoreThan450.Value) ? Resource.lblYes : Resource.lblNo;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backOrChangeAction" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
-    @if (TempData["ExcessWinterRainfallCheckAnswerError"] != null)
+    @if (TempData["ExcessOrWinterRainfallCheckAnswerError"] != null)
     {
         <govuk-error-summary>
-            <govuk-error-summary-item href="#">@TempData["ExcessWinterRainfallCheckAnswerError"]</govuk-error-summary-item>
+            <govuk-error-summary-item href="#">@TempData["ExcessOrWinterRainfallCheckAnswerError"]</govuk-error-summary-item>
         </govuk-error-summary>
     }
-    <form class="form-with-overlay" asp-action="ExcessWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
+    <form class="form-with-overlay" asp-action="ExcessOrWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
         @Html.AntiForgeryToken()
         <div hidden="true">
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
@@ -24,10 +29,13 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallCheckAnswer"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallCheckAnswer"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallUpdated" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WinterRainfallName"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWinterRainfallMoreThan450" />
         </div>
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
@@ -42,12 +50,12 @@
             
                 <govuk-summary-list>
                     <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-key>@title</govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.ExcessWinterRainfallName
+                        @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? isWinterRainfall450OrMore : Model.ExcessWinterRainfallName)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ExcessWinterRainFall" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="@backOrChangeAction" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@title</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>

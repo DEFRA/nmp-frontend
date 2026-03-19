@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="UpdateExcessWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -30,7 +30,7 @@
                 @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"/> *@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessWinterRainfallUpdated"/>
+                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallUpdated"/>
             </div>
             <govuk-radios asp-for="@Model.ExcessWinterRainfallId">
                 <govuk-radios-fieldset>
