@@ -1,4 +1,5 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
     int previousYear = Model.Year.Value - 1;
@@ -8,6 +9,7 @@
     ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {heading}";
     string backOrChangeAction = Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "IsWinterRainfallMoreThan450" : "ExcessWinterRainFall";
     string isWinterRainfall450OrMore = (Model.IsWinterRainfallMoreThan450.HasValue && Model.IsWinterRainfallMoreThan450.Value) ? Resource.lblYes : Resource.lblNo;
+    ViewBag.CurrentStep = (int)ExcessWinterRainfallWizardSteps.CheckAnswer;
 }
 
 @section BeforeContent {
@@ -22,23 +24,8 @@
     }
     <form class="form-with-overlay" asp-action="ExcessOrWinterRainfallCheckAnswer" asp-controller="Crop" method="post" novalidate="">
         @Html.AntiForgeryToken()
-        <div hidden="true">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallCheckAnswer"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallUpdated" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WinterRainfallName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWinterRainfallMoreThan450" />
-        </div>
+        @await Html.PartialAsync("~/Views/Crop/_ExcessWinterRainfall.cshtml", Model)
         <div class="govuk-grid-column-two-thirds-from-desktop">
-
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>

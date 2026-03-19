@@ -1,4 +1,5 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
     int previousYear = Model.Year.Value - 1;
@@ -8,6 +9,7 @@
 
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)ExcessWinterRainfallWizardSteps.WinterRainfall;
 }
 
 @section BeforeContent {
@@ -24,17 +26,8 @@
 
         <form asp-action="IsWinterRainfallMoreThan450" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
-            <div hidden="true">
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallUpdated" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WinterRainfallName" value="@Model.WinterRainfallName" />
-            </div>
-            <govuk-radios asp-for="@Model.IsWinterRainfallMoreThan450">
+            @await Html.PartialAsync("~/Views/Crop/_ExcessWinterRainfall.cshtml", Model)
+            <govuk-radios asp-for="@Model.IsWinterRainfallMoreThan450" class="govuk-radios--inline">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblIsTheWinterRainfallFrom1OctTo1March, previousYear, Model.Year, Model.FarmName)

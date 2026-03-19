@@ -4804,8 +4804,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
+            string successMsg = string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value);
             if (model != null && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
+                 successMsg = string.Format(Resource.MsgAddWinterRainfallContentOne, model.Year.Value);
                 model.ExcessWinterRainfallValue = (model.IsWinterRainfallMoreThan450.HasValue && model.IsWinterRainfallMoreThan450.Value) ?500 : 400;
             }
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
@@ -4823,7 +4825,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (ExcessRainfalls? excessRainfall, Error? error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessOrWinterRainfallUpdated.Value);
             if (excessRainfall != null)
             {
-                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value)), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
+                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(successMsg), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
             }
             else
             {

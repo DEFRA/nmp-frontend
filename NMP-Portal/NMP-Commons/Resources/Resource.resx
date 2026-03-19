@@ -7589,4 +7589,7 @@ livestock manure.</value>
   <data name="lbl450OrMore" xml:space="preserve">
     <value>450mm or more</value>
   </data>
+  <data name="MsgAddWinterRainfallContentOne" xml:space="preserve">
+    <value>Winter Rainfall for {0} updated</value>
+  </data>
 </root>

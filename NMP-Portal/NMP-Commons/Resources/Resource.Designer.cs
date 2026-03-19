@@ -18892,6 +18892,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter Rainfall for {0} updated.
+        /// </summary>
+        public static string MsgAddWinterRainfallContentOne {
+            get {
+                return ResourceManager.GetString("MsgAddWinterRainfallContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to APPLICATION AFTER 31 OCTOBER.
         /// </summary>
         public static string MsgApplicationAfter31October {

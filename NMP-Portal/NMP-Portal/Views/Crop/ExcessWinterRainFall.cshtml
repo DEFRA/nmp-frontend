@@ -1,8 +1,10 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{string.Format(Resource.lblExcessWinterRainfallContentOne, Model.FarmName)} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = (int)ExcessWinterRainfallWizardSteps.ExcessWinterRainfall;
 }
 
 @section BeforeContent {
@@ -23,15 +25,7 @@
         
         <form asp-action="ExcessWinterRainfall" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
-            <div hidden="true">
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall"/>
-                @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfall"/> *@
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallUpdated"/>
-            </div>
+            @await Html.PartialAsync("~/Views/Crop/_ExcessWinterRainfall.cshtml", Model)
             <govuk-radios asp-for="@Model.ExcessWinterRainfallId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
