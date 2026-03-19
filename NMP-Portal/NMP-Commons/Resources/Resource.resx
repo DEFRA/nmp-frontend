@@ -7553,4 +7553,43 @@ livestock manure.</value>
   <data name="lblLandParcelIdentificationNumber" xml:space="preserve">
     <value>Land parcel identification number (LPID)</value>
   </data>
+  <data name="lblEnterWinterRainfallForHarvestYear" xml:space="preserve">
+    <value>Enter winter rainfall for harvest year {0}.</value>
+  </data>
+  <data name="lblYouHaveNotEnteredWinterRainfall" xml:space="preserve">
+    <value>You have not entered winter rainfall.</value>
+  </data>
+  <data name="lblChangeWinterRainfallForHarvestYear" xml:space="preserve">
+    <value>Change winter rainfall for harvest year {0}.</value>
+  </data>
+  <data name="lblWinterRainfallIs450OrMoreOrLess" xml:space="preserve">
+    <value>Winter rainfall is {0}.</value>
+  </data>
+  <data name="lblWinterRainfall1OctTo1March" xml:space="preserve">
+    <value>Winter rainfall (1 October {0} to 1 March {1})</value>
+  </data>
+  <data name="lblIsTheWinterRainfallFrom1OctTo1March" xml:space="preserve">
+    <value>Is the winter rainfall (from 1 October {0} to 1 March {1}) at {2} 450mm or more?</value>
+  </data>
+  <data name="lblSEPAPublishRainfallDataForScotland" xml:space="preserve">
+    <value>SEPA publish rainfall data for Scotland. &lt;a href="https://ahdb.org.uk/knowledge-library/how-to-use-excess-winter-rainfall-data-to-plan-nitrogen-applications" target="_blank"&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;</value>
+  </data>
+  <data name="lblUpdateRainfall" xml:space="preserve">
+    <value>Update rainfall</value>
+  </data>
+  <data name="lblCreateRainfall" xml:space="preserve">
+    <value>Create rainfall</value>
+  </data>
+  <data name="lblUpdateWinterRainfall" xml:space="preserve">
+    <value>Update winter rainfall</value>
+  </data>
+  <data name="lblLessThan450" xml:space="preserve">
+    <value>less than 450mm</value>
+  </data>
+  <data name="lbl450OrMore" xml:space="preserve">
+    <value>450mm or more</value>
+  </data>
+  <data name="MsgAddWinterRainfallContentOne" xml:space="preserve">
+    <value>Winter Rainfall for {0} updated</value>
+  </data>
 </root>

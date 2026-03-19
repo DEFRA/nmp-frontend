@@ -591,21 +591,40 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.Nutrients = new List<NutrientResponseWrapper>();
             model.Nutrients = nutrients;
         }
-        (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
-        if (string.IsNullOrWhiteSpace(error?.Message) && excessRainfalls != null)
-        {
-            (List<CommonResponse> excessWinterRainfallOption, error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-            if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
-            {
-                string excessRainfallName = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == excessRainfalls.WinterRainfall)).Name;
-                string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
-                model.CropAndFieldReport.ExcessWinterRainfall = $"{parts[0]} ({parts[1]})";
-            }
-        }
 
-        if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null)
+
+        if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null&& model.FarmId!=null)
         {
             model.FarmRB209CountryID = model.CropAndFieldReport.Farm.RB209CountryID;
+            (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
+            if (string.IsNullOrWhiteSpace(error?.Message) && excessRainfalls != null)
+            {
+                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    (List<CommonResponse> excessWinterRainfallOption, error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
+                    if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
+                    {
+                        string? excessRainfallName = excessWinterRainfallOption.FirstOrDefault(x => x.Value == excessRainfalls.WinterRainfall)?.Name;
+                        if (!string.IsNullOrWhiteSpace(excessRainfallName))
+                        {
+                            string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
+                            model.CropAndFieldReport.ExcessWinterRainfall = $"{parts[0]} ({parts[1]})";
+                        }
+
+                    }
+                }
+                else if (model.CropAndFieldReport != null)
+                {
+                    if (excessRainfalls.WinterRainfall == 500)
+                    {
+                        model.CropAndFieldReport.WinterRainfall = Resource.lbl450OrMore;
+                    }
+                    else
+                    {
+                        model.CropAndFieldReport.WinterRainfall = Resource.lblLessThan450;
+                    }
+                }
+            }
             if (string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.CPH))
             {
                 model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
@@ -910,7 +929,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         .ToDictionary(x => x.id, x => x.groupIds);
 
                     var cropGroupIds = model.CropTypeList?
-                    .Select(cropType => int.Parse(cropType)).ToList();                    
+                    .Select(cropType => int.Parse(cropType)).ToList();
 
                     List<CropTypeResponse> cropTypes = await _fieldLogic.FetchAllCropTypes();
                     if (cropGroupIds != null)
@@ -965,7 +984,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             }
             else
-            {                
+            {
                 TempData["ErrorOnSelectField"] = error.Message;
                 return RedirectToAction("ExportFieldsOrCropType");
             }
@@ -974,7 +993,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Report Controller : Exception in NMaxReport() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Report Controller : Exception in NMaxReport() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnSelectField"] = ex.Message;
             return RedirectToAction("ExportFieldsOrCropType");
         }
@@ -996,7 +1015,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
                 if (error == null && cropTypeLinkingResponse != null && model.Farm != null && model.Farm.CountryID.HasValue)
                 {
-                    nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingResponse);                    
+                    nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingResponse);
                     Field field = await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value);
                     if (field != null && field.IsWithinNVZ != null && field.IsWithinNVZ.Value)
                     {
@@ -1070,9 +1089,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 //    grassCut = 40;
                                 //}
                                 // As per the discussion with RB209 team, DefoliationSequenceID will be used to identify the cuts for grass and if the sequence ID is 10,11,32,33,56,57,78 or 79 then it will be considered as 3 or more cuts and 40 points will be given for grass cut in that case.
-                                int[] threeOrMoreCutdefoliationSequenceIDs = { 10, 11, 32, 33, 56, 57, 78, 79 };                                
+                                int[] threeOrMoreCutdefoliationSequenceIDs = { 10, 11, 32, 33, 56, 57, 78, 79 };
                                 if (crop.DefoliationSequenceID.HasValue && Array.Exists<int>(threeOrMoreCutdefoliationSequenceIDs, element => element == crop.DefoliationSequenceID))
-                                {                                    
+                                {
                                     grassCut = 40;
                                 }
                             }
@@ -1205,9 +1224,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 var nitrogenResponse = new NitrogenApplicationsForNMaxReportResponse
                                 {
                                     FieldId = field.ID.Value,
-                                    FieldName = field.Name?? string.Empty,
+                                    FieldName = field.Name ?? string.Empty,
                                     CropTypeName = cropTypeName,
-                                    CropArea = field.CroppedArea.HasValue? field.CroppedArea.Value : default(decimal),
+                                    CropArea = field.CroppedArea.HasValue ? field.CroppedArea.Value : default(decimal),
                                     InorganicNRate = totalFertiliserN != null ? (int)Math.Round(totalFertiliserN.Value, 0) : null,
                                     InorganicNTotal = totalFertiliserN != null ? (int)Math.Round((totalFertiliserN.Value * field.CroppedArea.Value), 0) : null,
                                     OrganicCropAvailableNRate = totalOrganicAvailableN != null ? (int)Math.Round(totalOrganicAvailableN.Value, 0) : null,
@@ -1225,7 +1244,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
                         else
                         {
-                            return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nmaxLimit, error);                            
+                            return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nmaxLimit, error);
                         }
                     }
                 }
@@ -1952,11 +1971,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
             ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
             (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-            if (string.IsNullOrWhiteSpace(error?.Message)&& nutrientsLoadingManuresList.Count > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManuresList.Count > 0)
             {
-                    nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
-                    ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManuresList;
-                
+                nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
+                ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManuresList;
+
             }
             (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
             if (nutrientsLoadingFarmDetails != null)
@@ -6268,11 +6287,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
 
             (bool farmManureExist, Error error) = await _organicManureLogic.FetchFarmManureTypeCheckByFarmIdAndManureTypeId(model.FarmId.Value, model.ManureTypeId.Value, model.OtherMaterialName);
-            if (string.IsNullOrWhiteSpace(error?.Message)&& farmManureExist)
+            if (string.IsNullOrWhiteSpace(error?.Message) && farmManureExist)
             {
-               
-                    ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
-                
+
+                ModelState.AddModelError("OtherMaterialName", Resource.MsgThisManureTypeNameAreadyExist);
+
             }
             if (!ModelState.IsValid)
             {
@@ -6481,7 +6500,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.TotalLivestockManureCapacity = totalLivestockManureCapacity;
         ViewBag.AreaInsideNVZ = nutrientsLoadingFarmDetail.LandInNVZ;
         ViewBag.AreaOutsideNVZ = nutrientsLoadingFarmDetail.LandNotNVZ;
-        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);        
+        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
@@ -6866,7 +6885,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Report Controller : Exception in DeleteNLLivestock() get action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Report Controller : Exception in DeleteNLLivestock() get action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnLivestockCheckAnswer"] = ex.Message;
             return RedirectToAction("LivestockCheckAnswer");
         }

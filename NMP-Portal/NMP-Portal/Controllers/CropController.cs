@@ -2967,8 +2967,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         if (excessRainfalls != null && excessRainfalls.WinterRainfall != null)
                         {
                             model.ExcessWinterRainfallValue = excessRainfalls.WinterRainfall.Value;
+                            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                model.IsWinterRainfallMoreThan450 = excessRainfalls.WinterRainfall == 500;
+                                if (model.IsWinterRainfallMoreThan450.Value)
+                                {
+                                    model.WinterRainfallName = Resource.lbl450OrMore;
+                                }
+                                else
+                                {
+                                    model.WinterRainfallName = Resource.lblLessThan450;
+                                }
+                            }
                             model.AnnualRainfall = excessRainfalls.WinterRainfall.Value;
-                            model.IsExcessWinterRainfallUpdated = true;
+                            model.IsExcessOrWinterRainfallUpdated = true;
                             (List<CommonResponse> excessWinterRainfallOption, error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
                             if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
                             {
@@ -2982,15 +2994,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 }
                             }
 
-                            ViewBag.ExcessRainfallContentFirst = string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName);
-                            ViewBag.ExcessRainfallContentSecond = Resource.lblUpdateExcessWinterRainfall;
+                            ViewBag.ExcessRainfallContentFirst = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblWinterRainfallIs450OrMoreOrLess, model.WinterRainfallName) : string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName));
+                            ViewBag.ExcessRainfallContentSecond = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblChangeWinterRainfallForHarvestYear, harvestYear) : Resource.lblUpdateExcessWinterRainfall);
+
                         }
                         else
                         {
                             model.AnnualRainfall = farm?.Rainfall;
-                            model.IsExcessWinterRainfallUpdated = false;
-                            ViewBag.ExcessRainfallContentFirst = Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall;
-                            ViewBag.ExcessRainfallContentSecond = string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear);
+                            model.IsExcessOrWinterRainfallUpdated = false;
+                            ViewBag.ExcessRainfallContentFirst = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblYouHaveNotEnteredWinterRainfall : Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall);
+                            ViewBag.ExcessRainfallContentSecond = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblEnterWinterRainfallForHarvestYear, harvestYear) : string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear));
                         }
                     }
 
@@ -4562,34 +4575,34 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public IActionResult UpdateExcessWinterRainfall()
+    public IActionResult UpdateExcessOrWinterRainfall()
     {
-        _logger.LogTrace("Crop Controller : UpdateExcessWinterRainfall() action called");
+        _logger.LogTrace("Crop Controller : UpdateExcessOrWinterRainfall() action called");
         PlanViewModel? model = GetHarvestYearPlanFromSession();
 
         try
         {
             if (model == null)
             {
-                _logger.LogTrace("Crop Controller : session not found in UpdateExcessWinterRainfall() action");
+                _logger.LogTrace("Crop Controller : session not found in UpdateExcessOrWinterRainfall() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Crop Controller : Exception in UpdateExcessWinterRainfall() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in UpdateExcessOrWinterRainfall() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
             return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
         }
 
-        return View(model);
+        return View("UpdateExcessOrWinterRainfall", model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult UpdateExcessWinterRainfall(PlanViewModel model)
+    public IActionResult UpdateExcessOrWinterRainfall(PlanViewModel model)
     {
-        _logger.LogTrace("Crop Controller : UpdateExcessWinterRainfall() post action called");
+        _logger.LogTrace("Crop Controller : UpdateExcessOrWinterRainfall() post action called");
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -4626,8 +4639,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfall() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["UpdateExcessWinterRainfallError"] = ex.Message;
-            return RedirectToAction("UpdateExcessWinterRainfall");
+            TempData["UpdateExcessOrWinterRainfallError"] = ex.Message;
+            return RedirectToAction("UpdateExcessOrWinterRainfall");
         }
 
         return View(model);
@@ -4661,7 +4674,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
             SetHarvestYearPlanToSession(model);
-            return RedirectToAction("ExcessWinterRainfallCheckAnswer", model);
+            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer", model);
         }
         catch (Exception ex)
         {
@@ -4672,32 +4685,95 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExcessWinterRainfallCheckAnswer()
+    public IActionResult IsWinterRainfallMoreThan450()
     {
-        _logger.LogTrace("Crop Controller : ExcessWinterRainfallCheckAnswer() action called");
+        _logger.LogTrace("Crop Controller : IsWinterRainfallMoreThan450() action called");
         PlanViewModel? model = GetHarvestYearPlanFromSession();
 
         try
         {
             if (model == null)
             {
-                _logger.LogTrace("Crop Controller : session not found in ExcessWinterRainfallCheckAnswer() action");
+                _logger.LogTrace("Crop Controller : session not found in IsWinterRainfallMoreThan450() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            (CommonResponse commonResponse, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionByIdAsync(model.ExcessWinterRainfallId.Value);
-            if (error?.Message == null && commonResponse != null)
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "Crop Controller : Exception in IsWinterRainfallMoreThan450() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData["UpdateExcessOrWinterRainfallError"] = ex.Message;
+            return RedirectToAction("UpdateExcessOrWinterRainfall");
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult IsWinterRainfallMoreThan450(PlanViewModel model)
+    {
+        _logger.LogTrace("Crop Controller : IsWinterRainfallMoreThan450() post action called");
+        try
+        {
+            if (model.IsWinterRainfallMoreThan450 == null)
             {
-                model.ExcessWinterRainfallName = commonResponse.Name;
-                model.ExcessWinterRainfallValue = commonResponse.Value;
+                ModelState.AddModelError("IsWinterRainfallMoreThan450", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            else if (model.IsWinterRainfallMoreThan450.Value)
+            {
+                model.WinterRainfallName = Resource.lbl450OrMore;
+            }
+            else
+            {
+                model.WinterRainfallName = Resource.lblLessThan450;
             }
 
-            model.IsExcessWinterRainfallCheckAnswer = true;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            SetHarvestYearPlanToSession(model);
+            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer", model);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "Crop Controller : Exception in IsWinterRainfallMoreThan450() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData["IsWinterRainfallMoreThan450Error"] = ex.Message;
+            return View(model);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExcessOrWinterRainfallCheckAnswer()
+    {
+        _logger.LogTrace("Crop Controller : ExcessOrWinterRainfallCheckAnswer() action called");
+        PlanViewModel? model = GetHarvestYearPlanFromSession();
+
+        try
+        {
+            if (model == null)
+            {
+                _logger.LogTrace("Crop Controller : session not found in ExcessOrWinterRainfallCheckAnswer() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (CommonResponse commonResponse, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionByIdAsync(model.ExcessWinterRainfallId.Value);
+                if (error?.Message == null && commonResponse != null)
+                {
+                    model.ExcessWinterRainfallName = commonResponse.Name;
+                    model.ExcessWinterRainfallValue = commonResponse.Value;
+                }
+            }
+            model.IsExcessOrWinterRainfallCheckAnswer = true;
             SetHarvestYearPlanToSession(model);
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessOrWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallError"] = ex.Message;
             return RedirectToAction("ExcessWinterRainfall", model);
         }
@@ -4707,9 +4783,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ExcessWinterRainfallCheckAnswer(PlanViewModel model)
+    public async Task<IActionResult> ExcessOrWinterRainfallCheckAnswer(PlanViewModel model)
     {
-        _logger.LogTrace("Crop Controller : ExcessWinterRainfallCheckAnswer() action called");
+        _logger.LogTrace("Crop Controller : ExcessOrWinterRainfallCheckAnswer() action called");
 
         try
         {
@@ -4724,10 +4800,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                _logger.LogTrace("Crop Controller :HarvestYearPlan session not found in ExcessWinterRainfallCheckAnswer() post action");
+                _logger.LogTrace("Crop Controller :HarvestYearPlan session not found in ExcessOrWinterRainfallCheckAnswer() post action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
+            string successMsg = string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value);
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                 successMsg = string.Format(Resource.MsgAddWinterRainfallContentOne, model.Year.Value);
+                model.ExcessWinterRainfallValue = (model.IsWinterRainfallMoreThan450.HasValue && model.IsWinterRainfallMoreThan450.Value) ?500 : 400;
+            }
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             var excessRainfalls = new ExcessRainfalls
             {
@@ -4740,21 +4822,21 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             };
 
             string jsonData = JsonConvert.SerializeObject(excessRainfalls);
-            (ExcessRainfalls? excessRainfall, Error? error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessWinterRainfallUpdated.Value);
+            (ExcessRainfalls? excessRainfall, Error? error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessOrWinterRainfallUpdated.Value);
             if (excessRainfall != null)
             {
-                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value)), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
+                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(successMsg), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
             }
             else
             {
-                TempData["ExcessWinterRainfallCheckAnswerError"] = error?.Message;
+                TempData["ExcessOrWinterRainfallCheckAnswerError"] = error?.Message;
                 return View(model);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ExcessWinterRainfallCheckAnswerError"] = ex.Message;
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessOrWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData["ExcessOrWinterRainfallCheckAnswerError"] = ex.Message;
             return View(model);
         }
     }
