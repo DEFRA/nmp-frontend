@@ -79,8 +79,8 @@ public class PlanViewModel
     public List<int>? organicManureIds { get; set; }
     public List<string>? SelectedField { get; set; }
     public bool? IsComingFromRecommendation { get; set; }
-    public bool? IsExcessWinterRainfallCheckAnswer { get; set; }
-    public bool? IsExcessWinterRainfallUpdated { get; set; }
+    public bool? IsExcessOrWinterRainfallCheckAnswer { get; set; }
+    public bool? IsExcessOrWinterRainfallUpdated { get; set; }
     public string? EncryptedIsCropUpdate { get; set; }
     public string? PreviousCropGroupName { get; set; }
 
@@ -111,4 +111,6 @@ public class PlanViewModel
     public bool? IsFieldToBeRemoved { get; set; }
     public bool IsCurrentSwardChange { get; set; } = false;
     public int? CountryId { get; set; }
+    public string? WinterRainfallName { get; set; }
+    public bool? IsWinterRainfallMoreThan450 { get; set; }
 }

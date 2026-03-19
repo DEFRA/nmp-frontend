@@ -1,0 +1,54 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+    int previousYear = Model.Year.Value - 1;
+    string heading = string.Format(Resource.lblIsTheWinterRainfallFrom1OctTo1March, previousYear, Model.Year, Model.FarmName);
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdateRainfall : Resource.lblCreateRainfall;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)ExcessWinterRainfallWizardSteps.WinterRainfall;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (TempData["IsWinterRainfallMoreThan450Error"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["IsWinterRainfallMoreThan450Error"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+
+        <form asp-action="IsWinterRainfallMoreThan450" asp-controller="Crop" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+            @await Html.PartialAsync("~/Views/Crop/_ExcessWinterRainfall.cshtml", Model)
+            <govuk-radios asp-for="@Model.IsWinterRainfallMoreThan450" class="govuk-radios--inline">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblIsTheWinterRainfallFrom1OctTo1March, previousYear, Model.Year, Model.FarmName)
+
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        <p class="govuk-body">
+                            @Html.Raw(string.Format(Resource.lblSEPAPublishRainfallDataForScotland, previousYear, Model.Year, Model.FarmName))
+                        </p>
+                    </govuk-radios-hint>
+                    <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <fieldset class="govuk-fieldset">
+                <button class="govuk-button" data-module="govuk-button">Continue</button>
+            </fieldset>
+
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">Cancel</a></p>
+
+        </form>
+    </div>
+</div>

@@ -682,6 +682,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 450mm or more.
+        /// </summary>
+        public static string lbl450OrMore {
+            get {
+                return ResourceManager.GetString("lbl450OrMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A.
         /// </summary>
         public static string lblA {
@@ -3013,6 +3022,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change winter rainfall for harvest year {0}..
+        /// </summary>
+        public static string lblChangeWinterRainfallForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblChangeWinterRainfallForHarvestYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check answer.
         /// </summary>
         public static string lblCheckAnswer {
@@ -3558,6 +3576,15 @@ namespace NMP.Commons.Resources {
         public static string lblCreatePlan {
             get {
                 return ResourceManager.GetString("lblCreatePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create rainfall.
+        /// </summary>
+        public static string lblCreateRainfall {
+            get {
+                return ResourceManager.GetString("lblCreateRainfall", resourceCulture);
             }
         }
         
@@ -5196,6 +5223,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterValidValue {
             get {
                 return ResourceManager.GetString("lblEnterValidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter winter rainfall for harvest year {0}..
+        /// </summary>
+        public static string lblEnterWinterRainfallForHarvestYear {
+            get {
+                return ResourceManager.GetString("lblEnterWinterRainfallForHarvestYear", resourceCulture);
             }
         }
         
@@ -7711,6 +7747,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is the winter rainfall (from 1 October {0} to 1 March {1}) at {2} 450mm or more?.
+        /// </summary>
+        public static string lblIsTheWinterRainfallFrom1OctTo1March {
+            get {
+                return ResourceManager.GetString("lblIsTheWinterRainfallFrom1OctTo1March", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is this a new sward or existing sward?.
         /// </summary>
         public static string lblIsThisANewSwardOrExistingSward {
@@ -8194,6 +8239,15 @@ namespace NMP.Commons.Resources {
         public static string lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm {
             get {
                 return ResourceManager.GetString("lblLengthOfTimeYouHaveTheseAnimalsOnTheFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to less than 450mm.
+        /// </summary>
+        public static string lblLessThan450 {
+            get {
+                return ResourceManager.GetString("lblLessThan450", resourceCulture);
             }
         }
         
@@ -12824,6 +12878,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SEPA publish rainfall data for Scotland. &lt;a href=&quot;https://ahdb.org.uk/knowledge-library/how-to-use-excess-winter-rainfall-data-to-plan-nitrogen-applications&quot; target=&quot;_blank&quot;&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;.
+        /// </summary>
+        public static string lblSEPAPublishRainfallDataForScotland {
+            get {
+                return ResourceManager.GetString("lblSEPAPublishRainfallDataForScotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to September.
         /// </summary>
         public static string lblSeptember {
@@ -15607,6 +15670,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update rainfall.
+        /// </summary>
+        public static string lblUpdateRainfall {
+            get {
+                return ResourceManager.GetString("lblUpdateRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall categories are estimated from the average annual rainfall, or excess winter rainfall when entered..
         /// </summary>
         public static string lblUpdateRainfallContentOne {
@@ -15720,6 +15792,15 @@ namespace NMP.Commons.Resources {
         public static string lblUpdateUpdate_excess_winter_rainfall {
             get {
                 return ResourceManager.GetString("lblUpdateUpdate excess winter rainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update winter rainfall.
+        /// </summary>
+        public static string lblUpdateWinterRainfall {
+            get {
+                return ResourceManager.GetString("lblUpdateWinterRainfall", resourceCulture);
             }
         }
         
@@ -17911,6 +17992,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter rainfall (1 October {0} to 1 March {1}).
+        /// </summary>
+        public static string lblWinterRainfall1OctTo1March {
+            get {
+                return ResourceManager.GetString("lblWinterRainfall1OctTo1March", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter rainfall is {0}..
+        /// </summary>
+        public static string lblWinterRainfallIs450OrMoreOrLess {
+            get {
+                return ResourceManager.GetString("lblWinterRainfallIs450OrMoreOrLess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Winter wheat.
         /// </summary>
         public static string lblWinterWheat {
@@ -18397,6 +18496,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have not entered winter rainfall..
+        /// </summary>
+        public static string lblYouHaveNotEnteredWinterRainfall {
+            get {
+                return ResourceManager.GetString("lblYouHaveNotEnteredWinterRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have not planned any crops for {0} that require an {1} report..
         /// </summary>
         public static string lblYouHaveNotPlannedAnyCropsForYear {
@@ -18780,6 +18888,15 @@ namespace NMP.Commons.Resources {
         public static string MsgAddressLine4MaxLengthValidation {
             get {
                 return ResourceManager.GetString("MsgAddressLine4MaxLengthValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter Rainfall for {0} updated.
+        /// </summary>
+        public static string MsgAddWinterRainfallContentOne {
+            get {
+                return ResourceManager.GetString("MsgAddWinterRainfallContentOne", resourceCulture);
             }
         }
         
