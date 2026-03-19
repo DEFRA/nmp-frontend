@@ -644,7 +644,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
             if (wrapper?.Error != null)
             {
-                var error = wrapper.Error.ToObject<Error>();
+                var error = wrapper?.Error.ToObject<Error>();
                 _logger.LogError("{Code} : {Message} : {Stack} : {Path}",
                     (object?)error?.Code, (object?)error?.Message, (object?)error?.Stack, (object?)error?.Path);
                 return (default, error);
