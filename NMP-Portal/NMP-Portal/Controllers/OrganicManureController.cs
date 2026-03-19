@@ -1931,8 +1931,12 @@ namespace NMP.Portal.Controllers
 
             var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
 
-            (string? closedPeriod, Error error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
-            return closedPeriod;
+            (string? closedPeriod, Error? error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
+            if(error != null)
+            {
+                return closedPeriod;
+            }
+            return null;
         }
 
         [HttpGet]
@@ -3208,7 +3212,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                                     {
-                                                        (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+                                                        (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm);
 
                                                     }
 
@@ -3430,7 +3434,7 @@ namespace NMP.Portal.Controllers
                                             {
                                                 if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                                 {
-                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm);
 
                                                 }
 
@@ -3679,7 +3683,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm);
 
                                             }
 
@@ -5158,7 +5162,7 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
                                             {
-                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, Convert.ToInt32(fieldId), farm, fieldDetail);
+                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm);
                                                 if (error != null)
                                                 {
                                                     if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
@@ -6716,7 +6720,7 @@ namespace NMP.Portal.Controllers
 
             return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
         }
-        private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, int fieldId, Farm farm, FieldDetailResponse fieldDetail)
+        private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, Farm farm)
         {
             Error? error = null;
             string warningMsg = string.Empty;
@@ -6879,7 +6883,7 @@ namespace NMP.Portal.Controllers
             // Organic farm, high N, NVZ
             if (registeredOrganicProducer && isHighReadilyAvailableNitrogen && isWithinNVZ)
             {
-                (model, error, closedPeriod, isWithinClosedPeriod) = await HandleOrganicHighNWarning(model, fieldDetail, warningMessage, farm);
+                (model, error, closedPeriod, isWithinClosedPeriod) = await HandleOrganicHighNWarning(model, warningMessage, farm);
                 return (model, error, closedPeriod, isWithinClosedPeriod);
             }
 
@@ -6909,12 +6913,12 @@ namespace NMP.Portal.Controllers
         }
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleOrganicHighNWarning(
-            OrganicManureViewModel model, FieldDetailResponse fieldDetail, WarningWithinPeriod warningMessage, Farm farm)
+            OrganicManureViewModel model, WarningWithinPeriod warningMessage, Farm farm)
         {
             Error? error = null;
             string? closedPeriod = string.Empty;
             bool isWithinClosedPeriod = false;
-            (CropTypeResponse cropTypeResponse, Error error3) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
+            (CropTypeResponse cropTypeResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(Convert.ToInt32(model.FieldList[0]), model.HarvestYear ?? 0, false);
             if (error != null) return (model, error, closedPeriod, isWithinClosedPeriod);
 
             List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
