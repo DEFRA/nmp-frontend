@@ -616,55 +616,6 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
         return (totalN, error);
     }
-    //public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId)
-    //{
-    //    string? closedPeriod = null;
-    //    Error? error = null;
-    //    try
-    //    {
-    //        HttpClient httpClient = await GetNMPAPIClient();
-    //        string url = string.Empty;
-    //        if (nvzProgramId == null)
-    //        {
-    //            url = string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodAsyncAPI, countryId, cropTypeId);
-    //        }
-    //        else
-    //        {
-    //            url = string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
-    //        }
-    //        var response = await httpClient.GetAsync(url);
-    //        string result = await response.Content.ReadAsStringAsync();
-    //        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-    //        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.ClosedPeriod != null)
-    //        {
-    //            closedPeriod = responseWrapper?.Data?.ClosedPeriod?.ToObject<string>();
-    //        }
-    //        else
-    //        {
-    //            if (responseWrapper != null && responseWrapper.Error != null)
-    //            {
-    //                error = responseWrapper?.Error?.ToObject<Error>();
-    //                if (error != null)
-    //                {
-    //                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-    //                }
-    //            }
-    //        }
-    //    }
-    //    catch (HttpRequestException hre)
-    //    {
-    //        error = new Error();
-    //        error.Message = Resource.MsgServiceNotAvailable;
-    //        _logger.LogError(hre, hre.Message);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        error = new Error();
-    //        error.Message = ex.Message;
-    //        _logger.LogError(ex, ex.Message);
-    //    }
-    //    return (closedPeriod, error);
-    //}
 
     public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(
     int countryId, int cropTypeId, int? nvzProgramId)
