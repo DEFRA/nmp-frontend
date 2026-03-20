@@ -2221,6 +2221,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application detail.
+        /// </summary>
+        public static string lblApplicationDetail {
+            get {
+                return ResourceManager.GetString("lblApplicationDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application method.
         /// </summary>
         public static string lblApplicationMethod {
@@ -2262,6 +2271,15 @@ namespace NMP.Commons.Resources {
         public static string lblApplicationRateOverTheMaximumRateForSlurry {
             get {
                 return ResourceManager.GetString("lblApplicationRateOverTheMaximumRateForSlurry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application rate (per hectare).
+        /// </summary>
+        public static string lblApplicationRatePerHectare {
+            get {
+                return ResourceManager.GetString("lblApplicationRatePerHectare", resourceCulture);
             }
         }
         
@@ -6649,6 +6667,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop need is based on guidance in the SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine)..
+        /// </summary>
+        public static string lblGuidanceForScotland {
+            get {
+                return ResourceManager.GetString("lblGuidanceForScotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Harvest year.
         /// </summary>
         public static string lblHarvestYear {
@@ -7585,11 +7612,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inorganic fertiliser and lime applications for {0} (per hectare).
+        ///   Looks up a localized string similar to Inorganic fertiliser and lime applications for {0}.
         /// </summary>
         public static string lblInorganicFertiliserAndLimeApplicationsForField {
             get {
                 return ResourceManager.GetString("lblInorganicFertiliserAndLimeApplicationsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inorganic fertiliser and lime applications for {0} (per hectare).
+        /// </summary>
+        public static string lblInorganicFertiliserAndLimeApplicationsForFieldPerHectare {
+            get {
+                return ResourceManager.GetString("lblInorganicFertiliserAndLimeApplicationsForFieldPerHectare", resourceCulture);
             }
         }
         
@@ -10205,6 +10241,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No..
+        /// </summary>
+        public static string lblNumber {
+            get {
+                return ResourceManager.GetString("lblNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number in {0} {1}.
         /// </summary>
         public static string lblNumberInMonthSuffix {
@@ -10327,6 +10372,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrients {
             get {
                 return ResourceManager.GetString("lblNutrients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient totals from organic material applications.
+        /// </summary>
+        public static string lblNutrientTotalsFromOrganicMaterialApplications {
+            get {
+                return ResourceManager.GetString("lblNutrientTotalsFromOrganicMaterialApplications", resourceCulture);
             }
         }
         
@@ -10813,6 +10867,15 @@ namespace NMP.Commons.Resources {
         public static string lblOrgenisation {
             get {
                 return ResourceManager.GetString("lblOrgenisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material application for {0}.
+        /// </summary>
+        public static string lblOrgMaterialApplicationForFieldName {
+            get {
+                return ResourceManager.GetString("lblOrgMaterialApplicationForFieldName", resourceCulture);
             }
         }
         
@@ -11632,6 +11695,15 @@ namespace NMP.Commons.Resources {
         public static string lblPreviousCrop {
             get {
                 return ResourceManager.GetString("lblPreviousCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous crop in {0}.
+        /// </summary>
+        public static string lblPreviousCropInYear {
+            get {
+                return ResourceManager.GetString("lblPreviousCropInYear", resourceCulture);
             }
         }
         
@@ -12878,7 +12950,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SEPA publish rainfall data for Scotland. &lt;a href=&quot;https://ahdb.org.uk/knowledge-library/how-to-use-excess-winter-rainfall-data-to-plan-nitrogen-applications&quot; target=&quot;_blank&quot;&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;.
+        ///   Looks up a localized string similar to SEPA publish rainfall data for Scotland. &lt;a href=&quot;https://www2.sepa.org.uk/rainfall&quot; target=&quot;_blank&quot;&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;.
         /// </summary>
         public static string lblSEPAPublishRainfallDataForScotland {
             get {
@@ -13882,6 +13954,15 @@ namespace NMP.Commons.Resources {
         public static string lblStartingPBalance {
             get {
                 return ResourceManager.GetString("lblStartingPBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status/pH.
+        /// </summary>
+        public static string lblStatusSlashPH {
+            get {
+                return ResourceManager.GetString("lblStatusSlashPH", resourceCulture);
             }
         }
         
@@ -17992,6 +18073,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter rainfall.
+        /// </summary>
+        public static string lblWinterRainfall {
+            get {
+                return ResourceManager.GetString("lblWinterRainfall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Winter rainfall (1 October {0} to 1 March {1}).
         /// </summary>
         public static string lblWinterRainfall1OctTo1March {
@@ -18762,6 +18852,15 @@ namespace NMP.Commons.Resources {
         public static string lbNumberInMonthYear {
             get {
                 return ResourceManager.GetString("lbNumberInMonthYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material type.
+        /// </summary>
+        public static string lbOrganicMaterialType {
+            get {
+                return ResourceManager.GetString("lbOrganicMaterialType", resourceCulture);
             }
         }
         
