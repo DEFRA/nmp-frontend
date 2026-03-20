@@ -45,4 +45,5 @@ public interface IOrganicManureService
     Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData);
     Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID);
     Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeById(int id);
+    Task<(string?, Error?)> FetchOrganicManureClosedPeriod(OrganicClosedPeriodRequest organicClosedPeriodRequest);
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -284,7 +285,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         Error? error = null;
         List<FertiliserManure> fertilisers = new List<FertiliserManure>();
         try
-        {            
+        {
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.PostAsync(ApiurlHelper.AddFertiliserManuresAsyncAPI, new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
@@ -313,16 +314,16 @@ public class FertiliserManureService : Service, IFertiliserManureService
         catch (HttpRequestException hre)
         {
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);          
+            _logger.LogError(ex, ex.Message);
         }
         return (fertilisers, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate, int? fertiliserId, bool confirm)
     {
         Error error = null;
         decimal totalN = 0;
@@ -354,7 +355,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    
+
                     error = responseWrapper.Error.ToObject<Error>();
                     if (error != null)
                     {
@@ -398,7 +399,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 Content = content
             };
-            var response = await httpClient.SendAsync(requestMessage);            
+            var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -484,12 +485,12 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId,farmId,harvestYear));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId, farmId, harvestYear));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                fertiliserResponse = responseWrapper.Data.ToObject<List<FertiliserAndOrganicManureUpdateResponse>>();                    
+                fertiliserResponse = responseWrapper.Data.ToObject<List<FertiliserAndOrganicManureUpdateResponse>>();
             }
             else
             {
@@ -520,7 +521,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
     }
     public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
     {
-        Error? error =null;
+        Error? error = null;
         List<FertiliserManure> fertiliser = new List<FertiliserManure>();
         try
         {
@@ -614,5 +615,52 @@ public class FertiliserManureService : Service, IFertiliserManureService
             throw new Exception(error.Message, ex);
         }
         return (totalN, error);
+    }
+
+    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(
+    int countryId, int cropTypeId, int? nvzProgramId)
+    {
+        string url = nvzProgramId == null
+            ? string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodAsyncAPI, countryId, cropTypeId)
+            : string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
+
+        return await GetAsync<string>(url);
+    }
+
+    private async Task<(T?, Error?)> GetAsync<T>(string url)
+    {
+        try
+        {
+            var httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(url);
+            var result = await response.Content.ReadAsStringAsync();
+
+            var wrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode && wrapper?.Data != null)
+            {
+                return (wrapper?.Data?.ClosedPeriod.ToObject<T>(), null);
+            }
+
+            if (wrapper?.Error != null)
+            {
+                var error = wrapper?.Error.ToObject<Error>();
+                _logger.LogError("{Code} : {Message} : {Stack} : {Path}",
+                    (object?)error?.Code, (object?)error?.Message, (object?)error?.Stack, (object?)error?.Path);
+                return (default, error);
+            }
+
+            return (default, null);
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.LogError(hre, hre.Message);
+            return (default, new Error { Message = Resource.MsgServiceNotAvailable });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return (default, new Error { Message = ex.Message });
+        }
     }
 }

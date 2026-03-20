@@ -241,4 +241,7 @@ internal static class ApiurlHelper
     public const string FetchTotalNByCropIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-crop-id/{0}?fromDate={1}&toDate={2}&confirm={3}";
     public const string FetchNvzActionProgramsByCountryIdAsyncAPI = "vendors/rb209/Soil/NvzActionProgram/{0}";
     public const string FetchFarmAndFarmsNvzByFarmIdAsyncAPI = "farms-nvz-data/{0}";
+    public const string FetchOrganicManureClosedPeriodAsyncAPI = "organic-manure/get-closed-period/{0}?fieldType={1}&harvestYear={2}&sowingDate={3}&countryId={4}&cropGroupId={5}&cropTypeId={6}&isPerennial={7}";
+    public const string FetchFertiliserManureClosedPeriodAsyncAPI = "fertiliser-manures/get-closed-period/{0}?CropTypeId={1}";
+    public const string FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI = "fertiliser-manures/get-closed-period/{0}?CropTypeId={1}&NvzId={2}";
 }

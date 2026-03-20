@@ -232,5 +232,10 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchFarmManureTypeById() called");
         return await _organicManureService.FetchFarmManureTypeById(id);
     }
+    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriod(OrganicClosedPeriodRequest organicClosedPeriodRequest)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchOrganicManureClosedPeriod() called");
+        return await _organicManureService.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
+    }
 
 }
