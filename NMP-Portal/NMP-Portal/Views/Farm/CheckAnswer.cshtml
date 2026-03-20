@@ -43,11 +43,11 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackCheckAnswer") asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Farm">@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay" asp-action="@(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? "FarmUpdate" : "CheckAnswer")" asp-controller="Farm" method="post">
     @Html.AntiForgeryToken()
-
+    @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             @if (!ViewData.ModelState.IsValid)
@@ -59,9 +59,9 @@
                     {
                         foreach (var error in state.Value.Errors)
                         {
-                            if (error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit,Resource.lblFirstLineAddress))
-                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblSecondLineAddress)) 
-                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblTownOrCity)) 
+                            if (error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblFirstLineAddress))
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblSecondLineAddress))
+                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblTownOrCity))
                             || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblCounty)))
                             {
                                 errorAction = action;
@@ -81,134 +81,182 @@
                     <govuk-error-summary-item href="#passport-issued-day">@TempData["AddFarmError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <h1 class="govuk-heading-l">
+            <h1 class="govuk-heading-l text-wrap-anywhere">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? string.Format(Resource.lblUpdateFarm, Model.Name) : Resource.lblCheckYourAnswers)
             </h1>
 
-            <div hidden="true">
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPostCodeChanged" value="@Model.IsPostCodeChanged" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Rainfall" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RegisteredOrganicProducer" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZFields" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldsAbove300SeaLevel" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FullAddress" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedIsUpdate" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ClimateDataPostCode" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManualAddress" value="@Model.IsManualAddress.ToString().ToLower()" />
-            </div>
-            <div class="check-answers">
-                <govuk-summary-list>
+
+            <govuk-summary-list>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblFarmName
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.Name
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblCountry
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.Country
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        @if (string.IsNullOrEmpty(Model.EncryptedIsUpdate))
+                        {
+                            <govuk-summary-list-row-action asp-action="Country" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblCountry)</span></govuk-summary-list-row-action>
+                        }
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @Resource.lblFarmName
+                            @Resource.lblBusinessName
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.Name
+                            @Model.BusinessName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @Resource.lblCountry
+                            @Resource.lblBusinessReferenceNumberOptional
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.Country
+                            @(string.IsNullOrWhiteSpace(Model.SBI) ? Resource.lblNotEntered : Model.SBI)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            @if (string.IsNullOrEmpty(Model.EncryptedIsUpdate))
+                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblMainLocationCodeMCOptional
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(string.IsNullOrWhiteSpace(Model.CPH) ? Resource.lblNotEntered : Model.CPH)
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblPostCode
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.Postcode
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblFarmAddress
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.FullAddress
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmAddress)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode) && Model.ClimateDataPostCode != Model.Postcode)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblClimatePostcode
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.ClimateDataPostCode
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblClimatePostcode)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+                }
+                <govuk-summary-list-row class=@((!Model.Rainfall.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblAverageAnnualRainfall
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(!Model.Rainfall.HasValue ? Resource.lblNotSet : string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm))
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblAnnualRainfall)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+
+                @if (Model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @fieldsInNVZ
+                        </govuk-summary-list-row-value>
+
+                        <govuk-summary-list-row-actions>
+                            @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                             {
-                                <govuk-summary-list-row-action asp-action="Country" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblCountry)</span></govuk-summary-list-row-action>
+                                if (ViewBag.FieldCount == 0)
+                                {
+                                    <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
+                                }
+                            }
+                            else
+                            {
+                                <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
                             }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+                }
+                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @Resource.lblPostCode
+                            @string.Format(Resource.lblWhichNVZAreTheFieldsAtYourFarmIn, Model.Name)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.Postcode
+                            @foreach (var selectedNvz in ViewBag.SelectedNVZs)
+                            {
+                                @selectedNvz
+                                <br />
+                            }
                         </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblFarmAddress
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @Model.FullAddress
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmAddress)</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                    @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode) && Model.ClimateDataPostCode != Model.Postcode)
-                    {
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblClimatePostcode
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @Model.ClimateDataPostCode
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblClimatePostcode)</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
-                    <govuk-summary-list-row class=@((!Model.Rainfall.HasValue)?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @Resource.lblAverageAnnualRainfall
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @(!Model.Rainfall.HasValue ? Resource.lblNotSet : string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm))
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblAnnualRainfall)</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
 
-                    @if (Model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Wales)
-                    {
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @fieldsInNVZ
-                            </govuk-summary-list-row-value>
-
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    }
-
-                    <govuk-summary-list-row>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @fieldsAbove300m
-                        </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name))</span></govuk-summary-list-row-action>
+                            @if (ViewBag.FieldCount == 0)
+                            {
+                                <govuk-summary-list-row-action asp-action="NitrateVulnerableZones" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@string.Format(Resource.lblWhichNVZAreTheFieldsAtYourFarmIn, Model.Name)</span></govuk-summary-list-row-action>
+                            }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
+                }
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @fieldsAbove300m
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name))</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                @if (Model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @Resource.lblRegisteredOrganicProducer
@@ -220,8 +268,8 @@
                             <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducer)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                </govuk-summary-list>
-            </div>
+                }
+            </govuk-summary-list>
 
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblUpdateThisFarm : Resource.lblAddThisFarm)
@@ -235,7 +283,7 @@
                 }
                 else
                 {
-                    if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                    if (ViewBag.IsDataChange != null && (bool)ViewBag.IsDataChange)
                     {
                         <a class="govuk-link" asp-action="Cancel" asp-controller="Farm">@Resource.lblCancel</a>
                     }

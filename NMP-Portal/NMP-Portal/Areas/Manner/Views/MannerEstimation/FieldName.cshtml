@@ -1,0 +1,41 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep5ViewModel
+
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "AverageAnnualRainfall")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="FieldName" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-input asp-for="@Model.FieldName">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @Resource.AddFieldNameQuestion
+                </govuk-input-label>
+            </govuk-input>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button> 
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>

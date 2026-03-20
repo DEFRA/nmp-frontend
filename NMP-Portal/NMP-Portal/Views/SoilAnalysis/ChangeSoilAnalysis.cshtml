@@ -1,35 +1,21 @@
 ﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
 @using NMP.Commons.ViewModels
+@using NMP.Commons.Enums
 
 @model SoilAnalysisViewModel
 @{
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
     ? $"{string.Format(Resource.lblChangeSoilAnalysisFromDate, Model.Date != null ? Model.Date.Value.ToString("dd MMMM yyyy") : "")} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
     $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-
+    ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.ChangeSoilAnalysis;
 }
 
-@* @if (ViewBag.Error != null)
-{
-    <govuk-error-summary>
-        <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
-    </govuk-error-summary>
-} *@
 @if (Model != null)
 {
     @section BeforeContent {
-        @*     @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value)
-        { *@
         <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackActionForCheckAnswer") asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
 
-        @*  }
-        else
-        {
-            <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId" asp-route-farmId="@Model.EncryptedFarmId">
-                @Resource.lblBack
-            </govuk-back-link>
-        } *@
     }
     <form class="form-with-overlay" asp-action="UpdateSoil" asp-controller="SoilAnalysis" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
@@ -56,27 +42,7 @@
                 {
                     <p class="govuk-body">@Resource.lblAnyChangesYouMakeMayAffectTheNutrientRecommendation</p>
                 }
-                <div hidden="true">
-                    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Date"></govuk-date-input>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PH" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedSoilAnalysisId" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SulphurDeficient" value="@Model.SulphurDeficient.ToString().ToLower()" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilNutrientValueTypeIndex" value="@Model.IsSoilNutrientValueTypeIndex.ToString().ToLower()" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isSoilAnalysisAdded" value="@Model.isSoilAnalysisAdded.ToString().ToLower()" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
-                </div>
+                @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
                 <govuk-summary-list>
                     <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
@@ -121,23 +87,32 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
+                    @if (((Model.IsSoilNutrientValueTypeIndex.HasValue && Model.IsSoilNutrientValueTypeIndex.Value)&&(Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
+                                    (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue))
+                                    || ((Model.IsSoilNutrientValueTypeIndex.HasValue && !Model.IsSoilNutrientValueTypeIndex.Value) && ((Model.PH.HasValue) || Model.Potassium.HasValue ||
+                                    Model.Phosphorus.HasValue || Model.Magnesium.HasValue)))
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblPh
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @((!Model.PH.HasValue) ? Resource.lblNotEntered : (Model.PH))
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPh)</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+                    }
 
                     @if (Model.IsSoilNutrientValueTypeIndex.HasValue && Model.IsSoilNutrientValueTypeIndex.Value)
                     {
+                       
+
                         @if (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                                         (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue)
                         {
-                            <govuk-summary-list-row>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblPh
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @((!Model.PH.HasValue) ? Resource.lblNotEntered : (Model.PH))
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPh)</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblPhosphorusIndex
@@ -174,10 +149,10 @@
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
+                            
                         }
                         else
                         {
-
                             <govuk-summary-list-row class=@((!Model.PH.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblPh
@@ -225,6 +200,7 @@
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
+                            
                         }
                     }
                     else
@@ -232,7 +208,7 @@
                         @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                         Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                         {
-                            <govuk-summary-list-row>
+                            @* <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblPh
                                 </govuk-summary-list-row-key>
@@ -242,7 +218,7 @@
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPh)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
+                            </govuk-summary-list-row> *@
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblPhosphorusPerLitreOfSoil
@@ -330,9 +306,20 @@
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
-
+                       
                     }
 
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblOrganicMatter
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @((!Model.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : Model.OrganicMatterPercentage)                            
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
                 </govuk-summary-list>
 
                 @if (Model.isSoilAnalysisAdded == null)

@@ -16,4 +16,5 @@ public class FarmViewModel:Farm
     public int? ArableArea { get; set; }
     public int? GrassArea { get; set; }
     public bool? IsCancel { get; set; }
+    public List<string>? NitrateVulnerableZoneList { get; set; }
 }

@@ -4,7 +4,7 @@ internal static class ApiurlHelper
     public const string GetToken = "Token";
     public const string AddressLookupAPI = "vendors/address-lookup/addresses?postcode={0}&offset={1}";
     public const string AddFarmAPI = "farms/createFarm";
-    public const string IsFarmExist = "farms/exists?Name={0}&Postcode={1}&Id={2}";
+    public const string IsFarmExist = "farms/exists?Name={0}&Postcode={1}&Id={2}&OrganisationID={3}";
     public const string FetchFarmByUserIdAPI = "farms/users/{0}";
     public const string FetchFarmByOrgIdAPI = "farms/organisations/{0}";
     public const string FetchFarmByIdAPI = "farms/{0}";
@@ -139,6 +139,8 @@ internal static class ApiurlHelper
     public const string MergePreviousCropAPI = "previous-cropping/mergePreviousCrop";
     public const string FetchFarmManureTypeByIdAPI = "farm-manure-type/farm-manure-type-by-id/{0}";
     public const string UpdateOnlyFieldAsyncAPI = "fields-update";
+    public const string FetchCountryByIdAsyncAPI = "countries/By-Id/{0}";
+    public const string FetchPscIndexesAsyncAPI = "psc-indexes";
 
     //Manner APi Url
     public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
@@ -168,10 +170,13 @@ internal static class ApiurlHelper
     public const string FetchMannerCalculateNutrientAsyncAPI = "vendors/manner/calculate-nutrients";
     public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
     public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
+    public const string FetchFarmsNVZByFarmIdAsyncAPI = "farmsNVZ/{0}";
+
     //UserExtension API Urls
     public const string FetchUserExtensionAPI = "user-extension";
     public const string UpdateUserExtensionTermsOfUseAPI = "user-extension/accept-terms-of-use";
-    public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service";
+    public const string UpdateUserExtensionDoNotShowAboutServiceAPI = "user-extension/show-about-service"; 
+    public const string UpdateUserExtensionDoNotShowAboutMannerAPI = "user-extension/do-not-show-about-manner";
 
     public const string FetchSnsAnalysisByCropIdAsyncAPI = "sns-analyses/crop/{0}";
     public const string AddSnsAnalysisAsyncAPI = "sns-analyses";
@@ -218,7 +223,7 @@ internal static class ApiurlHelper
     public const string FetchBankSlopeAnglesAsyncAPI = "bank-slope-angles";
     public const string FetchBankSlopeAngleByIdAsyncAPI = "bank-slope-angles/{0}";
     public const string AddStoreCapacityAsyncAPI = "store-capacities";
-    public const string IsStoreNameExistByFarmIdYearAndNameAsyncAPI = "store-capacities/{0}/{1}/{2}?ID={3}";
+    public const string IsStoreNameExistByFarmIdYearAndNameAsyncAPI = "store-capacities/{0}/{1}?ID={2}";
     public const string FetchStoreCapacityByIdAsyncAPI = "storage-capacities/{0}";
     public const string CopyStoreManureCapacityAsyncAPI = "storage-capacities/copystoragecapacities";
     public const string DeleteStorageCapacityByIdAPI = "store-capacities/{0}";
@@ -231,4 +236,6 @@ internal static class ApiurlHelper
     public const string FetchAllWarningAsyncAPI = "warning";
     public const string FetchTotalNByManagementIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-management-period/{0}?fromDate={1}&toDate={2}&confirm={3}";
     public const string FetchTotalNByCropIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen-by-crop-id/{0}?fromDate={1}&toDate={2}&confirm={3}";
+    public const string FetchNvzActionProgramsByCountryIdAsyncAPI = "vendors/rb209/Soil/NvzActionProgram/{0}";
+    public const string FetchFarmAndFarmsNvzByFarmIdAsyncAPI = "farms-nvz-data/{0}";
 }

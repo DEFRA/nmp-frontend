@@ -49,7 +49,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     @if (IsSectionDefined("HeadIcons"))
     {
-        @RenderSection("HeadIcons")
+        @await RenderSectionAsync("HeadIcons")
     }
     else
     {
@@ -62,26 +62,26 @@
 
     @Html.GovUkFrontendStyleImports()    
     <link rel="stylesheet" asp-append-version="true" href="~/assets/stylesheets/application.css"/>
-    @RenderSection("Head", required: false)
+    @await RenderSectionAsync("Head", required: false)
     <meta property="og:image" content="@(ogImage)"/>
 </head>
 <body class="@Classes("govuk-template__body", ViewBag.BodyClasses)">
     @Html.GovUkFrontendJsEnabledScript(cspNonce)
-    @RenderSection("BodyStart", required: false)
+    @await RenderSectionAsync("BodyStart", required: false)
 
     @if (IsSectionDefined("SkipLink"))
     {
-        @RenderSection("SkipLink", required: false)
+        @await RenderSectionAsync("SkipLink", required: false)
     }
     else
     {
         <govuk-skip-link href="#main-content">Skip to main content</govuk-skip-link>
     }
 
-    @RenderSection("Header", required: false)
+    @await RenderSectionAsync("Header", required: false)
 
     <div class="@Classes("govuk-width-container", ViewBag.ContainerClasses)">
-        @RenderSection("BeforeContent", required: false)
+        @await RenderSectionAsync("BeforeContent", required: false)
         <main class="@Classes("govuk-main-wrapper", ViewBag.MainClasses)" id="main-content" role="main" lang="@ViewBag.MainLang" prepend-error-summary="false">
             @if (ViewBag.ErrorSummaryHasBeenRendered != true)
             {
@@ -91,9 +91,9 @@
         </main>
     </div>
 
-    @RenderSection("Footer", required: false) 
+    @await RenderSectionAsync("Footer", required: false)
     @Html.GovUkFrontendScriptImports(cspNonce)    
     <script type="text/javascript" asp-add-nonce="true" asp-append-version="true" src="~/assets/javascripts/application.js"></script>
-    @RenderSection("BodyEnd")    
+    @await RenderSectionAsync("BodyEnd")
 </body>
 </html>

@@ -20,8 +20,8 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IOrganicManureLogic organicManureLogic,
-     IPreviousCroppingLogic previousCroppingLogic) : Controller
+     IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic,
+     IPreviousCroppingLogic previousCroppingLogic, IMannerLogic mannerLogic) : Controller
 {
     private readonly ILogger<CropController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -30,8 +30,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
-    private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;    
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
+    private readonly IMannerLogic _mannerLogic = mannerLogic;
     private const string _cropInfoTwoActionName = "CropInfoTwo";
     private const string _cropDataSessionKey = "CropData";
     private const string _plansAndRecordsOverviewActionName = "PlansAndRecordsOverview";
@@ -133,7 +133,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : HarvestYearForPlan() action posted");
 
-        if (model.Year == null)
+        if (!model.Year.HasValue)
         {
             ModelState.AddModelError("Year", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
         }
@@ -149,7 +149,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             for (int i = 0; i < model?.Crops?.Count; i++)
             {
-                model.Crops[i].Year = model.Year.Value;
+                model.Crops[i].Year = model.Year??0;
             }
 
             SetCropToSession(model);
@@ -184,7 +184,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsPlanRecord == true)
         {
-            return RedirectToAction(_plansAndRecordsOverviewActionName,"Crop",
+            return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop",
                 new
                 {
                     id = model.EncryptedFarmId,
@@ -194,7 +194,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsAddAnotherCrop)
         {
-            return RedirectToAction( _harvestYearOverviewActionName,   "Crop",
+            return RedirectToAction(_harvestYearOverviewActionName, "Crop",
                 new
                 {
                     id = model.EncryptedFarmId,
@@ -202,7 +202,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 });
         }
 
-        return View("HarvestYearForPlan",model);
+        return View("HarvestYearForPlan", model);
     }
 
     private async Task InitializeFarmContextAsync(PlanViewModel model, string encryptedFarmId)
@@ -211,7 +211,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.EncryptedFarmId = encryptedFarmId;
 
         var (farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
-        model.IsEnglishRules = farm.EnglishRules;
+        model.FarmRB209CountryID = farm?.RB209CountryID;
     }
 
     private IActionResult HandleBadRequest()
@@ -237,9 +237,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            (Farm farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            model.IsEnglishRules = farm.EnglishRules;
-            ViewBag.CropGroupList = await GetCropGroups(model.IsEnglishRules);
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+            model.FarmRB209CountryID = farm?.RB209CountryID;
+            if (model.FarmRB209CountryID.HasValue)
+            {
+                ViewBag.CropGroupList =
+                    await GetCropGroups(model.FarmRB209CountryID.Value);
+            }
 
             if (model.IsCropGroupChange)
             {
@@ -257,11 +261,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return View(model);
     }
 
-    private async Task<List<CropGroupResponse>> GetCropGroups(bool isEnglishRule)
+    private async Task<List<CropGroupResponse>> GetCropGroups(int farmRB209CountryID)
     {
         List<CropGroupResponse> cropGroups = await _fieldLogic.FetchCropGroups();
-        var country = isEnglishRule ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-        var cropGroupsList = cropGroups.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+        var cropGroupsList = cropGroups.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
         return cropGroupsList.OrderBy(c => c.CropGroupName).ToList();
     }
 
@@ -279,7 +282,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (!ModelState.IsValid)
             {
                 ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                ViewBag.CropGroupList = await GetCropGroups(model.IsEnglishRules);
+                if (model.FarmRB209CountryID.HasValue)
+                {
+                    ViewBag.CropGroupList =
+                        await GetCropGroups(model.FarmRB209CountryID.Value);
+                }
                 return View(model);
             }
 
@@ -331,7 +338,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CropGroups() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CropGroups() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropGroupError"] = ex.Message;
             return View(model);
         }
@@ -353,32 +360,28 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }).ToList();
 
 
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
-                var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
                 List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
                     .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
 
-                (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
+                (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops);
                 PlanViewModel? cropData = GetCropFromSession();
                 if (cropData != null && cropData.CropTypeID != model.CropTypeID)
                 {
                     model.IsCropTypeChange = true;
                 }
-                if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
+                if (harvestYearPlanResponse.Count > 0 || SelectListItem.Count == 1)
                 {
                     var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                     SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
-                    if (!model.IsCheckAnswer)
+                    if (!model.IsCheckAnswer && model.Crops != null && model.Crops.Count > 0)
                     {
-                        if (model.Crops != null && model.Crops.Count > 0)
+                        foreach (var crop in model.Crops)
                         {
-                            foreach (var crop in model.Crops)
+                            if (crop.FieldID != null)
                             {
-                                if (crop.FieldID != null)
-                                {
-                                    crop.CropOrder = fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) ? 2 : 1;
-                                }
+                                crop.CropOrder = fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value) ? 2 : 1;
                             }
                         }
                     }
@@ -450,9 +453,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
             if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other)
             {
-                List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0);
-                var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-                var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+                List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
                 ViewBag.CropTypeList = cropTypeList.OrderBy(c => c.CropType);
             }
             model.IsCropTypeChange = false;
@@ -496,10 +497,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other)
                 {
-                    List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
-                    cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0);
-                    var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-                    ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList().OrderBy(c => c.CropType); ;
+                    List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
+                    ViewBag.CropTypeList = cropTypes;
                 }
                 return View(model);
             }
@@ -507,11 +506,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
             List<Field> allFields = await _fieldLogic.FetchFieldsByFarmId(farmID);
             List<Field> fieldList = new List<Field>(allFields);
-            Error error = null;
+            Error? error = null;
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
+                if (error == null && harvestYearPlanResponseForFilter.Count > 0)
                 {
                     harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                     if (harvestYearPlanResponseForFilter != null)
@@ -710,7 +709,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CropTypes() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CropTypes() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropTypeError"] = ex.Message;
             return View(model);
         }
@@ -808,7 +807,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             List<HarvestYearPlanResponse> harvestYearPlanResponse = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+            if (error==null && harvestYearPlanResponse.Count > 0)
             {
                 cropPlanForFirstCropFilter = harvestYearPlanResponse
                 .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
@@ -925,7 +924,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<Field> fieldList = new List<Field>(allFields);
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
+            if (error==null && harvestYearPlanResponseForFilter.Count > 0)
             {
                 cropPlanForFirstCropFilter = harvestYearPlanResponseForFilter.Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -1367,10 +1366,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
             }
 
-            bool isPerennial = await _organicManureLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
+            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
             //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-            DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00,00,00, DateTimeKind.Unspecified);
+            DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00, 00, 00, DateTimeKind.Unspecified);
 
             if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
             {
@@ -1492,7 +1491,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         try
         {
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             ViewBag.DefaultYield = defaultYield;
             if (model.IsQuestionChange)
             {
@@ -1519,7 +1518,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!ModelState.IsValid)
         {
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             ViewBag.DefaultYield = defaultYield;
             return View(model);
         }
@@ -1545,7 +1544,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             ViewBag.DefaultYield = defaultYield;
             if (defaultYield == 0 && model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
             {
@@ -1580,7 +1579,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         try
         {
-            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYieldForCropType > 0)
             {
                 ViewBag.IsYieldOptional = Resource.lblYes;
@@ -1644,7 +1643,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     return RedirectToAction("CropInfoOne");
                 }
             }
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYield > 0)
             {
                 ViewBag.DefaultYield = defaultYield;
@@ -1665,7 +1664,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : Yield() post action called");
         try
         {
-            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
             if (defaultYield == 0)
             {
                 if (model.Crops[model.YieldCurrentCounter].Yield == null)
@@ -1791,7 +1790,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             List<CropInfoOneResponse> cropInfoOneList = await GetCropInfoOneList(model);
             await PopulateCropInfoOneViewData(model, cropInfoOneList);
-            if(cropInfoOneList!=null&&cropInfoOneList.Any(x => x.CropInfo1Name == Resource.lblNone))
+            if (cropInfoOneList != null && cropInfoOneList.Any(x => x.CropInfo1Name == Resource.lblNone))
             {
                 model.CropInfo1Name = cropInfoOneList?
                 .FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)
@@ -1842,7 +1841,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     "CropInfo1",
                     Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            List<CropInfoOneResponse> cropInfoOneList = await GetCropInfoOneList(model);                
+            List<CropInfoOneResponse> cropInfoOneList = await GetCropInfoOneList(model);
 
 
             if (!ModelState.IsValid)
@@ -1865,7 +1864,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return GetNextAction(model);
     }
-    
+
 
     private async Task PopulateCropInfoOneViewData(
         PlanViewModel model,
@@ -1959,9 +1958,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<List<CropInfoTwoResponse>> GetFilteredCropInfoTwoList(PlanViewModel model)
     {
         List<CropInfoTwoResponse> cropInfoTwoResponse = await _cropLogic.FetchCropInfoTwoByCropTypeId();
-        var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-        var cropInfoTwoList = cropInfoTwoResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-        return cropInfoTwoList;
+        if (model.FarmRB209CountryID.HasValue)
+        {
+            cropInfoTwoResponse = cropInfoTwoResponse.Where(x => x.CountryId == model.FarmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+        }
+        return cropInfoTwoResponse;
     }
 
     [HttpPost]
@@ -2006,14 +2007,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CheckAnswer() action called");
         PlanViewModel model = new PlanViewModel();
-        Error error = null;
-        List<HarvestYearPlanResponse> harvestYearPlanResponse = null;
-
-        string yieldQuestion = null;
-        string sowingQuestion = null;
-        decimal? firstYield = null;
+        Error? error = null;
+        List<HarvestYearPlanResponse>? harvestYearPlanResponse = null;
+        string? sowingQuestion = null;
         bool isBasePlan = false;
-        bool allYieldsAreSame = true;
         bool allSowingAreSame = true;
         DateTime? firstSowingDate = null;
         try
@@ -2055,7 +2052,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
 
                 (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+                if (error == null && harvestYearPlanResponse.Count > 0)
                 {
                     harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropTypeName == model.CropType && x.CropGroupName == model.CropGroupName).ToList();
                     if (harvestYearPlanResponse != null)
@@ -2067,7 +2064,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.Crops = new List<Crop>();
                         model.FieldList = new List<string>();
                         int counter = 1;
-                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID);
+                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.First().CropTypeID, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                         List<decimal?> yields = new List<decimal?>();
                         for (int i = 0; i < harvestYearPlanResponse.Count; i++)
                         {
@@ -2079,24 +2076,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             crop.FieldID = harvestYearPlanResponse[i].FieldID;
                             crop.CropGroupName = harvestYearPlanResponse[i].CropGroupName;
                             crop.FieldName = harvestYearPlanResponse[i].FieldName;
-                            crop.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
-                            crop.SwardManagementID = harvestYearPlanResponse.FirstOrDefault().SwardManagementID;
-                            crop.DefoliationSequenceID = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
-                            crop.SwardTypeID = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
-                            crop.PotentialCut = harvestYearPlanResponse.FirstOrDefault().PotentialCut;
-                            model.SwardManagementId = harvestYearPlanResponse.FirstOrDefault().SwardManagementID; ;
-                            model.DefoliationSequenceId = harvestYearPlanResponse.FirstOrDefault().DefoliationSequenceID;
-                            model.SwardTypeId = harvestYearPlanResponse.FirstOrDefault().SwardTypeID;
-                            model.PotentialCut = harvestYearPlanResponse.FirstOrDefault().PotentialCut;
+                            crop.CropTypeID = harvestYearPlanResponse[0].CropTypeID;
+                            crop.SwardManagementID = harvestYearPlanResponse[0].SwardManagementID;
+                            crop.DefoliationSequenceID = harvestYearPlanResponse[0].DefoliationSequenceID;
+                            crop.SwardTypeID = harvestYearPlanResponse[0].SwardTypeID;
+                            crop.PotentialCut = harvestYearPlanResponse[0].PotentialCut;
+                            model.SwardManagementId = harvestYearPlanResponse[0].SwardManagementID;
+                            model.DefoliationSequenceId = harvestYearPlanResponse[0].DefoliationSequenceID;
+                            model.SwardTypeId = harvestYearPlanResponse[0].SwardTypeID;
+                            model.PotentialCut = harvestYearPlanResponse[0].PotentialCut;
                             if (harvestYearPlanResponse[i].CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
-                                model.CurrentSward = (harvestYearPlanResponse.FirstOrDefault().Establishment == null || harvestYearPlanResponse.FirstOrDefault().Establishment == 0) ? (int)NMP.Commons.Enums.CurrentSward.ExistingSward : (int)NMP.Commons.Enums.CurrentSward.NewSward;
+                                model.CurrentSward = (harvestYearPlanResponse[0].Establishment == null || harvestYearPlanResponse[0].Establishment == 0) ? (int)NMP.Commons.Enums.CurrentSward.ExistingSward : (int)NMP.Commons.Enums.CurrentSward.NewSward;
                             }
                             else
                             {
                                 model.CurrentSward = null;
                             }
-                            model.GrassSeason = harvestYearPlanResponse.FirstOrDefault().Establishment;
+                            model.GrassSeason = harvestYearPlanResponse[0].Establishment;
                             crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
                             if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                             {
@@ -2116,8 +2113,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             }
 
                             if (harvestYearPlanResponse[i].SowingDate == null)
-                            {
-                                sowingQuestion = Resource.lblNoIWillEnterTheDateLater;
+                            {                                
                                 crop.SowingDate = null;
                                 model.SowingDateQuestion = (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
                             }
@@ -2147,7 +2143,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             List<CropTypeResponse> cropTypeResponseList = (await _fieldLogic.FetchAllCropTypes());
                             if (cropTypeResponseList != null)
                             {
-                                CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
+                                CropTypeResponse? cropTypeResponse = cropTypeResponseList.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
                                 if (cropTypeResponse != null)
                                 {
                                     model.CropGroupId = cropTypeResponse.CropGroupId;
@@ -2167,10 +2163,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.SowingDateQuestion = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
 
                         }
-                        model.CropInfo1 = harvestYearPlanResponse.FirstOrDefault().CropInfo1;
-                        model.CropInfo2 = harvestYearPlanResponse.FirstOrDefault().CropInfo2;
+                        model.CropInfo1 = harvestYearPlanResponse[0].CropInfo1;
+                        model.CropInfo2 = harvestYearPlanResponse[0].CropInfo2;
 
-                        model.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
+                        model.CropTypeID = harvestYearPlanResponse[0].CropTypeID;
                         if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                         {
 
@@ -2206,11 +2202,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             }
                         }
                         model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
-                        model.CropType = harvestYearPlanResponse.FirstOrDefault().CropTypeName;
-                        model.Variety = harvestYearPlanResponse.FirstOrDefault().CropVariety;
-                        model.CropGroupName = harvestYearPlanResponse.FirstOrDefault().CropGroupName;
+                        model.CropType = harvestYearPlanResponse[0].CropTypeName;
+                        model.Variety = harvestYearPlanResponse[0].CropVariety;
+                        model.CropGroupName = harvestYearPlanResponse[0].CropGroupName;
                         model.PreviousCropGroupName = model.CropGroupName;
-                        model.OtherCropName = harvestYearPlanResponse.FirstOrDefault().OtherCropName;
+                        model.OtherCropName = harvestYearPlanResponse[0].OtherCropName;
                         if (model.CropTypeID != null && model.CropInfo1 != null)
                         {
                             model.CropInfo1Name = await _cropLogic.FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(model.CropTypeID.Value, model.CropInfo1.Value);
@@ -2249,7 +2245,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<Field> allFieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmID);
-            if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+            if (error==null && harvestYearPlanResponse.Count > 0)
             {
                 cropPlanForFirstCropFilter = harvestYearPlanResponse
                     .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
@@ -2260,8 +2256,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     //filter the plan list based on the crop group
                     harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                     if (harvestYearPlanResponse != null)
-                    {
-                        var fieldIds = harvestYearPlanResponse.Select(x => x.FieldID).ToList();
+                    {                       
 
                         //Get the fields that we unchecked.
                         List<HarvestYearPlanResponse> removableFields = harvestYearPlanResponse.Where(f => !model.FieldList.Contains(f.FieldID.ToString())).ToList();
@@ -2294,8 +2289,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             {
                                 if (!model.Crops.Any(x => x.FieldID == removableField.FieldID))
                                 {
-                                    (Crop crop, error) = await _cropLogic.FetchCropById(removableField.CropID);
-                                    if (string.IsNullOrWhiteSpace(error.Message))
+                                    (Crop? crop, error) = await _cropLogic.FetchCropById(removableField.CropID);
+                                    if (error == null && crop != null)
                                     {
                                         crop.FieldName = allFieldList.Where(x => x.ID == removableField.FieldID).Select(x => x.Name).FirstOrDefault();
                                         model.Crops.Add(crop);
@@ -2313,9 +2308,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model.CropTypeID.HasValue)
             {
-                decimal defaultYieldForCropType =
-                    await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
-
+                decimal defaultYieldForCropType = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                 if (defaultYieldForCropType > 0)
                 {
                     ViewBag.IsYieldOptional = Resource.lblYes;
@@ -2379,10 +2372,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-            (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
-            if (farm != null && string.IsNullOrWhiteSpace(error.Message))
+            (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
+            if (farm != null && string.IsNullOrWhiteSpace(error?.Message))
             {
-                model.IsEnglishRules = farm.EnglishRules;
+                model.FarmRB209CountryID = farm.RB209CountryID;
             }
 
             List<Field> fieldList = [.. allFieldList];
@@ -2446,7 +2439,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.IsCropGroupChange = false;
 
                 (List<SwardTypeResponse> swardTypeResponses, error) = await _cropLogic.FetchSwardTypes();
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["SowingDateError"] = error.Message;
                     return RedirectToAction("SowingDate");
@@ -2557,15 +2550,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 if (cropInfoOneQuestion == null)
                 {
-                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-                    var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-                    var cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-                    ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CropInfo1Name);
+                    List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
+                    ViewBag.CropInfoOneList = cropInfoOneResponse.OrderBy(c => c.CropInfo1Name);
 
-                    if (cropInfoOneList.Count > 0)
+                    if (cropInfoOneResponse.Count > 0)
                     {
-                        model.CropInfo1Name = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Name;
-                        model.CropInfo1 = cropInfoOneList.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Id;
+                        model.CropInfo1Name = cropInfoOneResponse.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Name;
+                        model.CropInfo1 = cropInfoOneResponse.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Id;
 
                         for (int i = 0; i < model.Crops?.Count; i++)
                         {
@@ -2575,12 +2566,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
                 }
             }
-            if (model.CropGroupId != null)
+            if (model.CropGroupId != null && model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
-                {
-                    model.CropGroup = Resource.lblGrass;
-                }
+                model.CropGroup = Resource.lblGrass;
             }
             if (isBasePlan)
             {
@@ -2684,9 +2672,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<List<CropInfoOneResponse>> GetCropInfoOneList(PlanViewModel model)
     {
-        List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-        var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-        return cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+        List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
+
+        return cropInfoOneResponse;
     }
 
     public async Task<IActionResult> BackCheckAnswer()
@@ -2721,16 +2709,30 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     s = model.EncryptedHarvestYear
                 });
             }
-            List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0);
-            var country = model.IsEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            List<CropInfoOneResponse> cropInfoOneList = cropInfoOneResponse.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+            List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
 
-            action = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals ?
-               _cropInfoTwoActionName : (((model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
-               || cropInfoOneList.Count == 1) ?
-               ((model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
-               model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield) ?
-           "YieldQuestion" : "Yield") : "CropInfoOne");
+            if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals)
+            {
+                action = _cropInfoTwoActionName;
+            }
+            else
+            {
+                if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other || cropInfoOneList.Count == 1)
+                {
+                    if(model.YieldQuestion != (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
+                    {
+                        action = "YieldQuestion";
+                    }
+                    else
+                    {
+                        action = "Yield";
+                    }
+                }
+                else
+                {
+                    action = "CropInfoOne";
+                }
+            }
 
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals)
             {
@@ -2852,7 +2854,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         {
                             if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                             {
-                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                                 if (defaultYield == 0)
                                 {
                                     ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
@@ -2861,7 +2863,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             }
                             else if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                             {
-                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                                decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                                 if (defaultYield == 0)
                                 {
                                     ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
@@ -2967,7 +2969,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 if (model.CropTypeID != null)
                 {
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                     if (defaultYield > 0)
                     {
                         ViewBag.DefaultYield = defaultYield;
@@ -2985,7 +2987,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (string.IsNullOrWhiteSpace(harvestYearError.Message))
                 {
                     //Fetch fields allowed for second crop based on first crop
-                    var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
                     List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
                         .Where(x => x.IsBasePlan != null && (!x.IsBasePlan.Value)).ToList();
 
@@ -3024,14 +3025,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
 
-            Error error = null;
+            Error? error = null;
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
 
             int? lastGroupNumber = null;
             if (string.IsNullOrWhiteSpace(model.CropGroupName))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (harvestYearPlanResponse != null && error.Message == null)
+                if (harvestYearPlanResponse != null && error == null)
                 {
                     var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
                                      int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
@@ -3052,7 +3053,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 crop.FieldName = null;
                 crop.EncryptedCounter = null;
                 crop.FieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-                //crop.CropOrder = 1;
+                
                 if (string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     if (lastGroupNumber != null)
@@ -3158,8 +3159,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 Crops = cropEntries
             };
+
             (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
-            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && success)
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
             {
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                 RemoveCropSession();
@@ -3175,7 +3178,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater; //error.Message; //
+                TempData["ErrorCreatePlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater; 
                 return RedirectToAction(_checkAnswerActionName);
             }
         }
@@ -3189,41 +3192,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v, string? w)//w is a link
     {
-        _logger.LogTrace("Crop Controller : HarvestYearOverview({0}, {1}, {2}, {3}) action called", id, year, q, r);
+        _logger.LogTrace("Crop Controller : HarvestYearOverview({Id}, {Year}, {Q}, {R}) action called", id, year, q, r);
         PlanViewModel? model = null;
         try
         {
-            if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("OrganicDataBeforeUpdate");
-            }
-            if (HttpContext.Session.Exists("FertiliserDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("FertiliserDataBeforeUpdate");
-            }
-            if (HttpContext.Session.Exists(_cropDataBeforeUpdateSessionKey))
-            {
-                HttpContext.Session.Remove(_cropDataBeforeUpdateSessionKey);
-            }
-            if (HttpContext.Session.Exists("ReportData"))
-            {
-                HttpContext.Session.Remove("ReportData");
-            }
-            if (HttpContext.Session.Exists("StorageCapacityData"))
-            {
-                HttpContext.Session.Remove("StorageCapacityData");
-            }
-            if (HttpContext.Session.Exists("FertiliserManure"))
-            {
-                HttpContext.Session.Remove("FertiliserManure");
-            }
-            if (HttpContext.Session.Exists("OrganicManure"))
-            {
-                HttpContext.Session.Remove("OrganicManure");
-            }
-
+            RemoveOrganicDataBeforeUpdateFromSession();
+            RemoveFertiliserDataBeforeUpdateFromSession();
+            RemoveCropDataBeforeUpdateFromSession();
+            RemoveReportDataFromSession();
+            RemoveStorageCapacityDataFromSession();
+            RemoveFertiliserManureFromSession();
+            RemoveOrganicManureFromSession();
             RemoveCropSession();
-            
+
             if (!string.IsNullOrWhiteSpace(q))
             {
                 if (!string.IsNullOrWhiteSpace(r))
@@ -3262,15 +3243,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model = new PlanViewModel();
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                     int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
-
-                    (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                    Error? error = null;
+                    (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
                     }
+
                     (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(farmId, harvestYear);
 
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["ErrorOnHarvestYearOverview"] = error.Message;
                         return View(_harvestYearOverviewActionName, model);
@@ -3283,12 +3265,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.AnnualRainfall = excessRainfalls.WinterRainfall.Value;
                             model.IsExcessWinterRainfallUpdated = true;
                             (List<CommonResponse> excessWinterRainfallOption, error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-                            if (string.IsNullOrWhiteSpace(error.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
+                            if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
                             {
-                                string excessRainfallName = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == model.ExcessWinterRainfallValue)).Name;
-                                string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
-                                model.ExcessWinterRainfallName = $"{parts[0]} ({parts[1]})";
-                                model.ExcessWinterRainfallId = (excessWinterRainfallOption.FirstOrDefault(x => x.Value == model.ExcessWinterRainfallValue)).Id;
+                                CommonResponse? selectedOption = excessWinterRainfallOption.FirstOrDefault(x => x.Value == model.ExcessWinterRainfallValue);
+                                if (selectedOption != null)
+                                {
+                                    string excessRainfallName = selectedOption.Name;
+                                    string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
+                                    model.ExcessWinterRainfallName = $"{parts[0]} ({parts[1]})";
+                                    model.ExcessWinterRainfallId = selectedOption.Id;
+                                }
                             }
 
                             ViewBag.ExcessRainfallContentFirst = string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName);
@@ -3296,19 +3282,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         }
                         else
                         {
-                            model.AnnualRainfall = farm.Rainfall.Value;
+                            model.AnnualRainfall = farm?.Rainfall;
                             model.IsExcessWinterRainfallUpdated = false;
                             ViewBag.ExcessRainfallContentFirst = Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall;
                             ViewBag.ExcessRainfallContentSecond = string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear);
                         }
                     }
 
-                    List<string> fields = new List<string>();
-
-                    (HarvestYearResponseHeader harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
                     model.Year = harvestYear;
+                    (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
 
-                    if (harvestYearPlanResponse != null && error.Message == null)
+                    if (harvestYearPlanResponse != null && error == null)
                     {
                         List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
                         if (allCropDetails != null)
@@ -3332,7 +3316,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.FieldCount = allCropDetails.Select(h => h.FieldID).Distinct().Count();
                             List<Field> fieldList = await _fieldLogic.FetchFieldsByFarmId(farmId);
                             bool isSecondCropAllowed = await IsSecondCropAllowed(allCropDetails);
-                            if (harvestYearPlanResponse.CropDetails.Count() > 0)
+
+                            if (harvestYearPlanResponse.CropDetails != null && harvestYearPlanResponse.CropDetails.Count > 0)
                             {
                                 var harvestFieldIds = allCropDetails.Select(x => x.FieldID.ToString()).ToList();
                                 fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString())).ToList();
@@ -3400,7 +3385,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 harvestYearPlans.OrganicManureList.ForEach(m => m.EncryptedFieldName = _cropDataProtector.Protect(m.Field.ToString()));
                                 foreach (var organic in harvestYearPlans.OrganicManureList)
                                 {
-                                    (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
+                                    (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeId.Value);
                                     if (error == null && manureType != null)
                                     {
                                         organic.RateUnit = manureType.IsLiquid.HasValue && manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
@@ -3649,14 +3634,70 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return View(model);
     }
 
+    private void RemoveOrganicManureFromSession()
+    {
+        if (HttpContext.Session.Exists("OrganicManure"))
+        {
+            HttpContext.Session.Remove("OrganicManure");
+        }
+    }
+
+    private void RemoveFertiliserManureFromSession()
+    {
+        if (HttpContext.Session.Exists("FertiliserManure"))
+        {
+            HttpContext.Session.Remove("FertiliserManure");
+        }
+    }
+
+    private void RemoveStorageCapacityDataFromSession()
+    {
+        if (HttpContext.Session.Exists("StorageCapacityData"))
+        {
+            HttpContext.Session.Remove("StorageCapacityData");
+        }
+    }
+
+    private void RemoveReportDataFromSession()
+    {
+        if (HttpContext.Session.Exists("ReportData"))
+        {
+            HttpContext.Session.Remove("ReportData");
+        }
+    }
+
+    private void RemoveCropDataBeforeUpdateFromSession()
+    {
+        if (HttpContext.Session.Exists(_cropDataBeforeUpdateSessionKey))
+        {
+            HttpContext.Session.Remove(_cropDataBeforeUpdateSessionKey);
+        }
+    }
+
+    private void RemoveFertiliserDataBeforeUpdateFromSession()
+    {
+        if (HttpContext.Session.Exists("FertiliserDataBeforeUpdate"))
+        {
+            HttpContext.Session.Remove("FertiliserDataBeforeUpdate");
+        }
+    }
+
+    private void RemoveOrganicDataBeforeUpdateFromSession()
+    {
+        if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
+        {
+            HttpContext.Session.Remove("OrganicDataBeforeUpdate");
+        }
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> HarvestYearOverview(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : HarvestYearOverview() post action called");
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-           return await Task.FromResult(View(model));
+            return await Task.FromResult(View(model));
         }
         return await Task.FromResult(View(model));
     }
@@ -3664,7 +3705,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year, string? q)
     {
-        _logger.LogTrace("Crop Controller : PlansAndRecordsOverview({Id}, {Year}) action called",id,year);
+        _logger.LogTrace("Crop Controller : PlansAndRecordsOverview({Id}, {Year}) action called", id, year);
         PlanViewModel model = new PlanViewModel();
         if (HttpContext.Session.Exists("FertiliserManure"))
         {
@@ -3674,7 +3715,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             HttpContext.Session.Remove("OrganicManure");
         }
-        
+
         RemoveCropSession();
         if (!string.IsNullOrWhiteSpace(q))
         {
@@ -3683,9 +3724,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!string.IsNullOrWhiteSpace(id))
         {
+            Error? error = null;
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-            model.FarmName = farm.Name;
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            model.FarmName = farm?.Name;
+
             List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
             planSummaryResponse.RemoveAll(x => x.Year == 0);
             planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
@@ -3703,10 +3746,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             //fetch oldest previous cropping
             (int? topPrevCroppingYear, error) = await _previousCroppingLogic.FetchPreviousCroppingYearByFarmdId(farmId);
-            if (string.IsNullOrWhiteSpace(error.Message) && topPrevCroppingYear > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && topPrevCroppingYear > 0)
             {
                 DateTime currentDate = DateTime.Now;
-                DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31);
+                DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31, 00, 00, 00, DateTimeKind.Unspecified);
                 int currentHarvestYear = 0;
                 if (currentDate > harvestYearEndDate)
                 {
@@ -3725,6 +3768,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         yearList.Add(item.Year);
                     }
+
                     for (int j = 0; j < planSummaryResponse.Count; j++)
                     {
                         var harvestNewYear = new HarvestYear
@@ -3734,7 +3778,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
                             IsAnyPlan = true
                         };
-                        model.HarvestYear.Add(harvestNewYear);
+                        model.HarvestYear?.Add(harvestNewYear);
                     }
 
                     int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear.GetValueOrDefault() : planSummaryResponse.Min(x => x.Year) - 1;
@@ -3754,7 +3798,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             {
                                 harvestYear.IsThisOldYear = true;
                             }
-                            model.HarvestYear.Add(harvestYear);
+                            model.HarvestYear?.Add(harvestYear);
                         }
                     }
                 }
@@ -3773,15 +3817,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         {
                             harvestYear.IsThisOldYear = true;
                         }
-                        model.HarvestYear.Add(harvestYear);
+                        model.HarvestYear?.Add(harvestYear);
                     }
                 }
             }
-            if (model.HarvestYear.Count > 0)
+
+            if (model.HarvestYear?.Count > 0)
             {
                 model.HarvestYear = model.HarvestYear.OrderByDescending(x => x.Year).ToList();
             }
-            model.EncryptedFarmId = id;
+
+            
+             model.EncryptedFarmId = id;
+            
         }
 
         return View(model);
@@ -3802,9 +3850,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
     {
-        _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q,r,s);
+        _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
-        Error error = null;
+        Error? error = null;
         int decryptedFarmId = 0;
         int decryptedFieldId = 0;
         int decryptedHarvestYear = 0;
@@ -3844,7 +3892,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (!string.IsNullOrWhiteSpace(q))
             {
                 decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                model.FarmName = (await _farmLogic.FetchFarmByIdAsync(decryptedFarmId)).Item1.Name;
+                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
+                if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
+                {
+                    model.FarmName = farm.Name;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
+                }
                 model.EncryptedFarmId = q;
             }
 
@@ -3866,7 +3919,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
-            if (harvestYearPlanResponse != null && error.Message == null)
+            if (harvestYearPlanResponse != null && error == null)
             {
                 bool isAllBasePlan = harvestYearPlanResponse.All(h => ((h.IsBasePlan != null) && (h.IsBasePlan.Value)));
                 if (isAllBasePlan)
@@ -3883,29 +3936,36 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         {
                             model.Crops = new List<CropViewModel>();
                         }
+
                         if (model.ManagementPeriods == null)
                         {
                             model.ManagementPeriods = new List<ManagementPeriodViewModel>();
                         }
+
                         if (model.Recommendations == null)
                         {
                             model.Recommendations = new List<Recommendation>();
                         }
+
                         if (model.RecommendationComments == null)
                         {
                             model.RecommendationComments = new List<RecommendationComment>();
                         }
+
                         if (model.OrganicManures == null)
                         {
                             model.OrganicManures = new List<OrganicManureDataViewModel>();
                         }
+
                         if (model.FertiliserManures == null)
                         {
                             model.FertiliserManures = new List<FertiliserManureDataViewModel>();
                         }
 
                         int cropCounter = 0;
-                        string firstCropName = recommendations.FirstOrDefault().Crops.CropTypeID == 140 ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
+
+
+                        string? firstCropName = recommendations.FirstOrDefault()?.Crops?.CropTypeID == 140 ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
                         foreach (var recommendation in recommendations)
                         {
                             //check sns already exist or not in SnsAnalyses table by cropID
@@ -3925,7 +3985,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 SowingDate = recommendation.Crops.SowingDate,
                                 OtherCropName = recommendation.Crops.OtherCropName,
                                 CropTypeName = recommendation.Crops.CropTypeID == 140 ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendation.Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
-                                IsSnsExist = (snsData.CropID != null && snsData.CropID > 0) ? true : false,
+                                IsSnsExist = snsData.CropID > 0,
                                 SnsAnalysisData = snsData,
                                 SwardManagementName = recommendation.Crops.SwardManagementName,
                                 EstablishmentName = recommendation.Crops.EstablishmentName,
@@ -4081,6 +4141,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         CropK2O = recData.Recommendation.CropK2O,
                                         CropSO3 = recData.Recommendation.CropSO3,
                                         CropMgO = recData.Recommendation.CropMgO,
+                                        CropNa2O=recData.Recommendation.CropNa2O,
                                         CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
                                         ManureN = recData.Recommendation.ManureN,
                                         ManureP2O5 = recData.Recommendation.ManureP2O5,
@@ -4088,12 +4149,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         ManureSO3 = recData.Recommendation.ManureSO3,
                                         ManureMgO = recData.Recommendation.ManureMgO,
                                         ManureLime = recData.Recommendation.ManureLime,
+                                        ManureNa2O = recData.Recommendation.ManureNa2O,
                                         FertilizerN = recData.Recommendation.FertilizerN,
                                         FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
                                         FertilizerK2O = recData.Recommendation.FertilizerK2O,
                                         FertilizerSO3 = recData.Recommendation.FertilizerSO3,
                                         FertilizerMgO = recData.Recommendation.FertilizerMgO,
                                         FertilizerLime = recData.Recommendation.FertilizerLime,
+                                        FertilizerNa2O = recData.Recommendation.FertilizerNa2O,
                                         SNSIndex = recData.Recommendation.SNSIndex,
                                         SIndex = recData.Recommendation.SIndex,
                                         LimeIndex = recData.Recommendation.PH,
@@ -4143,7 +4206,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     {
                                         foreach (var item in recData.OrganicManures)
                                         {
-                                            (ManureType? manureType, error) = await _organicManureLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
+                                            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(item.ManureTypeID);
                                             if (error == null && manureType != null)
                                             {
                                                 var orgManure = new OrganicManureDataViewModel
@@ -4228,7 +4291,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         if (count < 3 && missingYears.Count > 0)
                         {
                             (List<PreviousCroppingData> previousCropping, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, null);
-                            if (string.IsNullOrWhiteSpace(error.Message))
+                            if (string.IsNullOrWhiteSpace(error?.Message))
                             {
                                 if (previousCropping.Count > 0)
                                 {
@@ -4243,7 +4306,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         ViewBag.IsThereAnyPreviousCropping = false;
                                         TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
                                         TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName);
-                                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName,  model.FieldName);
+                                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, model.FieldName);
                                     }
                                 }
                             }
@@ -4287,7 +4350,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(crop.FieldID.Value);
                     int cropPlanCount = cropsResponse.Count(x => x.Year == harvestYear && !x.Confirm);
-                    int firstCropType = cropsResponse.Where(x => x.Year == harvestYear && !x.Confirm  && x.CropOrder == 1).Select(c => c.CropTypeID.Value).FirstOrDefault();
+                    int firstCropType = cropsResponse.Where(x => x.Year == harvestYear && !x.Confirm && x.CropOrder == 1).Select(c => c.CropTypeID.Value).FirstOrDefault();
                     if (isUpdate && cropPlanCount == 2)
                     {
                         secondCropList = await _cropLogic.FetchSecondCropListByFirstCropId(firstCropType);
@@ -4502,67 +4565,26 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> CropGroupName()
     {
         _logger.LogTrace("Crop Controller : CropGroupName() action called");
+
         PlanViewModel model = GetCropFromSession();
+        if (model == null)
+        {
+            _logger.LogTrace("Crop Controller : session not found in CropGroupName() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+
         try
         {
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+            bool isCropUpdate = !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate);
 
-            if (model == null)
-            {
-                _logger.LogTrace("Crop Controller : session not found in CropGroupName() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-            }
+            var fieldList = await GetFilteredFields(model, farmId, isCropUpdate);
+            var selectListItems = MapToSelectList(fieldList);
 
-            Error error = null;
-            int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-            List<Field> fieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
-            {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
-                {
-                    harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                    if (harvestYearPlanResponseForFilter != null)
-                    {
-                        var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
-                        fieldList = fieldList.Where(x => fieldIds.Contains(x.ID.Value)).ToList();
-                    }
-                }
-            }
-            var SelectListItem = fieldList.Select(f => new SelectListItem
-            {
-                Value = f.ID.ToString(),
-                Text = f.Name
-            }).ToList();
+            await ApplySecondCropRules(model, farmId, isCropUpdate, selectListItems);
 
-            List<int> fieldsAllowedForSecondCrop = new List<int>();
-            List<int> fieldRemoveList = new List<int>();
-            (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
-
-            var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
-            List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))).ToList();
-
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
-            {
-                (List<int> fieldsAllowedForSecondCrops, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
-                foreach (var removeFieldId in fieldRemoveList)
-                {
-                    SelectListItem.RemoveAll(x => x.Value == removeFieldId.ToString());
-                }
-            }
-            else
-            {
-                //Fetch fields allowed for second crop based on first crop
-                (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
-
-                if (harvestYearPlanResponse.Count() > 0 || SelectListItem.Count == 1)
-                {
-                    var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    SelectListItem = SelectListItem.Where(x => !harvestFieldIds.Contains(x.Value) || fieldsAllowedForSecondCrop.Contains(int.Parse(x.Value))).ToList();
-                }
-            }
-
-            ViewBag.fieldList = SelectListItem;
+            ViewBag.fieldList = selectListItems;
+            return View(model);
         }
         catch (Exception ex)
         {
@@ -4570,8 +4592,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             TempData["ErrorOnSelectField"] = ex.Message;
             return RedirectToAction("CropFields");
         }
-
-        return View(model);
     }
 
     [HttpPost]
@@ -4585,13 +4605,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return View(model);
             }
-            Error error = null;
+
+            Error? error = null;
             bool isThereAnyPreviousFieldLeft = false;
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                 (List<HarvestYearPlanResponse> crops, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && crops.Count > 0)
+                if (error == null && crops.Count > 0)
                 {
                     List<string> fieldIds = crops.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID.ToString()).ToList();
                     if (fieldIds.Count > 0 && fieldIds.Any(fieldId => model.FieldList.Contains(fieldId)))
@@ -4605,7 +4626,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) || (!isThereAnyPreviousFieldLeft) || (model.IsFieldToBeRemoved.HasValue && model.IsFieldToBeRemoved.Value))
                 {
                     (List<HarvestYearPlanResponse> harvestYearPlanResponses, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                    if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponses.Count > 0)
+                    if (error == null && harvestYearPlanResponses.Count > 0)
                     {
                         bool cropGroupNameExists = harvestYearPlanResponses
                            .Any(harvest =>
@@ -4623,7 +4644,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
                     (bool groupNameExist, error) = await _cropLogic.IsCropsGroupNameExistForUpdate(cropIds, model.CropGroupName, model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                    if (string.IsNullOrWhiteSpace(error.Message) && groupNameExist)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && groupNameExist)
                     {
                         ModelState.AddModelError("CropGroupName", Resource.lblThisCropGroupNameAlreadyExists);
                         return View(model);
@@ -4716,7 +4737,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogTrace("Crop Controller : Exception in RemoveCrop() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in RemoveCrop() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             if (string.IsNullOrWhiteSpace(s) || (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value))))
             {
                 int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
@@ -4727,7 +4748,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     fieldList = fieldList.Where(x => fieldIds.Contains(x.ID)).ToList();
                 }
 
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
+                (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error? harvestYearError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
                 {
                     var fieldIdsForFilter = fieldList.Select(f => f.ID);
@@ -4740,6 +4761,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     //Fetch fields allowed for second crop based on first crop                        
                     var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
+
                     List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
                         .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
                         ).ToList();
@@ -4808,9 +4830,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                Error error = new Error();
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+                Error? error = null;
+                (List<HarvestYearPlanResponse>? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                if (error == null && harvestYearPlanResponse.Count > 0)
                 {
                     if (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value)))
                     {
@@ -4824,8 +4846,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse.Count > 0)
                     {
                         List<int> cropIds = harvestYearPlanResponse.Select(x => x.CropID).ToList();
-                        (string message, error) = await _cropLogic.RemoveCropPlan(cropIds);
-                        if (!string.IsNullOrWhiteSpace(error.Message))
+                        (string? message, error) = await _cropLogic.RemoveCropPlan(cropIds);
+                        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                         {
                             TempData["RemoveGroupError"] = error.Message;
                             return View(model);
@@ -4833,7 +4855,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         else
                         {
                             (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                            if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+                            if (error == null && harvestYearPlanResponse.Count > 0)
                             {
                                 return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value))) ? _cropDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) : _cropDataProtector.Protect(string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType, model.FieldName)) });
                             }
@@ -4866,7 +4888,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public IActionResult UpdateExcessWinterRainfall()
     {
         _logger.LogTrace("Crop Controller : UpdateExcessWinterRainfall() action called");
-        PlanViewModel model = GetHarvestYearPlanFromSession();
+        PlanViewModel? model = GetHarvestYearPlanFromSession();
 
         try
         {
@@ -4891,7 +4913,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public IActionResult UpdateExcessWinterRainfall(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : UpdateExcessWinterRainfall() post action called");
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return View(model);
         }
@@ -4913,18 +4935,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<CommonResponse> excessWinterRainfallOption, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption.Count > 0)
             {
-                if (excessWinterRainfallOption.Count > 0)
+                var SelectListItem = excessWinterRainfallOption.Select(f => new SelectListItem
                 {
-                    var SelectListItem = excessWinterRainfallOption.Select(f => new SelectListItem
-                    {
-                        Value = f.Id.ToString(),
-                        Text = f.Name
-                    }).ToList();
+                    Value = f.Id.ToString(),
+                    Text = f.Name
+                }).ToList();
 
-                    ViewBag.ExcessRainFallOptions = SelectListItem;
-                }
+                ViewBag.ExcessRainFallOptions = SelectListItem;
             }
         }
         catch (Exception ex)
@@ -4951,10 +4970,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (!ModelState.IsValid)
             {
                 (List<CommonResponse> excessWinterRainfallOption, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message)&&excessWinterRainfallOption.Count>0)
                 {
-                    if (excessWinterRainfallOption.Count > 0)
-                    {
                         var SelectListItem = excessWinterRainfallOption.Select(f => new SelectListItem
                         {
                             Value = f.Id.ToString(),
@@ -4962,7 +4979,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         }).ToList();
 
                         ViewBag.ExcessRainFallOptions = SelectListItem;
-                    }
+                    
                 }
                 return View(model);
             }
@@ -4971,7 +4988,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Crop Controller : Exception in ExcessWinterRainfall() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfall() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallError"] = ex.Message;
             return View(model);
         }
@@ -4981,7 +4998,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> ExcessWinterRainfallCheckAnswer()
     {
         _logger.LogTrace("Crop Controller : ExcessWinterRainfallCheckAnswer() action called");
-        PlanViewModel model = GetHarvestYearPlanFromSession();
+        PlanViewModel? model = GetHarvestYearPlanFromSession();
 
         try
         {
@@ -4992,17 +5009,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (CommonResponse commonResponse, Error error) = await _farmLogic.FetchExcessWinterRainfallOptionByIdAsync(model.ExcessWinterRainfallId.Value);
-            if (string.IsNullOrWhiteSpace(error.Message) && commonResponse != null)
+            if (error?.Message == null && commonResponse != null)
             {
                 model.ExcessWinterRainfallName = commonResponse.Name;
                 model.ExcessWinterRainfallValue = commonResponse.Value;
             }
+
             model.IsExcessWinterRainfallCheckAnswer = true;
             SetHarvestYearPlanToSession(model);
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallError"] = ex.Message;
             return RedirectToAction("ExcessWinterRainfall", model);
         }
@@ -5018,7 +5036,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         try
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -5045,30 +5063,30 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             };
 
             string jsonData = JsonConvert.SerializeObject(excessRainfalls);
-            (ExcessRainfalls excessRainfall, Error error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessWinterRainfallUpdated.Value);
-            if (string.IsNullOrWhiteSpace(error.Message) && excessRainfall != null)
+            (ExcessRainfalls? excessRainfall, Error? error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessWinterRainfallUpdated.Value);
+            if (excessRainfall != null)
             {
                 return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value)), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
             }
             else
             {
-                TempData["ExcessWinterRainfallCheckAnswerError"] = error.Message;
+                TempData["ExcessWinterRainfallCheckAnswerError"] = error?.Message;
                 return View(model);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,"Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallCheckAnswerError"] = ex.Message;
             return View(model);
-        }        
+        }
     }
 
     [HttpGet]
     public async Task<IActionResult> UpdateCropGroupNameCheckAnswer(string? q, string? r, string? t, string? u, string? s)
     {
         _logger.LogTrace("Crop Controller : UpdateCropGroupNameCheckAnswer() action called");
-        PlanViewModel model = GetCropFromSession()?? new PlanViewModel();
+        PlanViewModel model = GetCropFromSession() ?? new PlanViewModel();
 
         try
         {
@@ -5097,7 +5115,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 model.EncryptedFarmId = u;
             }
-            Error error = new Error();
+            Error? error = new Error();
             bool allYieldsAreSame = true;
             bool allSowingAreSame = true;
             string? yieldQuestion = null;
@@ -5108,20 +5126,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (string.IsNullOrWhiteSpace(s))
             {
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponse.Count > 0)
+                if (string.IsNullOrWhiteSpace(error?.Message) && harvestYearPlanResponse.Count > 0)
                 {
                     harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.CropGroupName).ToList();
                     if (harvestYearPlanResponse != null)
                     {
                         model.Crops = new List<Crop>();
 
-                        decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(harvestYearPlanResponse.FirstOrDefault().CropTypeID);
+                        var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
+
+                        decimal? defaultYield = cropTypeId.HasValue
+                            ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) : null;
+
                         for (int i = 0; i < harvestYearPlanResponse.Count; i++)
                         {
                             var crop = new Crop();
                             crop.FieldID = harvestYearPlanResponse[i].FieldID;
                             crop.FieldName = harvestYearPlanResponse[i].FieldName;
-                            crop.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
+                            crop.CropTypeID = harvestYearPlanResponse.First().CropTypeID;
                             if (decimal.TryParse(harvestYearPlanResponse[i].Yield, out decimal yield))
                             {
                                 crop.Yield = yield;
@@ -5148,6 +5170,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             {
                                 crop.Yield = null;
                             }
+
                             if (harvestYearPlanResponse[i].IsBasePlan != null && harvestYearPlanResponse[i].IsBasePlan.Value)
                             {
                                 isBasePlan = true;
@@ -5174,6 +5197,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 crop.SowingDate = harvestYearPlanResponse[i].SowingDate;
 
                             }
+
                             crop.ID = harvestYearPlanResponse[i].CropID;
                             crop.CropInfo1 = harvestYearPlanResponse[i].CropInfo1;
                             model.Crops.Add(crop);
@@ -5189,15 +5213,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.SowingDateQuestion = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
                             ViewBag.allSowingAreSame = allSowingAreSame;
                         }
-                        model.CropInfo1 = harvestYearPlanResponse.FirstOrDefault().CropInfo1;
-                        model.CropInfo2 = harvestYearPlanResponse.FirstOrDefault().CropInfo2;
+                        model.CropInfo1 = harvestYearPlanResponse[0].CropInfo1;
+                        model.CropInfo2 = harvestYearPlanResponse[0].CropInfo2;
                         ViewBag.SowingQuestion = sowingQuestion;
                         ViewBag.YieldQuestion = yieldQuestion;
-                        model.CropTypeID = harvestYearPlanResponse.FirstOrDefault().CropTypeID;
+                        model.CropTypeID = harvestYearPlanResponse[0].CropTypeID;
                         model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
-                        model.CropType = harvestYearPlanResponse.FirstOrDefault().CropTypeName;
-                        model.Variety = harvestYearPlanResponse.FirstOrDefault().CropVariety;
-                        model.CropGroupName = harvestYearPlanResponse.FirstOrDefault().CropGroupName;
+                        model.CropType = harvestYearPlanResponse[0].CropTypeName;
+                        model.Variety = harvestYearPlanResponse[0].CropVariety;
+                        model.CropGroupName = harvestYearPlanResponse[0].CropGroupName;
                         model.PreviousCropGroupName = model.CropGroupName;
                         if (model.CropTypeID != null && model.CropInfo1 != null)
                         {
@@ -5231,7 +5255,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         isBasePlan = true;
                     }
 
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.Crops.FirstOrDefault().CropTypeID.Value);
+                    var cropTypeId = model.Crops.FirstOrDefault()?.CropTypeID;
+
+                    decimal? defaultYield = cropTypeId.HasValue
+                        ? await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(cropTypeId.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) : null;
+
                     yieldQuestion = model.Crops[i].Yield == defaultYield ? string.Format(Resource.lblUseTheStandardFigure, defaultYield) : null;
                     if (string.IsNullOrWhiteSpace(yieldQuestion))
                     {
@@ -5313,11 +5341,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : UpdateCrop() post action called");
         try
         {
-            Error error = null;
+            Error? error = null;
             int i = 0;
             int otherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
             int cerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
-            int potatoesGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
+            
             int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
             foreach (var crop in model.Crops)
             {
@@ -5345,26 +5373,26 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                         {
-                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                             if (defaultYield == 0)
                             {
                                 ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheExpectedYieldForSingleNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
-                            }                            
+                            }
                             break;
                         }
                         else if (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                         {
-                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value);
+                            decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                             if (defaultYield == 0)
                             {
                                 ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheDifferentExpectedYieldNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
-                            }                            
+                            }
                         }
                     }
                 }
                 i++;
             }
-            
+
             if (model.CropTypeID == null)
             {
                 ModelState.AddModelError("CropTypeID", Resource.MsgMainCropTypeNotSet);
@@ -5398,9 +5426,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 if (model.PotentialCut == null)
                 {
-                    string fieldText = (model.FieldList?.Count == 1)
-                           ? model.Crops[0].FieldName
-                           : Resource.lblTheseFields;
+                    string fieldText = (model.FieldList != null && model.FieldList.Count == 1) ? model.Crops[0]?.FieldName?? string.Empty : Resource.lblTheseFields;
 
                     string resourceText = model.SwardManagementId switch
                     {
@@ -5461,7 +5487,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 List<Field> fieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
                 if (model.CropTypeID != null)
                 {
-                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0);
+                    decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID ?? 0, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
                     if (defaultYield > 0)
                     {
                         ViewBag.DefaultYield = defaultYield;
@@ -5469,16 +5495,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 (List<HarvestYearPlanResponse> harvestYearPlanResponse, Error harvestYearError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
                 if (string.IsNullOrWhiteSpace(harvestYearError.Message))
-                {
-                    
-                    var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
+                {                    
                     List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
-                        .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))                       
+                        .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
                         ).ToList();
 
-                    (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) ? false : true, model.Crops);
+                    (List<int> fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops);
 
-                    if (harvestYearPlanResponse.Count() > 0 || fieldsAllowedForSecondCrop.Count() > 0)
+                    if (harvestYearPlanResponse.Count > 0 || fieldsAllowedForSecondCrop.Count > 0)
                     {
                         var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
                         fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
@@ -5488,12 +5512,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     TempData["ErrorCreatePlan"] = harvestYearError.Message;
                     ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-                    
+
                     return RedirectToAction(_checkAnswerActionName);
                 }
 
                 ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-                
+
                 if (!string.IsNullOrWhiteSpace(model.CropGroupName))
                 {
                     ViewBag.EncryptedCropGroupName = _cropDataProtector.Protect(model.CropGroupName);
@@ -5620,7 +5644,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             if (model.Crops != null && model.Crops.Count > 0)
             {
-                string cropIds = string.Join(",", model.Crops.Select(x => x.ID));
+               
                 if (string.IsNullOrWhiteSpace(model.Variety))
                 {
                     model.Variety = null;
@@ -5725,27 +5749,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     Utilisation1ID = utilisation1,
                                     Yield = crop.Yield ?? 0 / model.PotentialCut
                                 });
-                                if (managementPeriodList != null && managementPeriodList.Any())
+                                if (managementPeriodList != null && managementPeriodList.Any() && crop.ID != null)
                                 {
-                                    if (crop.ID != null)
+                                    foreach (var managementPeriod in managementPeriods)
                                     {
-                                        foreach (var managementPeriod in managementPeriods)
-                                        {
-                                            managementPeriod.ModifiedOn = DateTime.Now;
-                                            managementPeriod.ModifiedByID = userId;
-                                        }
+                                        managementPeriod.ModifiedOn = DateTime.Now;
+                                        managementPeriod.ModifiedByID = userId;
                                     }
                                 }
                                 defoliation++;
                             }
                         }
                     }
-                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
+                    if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         crop.FieldName = null;
                         crop.EncryptedCounter = null;
                         crop.FieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-                        //crop.CropOrder = 1;
+                        
                         CropData cropEntry = new CropData
                         {
                             Crop = crop,
@@ -5756,13 +5777,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                 (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
-                if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0 && string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+                if (string.IsNullOrWhiteSpace(error?.Message) && harvestYearPlanResponseForFilter.Count > 0 && string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
                     //filter the plan list based on the crop group
                     harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                     if (harvestYearPlanResponseForFilter != null)
                     {
-                        var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID).ToList();
 
                         //Get the fields that we unchecked.
                         var removableFields = harvestYearPlanResponseForFilter.Where(f => !model.FieldList.Contains(f.FieldID.ToString())).ToList();
@@ -5804,7 +5824,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 };
                 string jsonData = JsonConvert.SerializeObject(cropDataWrapper);
                 (bool success, error) = await _cropLogic.MergeCrop(jsonData);
-                if (string.IsNullOrWhiteSpace(error.Message) && success)
+                if (string.IsNullOrWhiteSpace(error?.Message) && success)
                 {
                     model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
                     RemoveCropSession();
@@ -5826,8 +5846,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             q = model.EncryptedFarmId,
                             r = model.EncryptedFieldId,
                             s = model.EncryptedHarvestYear,
-                            t = _cropDataProtector.Protect(Resource.lblCropPlanUpdated)
-                            //u = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedRecommendations)
+                            t = _cropDataProtector.Protect(Resource.lblCropPlanUpdated)                            
                         });
                     }
                 }
@@ -5852,18 +5871,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> CurrentSward()
     {
         _logger.LogTrace("Crop Controller : CurrentSward() action called");
-        PlanViewModel model = new PlanViewModel();
+        PlanViewModel? model = GetCropFromSession(); 
         try
         {
-            if (HttpContext.Session.Keys.Contains("CropData"))
-            {
-                model = HttpContext.Session.GetObjectFromJson<PlanViewModel>("CropData");
+            if (model== null)
+            { 
+                return await Task.FromResult(RedirectToAction("FarmList", "Farm"));
             }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
-            }
-
         }
         catch (Exception ex)
         {
@@ -5892,6 +5906,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return View(model);
             }
+
             if (model.IsCheckAnswer)
             {
                 PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
@@ -5935,7 +5950,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.GrassGrowthClassCounter = 0;
                             SetCropToSession(model);
                         }
-                    }                    
+                    }
                     else
                     {
                         model.DefoliationSequenceId = null;
@@ -5946,7 +5961,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.Crops.ForEach(x => x.Yield = null);
                 model.GrassSeason = null;
             }
+
             SetCropToSession(model);
+
             if (model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward)
             {
                 return RedirectToAction("GrassSeason");
@@ -6050,7 +6067,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> SwardType()
     {
         _logger.LogTrace("Crop Controller : SwardType() action called");
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession();
         try
         {
             if (model == null)
@@ -6060,7 +6077,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypes();
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["SowingDateError"] = error.Message;
                 return RedirectToAction("SowingDate");
@@ -6720,7 +6737,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> DryMatterYield(string q)
     {
-        _logger.LogTrace("Crop Controller : DryMatterYield({Q}) action called",q);
+        _logger.LogTrace("Crop Controller : DryMatterYield({Q}) action called", q);
         PlanViewModel model = GetCropFromSession();
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
@@ -6994,7 +7011,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && (model.IsComingFromRecommendation == null))
             {
-                if (string.IsNullOrWhiteSpace(error.Message))
+                if (string.IsNullOrWhiteSpace(error?.Message))
                 {
                     if (harvestYearPlanResponse.Count > 0)
                     {
@@ -7046,8 +7063,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : CheckYourPlanData() action called");
         PlanViewModel model = new PlanViewModel();
         int farmId = 0;
-        Farm farm = new Farm();
-        Error error = new Error();
+        FarmResponse? farm = new FarmResponse();
+        Error? error = null;
         try
         {
             if (!string.IsNullOrWhiteSpace(q))
@@ -7058,7 +7075,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(year));
             }
 
-            model.FarmName = farm.Name;
+            model.FarmName = farm?.Name;
+
             List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
             planSummaryResponse.RemoveAll(x => x.Year == 0);
             planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
@@ -7078,7 +7096,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.PlanSummaryList = planSummaryResponse;
             (int? topPrevCroppingYear, error) = await _previousCroppingLogic.FetchPreviousCroppingYearByFarmdId(farmId);
 
-            if (string.IsNullOrWhiteSpace(error.Message) && topPrevCroppingYear > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && topPrevCroppingYear > 0)
             {
                 DateTime currentDate = DateTime.Now;
                 DateTime harvestYearEndDate = new DateTime(currentDate.Year, 7, 31, 0, 0, 0, DateTimeKind.Local);
@@ -7210,7 +7228,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> CopyExistingPlan(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : CopyExistingPlan() post action called");
-        
+
         if (model.CopyExistingPlan == null)
         {
             ModelState.AddModelError("CopyExistingPlan", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -7269,7 +7287,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CopyPlanYears() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CopyPlanYears() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
             return RedirectToAction(_farmSummaryActionName, "Farm");
         }
@@ -7281,7 +7299,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CopyPlanYears() action posted");
 
-        if (model.CopyYear == null)
+        if (!model.CopyYear.HasValue)
         {
             ModelState.AddModelError("CopyYear", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblYear.ToLower()));
         }
@@ -7325,7 +7343,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
             return RedirectToAction(_farmSummaryActionName, "Farm");
         }
@@ -7370,7 +7388,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,"Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm"));
         }
@@ -7412,7 +7430,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.InorganicFertiliser) != 0;
         (bool success, error) = await _cropLogic.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
 
-        if (error.Message == null && success)
+        if (string.IsNullOrWhiteSpace(error?.Message) && success)
         {
             model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
             RemoveCropSession();
@@ -7516,7 +7534,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
 
-            (ViewBag.RemovableFields, ViewBag.NewlyAddedFields) = await SeparateFieldsAsync(model);            
+            (ViewBag.RemovableFields, ViewBag.NewlyAddedFields) = await SeparateFieldsAsync(model);
         }
         catch (Exception ex)
         {
@@ -7538,7 +7556,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (!ModelState.IsValid)
         {
-            (ViewBag.RemovableFields, ViewBag.NewlyAddedFields) = await SeparateFieldsAsync(model);                        
+            (ViewBag.RemovableFields, ViewBag.NewlyAddedFields) = await SeparateFieldsAsync(model);
         }
 
         SetCropToSession(model);
@@ -7560,7 +7578,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<(List<HarvestYearPlanResponse>?, List<Field>?)> SeparateFieldsAsync(PlanViewModel model)
     {
         List<HarvestYearPlanResponse>? fieldsToBeRemoved = null;
-        List<Field>? newFields  = null;
+        List<Field>? newFields = null;
         Error? error = null;
         int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
 
@@ -7570,12 +7588,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             //fetch plan of this year
             (List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmID);
-            if (string.IsNullOrWhiteSpace(error.Message) && harvestYearPlanResponseForFilter.Count > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && harvestYearPlanResponseForFilter.Count > 0)
             {
                 //filter the plan list based on the crop group
                 harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                 if (harvestYearPlanResponseForFilter != null)
-                {                    
+                {
                     //Get the fields that we unchecked.
                     var removableFields = harvestYearPlanResponseForFilter.Where(f => !model.FieldList.Contains(f.FieldID.ToString())).ToList();
                     fieldsToBeRemoved = removableFields.Count > 0 ? removableFields : null;
@@ -7590,7 +7608,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
         }
-                
+
         return (fieldsToBeRemoved, newFields);
     }
 
@@ -7606,5 +7624,85 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private void SetHarvestYearPlanToSession(PlanViewModel plan)
     {
         HttpContext.Session.SetObjectAsJson("HarvestYearPlan", plan);
+    }
+
+    private async Task<List<Field>> GetFilteredFields(PlanViewModel model, int farmId, bool isCropUpdate)
+    {
+        var fields = await _fieldLogic.FetchFieldsByFarmId(farmId);
+
+        if (!isCropUpdate)
+            return fields;
+
+        var (plans, error) =
+            await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmId);
+
+        if ((error != null && !string.IsNullOrWhiteSpace(error.Message)) || plans.Count == 0)
+            return fields;
+
+        var fieldIds = plans
+            .Where(x => x.CropGroupName == model.PreviousCropGroupName)
+            .Select(x => x.FieldID)
+            .ToList();
+
+        return fields.Where(f => fieldIds.Contains(f.ID.Value)).ToList();
+    }
+
+    private static List<SelectListItem> MapToSelectList(List<Field> fields)
+    {
+        return fields.Select(f => new SelectListItem
+        {
+            Value = f.ID.ToString(),
+            Text = f.Name
+        }).ToList();
+    }
+
+    private async Task ApplySecondCropRules(PlanViewModel model, int farmId, bool isCropUpdate, List<SelectListItem> selectList)
+    {
+        Error error;
+        var (plans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmId);
+
+        var firstCropPlans = plans
+            .Where(x => x.IsBasePlan != null && !x.IsBasePlan.Value)
+            .ToList();
+
+        var (allowedFields, removeFields) =
+            await FetchAllowedFieldsForSecondCrop(
+                firstCropPlans,
+                model.Year ?? 0,
+                model.CropTypeID ?? 0,
+                isCropUpdate,
+                model.Crops);
+
+        if (isCropUpdate)
+        {
+            RemoveFields(selectList, removeFields);
+            return;
+        }
+
+        ApplyHarvestFieldFiltering(selectList, plans, allowedFields);
+    }
+
+    private static void RemoveFields(
+    List<SelectListItem> selectList,
+    List<int> removeFieldIds)
+    {
+        foreach (var id in removeFieldIds)
+        {
+            selectList.RemoveAll(x => x.Value == id.ToString());
+        }
+    }
+
+    private static void ApplyHarvestFieldFiltering(List<SelectListItem> selectList, List<HarvestYearPlanResponse> plans, List<int> allowedFields)
+    {
+        if (!plans.Any() && selectList.Count != 1)
+            return;
+
+        var harvestedFieldIds = plans
+            .Select(x => x.FieldID.ToString())
+            .ToList();
+
+        selectList.RemoveAll(x =>
+            harvestedFieldIds.Contains(x.Value) &&
+            !allowedFields.Contains(int.Parse(x.Value)));
     }
 }

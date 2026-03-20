@@ -226,7 +226,7 @@
     <value>How many fields at {0} are in a Nitrate Vulnerable Zone (NVZ)?</value>
   </data>
   <data name="lblIfYouhaveMoreThanOneHolding" xml:space="preserve">
-    <value>If you have more than one holding, add a separate farm for each.</value>
+    <value>If you have more than one holding, add a separate farm for each one.</value>
   </data>
   <data name="lblManualAddress" xml:space="preserve">
     <value>Manual address</value>
@@ -2422,10 +2422,7 @@ cubic metres per hectare  not set</value>
     <value>Potassium (K) per litre of soil (optional)</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint1" xml:space="preserve">
-    <value>Enter the values of your soil analysis. You must enter at least one value.</value>
-  </data>
-  <data name="MsgEnterTheValueOYourSoilAnalysisHint2" xml:space="preserve">
-    <value>If your soil analysis does not include results for a particular nutrient, leave it blank.</value>
+    <value>Enter at least one value. If your soil analysis does not include results for a particular nutrient leave it blank.</value>
   </data>
   <data name="MsgEnterAtLeastOneValue" xml:space="preserve">
     <value>Enter at least one value.</value>
@@ -2562,8 +2559,8 @@ cubic metres per hectare  not set</value>
   <data name="lblAllAmountsArePerHectare" xml:space="preserve">
     <value>All amounts are per hectare.</value>
   </data>
-  <data name="lblAddACropGroup" xml:space="preserve">
-    <value>Add a crop group</value>
+  <data name="lblAddACropToAField" xml:space="preserve">
+    <value>Add a crop to a field</value>
   </data>
   <data name="lblAddAnInorganicFertiliserApplication" xml:space="preserve">
     <value>Add an inorganic fertiliser application</value>
@@ -3831,8 +3828,8 @@ cubic metres per hectare  not set</value>
   <data name="MsgIfGreenAreaIndexIsNull" xml:space="preserve">
     <value>Enter a value between 0 and 3.0</value>
   </data>
-  <data name="MsgViewYourFarmDetails" xml:space="preserve">
-    <value>View your farm details</value>
+  <data name="MsgCheckYourNutrientRecommendations" xml:space="preserve">
+    <value>Check your nutrient recommendations.</value>
   </data>
   <data name="lblAmmoniumHypenN" xml:space="preserve">
     <value>Ammonium-N​</value>
@@ -3877,7 +3874,7 @@ cubic metres per hectare  not set</value>
     <value>Total area</value>
   </data>
   <data name="MsgEnterTheValueOYourSoilAnalysisHint3" xml:space="preserve">
-    <value>For Potassium (K) the index should be an integer 0-9, except when the value is 2 in which case you must add it as 2+ or 2-.</value>
+    <value>When the value for Potassium (K)  is 2, enter it as 2+ or 2-</value>
   </data>
   <data name="lblHelpIssuesLine1" xml:space="preserve">
     <value>technical issues</value>
@@ -3910,7 +3907,7 @@ cubic metres per hectare  not set</value>
     <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
   </data>
   <data name="lblFirstRuleOfNVZForEngland" xml:space="preserve">
-    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution. They include about 55% of land in England.</value>
+    <value>NVZs are areas designated as being at risk from agricultural nitrate pollution.</value>
   </data>
   <data name="lblFourthRuleOfNVZForEngland" xml:space="preserve">
     <value>Nitrate vulnerable zones (NVZs)</value>
@@ -3922,7 +3919,7 @@ cubic metres per hectare  not set</value>
     <value>Read</value>
   </data>
   <data name="lblSecondRuleOfNVZForEngland" xml:space="preserve">
-    <value>If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+    <value>If your land is in an NVZ, you must follow rules when you use nitrogen fertiliser. This tool will help you demonstrate compliance with the NVZ rules.</value>
   </data>
   <data name="lblTheWaterResourcesRegulations2021" xml:space="preserve">
     <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
@@ -4114,7 +4111,7 @@ cubic metres per hectare  not set</value>
     <value>This growth class gives a range for annual dry matter yield of:</value>
   </data>
   <data name="lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass" xml:space="preserve">
-    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass.</value>
+    <value>We use the target annual dry matter yield to give nitrogen (N) recommendations for grass. AHDB publish guidance on measuring grass yields.</value>
   </data>
   <data name="lblWhatIsTheTotalTargetDryMatterYieldForField" xml:space="preserve">
     <value>What is the total target dry matter yield for {0} in {1}?</value>
@@ -4693,7 +4690,7 @@ cubic metres per hectare  not set</value>
     <value>You have not entered any field or crop information for {0}</value>
   </data>
   <data name="lblIncludesNmaxLivestockManureNitrogen" xml:space="preserve">
-    <value>Including N-max, livestock manure nitrogen (N) farm limit, and organic manure storage reports</value>
+    <value>Including N-max, livestock manure nitrogen (N) farm limit, and existing manure storage capacity reports</value>
   </data>
   <data name="lblWhatTypeOfReportDoYouWantToCreate" xml:space="preserve">
     <value>What type of report do you want to create?</value>
@@ -4714,7 +4711,7 @@ cubic metres per hectare  not set</value>
     <value>Update organic material imports and exports</value>
   </data>
   <data name="lblFarmSummaryContent11" xml:space="preserve">
-    <value>Update organic material storage</value>
+    <value>Update organic manure store</value>
   </data>
   <data name="lblFarmSummaryContent7" xml:space="preserve">
     <value>Manage farm and field details</value>
@@ -5544,17 +5541,17 @@ cubic metres per hectare  not set</value>
   <data name="lblExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Existing manure storage capacity report</value>
   </data>
-  <data name="ExistingManureStorageCapacityReportHint" xml:space="preserve">
-    <value>Assess compliance with rules for organic manure storage for your farm.</value>
-  </data>
   <data name="lblWhichYearWouldYouLikeToCreateExistingManureReport" xml:space="preserve">
     <value>Which year would you like to create an Existing manure storage capacity report for?</value>
   </data>
   <data name="lblNotEnteredStorage" xml:space="preserve">
-    <value>Not entered storage</value>
+    <value>Not entered store</value>
   </data>
-  <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorageFor" xml:space="preserve">
-    <value>You have not entered any organic material storage for {0}</value>
+  <data name="lblYouHaveNotEnteredAnyOrganicMaterialStorage" xml:space="preserve">
+    <value>You have not entered any manure stores</value>
+  </data>
+  <data name="lblAddAManureStore" xml:space="preserve">
+    <value>Add a manure store</value>
   </data>
   <data name="lblWinterWheat" xml:space="preserve">
     <value>Winter wheat</value>
@@ -5601,7 +5598,7 @@ livestock manure.</value>
     <value>do not compliance</value>
   </data>
   <data name="lblOrganicMaterialStorage" xml:space="preserve">
-    <value>Organic material storage</value>
+    <value>Organic manure store</value>
   </data>
   <data name="lblMetres" xml:space="preserve">
     <value>metres</value>
@@ -5625,13 +5622,13 @@ livestock manure.</value>
     <value>metres cubed</value>
   </data>
   <data name="lblSlurryStorage" xml:space="preserve">
-    <value>Slurry storage</value>
+    <value>Slurry stores</value>
   </data>
   <data name="lblDirtyWater" xml:space="preserve">
     <value>Dirty water</value>
   </data>
   <data name="lblSolidManureStorage" xml:space="preserve">
-    <value>Solid manure storage</value>
+    <value>Solid manure stores</value>
   </data>
   <data name="lblManageStoreCapacity" xml:space="preserve">
     <value>Manage store capacity</value>
@@ -5645,8 +5642,8 @@ livestock manure.</value>
   <data name="lblStorageType" xml:space="preserve">
     <value>Storage type</value>
   </data>
-  <data name="lblWhatKindOfManureStorageDoYouWantToAdd" xml:space="preserve">
-    <value>What type of manure storage do you want to add?</value>
+  <data name="lblWhatKindOfManureStoreDoYouWantToAdd" xml:space="preserve">
+    <value>What type of manure store do you want to add?</value>
   </data>
   <data name="lblStorageName" xml:space="preserve">
     <value>Storage name</value>
@@ -5664,7 +5661,7 @@ livestock manure.</value>
     <value>Dimensions</value>
   </data>
   <data name="WhatKindOfStorageIsStoreName" xml:space="preserve">
-    <value>What kind of storage is {0}?</value>
+    <value>What kind of store is {0}?</value>
   </data>
   <data name="MsgCropNmaxLimitWarningPara1Additional" xml:space="preserve">
     <value>Individual fields may have a higher adjusted limit, but you must stay within the {0}kg limit overall.</value>
@@ -5685,7 +5682,7 @@ livestock manure.</value>
     <value>{0} dimensions</value>
   </data>
   <data name="MsgEnterTheDimensionOfYourStorageBeforeContinuing" xml:space="preserve">
-    <value>Enter the {0} of your storage before continuing.</value>
+    <value>Enter the {0} of your store before continuing.</value>
   </data>
   <data name="lblIsThisCovered" xml:space="preserve">
     <value>Is {0} covered?</value>
@@ -5697,10 +5694,10 @@ livestock manure.</value>
     <value>What is the total depth?</value>
   </data>
   <data name="lblAboutFreeboards" xml:space="preserve">
-    <value>About freeboards</value>
+    <value>About freeboard</value>
   </data>
   <data name="lblFreeboardIsTheDistanceBetweenTheTopOfTheTank" xml:space="preserve">
-    <value>Freeboard is the distance between the top of the tank and the level of the slurry inside. You must always keep this distance clear.</value>
+    <value>Freeboard is the distance between the top of the store and the level of the slurry inside. You must always keep this distance clear.</value>
   </data>
   <data name="lblForASteelOrConcreteStore" xml:space="preserve">
     <value>For a steel or concrete store, you must keep a minimum of 30cm of freeboard.</value>
@@ -5763,7 +5760,7 @@ livestock manure.</value>
     <value>What is the total capacity of {0}?</value>
   </data>
   <data name="MsgEnterTheTotalCapacityOfYourStorage" xml:space="preserve">
-    <value>Enter the total capacity of your storage</value>
+    <value>Enter the total capacity of your store</value>
   </data>
   <data name="lblDoesStoreHaveSlopedEdges" xml:space="preserve">
     <value>Does {0} have sloped edges?</value>
@@ -5775,10 +5772,10 @@ livestock manure.</value>
     <value>Bank slope angle</value>
   </data>
   <data name="lblWhatIsTheEstimatedAngleOfTheBankSlope" xml:space="preserve">
-    <value>What is the estimated angle of the bank slope?</value>
+    <value>What is the bank slope?</value>
   </data>
   <data name="lblAddThisManureStorage" xml:space="preserve">
-    <value>Add this manure storage</value>
+    <value>Add this manure store</value>
   </data>
   <data name="lblTotalCapacityMinusTheFreeBoard" xml:space="preserve">
     <value>Total capacity (minus the freeboard)</value>
@@ -5790,7 +5787,7 @@ livestock manure.</value>
     <value>metres squared</value>
   </data>
   <data name="lblAddStorageFor" xml:space="preserve">
-    <value>Add storage for {0}</value>
+    <value>Add store</value>
   </data>
   <data name="lblSortByCropType" xml:space="preserve">
     <value>sort by crop</value>
@@ -5886,31 +5883,25 @@ livestock manure.</value>
     <value>Livestock group</value>
   </data>
   <data name="lblYouHaveAddedManureStorage" xml:space="preserve">
-    <value>You have added manure storage</value>
+    <value>You have added a manure store</value>
   </data>
   <data name="MsgToCreateAnExistingManureStorageCapacityReportEnterAllThe" xml:space="preserve">
-    <value>To create an existing manure storage capacity report, enter all the manure storage on {0} in {1}.</value>
+    <value>To create an existing manure storage capacity report, enter all the manure stores on {0}.</value>
   </data>
   <data name="lblAddMoreManureStorage" xml:space="preserve">
-    <value>Add more manure storage</value>
+    <value>Add more manure store</value>
   </data>
   <data name="lblCreateAnExistingManureStorageCapacityReport" xml:space="preserve">
     <value>Create an existing manure storage capacity report</value>
   </data>
   <data name="lblManureStorage" xml:space="preserve">
-    <value>Manure storage</value>
-  </data>
-  <data name="lblStorageCapacity" xml:space="preserve">
-    <value>Storage capacity report</value>
-  </data>
-  <data name="lblExistingManureStorageCapacityYear" xml:space="preserve">
-    <value>Existing manure storage capacity {0}</value>
+    <value>Manure store</value>
   </data>
   <data name="lblSlurryStores" xml:space="preserve">
     <value>Slurry stores</value>
   </data>
   <data name="lblStoreCapacityReportContentOne" xml:space="preserve">
-    <value>Capacity for earth banked stores include a freeboard of 75cm. All other stores include a freeboard of 30cm.</value>
+    <value>The capacity for earth banked stores allow for a freeboard of 75 cm. The capacity for all other stores allow for a freeboard of 30 cm.</value>
   </data>
   <data name="lblTotalCapacity" xml:space="preserve">
     <value> Total capacity</value>
@@ -5919,7 +5910,7 @@ livestock manure.</value>
     <value>Covered</value>
   </data>
   <data name="lblStoreCapacityReportContentTwo" xml:space="preserve">
-    <value>Slurry storage totals</value>
+    <value>Slurry store totals</value>
   </data>
   <data name="lblDirtyWaterStores" xml:space="preserve">
     <value>Dirty water stores</value>
@@ -5928,7 +5919,7 @@ livestock manure.</value>
     <value>Dirty water total</value>
   </data>
   <data name="lblStoreCapacityReportContentFour" xml:space="preserve">
-    <value>On a concrete base or in poultry houses.</value>
+    <value>On yards or in livestock housing.</value>
   </data>
   <data name="lblSolidManureStores" xml:space="preserve">
     <value>Solid manure stores</value>
@@ -5942,20 +5933,17 @@ livestock manure.</value>
   <data name="lblSolidManureTotal" xml:space="preserve">
     <value>Solid manure total</value>
   </data>
-  <data name="lblTotaLiquidCapacity" xml:space="preserve">
-    <value>Total liquid capacity</value>
-  </data>
   <data name="lblTotalSolidCapacity" xml:space="preserve">
-    <value>Total solid capacity</value>
+    <value>Total solid manure capacity (volume)</value>
   </data>
   <data name="lblTotalSolidCapacityFreshWeight" xml:space="preserve">
-    <value>Total solid capacity (fresh weight)</value>
+    <value>Total solid manure capacity (fresh weight)</value>
   </data>
   <data name="lblTotalSurfaceArea" xml:space="preserve">
-    <value>Total surface area</value>
+    <value>Total area of uncovered stores</value>
   </data>
   <data name="lblStorageCapacityReportContentFour" xml:space="preserve">
-    <value>To create an existing manure storage capacity report, enter the manure storage on {0} in {1}</value>
+    <value>To create an existing manure storage capacity report, enter the manure stores on {0}</value>
   </data>
   <data name="lblNoSlurryStoresRecorded" xml:space="preserve">
     <value> No slurry stores recorded</value>
@@ -5982,22 +5970,25 @@ livestock manure.</value>
     <value>A store with that name and year has already been added. You or someone else who works on the farm may have already added it.</value>
   </data>
   <data name="lblManureStorageTotals" xml:space="preserve">
-    <value>Manure storage totals</value>
+    <value>Manure store totals</value>
   </data>
-  <data name="lblTotalLiquidCapacity" xml:space="preserve">
-    <value>Total liquid capacity</value>
+  <data name="lblTotalSlurryCapacity" xml:space="preserve">
+    <value>Total slurry capacity</value>
   </data>
   <data name="lblYouHaveNotAddedAnySolidMaterialStorage" xml:space="preserve">
-    <value>You have not added any Solid material storage</value>
+    <value>You have not added any solid manure stores</value>
+  </data>
+  <data name="lblAddASolidManureStore" xml:space="preserve">
+    <value>Add a solid manure store</value>
   </data>
   <data name="lblYouHaveNotAddedAnyDirtyWaterStorage" xml:space="preserve">
-    <value>You have not added any dirty water storage</value>
+    <value>You have not added any dirty water store</value>
   </data>
   <data name="lblAddDirtyWaterStorage" xml:space="preserve">
-    <value>Add dirty water storage</value>
+    <value>Add dirty water store</value>
   </data>
   <data name="lblYouHaveNotAddedAnySlurryStorage" xml:space="preserve">
-    <value>You have not added any slurry storage</value>
+    <value>You have not added any slurry store</value>
   </data>
   <data name="lblWhatIsTheCircumference" xml:space="preserve">
     <value>What is the circumference?</value>
@@ -6006,13 +5997,13 @@ livestock manure.</value>
     <value>What is the diameter?</value>
   </data>
   <data name="lblFarmSummaryContent12" xml:space="preserve">
-    <value>Update manure storage</value>
+    <value>Update manure store</value>
   </data>
   <data name="lblUpdateYearStorage" xml:space="preserve">
-    <value>Update {0} storage</value>
+    <value>Update {0} store</value>
   </data>
   <data name="lblAddYearStorage" xml:space="preserve">
-    <value>Add {0} storage</value>
+    <value>Add {0} store</value>
   </data>
   <data name="lblBackToFarmName" xml:space="preserve">
     <value>Back to {0}</value>
@@ -6021,7 +6012,7 @@ livestock manure.</value>
     <value>Store Capacity</value>
   </data>
   <data name="lblCopyExistingManureStorage" xml:space="preserve">
-    <value>Copy existing manure storage</value>
+    <value>Copy existing manure store</value>
   </data>
   <data name="lblCopyExistingStorageManureContentOne" xml:space="preserve">
     <value>Would you like to start with a copy of another existing manure storage capacity report?</value>
@@ -6030,16 +6021,16 @@ livestock manure.</value>
     <value>StorageCapacity</value>
   </data>
   <data name="lblUpdateManureStorage" xml:space="preserve">
-    <value>Update manure storage</value>
+    <value>Update manure store</value>
   </data>
   <data name="lblChangesHereWillBeAppliedToThisManureStorage" xml:space="preserve">
-    <value>Changes here will be applied to this manure store storage across {0}.</value>
+    <value>Changes here will be applied to this manure store across {0}.</value>
   </data>
   <data name="lblUpdateThisManureStorage" xml:space="preserve">
-    <value>Update this manure storage</value>
+    <value>Update this manure store</value>
   </data>
   <data name="lblRemoveThisManureStorage" xml:space="preserve">
-    <value>Remove this manure storage</value>
+    <value>Remove this manure store</value>
   </data>
   <data name="SelectOneLiveStockTypeYouCanAddMoreLivestockTypeLater" xml:space="preserve">
     <value>Select one {0} type. You can add more {0} types later.</value>
@@ -6192,7 +6183,7 @@ livestock manure.</value>
     <value>What we’re doing to improve accessibility</value>
   </data>
   <data name="lblYouHaveUpdatedManureStorage" xml:space="preserve">
-    <value>You have updated manure storage</value>
+    <value>You have updated manure store</value>
   </data>
   <data name="MsgWhatIsTheWeightCapacityOfNotSet" xml:space="preserve">
     <value>What is the weight capacity of {0} not set.</value>
@@ -6201,7 +6192,7 @@ livestock manure.</value>
     <value>Does {0} have sloped edges not set.</value>
   </data>
   <data name="MsgWhatIsTheEstimatedAngleOfTheBankNotSet" xml:space="preserve">
-    <value>What is the estimated angle of the bank slope not set.</value>
+    <value>What is the bank slope not set.</value>
   </data>
   <data name="MsgWhatIsTheTotalCapacityOfNotSet" xml:space="preserve">
     <value>What is the total capacity of {0} not set.</value>
@@ -6228,7 +6219,7 @@ livestock manure.</value>
     <value>What is the length not set.</value>
   </data>
   <data name="MsgWhatKindOFManureStorageDoYouWantToAddNotSet" xml:space="preserve">
-    <value>What kind of manure storage do you want to add not set.</value>
+    <value>What kind of manure store do you want to add not set.</value>
   </data>
   <data name="MsgWhatDoYouWantToCallThisManureStoreNotSet" xml:space="preserve">
     <value>What do you want to call this manure store not set.</value>
@@ -6268,6 +6259,9 @@ livestock manure.</value>
   </data>
   <data name="lblSectionAddFarm" xml:space="preserve">
     <value>Add Farm</value>
+  </data>
+  <data name="lblAddASlurryStore" xml:space="preserve">
+    <value>Add a slurry store</value>
   </data>
   <data name="lblDetails" xml:space="preserve">
     <value>Details</value>
@@ -6357,7 +6351,7 @@ livestock manure.</value>
     <value>, in {0}</value>
   </data>
   <data name="lblUpdateOrganicMaterialStorage" xml:space="preserve">
-    <value>Update organic material storage</value>
+    <value>Update organic manure store</value>
   </data>
   <data name="AddASoilMineralNitrogenAnalysisResult" xml:space="preserve">
     <value>Add a soil mineral nitrogen analysis result</value>
@@ -6450,7 +6444,7 @@ livestock manure.</value>
     <value>What is the diameter</value>
   </data>
   <data name="lblWhatIsTheDepthSuffix" xml:space="preserve">
-    <value>What is the depth</value>
+    <value>What is the average depth</value>
   </data>
   <data name="lblWhatIsTheTotalDepthSuffix" xml:space="preserve">
     <value>What is the total depth</value>
@@ -6848,9 +6842,6 @@ livestock manure.</value>
   <data name="MsgEnterTheCroppedArea" xml:space="preserve">
     <value>Enter the cropped area</value>
   </data>
-  <data name="ExistingManureStorageCapacityReportHintReword" xml:space="preserve">
-    <value>Calculate the storage capacity of your existing manure stores.</value>
-  </data>
   <data name="lblYourDataContentOne" xml:space="preserve">
     <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
   </data>
@@ -6948,7 +6939,7 @@ livestock manure.</value>
     <value>Livestock manure nitrogen (N) farm limit</value>
   </data>
   <data name="lblExistingManureStorageCapacity" xml:space="preserve">
-    <value>Existing manure storage capacity</value>
+    <value>Existing manure store capacity</value>
   </data>
   <data name="lblOrganicManureInventoryAndStorageRequirement" xml:space="preserve">
     <value>Organic manure inventory and storage requirement</value>
@@ -7119,7 +7110,7 @@ livestock manure.</value>
     <value>Create field and crop level reports, including for the:</value>
   </data>
   <data name="lblIncludesMaximumNitrogenHoldingNitrogenForWales" xml:space="preserve">
-    <value>Including for the maximum nitrogen (N) limit, and the holding nitrogen limit ‘the 170 limit’</value>
+    <value>Including for the maximum nitrogen (N) limit, the holding nitrogen (N) limit ‘the 170 limit’, and existing manure storage capacity</value>
   </data>
   <data name="lblHoldingNitrogenLimitForYear" xml:space="preserve">
     <value>Holding nitrogen limit ‘the 170 limit’ 2026</value>
@@ -7144,6 +7135,54 @@ livestock manure.</value>
   </data>
   <data name="lblFarmManure" xml:space="preserve">
     <value>FarmManure</value>
+  </data>
+  <data name="lblLettuceFields" xml:space="preserve">
+    <value>Lettuce fields</value>
+  </data>
+  <data name="lblAboutRecommendationForScotlandContent1" xml:space="preserve">
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the SRUC Technical Notes.</value>
+  </data>
+  <data name="lblAboutRecommendationForScotlandContent2" xml:space="preserve">
+    <value>While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
+  </data>
+  <data name="lblAboutRecommendationForScotlandContent3" xml:space="preserve">
+    <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
+  </data>
+  <data name="lblRegulations_for_Scotland" xml:space="preserve">
+    <value>Regulations for Scotland</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent1" xml:space="preserve">
+    <value>There are currently five NVZs in Scotland:</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent2" xml:space="preserve">
+    <value>Lower Nithsdale</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent3" xml:space="preserve">
+    <value>Lothian and Borders</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent4" xml:space="preserve">
+    <value>Strathmore and Fife (including Finavon)</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent5" xml:space="preserve">
+    <value>Moray, Aberdeenshire/Banff and Buchan</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent6" xml:space="preserve">
+    <value>Stranraer Lowlands</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent7" xml:space="preserve">
+    <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent8" xml:space="preserve">
+    <value>You should follow the guidance in the &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops.</value>
+  </data>
+  <data name="lblFarmingRuleForEnglandContent1" xml:space="preserve">
+    <value>They include about 55% of land in England.</value>
+  </data>
+  <data name="lblFarmingRuleForScotlandContent9" xml:space="preserve">
+    <value>About Nitrate Vulnerable Zones (NVZs)</value>
+  </data>
+  <data name="lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes" xml:space="preserve">
+    <value>Select one option. These are the crop types from the SRUC Technical Notes.</value>
   </data>
   <data name="MsgFieldNameMaxLengthValidation" xml:space="preserve">
     <value>Enter a field name that is no more than 50 characters long.</value>
@@ -7175,14 +7214,29 @@ livestock manure.</value>
   <data name="MsgCommentMaxLengthValidation" xml:space="preserve">
     <value>Enter a comment that is no more than 100 characters long.</value>
   </data>
-  <data name="lblAddOrganicMaterialStorage" xml:space="preserve">
-    <value>Add organic material storage</value>
+  <data name="lblCapacityWeight" xml:space="preserve">
+    <value>CapacityWeight</value>
   </data>
-  <data name="lblAddSolidMaterialStorage" xml:space="preserve">
-    <value>Add solid material storage</value>
+  <data name="lblStorageBagCapacity" xml:space="preserve">
+    <value>StorageBagCapacity</value>
   </data>
-  <data name="lblAddSlurryStorage" xml:space="preserve">
-    <value>Add slurry storage</value>
+  <data name="lblEnterTheLengthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the length to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheDepthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the depth to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheDiameterToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the diameter to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheWidthToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the width to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheCircumferenceToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the circumference to one decimal place.</value>
+  </data>
+  <data name="lblEnterTheWeightCapacityToOneDecimalPlace" xml:space="preserve">
+    <value>Enter the weight capacity to one decimal place.</value>
   </data>
   <data name="MsgForNotValidValueForNutrient" xml:space="preserve">
     <value>The value in not valid for {0}. The value must be a whole number between {1} and {2}.</value>
@@ -7232,6 +7286,87 @@ livestock manure.</value>
   <data name="lblSampleDepthForErrorNotValidValue" xml:space="preserve">
     <value>SampleDepth</value>
   </data>
+  <data name="lblCapacityWeightForSummary" xml:space="preserve">
+    <value>Capacity weight</value>
+  </data>
+  <data name="lblSolidManureStorageTotal" xml:space="preserve">
+    <value>Solid manure store total</value>
+  </data>
+  <data name="lblSlurryStorageTotal" xml:space="preserve">
+    <value>Slurry store total</value>
+  </data>
+  <data name="lblTotalSurfaceAreaOfUncoveredStores" xml:space="preserve">
+    <value>Total surface area of uncovered slurry stores</value>
+  </data>
+  <data name="lblCreateNutrientManagementPlansAndNVZReports" xml:space="preserve">
+    <value>Create nutrient management plans and NVZ reports</value>
+  </data>
+  <data name="lblAddAFarmToStartCreatingNutrientManagementPlans" xml:space="preserve">
+    <value>Add a farm to start creating nutrient management plans.</value>
+  </data>
+  <data name="lblYouCanCreateNVZReportsAndOtherFarmManagementReports" xml:space="preserve">
+    <value>You can create NVZ reports and other farm management reports once you have added a farm.</value>
+  </data>
+  <data name="lblCreateANutrientSupplyEstimate" xml:space="preserve">
+    <value>Create a nutrient supply estimate</value>
+  </data>
+  <data name="lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans" xml:space="preserve">
+    <value>Select a farm to create or update it's nutrient management plans or to create a report.</value>
+  </data>
+  <data name="lblCreateEstimateContent1" xml:space="preserve">
+    <value>Compare different organic material applications to see how nutrient supply could be affected (scenario planning).</value>
+  </data>
+  <data name="lblCreateEstimateContent2" xml:space="preserve">
+    <value>You can see the financial value of organic material applications, and how much you could save compared to buying inorganic fertiliser.</value>
+  </data>
+  <data name="lblMannerNPK" xml:space="preserve">
+    <value>(Manner-NPK)</value>
+  </data>
+  <data name="lblViewOrCreateANutrientSupplyEstimate" xml:space="preserve">
+    <value>View or create a nutrient supply estimate</value>
+  </data>
+  <data name="lblPlanningAndEstimating" xml:space="preserve">
+    <value>Planning and estimating</value>
+  </data>
+  <data name="lblMannerEstimateContent1" xml:space="preserve">
+    <value>How estimating nutrient supply from organic materials works using MANNER-NPK</value>
+  </data>
+  <data name="lblMannerEstimateContent2" xml:space="preserve">
+    <value>MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials.</value>
+  </data>
+  <data name="lblMannerEstimateContent3" xml:space="preserve">
+    <value>Saving and printing</value>
+  </data>
+  <data name="lblMannerEstimateContent4" xml:space="preserve">
+    <value>You can save your estimates as a PDF and print them.</value>
+  </data>
+  <data name="lblAboutManner" xml:space="preserve">
+    <value>About manner</value>
+  </data>
+  <data name="lblMannerHubPage" xml:space="preserve">
+    <value>Manner hub page</value>
+  </data>
+  <data name="lblMannerEstimate" xml:space="preserve">
+    <value>Manner estimate</value>
+  </data>
+  <data name="MsgSelectACountryBeforContinuing" xml:space="preserve">
+    <value>Select a country before continuing.</value>
+  </data>
+  <data name="lblWhatIsTheWeightCapacity" xml:space="preserve">
+    <value>What is the weight capacity?</value>
+  </data>
+  <data name="lblAverageAnnualRainfallForError" xml:space="preserve">
+    <value>AverageAnnualRainfall</value>
+  </data>
+  <data name="lblFarmNamePageHint" xml:space="preserve">
+    <value>This will be shown on the estimate</value>
+  </data>
+  <data name="lblAverageAnnualRainfallHint" xml:space="preserve">
+    <value>This is the average rainfall for your postcode area. If you have more accurate data for your farm, you can change it now or later.</value>
+  </data>
+  <data name="lblIsThisInNVZ" xml:space="preserve">
+    <value>Is {0} inside a Nitrate Vulnerable Zone (NVZ)?</value>
+  </data>
   <data name="MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit" xml:space="preserve">
     <value>Your {0} has exceeded the maximum character limit.</value>
   </data>
@@ -7240,5 +7375,167 @@ livestock manure.</value>
   </data>
   <data name="lblSecondLineAddress" xml:space="preserve">
     <value>second line address</value>
+  </data>
+  <data name="lblWhatTypeOfCropWouldYouLikeToUse" xml:space="preserve">
+    <value>What type of crop would you like to use?</value>
+  </data>
+  <data name="lblSelectOneOptionTheseOptionsComeFromAHDB" xml:space="preserve">
+    <value>Select one option. These options come from the AHDB Nutrient Management Guide (RB209).</value>
+  </data>
+  <data name="lblWhichWouldYouLikeToUse" xml:space="preserve">
+    <value>Which {0} would you like to use?</value>
+  </data>
+  <data name="lblEarlySownContent" xml:space="preserve">
+    <value>Early sown (25th August to 14th September)</value>
+  </data>
+  <data name="lblLateSownContent" xml:space="preserve">
+    <value>Late sown (15th September to 24th August)</value>
+  </data>
+  <data name="lblWhatTypeOfOrganicMaterialWouldYouLikeUse" xml:space="preserve">
+    <value>What type of organic material would you like use?</value>
+  </data>
+  <data name="lblWhatTypeOfManureGroupWouldYouLikeUse" xml:space="preserve">
+    <value>What type of {0} would you like use?</value>
+  </data>
+  <data name="lblIsTheWheatEarlyOrLateSown" xml:space="preserve">
+    <value>Is the wheat early or late sown?</value>
+  </data>
+  <data name="lblViewMapsOfTheNitrateVulnerableZonesInScotland" xml:space="preserve">
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland.&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblItWillAlsoTellYou" xml:space="preserve">
+    <value>It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+  </data>
+  <data name="lblBusinessInformationFor" xml:space="preserve">
+    <value>Business information for {0}</value>
+  </data>
+  <data name="lblWhatIsTheBusinessName" xml:space="preserve">
+    <value>What is the business name?</value>
+  </data>
+  <data name="lblWhatIsTheBusinessReferenceNumber" xml:space="preserve">
+    <value>What is the business reference number (optional)?</value>
+  </data>
+  <data name="lblForExample123456" xml:space="preserve">
+    <value>For example, 123456</value>
+  </data>
+  <data name="lblWhatIsTheMainLocationCode" xml:space="preserve">
+    <value>What is the main location code (MLC) (optional)?</value>
+  </data>
+  <data name="lblForExample223334444" xml:space="preserve">
+    <value>For example, 22/333/4444</value>
+  </data>
+  <data name="MsgEnterTheBusinessName" xml:space="preserve">
+    <value>Enter the business name</value>
+  </data>
+  <data name="lblWhichNVZAreTheFieldsAtYourFarmIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zones (NVZ) are the fields at {0} in?</value>
+  </data>
+  <data name="lblViewAMapOfNitrateVulnerableZones" xml:space="preserve">
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View a map of Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblYouCanAddFieldsToDifferentNVZs" xml:space="preserve">
+    <value>You can add fields to different NVZs later if you need to.</value>
+  </data>
+  <data name="lblWhatIsTheLPIDNumber" xml:space="preserve">
+    <value>What is the land parcel identification number (LPID) (optional)?</value>
+  </data>
+  <data name="lblHintOfLPIDNumber" xml:space="preserve">
+    <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
+  </data>
+  <data name="MsgLPIDNumberFormatError" xml:space="preserve">
+    <value>LPID number should match the following format AA/12345/12345.</value>
+  </data>
+  <data name="MsgInvalidFarmData" xml:space="preserve">
+    <value>Invalid farm data</value>
+  </data>
+  <data name="lblWhatIsTheAverageDepthSuffix" xml:space="preserve">
+    <value>What is the average depth</value>
+  </data>
+  <data name="lblWhatIsTheAverageWidthSuffix" xml:space="preserve">
+    <value>What is the average width</value>
+  </data>
+  <data name="lblWhatIsTheAverageLength" xml:space="preserve">
+    <value>What is the average length?</value>
+  </data>
+  <data name="lblWhatIsTheAverageWidth" xml:space="preserve">
+    <value>What is the average width?</value>
+  </data>
+  <data name="lblWhatIsTheAverageDepth" xml:space="preserve">
+    <value>What is the average depth?</value>
+  </data>
+  <data name="lblOrganicMatter" xml:space="preserve">
+    <value>Organic matter</value>
+  </data>
+  <data name="lblManureStores" xml:space="preserve">
+    <value>Manure stores</value>
+  </data>
+  <data name="lblTotalManureStorage" xml:space="preserve">
+    <value>Total manure storage</value>
+  </data>
+  <data name="lblExistingManureStorageCapacityForHint" xml:space="preserve">
+    <value>Existing manure storage capacity</value>
+  </data>
+  <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
+    <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacity" xml:space="preserve">
+    <value>Phosphorus sorption capacity (PSC)</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentOne" xml:space="preserve">
+    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentTwo" xml:space="preserve">
+    <value>If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentThree" xml:space="preserve">
+    <value>&lt;a href="https://map.environment.gov.scot/Soil_maps/?layer=16"  target="_blank"&gt;View the map&lt;/a&gt; (open a new window)</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentFour" xml:space="preserve">
+    <value>You can also read the SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentFive" xml:space="preserve">
+    <value>&lt;a href="https://www.fas.scot/downloads/managing-soil-phosphorus/"  target="_blank"&gt;View the SRUC technical notes&lt;/a&gt; (open in a new window).</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentSix" xml:space="preserve">
+    <value>If you are still unsure, use PSC Index 1.</value>
+  </data>
+  <data name="lblPhosphorusSorptionCapacityContentSeven" xml:space="preserve">
+    <value>What is the phosphorus sorption capacity (PSC) of the soil in {0}?</value>
+  </data>
+  <data name="lblBackslopHint" xml:space="preserve">
+    <value>A "1 in X" slope means that for every X units of horizontal distance, the elevation changes by 1 vertical unit</value>
+  </data>
+  <data name="lblUpdateFarmOrBusinessDetails" xml:space="preserve">
+    <value>Update farm or business details</value>
+  </data>
+  <data name="lblBusinessReferenceNumber" xml:space="preserve">
+    <value>Business Reference Number</value>
+  </data>
+  <data name="lblMainLocationCode" xml:space="preserve">
+    <value>Main Location Code (MLC)</value>
+  </data>
+  <data name="lblBusinessReferenceNumberOptional" xml:space="preserve">
+    <value>Business Reference Number (optional)</value>
+  </data>
+  <data name="lblMainLocationCodeMCOptional" xml:space="preserve">
+    <value>Main Location Code (MC) (optional)</value>
+  </data>
+  <data name="MsgMLCMinMaxValidation" xml:space="preserve">
+    <value>Enter a main location code that is no more than 50 characters long</value>
+  </data>
+  <data name="MsgBusinessNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a business name that is no more than 128 characters long</value>
+  </data>
+  <data name="MsgSBIMinMaxValidation" xml:space="preserve">
+    <value>Enter a business reference number that is no more than 20 characters long</value>
+  </data>
+  <data name="lblUpdateFarmOrBusinessInformation" xml:space="preserve">
+    <value>Update farm or business information</value>
+  </data>
+  <data name="lblSolidManureStoresOnYardsOrInLivestockHousing" xml:space="preserve">
+    <value>Solid manure stores (on yards or in livestock housing)</value>
+  </data>
+  <data name="msgViewAhdbGuidence" xml:space="preserve">
+    <value>View the AHDB guidance</value>
   </data>
 </root>
