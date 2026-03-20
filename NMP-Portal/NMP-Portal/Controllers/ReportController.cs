@@ -593,7 +593,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
 
-        if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null&& model.FarmId!=null)
+        if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null && model.FarmId != null)
         {
             model.FarmRB209CountryID = model.CropAndFieldReport.Farm.RB209CountryID;
             (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
@@ -752,10 +752,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                     }
                                     foreach (var organic in manData.OrganicManures)
                                     {
-                                        (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+                                        (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeID);
                                         if (error == null)
                                         {
-                                            organic.RateUnit = manureType.IsLiquid.Value ? string.Format("{0} {1}", Resource.lblCubicMeters, Resource.lblPerHectare) : string.Format("{0} {1}", Resource.lbltonnes, Resource.lblPerHectare);
+                                            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                                            {
+                                                organic.RateUnit = manureType.IsLiquid.Value ?Resource.lblCubicMeters :  Resource.lbltonnes;
+                                            }
+                                            else
+                                            {
+                                                organic.RateUnit = manureType.IsLiquid.Value ? string.Format("{0} {1}", Resource.lblCubicMeters, Resource.lblPerHectare) : string.Format("{0} {1}", Resource.lbltonnes, Resource.lblPerHectare);
+                                            }
+
                                         }
                                         else
                                         {

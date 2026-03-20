@@ -2892,7 +2892,7 @@ cubic metres per hectare  not set</value>
   <data name="lblIncorporationMethod" xml:space="preserve">
     <value>Incorporation method</value>
   </data>
-  <data name="lblInorganicFertiliserAndLimeApplicationsForField" xml:space="preserve">
+  <data name="lblInorganicFertiliserAndLimeApplicationsForFieldPerHectare" xml:space="preserve">
     <value>Inorganic fertiliser and lime applications for {0} (per hectare)</value>
   </data>
   <data name="lblManagement" xml:space="preserve">
@@ -7572,7 +7572,7 @@ livestock manure.</value>
     <value>Is the winter rainfall (from 1 October {0} to 1 March {1}) at {2} 450mm or more?</value>
   </data>
   <data name="lblSEPAPublishRainfallDataForScotland" xml:space="preserve">
-    <value>SEPA publish rainfall data for Scotland. &lt;a href="https://ahdb.org.uk/knowledge-library/how-to-use-excess-winter-rainfall-data-to-plan-nitrogen-applications" target="_blank"&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;</value>
+    <value>SEPA publish rainfall data for Scotland. &lt;a href="https://www2.sepa.org.uk/rainfall" target="_blank"&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;</value>
   </data>
   <data name="lblUpdateRainfall" xml:space="preserve">
     <value>Update rainfall</value>
@@ -7591,5 +7591,38 @@ livestock manure.</value>
   </data>
   <data name="MsgAddWinterRainfallContentOne" xml:space="preserve">
     <value>Winter Rainfall for {0} updated</value>
+  </data>
+  <data name="lblStatusSlashPH" xml:space="preserve">
+    <value>Status/pH</value>
+  </data>
+  <data name="lblOrgMaterialApplicationForFieldName" xml:space="preserve">
+    <value>Organic material application for {0}</value>
+  </data>
+  <data name="lblApplicationDetail" xml:space="preserve">
+    <value>Application detail</value>
+  </data>
+  <data name="lbOrganicMaterialType" xml:space="preserve">
+    <value>Organic material type</value>
+  </data>
+  <data name="lblApplicationRatePerHectare" xml:space="preserve">
+    <value>Application rate (per hectare)</value>
+  </data>
+  <data name="lblNumber" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="lblNutrientTotalsFromOrganicMaterialApplications" xml:space="preserve">
+    <value>Nutrient totals from organic material applications</value>
+  </data>
+  <data name="lblInorganicFertiliserAndLimeApplicationsForField" xml:space="preserve">
+    <value>Inorganic fertiliser and lime applications for {0}</value>
+  </data>
+  <data name="lblPreviousCropInYear" xml:space="preserve">
+    <value>Previous crop in {0}</value>
+  </data>
+  <data name="lblGuidanceForScotland" xml:space="preserve">
+    <value>Crop need is based on guidance in the SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+  </data>
+  <data name="lblWinterRainfall" xml:space="preserve">
+    <value>Winter rainfall</value>
   </data>
 </root>
