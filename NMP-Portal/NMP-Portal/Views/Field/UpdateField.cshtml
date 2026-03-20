@@ -1,4 +1,5 @@
 ﻿@using NMP.Commons.Resources;
+@using NMP.Commons.Enums;
 @model NMP.Commons.ViewModels.FieldViewModel
 
 @{
@@ -26,7 +27,7 @@
         case false:
             isAbove300SeaLevel = Resource.lblNo;
             break;
-    }
+    }   
 
 }
 @section BeforeContent {
@@ -56,69 +57,7 @@
             <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblUpdateXField, Model.Name)
             </h1>
-            <div hidden="true">
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NationalGridReference" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherReference" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LPIDNumber" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID" value="@Model.FarmID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalArea" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CroppedArea" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureNonSpreadingArea" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAbove300SeaLevel" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilReleasingClay" value="@Model.SoilReleasingClay.ToString().ToLower()" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOverChalk" value="@Model.SoilOverChalk.ToString().ToLower()" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.isEnglishRules" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.FieldID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropGroupID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.CropTypeID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGrassInLastThreeYear" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HarvestYear" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.GrassManagementOptionID" />
-
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.HasGreaterThan30PercentClover" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.SoilNitrogenSupplyItemID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.LayDuration" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LastHarvestYear" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
-                @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
-                {
-                    @for (int i = 0; i < Model.PreviousGrassYears.Count; i++)
-                    {
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassYears[i]" value="@Model.PreviousGrassYears[i]" />
-                    }
-                }
-                @if (Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
-                {
-                    @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)
-                    {
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ID" value="@Model.PreviousCroppingsList[i].ID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].FieldID" value="@Model.PreviousCroppingsList[i].FieldID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CropGroupID" value="@Model.PreviousCroppingsList[i].CropGroupID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CropTypeID" value="@Model.PreviousCroppingsList[i].CropTypeID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HasGrassInLastThreeYear" value="@Model.PreviousCroppingsList[i].HasGrassInLastThreeYear" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HarvestYear" value="@Model.PreviousCroppingsList[i].HarvestYear" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].LayDuration" value="@Model.PreviousCroppingsList[i].LayDuration" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].GrassManagementOptionID" value="@Model.PreviousCroppingsList[i].GrassManagementOptionID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].HasGreaterThan30PercentClover" value="@Model.PreviousCroppingsList[i].HasGreaterThan30PercentClover" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].SoilNitrogenSupplyItemID" value="@Model.PreviousCroppingsList[i].SoilNitrogenSupplyItemID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedOn" value="@Model.PreviousCroppingsList[i].CreatedOn" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].CreatedByID" value="@Model.PreviousCroppingsList[i].CreatedByID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedOn" value="@Model.PreviousCroppingsList[i].ModifiedOn" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].ModifiedByID" value="@Model.PreviousCroppingsList[i].ModifiedByID" />
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppingsList[i].Action" value="@Model.PreviousCroppingsList[i].Action" />
-
-                    }
-                }
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
-
-            </div>
+            @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
             <govuk-summary-list>
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -153,17 +92,17 @@
                         <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange</govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row> *@
-                @if (!Model.isEnglishRules)
+                @if (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
                             @Resource.lblLandParcelIDForCheckAnswere
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @Model.LPIDNumber
+                            @(string.IsNullOrWhiteSpace(Model.LPIDNumber) ? Resource.lblNotEntered : Model.LPIDNumber)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="AddField" asp-controller="Field" asp-route-id="@Model.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblLandParcelIDForCheckAnswere)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="LPIDNumber" asp-controller="Field">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblLandParcelIDForCheckAnswere)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }

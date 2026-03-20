@@ -518,9 +518,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
         return (fertiliserResponse, error);
     }
-    public async Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData)
+    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
     {
-        Error error = new Error();
+        Error? error =null;
         List<FertiliserManure> fertiliser = new List<FertiliserManure>();
         try
         {
@@ -550,13 +550,19 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
+            error = new Error
+            {
+                Message = Resource.MsgServiceNotAvailable
+            };
             _logger.LogError(hre, hre.Message);
             throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
+            error = new Error
+            {
+                Message = ex.Message
+            };
             _logger.LogError(ex, ex.Message);
             throw new Exception(error.Message, ex);
         }

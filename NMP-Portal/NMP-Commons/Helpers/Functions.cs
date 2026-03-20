@@ -1,10 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using NMP.Commons.Enums;
+using NMP.Commons.ServiceResponses;
 namespace NMP.Commons.Helpers
 {
     public static class Functions
     {
+        public static Error? ExtractError(this ILogger logger, ResponseWrapper? wrapper, Error? error)
+        {
+            if (wrapper != null && wrapper.Error != null)
+            {
+                error = wrapper?.Error?.ToObject<Error>();
+
+                if (error != null)
+                {
+                    // Cast dynamic values to object to avoid dynamic dispatch for extension methods
+                    logger.LogError(
+                        "{Code} : {Message} : {Stack} : {Path}",
+                        error.Code,
+                        error.Message,
+                        error.Stack,
+                        error.Path);
+                }
+            }
+
+            return error;
+        }
+
         public static string ExtractFirstHalfPostcode(string postcode)
         {
             if (string.IsNullOrWhiteSpace(postcode))
@@ -61,9 +84,12 @@ namespace NMP.Commons.Helpers
             return 0;
         }
 
-        public static int ApplyPotentialCutBonus(int potentialCut)
+        public static int ApplyPotentialCutBonus(int potentialCut, int? defoliationSequenceId)
         {
-            if (potentialCut >= (int)PotentialCut.Three)
+            //NMPT 2844
+            // As per the discussion with RB209 team, DefoliationSequenceID will be used to identify the cuts for grass and if the sequence ID is 10,11,32,33,56,57,78 or 79 then it will be considered as 3 or more cuts and 40 points will be given for grass cut in that case.
+            int[] threeOrMoreCutdefoliationSequenceIDs = { 10, 11, 32, 33, 56, 57, 78, 79 };
+            if (defoliationSequenceId.HasValue && Array.Exists<int>(threeOrMoreCutdefoliationSequenceIDs, element => element == defoliationSequenceId))
             {
                 return 40;
             }

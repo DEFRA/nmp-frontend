@@ -14,12 +14,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, ICropLogic cropLogic, IPreviousCroppingLogic previousCroppingLogic) : Controller
+     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic,  IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -28,7 +29,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic ?? throw new ArgumentNullException(nameof(fieldLogic));
     private readonly ISoilLogic _soilService = soilLogic;
-    private readonly ICropLogic _cropLogic = cropLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
@@ -45,6 +45,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private const string _cropTypesActionName = "CropTypes";
     private const string _lastHarvestYearActionName = "LastHarvestYear";
     private const string _stringFormat = "{0} {1}";
+    private readonly IFarmsNvzLogic _farmsNvzLogic = farmsNvzLogic;
     public async Task<IActionResult> Index()
     {
         _logger.LogTrace("Field Controller : Index() action called");
@@ -174,11 +175,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                 model.EncryptedFarmId = q;
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
-                model.isEnglishRules = farm.EnglishRules;
-                model.FarmName = farm.Name;
-                model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-                model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
+                if (farm != null)
+                {
+                    model.FarmRB209CountryID = farm?.RB209CountryID;
+                    model.FarmName = farm?.Name;
+                    model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                    model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(r) && model != null)
@@ -225,9 +229,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model.CopyExistingField != null && (model.CopyExistingField.Value))
         {
             Error? error = null;
-            (FieldResponse fieldResponse, error) = await _fieldLogic.FetchFieldSoilAnalysisAndSnsById(model.ID.Value);
+            (FieldResponse? fieldResponse, error) = await _fieldLogic.FetchFieldSoilAnalysisAndSnsById(model.ID.Value);
 
-            if (fieldResponse != null && string.IsNullOrWhiteSpace(error.Message))
+            if (fieldResponse != null && error == null)
             {
                 model.NationalGridReference = fieldResponse.Field.NationalGridReference;
                 model.OtherReference = fieldResponse.Field.OtherReference;
@@ -265,6 +269,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_recentSoilAnalysisQuestion);
         }
 
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("LPIDNumber");
+        }
         return RedirectToAction("FieldMeasurements");
     }
 
@@ -322,11 +330,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         string farmId = _farmDataProtector.Unprotect(field.EncryptedFarmId);
-        (Farm farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-        field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-        field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+        if (farm != null)
+        {
+            field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+            field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+        }
         SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer)
@@ -433,6 +442,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError(_totalAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
         }
     }
+  
 
     [HttpGet]
     public async Task<IActionResult> NVZField()
@@ -451,17 +461,20 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-        (Farm farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+        SetFieldDataToSession(model);
+        var result = await HandleNvzLogicAsync(model);
 
-        model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+        if (result != null)
+        {
+            return result;
+        }
         SetFieldDataToSession(model);
         return RedirectToAction(_elevationFieldActionName);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult NVZField(FieldViewModel model)
+    public async Task<IActionResult> NVZField(FieldViewModel model)
     {
         _logger.LogTrace("Field Controller : NVZField() post action called");
 
@@ -487,7 +500,76 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_updateFieldActionName);
         }
 
+        if ((model.IsWithinNVZ.HasValue && model.IsWithinNVZ.Value) && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            int farmNvzListCount = await BindNitrateVulnerableZones(model);
+            if (farmNvzListCount > 1)
+            {
+                return RedirectToAction("NitrateVulnerableZones");
+            }
+        }
+
+        if (model.IsWithinNVZ.HasValue && !model.IsWithinNVZ.Value)
+        {
+            model.IsNVZProgrammeNeedToShow = false;
+            model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
+        }
+        SetFieldDataToSession(model);
+
         return RedirectToAction(_elevationFieldActionName);
+
+    }
+    private async Task<IActionResult?> HandleNvzLogicAsync(FieldViewModel model)
+    {
+        string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+
+        if (farm != null && farm.NVZFields.HasValue)
+        {
+            model.IsWithinNVZ = Convert.ToBoolean(farm.NVZFields);
+
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                if (farm.NVZFields.Value == (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ)
+                {
+                    int farmNvzListCount = await BindNitrateVulnerableZones(model);
+
+                    if (farmNvzListCount > 1)
+                    {
+                        model.IsNVZProgrammeNeedToShow = true;
+                        SetFieldDataToSession(model);
+                        return RedirectToAction("NitrateVulnerableZones");
+                    }
+                }
+                else
+                {
+                    model.IsNVZProgrammeNeedToShow = false;
+                    model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
+                }
+            }
+        }
+
+        return null;
+    }
+    private async Task<int> BindNitrateVulnerableZones(FieldViewModel model)
+    {
+
+        (List<FarmsNvz> farmsNvzList, Error? error) = await _farmsNvzLogic.FetchFarmNVZByID(model.FarmID);
+        if (error == null && farmsNvzList.Any())
+        {
+            if (farmsNvzList.Count == 1)
+            {
+                model.NVZProgrammeID = farmsNvzList[0].NVZProgrammeID;
+                SetFieldDataToSession(model);
+                return farmsNvzList.Count;
+            }
+            else
+            {
+                ViewBag.FarmsNvzList = farmsNvzList.OrderBy(x => x.NVZProgrammeName);
+                return farmsNvzList.Count;
+            }
+        }
+        return farmsNvzList.Count;
     }
 
     [HttpGet]
@@ -508,8 +590,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         string farmId = _farmDataProtector.Unprotect(model.EncryptedFarmId);
-        (Farm farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-        model.IsAbove300SeaLevel = Convert.ToBoolean(farm.FieldsAbove300SeaLevel);
+        (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+        if (farm != null)
+        {
+            model.IsAbove300SeaLevel = Convert.ToBoolean(farm.FieldsAbove300SeaLevel);
+        }
         SetFieldDataToSession(model);
         return RedirectToAction("SoilType");
     }
@@ -559,9 +644,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            var country = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            ViewBag.SoilTypesList = await _fieldLogic.FetchSoilTypesByRB209CountryId(country);
-
+            if (model.FarmRB209CountryID.HasValue)
+            {
+                ViewBag.SoilTypesList = await _fieldLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryID.Value);
+            }
             if (ViewBag.SoilTypesList == null && ((List<SoilTypesResponse>)ViewBag.SoilTypesList).Count > 0)
             {
                 ViewBag.SoilTypeError = Resource.MsgServiceNotAvailable;
@@ -577,7 +663,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_elevationFieldActionName);
         }
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SoilType(FieldViewModel model)
@@ -591,9 +677,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 ModelState.AddModelError("SoilTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblSoilType.ToLower()));
             }
 
-            var country = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(country);
-
+            List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+            if (model.FarmRB209CountryID.HasValue)
+            {
+                soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryID.Value);
+            }
             if (!ModelState.IsValid)
             {
                 ViewBag.SoilTypesList = soilTypes;
@@ -654,6 +742,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             TempData[_errorTempData] = ex.Message;
             return View(model);
         }
+
+        if(model.FarmRB209CountryID.HasValue&&model.FarmRB209CountryID.Value==(int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("PscIndex");
+        }
         return RedirectToAction(_recentSoilAnalysisQuestion);
     }
 
@@ -689,8 +782,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
 
-        var country = field.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-        List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(country);
+        List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
+        if (field.FarmRB209CountryID.HasValue)
+        {
+            soilTypes = await _fieldLogic.FetchSoilTypesByRB209CountryId(field.FarmRB209CountryID.Value);
+        }
         var soilType = soilTypes?.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
         if (soilType != null && !soilType.KReleasingClay)
         {
@@ -1032,7 +1128,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return View(model);
             }
 
-            model.SoilAnalyses.PhosphorusMethodologyID = (int)PhosphorusMethodology.Olsens;
+            model.SoilAnalyses.PhosphorusMethodologyID = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)PhosphorusMethodology.Resin : (int)PhosphorusMethodology.Olsens;
 
             if (HasAnyNutrientValue(model))
             {
@@ -1088,7 +1184,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return false;
         }
 
-        if (!await TryPopulateIndexAsync(Resource.lblPhosphate, model.SoilAnalyses.Phosphorus, (id, value) => model.SoilAnalyses.PhosphorusIndex = value, (int)PhosphorusMethodology.Olsens, nutrients))
+        if (!await TryPopulateIndexAsync(Resource.lblPhosphate, model.SoilAnalyses.Phosphorus, (id, value) => model.SoilAnalyses.PhosphorusIndex = value, model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)PhosphorusMethodology.Resin : (int)PhosphorusMethodology.Olsens, nutrients))
         {
             return false;
         }
@@ -1152,7 +1248,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ValidatePotassiumIndex(model);
 
             if (model.SoilAnalyses.PH == null && (string.IsNullOrWhiteSpace(model.PotassiumIndexValue)) &&
-            model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null)
+            model.SoilAnalyses.PhosphorusIndex == null && model.SoilAnalyses.MagnesiumIndex == null && model.SoilAnalyses.OrganicMatterPercentage == null)
             {
                 ViewData["IsPostRequest"] = true;
                 ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
@@ -1172,6 +1268,19 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 ViewData["IsPostRequest"] = true;
                 ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
+            }
+        }
+
+        if (model.SoilAnalyses.OrganicMatterPercentage != null)
+        {
+            if (model.SoilAnalyses.OrganicMatterPercentage < 0 || model.SoilAnalyses.OrganicMatterPercentage > 100)
+            {
+                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
+            }
+
+            if (model.SoilAnalyses.OrganicMatterPercentage.Value % 1 != 0)
+            {
+                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
             }
         }
     }
@@ -1256,7 +1365,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
         {
-            if (int.TryParse(model.PotassiumIndexValue, out int value))
+            string potassiumIndex = model.PotassiumIndexValue.Replace(" ", "");
+            if (int.TryParse(potassiumIndex, out int value))
             {
                 if (value > 9 || value < 0)
                 {
@@ -1269,8 +1379,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
             else
             {
-                if ((model.PotassiumIndexValue.ToString() != Resource.lblTwoMinus) &&
-                                       (model.PotassiumIndexValue.ToString() != Resource.lblTwoPlus))
+                if ((potassiumIndex.ToString() != Resource.lblTwoMinus) &&
+                                       (potassiumIndex.ToString() != Resource.lblTwoPlus))
                 {
                     ModelState.AddModelError("PotassiumIndexValue", Resource.MsgValidationForPotasium);
                 }
@@ -1365,10 +1475,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0);
-            var country = model.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            var cropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
-
+            List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
             ViewBag.CropTypeList = cropTypeList;
             if (cropTypeList.Count == 1 && cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
             {
@@ -1402,10 +1509,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!ModelState.IsValid)
         {
-            List<CropTypeResponse> cropTypes = new List<CropTypeResponse>();
-            cropTypes = await _fieldLogic.FetchCropTypes(field.CropGroupId ?? 0);
-            var country = field.isEnglishRules ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-            ViewBag.CropTypeList = cropTypes.Where(x => x.CountryId == country || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).OrderBy(c => c.CropType).ToList();
+            List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(field.CropGroupId ?? 0, field.FarmRB209CountryID);
+            ViewBag.CropTypeList = cropTypes;
             return View(field);
         }
         field.CropType = await _fieldLogic.FetchCropTypeById(field.CropTypeID.Value);
@@ -1534,40 +1639,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.PKBalance = null;
             }
 
-            int? lastGroupNumber = null;
-            Error error = new Error();
-            (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-
-            if (farm != null && (string.IsNullOrWhiteSpace(error.Message)))
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.LastHarvestYear.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-
-                if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count > 0)
-                {
-                    var lastGroup = harvestYearPlanResponse.Where(cg => !string.IsNullOrEmpty(cg.CropGroupName) && cg.CropGroupName.StartsWith("Crop group") &&
-                                     int.TryParse(cg.CropGroupName.Split(' ')[2], out _))
-                                    .OrderByDescending(cg => int.Parse(cg.CropGroupName.Split(' ')[2]))
-                                    .FirstOrDefault();
-                    if (lastGroup != null)
-                    {
-                        lastGroupNumber = int.Parse(lastGroup.CropGroupName.Split(' ')[2]);
-                    }
-                }
-
-                if (lastGroupNumber != null)
-                {
-                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, (lastGroupNumber + 1));
-                }
-                else
-                {
-                    model.CropGroupName = string.Format(Resource.lblCropGroupWithCounter, 1);
-                }
+                model.NVZProgrammeID = (model.IsWithinNVZ.HasValue && model.IsWithinNVZ.Value) ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
             }
-            else
-            {
-                TempData[_addFieldErrorTempData] = Resource.MsgWeCouldNotAddYourFieldPleaseTryAgainLater;
-                return RedirectToAction(_checkAnswerActionName);
-            }
+
+            Error? error = new Error();
+            (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
 
             List<PreviousCroppingData> previousCropping = new List<PreviousCroppingData>();
 
@@ -1705,6 +1783,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
             {
+                model.PotassiumIndexValue = model.PotassiumIndexValue.Replace(" ", "");
                 if (model.PotassiumIndexValue == Resource.lblTwoMinus)
                 {
                     model.SoilAnalyses.PotassiumIndex = Convert.ToInt32(Resource.lblMinusTwo);
@@ -1746,6 +1825,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     MagnesiumAnalysis = model.SoilAnalyses.MagnesiumAnalysis,
                     MagnesiumStatus = model.SoilAnalyses.MagnesiumStatus,
                     NitrogenResidueGroup = model.SoilAnalyses.NitrogenResidueGroup,
+                    OrganicMatterPercentage = model.SoilAnalyses.OrganicMatterPercentage,
                     Comments = model.SoilAnalyses.Comments,
                     PreviousID = model.SoilAnalyses.PreviousID,
                     CreatedOn = DateTime.Now,
@@ -1761,7 +1841,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 {
                     //ID= model.ID,
                     SoilTypeID = model.SoilTypeID,
-                    NVZProgrammeID = model.IsWithinNVZ == true ? (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule : (int)NMP.Commons.Enums.NvzProgram.NotInNVZ,
+                    NVZProgrammeID = model.NVZProgrammeID,
                     Name = model.Name,
                     LPIDNumber = model.LPIDNumber,
                     NationalGridReference = model.NationalGridReference,
@@ -1862,7 +1942,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!model.SoilAnalyses.Date.HasValue)
         {
-            ModelState.AddModelError("SoilAnalyses.Date", Resource.MsgSampleDateNotSet);
+            ModelState.AddModelError("SoilAnalyses.Date", string.Format(Resource.lblDateSampleTaken, model.Name));
         }
         if (!model.SoilAnalyses.SulphurDeficient.HasValue)
         {
@@ -2008,8 +2088,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 model.Fields.ForEach(x => x.EncryptedFieldId = _fieldDataProtector.Protect(x.ID.ToString()));
             }
-            (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-            model.FarmName = farm.Name;
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            if (farm != null)
+            {
+                model.FarmName = farm.Name;
+            }
             if (string.IsNullOrWhiteSpace(isDeleted) && name != null)
             {
                 model.FieldName = _farmDataProtector.Unprotect(name);
@@ -2051,18 +2134,18 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         FieldViewModel model = new FieldViewModel();
-        Error error = new Error();
-        (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+        Error? error = new Error();
+        (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
         int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
         var field = await _fieldLogic.FetchFieldByFieldId(decryptedFieldId);
-        List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(decryptedFieldId);
+        List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(decryptedFieldId);
         List<PreviousCroppingData> prevCroppings = new List<PreviousCroppingData>();
 
         bool isPreviousCroppingBindRequired = false;
         if (!cropPlans.Any())
         {
             (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, null);
-            if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
+            if (string.IsNullOrWhiteSpace(error?.Message) && prevCroppings.Count > 0)
             {
                 model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
             }
@@ -2089,7 +2172,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.LastHarvestYear = oldestYearWithPlan - 1;
             (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, oldestYearWithPlan);
 
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (string.IsNullOrWhiteSpace(error?.Message))
             {
                 List<int> previousYears = new List<int>();
 
@@ -2210,12 +2293,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         model.EncryptedFieldId = fieldId;
         model.ID = decryptedFieldId;
-        model.isEnglishRules = farm.EnglishRules;
+        model.FarmRB209CountryID = farm?.RB209CountryID;
         model.SoilOverChalk = field.SoilOverChalk;
         if (farm != null)
         {
-            model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
-            model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            model.IsAbove300SeaLevelForFarm = farm?.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
         }
         else
         {
@@ -2246,7 +2329,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
         }
         model.EncryptedFarmId = farmId;
-        model.FarmName = farm.Name;
+        model.FarmName = farm?.Name;
         List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldLogic.FetchSoilAnalysisByFieldId(decryptedFieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
         if (soilAnalysisResponse != null && soilAnalysisResponse.Count > 0)
         {
@@ -2265,7 +2348,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     {
                         ViewBag.Success = Resource.lblTrue;
                         ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveUpdated, model.Name);
-                        ViewBag.SuccessMsgContentLink = Resource.MsgViewYourFarmDetails;
+                        ViewBag.SuccessMsgContentLink = Resource.MsgCheckYourNutrientRecommendations;
                     }
                     else if (statusFor == Resource.lblSoilAnalysis)
                     {
@@ -2289,7 +2372,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                             {
                                 ViewBag.SuccessMsgContent = string.Format(Resource.lblYouHaveRemovedASoilAnalysisForFieldName, model.Name);
                             }
-                            List<Crop> crop = (await _cropLogic.FetchCropsByFieldId(model.ID.Value)).ToList();
+                            List<Crop> crop = (await _fieldLogic.FetchCropsByFieldId(model.ID.Value)).ToList();
                             if (crop != null && crop.Count > 0)
                             {
                                 if (soilAnalysisResponse.Count > 0)
@@ -2491,12 +2574,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             List<Crop> cropPlans = new List<Crop>();
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
-                (Farm farm, Error error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
+                (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
                 int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
                 var field = await _fieldLogic.FetchFieldByFieldId(decrptedFieldId);
-
+                model.FarmRB209CountryID = farm?.RB209CountryID;
                 //get plans of field
-                cropPlans = await _cropLogic.FetchCropsByFieldId(decrptedFieldId);
+                cropPlans = await _fieldLogic.FetchCropsByFieldId(decrptedFieldId);
                 bool? hasGrassInLastThreeYear = null;
 
                 //get oldest plan
@@ -2505,7 +2588,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (!cropPlans.Any())
                 {
                     (prevCroppings, error) = await _previousCroppingLogic.FetchDataByFieldId(decrptedFieldId, null);
-                    if (string.IsNullOrWhiteSpace(error.Message) && prevCroppings.Count > 0)
+                    if (string.IsNullOrWhiteSpace(error?.Message) && prevCroppings.Count > 0)
                     {
                         model.LastHarvestYear = prevCroppings.Max(p => p.HarvestYear);
                     }
@@ -2593,13 +2676,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilTypeID = field.SoilTypeID;
                 model.EncryptedFieldId = fieldId;
                 model.ID = decrptedFieldId;
-                model.isEnglishRules = farm.EnglishRules;
                 model.SoilOverChalk = field.SoilOverChalk;
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(farmId));
                 model.EncryptedFarmId = farmId;
-                model.FarmName = farm.Name;
+
                 if (farm != null)
                 {
+                    model.FarmRB209CountryID = farm?.RB209CountryID;
+                    model.FarmName = farm?.Name;
                     model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                     model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                 }
@@ -2628,7 +2712,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (model != null && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
                     int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-                    cropPlans = await _cropLogic.FetchCropsByFieldId(decrptedFieldId);
+                    cropPlans = await _fieldLogic.FetchCropsByFieldId(decrptedFieldId);
                 }
 
                 if (model == null)
@@ -2850,7 +2934,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ValidateCheckAnwser(model, false);
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-            List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(fieldId);
+            List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
             if (!ModelState.IsValid)
             {
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
@@ -2914,7 +2998,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
 
 
-            if (error.Message == null && fieldResponse != null)
+            if (string.IsNullOrWhiteSpace(error?.Message) && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect(Resource.lblTrue);
                 RemoveFieldDataFromSession();
@@ -2970,7 +3054,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(field.EncryptedFieldId));
             (string message, Error error) = await _fieldLogic.DeleteFieldByIdAsync(fieldId);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.DeleteFieldError = error.Message;
                 return View(field);
@@ -3054,7 +3138,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmID, Resource.lblTrue);
 
-        if (string.IsNullOrWhiteSpace(error.Message))
+        if (string.IsNullOrWhiteSpace(error?.Message))
         {
             ViewBag.FieldList = fieldList;
         }
@@ -3077,7 +3161,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!ModelState.IsValid)
         {
             (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(field.FarmID, Resource.lblTrue);
-            if (string.IsNullOrWhiteSpace(error.Message))
+            if (string.IsNullOrWhiteSpace(error?.Message))
             {
                 ViewBag.FieldList = fieldList;
             }
@@ -3234,7 +3318,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
         {
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-            List<Crop> cropPlans = await _cropLogic.FetchCropsByFieldId(fieldId);
+            List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
 
             if (cropPlans.Any())
             {
@@ -3702,4 +3786,141 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             HttpContext.Session.Remove("FieldData");
         }
     }
+
+    [HttpGet]
+    public IActionResult LPIDNumber()
+    {
+        _logger.LogTrace("Field Controller : LPIDNumber() action called");
+        FieldViewModel? model = LoadFieldDataFromSession();
+
+        if (model == null)
+        {
+            _logger.LogTrace("Field Controller : LPIDNumber() action : Field data is not available in session");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult LPIDNumber(FieldViewModel model)
+    {
+        _logger.LogTrace("Field Controller : LPIDNumber() post action called");
+
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        SetFieldDataToSession(model);
+
+        if (model.IsCheckAnswer)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+        {
+            return RedirectToAction(_updateFieldActionName);
+        }
+
+        return RedirectToAction("FieldMeasurements");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> NitrateVulnerableZones()
+    {
+        _logger.LogTrace("Field Controller : NitrateVulnerableZones() action called");
+        FieldViewModel? model = LoadFieldDataFromSession();
+
+        if (model == null)
+        {
+            _logger.LogTrace("Field Controller : NitrateVulnerableZones() action : Field data is not available in session");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+        await BindNitrateVulnerableZones(model);
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> NitrateVulnerableZones(FieldViewModel model)
+    {
+        _logger.LogTrace("Field Controller : NitrateVulnerableZones() post action called");
+        if (model.NVZProgrammeID == null)
+        {
+            ModelState.AddModelError("NVZProgrammeID", Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+
+        if (!ModelState.IsValid)
+        {
+            await BindNitrateVulnerableZones(model);
+            return View(model);
+        }
+        model.IsNVZProgrammeNeedToShow = true;
+        SetFieldDataToSession(model);
+
+        if (model.IsCheckAnswer)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+        {
+            return RedirectToAction(_updateFieldActionName);
+        }
+        return RedirectToAction(_elevationFieldActionName);
+    }
+    [HttpGet]
+    private  async Task FetchPscIndexList()
+    {
+        List<CommonResponse> pscIndexList = await _fieldLogic.FetchPscIndex();
+        ViewBag.PscIndexList = pscIndexList;
+    }
+    public async Task<IActionResult> PscIndex()
+    {
+        _logger.LogTrace("Field Controller : PscIndex() action called");
+        FieldViewModel? model = LoadFieldDataFromSession();
+
+        if (model == null)
+        {
+            _logger.LogTrace("Field Controller : PscIndex() action : Field data is not available in session");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+       await  FetchPscIndexList();
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PscIndex(FieldViewModel model)
+    {
+        _logger.LogTrace("Field Controller : PscIndex() post action called");
+        if (model.PscIndexID == null)
+        {
+            ModelState.AddModelError("PscIndexID", Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+
+        if (!ModelState.IsValid)
+        {
+          await   FetchPscIndexList();
+            return View(model);
+        }
+        
+        SetFieldDataToSession(model);
+
+        if (model.IsCheckAnswer)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+        {
+            return RedirectToAction(_updateFieldActionName);
+        }
+        return RedirectToAction(_recentSoilAnalysisQuestion);
+    }
+
 }

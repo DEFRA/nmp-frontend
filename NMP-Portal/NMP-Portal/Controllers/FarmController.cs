@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NMP.Application;
+using NMP.Businesses;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -14,6 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -30,6 +33,7 @@ namespace NMP.Portal.Controllers
         private const string _checkAnswerActionName = "CheckAnswer";
         private const string _rainfallActionName = "Rainfall";
         private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
+        private const string _organisationId = "organisationId";
 
         public IActionResult Index()
         {
@@ -47,7 +51,7 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
-                Claim? claim = HttpContext.User.FindFirst("organisationId");
+                Claim? claim = HttpContext.User.FindFirst(_organisationId);
                 string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
                 (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
@@ -61,10 +65,6 @@ namespace NMP.Portal.Controllers
                     model.Farms.AddRange(farms);
                     model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
                 }
-                if (model.Farms.Count == 0)
-                {
-                    return RedirectToAction("Name", "Farm");
-                }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     ViewBag.Success = "true";
@@ -74,6 +74,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.Success = "false";
                 }
+                ViewBag.IsAnyRecordInMannerEstimate = false;
             }
             catch (HttpRequestException hre)
             {
@@ -232,8 +233,45 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("BusinessInformation");
+            }
             return RedirectToAction("PostCode");
+        }
+
+        [HttpGet]
+        public IActionResult BusinessInformation()
+        {
+            _logger.LogTrace("Farm Controller : BusinessInformation() action called");
+            FarmViewModel? model = GetFarmFromSession();
+            if (model == null)
+            {
+                model = new FarmViewModel();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BusinessInformation(FarmViewModel model)
+        {
+            _logger.LogTrace("Farm Controller : BusinessInformation() post action called");
+
+            if (string.IsNullOrWhiteSpace(model.BusinessName))
+            {
+                ModelState.AddModelError("BusinessName", Resource.MsgEnterTheBusinessName);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            SetFarmToSession(model);
+
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("PostCode");
         }
 
         [HttpGet]
@@ -316,8 +354,10 @@ namespace NMP.Portal.Controllers
             int farmId = farm.EncryptedFarmId != null
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
-
-            bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId).Result;
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+            bool exists = _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId, organisationId).Result;
             if (exists)
             {
                 ModelState.AddModelError(key, Resource.MsgFarmAlreadyExist);
@@ -543,7 +583,11 @@ namespace NMP.Portal.Controllers
                 ? Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId))
                 : 0;
 
-            if (await _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId))
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+
+            if (await _farmLogic.IsFarmExistAsync(farm.Name, farm.Postcode, farmId, organisationId))
             {
                 ModelState.AddModelError("Postcode", Resource.MsgFarmAlreadyExist);
             }
@@ -858,6 +902,50 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
+            if (farm.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ && farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("NitrateVulnerableZones");
+            }
+            return RedirectToAction("Elevation");
+        }
+        [HttpGet]
+        public async Task<IActionResult> NitrateVulnerableZones()
+        {
+            _logger.LogTrace("Farm Controller : NitrateVulnerableZones() action called");
+            FarmViewModel? model = GetFarmFromSession();
+
+            if (model == null)
+            {
+                _logger.LogError("Farm Controller : Session not found in Elevation() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NitrateVulnerableZones(FarmViewModel farm)
+        {
+            _logger.LogTrace("Farm Controller : NitrateVulnerableZones() post action called");
+
+            if (farm.NitrateVulnerableZoneList == null)
+            {
+                ModelState.AddModelError("NitrateVulnerableZoneList", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(farm.CountryID ?? 0);
+                return View(farm);
+            }
+
+            SetFarmToSession(farm);
+
+            if (farm.IsCheckAnswer)
+            {
+                return RedirectToAction(_checkAnswerActionName);
+            }
 
             return RedirectToAction("Elevation");
         }
@@ -914,6 +1002,12 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Organic() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                model.RegisteredOrganicProducer = false;
+                SetFarmToSession(model);
+                return RedirectToAction(_checkAnswerActionName);
+            }
 
             return View(model);
         }
@@ -939,15 +1033,15 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CheckAnswer(string id, string? q)
+        public async Task<IActionResult> CheckAnswer(string id, string? q)
         {
-            _logger.LogTrace("Farm Controller : CheckAnswer({0}) action called", q);
+            _logger.LogTrace("Farm Controller : CheckAnswer({Q}) action called", q);
             FarmViewModel? model = GetFarmFromSession();
 
             if (model == null)
             {
-                _logger.LogError("Farm Controller : Session not found in CheckAnswer({0}) action", q);
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                _logger.LogError("Farm Controller : Session not found in CheckAnswer({Q}) action", q);
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
             }
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
@@ -968,6 +1062,7 @@ namespace NMP.Portal.Controllers
                 SetFarmDataBeforeUpdateToSession(model);
 
             }
+
             var previousModel = GetFarmDataBeforeUpdateFromSession();
 
             bool isDataChanged = false;
@@ -979,90 +1074,108 @@ namespace NMP.Portal.Controllers
             }
 
             ViewBag.IsDataChange = isDataChanged;
-
+            if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                var nvzs = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
+                ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.Value)).Select(s => s.Text).ToList();
+                ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(model.ID);
+            }
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
-        public async Task<IActionResult> CheckAnswer(FarmViewModel farm)
+        public async Task<IActionResult> CheckAnswer(FarmViewModel model)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer() post action called");
+
             try
             {
-                if (farm.Rainfall == null)
+                if (model.Rainfall == null)
                 {
                     ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
                 }
-                ValidateFieldLengths(farm);  //Validate max length for address fields.
+                ValidateFieldLengths(model);  //Validate max length for address fields.
+                var nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.CountryID ?? 0);
+                int nvzProgramId = 0;
+                if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync((int)NMP.Commons.Enums.FarmCountry.England);
+                    nvzProgramId = model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ : (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
+                    model.NitrateVulnerableZoneList = new List<string>();
+                    model.NitrateVulnerableZoneList.Add(nvzProgramId.ToString());
+                }
                 if (!ModelState.IsValid)
                 {
-                    return View(farm);
+                    if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
+                        ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString())).Select(s => s.NvzName).ToList();
+                    }
+                    return View(model);
                 }
+
                 int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-                int isAllFieldsAbove300 = farm.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
-                farm.AverageAltitude = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
+                int isAllFieldsAbove300 = model.FieldsAbove300SeaLevel == (int)Commons.Enums.FieldsAbove300SeaLevel.AllFieldsAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.above : 0;
+                model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
 #pragma warning disable CS8604 // Possible null reference argument.
-                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst(_organisationId)?.Value);
 #pragma warning restore CS8604 // Possible null reference argument.
 
-                if (string.IsNullOrWhiteSpace(farm.ClimateDataPostCode))
+                if (string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
                 {
-                    farm.ClimateDataPostCode = farm.Postcode;
+                    model.ClimateDataPostCode = model.Postcode;
                 }
                 var farmData = new FarmData
                 {
                     Farm = new Farm()
                     {
-                        Name = farm.Name,
-                        Address1 = farm.Address1,
-                        Address2 = farm.Address2,
-                        Address3 = farm.Address3,
-                        Address4 = farm.Address4,
-                        Postcode = farm.Postcode,
-                        CPH = farm.CPH,
-                        FarmerName = farm.FarmerName,
-                        BusinessName = farm.BusinessName,
-                        SBI = farm.SBI,
-                        STD = farm.STD,
-                        Telephone = farm.Telephone,
-                        Mobile = farm.Mobile,
-                        Email = farm.Email,
-                        Rainfall = farm.Rainfall,
+                        Name = model.Name,
+                        Address1 = model.Address1,
+                        Address2 = model.Address2,
+                        Address3 = model.Address3,
+                        Address4 = model.Address4,
+                        Postcode = model.Postcode,
+                        CPH = model.CPH,
+                        FarmerName = model.FarmerName,
+                        BusinessName = model.BusinessName,
+                        SBI = model.SBI,
+                        STD = model.STD,
+                        Telephone = model.Telephone,
+                        Mobile = model.Mobile,
+                        Email = model.Email,
+                        Rainfall = model.Rainfall,
                         OrganisationID = organisationId,
-                        TotalFarmArea = farm.TotalFarmArea,
-                        AverageAltitude = farm.AverageAltitude,
-                        RegisteredOrganicProducer = farm.RegisteredOrganicProducer,
-                        MetricUnits = farm.MetricUnits,
-                        EnglishRules = farm.EnglishRules,
-                        NVZFields = farm.NVZFields,
-                        FieldsAbove300SeaLevel = farm.FieldsAbove300SeaLevel,
-                        CountryID = farm.CountryID,
-                        ClimateDataPostCode = farm.ClimateDataPostCode,
+                        TotalFarmArea = model.TotalFarmArea,
+                        AverageAltitude = model.AverageAltitude,
+                        RegisteredOrganicProducer = model.RegisteredOrganicProducer,
+                        MetricUnits = model.MetricUnits,
+                        EnglishRules = model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland,
+                        NVZFields = model.NVZFields,
+                        FieldsAbove300SeaLevel = model.FieldsAbove300SeaLevel,
+                        CountryID = model.CountryID,
+                        ClimateDataPostCode = model.ClimateDataPostCode,
                         CreatedByID = userId,
                         CreatedOn = System.DateTime.Now,
-                        ModifiedByID = farm.ModifiedByID,
-                        ModifiedOn = farm.ModifiedOn
+                        ModifiedByID = model.ModifiedByID,
+                        ModifiedOn = model.ModifiedOn
                     },
+                    FarmsNvz = model.NitrateVulnerableZoneList?
+                    .Select(selectedId =>
+                    {
+                        var nvz = nvzs.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
+
+                        return new FarmsNvz
+                        {
+                            NVZProgrammeID = Convert.ToInt32(selectedId),
+                            NVZProgrammeName = nvz?.NvzName ?? string.Empty,
+                        };
+                    }).ToList() ?? new List<FarmsNvz>(),
                     UserID = userId,
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmLogic.AddFarmAsync(farmData);
-
-                if (!string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["AddFarmError"] = error.Message;
-                    return View(farm);
-                }
-                string success = _dataProtector.Protect("true");
-                farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
-                RemoveFarmSession();
-                RemoveAddressesSession();
-                RemoveFarmDataBeforeUpdateFromSession();
-                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success });
+                return await SaveFarmAsync(farmData, organisationId, model, nvzs);
             }
             catch (HttpRequestException hre)
             {
@@ -1074,6 +1187,37 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "Farm Controller : Exception in CheckAnswer() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
+        }
+        private async Task<IActionResult> SaveFarmAsync(FarmData farmData, Guid organisationId, FarmViewModel model, List<NvzActionProgramResponse> nvzs)
+        {
+            (Farm? farmResponse, Error? error) =
+                await _farmLogic.AddFarmAsync(farmData, organisationId);
+
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                TempData["AddFarmError"] = error.Message;
+
+                ViewBag.SelectedNVZs = nvzs
+                    .Where(n => model.NitrateVulnerableZoneList != null &&
+                                model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString()))
+                    .Select(s => s.NvzName)
+                    .ToList();
+
+                return View(model);
+            }
+
+            string success = _dataProtector.Protect("true");
+
+            RemoveFarmSession();
+            RemoveAddressesSession();
+            RemoveFarmDataBeforeUpdateFromSession();
+
+            if (farmResponse != null)
+                farmResponse.EncryptedFarmId =
+                    _dataProtector.Protect(farmResponse.ID.ToString());
+
+            return RedirectToAction("FarmSummary",
+                new { id = farmResponse?.EncryptedFarmId, q = success });
         }
 
         public IActionResult BackCheckAnswer()
@@ -1099,6 +1243,10 @@ namespace NMP.Portal.Controllers
             {
                 model.IsCheckAnswer = false;
                 SetFarmToSession(model);
+                if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    return RedirectToAction("Elevation");
+                }
                 return RedirectToAction("Organic");
             }
         }
@@ -1130,25 +1278,26 @@ namespace NMP.Portal.Controllers
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     farmId = _dataProtector.Unprotect(id);
-                    (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["Error"] = error.Message;
                         return RedirectToAction(_farmListActionName);
                     }
 
-                    HttpContext.Session.SetString("current_farm_name", farm.Name ?? "");
+                    HttpContext.Session.SetString("current_farm_name", farm?.Name ?? "");
                     HttpContext.Session.SetString("current_farm_id", id);
 
                     if (farm != null)
                     {
                         farmData = new FarmViewModel();
                         farmData.Name = farm.Name;
-                        farmData.CountryID = farm.CountryID.Value;
+                        farmData.CountryID = farm.CountryID;
                         farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                         farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
+                        farmData.EncryptedIsUpdate = u;
                     }
                 }
             }
@@ -1183,16 +1332,18 @@ namespace NMP.Portal.Controllers
                 }
 
                 farmId = _dataProtector.Unprotect(id);
-                (Farm farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
+                (FarmAndFarmsNvzResponse? farmsNvz, error) = await _farmLogic.FetchFarmAndFarmsNvzByFarmIdAsync(Convert.ToInt32(farmId));
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["Error"] = error.Message;
                     return RedirectToAction(_farmListActionName);
                 }
 
-                if (farm != null)
+                if (farmsNvz.Farm != null)
                 {
+                    var farm = farmsNvz.Farm;
+
                     farmData = new FarmViewModel();
                     farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                     farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
@@ -1230,7 +1381,14 @@ namespace NMP.Portal.Controllers
 
                     bool update = true;
                     farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
+                    farmData.NitrateVulnerableZoneList = farmsNvz.FarmsNvz?.Select(n => n.NVZProgrammeID.ToString()).ToList() ?? new List<string>();
                     SetFarmToSession(farmData);
+
+                    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
+                        var nvzs = await GetNvzActionProgramItemsByCountryIdAsync(farm.CountryID ?? 0);
+                        ViewBag.SelectedNVZs = nvzs.Where(n => farmData.NitrateVulnerableZoneList != null && farmData.NitrateVulnerableZoneList.Contains(n.Value)).Select(s => s.Text).ToList();
+                    }
                 }
             }
             catch (HttpRequestException hre)
@@ -1280,7 +1438,7 @@ namespace NMP.Portal.Controllers
                 model.AverageAltitude = model.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.FieldsAbove300SeaLevel.NoneAbove300m ? (int)NMP.Commons.Enums.AverageAltitude.below : isAllFieldsAbove300;
 
 #pragma warning disable CS8604 // Possible null reference argument.
-                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst("organisationId")?.Value);
+                Guid organisationId = Guid.Parse(HttpContext.User.FindFirst(_organisationId)?.Value);
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning disable CS8604 // Possible null reference argument.
                 int farmId = Convert.ToInt32(_dataProtector.Unprotect(model.EncryptedFarmId));
@@ -1288,9 +1446,9 @@ namespace NMP.Portal.Controllers
 
                 int createdByID = 0;
                 DateTime createdOn = DateTime.Now;
-                (Farm farmDetail, Error apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                (FarmResponse? farmDetail, Error? apiError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
-                if (!string.IsNullOrWhiteSpace(apiError.Message))
+                if (apiError != null && !string.IsNullOrWhiteSpace(apiError.Message))
                 {
                     TempData["Error"] = apiError.Message;
                     return RedirectToAction(_farmListActionName);
@@ -1306,6 +1464,8 @@ namespace NMP.Portal.Controllers
                 {
                     model.ClimateDataPostCode = model.Postcode;
                 }
+                
+                var nvzData = await PrepareNvzDataAsync(model);
 
                 var farmData = new FarmData
                 {
@@ -1332,7 +1492,7 @@ namespace NMP.Portal.Controllers
                         AverageAltitude = model.AverageAltitude,
                         RegisteredOrganicProducer = model.RegisteredOrganicProducer,
                         MetricUnits = model.MetricUnits,
-                        EnglishRules = model.EnglishRules,
+                        EnglishRules = model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland,
                         NVZFields = model.NVZFields,
                         FieldsAbove300SeaLevel = model.FieldsAbove300SeaLevel,
                         CountryID = model.CountryID,
@@ -1342,13 +1502,24 @@ namespace NMP.Portal.Controllers
                         ModifiedByID = userId,
                         ModifiedOn = model.ModifiedOn
                     },
+                    FarmsNvz = model.NitrateVulnerableZoneList?
+                    .Select(selectedId =>
+                    {
+                        var nvz = nvzData.FirstOrDefault(x => x.NvzId == Convert.ToInt32(selectedId));
+
+                        return new FarmsNvz
+                        {
+                            NVZProgrammeID = Convert.ToInt32(selectedId),
+                            NVZProgrammeName = nvz?.NvzName ?? string.Empty,
+                        };
+                    }).ToList() ?? new List<FarmsNvz>(),
                     UserID = userId,
                     RoleID = 2
                 };
 
-                (Farm farmResponse, Error error) = await _farmLogic.UpdateFarmAsync(farmData);
+                (Farm? farmResponse, Error? error) = await _farmLogic.UpdateFarmAsync(farmData, organisationId);
 
-                if (!string.IsNullOrWhiteSpace(error.Message))
+                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
@@ -1356,11 +1527,14 @@ namespace NMP.Portal.Controllers
                 }
 
                 string success = _dataProtector.Protect("true");
-                farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                if (farmResponse != null)
+                {
+                    farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
+                }
                 RemoveFarmSession();
                 RemoveAddressesSession();
                 string isUpdate = _dataProtector.Protect("true");
-                return RedirectToAction("FarmSummary", new { id = farmResponse.EncryptedFarmId, q = success, u = isUpdate });
+                return RedirectToAction("FarmSummary", new { id = farmResponse?.EncryptedFarmId, q = success, u = isUpdate });
             }
             catch (HttpRequestException hre)
             {
@@ -1373,7 +1547,25 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
+        private async Task<List<NvzActionProgramResponse>> PrepareNvzDataAsync(FarmViewModel model)
+        {
+            var nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(model.CountryID ?? 0);
 
+            if (model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                nvzs = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(
+                    (int)NMP.Commons.Enums.FarmCountry.England);
+
+                int nvzProgramId =
+                    model.NVZFields == (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ
+                        ? (int)NMP.Commons.Enums.NvzProgram.NotInNVZ
+                        : (int)NMP.Commons.Enums.NvzProgram.CurrentNVZRule;
+
+                model.NitrateVulnerableZoneList = new List<string> { nvzProgramId.ToString() };
+            }
+
+            return nvzs;
+        }
         [HttpGet]
         public IActionResult FarmRemove()
         {
@@ -1414,7 +1606,7 @@ namespace NMP.Portal.Controllers
                 {
                     int id = Convert.ToInt32(_dataProtector.Unprotect(farm.EncryptedFarmId));
                     (string message, Error error) = await _farmLogic.DeleteFarmByIdAsync(id);
-                    if (!string.IsNullOrWhiteSpace(error.Message))
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["AddFarmError"] = error.Message;
                         return View(farm);
@@ -1456,7 +1648,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex,"farm Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "farm Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
@@ -1556,6 +1748,17 @@ namespace NMP.Portal.Controllers
             {
                 HttpContext.Session.Remove("AddressList");
             }
+        }
+        private async Task<List<SelectListItem>> GetNvzActionProgramItemsByCountryIdAsync(int countryId)
+        {
+            var nvzActionPrograms = await _farmLogic.FetchNvzActionProgramsByCountryIdAsync(countryId);
+
+            return nvzActionPrograms
+                .Select(f => new SelectListItem
+                {
+                    Value = f.NvzId.ToString(),
+                    Text = f.NvzName
+                }).OrderBy(x => x.Text).ToList();
         }
     }
 }

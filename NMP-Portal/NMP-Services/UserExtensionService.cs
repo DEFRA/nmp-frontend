@@ -11,10 +11,11 @@ using System.Text;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) 
+public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService)
     : Service(httpContextAccessor, clientFactory, tokenRefreshService), IUserExtensionService
 {
     private readonly ILogger<UserExtensionService> _logger = logger;
+    private readonly string _userExtension = "UserExtension";
 
     public async Task<UserExtension?> FetchUserExtensionAsync()
     {
@@ -28,14 +29,10 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         if (response.IsSuccessStatusCode)
         {
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (responseWrapper?.Data is JObject data &&
+            data[_userExtension] is JObject userExtensionObject)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                if (responseWrapper?.Data["UserExtension"] is JObject UserExtensionJObject)
-                {
-                    userExtension = UserExtensionJObject.ToObject<UserExtension>();
-                }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                userExtension = userExtensionObject.ToObject<UserExtension>();
             }
         }
 
@@ -57,14 +54,10 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         {
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (responseWrapper?.Data is JObject data &&
+            data[_userExtension] is JObject userExtensionObject)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                if (responseWrapper?.Data["UserExtension"] is JObject UserExtensionJObject)
-                {
-                    userExtension = UserExtensionJObject.ToObject<UserExtension>();
-                }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                userExtension = userExtensionObject.ToObject<UserExtension>();
             }
         }
 
@@ -83,14 +76,31 @@ public class UserExtensionService(ILogger<UserExtensionService> logger, IHttpCon
         {
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (responseWrapper?.Data is JObject data &&
+             data[_userExtension] is JObject userExtensionObject)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                if (responseWrapper?.Data["UserExtension"] is JObject UserExtensionJObject)
-                {
-                    userExtension = UserExtensionJObject.ToObject<UserExtension>();
-                }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                userExtension = userExtensionObject.ToObject<UserExtension>();
+            }
+        }
+
+        return userExtension;
+    }
+    public async Task<UserExtension?> UpdateShowAboutMannerAsync(AboutManner aboutManner)
+    {
+        _logger.LogTrace("UpdateShowAboutMannerAsync method in UserExtensionService");
+        string jsonData = JsonConvert.SerializeObject(aboutManner);
+        UserExtension? userExtension = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.PutAsync(ApiurlHelper.UpdateUserExtensionDoNotShowAboutMannerAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        if (response.IsSuccessStatusCode)
+        {
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (responseWrapper?.Data is JObject data &&
+             data[_userExtension] is JObject userExtensionObject)
+            {
+                userExtension = userExtensionObject.ToObject<UserExtension>();
             }
         }
 

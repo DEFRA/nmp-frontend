@@ -21,7 +21,7 @@
     @section BeforeContent {
     <govuk-breadcrumbs class="govuk-breadcrumbs-link">
         <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-            @Resource.lblAllFarm
+                @Resource.lblPlanningAndEstimating
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
             @Model.FarmName
@@ -104,6 +104,10 @@
                                     <td class="govuk-table__cell">@Resource.lblPotassiumPerLitreOfSoil</td>
                                     <td class="govuk-table__cell">@(Model.Potassium != null ? Model.Potassium : Resource.lblNotEntered)</td>
                                 </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblOrganicMatter</td>
+                            <td class="govuk-table__cell">@(Model.OrganicMatterPercentage != null ? Model.OrganicMatterPercentage : Resource.lblNotEntered)</td>
+                        </tr>
 
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblPotassiumIndex</td>

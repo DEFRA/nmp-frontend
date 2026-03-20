@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{string.Format(Resource.lblStoreDimenstion, Model.StoreName)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
@@ -34,7 +34,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"/>
@@ -43,7 +42,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
@@ -105,7 +103,7 @@
                         else
                         {
                             <govuk-input-label is-page-heading="false">
-                                @Resource.lblWhatIsTheLength
+                                @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageLength : Resource.lblWhatIsTheLength)
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>
                             </govuk-input-label>
                         }
@@ -121,7 +119,7 @@
                         else
                         {
                             <govuk-input-label is-page-heading="false">
-                                @Resource.lblWhatIsTheWidthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
+                                @(Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage ? Resource.lblWhatIsTheAverageWidthSuffix : Resource.lblWhatIsTheWidthSuffix)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
                             </govuk-input-label>
                         }
                         <govuk-input-suffix>@Resource.lblMetres</govuk-input-suffix>
@@ -164,7 +162,7 @@
 
                 <govuk-input asp-for=@Model.Depth type="number" step="any" spellcheck="false">
 
-                    @if (Model.StorageTypeID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                    @if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                     {
                         <govuk-input-label is-page-heading="false">
                             @Resource.lblWhatIsTheDepthSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMetres)</span>@Resource.lblQuestionMark
@@ -201,7 +199,7 @@
                     {
                         @if (Model.IsStoreCapacityExist == true)
                         {
-                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
+                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel
                             </a>
                         }

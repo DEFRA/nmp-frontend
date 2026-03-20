@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Identity.Web.UI;
 using NMP.Commons.Models;
 using NMP.Portal.Security;
@@ -17,6 +19,7 @@ using OpenTelemetry.Trace;
 using Polly;
 using Polly.Extensions.Http;
 using StackExchange.Redis; // Add this at the top of the file
+using System;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -59,22 +62,24 @@ if (!string.IsNullOrWhiteSpace(azureRedisHost))
         options.ConnectRetry = 5;           // Retry 5 times
         options.ConnectTimeout = 15000;     // 15 seconds
         options.ReconnectRetryPolicy = new ExponentialRetry(5000); // Backoff strategy
-        options.ConfigureForAzureWithTokenCredentialAsync(credential); // ⭐ Critical: auto-refresh AAD token
+        options.SyncTimeout = 10000;
+        options.AsyncTimeout = 10000;
+        options.KeepAlive = 30;
+        options.ConfigureForAzureWithTokenCredentialAsync(credential).GetAwaiter().GetResult();  // ⭐ Critical: auto-refresh AAD token
 
         return ConnectionMultiplexer.Connect(options);
     });
 
     // 2. Use Redis cache using DI-bound multiplexer
-    builder.Services.AddStackExchangeRedisCache(options =>
+    builder.Services.AddSingleton<IDistributedCache>(sp =>
     {
-        options.ConnectionMultiplexerFactory = async () =>
-        {
-            return builder.Services
-                .BuildServiceProvider()
-                .GetRequiredService<IConnectionMultiplexer>();
-        };
+        var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
 
-        options.InstanceName = "nmp_ui_";
+        return new RedisCache(new RedisCacheOptions
+        {
+            ConnectionMultiplexerFactory = () => Task.FromResult(multiplexer),
+            InstanceName = "NMP-Portal.Redis_"
+        });
     });
 }
 
@@ -106,31 +111,26 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
+var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+var authorizeFilter = new AuthorizeFilter(policy);
+var responseCacheAttribute = new ResponseCacheAttribute
+{
+    NoStore = true,
+    Location = ResponseCacheLocation.None
+};
+
 builder.Services.AddControllersWithViews(options =>
 {
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-    options.Filters.Add(new ResponseCacheAttribute
-    {
-        NoStore = true,
-        Location = ResponseCacheLocation.None
-    });
+    
+    options.Filters.Add(authorizeFilter);
+    options.Filters.Add(responseCacheAttribute);
 }).AddMicrosoftIdentityUI()
 .AddSessionStateTempDataProvider();
 
 builder.Services.AddRazorPages().AddMvcOptions(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-                  .RequireAuthenticatedUser()
-                  .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-    options.Filters.Add(new ResponseCacheAttribute
-    {
-        NoStore = true,
-        Location = ResponseCacheLocation.None
-    });
+{    
+    options.Filters.Add(authorizeFilter);
+    options.Filters.Add(responseCacheAttribute);
 }).AddMicrosoftIdentityUI().AddSessionStateTempDataProvider();
 
 builder.Services.AddDataProtection();
@@ -163,7 +163,7 @@ builder.Services.AddHttpClient("NMPApi", httpClient =>
 
 builder.Services.AddHttpClient("DefraIdentityConfiguration", httpClient =>
 {
-    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("CustomerIdentityInstance").Value ?? "/");
+    httpClient.BaseAddress = new Uri(uriString: builder.Configuration.GetSection("CustomerIdentityMetaDataUrl").Value ?? "/");
     httpClient.Timeout = TimeSpan.FromMinutes(5);
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 }).AddPolicyHandler(GetRetryPolicy()).AddPolicyHandler(GetCircuitBreakerPolicy());
@@ -175,10 +175,10 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie = new CookieBuilder()
     {
         Name = "NMP-Portal",
-        HttpOnly = true,        
-        Path = "/",       
+        HttpOnly = true,
+        Path = "/",
         SecurePolicy = CookieSecurePolicy.Always,
-        SameSite = SameSiteMode.Strict 
+        SameSite = SameSiteMode.Strict
     };
     options.FormFieldName = "NMP-Portal-Antiforgery-Field";
     options.HeaderName = "X-CSRF-TOKEN-NMP";
@@ -205,6 +205,7 @@ builder.Services.AddCsp(nonceByteAmount: 32);
 
 var app = builder.Build();
 app.UseGovUkFrontend();
+
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 
@@ -213,37 +214,13 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 else
-{
-    // Configure the HTTP request pipeline.    
-    app.Use(async (ctx, next) =>
-    {
-        await next();
-        if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-        {
-            //Re-execute the request so the user gets the error page
-            string originalPath = ctx.Request.Path.Value;
-            ctx.Items["originalPath"] = originalPath;
-            ctx.Request.Path = "/Error/404";
-            await next();
-        }
-    });
+{        
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-app.Use(async (context, next) =>
-{
-    // Do work that doesn't write to the Response.
-    if (context.Request.Method is "OPTIONS" or "TRACE" or "HEAD")
-    {
-        context.Response.StatusCode = 405;
-        return;
-    }
-    await next.Invoke();
-    // Do logging or other work that doesn't write to the Response.
-});
-
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/favicon.ico")
@@ -251,26 +228,42 @@ app.Use(async (context, next) =>
         context.Response.Redirect("/assets/rebrand/images/favicon.ico");
         return;
     }
-    else if(context.Request.Path == "/favicon.svg")
+    else if (context.Request.Path == "/favicon.svg")
     {
         context.Response.Redirect("/assets/rebrand/images/favicon.svg");
         return;
     }
+    // 1️ Always allow Azure metadata requests to pass through untouched
+    if (context.Request.Path.StartsWithSegments("/metadata"))
+    {
+        await next();
+        return;
+    }
+
+    // 2️ Block TRACE requests (security hardening)
+    if (context.Request.Method == HttpMethods.Trace)
+    {
+        context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+        return;
+    }       
+
+    // 3️ Continue normal pipeline
     await next();
 });
 
 app.UseCsp(csp =>
 {
+    const string browserLinkJsUrl = "https://*/-vs/browserLink.js";
     var pageTemplateHelper = app.Services.GetRequiredService<PageTemplateHelper>();
     csp.ByDefaultAllow
         .FromSelf();
     csp.AllowStyles
-           .FromSelf().AddNonce(); 
+           .FromSelf().AddNonce();
     csp.AllowScripts
         .FromSelf()
         .AddNonce()
         .From(pageTemplateHelper.GetCspScriptHashes())
-        .From("https://*/-vs/browserLink.js");
+        .From(browserLinkJsUrl);
     csp.AllowConnections.ToSelf().To("wss:").To("ws:").To("https:").To("http:");
     csp.AllowBaseUri.FromSelf();
     csp.AllowFrames.FromSelf();
@@ -288,9 +281,18 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<FarmContextMiddleware>();
+
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+  name: "Manner",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+  name: "Planet",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+name: "default",
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 await app.RunAsync();
 
@@ -311,7 +313,7 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(int numRetries = 10, int
                     if (!response.Result.Headers.TryGetValues("Retry-After", out IEnumerable<string>? values))
                         return delay;
 
-                    if (int.TryParse(values?.First(), out int delayInSeconds))
+                    if (int.TryParse(values.First(), out int delayInSeconds))
                         delay = TimeSpan.FromSeconds(delayInSeconds);
                 }
                 else

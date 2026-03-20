@@ -103,7 +103,7 @@
 
         @if (Model != null)
         {
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEnglishRules" value="@Model.IsEnglishRules.ToString().ToLower()"/>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeChange" value="@Model.IsManureTypeChange.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" value="@Model.IsManureTypeLiquid.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NeedToShowSameDefoliationForAll" value="@Model.NeedToShowSameDefoliationForAll.ToString().ToLower()"/>

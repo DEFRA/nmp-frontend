@@ -1,0 +1,45 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep4ViewModel
+
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)} {Resource.lblHyphen} {title}";
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "PostCode")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="AverageAnnualRainfall" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</h1>
+            <p class="govuk-body">@Resource.lblAverageAnnualRainfallHint</p>
+            <div class="text-group margin-bottom-forty">
+                <p class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</p>
+                <p class="govuk-body">
+                    @(string.Format("{0:N0}{1}", Model.AverageAnnualRainfall, Resource.lblmm))
+                <p class="govuk-body margin-bottom-forty">
+                    <a class="govuk-link" asp-action="AverageAnnualRainfallManual" asp-controller="MannerEstimation" aria-label="@Resource.lblChangeRainfallAmount">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
+                </p>
+            </div>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>

@@ -1,8 +1,8 @@
 ﻿﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
-    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddOrganicMaterialStorage;
-    ViewData["Title"] = $"{Resource.lblWhatKindOfManureStorageDoYouWantToAdd} {Resource.lblHyphen} {title}";
+    string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
+    ViewData["Title"] = $"{Resource.lblWhatKindOfManureStoreDoYouWantToAdd} {Resource.lblHyphen} {title}";
     var backAction = "";
     if (Model.IsCheckAnswer == true)
     {
@@ -34,7 +34,7 @@
 
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnMaterialStates"] != null)
 {
@@ -60,7 +60,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"/>
@@ -75,7 +74,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSlopeEdge"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
@@ -98,7 +96,7 @@
                 <govuk-radios class="govuk-radios" asp-for="@Model.MaterialStateID">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblWhatKindOfManureStorageDoYouWantToAdd
+                            @Resource.lblWhatKindOfManureStoreDoYouWantToAdd
                         </govuk-radios-fieldset-legend>
                         <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
                         @if (ViewBag.MaterialStateList != null && ViewBag.MaterialStateList.Count > 0)
@@ -119,7 +117,7 @@
                     {
                         @if (Model.IsStoreCapacityExist == true)
                         {
-                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
+                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel
                             </a>
                         }

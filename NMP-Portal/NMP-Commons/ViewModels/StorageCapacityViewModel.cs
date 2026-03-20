@@ -21,10 +21,8 @@ namespace NMP.Commons.ViewModels
 
         [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
         public decimal? SolidManureDensity { get; set; }
-
-        [Range(0, 9999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And9999))]
+        
         public decimal? StorageBagCapacity { get; set; }
-        public bool? IsSlopeEdge { get; set; }
         public string? BankSlopeAngleName { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
         public decimal? Slope { get; set; }

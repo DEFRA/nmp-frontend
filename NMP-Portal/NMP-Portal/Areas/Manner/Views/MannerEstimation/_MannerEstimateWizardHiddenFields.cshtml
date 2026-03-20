@@ -1,0 +1,53 @@
+﻿@* @using NMP.Commons.Enums
+@using NMP.Commons.ViewModels;
+@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.MannerEstimationViewModel
+@{
+    var currentStep = ViewBag.CurrentStep as int?;
+}
+<div hidden="hidden">
+    @if (currentStep != (int)MannerEstimateWizardSteps.FarmName)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Name" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.Country)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.Postcode)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.AverageAnuualRainfall)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageAnuualRainfall" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.IsWithinNVZ)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZ" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZProgrammeID" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.SoilTypeID)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilTypeID" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.CropGroupID)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupID" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.CropTypeID)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
+    }
+    @if (currentStep != (int)MannerEstimateWizardSteps.IsEarlySown)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEarlySown" />
+    }
+
+
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropType" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" value="@Model.ID" />
+</div> *@

@@ -79,7 +79,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         return await _fertiliserManureService.FetchTotalNByManagementPeriodID(managementPeriodID);
     }
 
-    public async Task<(List<FertiliserManure>, Error)> UpdateFertiliser(string fertliserData)
+    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
     {
         _logger.LogTrace("Updating fertiliser");
         return await _fertiliserManureService.UpdateFertiliser(fertliserData);

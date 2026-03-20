@@ -4,14 +4,7 @@
 
 @{
     ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
-    var isWithinNVZ = "";
-    var isAbove300SeaLevel = "";
-    var soilReleasingClay = "";
-    var sulphurDeficient = "";
-    var WantToApplySns = "";
     var addRecentSoilAnalysis = "";
-
-
     if (Model.RecentSoilAnalysisQuestion != null)
     {
         switch (Model.RecentSoilAnalysisQuestion)
@@ -43,7 +36,7 @@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
-            <div hidden="true">
+            <div hidden="hidden">
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"/>
@@ -79,11 +72,8 @@
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"/>
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
             </div>
-            <div class="check-answers">
+         
                 <govuk-summary-list>
-
-
-                    @* sns journey *@
 
                     <govuk-summary-list-row class=@((!Model.SampleDate.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
@@ -99,7 +89,7 @@
 
                     @if (Model.SnsCategoryId != null)
                     {
-                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables))
+                        @if (Model.SnsCategoryId != (int)NMP.Commons.Enums.SnsCategories.Vegetables)
                         {
                             <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt030CM.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
@@ -236,7 +226,14 @@
                                                 @Resource.lblWhenWasThisMeasured
                                             </govuk-summary-list-row-key>
                                             <govuk-summary-list-row-value>
-                                                @(Model.SeasonId != 0 ? (Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring) : Resource.lblNotSet)
+                                                @if(Model.SeasonId != 0)
+                                                {
+                                                    @((Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn) ? Resource.lblAutumn : Resource.lblSpring)
+                                                }
+                                                else
+                                                {
+                                                    @Resource.lblNotSet
+                                                }
                                             </govuk-summary-list-row-value>
                                             <govuk-summary-list-row-actions>
                                                 <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
@@ -310,16 +307,30 @@
                                             @Resource.lblWhatIsTheAdjustmentValuePerHectare
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.AdjustmentValue.HasValue ? string.Concat(Model.AdjustmentValue % 1 == 0
-                                                                        ? ((int)Model.AdjustmentValue).ToString()
-                                                                        : Model.AdjustmentValue.ToString(), Resource.lblKgPerHectare) : Resource.lblNotSet)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="AdjustmentValue" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAdjustmentValuePerHectare</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                                        }
-                            }
+                                            @if(Model.AdjustmentValue.HasValue)
+                                            {
+                                                 string adjustmentValueDisplay;
+                                                if (Model.AdjustmentValue % 1 == 0)
+                                                {
+                                                    adjustmentValueDisplay = ((int)Model.AdjustmentValue).ToString();
+                                                }
+                                                else
+                                                {
+                                                    adjustmentValueDisplay = Model.AdjustmentValue.ToString();
+                                                }
+                                                @string.Concat(adjustmentValueDisplay, Resource.lblKgPerHectare)
+                                            }
+                                            else
+                                            {
+                                                @Resource.lblNotSet
+                                            }                                            
+                                            </govuk-summary-list-row-value>
+                                            <govuk-summary-list-row-actions>
+                                                <govuk-summary-list-row-action asp-action="AdjustmentValue" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAdjustmentValuePerHectare</span></govuk-summary-list-row-action>
+                                            </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
+                                    }
+                                }
 
                         }
                         <govuk-summary-list-row>
@@ -336,7 +347,6 @@
 
 
                 </govuk-summary-list>
-            </div>
 
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @Resource.lblAddTheseAnalysisResults

@@ -1,23 +1,30 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
-using System.Security.Claims;
 using NMP.Core;
 using NMP.Core.Attributes;
-using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfiguration config)
+public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfiguration config, IOptionsMonitor<OpenIdConnectOptions> openIdConnectOptions)
 {
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
     private readonly IConfiguration _config = config;
-
+    private const string refreshTokenKey = "refresh_token";
+    private readonly IOptionsMonitor<OpenIdConnectOptions> _openIdConnectOptions = openIdConnectOptions;
     public async Task<string> RefreshUserAccessTokenAsync(HttpContext context)
     {
-        var refreshToken = await context.GetTokenAsync("refresh_token");
+        var refreshToken = await context.GetTokenAsync(refreshTokenKey);
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true,
@@ -25,16 +32,11 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
             AllowRefresh = true
         };
 
-        if (refreshToken == null)
+        if (string.IsNullOrWhiteSpace(refreshToken))
         {
             await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
         }
-
-        ClaimsPrincipal? user = context.User;
-        var identity = user?.Identity as ClaimsIdentity;
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-        string issuer = identity?.FindFirst("issuer")?.Value;
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+               
         OAuthTokenResponse tokens;
         using (var client = _httpClientFactory.CreateClient())
         {
@@ -42,18 +44,19 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 
             var formData = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("refresh_token", refreshToken),
+                new KeyValuePair<string, string>(refreshTokenKey, refreshToken?? string.Empty),
                 new KeyValuePair<string, string>("redirect_uri", ""),
-                new KeyValuePair<string, string>("client_id", _config["CustomerIdentityClientId"]),
-                new KeyValuePair<string, string>("client_secret", _config["CustomerIdentityClientSecret"]),
-                new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                new KeyValuePair<string, string>("client_id", _config["CustomerIdentityClientId"]?? string.Empty),
+                new KeyValuePair<string, string>("client_secret", _config["CustomerIdentityClientSecret"] ?? string.Empty),
+                new KeyValuePair<string, string>("grant_type", refreshTokenKey),
                 new KeyValuePair<string, string>("scope", scopes)
             });
-#pragma warning disable CS8604 // Possible null reference argument.
-            Uri uri = new Uri(uriString: issuer);
-#pragma warning restore CS8604 // Possible null reference argument.
-            var url = $"https://{uri.Authority}/{_config["CustomerIdentityTenantId"]}/{_config["CustomerIdentityPolicyId"]}/oauth2/v2.0/token";
 
+            IConfigurationManager<OpenIdConnectConfiguration>? configurationManager = GetConfigurationManager();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var metadata = await configurationManager?.GetConfigurationAsync(CancellationToken.None);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var url = metadata.TokenEndpoint;
             var response = await client.PostAsync(url, formData);
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
@@ -63,18 +66,26 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 
             if (tokens == null || string.IsNullOrEmpty(tokens.AccessToken))
             {
-                await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
+                await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, authProperties);
             }
             // Update authentication session
             var auth = await context.AuthenticateAsync();
             if (auth != null && auth.Principal != null && tokens != null && !string.IsNullOrEmpty(tokens.AccessToken))
             {
                 auth.Properties?.UpdateTokenValue("access_token", tokens.AccessToken);
-                auth.Properties?.UpdateTokenValue("refresh_token", tokens.RefreshToken);
+                auth.Properties?.UpdateTokenValue(refreshTokenKey, tokens.RefreshToken);
                 await context.SignInAsync(auth.Principal, auth.Properties);
             }
         }
 
         return tokens?.AccessToken ?? string.Empty;
+    }
+
+    private IConfigurationManager<OpenIdConnectConfiguration>? GetConfigurationManager()
+    {
+        // Use the SAME scheme name you registered
+        var options = _openIdConnectOptions.Get(OpenIdConnectDefaults.AuthenticationScheme);
+
+        return options.ConfigurationManager;
     }
 }
