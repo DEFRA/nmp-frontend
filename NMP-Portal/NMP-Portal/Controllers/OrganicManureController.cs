@@ -1931,7 +1931,7 @@ namespace NMP.Portal.Controllers
             var request = BuildOrganicClosedPeriodRequest(fieldDetail, model, farm, cropTypeResponse, cropTypeId, isPerennial);
 
             (string? closedPeriod, Error? error) = await _organicManureLogic.FetchOrganicManureClosedPeriod(request);
-            if (error != null)
+            if (error == null)
             {
                 return closedPeriod;
             }
@@ -10242,7 +10242,7 @@ namespace NMP.Portal.Controllers
                 SoilTypeId = fieldDetail.SoilTypeID ?? 0,
                 FieldType = fieldDetail.FieldType ?? 0,
                 HarvestYear = model.HarvestYear ?? 0,
-                SowingDate = fieldDetail.SowingDate,
+                SowingDate = fieldDetail.SowingDate?.ToString("yyyy-MM-dd"),
                 CountryId = farm.CountryID ?? 0,
                 CropGroupId = cropTypeResponse.CropGroupId,
                 CropTypeId = cropTypeId,
