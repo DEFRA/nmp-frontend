@@ -1533,6 +1533,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
                             if (field != null)
                             {
+                                model.FieldID = fieldId.Value;
                                 bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
                                 if (isFieldIsInNVZ)
                                 {
@@ -2661,9 +2662,16 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, field.NVZProgrammeID);
         bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
 
-        if (!filterCrops.Contains(cropTypeId) && isWithinClosedPeriod)
+        bool isScotland = model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+
+        bool isCropAllowed = isScotland ? BrassicaCrops().Contains(cropTypeId) : filterCrops.Contains(cropTypeId);
+
+        if (!isCropAllowed && isWithinClosedPeriod)
         {
-            WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
+            WarningResponse warningResponse = await _warningLogic
+                .FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmCountryId ?? 0,
+                    NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
 
             model.IsClosedPeriodWarning = true;
             model.ClosedPeriodWarningHeader = warningResponse.Header;
@@ -2753,8 +2761,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                 if (error == null)
                 {
-
-                    if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)  //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
+                    
+                    if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)
+                    //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
+                    //totalNitrogen > 100 and brassica crop will work for Scotland as well
                     {
                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
 
