@@ -10,7 +10,6 @@ using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
-using NMP.Portal.Helpers;
 using System.Globalization;
 
 namespace NMP.Portal.Controllers
@@ -104,9 +103,9 @@ namespace NMP.Portal.Controllers
                         int decryptedSoilId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                         _logger.LogTrace("SoilAnalysisController: soil-analyses/{DecryptedSoilId} called", decryptedSoilId);
 
-                        (SoilAnalysis soilAnalysis, error) = await _soilAnalysisLogic.FetchSoilAnalysisById(decryptedSoilId);
+                        (SoilAnalysis? soilAnalysis, error) = await _soilAnalysisLogic.FetchSoilAnalysisById(decryptedSoilId);
 
-                        if (error == null)
+                        if (soilAnalysis != null)
                         {
                             model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblFalse);
                             model.Phosphorus = soilAnalysis.Phosphorus;
@@ -123,7 +122,7 @@ namespace NMP.Portal.Controllers
 
                             model.PotassiumIndex = soilAnalysis.PotassiumIndex;
                             model.MagnesiumIndex = soilAnalysis.MagnesiumIndex;
-                            model.Date = soilAnalysis.Date.Value.ToLocalTime();
+                            model.Date = soilAnalysis.Date;
                             model.SulphurDeficient = soilAnalysis.SulphurDeficient;
                             if (!string.IsNullOrWhiteSpace(j))
                             {
@@ -139,7 +138,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            ViewBag.Error = error.Message;
+                            ViewBag.Error = error?.Message;
                             return View(model);
                         }
 
@@ -920,7 +919,7 @@ namespace NMP.Portal.Controllers
             if (model.SoilAnalysisRemove.HasValue && model.SoilAnalysisRemove.Value)
             {
                 int soilAnalysisId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedSoilAnalysisId));
-                (string success, Error error) = await _soilAnalysisLogic.DeleteSoilAnalysisByIdAsync(soilAnalysisId);
+                (string success, Error? error) = await _soilAnalysisLogic.DeleteSoilAnalysisByIdAsync(soilAnalysisId);
 
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
