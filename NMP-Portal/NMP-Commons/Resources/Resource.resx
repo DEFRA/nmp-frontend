@@ -7476,7 +7476,7 @@ livestock manure.</value>
     <value>Existing manure storage capacity</value>
   </data>
   <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
-    <value>Which Nitrate Vulnerable Zone (NVZ) is {0} in ?</value>
+    <value>Which Nitrate Vulnerable Zone (NVZ) is {0} in?</value>
   </data>
   <data name="lblPhosphorusSorptionCapacity" xml:space="preserve">
     <value>Phosphorus sorption capacity (PSC)</value>
