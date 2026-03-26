@@ -33,4 +33,10 @@ public class SoilLogic(ILogger<SoilLogic> logger, ISoilService soilService) : IS
         _logger.LogTrace("Fetch all soil analysis method");
         return await _soilService.FetchSoilAnalysesMethodById(id);
     }
+
+    public async Task<(List<string>?, Error?)> FetchSoilNutrientStatusList(int nutrientId, int methodologyId, int countryId)
+    {
+        _logger.LogTrace("Fetch Soil nutrient status list by nutrientId,methodologyId and countryId");
+        return await _soilService.FetchSoilNutrientStatusList(nutrientId, methodologyId, countryId);
+    }
 }

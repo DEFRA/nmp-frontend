@@ -34,7 +34,7 @@
     }
     else
     {
-        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@(!Model.IsSoilNutrientValueTypeChange ? "ChangeSoilAnalysis" : "SoilNutrientValueType") asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
     }
 }
 @if (ViewBag.Error != null)
@@ -77,14 +77,14 @@
                             @Resource.MsgForPhPhosphorusPotassiumMagnesium
                         </govuk-error-message>
                     }
-                    @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
+                    <govuk-input asp-for="@Model.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
+                        <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
+                    </govuk-input>
+                    @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland && Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                     {
-                        <govuk-input asp-for="@Model.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
-                            <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
-                        </govuk-input>
 
                         <govuk-input asp-for="@Model.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
-                            <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>                            
+                            <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" asp-for="@Model.PotassiumIndexValue">
@@ -98,10 +98,9 @@
 
                     }
                     else
+                    @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                     {
-                        <govuk-input asp-for="@Model.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
-                            <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
-                        </govuk-input>
+
                         <govuk-input asp-for=@Model.Phosphorus type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label is-page-heading="false">
                                 @Resource.lblPhosphorusPerLitreOfSoil
@@ -128,8 +127,62 @@
                         </govuk-input>
 
                     }
-                    
-                </govuk-fieldset>              
+                    else
+                    @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        <govuk-radios asp-for="@Model.PhosphorusStatus">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend is-page-heading="false">
+                                    @Resource.lblPhosphorusStatusOptional
+                                </govuk-radios-fieldset-legend>
+
+                                @if (ViewBag.PhosphorusSelectList != null)
+                                {
+                                    @foreach (var item in ViewBag.PhosphorusSelectList)
+                                    {
+                                        <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                    }
+                                }
+
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+                        <govuk-radios asp-for="@Model.PotassiumStatus">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend is-page-heading="false">
+                                    @Resource.lblPotashStatusOptional
+                                </govuk-radios-fieldset-legend>
+
+                                @if (ViewBag.PhosphorusSelectList != null)
+                                {
+                                    @foreach (var item in ViewBag.PhosphorusSelectList)
+                                    {
+                                        <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                    }
+                                }
+
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+                        <govuk-radios asp-for="@Model.MagnesiumStatus">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend is-page-heading="false">
+                                    @Resource.lblMagnesiumStatusOptional
+                                </govuk-radios-fieldset-legend>
+
+                                @if (ViewBag.MagnesiumSelectList != null)
+                                {
+                                    @foreach (var item in ViewBag.MagnesiumSelectList)
+                                    {
+                                        <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                    }
+                                }
+
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+
+
+                    }
+
+                </govuk-fieldset>
             </div>
 
             <govuk-input asp-for=@Model.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">

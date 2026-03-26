@@ -8,7 +8,7 @@ namespace NMP.Commons.Enums
 {
     public enum SoilAnalysesMethod
     {
-        RB209=1,
-        Sac =2
+        Sac =2,
+        RB209 = 3
     }
 }

@@ -108,5 +108,39 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         }
         return (soilAnalysesMethod, error);
     }
+    public async Task<(List<string>?, Error?)> FetchSoilNutrientStatusList(int nutrientId, int methodologyId, int countryId)
+    {
+        Error? error = null;
+        List<string>? statusList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientIndexValueAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()), HttpUtility.UrlEncode(countryId.ToString()));
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper?.Data != null)
+        {
+            List<SoilNutrientIndiceResponse>? soilNutrientIndiceResponse = responseWrapper?.Data?.ToObject<List<SoilNutrientIndiceResponse>>();
 
+            if (soilNutrientIndiceResponse != null)
+            {
+                statusList = soilNutrientIndiceResponse?
+                                .Select(x => x.index)
+                                .ToList() ?? new List<string>();
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (statusList, error);
+    }
 }

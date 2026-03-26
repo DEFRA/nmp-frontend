@@ -9008,6 +9008,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Magnesium (Mg) status.
+        /// </summary>
+        public static string lblMagnesiumStatus {
+            get {
+                return ResourceManager.GetString("lblMagnesiumStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnesium (Mg) status (Optional).
+        /// </summary>
+        public static string lblMagnesiumStatusOptional {
+            get {
+                return ResourceManager.GetString("lblMagnesiumStatusOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to mailto:helpdesk@rsk-bsl.co.uk.
         /// </summary>
         public static string lblMailtoHelpdesk {
@@ -11321,6 +11339,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) status.
+        /// </summary>
+        public static string lblPhosphorusStatus {
+            get {
+                return ResourceManager.GetString("lblPhosphorusStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus (P) status (Optional).
+        /// </summary>
+        public static string lblPhosphorusStatusOptional {
+            get {
+                return ResourceManager.GetString("lblPhosphorusStatusOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to pH value .
         /// </summary>
         public static string lblPhValueSuffix {
@@ -11551,6 +11587,24 @@ namespace NMP.Commons.Resources {
         public static string lblPotashReleasingClay {
             get {
                 return ResourceManager.GetString("lblPotashReleasingClay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potassium (K) status.
+        /// </summary>
+        public static string lblPotashStatus {
+            get {
+                return ResourceManager.GetString("lblPotashStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potassium (K) status (Optional).
+        /// </summary>
+        public static string lblPotashStatusOptional {
+            get {
+                return ResourceManager.GetString("lblPotashStatusOptional", resourceCulture);
             }
         }
         

@@ -31,6 +31,8 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusIndex" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodology" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumMethodologyID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumMethodologyID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndex" />
@@ -38,6 +40,9 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumIndex" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicMatterPercentage" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MagnesiumStatus" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumStatus" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusStatus" />
     }
     @if (currentStep != (int)SoilAnalysisWizardSteps.RemoveSoilAnalysis)
     {

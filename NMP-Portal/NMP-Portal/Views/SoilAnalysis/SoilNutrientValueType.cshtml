@@ -39,7 +39,11 @@
                         </govuk-radios-fieldset-legend>
                         @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
                         {
-                            <govuk-radios-item value=@asAnStatus disabled=true>@Resource.lblAsAStatus</govuk-radios-item>
+                            <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
+                        }
+                        else @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.RB209)
+                        {
+                            <govuk-radios-item value=@asAnIndex disabled=true>@Resource.lblAsAnIndex</govuk-radios-item>
                         }
                         else
                         {

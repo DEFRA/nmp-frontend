@@ -7625,4 +7625,22 @@ livestock manure.</value>
   <data name="lblWinterRainfall" xml:space="preserve">
     <value>Winter rainfall</value>
   </data>
+  <data name="lblPhosphorusStatusOptional" xml:space="preserve">
+    <value>Phosphorus (P) status (Optional)</value>
+  </data>
+  <data name="lblPotashStatusOptional" xml:space="preserve">
+    <value>Potassium (K) status (Optional)</value>
+  </data>
+  <data name="lblMagnesiumStatusOptional" xml:space="preserve">
+    <value>Magnesium (Mg) status (Optional)</value>
+  </data>
+  <data name="lblPhosphorusStatus" xml:space="preserve">
+    <value>Phosphorus (P) status</value>
+  </data>
+  <data name="lblPotashStatus" xml:space="preserve">
+    <value>Potassium (K) status</value>
+  </data>
+  <data name="lblMagnesiumStatus" xml:space="preserve">
+    <value>Magnesium (Mg) status</value>
+  </data>
 </root>
