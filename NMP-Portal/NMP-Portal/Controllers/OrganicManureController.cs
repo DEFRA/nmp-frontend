@@ -8921,7 +8921,7 @@ namespace NMP.Portal.Controllers
                             cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                             cropOptions.Add(new SelectListItem
                             {
-                                Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
+                                Text = $"{Resource.lblCrop} {crop.CropOrder}: {cropTypeName}",
                                 Value = crop.ID.ToString()
                             });
                         }
