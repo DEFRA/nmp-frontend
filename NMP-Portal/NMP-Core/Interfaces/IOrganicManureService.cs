@@ -49,5 +49,5 @@ public interface IOrganicManureService
     Task<(string?, Error?)> FetchOrganicManureClosedPeriod(OrganicClosedPeriodRequest organicClosedPeriodRequest);
     Task<(bool, Error)> FetchLivestockManureExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId);
     Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry);
-    Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId);
+    Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId);
 }

@@ -253,9 +253,9 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchTotalApplicationRateByDateRange(cropId, dateFrom, dateTo, organicManureId, isPoultry);
     }
 
-    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId)
     {
         _logger.LogTrace("OrganicManureLogic : CheckGreenCompostExistanceByDateRange() called");
-        return await _organicManureService.CheckGreenCompostExistanceByDateRange(cropId, dateFrom, dateTo, organicManureId);
+        return await _organicManureService.CheckGreenCompostExistanceByDateRange(fieldId, dateFrom, dateTo, organicManureId);
     }
 }

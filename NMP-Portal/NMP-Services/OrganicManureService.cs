@@ -1571,7 +1571,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalRate, error);
     }
 
-    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId)
     {
         Error? error = null;
         bool isLivestockcManureExist = false;
@@ -1586,7 +1586,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 requestUrl += $"&organicManureID={organicManureId.Value}";
             }
 
-            requestUrl = string.Format(requestUrl, cropId, dateFrom, dateTo);
+            requestUrl = string.Format(requestUrl, fieldId, dateFrom, dateTo);
 
             var response = await httpClient.GetAsync(requestUrl);
             string result = await response.Content.ReadAsStringAsync();
