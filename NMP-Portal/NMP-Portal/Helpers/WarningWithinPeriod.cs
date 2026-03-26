@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Identity.Client;
 using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -109,7 +110,7 @@ namespace NMP.Portal.Helpers
                 {
 
                     default:
-                        closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial,countryId);
+                        closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial, countryId);
 
                         break;
                 }
@@ -227,7 +228,7 @@ namespace NMP.Portal.Helpers
                     DateTime? endDateFebruary = null;
                     endDateFebruary = new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
 
-                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00,00,00, DateTimeKind.Unspecified);
+                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                     DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day, 00, 00, 00, DateTimeKind.Unspecified);
 
 
@@ -562,7 +563,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
 
         }
-        public bool IsFertiliserApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
+        public bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
         {
             bool isWithinWarningPeriod = false;
 
@@ -651,6 +652,8 @@ namespace NMP.Portal.Helpers
             }
             return isWithinDateRange;
         }
+
+
 
     }
 }

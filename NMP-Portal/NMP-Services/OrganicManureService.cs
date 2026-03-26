@@ -1098,6 +1098,54 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (totalN, error);
     }
+
+    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDate(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    {
+        Error? error = null;
+        decimal totalN = 0;
+        string fromdate = startDate.ToString("yyyy-MM-dd");
+        string toDate = endDate.ToString("yyyy-MM-dd");
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            string url = ApiurlHelper.FetchTotalNBasedOnFieldIdAndAppDateAsyncAPI;
+
+            if (organicManureId.HasValue)
+            {
+                url += $"&organicManureID={organicManureId.Value}";
+            }
+
+            url = string.Format(url, fieldId, fromdate, toDate, confirm);
+            var response = await httpClient.GetAsync(url);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (totalN, error);
+    }
+
     public async Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureById(int id)
     {
         OrganicManureDataViewModel organicManure = new OrganicManureDataViewModel();
@@ -1427,5 +1475,147 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             _logger.LogError(ex, ex.Message);
         }
         return (closedPeriod, error);
+    }
+
+    public async Task<(bool, Error)> FetchLivestockManureExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    {
+        Error? error = null;
+        bool isLivestockcManureExist = false;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            string requestUrl = ApiurlHelper.FetchLivestockManureExistanceByDateRangeAsyncAPI;
+
+            if (organicManureId.HasValue)
+            {
+                requestUrl += $"&organicManureID={organicManureId.Value}";
+            }
+
+            requestUrl = string.Format(requestUrl, cropId, dateFrom, dateTo);
+
+            var response = await httpClient.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    isLivestockcManureExist = responseWrapper.Data.exists.ToObject<bool>();
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+
+        }
+        catch (Exception ex)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (isLivestockcManureExist, error);
+    }
+
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
+    {
+        Error? error = null;
+        decimal? totalRate = 0;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            string requestUrl = ApiurlHelper.FetchTotalApplicationRateByDateRangeAsyncAPI;
+
+            if (organicManureId.HasValue)
+            {
+                requestUrl += $"&organicManureID={organicManureId.Value}";
+            }
+            requestUrl += $"&isPoultry={isPoultry}";
+
+            requestUrl = string.Format(requestUrl, cropId, dateFrom, dateTo);
+
+            var response = await httpClient.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                totalRate = responseWrapper.Data != null ? Convert.ToDecimal(responseWrapper.Data) : (decimal?)null;
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+
+        }
+        catch (Exception ex)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (totalRate, error);
+    }
+
+    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    {
+        Error? error = null;
+        bool isLivestockcManureExist = false;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            string requestUrl = ApiurlHelper.CheckGreenCompostExistanceByDateRangeAsyncAPI;
+
+            if (organicManureId.HasValue)
+            {
+                requestUrl += $"&organicManureID={organicManureId.Value}";
+            }
+
+            requestUrl = string.Format(requestUrl, cropId, dateFrom, dateTo);
+
+            var response = await httpClient.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    isLivestockcManureExist = responseWrapper.Data.exists.ToObject<bool>();
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+
+        }
+        catch (Exception ex)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (isLivestockcManureExist, error);
     }
 }
