@@ -6534,27 +6534,24 @@ namespace NMP.Portal.Controllers
 
                             (bool isGreenCompostExistIn2Year, error) = await _organicManureLogic.CheckGreenCompostExistanceByDateRange(fieldId, model.ApplicationDate.Value.AddDays(-729).ToString("yyyy-MM-dd"), model.ApplicationDate.Value.ToString("yyyy-MM-dd"), organicManureId);
 
-                            if (!isScotland || isGreenCompostExistIn2Year || isCompost)
+                            if ((!isScotland || isGreenCompostExistIn2Year || isCompost) && totalN > 500)
                             {
-                                if (totalN > 500)
+                                model.IsOrgManureNfieldLimitWarning = true;
+
+                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString();
+
+                                WarningResponse? warning = warningList
+                                    .FirstOrDefault(x => x.CountryID == farm.CountryID &&
+                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                                if (warning != null)
                                 {
-                                    model.IsOrgManureNfieldLimitWarning = true;
+                                    model.NmaxWarningHeader = warning.Header;
+                                    model.NmaxWarningCodeID = warning.WarningCodeID;
+                                    model.NmaxWarningLevelID = warning.WarningLevelID;
 
-                                    var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString();
-
-                                    WarningResponse? warning = warningList
-                                        .FirstOrDefault(x => x.CountryID == farm.CountryID &&
-                                                             string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                    if (warning != null)
-                                    {
-                                        model.NmaxWarningHeader = warning.Header;
-                                        model.NmaxWarningCodeID = warning.WarningCodeID;
-                                        model.NmaxWarningLevelID = warning.WarningLevelID;
-
-                                        model.NmaxWarningPara1 = warning.Para1;
-                                        model.NmaxWarningPara2 = warning.Para2;
-                                        model.NmaxWarningPara3 = warning.Para3;
-                                    }
+                                    model.NmaxWarningPara1 = warning.Para1;
+                                    model.NmaxWarningPara2 = warning.Para2;
+                                    model.NmaxWarningPara3 = warning.Para3;
                                 }
                             }
 
@@ -6808,6 +6805,7 @@ namespace NMP.Portal.Controllers
 
             return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
         }
+
         private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, Farm farm, int cropId, int fieldId)
         {
             if (farm == null)
@@ -6819,98 +6817,135 @@ namespace NMP.Portal.Controllers
             if (error != null)
                 return (model, error);
 
-            bool isHighN = manureType?.HighReadilyAvailableNitrogen ?? false;
-            model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
+            SetHighN(model, manureType);
 
-            string? closedPeriod = await GetClosedPeriod(model, farm, isHighN);
+            string? closedPeriod = await GetClosedPeriod(model, farm, model.HighReadilyAvailableNitrogen ?? false);
 
             bool isSlurry = IsSlurry(model.ManureTypeId);
             bool isPoultry = IsPoultryManure(model.ManureTypeId);
 
             var warningHelper = new WarningWithinPeriod();
-            if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
-            {
-                if (!IsWithinClosedPeriodAndFeb(model, closedPeriod, warningHelper))
-                    return (model, null);
 
-                ApplyWarnings(model, farm, warningList, isSlurry, isPoultry);
-            }
-            else
-            {
-                int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
-                int? organicManureId = null;
-                (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
-                    model.HarvestYear.Value, fieldId.ToString(), null, null);
+            if (IsNonScotland(model))
+                return HandleNonScotland(model, farm, warningList, closedPeriod, warningHelper, isSlurry, isPoultry);
 
-                if (error != null)
-                {
-                    return (model, error);
-                }
-                if (model.UpdatedOrganicIds?.Count > 0)
-                {
-                    int targetManagementId =
-                        managementIds.Count > 1 ? managementPeriodId : managementIds[0];
+            return await HandleScotland(
+                model, farm, warningList, cropId, fieldId,
+                closedPeriod, warningHelper, isPoultry);
+        }
+        private void SetHighN(OrganicManureViewModel model, ManureType? manureType)
+        {
+            model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
+        }
 
-                    organicManureId = model.UpdatedOrganicIds
-                        .Where(x => x.ManagementPeriodId == targetManagementId)
-                        .Select(x => x.OrganicManureId)
-                        .FirstOrDefault();
-                }
-                var manureTypeForRanAndPoultry = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-                bool isRanExceptPoultry = (manureType?.HighReadilyAvailableNitrogen ?? false) && !IsPoultryManure(model.ManureTypeId);
+        private bool IsNonScotland(OrganicManureViewModel model)
+        {
+            return model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland;
+        }
+        private (OrganicManureViewModel, Error?) HandleNonScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, string? closedPeriod, WarningWithinPeriod warningHelper, bool isSlurry, bool isPoultry)
+        {
+            if (!IsWithinClosedPeriodAndFeb(model, closedPeriod, warningHelper))
+                return (model, null);
 
-
-
-                if (model.ApplicationDate.HasValue && warningHelper.IsApplicationWithinWarningPeriod(model.ApplicationDate.Value, closedPeriod) == true)
-                {
-                    string? period = string.Empty;
-                    if (!string.IsNullOrWhiteSpace(closedPeriod) && closedPeriod.Contains("to"))
-                    {
-                        var parts = closedPeriod.Split(" to ", StringSplitOptions.TrimEntries);
-
-                        if (parts.Length == 2)
-                        {
-                            string endPeriod = parts[1];
-                            period = $"{endPeriod} to 14 February";
-                        }
-
-                    }
-                    (DateTime? startDate, DateTime? endDate) = GetClosedPeriodDates(period, model.HarvestYear ?? 0);
-
-                    (decimal? totalApplicationRate, error) = await _organicManureLogic.FetchTotalApplicationRateByDateRange(cropId, startDate.Value.ToString("yyyy-MM-dd"), endDate.Value.ToString("yyyy-MM-dd"), organicManureId, isPoultry);
-
-                    totalApplicationRate = model.ApplicationRate + totalApplicationRate;
-                    ApplyWarningsRanAndPoultryTotalRateLimit(model, farm, warningList, isRanExceptPoultry, totalApplicationRate, isPoultry);
-                }
-
-                DateTime applicationDate = model.ApplicationDate.Value;
-                if (!string.IsNullOrWhiteSpace(closedPeriod) && closedPeriod.Contains("to"))
-                {
-                    var parts = closedPeriod.Split(" to ", StringSplitOptions.TrimEntries);
-
-                    if (parts.Length == 2)
-                    {
-                        string startDateString = parts[0];
-                        int year = model.ApplicationDate.Value.Year;
-
-                        DateTime closedStartDate = DateTime.Parse($"{startDateString} {year}");
-
-                        DateTime? startDate = closedStartDate.AddDays(-28);
-                        DateTime? endDate = closedStartDate.AddDays(-1);
-
-                        if (applicationDate >= startDate && applicationDate <= endDate)
-                        {
-                            (decimal? totalApplicationRate, error) = await _organicManureLogic.FetchTotalApplicationRateByDateRange(cropId, startDate.Value.ToString("yyyy-MM-dd"), endDate.Value.ToString("yyyy-MM-dd"), organicManureId, isPoultry);
-                            totalApplicationRate = model.ApplicationRate + totalApplicationRate;
-                            ApplyWarningsRanAndPoultryTotalRateLimit(model, farm, warningList, isRanExceptPoultry, totalApplicationRate, isPoultry);
-                        }
-                    }
-                }
-            }
-
+            ApplyWarnings(model, farm, warningList, isSlurry, isPoultry);
 
             return (model, null);
         }
+        private async Task<(OrganicManureViewModel, Error?)> HandleScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, int fieldId, string? closedPeriod, WarningWithinPeriod warningHelper, bool isPoultry)
+        {
+            var (organicManureId, error) = await GetOrganicManureId(model, fieldId);
+            if (error != null)
+                return (model, error);
+
+            bool isRanExceptPoultry =
+                (model.HighReadilyAvailableNitrogen ?? false) && !isPoultry;
+
+            await ApplyScotlandWarningsIfNeeded(model, farm, warningList, cropId, closedPeriod, warningHelper, organicManureId, isRanExceptPoultry, isPoultry);
+
+            return (model, null);
+        }
+        private async Task<(int?, Error?)> GetOrganicManureId(OrganicManureViewModel model, int fieldId)
+        {
+            int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
+
+            var (managementIds, error) =
+                await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
+                    model.HarvestYear.Value, fieldId.ToString(), null, null);
+
+            if (error != null)
+                return (null, error);
+
+            if (model.UpdatedOrganicIds?.Count > 0)
+            {
+                int targetManagementId =
+                    managementIds.Count > 1 ? managementPeriodId : managementIds[0];
+
+                int? organicManureId = model.UpdatedOrganicIds
+                    .Where(x => x.ManagementPeriodId == targetManagementId)
+                    .Select(x => x.OrganicManureId)
+                    .FirstOrDefault();
+
+                return (organicManureId, null);
+            }
+
+            return (null, null);
+        }
+        private async Task ApplyScotlandWarningsIfNeeded(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, string? closedPeriod, WarningWithinPeriod warningHelper, int? organicManureId, bool isRanExceptPoultry, bool isPoultry)
+        {
+            if (!model.ApplicationDate.HasValue ||
+                string.IsNullOrWhiteSpace(closedPeriod) ||
+                !closedPeriod.Contains("to"))
+                return;
+
+            var parts = closedPeriod.Split(" to ", StringSplitOptions.TrimEntries);
+            if (parts.Length != 2)
+                return;
+
+            DateTime applicationDate = model.ApplicationDate.Value;
+            int year = applicationDate.Year;
+
+            DateTime closedStartDate = DateTime.Parse($"{parts[0]} {year}");
+
+            // Feb window
+            string period = $"{parts[1]} to 14 February";
+            var (febStart, febEnd) =
+                GetClosedPeriodDates(period, model.HarvestYear ?? 0);
+
+            // 28-day pre-closed window
+            DateTime preStart = closedStartDate.AddDays(-28);
+            DateTime preEnd = closedStartDate.AddDays(-1);
+
+            bool isInFebPeriod =
+                warningHelper.IsApplicationWithinWarningPeriod(applicationDate, closedPeriod);
+
+            bool isInPreClosedPeriod =
+                applicationDate >= preStart && applicationDate <= preEnd;
+
+            if (!isInFebPeriod && !isInPreClosedPeriod)
+                return;
+
+            DateTime startDate = isInFebPeriod ? febStart.Value : preStart;
+            DateTime endDate = isInFebPeriod ? febEnd.Value : preEnd;
+
+            var (totalApplicationRate, _) =
+                await _organicManureLogic.FetchTotalApplicationRateByDateRange(
+                    cropId,
+                    startDate.ToString("yyyy-MM-dd"),
+                    endDate.ToString("yyyy-MM-dd"),
+                    organicManureId,
+                    isPoultry);
+
+            totalApplicationRate = model.ApplicationRate + totalApplicationRate;
+
+            ApplyWarningsRanAndPoultryTotalRateLimit(
+                model,
+                farm,
+                warningList,
+                isRanExceptPoultry,
+                totalApplicationRate,
+                isPoultry);
+        }
+
         private async Task<(ManureType?, Error?)> GetManureType(OrganicManureViewModel model)
         {
             if (model?.FarmRB209CountryID == null || model.ManureGroupIdForFilter == null)
@@ -7009,128 +7044,189 @@ namespace NMP.Portal.Controllers
             model.EndClosedPeriodEndFebWarningPara3 = warning.Para3;
         }
         private async Task<(OrganicManureViewModel, Error?)> IsClosedPeriodWarningMessage(
-            OrganicManureViewModel model, bool isWithinNVZ, bool registeredOrganicProducer, int fieldId, Farm farm, DateTime? sowingDate, int cropId)
+    OrganicManureViewModel model,
+    bool isWithinNVZ,
+    bool registeredOrganicProducer,
+    int fieldId,
+    Farm farm,
+    DateTime? sowingDate,
+    int cropId)
         {
-            Error? error = null;
-            string? closedPeriod = string.Empty;
-            bool isWithinClosedPeriod = false;
-
-            // Fetch manure types
-            List<ManureType> manureTypeList = new List<ManureType>();
-            if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-            {
-                (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                if (error != null) return (model, error);
-            }
-            // Determine if manure is high readily available nitrogen
-            bool isHighReadilyAvailableNitrogen = false;
-            if (manureTypeList.Count > 0)
-            {
-                var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
-                model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
-            }
-
-            (model, error, closedPeriod, isWithinClosedPeriod) = await HandleClosedPeriodWarningLogic(
-                model, isWithinNVZ, registeredOrganicProducer, isHighReadilyAvailableNitrogen, farm);
+            var (manureTypeList, error) = await GetManureTypes(model);
             if (error != null) return (model, error);
 
-            // Check for 20-day rule between closed period and end of February
-            // if application date is between end of closed period and end of february.
-            // check 20 days or less since the last application of slurry or poultry manure.
+            SetHighReadilyAvailableNitrogen(model, manureTypeList);
+
+            var (updatedModel, closedError, closedPeriod, isWithinClosedPeriod) =
+                await HandleClosedPeriodWarningLogic(
+                    model,
+                    isWithinNVZ,
+                    registeredOrganicProducer,
+                    model.HighReadilyAvailableNitrogen ?? false,
+                    farm);
+
+            if (closedError != null) return (model, closedError);
+
+            model = updatedModel;
+
             (model, error) = await HandleTwentyDayRule(model, fieldId, closedPeriod, new WarningWithinPeriod());
             if (error != null) return (model, error);
 
-
-            if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            if (IsScotland(model))
             {
-                if (isHighReadilyAvailableNitrogen && isWithinNVZ)
-                {
-                    (CropTypeResponse cropTypeResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear ?? 0, false);
-                    WarningWithinPeriod warningMessage = new WarningWithinPeriod();
-                    DateTime? startDate = null;
-                    DateTime? endDate = null;
-                    if (cropTypeResponse.CropTypeId != (int)NMP.Commons.Enums.CropTypes.Grass)
-                    {
-                        //check the planned application date is between 01 July and 31 July
+                (model, error) = await HandleScotlandRules(
+                    model,
+                    manureTypeList,
+                    isWithinNVZ,
+                    fieldId,
+                    sowingDate,
+                    cropId);
 
-                        startDate = new DateTime(model.HarvestYear ?? 0, 7, 1);
-                        endDate = new DateTime(model.HarvestYear ?? 0, 7, 31);
-                        bool isWithinJuly = warningMessage.IsApplicationDateWithinDateRange(
-                            model.ApplicationDate, startDate, endDate);
-                        if (isWithinJuly)
-                        {
-                            (model, error) = await ScotlandJulyHighNWarning(model, warningMessage);
-                            if (error != null) return (model, error);
-                        }
-                        else
-                        {
-                            //check the planned application date is between 01 August and 30 September
-                            startDate = new DateTime(model.HarvestYear ?? 0, 8, 1);
-                            endDate = new DateTime(model.HarvestYear ?? 0, 9, 30);
-                            bool isWithinAugToSept = warningMessage.IsApplicationDateWithinDateRange(
-                                model.ApplicationDate, startDate, endDate);
-                            if (isWithinAugToSept && (sowingDate == null || (sowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
-                            {
-                                (model, error) = await ScotlandAugustToSeptHighNWarning(model, warningMessage);
-                                if (error != null) return (model, error);
-                            }
-                        }
-
-                    }
-                }
-
-                if (model.ManureGroupIdForFilter.HasValue && manureTypeList.Any(x => x.ManureGroupId == (int)NMP.Commons.Enums.ManureGroup.LivestockManure) && isWithinNVZ)
-                {
-                    (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
-                    model.HarvestYear.Value, fieldId.ToString(), null, null);
-
-                    if (error != null)
-                    {
-                        return (model, error);
-                    }
-
-                    int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
-                    int? organicManureId = null;
-
-                    if (model.UpdatedOrganicIds?.Count > 0)
-                    {
-                        int targetManagementId = managementIds.Count > 1 ? managementPeriodId : managementIds[0];
-
-                        organicManureId = model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == targetManagementId).Select(x => x.OrganicManureId).FirstOrDefault();
-                    }
-
-                    (bool isLivestockManureExist, error) =
-                        await _organicManureLogic.FetchLivestockManureExistanceByDateRange(cropId,
-                            model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"),
-                            model.ApplicationDate.Value.ToString("yyyy-MM-dd"), organicManureId);
-
-                    if (error != null || !isLivestockManureExist)
-                    {
-                        return (model, error);
-                    }
-                    if (isLivestockManureExist)
-                    {
-                        model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
-                        WarningResponse warning =
-                            await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                                model.FarmCountryId ?? 0,
-                                NMP.Commons.Enums.WarningKey
-                                    .AllowWeeksBetweenSlurryPoultryApplications.ToString());
-
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
-                    }
-                }
+                if (error != null) return (model, error);
             }
+
             model.ClosedPeriod = closedPeriod;
             model.IsWithinClosedPeriod = isWithinClosedPeriod;
+
             return (model, null);
         }
+        private async Task<(List<ManureType>, Error?)> GetManureTypes(OrganicManureViewModel model)
+        {
+            if (!model.FarmRB209CountryID.HasValue || !model.ManureGroupIdForFilter.HasValue)
+                return (new List<ManureType>(), null);
+
+            return await FetchManureTypeList(
+                model.ManureGroupIdForFilter.Value,
+                model.FarmRB209CountryID.Value);
+        }
+        private void SetHighReadilyAvailableNitrogen(
+    OrganicManureViewModel model,
+    List<ManureType> manureTypeList)
+        {
+            var manureType = manureTypeList
+                .FirstOrDefault(x => x.Id == model.ManureTypeId);
+
+            model.HighReadilyAvailableNitrogen =
+                manureType?.HighReadilyAvailableNitrogen;
+        }
+        private bool IsScotland(OrganicManureViewModel model)
+        {
+            return model.FarmCountryId ==
+                (int)NMP.Commons.Enums.FarmCountry.Scotland;
+        }
+        private async Task<(OrganicManureViewModel, Error?)> HandleScotlandRules(
+    OrganicManureViewModel model,
+    List<ManureType> manureTypeList,
+    bool isWithinNVZ,
+    int fieldId,
+    DateTime? sowingDate,
+    int cropId)
+        {
+            if (model.HighReadilyAvailableNitrogen == true && isWithinNVZ)
+            {
+                var (updatedModel, error) =
+                    await HandleScotlandHighN(model, fieldId, sowingDate);
+
+                if (error != null) return (model, error);
+                model = updatedModel;
+            }
+
+            if (IsLivestockCondition(model, manureTypeList, isWithinNVZ))
+            {
+                var (updatedModel, error) =
+                    await HandleLivestockManureRule(model, fieldId, cropId);
+
+                if (error != null) return (model, error);
+                model = updatedModel;
+            }
+
+            return (model, null);
+        }
+        private async Task<(OrganicManureViewModel, Error?)> HandleScotlandHighN(
+    OrganicManureViewModel model,
+    int fieldId,
+    DateTime? sowingDate)
+        {
+            var (cropTypeResponse, error) =
+                await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(
+                    fieldId, model.HarvestYear ?? 0, false);
+
+            if (error != null) return (model, error);
+
+            if (cropTypeResponse.CropTypeId ==
+                (int)NMP.Commons.Enums.CropTypes.Grass)
+                return (model, null);
+
+            if (IsWithinRange(model, 7, 1, 7, 31))
+                return await ScotlandJulyHighNWarning(model);
+
+            if (IsWithinRange(model, 8, 1, 9, 30) &&
+                (sowingDate == null ||
+                 (sowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
+            {
+                return await ScotlandAugustToSeptHighNWarning(model);
+            }
+
+            return (model, null);
+        }
+        private bool IsWithinRange(OrganicManureViewModel model, int startMonth, int startDay, int endMonth, int endDay)
+        {
+            var helper = new WarningWithinPeriod();
+
+            DateTime start = new DateTime(model.HarvestYear ?? 0, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
+
+            DateTime end = new DateTime(model.HarvestYear ?? 0, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
+
+            return helper.IsApplicationDateWithinDateRange(
+                model.ApplicationDate, start, end);
+        }
+        private bool IsLivestockCondition(OrganicManureViewModel model, List<ManureType> manureTypeList, bool isWithinNVZ)
+        {
+            return model.ManureGroupIdForFilter.HasValue &&
+                   manureTypeList.Any(x =>
+                       x.ManureGroupId ==
+                       (int)NMP.Commons.Enums.ManureGroup.LivestockManure) &&
+                   isWithinNVZ;
+        }
+        private async Task<(OrganicManureViewModel, Error?)> HandleLivestockManureRule(OrganicManureViewModel model, int fieldId, int cropId)
+        {
+            var (organicManureId, error) =
+                await GetOrganicManureId(model, fieldId);
+
+            if (error != null) return (model, error);
+
+            var (exists, existsError) =
+                await _organicManureLogic.FetchLivestockManureExistanceByDateRange(
+                    cropId,
+                    model.ApplicationDate.Value.AddDays(-20).ToString("yyyy-MM-dd"),
+                    model.ApplicationDate.Value.ToString("yyyy-MM-dd"),
+                    organicManureId);
+
+            if (existsError != null || !exists)
+                return (model, existsError);
+
+            await ApplyLivestockWarning(model);
+
+            return (model, null);
+        }
+        private async Task ApplyLivestockWarning(OrganicManureViewModel model)
+        {
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+
+            var warning =
+                await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmCountryId ?? 0,
+                    NMP.Commons.Enums.WarningKey
+                        .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+        }
+
 
         private async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupIdForFilter, int FarmRB209CountryId)
         {
@@ -7194,8 +7290,7 @@ namespace NMP.Portal.Controllers
             return (model, null);
         }
 
-        private async Task<(OrganicManureViewModel, Error?)> ScotlandJulyHighNWarning(
-            OrganicManureViewModel model, WarningWithinPeriod warningMessage)
+        private async Task<(OrganicManureViewModel, Error?)> ScotlandJulyHighNWarning(OrganicManureViewModel model)
         {
             //scotland warning excel sheet row no. 26
             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
@@ -7210,8 +7305,7 @@ namespace NMP.Portal.Controllers
 
             return (model, null);
         }
-        private async Task<(OrganicManureViewModel, Error?)> ScotlandAugustToSeptHighNWarning(
-            OrganicManureViewModel model, WarningWithinPeriod warningMessage)
+        private async Task<(OrganicManureViewModel, Error?)> ScotlandAugustToSeptHighNWarning(OrganicManureViewModel model)
         {
             //scotland warning row no. 27
             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
@@ -10509,18 +10603,19 @@ namespace NMP.Portal.Controllers
             int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
             int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
 
+
             DateTime startDate;
             DateTime endDate;
 
             if (startMonth <= endMonth)
             {
-                startDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                endDate = new DateTime(harvestYear - 1, endMonth, endDay);
+                startDate = new DateTime(harvestYear - 1, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
+                endDate = new DateTime(harvestYear - 1, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
             }
             else
             {
-                startDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                endDate = new DateTime(harvestYear, endMonth, endDay);
+                startDate = new DateTime(harvestYear - 1, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
+                endDate = new DateTime(harvestYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
             }
 
             return (startDate, endDate);

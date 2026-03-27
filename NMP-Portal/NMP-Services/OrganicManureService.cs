@@ -1116,30 +1116,28 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             }
 
             url = string.Format(url, fieldId, fromdate, toDate, confirm);
+            
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -1496,29 +1494,27 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
             var response = await httpClient.GetAsync(requestUrl);
             string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    isLivestockcManureExist = responseWrapper.Data.exists.ToObject<bool>();
-                }
+                isLivestockcManureExist =
+                    responseWrapper?.Data?.exists?.ToObject<bool>() ?? false;
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper ?? new ResponseWrapper(), error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
 
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -1557,14 +1553,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
 
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -1593,26 +1589,24 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    isLivestockcManureExist = responseWrapper.Data.exists.ToObject<bool>();
-                }
+                isLivestockcManureExist =
+                    responseWrapper?.Data?.exists?.ToObject<bool>() ?? false;
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper ?? new ResponseWrapper(), error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
 
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
