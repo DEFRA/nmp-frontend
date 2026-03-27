@@ -310,6 +310,16 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction(_checkAnswerActionName);
         }
+        private List<int> BindViewBagForGrassLatsThreeYear(PreviousCroppingViewModel model)
+        {
+            int lastHarvestYear = 0;
+            List<int> previousYears = new List<int>();
+            lastHarvestYear = model.HarvestYear ?? 0;
+            previousYears.Add(lastHarvestYear);
+            previousYears.Add(lastHarvestYear - 1);
+            previousYears.Add(lastHarvestYear - 2);
+            return previousYears;
+        }
 
         [HttpGet]
         public IActionResult GrassLastThreeHarvestYear()
@@ -324,11 +334,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() action : PreviousCropping data is not available in session");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
-                List<int> previousYears = new List<int>();
-                int lastHarvestYear = model.HarvestYear ?? 0;
-                previousYears.Add(lastHarvestYear);
-                previousYears.Add(lastHarvestYear - 1);
-                previousYears.Add(lastHarvestYear - 2);
+                List<int> previousYears = BindViewBagForGrassLatsThreeYear(model);
                 ViewBag.PreviousGrassesYear = previousYears;
                 SetPreviousCroppingToSession(model);
                 return View(model);
@@ -345,7 +351,7 @@ namespace NMP.Portal.Controllers
         public IActionResult GrassLastThreeHarvestYear(PreviousCroppingViewModel model)
         {
             _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() post action called");
-            int lastHarvestYear = 0;
+        
             if (model.PreviousGrassYears == null)
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
@@ -353,17 +359,13 @@ namespace NMP.Portal.Controllers
 
             if (!ModelState.IsValid)
             {
-                List<int> previousYears = new List<int>();
-                lastHarvestYear = model.HarvestYear ?? 0;
-                previousYears.Add(lastHarvestYear);
-                previousYears.Add(lastHarvestYear - 1);
-                previousYears.Add(lastHarvestYear - 2);
+                List<int> previousYears = BindViewBagForGrassLatsThreeYear(model);
                 ViewBag.PreviousGrassesYear = previousYears;
                 return View(model);
             }
 
 
-            model = BindPerropertyForGrassLastThreeYear(model, lastHarvestYear);
+            model = BindPerropertyForGrassLastThreeYear(model);
             if (model.PreviousGrassYears?.Count == 3)
             {
                 model.LayDuration = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
@@ -386,8 +388,9 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("GrassManagementOptions");
         }
 
-        private PreviousCroppingViewModel BindPerropertyForGrassLastThreeYear(PreviousCroppingViewModel model, int lastHarvestYear)
+        private PreviousCroppingViewModel BindPerropertyForGrassLastThreeYear(PreviousCroppingViewModel model)
         {
+            int lastHarvestYear = 0;
             //below condition is for select all
             if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
             {
