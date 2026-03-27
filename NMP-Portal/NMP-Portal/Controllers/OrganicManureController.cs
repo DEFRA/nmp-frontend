@@ -6833,12 +6833,12 @@ namespace NMP.Portal.Controllers
                 model, farm, warningList, cropId, fieldId,
                 closedPeriod, warningHelper, isPoultry);
         }
-        private void SetHighN(OrganicManureViewModel model, ManureType? manureType)
+        private static void SetHighN(OrganicManureViewModel model, ManureType? manureType)
         {
             model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
         }
 
-        private bool IsNonScotland(OrganicManureViewModel model)
+        private static bool IsNonScotland(OrganicManureViewModel model)
         {
             return model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland;
         }
@@ -6851,6 +6851,7 @@ namespace NMP.Portal.Controllers
 
             return (model, null);
         }
+#pragma warning disable S107
         private async Task<(OrganicManureViewModel, Error?)> HandleScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, int fieldId, string? closedPeriod, WarningWithinPeriod warningHelper, bool isPoultry)
         {
             var (organicManureId, error) = await GetOrganicManureId(model, fieldId);
@@ -6864,6 +6865,7 @@ namespace NMP.Portal.Controllers
 
             return (model, null);
         }
+#pragma warning restore S107
         private async Task<(int?, Error?)> GetOrganicManureId(OrganicManureViewModel model, int fieldId)
         {
             int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
@@ -6890,6 +6892,7 @@ namespace NMP.Portal.Controllers
 
             return (null, null);
         }
+#pragma warning disable S107
         private async Task ApplyScotlandWarningsIfNeeded(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, string? closedPeriod, WarningWithinPeriod warningHelper, int? organicManureId, bool isRanExceptPoultry, bool isPoultry)
         {
             if (!model.ApplicationDate.HasValue ||
@@ -6904,7 +6907,7 @@ namespace NMP.Portal.Controllers
             DateTime applicationDate = model.ApplicationDate.Value;
             int year = applicationDate.Year;
 
-            DateTime closedStartDate = DateTime.Parse($"{parts[0]} {year}");
+            DateTime closedStartDate = DateTime.ParseExact($"{parts[0]} {year}","d MMM yyyy",CultureInfo.InvariantCulture);
 
             // Feb window
             string period = $"{parts[1]} to 14 February";
@@ -6945,7 +6948,7 @@ namespace NMP.Portal.Controllers
                 totalApplicationRate,
                 isPoultry);
         }
-
+#pragma warning restore S107
         private async Task<(ManureType?, Error?)> GetManureType(OrganicManureViewModel model)
         {
             if (model?.FarmRB209CountryID == null || model.ManureGroupIdForFilter == null)
@@ -7099,7 +7102,7 @@ namespace NMP.Portal.Controllers
                 model.ManureGroupIdForFilter.Value,
                 model.FarmRB209CountryID.Value);
         }
-        private void SetHighReadilyAvailableNitrogen(
+        private static void SetHighReadilyAvailableNitrogen(
     OrganicManureViewModel model,
     List<ManureType> manureTypeList)
         {
@@ -7109,7 +7112,7 @@ namespace NMP.Portal.Controllers
             model.HighReadilyAvailableNitrogen =
                 manureType?.HighReadilyAvailableNitrogen;
         }
-        private bool IsScotland(OrganicManureViewModel model)
+        private static bool IsScotland(OrganicManureViewModel model)
         {
             return model.FarmCountryId ==
                 (int)NMP.Commons.Enums.FarmCountry.Scotland;
@@ -7169,7 +7172,7 @@ namespace NMP.Portal.Controllers
 
             return (model, null);
         }
-        private bool IsWithinRange(OrganicManureViewModel model, int startMonth, int startDay, int endMonth, int endDay)
+        private static bool IsWithinRange(OrganicManureViewModel model, int startMonth, int startDay, int endMonth, int endDay)
         {
             var helper = new WarningWithinPeriod();
 
@@ -7180,7 +7183,7 @@ namespace NMP.Portal.Controllers
             return helper.IsApplicationDateWithinDateRange(
                 model.ApplicationDate, start, end);
         }
-        private bool IsLivestockCondition(OrganicManureViewModel model, List<ManureType> manureTypeList, bool isWithinNVZ)
+        private static bool IsLivestockCondition(OrganicManureViewModel model, List<ManureType> manureTypeList, bool isWithinNVZ)
         {
             return model.ManureGroupIdForFilter.HasValue &&
                    manureTypeList.Any(x =>

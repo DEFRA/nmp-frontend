@@ -583,7 +583,7 @@ namespace NMP.Portal.Helpers
         RegexOptions.Compiled | RegexOptions.NonBacktracking,
         TimeSpan.FromMilliseconds(100));
 
-        private (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
+        private static (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
         {
             int startDay = int.Parse(match.Groups[1].Value);
             string startMonthStr = match.Groups[2].Value;
@@ -596,7 +596,7 @@ namespace NMP.Portal.Helpers
 
             return (startDay, startMonth, endDay, endMonth);
         }
-        private int GetMonthNumber(string month)
+        private static int GetMonthNumber(string month)
         {
             var months = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
     {
@@ -617,7 +617,7 @@ namespace NMP.Portal.Helpers
             return months.TryGetValue(month, out int value) ? value : 0;
         }
 
-        private bool IsWithinPeriod(DateTime applicationDate, int startDay, int startMonth, int endDay, int endMonth)
+        private static bool IsWithinPeriod(DateTime applicationDate, int startDay, int startMonth, int endDay, int endMonth)
         {
             DateTime start = CreateDate(applicationDate.Year, startMonth, startDay);
             DateTime end = CreateDate(applicationDate.Year, endMonth, endDay);
@@ -633,7 +633,7 @@ namespace NMP.Portal.Helpers
             return (applicationDate >= start && applicationDate <= endNextYear) ||
                    (applicationDate >= startPrevYear && applicationDate <= end);
         }
-        private DateTime CreateDate(int year, int month, int day)
+        private static DateTime CreateDate(int year, int month, int day)
         {
             return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
         }
