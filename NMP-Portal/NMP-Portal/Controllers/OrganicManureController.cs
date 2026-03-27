@@ -1374,7 +1374,7 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ManureGroup");
         }
-        private OrganicManureViewModel RemoveFieldsFromDoubleCropList(OrganicManureViewModel model)
+        private static OrganicManureViewModel RemoveFieldsFromDoubleCropList(OrganicManureViewModel model)
         {
             //remove fields that's not in fieldList
             if (model.FieldList != null && model.FieldList.Any() && model.DoubleCrop != null && model.DoubleCrop.Count > 0 &&

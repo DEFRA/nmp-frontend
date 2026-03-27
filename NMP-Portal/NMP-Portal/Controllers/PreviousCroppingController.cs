@@ -10,6 +10,7 @@ using NMP.Commons.ViewModels;
 using NMP.Application;
 using NMP.Commons.Helpers;
 using System.Net;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace NMP.Portal.Controllers
 {
@@ -361,29 +362,8 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            //below condition is for select all
-            if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
-            {
-                List<int> previousYears = new List<int>();
-                lastHarvestYear = model.HarvestYear ?? 0;
-                previousYears.Add(lastHarvestYear);
-                previousYears.Add(lastHarvestYear - 1);
-                previousYears.Add(lastHarvestYear - 2);
-                model.PreviousGrassYears = previousYears;
-            }
 
-            lastHarvestYear = model.HarvestYear ?? 0;
-            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
-            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
-            if (model.IsCheckAnswer && previousCroppingData != null && previousCroppingData.PreviousGrassYears != null && model.PreviousGrassYears != null)
-            {
-                if (!model.PreviousGrassYears.OrderBy(x => x).SequenceEqual(previousCroppingData.PreviousGrassYears.OrderBy(x => x)))
-                {
-                    model.IsGrassLastThreeHarvestYearChange = true;
-                }
-            }
-            SetPreviousCroppingToSession(model);
-
+            model = BindPerropertyForGrassLastThreeYear(model, lastHarvestYear);
             if (model.PreviousGrassYears?.Count == 3)
             {
                 model.LayDuration = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
@@ -406,6 +386,31 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("GrassManagementOptions");
         }
 
+        private PreviousCroppingViewModel BindPerropertyForGrassLastThreeYear(PreviousCroppingViewModel model, int lastHarvestYear)
+        {
+            //below condition is for select all
+            if (model.PreviousGrassYears?.Count == 1 && model.PreviousGrassYears[0] == 0)
+            {
+                List<int> previousYears = new List<int>();
+                lastHarvestYear = model.HarvestYear ?? 0;
+                previousYears.Add(lastHarvestYear);
+                previousYears.Add(lastHarvestYear - 1);
+                previousYears.Add(lastHarvestYear - 2);
+                model.PreviousGrassYears = previousYears;
+            }
+
+            lastHarvestYear = model.HarvestYear ?? 0;
+            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
+            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            if (model.IsCheckAnswer && previousCroppingData != null && previousCroppingData.PreviousGrassYears != null && model.PreviousGrassYears != null &&
+                (!model.PreviousGrassYears.OrderBy(x => x).SequenceEqual(previousCroppingData.PreviousGrassYears.OrderBy(x => x))))
+            {
+                model.IsGrassLastThreeHarvestYearChange = true;
+            }
+            SetPreviousCroppingToSession(model);
+
+            return model;
+        }
         [HttpGet]
         public async Task<IActionResult> GrassManagementOptions()
         {
@@ -485,12 +490,9 @@ namespace NMP.Portal.Controllers
             }
 
             PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
-            if (model.IsCheckAnswer && previousCroppingData != null)
+            if (model.IsCheckAnswer && previousCroppingData != null && (model.HasGreaterThan30PercentClover != previousCroppingData.HasGreaterThan30PercentClover))
             {
-                if (model.HasGreaterThan30PercentClover != previousCroppingData.HasGreaterThan30PercentClover)
-                {
-                    model.IsHasGreaterThan30PercentCloverChange = true;
-                }
+                model.IsHasGreaterThan30PercentCloverChange = true;
             }
             SetPreviousCroppingToSession(model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsHasGreaterThan30PercentCloverChange) && (!model.IsGrassLastThreeHarvestYearChange))

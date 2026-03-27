@@ -805,7 +805,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return View(model);
     }
-    private FertiliserManureViewModel RemoveFieldsFromDoubleCropList(FertiliserManureViewModel model)
+    private static FertiliserManureViewModel RemoveFieldsFromDoubleCropList(FertiliserManureViewModel model)
     {
         //remove fields that's not in fieldList
         if (model.FieldList != null && model.FieldList.Any() && model.DoubleCrop != null && model.DoubleCrop.Count > 0 &&
