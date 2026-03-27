@@ -310,7 +310,7 @@ namespace NMP.Portal.Controllers
             }
             return RedirectToAction(_checkAnswerActionName);
         }
-        private List<int> BindViewBagForGrassLatsThreeYear(PreviousCroppingViewModel model)
+        private static List<int> BindViewBagForGrassLatsThreeYear(PreviousCroppingViewModel model)
         {
             int lastHarvestYear = 0;
             List<int> previousYears = new List<int>();
