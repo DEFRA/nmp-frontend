@@ -626,6 +626,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     model.DefoliationList = null;
                                 }
+                                model = RemoveFieldsFromDoubleCropList(model);
 
                                 if (model.DefoliationList != null && model.DefoliationList.Count > 0)
                                 {
@@ -994,6 +995,7 @@ namespace NMP.Portal.Controllers
                         model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
                     }
                     model.IsAnyCropIsGrass = false;
+                    model.IsDoubleCropAvailable = false;
                     (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
@@ -1288,6 +1290,7 @@ namespace NMP.Portal.Controllers
                             }
                         }
                     }
+                    model = RemoveFieldsFromDoubleCropList(model);
                     if (model.DefoliationList != null && model.DefoliationList.Count > 0)
                     {
                         int counter = 1;
@@ -1371,7 +1374,17 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ManureGroup");
         }
+        private OrganicManureViewModel RemoveFieldsFromDoubleCropList(OrganicManureViewModel model)
+        {
+            //remove fields that's not in fieldList
+            if (model.FieldList != null && model.FieldList.Any() && model.DoubleCrop != null && model.DoubleCrop.Count > 0 &&
+            model.DoubleCrop.Any(dc => !model.FieldList.Contains(dc.FieldID.ToString())))
+            {
+                model.DoubleCrop?.RemoveAll(dc => !model.FieldList.Contains(dc.FieldID.ToString()));
+            }
 
+            return model;
+        }
         private async Task<OrganicManureViewModel> BindGrassProperty(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropList, int fieldId)
         {
             if (cropList.Count > 0)

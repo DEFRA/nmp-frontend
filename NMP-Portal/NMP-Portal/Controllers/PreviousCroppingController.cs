@@ -79,13 +79,19 @@ namespace NMP.Portal.Controllers
                     model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID)).Name;
                     int currentYear = Convert.ToInt32(_farmDataProtector.Unprotect(s));
                     model.HarvestYear = currentYear - 1;
-                    SetPreviousCroppingToSession(model);
                     int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
                     (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                     if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {
                         model.FarmRB209CountryID = farm.RB209CountryID;
                     }
+                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        model.HasGrassInLastThreeYear = false;
+                        SetPreviousCroppingToSession(model);
+                        return RedirectToAction(_cropGroupsActionName);
+                    }
+                    SetPreviousCroppingToSession(model);
                 }
             }
             catch (Exception ex)
@@ -368,7 +374,14 @@ namespace NMP.Portal.Controllers
 
             lastHarvestYear = model.HarvestYear ?? 0;
             model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
-
+            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            if (model.IsCheckAnswer && previousCroppingData != null && previousCroppingData.PreviousGrassYears != null && model.PreviousGrassYears != null)
+            {
+                if (!model.PreviousGrassYears.OrderBy(x => x).SequenceEqual(previousCroppingData.PreviousGrassYears.OrderBy(x => x)))
+                {
+                    model.IsGrassLastThreeHarvestYearChange = true;
+                }
+            }
             SetPreviousCroppingToSession(model);
 
             if (model.PreviousGrassYears?.Count == 3)
@@ -386,7 +399,7 @@ namespace NMP.Portal.Controllers
 
             SetPreviousCroppingToSession(model);
 
-            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
+            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -433,7 +446,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction(_sasGreaterThan30PercentCloverActionName);
             }
 
-            if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange)
+            if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && (!model.IsGrassLastThreeHarvestYearChange))
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -471,9 +484,16 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
+            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            if (model.IsCheckAnswer && previousCroppingData != null)
+            {
+                if (model.HasGreaterThan30PercentClover != previousCroppingData.HasGreaterThan30PercentClover)
+                {
+                    model.IsHasGreaterThan30PercentCloverChange = true;
+                }
+            }
             SetPreviousCroppingToSession(model);
-
-            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
+            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsHasGreaterThan30PercentCloverChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -527,7 +547,7 @@ namespace NMP.Portal.Controllers
 
             SetPreviousCroppingToSession(model);
 
-            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
+            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -571,7 +591,7 @@ namespace NMP.Portal.Controllers
 
             SetPreviousCroppingToSession(model);
 
-            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange))
+            if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -600,6 +620,8 @@ namespace NMP.Portal.Controllers
                 ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.SoilNitrogenSupplyItemID)?.Name;
                 model.IsCheckAnswer = true;
                 model.IsHasGrassInLastThreeYearChange = false;
+                model.IsHasGreaterThan30PercentCloverChange = false;
+                model.IsGrassLastThreeHarvestYearChange = false;
 
                 if (model.CropGroupID != null)
                 {

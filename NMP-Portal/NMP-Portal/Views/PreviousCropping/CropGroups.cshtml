@@ -36,11 +36,18 @@
     {
         backAction = "HasGrassInLastThreeYear";
     }
-   
+
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer) ? "CheckAnswer" :backAction)" asp-controller="PreviousCropping">@Resource.lblBack</govuk-back-link>
+    @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+    {
+        <govuk-back-link asp-action="@((Model.IsCheckAnswer) ? "CheckAnswer" : backAction)" asp-controller="PreviousCropping">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblBack</govuk-back-link>
+    }
 }
 <form asp-action="CropGroups" asp-controller="PreviousCropping" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -59,11 +66,12 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNitrogenSupplyItemID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LayDuration" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrassLastThreeHarvestYearChange" />
         @if (Model != null)
         {
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
@@ -84,7 +92,7 @@
                 </govuk-error-summary>
             }
 
-           
+
             <govuk-radios asp-for="@Model.CropGroupID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -112,7 +120,7 @@
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> 
+            </govuk-button>
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {

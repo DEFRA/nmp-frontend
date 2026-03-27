@@ -522,7 +522,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             foreach (string field in model.FieldList)
                             {
                                 List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
-                                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList, true);
+                                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList, true);                                
                             }
 
                             string fieldIds = string.Join(",", model.FieldList);
@@ -722,6 +722,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
             }
 
+            model = RemoveFieldsFromDoubleCropList(model);
             if (model.DefoliationList != null && model.DefoliationList.Count > 0)
             {
                 int counter = 1;
@@ -804,7 +805,16 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return View(model);
     }
-
+    private FertiliserManureViewModel RemoveFieldsFromDoubleCropList(FertiliserManureViewModel model)
+    {
+        //remove fields that's not in fieldList
+        if (model.FieldList != null && model.FieldList.Any() && model.DoubleCrop != null && model.DoubleCrop.Count > 0 &&
+        model.DoubleCrop.Any(dc => !model.FieldList.Contains(dc.FieldID.ToString())))
+        {
+            model.DoubleCrop?.RemoveAll(dc => !model.FieldList.Contains(dc.FieldID.ToString()));
+        }
+        return model;
+    }
     private async Task<FertiliserManureViewModel> BindGrassProperty(FertiliserManureViewModel model, List<HarvestYearPlanResponse> cropList, int fieldId, List<CommonResponse> fieldList, bool isFieldGet)
     {
         if (cropList.Count > 0)
@@ -900,6 +910,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
                 model.IsAnyCropIsGrass = false;
+                model.IsDoubleCropAvailable = false;
                 foreach (string field in model.FieldList)
                 {
 
@@ -1059,6 +1070,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return View(model);
             }
 
+            model = RemoveFieldsFromDoubleCropList(model);
             if (model.DefoliationList != null && model.DefoliationList.Count > 0)
             {
                 int counter = 1;
@@ -1646,12 +1658,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(int fieldId, int? cropTypeId,  string? defoliationSequenceName)>
+    private async Task<(int fieldId, int? cropTypeId,string? defoliationSequenceName)>
     PopulateRecommendationData(FertiliserManureViewModel model, Error? error, int fieldId)
     {
         model.FieldName = (await _fieldLogic.FetchFieldByFieldId(fieldId)).Name;
 
-         (List<RecommendationHeader> recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
+        (List<RecommendationHeader> recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
         if (error != null || recommendationsHeader == null || !recommendationsHeader.Any())
             return (fieldId, null, null);
 
@@ -2761,7 +2773,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                 if (error == null)
                 {
-                    
+
                     if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)
                     //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                     //totalNitrogen > 100 and brassica crop will work for Scotland as well

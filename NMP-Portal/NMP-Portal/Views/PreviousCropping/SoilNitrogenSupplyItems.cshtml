@@ -4,7 +4,7 @@
 
     ViewData["Title"] = $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
     var backAction = "";
-    if (Model.IsCheckAnswer)
+    if (Model.IsCheckAnswer && (!Model.IsHasGreaterThan30PercentCloverChange))
     {
         backAction = "CheckAnswer";
     }
@@ -38,6 +38,8 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGreaterThan30PercentCloverChange" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrassLastThreeHarvestYearChange" />
         @if (Model != null)
         {
             @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
