@@ -652,59 +652,7 @@ namespace NMP.Portal.Controllers
                             {
                                 int i = 0;
                                 model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                foreach (var field in model.FieldList)
-                                {
-                                    int fieldId = Convert.ToInt32(field);
-                                    Field fieldData = await _fieldLogic.FetchFieldByFieldId(fieldId);
-                                    if (fieldData != null)
-                                    {
-                                        (CropTypeResponse cropsResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-                                        if (cropsResponse != null)
-                                        {
-                                            (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropsResponse.CropTypeId);
-
-                                            if (error == null && cropTypeLinkingResponse != null)
-                                            {
-                                                int mannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
-
-                                                var uptakeData = new
-                                                {
-                                                    cropTypeId = mannerCropTypeId,
-                                                    applicationMonth = model.ApplicationDate.Value.Month
-                                                };
-
-                                                string jsonString = JsonConvert.SerializeObject(uptakeData);
-                                                (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(jsonString);
-                                                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                                {
-                                                    TempData["FieldGroupError"] = error.Message;
-                                                    return View(_fieldGroup, model);
-                                                }
-                                                if (nitrogenUptakeResponse != null && error == null)
-                                                {
-                                                    if (model.AutumnCropNitrogenUptakes == null)
-                                                    {
-                                                        model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                                    }
-
-                                                    model.AutumnCropNitrogenUptakes.Add(new AutumnCropNitrogenUptakeDetail
-                                                    {
-                                                        EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
-                                                        FieldName = fieldData.Name ?? string.Empty,
-                                                        CropTypeId = cropsResponse.CropTypeId,
-                                                        CropTypeName = cropsResponse.CropType,
-                                                        AutumnCropNitrogenUptake = nitrogenUptakeResponse.value
-                                                    });
-                                                }
-                                            }
-                                            else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                            {
-                                                TempData["FieldGroupError"] = error.Message;
-                                                return View(_fieldGroup, model);
-                                            }
-                                        }
-                                    }
-                                }
+                                model.AutumnCropNitrogenUptakes = await BuildAutumnCropNitrogenUptakeAsync(model);
                                 foreach (var organicManure in model.OrganicManures)
                                 {
                                     ApplyCommonManureProperties(model, organicManure, i);
@@ -967,57 +915,7 @@ namespace NMP.Portal.Controllers
                             {
                                 int i = 0;
                                 model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                foreach (var field in model.FieldList)
-                                {
-                                    int fieldId = Convert.ToInt32(field);
-                                    Field fieldData = await _fieldLogic.FetchFieldByFieldId(fieldId);
-                                    if (fieldData != null)
-                                    {
-                                        (CropTypeResponse cropsResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-
-                                        (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropsResponse.CropTypeId);
-
-                                        if (error == null && cropTypeLinkingResponse != null)
-                                        {
-                                            int mannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
-
-                                            var uptakeData = new
-                                            {
-                                                cropTypeId = mannerCropTypeId,
-                                                applicationMonth = model.ApplicationDate.Value.Month
-                                            };
-
-                                            string jsonString = JsonConvert.SerializeObject(uptakeData);
-                                            (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(jsonString);
-                                            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                            {
-                                                TempData["FieldError"] = error.Message;
-                                                return View(model);
-                                            }
-                                            if (nitrogenUptakeResponse != null && error == null)
-                                            {
-                                                if (model.AutumnCropNitrogenUptakes == null)
-                                                {
-                                                    model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                                }
-
-                                                model.AutumnCropNitrogenUptakes.Add(new AutumnCropNitrogenUptakeDetail
-                                                {
-                                                    EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
-                                                    FieldName = fieldData.Name ?? string.Empty,
-                                                    CropTypeId = cropsResponse.CropTypeId,
-                                                    CropTypeName = cropsResponse.CropType,
-                                                    AutumnCropNitrogenUptake = nitrogenUptakeResponse.value
-                                                });
-                                            }
-                                        }
-                                        else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                        {
-                                            TempData["FieldError"] = error.Message;
-                                            return View(model);
-                                        }
-                                    }
-                                }
+                                model.AutumnCropNitrogenUptakes = await BuildAutumnCropNitrogenUptakeAsync(model);
                                 (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                                 if (error == null && farmManureTypeList.Count > 0)
                                 {
@@ -3975,72 +3873,7 @@ namespace NMP.Portal.Controllers
                 if (model.AutumnCropNitrogenUptake == null)
                 {
                     model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                    foreach (var field in model.FieldList)
-                    {
-                        int fieldId = Convert.ToInt32(field);
-                        (CropTypeResponse cropsResponse, error) = await _organicManureLogic.FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-
-                        (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropsResponse.CropTypeId);
-
-                        if (error == null && cropTypeLinkingResponse != null)
-                        {
-                            int mannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
-
-                            //check early and late for winter cereals and winter oilseed rape
-                            //if sowing date after 15 sept then late
-                            var uptakeData = new
-                            {
-                                cropTypeId = mannerCropTypeId,
-                                applicationMonth = model.ApplicationDate.Value.Month
-                            };
-
-                            string jsonString = JsonConvert.SerializeObject(uptakeData);
-                            (NitrogenUptakeResponse nitrogenUptakeResponse, error) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(jsonString);
-                            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                            {
-                                if (model.IsApplicationMethodChange)
-                                {
-                                    TempData["ManureApplyingDateError"] = error.Message;
-                                    return RedirectToAction("ManureApplyingDate");
-                                }
-                                else
-                                {
-                                    TempData["IncorporationDelayError"] = error.Message;
-                                    return RedirectToAction("IncorporationDelay");
-                                }
-                            }
-                            if (nitrogenUptakeResponse != null && error == null)
-                            {
-                                if (model.AutumnCropNitrogenUptakes == null)
-                                {
-                                    model.AutumnCropNitrogenUptakes = new List<AutumnCropNitrogenUptakeDetail>();
-                                }
-                                var fieldData = await _fieldLogic.FetchFieldByFieldId(fieldId);
-                                model.AutumnCropNitrogenUptakes.Add(new AutumnCropNitrogenUptakeDetail
-                                {
-                                    EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
-                                    FieldName = fieldData.Name ?? string.Empty,
-                                    CropTypeId = cropsResponse.CropTypeId,
-                                    CropTypeName = cropsResponse.CropType,
-                                    AutumnCropNitrogenUptake = nitrogenUptakeResponse.value
-                                });
-                            }
-
-                        }
-                        else if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                        {
-                            if (model.IsApplicationMethodChange)
-                            {
-                                TempData["ManureApplyingDateError"] = error.Message;
-                                return RedirectToAction("ManureApplyingDate");
-                            }
-                            else
-                            {
-                                TempData["IncorporationDelayError"] = error.Message;
-                                return RedirectToAction("IncorporationDelay");
-                            }
-                        }
-                    }
+                    model.AutumnCropNitrogenUptakes = await BuildAutumnCropNitrogenUptakeAsync(model);
                 }
 
                 //Soil drainage end date
@@ -10501,7 +10334,7 @@ namespace NMP.Portal.Controllers
             };
         }
 
-        private void ApplyCommonManureProperties(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, int index = 0)
+        private static void ApplyCommonManureProperties(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, int index = 0)
         {
             if (model.ApplicationDate.HasValue)
                 organicManure.ApplicationDate = model.ApplicationDate.Value;
@@ -10576,6 +10409,47 @@ namespace NMP.Portal.Controllers
                     model.AutumnCropNitrogenUptakes[index].AutumnCropNitrogenUptake;
             }
         }
+        private async Task<List<AutumnCropNitrogenUptakeDetail>> BuildAutumnCropNitrogenUptakeAsync(OrganicManureViewModel model)
+        {
+            var result = new List<AutumnCropNitrogenUptakeDetail>();
 
+            foreach (var field in model.FieldList)
+            {
+                int fieldId = Convert.ToInt32(field);
+                var fieldData = await _fieldLogic.FetchFieldByFieldId(fieldId);
+                if (fieldData == null) continue;
+
+                var (crop, _) = await _organicManureLogic
+                    .FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
+
+                var (link, error) = await _organicManureLogic
+                    .FetchCropTypeLinkingByCropTypeId(crop.CropTypeId);
+
+                if (error != null) continue;
+
+                var payload = new
+                {
+                    cropTypeId = link.MannerCropTypeID,
+                    applicationMonth = model.ApplicationDate.Value.Month
+                };
+
+                string json = JsonConvert.SerializeObject(payload);
+
+                var (uptake, err2) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(json);
+
+                if (err2 != null) continue;
+
+                result.Add(new AutumnCropNitrogenUptakeDetail
+                {
+                    EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
+                    FieldName = fieldData.Name ?? "",
+                    CropTypeId = crop.CropTypeId,
+                    CropTypeName = crop.CropType,
+                    AutumnCropNitrogenUptake = uptake.value
+                });
+            }
+
+            return result;
+        }
     }
 }
