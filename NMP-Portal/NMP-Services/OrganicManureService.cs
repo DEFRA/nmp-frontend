@@ -2,13 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NMP.Commons.Models;
 using NMP.Commons.Helpers;
+using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System;
+using System.Net.Http;
 using System.Text;
 using System.Web;
 namespace NMP.Services;
@@ -176,15 +178,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (rainType, error);
     }
@@ -245,16 +243,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (windSpeed, error);
     }
@@ -283,17 +276,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-
+            error = HandleException(ex);
         }
         return (moisterType, error);
     }
@@ -323,16 +310,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (rainType, error);
     }
@@ -360,16 +342,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (rainType, error);
     }
@@ -399,17 +376,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-
+            error = HandleException(ex);
         }
         return (windspeeds, error);
     }
@@ -437,16 +408,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (windspeedResponse, error);
     }
@@ -475,17 +441,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-
+            error = HandleException(ex);
         }
         return (moisterTypes, error);
     }
@@ -513,16 +473,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (moistureTypeResponse, error);
     }
@@ -535,30 +490,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string fromdate = startDate.ToString("yyyy-MM-dd");
         string toDate = endDate.ToString("yyyy-MM-dd");
 
-        HttpClient httpClient = await GetNMPAPIClient();
         string url = ApiurlHelper.FetchTotalNByManagementIdAndAppDateAsyncAPI;
 
         if (organicManureId.HasValue)
         {
             url += $"&organicManureID={organicManureId.Value}";
         }
-
         url = string.Format(url, HttpUtility.UrlEncode(managementId.ToString()), HttpUtility.UrlEncode(fromdate.ToString()), HttpUtility.UrlEncode(toDate.ToString()), HttpUtility.UrlEncode(confirm.ToString()));
-        var response = await httpClient.GetAsync(url);
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
-        {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
-            }
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
-        }
-
+        (totalN, error)= await GetTotalN(url);
         return (totalN, error);
     }
     public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDate(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
@@ -569,41 +508,22 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString("yyyy-MM-dd");
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
             string url = ApiurlHelper.FetchTotalNByCropIdAndAppDateAsyncAPI;
-
             if (organicManureId.HasValue)
             {
                 url += $"&organicManureID={organicManureId.Value}";
             }
-
             url = string.Format(url, HttpUtility.UrlEncode(cropId.ToString()), HttpUtility.UrlEncode(fromdate.ToString()), HttpUtility.UrlEncode(toDate.ToString()), HttpUtility.UrlEncode(confirm.ToString()));
-            var response = await httpClient.GetAsync(url);
-            var result = await response.Content.ReadAsStringAsync();
-            var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
+            (totalN, error) = await GetTotalN(url);
+
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalN, error);
     }
@@ -632,15 +552,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (cropType, error);
     }
@@ -668,16 +584,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (cropTypeLinking, error);
     }
@@ -709,15 +620,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (manureTypeIds, error);
     }
@@ -746,15 +653,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (manureTypeIds, error);
     }
@@ -765,9 +668,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         decimal totalN = 0;
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
             string url = ApiurlHelper.FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI;
-
             if (fertiliserId.HasValue)
             {
                 url += $"&fertiliserID={fertiliserId.Value}";
@@ -776,35 +677,17 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 url += $"&organicManureID={organicManureId.Value}";
             }
-
             url = string.Format(url, managementId, confirm);
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
+            (totalN, error) = await GetTotalN(url);
+
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalN, error);
     }
@@ -814,42 +697,22 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         decimal totalN = 0;
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-
             string url = string.Format(ApiurlHelper.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserAsyncAPI, cropId, confirm);
-
             if (fertiliserId.HasValue)
                 url += $"&fertiliserID={fertiliserId.Value}";
 
             if (organicManureId.HasValue)
                 url += $"&organicManureID={organicManureId.Value}";
 
-            var response = await httpClient.GetAsync(url);
-
-
-            var result = await response.Content.ReadAsStringAsync();
-            var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
+            (totalN, error) = await GetTotalN(url);
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalN, error);
     }
@@ -888,16 +751,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (isOrganicManureExist, error);
     }
@@ -926,16 +784,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (nitrogenUptakeResponse, error);
     }
@@ -964,16 +817,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (farmManureTypes, error);
     }
@@ -1002,15 +850,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (mannerCalculateNutrientResponse, error);
     }
@@ -1039,15 +883,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (soilTypeSoilTexture, error);
     }
@@ -1060,41 +900,21 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString("yyyy-MM-dd");
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
             string url = ApiurlHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI;
-
             if (organicManureId.HasValue)
             {
                 url += $"&organicManureID={organicManureId.Value}";
             }
-
             url = string.Format(url, fieldId, fromdate, toDate, confirm, isGreenFoodCompost);
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
+            (totalN, error) = await GetTotalN(url);
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalN, error);
     }
@@ -1107,39 +927,22 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString("yyyy-MM-dd");
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
             string url = ApiurlHelper.FetchTotalNBasedOnFieldIdAndAppDateAsyncAPI;
-
             if (organicManureId.HasValue)
             {
                 url += $"&organicManureID={organicManureId.Value}";
             }
-
             url = string.Format(url, fieldId, fromdate, toDate, confirm);
-            
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (!response.IsSuccessStatusCode)
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-            else
-            {
-                totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
-            }
+            (totalN, error) = await GetTotalN(url);
+
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalN, error);
     }
@@ -1168,15 +971,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (organicManure, error);
     }
@@ -1204,15 +1003,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (organicManures, error);
     }
@@ -1245,15 +1040,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
 
         return (message, error);
@@ -1282,15 +1073,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
 
         return (isFarmManureTypeExist, error);
@@ -1316,15 +1103,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
 
         return (organicResponse, error);
@@ -1356,15 +1139,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (organicManures, error);
     }
@@ -1375,34 +1154,17 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         decimal? totalN = null;
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchOragnicManureAvailableNByManagementPeriodIDAPI, HttpUtility.UrlEncode(managementPeriodID.ToString())));
+            string url = string.Format(ApiurlHelper.FetchOragnicManureAvailableNByManagementPeriodIDAPI, HttpUtility.UrlEncode(managementPeriodID.ToString()));
+            (totalN, error) = await GetTotalN(url);
 
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    totalN = responseWrapper?.Data?.TotalN;
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalN, error);
     }
@@ -1428,15 +1190,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (farmManureType, error);
     }
@@ -1462,15 +1220,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (closedPeriod, error);
     }
@@ -1481,42 +1235,21 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         bool isLivestockcManureExist = false;
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-
             string requestUrl = ApiurlHelper.FetchLivestockManureExistanceByDateRangeAsyncAPI;
-
             if (organicManureId.HasValue)
             {
                 requestUrl += $"&organicManureID={organicManureId.Value}";
             }
-
             requestUrl = string.Format(requestUrl, cropId, dateFrom, dateTo);
-
-            var response = await httpClient.GetAsync(requestUrl);
-            string result = await response.Content.ReadAsStringAsync();
-            var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                isLivestockcManureExist =
-                    responseWrapper?.Data?.exists?.ToObject<bool>() ?? false;
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper ?? new ResponseWrapper(), error);
-            }
+            (isLivestockcManureExist, error) = await CheckExistence(requestUrl);
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (isLivestockcManureExist, error);
     }
@@ -1553,16 +1286,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (totalRate, error);
     }
@@ -1573,43 +1301,82 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         bool isLivestockcManureExist = false;
         try
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-
             string requestUrl = ApiurlHelper.CheckGreenCompostExistanceByDateRangeAsyncAPI;
-
             if (organicManureId.HasValue)
             {
                 requestUrl += $"&organicManureID={organicManureId.Value}";
             }
-
             requestUrl = string.Format(requestUrl, fieldId, dateFrom, dateTo);
 
-            var response = await httpClient.GetAsync(requestUrl);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                isLivestockcManureExist =
-                    responseWrapper?.Data?.exists?.ToObject<bool>() ?? false;
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper ?? new ResponseWrapper(), error);
-            }
+            (isLivestockcManureExist,error)= await CheckExistence(requestUrl);
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-
+            error = HandleHttpRequestException(hre);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = HandleException(ex);
         }
         return (isLivestockcManureExist, error);
     }
+
+    private async Task<(bool, Error?)> CheckExistence(string requestUrl)
+    {
+        bool isLivestockcManureExist = false;
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(requestUrl);
+        string result = await response.Content.ReadAsStringAsync();
+        var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            isLivestockcManureExist =
+                responseWrapper?.Data?.exists?.ToObject<bool>() ?? false;
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper ?? new ResponseWrapper(), error);
+        }
+        return (isLivestockcManureExist, error);
+    }
+
+    public async Task<(decimal, Error?)> GetTotalN(string requestUrl)
+    {
+        Error? error = null;
+        decimal totalN = 0;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(requestUrl);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+        return (totalN,error);
+    }
+
+    private Error HandleHttpRequestException(HttpRequestException hre)
+    {
+        var error = new Error();
+        error.Message = Resource.MsgServiceNotAvailable;
+        _logger.LogError(hre, hre.Message);
+        return error;
+    }
+    private Error HandleException(Exception ex)
+    {
+        var error = new Error();
+        error.Message = ex.Message;
+        _logger.LogError(ex, ex.Message);
+        return error;
+    }
+
 }

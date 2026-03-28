@@ -6907,7 +6907,7 @@ namespace NMP.Portal.Controllers
             DateTime applicationDate = model.ApplicationDate.Value;
             int year = applicationDate.Year;
 
-            DateTime closedStartDate = DateTime.ParseExact($"{parts[0]} {year}","d MMM yyyy",CultureInfo.InvariantCulture);
+            DateTime closedStartDate = DateTime.ParseExact($"{parts[0]} {year}","d MMMM yyyy",CultureInfo.InvariantCulture);
 
             // Feb window
             string period = $"{parts[1]} to 14 February";
