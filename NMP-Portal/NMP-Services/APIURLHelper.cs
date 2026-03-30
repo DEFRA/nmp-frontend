@@ -78,7 +78,7 @@ internal static class ApiurlHelper
     public const string DeleteFarmByIdAPI = "farms/{0}";
     public const string AddFertiliserManuresAsyncAPI = "fertiliser-manures";
     public const string FetchIsPerennialByCropTypeIdAsyncAPI = "manner-crop-types/isPerennial/{0}";
-    public const string FetchTotalNBasedOnManIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";
+    public const string FetchTotalNBasedOnFieldIdAndAppDateAsyncAPI = "organic-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}&confirm={3}";
     public const string FetchCropTypeByFieldIdAndHarvestYearAsyncAPI = "crops/crop-type/{0}?year={1}&confirm={2}";
     public const string FetchCropTypeLinkingByCropTypeIdAsyncAPI = "crop-type-linkings/{0}";
     public const string FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI = "organic-manures/manure-type/{0}?year={1}&confirm={2}";
@@ -244,4 +244,9 @@ internal static class ApiurlHelper
     public const string FetchOrganicManureClosedPeriodAsyncAPI = "organic-manure/get-closed-period/{0}?fieldType={1}&harvestYear={2}&sowingDate={3}&countryId={4}&cropGroupId={5}&cropTypeId={6}&isPerennial={7}";
     public const string FetchFertiliserManureClosedPeriodAsyncAPI = "fertiliser-manures/get-closed-period/{0}?CropTypeId={1}";
     public const string FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI = "fertiliser-manures/get-closed-period/{0}?CropTypeId={1}&NvzId={2}";
+
+    public const string FetchLivestockManureExistanceByDateRangeAsyncAPI = "organic-manures/check-livestock-existence?cropId={0}&dateFrom={1}&dateTo={2}";
+
+    public const string FetchTotalApplicationRateByDateRangeAsyncAPI = "organic-manure/total-application-rate/{0}?startDate={1}&endDate={2}";
+    public const string CheckGreenCompostExistanceByDateRangeAsyncAPI = "organic-manure/check-green-compost/{0}?startDate={1}&endDate={2}";
 }

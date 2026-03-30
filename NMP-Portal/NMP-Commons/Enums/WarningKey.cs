@@ -15,6 +15,9 @@ namespace NMP.Commons.Enums
         [EnumMember(Value = "ORGANICMANURENFIELDLIMITCOMPOST")]
         OrganicManureNFieldLimitCompost,
 
+        [EnumMember(Value = "ORGANICMANURENFIELDLIMITCOMPOSTPAS")]
+        OrganicManureNFieldLimitCompostPAS,
+
         [EnumMember(Value = "ORGANICMANURENFIELDLIMITCOMPOSTMULCH")]
         OrganicManureNFieldLimitCompostMulch,
 
