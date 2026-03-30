@@ -4558,19 +4558,44 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         try
         {
             if (model.NumbersInJanuary == null &&
-                model.NumbersInFebruary == null &&
-                model.NumbersInMarch == null &&
-                model.NumbersInApril == null &&
-                model.NumbersInMay == null &&
-                model.NumbersInJune == null &&
-                model.NumbersInJuly == null &&
-                model.NumbersInAugust == null &&
-                model.NumbersInSeptember == null &&
-                model.NumbersInOctober == null &&
-                model.NumbersInNovember == null &&
-                model.NumbersInDecember == null)
+               model.NumbersInFebruary == null &&
+               model.NumbersInMarch == null &&
+               model.NumbersInApril == null &&
+               model.NumbersInMay == null &&
+               model.NumbersInJune == null &&
+               model.NumbersInJuly == null &&
+               model.NumbersInAugust == null &&
+               model.NumbersInSeptember == null &&
+               model.NumbersInOctober == null &&
+               model.NumbersInNovember == null &&
+               model.NumbersInDecember == null)
             {
                 ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
+            }
+            else
+            {
+                var monthMappings = new Dictionary<string, int?>
+                {
+                    { "NumbersInJanuary", model.NumbersInJanuary },
+                    { "NumbersInFebruary", model.NumbersInFebruary },
+                    { "NumbersInMarch", model.NumbersInMarch },
+                    { "NumbersInApril", model.NumbersInApril },
+                    { "NumbersInMay", model.NumbersInMay },
+                    { "NumbersInJune", model.NumbersInJune },
+                    { "NumbersInJuly",model.NumbersInJuly},
+                    { "NumbersInAugust", model.NumbersInAugust },
+                    { "NumbersInSeptember", model.NumbersInSeptember },
+                    { "NumbersInOctober",model.NumbersInOctober},
+                    { "NumbersInNovember", model.NumbersInNovember },
+                    { "NumbersInDecember", model.NumbersInDecember }
+                };
+                foreach (var field in monthMappings)
+                {
+                    if (field.Value < 0 || field.Value > 999999)
+                    {
+                        ValidateLiveStockMonth(field.Key);
+                    }
+                }
             }
             if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
             {
@@ -4590,7 +4615,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (!ModelState.IsValid)
             {
-
                 var monthMappings = new Dictionary<string, string>
                 {
                     { "NumbersInJanuary", string.Format(Resource.lblTheMonthsOf,Resource.lblJanuary) },
@@ -4606,7 +4630,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     { "NumbersInNovember", string.Format(Resource.lblTheMonthsOf,Resource.lblNovember) },
                     { "NumbersInDecember", string.Format(Resource.lblTheMonthsOf,Resource.lblDecember) }
                 };
-
                 foreach (var mapping in monthMappings)
                 {
                     if (ModelState.TryGetValue(mapping.Key, out var entry) &&
@@ -4638,6 +4661,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnLivestockNumbersMonthly"] = ex.Message;
             return View(model);
         }
+    }
+
+    private void ValidateLiveStockMonth(string key)
+    {
+        ModelState.AddModelError(
+            key,
+            string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999999)
+        );
     }
 
     [HttpGet]
@@ -4695,6 +4726,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (model.AverageNumber == null)
             {
                 ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor, model.Year));
+            }
+            else if (model.AverageNumber > 999999)
+            {
+                ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999999));
             }
             if (!ModelState.IsValid)
             {
