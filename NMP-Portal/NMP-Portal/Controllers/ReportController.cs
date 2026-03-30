@@ -4727,7 +4727,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor, model.Year));
             }
-            else if (model.AverageNumber > 999999)
+            else if (model.AverageNumber < 0||model.AverageNumber > 999999)
             {
                 ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999999));
             }
