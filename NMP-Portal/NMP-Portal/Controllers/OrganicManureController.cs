@@ -195,8 +195,7 @@ namespace NMP.Portal.Controllers
             if (!manIds.Any())
                 return null;
 
-            model.OrganicManures ??= new List<OrganicManureDataViewModel>();
-            model.OrganicManures.Clear();
+            ResetOrganicManures(model);
 
             int counter = 1;
             foreach (var id in manIds)
@@ -468,11 +467,7 @@ namespace NMP.Portal.Controllers
                             if (fieldList.Count > 0)
                             {
 
-                                var selectListItem = fieldList.Select(f => new SelectListItem
-                                {
-                                    Value = f.Id.ToString(),
-                                    Text = f.Name.ToString()
-                                }).ToList();
+                                var selectListItem = await BuildFieldSelectListAsync(fieldList);
                                 ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
                             }
                             return View(model);
@@ -482,14 +477,7 @@ namespace NMP.Portal.Controllers
                             if (fieldList.Count > 0)
                             {
                                 model.FieldList = fieldList.Select(x => x.Id.ToString()).ToList();
-                                if (model.OrganicManures == null)
-                                {
-                                    model.OrganicManures = new List<OrganicManureDataViewModel>();
-                                }
-                                if (model.OrganicManures.Count > 0)
-                                {
-                                    model.OrganicManures.Clear();
-                                }
+                                ResetOrganicManures(model);
                                 model.IsDoubleCropAvailable = false;
                                 foreach (string field in model.FieldList)
                                 {
@@ -514,28 +502,7 @@ namespace NMP.Portal.Controllers
                                 {
                                     if (managementIds.Count > 0)
                                     {
-                                        foreach (var manIds in managementIds)
-                                        {
-                                            var organicManure = new OrganicManureDataViewModel
-                                            {
-                                                ManagementPeriodID = manIds
-                                            };
-                                            if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
-                                            {
-                                                if (organicManureViewModel != null && organicManureViewModel.OrganicManures != null && organicManureViewModel.OrganicManures.Count > 0)
-                                                {
-                                                    for (int i = 0; i < organicManureViewModel.OrganicManures.Count; i++)
-                                                    {
-                                                        if (organicManureViewModel.OrganicManures[i].ManagementPeriodID == manIds)
-                                                        {
-                                                            organicManure = await BindDefoliationName(organicManure, organicManureViewModel, manIds, cropPlans, i);
-                                                        }
-                                                    }
-                                                }
-
-                                            }
-                                            model.OrganicManures.Add(organicManure);
-                                        }
+                                        await PopulateOrganicManuresAsync(model, managementIds, cropPlans, organicManureViewModel);
                                         model.DefoliationCurrentCounter = 0;
                                     }
                                 }
@@ -797,11 +764,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> fieldList, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
-                    var selectListItem = fieldList.Select(f => new SelectListItem
-                    {
-                        Value = f.Id.ToString(),
-                        Text = f.Name.ToString()
-                    }).ToList();
+                    var selectListItem = await BuildFieldSelectListAsync(fieldList);
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
                     if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                     {
@@ -879,37 +842,7 @@ namespace NMP.Portal.Controllers
                     {
                         if (managementIds.Count > 0)
                         {
-                            if (model.OrganicManures == null)
-                            {
-                                model.OrganicManures = new List<OrganicManureDataViewModel>();
-                            }
-                            if (model.OrganicManures.Count > 0)
-                            {
-                                model.OrganicManures.Clear();
-                            }
-
-                            foreach (var manIds in managementIds)
-                            {
-                                var organicManure = new OrganicManureDataViewModel
-                                {
-                                    ManagementPeriodID = manIds
-                                };
-                                model.OrganicManures.Add(organicManure);
-                                if (model.IsCheckAnswer && model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
-                                {
-                                    if (organicManureViewModel.OrganicManures != null && organicManureViewModel.OrganicManures.Count > 0)
-                                    {
-                                        for (int i = 0; i < organicManureViewModel.OrganicManures.Count; i++)
-                                        {
-                                            if (organicManureViewModel.OrganicManures[i].ManagementPeriodID == manIds)
-                                            {
-                                                organicManure = await BindDefoliationName(organicManure, organicManureViewModel, manIds, cropPlans, i);
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
+                            await PopulateOrganicManuresAsync(model, managementIds, cropPlans, organicManureViewModel);
 
                             if (model.IsCheckAnswer && model.OrganicManures.Count > 0)
                             {
@@ -10451,5 +10384,56 @@ namespace NMP.Portal.Controllers
 
             return result;
         }
+
+        
+        private async Task<List<SelectListItem>> BuildFieldSelectListAsync(List<CommonResponse> fieldList)
+        {
+            return fieldList
+                .Select(f => new SelectListItem
+                {
+                    Value = f.Id.ToString(),
+                    Text = f.Name
+                })
+                .OrderBy(x => x.Text)
+                .ToList();
+        }
+
+        private void ResetOrganicManures(OrganicManureViewModel model)
+        {
+            model.OrganicManures ??= new List<OrganicManureDataViewModel>();
+            model.OrganicManures.Clear();
+        }
+
+        private async Task PopulateOrganicManuresAsync(
+            OrganicManureViewModel model,
+            List<int> managementIds,
+            List<HarvestYearPlanResponse> cropPlans,
+            OrganicManureViewModel? previousModel = null)
+        {
+            ResetOrganicManures(model);
+
+            foreach (var manId in managementIds)
+            {
+                var organic = new OrganicManureDataViewModel
+                {
+                    ManagementPeriodID = manId
+                };
+
+                if (model.IsCheckAnswer && model.IsAnyCropIsGrass == true && previousModel?.OrganicManures != null)
+                {
+                    for (int i = 0; i < previousModel.OrganicManures.Count; i++)
+                    {
+                        if (previousModel.OrganicManures[i].ManagementPeriodID == manId)
+                        {
+                            organic = await BindDefoliationName(organic, previousModel, manId, cropPlans, i);
+                        }
+                    }
+                }
+
+                model.OrganicManures.Add(organic);
+            }
+        }
+
+
     }
 }
