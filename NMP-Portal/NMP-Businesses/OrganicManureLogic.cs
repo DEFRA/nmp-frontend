@@ -179,7 +179,11 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost() called");
         return await _organicManureService.FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(fieldId, startDate, endDate, confirm, isGreenFoodCompost, organicManureId);
     }
-
+    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDate(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedByFieldIdAppDate() called");
+        return await _organicManureService.FetchTotalNBasedByFieldIdAppDate(fieldId, startDate, endDate, confirm, organicManureId);
+    }
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchTotalNBasedOnManIdAndAppDate() called");
@@ -237,5 +241,21 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchOrganicManureClosedPeriod() called");
         return await _organicManureService.FetchOrganicManureClosedPeriod(organicClosedPeriodRequest);
     }
+    public async Task<(bool, Error)> FetchLivestockManureExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchLivestockManureExistanceByDateRange() called");
+        return await _organicManureService.FetchLivestockManureExistanceByDateRange(cropId, dateFrom, dateTo, organicManureId);
+    }
 
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchTotalApplicationRateByDateRange() called");
+        return await _organicManureService.FetchTotalApplicationRateByDateRange(cropId, dateFrom, dateTo, organicManureId, isPoultry);
+    }
+
+    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId)
+    {
+        _logger.LogTrace("OrganicManureLogic : CheckGreenCompostExistanceByDateRange() called");
+        return await _organicManureService.CheckGreenCompostExistanceByDateRange(fieldId, dateFrom, dateTo, organicManureId);
+    }
 }

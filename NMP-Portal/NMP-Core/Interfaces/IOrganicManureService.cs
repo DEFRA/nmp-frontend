@@ -37,6 +37,7 @@ public interface IOrganicManureService
     Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string jsonData);
     Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeId(int soilTypeId);
     Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(int fieldId, DateTime startDate, DateTime endDate, bool confirm,bool isGreenFoodCompost,int? organicManureId);
+    Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDate(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
     Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureById(int id);
     Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYear(int farmId, int year);
     Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds);
@@ -46,4 +47,7 @@ public interface IOrganicManureService
     Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID);
     Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeById(int id);
     Task<(string?, Error?)> FetchOrganicManureClosedPeriod(OrganicClosedPeriodRequest organicClosedPeriodRequest);
+    Task<(bool, Error)> FetchLivestockManureExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId);
+    Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry);
+    Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId);
 }

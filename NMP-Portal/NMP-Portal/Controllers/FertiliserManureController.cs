@@ -2672,7 +2672,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         int? fieldId = model.FieldID ?? null;
         Field field = await _fieldLogic.FetchFieldByFieldId(fieldId??0);
         (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, field.NVZProgrammeID);
-        bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
+        bool isWithinClosedPeriod = warning.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
 
         bool isScotland = model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
 
@@ -2708,7 +2708,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 endPeriod = periods[1];
                 warningPeriod = $"{startPeriod} to {endPeriod}";
             }
-            bool isWithinWarningPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
+            bool isWithinWarningPeriod = warning.IsApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
             if (isWithinWarningPeriod)
             {
@@ -2745,7 +2745,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
             HashSet<int> brassicaCrops = BrassicaCrops();
             string closedPeriod = warningMessage.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
-            bool isWithinClosedPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
+            bool isWithinClosedPeriod = warningMessage.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
             string startPeriod = string.Empty;
             string endPeriod = string.Empty;
             string[] periods = closedPeriod.Split(" to ");
@@ -2840,7 +2840,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 endPeriod = Resource.lbl31October;
                 warningPeriod = $"{startPeriod} to {endPeriod}";
             }
-            bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
+            bool isWithinWarningPeriod = warningMessage.IsApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
             DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31, 00, 00, 00, DateTimeKind.Unspecified);
             decimal PreviousApplicationsNitrogen = 0;
