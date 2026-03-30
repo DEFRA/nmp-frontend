@@ -37,6 +37,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly IWarningLogic _warningLogic = warningLogic;
     private readonly IMannerLogic _mannerLogic = mannerLogic;
     private readonly string _error = "Error";
+    private readonly string _numberInJanuary = "NumbersInJanuary";
     public IActionResult Index()
     {
         _logger.LogTrace($"Report Controller : Index() action called");
@@ -4570,13 +4571,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                model.NumbersInNovember == null &&
                model.NumbersInDecember == null)
             {
-                ModelState.AddModelError("NumbersInJanuary", Resource.MsgEnterAtLeastOneValue);
+                ModelState.AddModelError(_numberInJanuary, Resource.MsgEnterAtLeastOneValue);
             }
             else
             {
                 var monthMappings = new Dictionary<string, int?>
                 {
-                    { "NumbersInJanuary", model.NumbersInJanuary },
+                    { _numberInJanuary, model.NumbersInJanuary },
                     { "NumbersInFebruary", model.NumbersInFebruary },
                     { "NumbersInMarch", model.NumbersInMarch },
                     { "NumbersInApril", model.NumbersInApril },
@@ -4617,7 +4618,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 var monthMappings = new Dictionary<string, string>
                 {
-                    { "NumbersInJanuary", string.Format(Resource.lblTheMonthsOf,Resource.lblJanuary) },
+                    { _numberInJanuary, string.Format(Resource.lblTheMonthsOf,Resource.lblJanuary) },
                     { "NumbersInFebruary", string.Format(Resource.lblTheMonthsOf,Resource.lblFebruary) },
                     { "NumbersInMarch", string.Format(Resource.lblTheMonthsOf,Resource.lblMarch) },
                     { "NumbersInApril", string.Format(Resource.lblTheMonthsOf,Resource.lblApril) },
@@ -5472,7 +5473,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             model.NumbersInNovember == null &&
                             model.NumbersInDecember == null)
                         {
-                            ModelState.AddModelError("NumbersInJanuary", string.Format(Resource.MsgNumbersForEachMonthNotSet, model.LivestockGroupName, Resource.lblJanuary, model.Year));
+                            ModelState.AddModelError(_numberInJanuary, string.Format(Resource.MsgNumbersForEachMonthNotSet, model.LivestockGroupName, Resource.lblJanuary, model.Year));
                         }
 
                     }
