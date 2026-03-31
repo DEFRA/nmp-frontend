@@ -38,9 +38,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     {
         _logger.LogTrace("Fetching list of countries");
         (List<Country> countryList, _) = await _farmService.FetchCountryAsync();        
-        return countryList;
-        //Remove scotland
-        //return countryList.Where(c => c.ID != (int)FarmCountry.Scotland).OrderBy(c => c.Name).ToList();
+        return countryList;        
     }
 
     public async Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year)
