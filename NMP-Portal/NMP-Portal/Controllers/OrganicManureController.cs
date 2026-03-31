@@ -10282,72 +10282,83 @@ namespace NMP.Portal.Controllers
 
         private static void ApplyCommonManureProperties(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, int index = 0)
         {
-            if (model.ApplicationDate.HasValue)
-                organicManure.ApplicationDate = model.ApplicationDate.Value;
-
-            if (model.ApplicationMethod.HasValue)
-                organicManure.ApplicationMethodID = model.ApplicationMethod.Value;
-
-            if (model.ApplicationRate.HasValue)
-                organicManure.ApplicationRate = model.ApplicationRate.Value;
-
-            if (model.Area.HasValue)
-                organicManure.AreaSpread = model.Area.Value;
-
-            if (model.Quantity.HasValue)
-                organicManure.ManureQuantity = model.Quantity.Value;
+            SetIfHasValue(model.ApplicationMethod, v => organicManure.ApplicationMethodID = v);
+            SetIfHasValue(model.ApplicationRate, v => organicManure.ApplicationRate = v);
+            SetIfHasValue(model.Area, v => organicManure.AreaSpread = v);
+            SetIfHasValue(model.Quantity, v => organicManure.ManureQuantity = v);
+            SetIfHasValue(model.TotalRainfall, v => organicManure.Rainfall = v);
 
             organicManure.ManureTypeID = model.ManureTypeId.Value;
             organicManure.ManureTypeName = model.OtherMaterialName;
 
-            if (model.TotalRainfall.HasValue)
-                organicManure.Rainfall = model.TotalRainfall.Value;
+            ApplyNutrientValues(model, organicManure);
 
-            // Nutrient logic
-            if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) &&
-                model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
+            SetIfHasValue(model.IncorporationDelay, v => organicManure.IncorporationDelayID = v);
+            SetIfHasValue(model.IncorporationMethod, v => organicManure.IncorporationMethodID = v);
+            SetIfHasValue(model.SoilDrainageEndDate, v => organicManure.EndOfDrain = v);
+            SetIfHasValue(model.WindspeedID, v => organicManure.WindspeedID = v);
+            SetIfHasValue(model.MoistureTypeId, v => organicManure.MoistureID = v);
+            SetIfHasValue(model.RainfallWithinSixHoursID, v => organicManure.RainfallWithinSixHoursID = v);
+
+            ApplyAutumnCropNitrogen(model, organicManure, index);
+        }
+
+        private static void SetIfHasValue<T>(T? value, Action<T> setter) where T : struct
+        {
+            if (value.HasValue)
             {
-                organicManure.DryMatterPercent = model.DryMatterPercent.Value;
-                organicManure.K2O = model.K2O.Value;
-                organicManure.MgO = model.MgO.Value;
-                organicManure.N = model.N.Value;
-                organicManure.NH4N = model.NH4N.Value;
-                organicManure.NO3N = model.NO3N.Value;
-                organicManure.P2O5 = model.P2O5.Value;
-                organicManure.SO3 = model.SO3.Value;
-                organicManure.UricAcid = model.UricAcid.Value;
+                setter(value.Value);
             }
-            else if (model.ManureType != null)
+        }
+
+        private static void ApplyNutrientValues(OrganicManureViewModel model, OrganicManureDataViewModel organicManure)
+        {
+            if (IsManualNutrientEntry(model))
             {
-                organicManure.DryMatterPercent = model.ManureType.DryMatter.Value;
-                organicManure.K2O = model.ManureType.K2O.Value;
-                organicManure.MgO = model.ManureType.MgO.Value;
-                organicManure.N = model.ManureType.TotalN.Value;
-                organicManure.NH4N = model.ManureType.NH4N.Value;
-                organicManure.NO3N = model.ManureType.NO3N.Value;
-                organicManure.P2O5 = model.ManureType.P2O5.Value;
-                organicManure.SO3 = model.ManureType.SO3.Value;
-                organicManure.UricAcid = model.ManureType.Uric.Value;
+                SetManualNutrients(model, organicManure);
+                return;
             }
 
-            if (model.IncorporationDelay.HasValue)
-                organicManure.IncorporationDelayID = model.IncorporationDelay.Value;
+            if (model.ManureType != null)
+            {
+                SetDefaultNutrients(model.ManureType, organicManure);
+            }
+        }
 
-            if (model.IncorporationMethod.HasValue)
-                organicManure.IncorporationMethodID = model.IncorporationMethod.Value;
+        private static bool IsManualNutrientEntry(OrganicManureViewModel model)
+        {
+            return !string.IsNullOrWhiteSpace(model.DefaultNutrientValue) &&
+                   model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+        }
 
-            if (model.SoilDrainageEndDate.HasValue)
-                organicManure.EndOfDrain = model.SoilDrainageEndDate.Value;
+        private static void SetManualNutrients(OrganicManureViewModel model, OrganicManureDataViewModel organicManure)
+        {
+            organicManure.DryMatterPercent = model.DryMatterPercent;
+            organicManure.K2O = model.K2O;
+            organicManure.MgO = model.MgO;
+            organicManure.N = model.N;
+            organicManure.NH4N = model.NH4N;
+            organicManure.NO3N = model.NO3N;
+            organicManure.P2O5 = model.P2O5;
+            organicManure.SO3 = model.SO3;
+            organicManure.UricAcid = model.UricAcid;
+        }
 
-            if (model.WindspeedID.HasValue)
-                organicManure.WindspeedID = model.WindspeedID.Value;
+        private static void SetDefaultNutrients(dynamic manureType, OrganicManureDataViewModel organicManure)
+        {
+            organicManure.DryMatterPercent = manureType.DryMatter.Value;
+            organicManure.K2O = manureType.K2O.Value;
+            organicManure.MgO = manureType.MgO.Value;
+            organicManure.N = manureType.TotalN.Value;
+            organicManure.NH4N = manureType.NH4N.Value;
+            organicManure.NO3N = manureType.NO3N.Value;
+            organicManure.P2O5 = manureType.P2O5.Value;
+            organicManure.SO3 = manureType.SO3.Value;
+            organicManure.UricAcid = manureType.Uric.Value;
+        }
 
-            if (model.MoistureTypeId.HasValue)
-                organicManure.MoistureID = model.MoistureTypeId.Value;
-
-            if (model.RainfallWithinSixHoursID.HasValue)
-                organicManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
-
+        private static void ApplyAutumnCropNitrogen(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, int index)
+        {
             if (model.AutumnCropNitrogenUptakes != null &&
                 index < model.AutumnCropNitrogenUptakes.Count)
             {
@@ -10355,6 +10366,8 @@ namespace NMP.Portal.Controllers
                     model.AutumnCropNitrogenUptakes[index].AutumnCropNitrogenUptake;
             }
         }
+
+
         private async Task<List<AutumnCropNitrogenUptakeDetail>> BuildAutumnCropNitrogenUptakeAsync(OrganicManureViewModel model)
         {
             var result = new List<AutumnCropNitrogenUptakeDetail>();

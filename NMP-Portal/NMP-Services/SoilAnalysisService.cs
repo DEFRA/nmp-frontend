@@ -69,13 +69,13 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         }
         catch (HttpRequestException hre)
         {
-            error = error ?? new Error();
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre,hre.Message);
         }
         catch (Exception ex)
         {
-            error = error ?? new Error();
+            error ??= new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -110,13 +110,13 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         }
         catch (HttpRequestException hre)
         {
-            error = error ?? new Error();
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error = error ?? new Error();
+            error ??= new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -144,13 +144,13 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         }
         catch (HttpRequestException hre)
         {
-            error = error ?? new Error();
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error = error ?? new Error();
+            error ??= new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
