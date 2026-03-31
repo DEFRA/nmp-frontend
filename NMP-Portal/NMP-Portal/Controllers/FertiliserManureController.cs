@@ -2296,7 +2296,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                             (model, error) = await IsClosedPeriodWarningMessageShow(model, crop.CropTypeID.Value);
                                                         }
                                                         if (model.N > 0)
-                                                        {                                                            
+                                                        {
                                                             (model, error) = await IsNitrogenExceedWarning(model, fertiliser.ManagementPeriodID, crop.CropTypeID.Value, model.N.Value, startDate, endDate, cropType, false, fieldId.Value);
                                                         }
 
@@ -2875,7 +2875,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     isResidueGroupThree = true;
                 }
             }
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod && ((model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? (isResidueGroupOne || isResidueGroupTwo || isResidueGroupThree) : true))
+            bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
+            bool hasValidResidue = isResidueGroupOne || isResidueGroupTwo || isResidueGroupThree;
+
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape
+                && isWithinWarningPeriod
+                && (!isScotland || hasValidResidue))
             {
                 bool isNitrogenRateExceeded = false;
 
@@ -2905,17 +2910,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (isResidueGroupOne && ((PreviousApplicationsNitrogen + model.N.Value) > 10))
                     {
                         isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 10) : null;                        
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 10) : null;
                     }
                     else if (isResidueGroupTwo && ((PreviousApplicationsNitrogen + model.N.Value) > 20))
                     {
                         isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;                        
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;
                     }
                     else if (isResidueGroupThree && ((PreviousApplicationsNitrogen + model.N.Value) > 30))
                     {
                         isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 30) : null;                        
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 30) : null;
                     }
 
                     if (isNitrogenRateExceeded)

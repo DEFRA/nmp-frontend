@@ -44,13 +44,13 @@ namespace NMP.Services
             }
             catch (HttpRequestException hre)
             {
-                error ??= new Error();
+                error = new Error();
                 error.Message = Resource.MsgServiceNotAvailable;
                 _logger.LogError(hre, hre.Message);
             }
             catch (Exception ex)
             {
-                error ??= new Error();
+                error = new Error();
                 error.Message = ex.Message;
                 _logger.LogError(ex, ex.Message);
             }
