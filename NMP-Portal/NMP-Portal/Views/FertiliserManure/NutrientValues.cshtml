@@ -223,7 +223,7 @@
                         {
                             @* <div class="govuk-notification-banner__content">*@
                             <p class="govuk-notification-banner__heading">
-                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England || Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                                 {
                                     @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
                                 }
@@ -249,7 +249,7 @@
                             <govuk-details>
                                 <govuk-details-summary>
 
-                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England || Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                                     {
                                         @Resource.lblMoreAboutTheseNVZRules
                                     }

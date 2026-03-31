@@ -76,7 +76,11 @@ namespace NMP.Commons.Enums
         ManureSlurryMaxApplicationRate,
 
         [EnumMember(Value = "MANURESPOULTRYMANUREMAXAPPLICATIONRATE")]
-        ManuresPoultryManureMaxApplicationRate
+        ManuresPoultryManureMaxApplicationRate,
+
+        [EnumMember(Value = "INORGNMAXRATERESIDUEGROUP")]
+        InOrgNMAXRateResidueGroup
+
     }
 
 }
