@@ -144,6 +144,7 @@ internal static class ApiurlHelper
     public const string FetchAllSoilAnalysesMethodAsyncAPI = "soil-analyses-method";
     public const string FetchPscIndexeByIdAsyncAPI = "psc-indexes/{0}";
     public const string FetchAllSoilAnalysesMethodByIdAsyncAPI = "soil-analyses-method/{0}";
+    public const string FetchRecommendationByManagementPeriodIdAsyncAPI = "recommendations/{0}";
 
     //Manner APi Url
     public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";

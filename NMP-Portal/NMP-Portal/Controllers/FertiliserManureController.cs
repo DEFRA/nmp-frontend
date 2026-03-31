@@ -522,7 +522,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             foreach (string field in model.FieldList)
                             {
                                 List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
-                                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList, true);                                
+                                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field), fieldList, true);
                             }
 
                             string fieldIds = string.Join(",", model.FieldList);
@@ -1923,6 +1923,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     model.FarmName = farm?.Name;
                     model.FarmCountryId = farm?.CountryID;
+                    model.FarmRB209CountryID = farm?.RB209CountryID;
                 }
 
                 if (decryptedId > 0)
@@ -2295,7 +2296,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                             (model, error) = await IsClosedPeriodWarningMessageShow(model, crop.CropTypeID.Value);
                                                         }
                                                         if (model.N > 0)
-                                                        {
+                                                        {                                                            
                                                             (model, error) = await IsNitrogenExceedWarning(model, fertiliser.ManagementPeriodID, crop.CropTypeID.Value, model.N.Value, startDate, endDate, cropType, false, fieldId.Value);
                                                         }
 
@@ -2855,27 +2856,78 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             //warning excel sheet row no. 26
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
+            bool isResidueGroupOne = false;
+            bool isResidueGroupTwo = false;
+            bool isResidueGroupThree = false;
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (Recommendation? recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
+                if (recommendation != null && recommendation.NIndex == 1.ToString())
+                {
+                    isResidueGroupOne = true;
+                }
+                if (recommendation != null && recommendation.NIndex == 2.ToString())
+                {
+                    isResidueGroupTwo = true;
+                }
+                if (recommendation != null && recommendation.NIndex == 3.ToString())
+                {
+                    isResidueGroupThree = true;
+                }
+            }
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod && ((model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? (isResidueGroupOne || isResidueGroupTwo || isResidueGroupThree) : true))
             {
                 bool isNitrogenRateExceeded = false;
 
-                if ((PreviousApplicationsNitrogen + model.N.Value) > 30)
+                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    isNitrogenRateExceeded = true;
+                    if ((PreviousApplicationsNitrogen + model.N.Value) > 30)
+                    {
+                        isNitrogenRateExceeded = true;
+                    }
+
+                    if (isNitrogenRateExceeded)
+                    {
+                        WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateOSR.ToString());
+
+                        model.IsNitrogenExceedWarning = true;
+                        model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
+                        model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
+                        model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
+                        model.ClosedPeriodNitrogenExceedWarningPara1 = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
+                        model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod) : null;
+                        model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                    }
                 }
-
-                if (isNitrogenRateExceeded)
+                else
                 {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateOSR.ToString());
+                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InOrgNMAXRateResidueGroup.ToString());
+                    if (isResidueGroupOne && ((PreviousApplicationsNitrogen + model.N.Value) > 10))
+                    {
+                        isNitrogenRateExceeded = true;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 10) : null;                        
+                    }
+                    else if (isResidueGroupTwo && ((PreviousApplicationsNitrogen + model.N.Value) > 20))
+                    {
+                        isNitrogenRateExceeded = true;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;                        
+                    }
+                    else if (isResidueGroupThree && ((PreviousApplicationsNitrogen + model.N.Value) > 30))
+                    {
+                        isNitrogenRateExceeded = true;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 30) : null;                        
+                    }
 
-                    model.IsNitrogenExceedWarning = true;
-                    model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                    model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                    model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                    model.ClosedPeriodNitrogenExceedWarningPara1 = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                    model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod) : null;
-                    model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
-
+                    if (isNitrogenRateExceeded)
+                    {
+                        model.IsNitrogenExceedWarning = true;
+                        model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
+                        model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
+                        model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
+                        model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
+                        model.ClosedPeriodNitrogenExceedWarningPara2 = warningResponse.Para2;
+                        model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                    }
                 }
             }
             //warning excel sheet row no. 27
