@@ -2730,6 +2730,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         Error? error = null;
         decimal totalNitrogen = 0;
+        model.IsNitrogenExceedWarning = false;
         //if we are coming for update then we will exclude the fertiliserId.
         if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
         {
@@ -2838,7 +2839,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (periods.Length == 2)
             {
                 startPeriod = periods[0];
-                endPeriod = Resource.lbl31October;
+                endPeriod = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? endDate.ToString("dd MMMM") : Resource.lbl31October;
                 warningPeriod = $"{startPeriod} to {endPeriod}";
             }
             bool isWithinWarningPeriod = warningMessage.IsApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
@@ -2907,17 +2908,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 else
                 {
                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InOrgNMAXRateResidueGroup.ToString());
-                    if (isResidueGroupOne && ((PreviousApplicationsNitrogen + model.N.Value) > 10))
+                    if (isResidueGroupOne && (totalNitrogen > 10))
                     {
                         isNitrogenRateExceeded = true;
                         warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 10) : null;
                     }
-                    else if (isResidueGroupTwo && ((PreviousApplicationsNitrogen + model.N.Value) > 20))
+                    else if (isResidueGroupTwo && (totalNitrogen > 20))
                     {
                         isNitrogenRateExceeded = true;
                         warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;
                     }
-                    else if (isResidueGroupThree && ((PreviousApplicationsNitrogen + model.N.Value) > 30))
+                    else if (isResidueGroupThree && (totalNitrogen > 30))
                     {
                         isNitrogenRateExceeded = true;
                         warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 30) : null;
