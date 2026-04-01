@@ -165,7 +165,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                     }
                                     else if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitScotland != null).ToList();
+                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
                                     }
                                     cropTypeList = cropTypeList
                                     .Where(crop => cropTypeLinking.
@@ -419,7 +419,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 }
                                 else if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                 {
-                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitScotland != null).ToList();
+                                    cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
                                 }
                                 cropTypeList = cropTypeList
                                 .Where(crop => cropTypeLinking
@@ -7021,7 +7021,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return cropTypeLinkingResponse.NMaxLimitWales ?? 0;
 
             case NMP.Commons.Enums.FarmCountry.Scotland:
-                return cropTypeLinkingResponse.NMaxLimitScotland ?? 0;
+                return cropTypeLinkingResponse.NMaxLimitEngland ?? 0;
 
             default:
                 return 0;
