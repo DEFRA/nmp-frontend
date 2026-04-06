@@ -9,7 +9,7 @@ namespace NMP.Portal.Helpers
         public int NMaxLimit(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId,
             int potentialCut, bool hasSpecialManure, int? defoliationSequenceId)
         {
-            
+
             switch (cropTypeId)
             {
                 case (int)CropTypes.WinterWheat:
@@ -41,8 +41,8 @@ namespace NMP.Portal.Helpers
                     nmaxLimit += Functions.ApplyYieldBonus(yield, 3.5m, 0.1m, 6);
                     break;
 
-                case (int)CropTypes.Grass:                    
-                        nmaxLimit += Functions.ApplyPotentialCutBonus(potentialCut, defoliationSequenceId);                   
+                case (int)CropTypes.Grass:
+                    nmaxLimit += Functions.ApplyPotentialCutBonus(potentialCut, defoliationSequenceId);
                     break;
             }
 
@@ -54,84 +54,151 @@ namespace NMP.Portal.Helpers
             return nmaxLimit;
         }
 
-        public int NMaxLimitScotland(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut, bool hasSpecialManure, int? defoliationSequenceId, int? rainfall) 
+        public decimal NMaxLimitScotland(decimal nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut, int? defoliationSequenceId, int? rainfall, int residueGroup)
         {
-            nmaxLimit += GetCropSpecificAdjustment(cropTypeId, yield, cropInfo1);
+            nmaxLimit += GetCropSpecificAdjustmentScotland(cropTypeId, yield, cropInfo1);
 
-            nmaxLimit += GetRainfallAdjustment(cropTypeId, rainfall);
-
-            nmaxLimit += GetGrassAdjustment(cropTypeId, potentialCut, defoliationSequenceId);
-
-            if (hasSpecialManure && Functions.IsManureBonusCrop(cropTypeId))
+            int[] eligibleCropsForRainfallAdjustment =
             {
-                nmaxLimit += 80;
+                (int)CropTypes.WinterWheat,
+                (int)CropTypes.WholecropWinterWheat,
+
+                (int)CropTypes.WinterBarley,
+                (int)CropTypes.WholecropWinterBarley,
+
+                (int)CropTypes.SpringWheat,
+                (int)CropTypes.WholecropSpringWheat,
+                (int)CropTypes.WheatSpringUndersown,
+
+                (int)CropTypes.SpringBarley,
+                (int)CropTypes.WholecropSpringBarley,
+                (int)CropTypes.BarleySpringUndersown,
+
+                (int)CropTypes.WinterOats,
+                (int)CropTypes.ForageWinterOats,
+
+                (int)CropTypes.SpringOats,
+                (int)CropTypes.ForageSpringOats,
+                (int)CropTypes.OatsSpringUndersown,
+
+                (int)CropTypes.PotatoVarietyGroup1,
+                (int)CropTypes.PotatoVarietyGroup2,
+                (int)CropTypes.PotatoVarietyGroup3,
+                (int)CropTypes.PotatoVarietyGroup4,
+
+                (int)CropTypes.WinterOilseedRape,
+
+                (int)CropTypes.SpringRye,
+                (int)CropTypes.ForageSpringRye,
+
+                (int)CropTypes.SpringTriticale,
+                (int)CropTypes.ForageSpringTriticale,
+                (int)CropTypes.TriticaleSpringUndersown,
+
+
+            };
+
+            if (eligibleCropsForRainfallAdjustment.Contains(cropTypeId))
+            {
+                nmaxLimit += GetRainfallAdjustment(residueGroup, rainfall, soilType);
             }
 
             return nmaxLimit;
         }
 
-        private int GetCropSpecificAdjustment(int cropTypeId, decimal? yield, int? cropInfo1)
+        private decimal GetCropSpecificAdjustmentScotland(int cropTypeId, decimal? yield, int? cropInfo1)
         {
-            int adjustment = 0;
+            decimal adjustment = 0;
 
             switch (cropTypeId)
             {
                 case (int)CropTypes.WinterWheat:
+                case (int)CropTypes.WholecropWinterWheat:
                     if (cropInfo1 == (int)CropInfoOne.Milling)
                     {
                         adjustment += 40;
                     }
 
-                    adjustment += Functions.ApplyYieldBonus(yield, 8.0m, 0.1m, 2);
+                    adjustment += Functions.ApplyYieldBonusScotland(yield, 8.0m, 0.1m, 2);
                     break;
 
                 case (int)CropTypes.WinterBarley:
-                    adjustment += Functions.ApplyYieldBonus(yield, 6.5m, 0.1m, 2);
+                case (int)CropTypes.WholecropWinterBarley:
+                    adjustment += Functions.ApplyYieldBonusScotland(yield, 6.5m, 0.1m, 1.5m);
                     break;
 
                 case (int)CropTypes.SpringWheat:
-                    adjustment += Functions.ApplyYieldBonus(yield, 7.0m, 0.1m, 2);
+                case (int)CropTypes.WholecropSpringWheat:
+                case (int)CropTypes.WheatSpringUndersown:
+                    if (cropInfo1 == (int)CropInfoOne.Milling)
+                    {
+                        adjustment += 40;
+                    }
+                    adjustment += Functions.ApplyYieldBonusScotland(yield, 7.0m, 0.1m, 2);
                     break;
 
                 case (int)CropTypes.SpringBarley:
-                    adjustment += Functions.ApplyYieldBonus(yield, 5.5m, 0.1m, 2);
+                case (int)CropTypes.WholecropSpringBarley:
+                case (int)CropTypes.BarleySpringUndersown:
+                    if (cropInfo1 == (int)CropInfoOne.HighNGrainDistilling)
+                    {
+                        adjustment += 15;
+                    }
+                    adjustment += Functions.ApplyYieldBonusScotland(yield, 5.5m, 0.1m, 1.5m);
+                    break;
+
+                case (int)CropTypes.WinterOats:
+                case (int)CropTypes.ForageWinterOats:
+
+                    adjustment += Functions.ApplyYieldBonusScotland(yield, 6.0m, 0.1m, 1.5m);
+                    break;
+
+                case (int)CropTypes.SpringOats:
+                case (int)CropTypes.ForageSpringOats:
+                case (int)CropTypes.OatsSpringUndersown:
+
+                    adjustment += Functions.ApplyYieldBonusScotland(yield, 5.0m, 0.1m, 1.5m);
                     break;
 
                 case (int)CropTypes.WinterOilseedRape:
-                    adjustment += Functions.ApplyYieldBonus(yield, 3.5m, 0.1m, 6);
+                    if (yield > 4.0m)
+                        adjustment += 30;
                     break;
             }
 
             return adjustment;
         }
-        private int GetRainfallAdjustment(int cropTypeId, int? rainfall)
+
+
+        private int GetRainfallAdjustment(int nResGroup, decimal? winterRainfall, string soilType)
         {
-            if (!rainfall.HasValue)
-                return 0;
+
+            bool isSandySoil = soilType == "Sands"
+                               || soilType == "Shallow"
+                               || soilType == "Sandy loams";
+
+            bool isOtherSoil = soilType == "Other mineral"
+                               || soilType == "Humose"
+                               || soilType == "Peaty";
 
             int adjustment = 0;
 
-            // Example logic (replace with actual Excel rules)
-            if (rainfall > 700 && rainfall <= 1000)
+            if (isSandySoil)
             {
-                adjustment += 20;
+                if (nResGroup == 2)
+                    adjustment = 10;
+                else if (nResGroup >= 3 && nResGroup <= 6)
+                    adjustment = 20;
             }
-            else if (rainfall > 1000)
+            else if (isOtherSoil)
             {
-                adjustment += 40;
+                if (nResGroup >= 2 && nResGroup <= 6)
+                    adjustment = 10;
             }
 
             return adjustment;
         }
-        private int GetGrassAdjustment(int cropTypeId, int potentialCut, int? defoliationSequenceId)
-        {
-            if (cropTypeId == (int)CropTypes.Grass)
-            {
-                return Functions.ApplyPotentialCutBonus(potentialCut, defoliationSequenceId);
-            }
 
-            return 0;
-        }
 #pragma warning restore S107
     }
 }
