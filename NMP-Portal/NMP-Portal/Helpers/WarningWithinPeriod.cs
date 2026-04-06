@@ -496,8 +496,8 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted:
                     case (int)NMP.Commons.Enums.CropTypes.KaleGrazed:
                     case (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed:
-                    case (int)NMP.Commons.Enums.CropTypes.SwedesGrazed:
-                    case (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted:
+                    case (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed:
+                    case (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted:
                     case (int)NMP.Commons.Enums.CropTypes.BrusselSprouts:
                     case (int)NMP.Commons.Enums.CropTypes.Cabbage:
                     case (int)NMP.Commons.Enums.CropTypes.Calabrese:

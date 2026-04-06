@@ -155,33 +155,38 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropLogic.FetchCropTypeLinking();
                                 if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
                                 {
-                                    if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                                    if (farm.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                        if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.England)
+                                        {
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
+                                        }
+                                        else if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                        {
+                                            cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
+                                        }
+                                        cropTypeList = cropTypeList
+                                        .Where(crop => cropTypeLinking.
+                                        Any(link => link.CropTypeId == crop.CropTypeID)
+                                        && (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass
+                                             || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+                                        )
+                                        .DistinctBy(x => x.CropTypeID)
+                                        .ToList();
                                     }
-                                    else if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                                    else
                                     {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitWales != null).ToList();
-                                    }
-                                    else if (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
-                                    {
-                                        cropTypeLinking = cropTypeLinking.Where(x => x.NMaxLimitEngland != null).ToList();
-                                    }
-                                    cropTypeList = cropTypeList
-                                    .Where(crop => cropTypeLinking.
-                                    Any(link => link.CropTypeId == crop.CropTypeID)
-                                    && (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass
-                                         || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
-                                    )
-                                    .DistinctBy(x => x.CropTypeID)
-                                    .ToList();
+                                        RemoveCropsForScotland(cropTypeList);
+                                        //fetch data from ScotlandNMaxValues
+                                        List<int> ScotlandNMaxValues = new List<int>();
 
+                                    }
 
                                     if (cropTypeList.Count > 0)
                                     {
                                         //grouping of same type crops into one crop for nmax reporting
 
-                                        var cropGroups = GetNmaxReportCropGroups();
+                                        var cropGroups = (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
                                         List<CropTypeResponse> cropTypes = await _fieldLogic.FetchAllCropTypes();
 
                                         var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
@@ -430,7 +435,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 if (cropTypeList.Count > 0)
                                 {
                                     //grouping of same type crops into one crop for nmax reporting
-                                    var cropGroups = GetNmaxReportCropGroups();
+                                    var cropGroups = (farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
 
                                     List<CropTypeResponse> cropTypes = await _fieldLogic.FetchAllCropTypes();
                                     var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
@@ -917,7 +922,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 if (harvestYearPlanResponse.Count > 0)
                 {
                     // Get your dictionary of groups
-                    var cropGroups = GetNmaxReportCropGroups();
+                    var cropGroups = (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
                     if (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
                     {
                         RemoveVegetableGroups(cropGroups);
@@ -1262,7 +1267,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nmaxLimit, error);
     }
-    
+
     private static string ShorthandDefoliationSequence(List<string> data)
     {
         if (data == null || data.Count == 0)
@@ -3063,7 +3068,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.MgO = null;
             model.NO3N = null;
 
-            ReportViewModel? reportViewModel = GetReportDataFromSession();            
+            ReportViewModel? reportViewModel = GetReportDataFromSession();
             if (reportViewModel != null && (!string.IsNullOrWhiteSpace(reportViewModel.DefaultNutrientValue)))
             {
                 if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && (model.DefaultNutrientValue == Resource.lblYesUseTheseValues || model.DefaultNutrientValue == Resource.lblYes))
@@ -5083,7 +5088,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-            var cattle = (int)NMP.Commons.Enums.LivestockGroup.Cattle;            
+            var cattle = (int)NMP.Commons.Enums.LivestockGroup.Cattle;
             var sheep = (int)NMP.Commons.Enums.LivestockGroup.Sheep;
             var goatsDeerOrHorses = (int)NMP.Commons.Enums.LivestockGroup.GoatsDeerOrHorses;
             if (!string.IsNullOrWhiteSpace(livestockId))
@@ -5548,12 +5553,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         _logger.LogTrace($"Report Controller : ManageLivestock() action called");
         ReportViewModel model = new ReportViewModel();
-        
+
         if (HttpContext.Session.Keys.Contains("LivestockDataBeforeUpdate"))
         {
             HttpContext.Session.Remove("LivestockDataBeforeUpdate");
         }
-        
+
         if (!string.IsNullOrWhiteSpace(q))
         {
             if (string.IsNullOrWhiteSpace(model.IsComingFromImportExportOverviewPage))
@@ -6151,7 +6156,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     public IActionResult OtherMaterialName()
     {
         _logger.LogTrace("Report Controller : OtherMaterialName() action called");
-        ReportViewModel? model = GetReportDataFromSession(); 
+        ReportViewModel? model = GetReportDataFromSession();
         try
         {
             if (model== null)
@@ -6723,6 +6728,33 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         };
     }
 
+    private static Dictionary<string, int[]> GetNmaxReportCropGroupsForScotland()
+    {
+        return new Dictionary<string, int[]>
+        {
+            { Resource.lblWinterWheat, new [] { (int)Enums.CropTypes.WinterWheat, (int)Enums.CropTypes.WholecropWinterWheat } },
+            { Resource.lblSpringWheat, new [] { (int)Enums.CropTypes.SpringWheat, (int)Enums.CropTypes.WholecropSpringWheat ,(int)Enums.CropTypes.WheatSpringUndersown } },
+
+            { Resource.lblWinterBarley, new [] { (int)Enums.CropTypes.WinterBarley, (int)Enums.CropTypes.WholecropWinterBarley } },
+            { Resource.lblSpringBarley, new [] { (int)Enums.CropTypes.SpringBarley, (int)Enums.CropTypes.WholecropSpringBarley, (int)Enums.CropTypes.BarleySpringUndersown } },
+
+            { Resource.lblWinterOats, new [] { (int)Enums.CropTypes.WinterOats, (int)Enums.CropTypes.WholecropWinterOats } },
+            { Resource.lblSpringOats, new [] { (int)Enums.CropTypes.SpringOats, (int)Enums.CropTypes.WholecropSpringOats, (int)Enums.CropTypes.OatsSpringUndersown } },
+
+            { Resource.lblWinterRye, new [] { (int)Enums.CropTypes.WinterRye, (int)Enums.CropTypes.ForageWinterRye } },
+            { Resource.lblSpringRye, new [] { (int)Enums.CropTypes.SpringRye, (int)Enums.CropTypes.ForageSpringRye, (int)Enums.CropTypes.SpringRyeUndersown } },
+
+            { Resource.lblWinterTriticale, new [] { (int)Enums.CropTypes.WinterTriticale, (int)Enums.CropTypes.ForageWinterTriticale } },
+            { Resource.lblSpringTriticale, new [] { (int)Enums.CropTypes.SpringTriticale, (int)Enums.CropTypes.ForageSpringTriticale, (int)Enums.CropTypes.TriticaleSpringUndersown } },
+
+            { Resource.lblPotatoes, new [] { (int)Enums.CropTypes.PotatoVarietyGroup1, (int)Enums.CropTypes.PotatoVarietyGroup2, (int)Enums.CropTypes.PotatoVarietyGroup3, (int)Enums.CropTypes.PotatoVarietyGroup4 } },
+            { Resource.lblKale, new [] { (int)Enums.CropTypes.KaleCut, (int)Enums.CropTypes.KaleGrazed } },
+
+            { Resource.lblForageSwedes, new [] { (int)Enums.CropTypes.ForageSwedesRootsLifted, (int)Enums.CropTypes.ForageSwedesGrazed} },
+            { Resource.lblForageTurnips, new [] { (int)Enums.CropTypes.ForageTurnipsRootsLifted, (int)Enums.CropTypes.ForageTurnipsGrazed} }
+        };
+    }
+
     private static Dictionary<string, int[]> GetNmaxReportLettuceGroups()
     {
         return new Dictionary<string, int[]>
@@ -6731,9 +6763,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         };
     }
 
-    string GetGroupName(int cropId)
+    string GetGroupName(int cropId, int countryId)
     {
-        var cropGroups = GetNmaxReportCropGroups();
+        var cropGroups = (countryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
         foreach (var group in cropGroups)
         {
             if (group.Value.Contains(cropId))
@@ -7026,5 +7058,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             default:
                 return 0;
         }
+    }
+
+    private static void RemoveCropsForScotland(List<HarvestYearPlanResponse> cropTypeList)
+    {
+        cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Other);
+        cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Willow);
+        cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Sunflowers);
+        cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Miscanthus);
     }
 }
