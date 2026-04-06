@@ -258,4 +258,9 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : CheckGreenCompostExistanceByDateRange() called");
         return await _organicManureService.CheckGreenCompostExistanceByDateRange(fieldId, dateFrom, dateTo, organicManureId);
     }
+    public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(int cropTypeId, int soilTypeId, int residueGroup)
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup() called");
+        return await _organicManureService.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(cropTypeId, soilTypeId, residueGroup);
+    }
 }
