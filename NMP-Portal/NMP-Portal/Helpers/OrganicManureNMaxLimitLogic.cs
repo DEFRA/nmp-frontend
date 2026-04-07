@@ -106,7 +106,7 @@ namespace NMP.Portal.Helpers
             return nmaxLimit;
         }
 
-        private decimal GetCropSpecificAdjustmentScotland(int cropTypeId, decimal? yield, int? cropInfo1)
+        private static decimal GetCropSpecificAdjustmentScotland(int cropTypeId, decimal? yield, int? cropInfo1)
         {
             decimal adjustment = 0;
 
@@ -170,7 +170,7 @@ namespace NMP.Portal.Helpers
         }
 
 
-        private int GetRainfallAdjustment(int nResGroup, decimal? winterRainfall, string soilType)
+        private static int GetRainfallAdjustment(int nResGroup, decimal? winterRainfall, string soilType)
         {
 
             bool isSandySoil = soilType == "Sands"
@@ -190,10 +190,9 @@ namespace NMP.Portal.Helpers
                 else if (nResGroup >= 3 && nResGroup <= 6)
                     adjustment = 20;
             }
-            else if (isOtherSoil && winterRainfall >= 450 && nResGroup != 1)
+            else if (isOtherSoil && winterRainfall >= 450 && nResGroup >= 2 && nResGroup <= 6)
             {
-                if (nResGroup >= 2 && nResGroup <= 6)
-                    adjustment = 10;
+                adjustment = 10;
             }
 
             return adjustment;

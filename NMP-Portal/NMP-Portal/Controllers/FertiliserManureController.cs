@@ -2988,9 +2988,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
             CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
             int? scotlandNmax = null;
-            Field field = new Field();
             int residueGroup = 0;
-            
+
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
             {
@@ -3008,7 +3007,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                 if (farmCountryId == scotland)
                 {
-                    field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+
+                    Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
                     (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
 
                     if (recommendation != null)
@@ -3075,21 +3075,19 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 {
                                     string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                                     model.IsNMaxLimitWarning = true;
-                                    
+
 
                                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm?.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
-                                    if (farmCountryId != scotland)
+                                    if (farmCountryId != scotland && crop?.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
                                     {
-                                        if (crop?.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
-                                        {
-                                            model.CropNmaxLimitWarningHeader = warningResponse.Header;
-                                            model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
-                                            model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
-                                            model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
-                                            model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                        model.CropNmaxLimitWarningHeader = warningResponse.Header;
+                                        model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
+                                        model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
+                                        model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
+                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
 
-                                            model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
-                                        }
+                                        model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
+
                                     }
                                     if (farmCountryId == scotland)
                                     {

@@ -6280,12 +6280,11 @@ namespace NMP.Portal.Controllers
                 CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
                 Recommendation? recommendation = null;
                 int? scotlandNmax = null;
-                Field field = new Field();
                 int residueGroup = 0;
 
                 if (farmCountryId == scotland)
                 {
-                    field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+                    Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
                     (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
 
                     if (recommendation != null)
@@ -6384,18 +6383,15 @@ namespace NMP.Portal.Controllers
                                                                  string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
                                         if (warning != null)
                                         {
-                                            if (farmCountryId != scotland)
+                                            if (farmCountryId != scotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
                                             {
-                                                if (crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
-                                                {
-                                                    model.CropNmaxLimitWarningHeader = warning.Header;
-                                                    model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                    model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
+                                                model.CropNmaxLimitWarningHeader = warning.Header;
+                                                model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
+                                                model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
-                                                    model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                    model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-                                                    model.CropNmaxLimitWarningPara3 = warning.Para3;
-                                                }
+                                                model.CropNmaxLimitWarningPara1 = warning.Para1;
+                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                                model.CropNmaxLimitWarningPara3 = warning.Para3;
                                             }
                                             if (farmCountryId == scotland)
                                             {
@@ -6460,22 +6456,19 @@ namespace NMP.Portal.Controllers
                                                 WarningResponse? warning = warningList
                                                     .FirstOrDefault(x => x.CountryID == farm.CountryID &&
                                                                          string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                                if (farmCountryId != scotland)
+
+                                                if (farmCountryId != scotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
                                                 {
-                                                    if (crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+                                                    if (warning != null)
                                                     {
-                                                        if (warning != null)
-                                                        {
-                                                            model.CropNmaxLimitWarningHeader = warning.Header;
-                                                            model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                            model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
+                                                        model.CropNmaxLimitWarningHeader = warning.Header;
+                                                        model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
+                                                        model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
 
-                                                            model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                            model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-                                                            model.CropNmaxLimitWarningPara3 = warning.Para3;
-                                                        }
+                                                        model.CropNmaxLimitWarningPara1 = warning.Para1;
+                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                                        model.CropNmaxLimitWarningPara3 = warning.Para3;
                                                     }
-
                                                 }
                                                 else
                                                 {
