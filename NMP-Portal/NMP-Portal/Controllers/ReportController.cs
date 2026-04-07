@@ -497,7 +497,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (error == null && scotlandNMaxValue != null && scotlandNMaxValue.Count > 0)
             {
                 var missingCropTypes = cropTypeList
-                 .Where(c => !scotlandNMaxValue.Any(s => s.CroptypeID == c.CropTypeID))
+                 .Where(c => !scotlandNMaxValue.Any(s => s.CropTypeID == c.CropTypeID))
                  .ToList();
 
                 List<HarvestYearPlanResponse> cropTypeWithNmaxValue = new();
@@ -1261,9 +1261,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .FirstOrDefault(x => x.Crops?.CropTypeID == cropData.CropTypeID);
 
         (List<ScotlandNMaxValue>? scotlandNMaxValueList, error) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
-        if (error == null && scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CroptypeID == cropData.CropTypeID))
+        if (error == null && scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
-            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList?.FirstOrDefault(x => x.CroptypeID == cropData.CropTypeID);
+            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList?.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID);
             string? nResidueGroup = recommendation?.RecommendationData?
                   .FirstOrDefault()?.Recommendation?.NIndex;
 

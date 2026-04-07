@@ -8,7 +8,7 @@ namespace NMP.Commons.Models
 {
     public class ScotlandNMaxValue
     {
-        public int CroptypeID { get; set; }
+        public int CropTypeID { get; set; }
         public int SoilTypeID { get; set; }
         public int ResidueGroup1 { get; set; }
         public int ResidueGroup2 { get; set; }

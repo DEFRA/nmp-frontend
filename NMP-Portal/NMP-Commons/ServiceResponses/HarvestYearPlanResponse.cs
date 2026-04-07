@@ -54,6 +54,4 @@ public class HarvestYearPlanResponse
     public int TotalFertiliserManures { get; set; }
     [JsonProperty("IsBasePlan")]
     public bool? IsBasePlan { get; set; }
-    [JsonProperty("SoilTypeID")]
-    public int? SoilTypeID { get; set; }
 }
