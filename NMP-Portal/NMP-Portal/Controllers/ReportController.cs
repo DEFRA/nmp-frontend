@@ -465,7 +465,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (missingCropTypes.Any())
             {
-                return cropTypeList = await FilterCropTypeList(missingCropTypes, cropTypeList, error, year);
+                return  await FilterCropTypeList(missingCropTypes, cropTypeList, error, year);
             }
         }
         return cropTypeList;
@@ -502,7 +502,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .Except(cropTypeWithNmaxValue)
             .ToList();
 
-        return cropTypeList = cropTypeList
+        return cropTypeList
               .Except(missingCropTypes)
               .ToList();
     }
