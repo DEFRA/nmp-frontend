@@ -145,7 +145,7 @@ internal static class ApiurlHelper
     public const string FetchPscIndexeByIdAsyncAPI = "psc-indexes/{0}";
     public const string FetchAllSoilAnalysesMethodByIdAsyncAPI = "soil-analyses-method/{0}";
     public const string FetchRecommendationByManagementPeriodIdAsyncAPI = "recommendations/{0}";
-
+    public const string FetchAllScotlandNMaxValuesAsyncAPI = "scotland-nmax-values/getAll";
     //Manner APi Url
     public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
     public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";

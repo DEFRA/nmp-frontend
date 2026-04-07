@@ -6235,6 +6235,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forage swedes.
+        /// </summary>
+        public static string lblForageSwedes {
+            get {
+                return ResourceManager.GetString("lblForageSwedes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forage turnips.
+        /// </summary>
+        public static string lblForageTurnips {
+            get {
+                return ResourceManager.GetString("lblForageTurnips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For a steel or concrete store, you must keep a minimum of 30cm of freeboard..
         /// </summary>
         public static string lblForASteelOrConcreteStore {
@@ -7896,6 +7914,15 @@ namespace NMP.Commons.Resources {
         public static string lblK2O {
             get {
                 return ResourceManager.GetString("lblK2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kale.
+        /// </summary>
+        public static string lblKale {
+            get {
+                return ResourceManager.GetString("lblKale", resourceCulture);
             }
         }
         
@@ -13895,11 +13922,38 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spring oats.
+        /// </summary>
+        public static string lblSpringOats {
+            get {
+                return ResourceManager.GetString("lblSpringOats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spring rye.
+        /// </summary>
+        public static string lblSpringRye {
+            get {
+                return ResourceManager.GetString("lblSpringRye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Spring sown (April to June).
         /// </summary>
         public static string lblSpringSown {
             get {
                 return ResourceManager.GetString("lblSpringSown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spring triticale.
+        /// </summary>
+        public static string lblSpringTriticale {
+            get {
+                return ResourceManager.GetString("lblSpringTriticale", resourceCulture);
             }
         }
         
@@ -18073,6 +18127,33 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter oats.
+        /// </summary>
+        public static string lblWinterOats {
+            get {
+                return ResourceManager.GetString("lblWinterOats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter Oilseed Rape - autumn nitrogen.
+        /// </summary>
+        public static string lblWinterOilseedRapeAutumn {
+            get {
+                return ResourceManager.GetString("lblWinterOilseedRapeAutumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter Oilseed Rape - spring nitrogen.
+        /// </summary>
+        public static string lblWinterOilseedRapeSpring {
+            get {
+                return ResourceManager.GetString("lblWinterOilseedRapeSpring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Winter rainfall.
         /// </summary>
         public static string lblWinterRainfall {
@@ -18096,6 +18177,24 @@ namespace NMP.Commons.Resources {
         public static string lblWinterRainfallIs450OrMoreOrLess {
             get {
                 return ResourceManager.GetString("lblWinterRainfallIs450OrMoreOrLess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter rye.
+        /// </summary>
+        public static string lblWinterRye {
+            get {
+                return ResourceManager.GetString("lblWinterRye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter triticale.
+        /// </summary>
+        public static string lblWinterTriticale {
+            get {
+                return ResourceManager.GetString("lblWinterTriticale", resourceCulture);
             }
         }
         

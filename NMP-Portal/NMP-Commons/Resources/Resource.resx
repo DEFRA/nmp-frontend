@@ -7625,4 +7625,37 @@ livestock manure.</value>
   <data name="lblWinterRainfall" xml:space="preserve">
     <value>Winter rainfall</value>
   </data>
+  <data name="lblWinterOats" xml:space="preserve">
+    <value>Winter oats</value>
+  </data>
+  <data name="lblSpringOats" xml:space="preserve">
+    <value>Spring oats</value>
+  </data>
+  <data name="lblWinterRye" xml:space="preserve">
+    <value>Winter rye</value>
+  </data>
+  <data name="lblSpringRye" xml:space="preserve">
+    <value>Spring rye</value>
+  </data>
+  <data name="lblWinterTriticale" xml:space="preserve">
+    <value>Winter triticale</value>
+  </data>
+  <data name="lblSpringTriticale" xml:space="preserve">
+    <value>Spring triticale</value>
+  </data>
+  <data name="lblKale" xml:space="preserve">
+    <value>Kale</value>
+  </data>
+  <data name="lblForageSwedes" xml:space="preserve">
+    <value>Forage swedes</value>
+  </data>
+  <data name="lblForageTurnips" xml:space="preserve">
+    <value>Forage turnips</value>
+  </data>
+  <data name="lblWinterOilseedRapeSpring" xml:space="preserve">
+    <value>Winter Oilseed Rape - spring nitrogen</value>
+  </data>
+  <data name="lblWinterOilseedRapeAutumn" xml:space="preserve">
+    <value>Winter Oilseed Rape - autumn nitrogen</value>
+  </data>
 </root>
