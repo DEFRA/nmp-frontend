@@ -98,7 +98,7 @@ namespace NMP.Portal.Helpers
 
             };
 
-            if (eligibleCropsForRainfallAdjustment.Contains(cropTypeId))
+            if (eligibleCropsForRainfallAdjustment.Contains(cropTypeId) && rainfall != null)
             {
                 nmaxLimit += GetRainfallAdjustment(residueGroup, rainfall, soilType);
             }
@@ -183,14 +183,14 @@ namespace NMP.Portal.Helpers
 
             int adjustment = 0;
 
-            if (isSandySoil)
+            if (isSandySoil && winterRainfall >= 450 && nResGroup != 1)
             {
                 if (nResGroup == 2)
                     adjustment = 10;
                 else if (nResGroup >= 3 && nResGroup <= 6)
                     adjustment = 20;
             }
-            else if (isOtherSoil)
+            else if (isOtherSoil && winterRainfall >= 450 && nResGroup != 1)
             {
                 if (nResGroup >= 2 && nResGroup <= 6)
                     adjustment = 10;

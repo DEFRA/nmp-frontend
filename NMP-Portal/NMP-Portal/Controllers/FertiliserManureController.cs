@@ -3011,7 +3011,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     field = await _fieldLogic.FetchFieldByFieldId(fieldId);
                     (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
 
-                    if (recommendation != null && recommendation.NIndex == 1.ToString())
+                    if (recommendation != null)
                     {
                         residueGroup = Convert.ToInt32(recommendation.NIndex);
                     }
@@ -3053,7 +3053,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 }
                                 else
                                 {
-                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, farm.Rainfall, residueGroup);
+                                    int? winterRainfall = null;
+                                    (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
+                                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                                    {
+                                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
+                                    }
+                                    else
+                                    {
+                                        winterRainfall = excessRainfalls.WinterRainfall;
+                                    }
+
+                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
                                 }
 
                                 decimal totalNitrogenApplied = 0;
