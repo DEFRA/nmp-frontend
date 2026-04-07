@@ -198,7 +198,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             }
                             else
                             {
-                                RedirectExportFieldsOrCropType(model);
+                                return RedirectExportFieldsOrCropType(model);
                             }
                         }
                     }
@@ -320,7 +320,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         else
                         {
 
-                            RedirectExportFieldsOrCropType(model);
+                            return RedirectExportFieldsOrCropType(model);
                         }
                         return RedirectToAction("NMaxReport");
                     }
@@ -443,67 +443,71 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         if (countryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
         {
-            await AddOrRemoveCropTypeItemsForEngAndWales(countryID, cropTypeList, error, year);
+            cropTypeList = await AddOrRemoveCropTypeItemsForEngAndWales(countryID, cropTypeList, error);
         }
         else
         {
-           await AddOrRemoveCropTypeItemsForScotland(cropTypeList, error, year);
+            cropTypeList = await AddOrRemoveCropTypeItemsForScotland(cropTypeList, error, year);
         }
         return cropTypeList;
     }
 
-    private async Task AddOrRemoveCropTypeItemsForScotland(List<HarvestYearPlanResponse> cropTypeList, Error? error, int year)
+    private async Task<List<HarvestYearPlanResponse>> AddOrRemoveCropTypeItemsForScotland(List<HarvestYearPlanResponse> cropTypeList, Error? error, int year)
     {
         RemoveCropsForScotland(cropTypeList);
         //fetch data from ScotlandNMaxValues
         (List<ScotlandNMaxValue>? scotlandNMaxValue, error) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (error == null && scotlandNMaxValue != null && scotlandNMaxValue.Count > 0)
         {
-            var missingCropTypes = cropTypeList
+            List<HarvestYearPlanResponse> missingCropTypes = cropTypeList
              .Where(c => !scotlandNMaxValue.Any(s => s.CropTypeID == c.CropTypeID))
              .ToList();
 
-            List<HarvestYearPlanResponse> cropTypeWithNmaxValue = new();
-
             if (missingCropTypes.Any())
             {
-                foreach (var cropData in missingCropTypes)
-                {
-                    (List<RecommendationHeader> recommendationHeader, error) =
-                        await _cropLogic.FetchRecommendationByFieldIdAndYear(
-                            cropData.FieldID,
-                            year
-                        );
-
-                    if (error != null || recommendationHeader == null || !recommendationHeader.Any())
-                        continue;
-
-                    var recommendation = recommendationHeader
-                        .FirstOrDefault(x => x.Crops?.CropTypeID == cropData.CropTypeID);
-
-                    var hasPositiveN = recommendation?.RecommendationData?
-                        .Any(x => x.Recommendation?.FertilizerN != null && x.Recommendation?.FertilizerN > 0) == true;
-
-                    if (hasPositiveN)
-                    {
-                        cropTypeWithNmaxValue.Add(cropData);
-                    }
-                }
-
-
-                missingCropTypes = missingCropTypes
-                    .Except(cropTypeWithNmaxValue)
-                    .ToList();
-
-                cropTypeList = cropTypeList
-                    .Except(missingCropTypes)
-                    .ToList();
-
+                return cropTypeList = await FilterCropTypeList(missingCropTypes, cropTypeList, error, year);
             }
         }
+        return cropTypeList;
     }
 
-    private async Task AddOrRemoveCropTypeItemsForEngAndWales(int countryID, List<HarvestYearPlanResponse> cropTypeList, Error? error, int year)
+    private async Task<List<HarvestYearPlanResponse>> FilterCropTypeList(List<HarvestYearPlanResponse> missingCropTypes, List<HarvestYearPlanResponse> cropTypeList, Error? error, int year)
+    {
+        List<HarvestYearPlanResponse> cropTypeWithNmaxValue = new();
+        foreach (var cropData in missingCropTypes)
+        {
+            (List<RecommendationHeader> recommendationHeader, error) =
+                await _cropLogic.FetchRecommendationByFieldIdAndYear(
+                    cropData.FieldID,
+                    year
+                );
+
+            if (error != null || recommendationHeader == null || !recommendationHeader.Any())
+                continue;
+
+            var recommendation = recommendationHeader
+                .FirstOrDefault(x => x.Crops?.CropTypeID == cropData.CropTypeID);
+
+            var hasPositiveN = recommendation?.RecommendationData?
+                .Any(x => x.Recommendation?.FertilizerN != null && x.Recommendation?.FertilizerN > 0) == true;
+
+            if (hasPositiveN)
+            {
+                cropTypeWithNmaxValue.Add(cropData);
+            }
+        }
+
+
+        missingCropTypes = missingCropTypes
+            .Except(cropTypeWithNmaxValue)
+            .ToList();
+
+        return cropTypeList = cropTypeList
+              .Except(missingCropTypes)
+              .ToList();
+    }
+
+    private async Task<List<HarvestYearPlanResponse>> AddOrRemoveCropTypeItemsForEngAndWales(int countryID, List<HarvestYearPlanResponse> cropTypeList, Error? error)
     {
         (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropLogic.FetchCropTypeLinking();
         if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
@@ -525,6 +529,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .DistinctBy(x => x.CropTypeID)
             .ToList();
         }
+        return cropTypeList;
     }
     [HttpGet]
     public async Task<IActionResult> CropAndFieldManagement()
@@ -1246,7 +1251,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         (List<ScotlandNMaxValue>? scotlandNMaxValueList, error) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (error == null && scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
-            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList?.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID);
+            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID);
             string? nResidueGroup = recommendation?.RecommendationData?
                   .FirstOrDefault()?.Recommendation?.NIndex;
 
