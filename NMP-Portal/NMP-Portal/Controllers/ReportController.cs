@@ -6686,7 +6686,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         };
     }
 
-    string GetGroupName(int cropId)
+    static string GetGroupName(int cropId)
     {
         var cropGroups = GetNmaxReportCropGroups();
         foreach (var group in cropGroups)
