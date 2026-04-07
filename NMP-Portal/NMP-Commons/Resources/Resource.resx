@@ -7652,4 +7652,10 @@ livestock manure.</value>
   <data name="lblForageTurnips" xml:space="preserve">
     <value>Forage turnips</value>
   </data>
+  <data name="lblWinterOilseedRapeSpring" xml:space="preserve">
+    <value>Winter Oilseed Rape - spring nitrogen</value>
+  </data>
+  <data name="lblWinterOilseedRapeAutumn" xml:space="preserve">
+    <value>Winter Oilseed Rape - autumn nitrogen</value>
+  </data>
 </root>

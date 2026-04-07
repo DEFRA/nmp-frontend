@@ -18136,6 +18136,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter Oilseed Rape - autumn nitrogen.
+        /// </summary>
+        public static string lblWinterOilseedRapeAutumn {
+            get {
+                return ResourceManager.GetString("lblWinterOilseedRapeAutumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter Oilseed Rape - spring nitrogen.
+        /// </summary>
+        public static string lblWinterOilseedRapeSpring {
+            get {
+                return ResourceManager.GetString("lblWinterOilseedRapeSpring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Winter rainfall.
         /// </summary>
         public static string lblWinterRainfall {
