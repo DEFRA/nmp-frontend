@@ -7474,7 +7474,7 @@ namespace NMP.Portal.Controllers
             model.StartClosedPeriodEndFebWarningCodeID = warningResponse.WarningCodeID; //81a
             model.StartClosedPeriodEndFebWarningLevelID = warningResponse.WarningLevelID;
             model.StartClosedPeriodEndFebWarningPara1 = warningResponse.Para1;
-            model.StartClosedPeriodEndFebWarningPara2 = warningResponse.Para2;
+            model.StartClosedPeriodEndFebWarningPara2 = para2;
             model.StartClosedPeriodEndFebWarningPara3 = warningResponse.Para3;
             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
         }
