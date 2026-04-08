@@ -2617,14 +2617,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
 
-                        //model.IsNitrogenExceedWarning = true;
-                        //model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                        //model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                        //model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                        //model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                        //model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod, endPeriod) : null;
-                        //model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
-
                         SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod));
                     }
                 }
@@ -2659,14 +2651,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (isNitrogenRateExceeded)
                 {
                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRate.ToString());
-
-                    //model.IsNitrogenExceedWarning = true;
-                    //model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                    //model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                    //model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                    //model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                    //model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod, endPeriod, maxNitrogenRate) : null;
-                    //model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
 
                     SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod, maxNitrogenRate));
                 }
@@ -2736,14 +2720,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateOSR.ToString());
 
-                        //model.IsNitrogenExceedWarning = true;
-                        //model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                        //model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                        //model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                        //model.ClosedPeriodNitrogenExceedWarningPara1 = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                        //model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod) : null;
-                        //model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
-
                         SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
                     }
                 }
@@ -2768,14 +2744,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                     if (isNitrogenRateExceeded)
                     {
-                        //model.IsNitrogenExceedWarning = true;
-                        //model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                        //model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                        //model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                        //model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                        //model.ClosedPeriodNitrogenExceedWarningPara2 = warningResponse.Para2;
-                        //model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
-
+                       
                         SetClosedPeriodWarning(model, warningResponse, warningResponse.Para2);
                     }
                 }
@@ -2808,14 +2777,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (isNitrogenRateExceeded)
                 {
                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
-
-                    //model.IsNitrogenExceedWarning = true;
-                    //model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                    //model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                    //model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                    //model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                    //model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod) : null;
-                    //model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
 
                     SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
                 }
@@ -2925,27 +2886,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm?.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
                                     if (farmCountryId != scotland && crop?.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
                                     {
-                                        //model.CropNmaxLimitWarningHeader = warningResponse.Header;
-                                        //model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
-                                        //model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
-                                        //model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
-                                        //model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-
-                                        //model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
-
+                                        
                                         SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
 
 
                                     }
                                     if (farmCountryId == scotland)
                                     {
-                                        //model.CropNmaxLimitWarningHeader = warningResponse.Header;
-                                        //model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
-                                        //model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
-                                        //model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
-                                        //model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit) : null;
-
-                                        //model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
                                         SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
                                     }
                                 }
@@ -2988,7 +2935,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return await fetchFunc(fieldId, from, to, fertiliserId, false);
     }
-    private void SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null)
+    private static void SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null)
     {
         model.IsNitrogenExceedWarning = true;
         model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
@@ -2998,7 +2945,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         model.ClosedPeriodNitrogenExceedWarningPara2 = para2;
         model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
     }
-    private void SetNMaxWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2)
+    private static void SetNMaxWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2)
     {
         model.IsNMaxLimitWarning = true;
         model.CropNmaxLimitWarningHeader = warningResponse.Header;
@@ -3007,11 +2954,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
         model.CropNmaxLimitWarningPara2 = para2;
         model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
-    }
-    private (string start, string end) GetPeriods(string closedPeriod)
-    {
-        var parts = closedPeriod.Split(" to ");
-        return parts.Length == 2 ? (parts[0], parts[1]) : (string.Empty, string.Empty);
     }
     private static HashSet<int> BrassicaCrops()
     {

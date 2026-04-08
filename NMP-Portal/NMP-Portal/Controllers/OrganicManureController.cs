@@ -6486,7 +6486,7 @@ namespace NMP.Portal.Controllers
             }
             return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
         }
-        private void SetNmaxLimitWarning(OrganicManureViewModel model, WarningResponse warningResponse, string para2 = null)
+        private static void SetNmaxLimitWarning(OrganicManureViewModel model, WarningResponse warningResponse, string para2 = null)
         {
             model.CropNmaxLimitWarningHeader = warningResponse.Header;
             model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
@@ -7316,13 +7316,7 @@ namespace NMP.Portal.Controllers
                                                     if (currentNitrogen > 40 || currentNitrogen + totalN > 150)
                                                     {
                                                         WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateGrass.ToString());
-                                                        model.StartClosedPeriodEndFebWarningHeader = warning.Header;
-                                                        model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID; //81a
-                                                        model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
-                                                        model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
-                                                        model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
-                                                        model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
-                                                        model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+                                                        SetStartClosedPeriodEndFebWarning(model, warning, warning.Para2);
                                                     }
                                                 }
                                             }
@@ -7351,13 +7345,8 @@ namespace NMP.Portal.Controllers
                                                 if (currentNitrogen + totalN > 150)
                                                 {
                                                     WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRate.ToString());
-                                                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a
-                                                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
-                                                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
-                                                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
-                                                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
-                                                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+
+                                                    SetStartClosedPeriodEndFebWarning(model, warning, warning.Para2);
                                                 }
                                             }
                                         }
@@ -7385,13 +7374,8 @@ namespace NMP.Portal.Controllers
                                                 if (currentNitrogen + totalN > 150)
                                                 {
                                                     WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRate.ToString());
-                                                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a wales only
-                                                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
-                                                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
-                                                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
-                                                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
-                                                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+
+                                                    SetStartClosedPeriodEndFebWarning(model, warning, warning.Para2);
                                                 }
                                             }
                                         }
@@ -7433,13 +7417,9 @@ namespace NMP.Portal.Controllers
                                                         if (currentNitrogen > 50 || currentNitrogen + totalN > 150 || isOrganicManureExistWithin4Weeks)
                                                         {
                                                             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateWeeks.ToString());
-                                                            model.StartClosedPeriodEndFebWarningHeader = warning.Header;
-                                                            model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a
-                                                            model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
-                                                            model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
-                                                            model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
-                                                            model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
-                                                            model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+
+                                                            SetStartClosedPeriodEndFebWarning(model, warning, warning.Para2);
+
                                                         }
                                                     }
                                                 }
@@ -7469,13 +7449,8 @@ namespace NMP.Portal.Controllers
                                                 if (currentNitrogen + totalN > 150)
                                                 {
                                                     WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateOSR.ToString());
-                                                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
-                                                    model.StartClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;  //81a
-                                                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
-                                                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
-                                                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
-                                                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
-                                                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+
+                                                    SetStartClosedPeriodEndFebWarning(model, warning, warning.Para2);
                                                 }
                                             }
                                         }
@@ -7493,6 +7468,19 @@ namespace NMP.Portal.Controllers
 
             return (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, warningMsg, error);
         }
+        private static void SetStartClosedPeriodEndFebWarning(OrganicManureViewModel model, WarningResponse warningResponse, string para2 = null)
+        {
+            model.StartClosedPeriodEndFebWarningHeader = warningResponse.Header;
+            model.StartClosedPeriodEndFebWarningCodeID = warningResponse.WarningCodeID; //81a
+            model.StartClosedPeriodEndFebWarningLevelID = warningResponse.WarningLevelID;
+            model.StartClosedPeriodEndFebWarningPara1 = warningResponse.Para1;
+            model.StartClosedPeriodEndFebWarningPara2 = warningResponse.Para2;
+            model.StartClosedPeriodEndFebWarningPara3 = warningResponse.Para3;
+            model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = true;
+        }
+
+
+
 
         private async Task<(decimal?, Error?)> GetAvailableNFromMannerOutput(OrganicManureViewModel model)
         {
