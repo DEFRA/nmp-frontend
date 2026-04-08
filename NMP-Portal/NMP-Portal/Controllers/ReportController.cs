@@ -4412,13 +4412,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ReportViewModel? reportModel = GetReportDataFromSession();
 
 
-            if (model.IsLivestockCheckAnswer)
+            if (model.IsLivestockCheckAnswer && model.LivestockNumberQuestion == reportModel?.LivestockNumberQuestion && !model.IsLivestockGroupChange)
             {
-                if (model.LivestockNumberQuestion == reportModel?.LivestockNumberQuestion && !model.IsLivestockGroupChange)
-                {
-                    SetReportDataToSession(model);
-                    return RedirectToAction("LivestockCheckAnswer");
-                }
+                SetReportDataToSession(model);
+                return RedirectToAction("LivestockCheckAnswer");
             }
 
             SetReportDataToSession(model);
@@ -4585,7 +4582,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.AverageNumber = null;
             SetReportDataToSession(model);
 
-            return RedirectToAction("LivestockCheckAnswer");
+            return await Task.FromResult(RedirectToAction("LivestockCheckAnswer"));
         }
         catch (Exception ex)
         {
@@ -4605,14 +4602,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         _logger.LogTrace("Report Controller : AverageNumber() action called");
         ReportViewModel? model = GetReportDataFromSession();
-
-        if (model == null)
-        {
-            return RedirectToAction("FarmList", "Farm");
-        }
-
         try
-        {
+        { 
+            if (model == null)
+            {
+                return RedirectToAction("FarmList", "Farm");
+            }
             (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
             model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
             model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
@@ -4643,6 +4638,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return View(model);
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AverageNumber(ReportViewModel model)
@@ -4658,6 +4654,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999999));
             }
+
             if (!ModelState.IsValid)
             {
                 if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
@@ -4666,7 +4663,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else
                 {
-
                     string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
                     if (!string.IsNullOrWhiteSpace(groupName))
                     {
@@ -4696,9 +4692,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 SetReportDataToSession(model);
                 return RedirectToAction("LivestockCheckAnswer");
             }
+
             SetReportDataToSession(model);
 
-            return RedirectToAction("LivestockCheckAnswer");
+            return await Task.FromResult(RedirectToAction("LivestockCheckAnswer"));
         }
         catch (Exception ex)
         {
@@ -4709,7 +4706,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
 
     [HttpGet]
-    public async Task<IActionResult> NonGrazingLivestockAverageNumber()  //pig, poultry
+    public async Task<IActionResult> NonGrazingLivestockAverageNumber()
     {
         _logger.LogTrace("Report Controller : NonGrazingLivestockAverageNumber() action called");
         ReportViewModel? model = GetReportDataFromSession();
@@ -4721,10 +4718,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         try
         {
-            (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-            model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-            model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+            await FillLivestockTypesByGroupId(model);
         }
         catch (Exception ex)
         {
@@ -4751,10 +4745,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (!ModelState.IsValid)
             {
-                (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-                model.AverageOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-                model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+                await FillLivestockTypesByGroupId(model);
                 return View(model);
             }
             model.NumbersInJanuary = null;
@@ -4789,6 +4780,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnNonGrazingLivestockAverageNumber"] = ex.Message;
             return View(model);
         }
+    }
+
+    private async Task FillLivestockTypesByGroupId(ReportViewModel model)
+    {
+        (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+        model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+        model.AverageOccupancy = (int?)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+        model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
     }
 
     [HttpGet]
@@ -6108,12 +6107,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             return RedirectToAction("FarmList", "Farm");
         }
-        if (model != null && model.IsCheckAnswer)
+
+        if (model.IsCheckAnswer)
         {
             return RedirectToAction("LivestockImportExportCheckAnswer");
         }
-        else
-                if (model != null && model.IsImport != null)
+        else if (model.IsImport != null)
         {
             return RedirectToAction("ManageImportExport", new
             {
