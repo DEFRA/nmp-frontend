@@ -6385,23 +6385,11 @@ namespace NMP.Portal.Controllers
                                         {
                                             if (farmCountryId != scotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
                                             {
-                                                model.CropNmaxLimitWarningHeader = warning.Header;
-                                                model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
-
-                                                model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-                                                model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
                                             }
                                             if (farmCountryId == scotland)
                                             {
-                                                model.CropNmaxLimitWarningHeader = warning.Header;
-                                                model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
-
-                                                model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit) : null;
-                                                model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit));
                                             }
                                         }
 
@@ -6461,24 +6449,12 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     if (warning != null)
                                                     {
-                                                        model.CropNmaxLimitWarningHeader = warning.Header;
-                                                        model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                        model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
-
-                                                        model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
-                                                        model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                        SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    model.CropNmaxLimitWarningHeader = warning.Header;
-                                                    model.CropNmaxLimitWarningCodeID = warning.WarningCodeID;
-                                                    model.CropNmaxLimitWarningLevelID = warning.WarningLevelID;
-
-                                                    model.CropNmaxLimitWarningPara1 = warning.Para1;
-                                                    model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warning.Para2) ? string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit) : null;
-                                                    model.CropNmaxLimitWarningPara3 = warning.Para3;
+                                                    SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit));
                                                 }
                                             }
                                         }
@@ -6510,6 +6486,17 @@ namespace NMP.Portal.Controllers
             }
             return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
         }
+        private void SetNmaxLimitWarning(OrganicManureViewModel model, WarningResponse warningResponse, string para2 = null)
+        {
+            model.CropNmaxLimitWarningHeader = warningResponse.Header;
+            model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
+            model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
+
+            model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
+            model.CropNmaxLimitWarningPara2 = para2;
+            model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
+        }
+        
 
         private async Task<(OrganicManureViewModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage(OrganicManureViewModel model, Farm farm, int cropId, int fieldId)
         {
