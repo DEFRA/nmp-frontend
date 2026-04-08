@@ -39,26 +39,26 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly IScotlandNMaxValueLogic _scotlandNMaxValueLogic = scotlandNMaxValueLogic;
     private readonly string _error = "Error";
     private readonly string _numberInJanuary = "NumbersInJanuary";
-
+    private readonly string _reportDataSessionKey = "ReportData";
     private ReportViewModel? GetReportDataFromSession()
     {
-        if (HttpContext.Session.Exists("ReportData"))
+        if (HttpContext.Session.Exists(_reportDataSessionKey))
         {
-            return HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+            return HttpContext.Session.GetObjectFromJson<ReportViewModel>(_reportDataSessionKey);
         }
         return null;
     }
 
     private void SetReportDataToSession(ReportViewModel reportData)
     {
-        HttpContext.Session.SetObjectAsJson("ReportData", reportData);
+        HttpContext.Session.SetObjectAsJson(_reportDataSessionKey, reportData);
     }
 
     private void RemoveReportDataFromSession()
     {
-        if (HttpContext.Session.Exists("ReportData"))
+        if (HttpContext.Session.Exists(_reportDataSessionKey))
         {
-            HttpContext.Session.Remove("ReportData");
+            HttpContext.Session.Remove(_reportDataSessionKey);
         }
     }
     public IActionResult Index()
@@ -800,7 +800,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.EncryptedHarvestYear = j;
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
                     model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                    (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1351,7 +1351,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     model.EncryptedFarmId = f;
                     model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                    (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1372,7 +1372,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (model.FarmId != null && model.Country == null)
             {
-                (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -1416,7 +1416,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.Country = farm.CountryID;
@@ -1448,7 +1448,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return RedirectToAction("NVZComplianceReports", model);
             }
 
-            //return RedirectToAction("ReportType", new {i = model.EncryptedFarmId,j = model.EncryptedHarvestYear});
             return View(model);
         }
         catch (Exception ex)
@@ -1534,7 +1533,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (model.FarmId != null && model.Country == null)
             {
-                (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.FarmName = farm.Name;
@@ -1570,7 +1569,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmId != null && model.Country == null)
                 {
-                    (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                     if (farm != null)
                     {
                         model.FarmName = farm.Name;
@@ -1828,7 +1827,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                 return RedirectToAction("LivestockManureNitrogenReportChecklist");
             }
-
         }
         catch (Exception ex)
         {
@@ -2334,7 +2332,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (!string.IsNullOrWhiteSpace(r))
             {
-                int year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+                int? year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
                 if (year != null)
                 {
                     model.Year = year;
@@ -2509,12 +2507,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model.ManureGroupId = model.ManureGroupIdForFilter;
             }
 
-            ReportViewModel reportViewModel = new ReportViewModel();
-            if (HttpContext.Session.Keys.Contains("ReportData"))
-            {
-                reportViewModel = HttpContext?.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-            }
-
+            ReportViewModel? reportViewModel = GetReportDataFromSession();
+            
             if (reportViewModel != null && reportViewModel.ManureTypeId != model.ManureTypeId)
             {
                 model.IsDefaultValueChange = true;
@@ -2537,8 +2531,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
             if (error == null && farmManureTypeList.Count > 0)
             {
-                FarmManureTypeResponse previousFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == reportViewModel.ManureTypeId);
-                FarmManureTypeResponse currentFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
+                FarmManureTypeResponse? previousFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == reportViewModel?.ManureTypeId);
+                FarmManureTypeResponse? currentFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
                 if (previousFarmManure != null && currentFarmManure == null)
                 {
                     model.DefaultNutrientValue = Resource.lblYes;
@@ -4100,14 +4094,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return View(model);
             }
-            ReportViewModel reportModel = new ReportViewModel();
-            if (HttpContext.Session.Keys.Contains("ReportData"))
-            {
-                reportModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-            }
+            ReportViewModel? reportModel = GetReportDataFromSession();
+                        
             if (model.IsLivestockCheckAnswer)
             {
-                if (model.IsAnyLivestockNumber == reportModel.IsAnyLivestockNumber)
+                if (model.IsAnyLivestockNumber == reportModel?.IsAnyLivestockNumber)
                 {
                     SetReportDataToSession(model);
                     return RedirectToAction("LivestockCheckAnswer");
