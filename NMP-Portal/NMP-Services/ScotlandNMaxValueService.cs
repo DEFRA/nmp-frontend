@@ -23,7 +23,7 @@ namespace NMP.Services
         public async Task<(List<ScotlandNMaxValue>?, Error?)> FetchAllScotlandNMaxValue()
         {
             _logger.LogTrace("Fetch all ScotlandNMaxValue");
-            List<ScotlandNMaxValue> scotlandNMaxValueList = new List<ScotlandNMaxValue>();
+            List<ScotlandNMaxValue>? scotlandNMaxValueList =null;
             Error? error = null;
             try
             {
@@ -37,7 +37,7 @@ namespace NMP.Services
                     List<ScotlandNMaxValue>? scotlandNMaxValues = responseWrapper?.Data?.records.ToObject<List<ScotlandNMaxValue>>();
                     if (scotlandNMaxValues != null && scotlandNMaxValues.Count > 0)
                     {
-                        scotlandNMaxValueList.AddRange(scotlandNMaxValues);
+                        scotlandNMaxValueList = scotlandNMaxValues;
                     }
                 }
                 else
