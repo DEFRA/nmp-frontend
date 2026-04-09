@@ -2831,7 +2831,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     }
                                     else
                                     {
-                                        winterRainfall = excessRainfalls.WinterRainfall;
+                                        winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
                                     }
 
                                     nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
