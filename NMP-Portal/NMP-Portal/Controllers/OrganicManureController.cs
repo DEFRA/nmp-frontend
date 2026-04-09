@@ -558,63 +558,10 @@ namespace NMP.Portal.Controllers
                             int organicCounter = 1;
                             if (model.OrganicManures != null)
                             {
-                                foreach (var organicManure in model.OrganicManures)
-                                {
-                                    (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                                    if (error == null && managementPeriod != null)
-                                    {
-                                        HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
-                                        if (crop != null)
-                                        {
-                                            organicManure.FieldID = crop.FieldID;
-                                            organicManure.FieldName = fieldList?
-                                            .FirstOrDefault(x => x.Id == crop.FieldID)
-                                            ?.Name;
-
-
-                                            organicManure.EncryptedCounter = _fieldDataProtector.Protect(organicCounter.ToString());
-                                            organicCounter++;
-                                            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                            {
-                                                organicManure.IsGrass = true;
-                                            }
-                                            else if (model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == crop.FieldID))
-                                            {
-                                                model.DefoliationList.RemoveAll(x => x.FieldID == crop.FieldID);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                var grass = model.OrganicManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
-                                if (grass != null && model.DefoliationList != null)
-                                {
-                                    model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
-                                }
-                                else
-                                {
-                                    model.DefoliationList = null;
-                                }
+                                model = await BindOrganicData(model, cropPlans);
                                 model = RemoveFieldsFromDoubleCropList(model);
 
-                                if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-                                {
-                                    int counter = 1;
-                                    model.DefoliationList.ForEach(d =>
-                                    {
-                                        d.Counter = counter;
-                                        d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                                    });
-                                }
-                                if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-                                {
-                                    int counter = 1;
-                                    model.DoubleCrop.ForEach(d =>
-                                    {
-                                        d.Counter = counter;
-                                        d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                                    });
-                                }
+                                model=BindDefoliationOrDoubleCropList(model);
                             }
                             if (model.IsCheckAnswer && model.OrganicManures != null && model.OrganicManures.Count > 0 && model.FieldList != null)
                             {
@@ -920,63 +867,10 @@ namespace NMP.Portal.Controllers
                             model.IsAnyChangeInField = true;
                         }
                     }
-                    int organicCounter = 1;
-                    foreach (var organic in model.OrganicManures)
-                    {
-                        (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organic.ManagementPeriodID);
-                        if (error == null && managementPeriod != null)
-                        {
-                            HarvestYearPlanResponse? crop =
-    managementPeriod.CropID.HasValue
-        ? cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value)
-        : null;
 
-
-                            if (crop != null)
-                            {
-                                organic.FieldID = crop.FieldID;
-                                organic.FieldName = (await _fieldLogic.FetchFieldByFieldId(organic.FieldID.Value)).Name;
-                                organic.EncryptedCounter = _fieldDataProtector.Protect(organicCounter.ToString());
-                                organicCounter++;
-                                if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                {
-                                    organic.IsGrass = true;
-                                }
-                                else if (model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == crop.FieldID))
-                                {
-                                    model.DefoliationList.RemoveAll(x => x.FieldID == crop.FieldID);
-                                }
-                            }
-                            var grass = model.OrganicManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
-                            if (grass != null && model.DefoliationList != null)
-                            {
-                                model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
-                            }
-                            else
-                            {
-                                model.DefoliationList = null;
-                            }
-                        }
-                    }
+                    model = await BindOrganicData(model, cropPlans);
                     model = RemoveFieldsFromDoubleCropList(model);
-                    if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-                    {
-                        int counter = 1;
-                        model.DefoliationList.ForEach(d =>
-                        {
-                            d.Counter = counter;
-                            d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                        });
-                    }
-                    if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-                    {
-                        int counter = 1;
-                        model.DoubleCrop.ForEach(d =>
-                        {
-                            d.Counter = counter;
-                            d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                        });
-                    }
+                    model = BindDefoliationOrDoubleCropList(model);
 
                     if (model.IsCheckAnswer && model.IsFieldGroupChange)
                     {
@@ -985,7 +879,7 @@ namespace NMP.Portal.Controllers
                             // Perform the required action for these items
                             if (model.IsAnyChangeInField)
                             {
-                                model =await BindFieldData(model);
+                                model = await BindFieldData(model);
                             }
                         }
                     }
@@ -1006,6 +900,88 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ManureGroup");
         }
+
+        private OrganicManureViewModel BindDefoliationOrDoubleCropList(OrganicManureViewModel model)
+        {
+            if (model.DefoliationList != null && model.DefoliationList.Count > 0)
+            {
+                int counter = 1;
+                model.DefoliationList.ForEach(d =>
+                {
+                    d.Counter = counter;
+                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
+                });
+            }
+            if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
+            {
+                int counter = 1;
+                model.DoubleCrop.ForEach(d =>
+                {
+                    d.Counter = counter;
+                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
+                });
+            }
+            return model;
+        }
+        private async Task<OrganicManureViewModel> BindOrganicData(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
+        {
+            int organicCounter = 1;
+            if (model.OrganicManures != null)
+            {
+                model.OrganicManures = await BindOrganicManureListData(model, cropPlans, organicCounter);
+
+                var grass = model.OrganicManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
+                if (grass != null && model.DefoliationList != null)
+                {
+                    model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
+                }
+                else
+                {
+                    model.DefoliationList = null;
+                }
+            }
+            return model;
+        }
+
+        private async Task<List<OrganicManureDataViewModel>> BindOrganicManureListData(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans, int organicCounter)
+        {
+            foreach (var organic in model.OrganicManures)
+            {
+                (ManagementPeriod managementPeriod, _) = await _cropLogic.FetchManagementperiodById(organic.ManagementPeriodID);
+                if (managementPeriod != null)
+                {
+                    HarvestYearPlanResponse? crop =
+managementPeriod.CropID.HasValue
+? cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value)
+: null;
+                    if (crop != null)
+                    {
+                        organic.FieldID = crop.FieldID;
+                        organic.FieldName = (await _fieldLogic.FetchFieldByFieldId(organic.FieldID.Value)).Name;
+                        organic.EncryptedCounter = _fieldDataProtector.Protect(organicCounter.ToString());
+                        organicCounter++;
+                        if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                        {
+                            organic.IsGrass = true;
+                        }
+                        else if (model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == crop.FieldID))
+                        {
+                            model.DefoliationList.RemoveAll(x => x.FieldID == crop.FieldID);
+                        }
+                    }
+                    var grass = model.OrganicManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
+                    if (grass != null && model.DefoliationList != null)
+                    {
+                        model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
+                    }
+                    else
+                    {
+                        model.DefoliationList = null;
+                    }
+                }
+            }
+            return model.OrganicManures;
+        }
         private async Task<OrganicManureViewModel> BindFieldData(OrganicManureViewModel model)
         {
 
@@ -1017,6 +993,20 @@ namespace NMP.Portal.Controllers
             //check early and late for winter cereals and winter oilseed rape
             //if sowing date after 15 sept then late
             DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+
+            cropCategoryId = BindCropCategory(model, cropCategoryId, sowingDate);
+            if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
+            {
+                model.AutumnCropNitrogenUptake = await _mannerLogic.FetchCropNUptakeDefaultAsync(cropCategoryId);
+            }
+            else
+            {
+                model.AutumnCropNitrogenUptake = 0;
+            }
+            return model;
+        }
+        private int BindCropCategory(OrganicManureViewModel model, int cropCategoryId, DateTime? sowingDate)
+        {
             if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
             {
                 if (sowingDate != null)
@@ -1036,17 +1026,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
             }
-
-            if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
-            {
-
-                model.AutumnCropNitrogenUptake = await _mannerLogic.FetchCropNUptakeDefaultAsync(cropCategoryId);
-            }
-            else
-            {
-                model.AutumnCropNitrogenUptake = 0;
-            }
-            return model;
+            return cropCategoryId;
         }
 
         private static OrganicManureViewModel RemoveFieldsFromDoubleCropList(OrganicManureViewModel model)
@@ -4264,12 +4244,7 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                                {
-                                                    id = model.EncryptedFarmId,
-                                                    year = model.EncryptedHarvestYear
-                                                });
+                                                return RedirectToHarvestYearPage(model, error);
 
                                             }
 
@@ -4291,12 +4266,7 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                            return RedirectToAction("HarvestYearOverview", "Crop", new
-                                            {
-                                                id = model.EncryptedFarmId,
-                                                year = model.EncryptedHarvestYear
-                                            });
+                                            return RedirectToHarvestYearPage(model, error);
 
                                         }
                                     }
@@ -4442,12 +4412,7 @@ namespace NMP.Portal.Controllers
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
                                 HttpContext.Session.Remove(_organicManureSessionKey);
-                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear
-                                });
+                                return RedirectToHarvestYearPage(model, error);
                             }
 
                             (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
@@ -4563,34 +4528,19 @@ namespace NMP.Portal.Controllers
                             (model.IncorporationDelayName, error) = await _mannerLogic.FetchIncorporationDelayById(model.IncorporationDelay.Value);
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear
-                                });
+                                return RedirectToHarvestYearPage(model, error);
                             }
                             model.IncorporationMethod = organicManure.IncorporationMethodID;
                             (model.IncorporationMethodName, error) = await _mannerLogic.FetchIncorporationMethodById(model.IncorporationMethod.Value);
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear
-                                });
+                                return RedirectToHarvestYearPage(model, error);
                             }
                             model.MoistureTypeId = organicManure.MoistureID;
                             (MoistureTypeResponse moistureTypeResponse, error) = await _organicManureLogic.FetchMoisterTypeById(model.MoistureTypeId.Value);
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear
-                                });
+                                return RedirectToHarvestYearPage(model, error);
                             }
                             else if (moistureTypeResponse != null)
                             {
@@ -4601,12 +4551,7 @@ namespace NMP.Portal.Controllers
                             (RainTypeResponse rainTypeResponse, error) = await _organicManureLogic.FetchRainTypeById(model.RainfallWithinSixHoursID.Value);
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear
-                                });
+                                return RedirectToHarvestYearPage(model, error);
                             }
                             else if (rainTypeResponse != null)
                             {
@@ -4618,12 +4563,7 @@ namespace NMP.Portal.Controllers
 
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                {
-                                    id = model.EncryptedFarmId,
-                                    year = model.EncryptedHarvestYear
-                                });
+                                return RedirectToHarvestYearPage(model, error);
                             }
                             else if (windspeedResponse != null)
                             {
@@ -4727,13 +4667,9 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                            
                             HttpContext.Session.Remove(_organicManureSessionKey);
-                            return RedirectToAction("HarvestYearOverview", "Crop", new
-                            {
-                                id = model.EncryptedFarmId,
-                                year = model.EncryptedHarvestYear
-                            });
+                            return RedirectToHarvestYearPage(model, error);
                         }
                     }
                 }
@@ -4799,13 +4735,9 @@ namespace NMP.Portal.Controllers
                                                     }
                                                     else
                                                     {
-                                                        TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                                       
                                                         HttpContext.Session.Remove(_organicManureSessionKey);
-                                                        return RedirectToAction("HarvestYearOverview", "Crop", new
-                                                        {
-                                                            id = model.EncryptedFarmId,
-                                                            year = model.EncryptedHarvestYear
-                                                        });
+                                                        return RedirectToHarvestYearPage(model, error);
                                                     }
                                                 }
                                             }
@@ -4818,14 +4750,9 @@ namespace NMP.Portal.Controllers
                                                 return RedirectToAction("ConditionsAffectingNutrients");
                                             }
                                             else
-                                            {
-                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                            {                                               
                                                 HttpContext.Session.Remove(_organicManureSessionKey);
-                                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                                {
-                                                    id = model.EncryptedFarmId,
-                                                    year = model.EncryptedHarvestYear
-                                                });
+                                                return RedirectToHarvestYearPage(model, error);
                                             }
                                         }
 
@@ -4839,13 +4766,9 @@ namespace NMP.Portal.Controllers
                                         }
                                         else
                                         {
-                                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                            
                                             HttpContext.Session.Remove(_organicManureSessionKey);
-                                            return RedirectToAction("HarvestYearOverview", "Crop", new
-                                            {
-                                                id = model.EncryptedFarmId,
-                                                year = model.EncryptedHarvestYear
-                                            });
+                                            return RedirectToHarvestYearPage(model, error);
                                         }
                                     }
 
@@ -4868,13 +4791,9 @@ namespace NMP.Portal.Controllers
                                             }
                                             else
                                             {
-                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                                
                                                 HttpContext.Session.Remove(_organicManureSessionKey);
-                                                return RedirectToAction("HarvestYearOverview", "Crop", new
-                                                {
-                                                    id = model.EncryptedFarmId,
-                                                    year = model.EncryptedHarvestYear
-                                                });
+                                                return RedirectToHarvestYearPage(model, error);
                                             }
                                         }
                                     }
@@ -4899,13 +4818,9 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                           
                             HttpContext.Session.Remove(_organicManureSessionKey);
-                            return RedirectToAction("HarvestYearOverview", "Crop", new
-                            {
-                                id = model.EncryptedFarmId,
-                                year = model.EncryptedHarvestYear
-                            });
+                            return RedirectToHarvestYearPage(model, error);
                         }
                     }
                     else
@@ -4945,14 +4860,9 @@ namespace NMP.Portal.Controllers
                                                         return RedirectToAction("ConditionsAffectingNutrients");
                                                     }
                                                     else
-                                                    {
-                                                        TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                                                    {                                                        
                                                         HttpContext.Session.Remove(_organicManureSessionKey);
-                                                        return RedirectToAction("HarvestYearOverview", "Crop", new
-                                                        {
-                                                            id = model.EncryptedFarmId,
-                                                            year = model.EncryptedHarvestYear
-                                                        });
+                                                        return RedirectToHarvestYearPage(model,error);
                                                     }
                                                 }
                                             }
@@ -5582,6 +5492,15 @@ namespace NMP.Portal.Controllers
 
         }
 
+        private IActionResult RedirectToHarvestYearPage(OrganicManureViewModel model,Error error)
+        {
+            TempData["ErrorOnHarvestYearOverview"] = error.Message;
+            return RedirectToAction("HarvestYearOverview", "Crop", new
+            {
+                id = model.EncryptedFarmId,
+                year = model.EncryptedHarvestYear
+            });
+        }
         public IActionResult BackCheckAnswer()
         {
             _logger.LogTrace($"Organic Manure Controller : BackCheckAnswer() post action called");
