@@ -54,7 +54,7 @@ namespace NMP.Portal.Helpers
             return nmaxLimit;
         }
 
-        public decimal NMaxLimitScotland(decimal nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut, int? defoliationSequenceId, int? rainfall, int residueGroup)
+        public static decimal NMaxLimitScotland(decimal nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut, int? defoliationSequenceId, int? rainfall, int residueGroup)
         {
             nmaxLimit += GetCropSpecificAdjustmentScotland(cropTypeId, yield, cropInfo1);
 
