@@ -6658,7 +6658,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} field detail.
+        ///   Looks up a localized string similar to {0} field details.
         /// </summary>
         public static string lblGroupFieldDetail {
             get {
@@ -9820,9 +9820,18 @@ namespace NMP.Commons.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nitrogen applications for {0} .
         /// </summary>
-        public static string lblNitrogenApplicationsForCropTypeFields {
+        public static string lblNitrogenApplicationsForCropType {
             get {
-                return ResourceManager.GetString("lblNitrogenApplicationsForCropTypeFields", resourceCulture);
+                return ResourceManager.GetString("lblNitrogenApplicationsForCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen applications for {0} fields.
+        /// </summary>
+        public static string lblNitrogenApplicationsForCropTypeField {
+            get {
+                return ResourceManager.GetString("lblNitrogenApplicationsForCropTypeField", resourceCulture);
             }
         }
         
@@ -9954,6 +9963,15 @@ namespace NMP.Commons.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to {0} limit for {1} .
+        /// </summary>
+        public static string lblNMaxLimitForWinterWheat {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitForWinterWheat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} limit for {1} fields.
         /// </summary>
         public static string lblNMaxLimitForWinterWheatFields {
             get {

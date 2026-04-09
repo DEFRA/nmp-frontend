@@ -4392,7 +4392,7 @@ cubic metres per hectare  not set</value>
   <data name="LblCropTypeFields" xml:space="preserve">
     <value>{0} fields</value>
   </data>
-  <data name="lblNitrogenApplicationsForCropTypeFields" xml:space="preserve">
+  <data name="lblNitrogenApplicationsForCropType" xml:space="preserve">
     <value>Nitrogen applications for {0} </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent1" xml:space="preserve">
@@ -4404,7 +4404,7 @@ cubic metres per hectare  not set</value>
   <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
     <value>{0} limit for {1} before adjustments: {2}kg per hectare.</value>
   </data>
-  <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
+  <data name="lblNMaxLimitForWinterWheat" xml:space="preserve">
     <value>{0} limit for {1} </value>
   </data>
   <data name="lblTotal" xml:space="preserve">
@@ -7671,9 +7671,15 @@ livestock manure.</value>
     <value>Nitrogen (N) residue group</value>
   </data>
   <data name="lblGroupFieldDetail" xml:space="preserve">
-    <value>{0} field detail</value>
+    <value>{0} field details</value>
   </data>
   <data name="lblThisCalculationIsBasedOnAFarmAverageYield" xml:space="preserve">
     <value>This calculation is based on a farm average yield of {0} tonnes per hectare.</value>
+  </data>
+  <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
+    <value>{0} limit for {1} fields</value>
+  </data>
+  <data name="lblNitrogenApplicationsForCropTypeField" xml:space="preserve">
+    <value>Nitrogen applications for {0} fields</value>
   </data>
 </root>
