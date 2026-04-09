@@ -985,43 +985,7 @@ namespace NMP.Portal.Controllers
                             // Perform the required action for these items
                             if (model.IsAnyChangeInField)
                             {
-                                List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                                var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
-                                int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                                int cropCategoryId = await _mannerLogic.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
-
-                                //check early and late for winter cereals and winter oilseed rape
-                                //if sowing date after 15 sept then late
-                                DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-                                if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
-                                {
-                                    if (sowingDate != null)
-                                    {
-                                        int day = sowingDate.Value.Day;
-                                        int month = sowingDate.Value.Month;
-                                        if (month == (int)NMP.Commons.Enums.Month.September && day > 15)
-                                        {
-                                            if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal)
-                                            {
-                                                cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal;
-                                            }
-                                            else
-                                            {
-                                                cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
-                                {
-
-                                    model.AutumnCropNitrogenUptake = await _mannerLogic.FetchCropNUptakeDefaultAsync(cropCategoryId);
-                                }
-                                else
-                                {
-                                    model.AutumnCropNitrogenUptake = 0;
-                                }
+                                model =await BindFieldData(model);
                             }
                         }
                     }
@@ -1042,6 +1006,49 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction("ManureGroup");
         }
+        private async Task<OrganicManureViewModel> BindFieldData(OrganicManureViewModel model)
+        {
+
+            List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+            var crop = cropsResponse.Where(x => x.Year == model.HarvestYear);
+            int cropTypeId = crop.Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
+            int cropCategoryId = await _mannerLogic.FetchCategoryIdByCropTypeIdAsync(cropTypeId);
+
+            //check early and late for winter cereals and winter oilseed rape
+            //if sowing date after 15 sept then late
+            DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
+            if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+            {
+                if (sowingDate != null)
+                {
+                    int day = sowingDate.Value.Day;
+                    int month = sowingDate.Value.Month;
+                    if (month == (int)NMP.Commons.Enums.Month.September && day > 15)
+                    {
+                        if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal)
+                        {
+                            cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal;
+                        }
+                        else
+                        {
+                            cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape;
+                        }
+                    }
+                }
+            }
+
+            if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
+            {
+
+                model.AutumnCropNitrogenUptake = await _mannerLogic.FetchCropNUptakeDefaultAsync(cropCategoryId);
+            }
+            else
+            {
+                model.AutumnCropNitrogenUptake = 0;
+            }
+            return model;
+        }
+
         private static OrganicManureViewModel RemoveFieldsFromDoubleCropList(OrganicManureViewModel model)
         {
             //remove fields that's not in fieldList
@@ -6367,7 +6374,7 @@ namespace NMP.Portal.Controllers
                                             winterRainfall = excessRainfalls.WinterRainfall;
                                         }
 
-                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
+                                        nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
                                     }
 
 
@@ -6430,7 +6437,7 @@ namespace NMP.Portal.Controllers
                                                 {
                                                     winterRainfall = excessRainfalls.WinterRainfall;
                                                 }
-                                                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
+                                                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
 
                                             }
 
