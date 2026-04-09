@@ -4851,7 +4851,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private async Task<FertiliserManureDataViewModel> BindDefoliationName(List<HarvestYearPlanResponse> cropPlans, int manIds, Error? error, FertiliserManureDataViewModel fertiliserManure)
     {
-        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
+        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);//
         if (error == null && managementPeriod != null)
         {
             HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
