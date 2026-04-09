@@ -6658,6 +6658,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} field detail.
+        /// </summary>
+        public static string lblGroupFieldDetail {
+            get {
+                return ResourceManager.GetString("lblGroupFieldDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} fields ({1}).
         /// </summary>
         public static string lblGroupNameFieldsWithCropTypeName {
@@ -9314,6 +9323,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Market adjustment.
+        /// </summary>
+        public static string lblMarketAdjustment {
+            get {
+                return ResourceManager.GetString("lblMarketAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max application rate (everything except WOSR, Brassicas &amp; Grass).
         /// </summary>
         public static string lblMaxApplicationRateEverythingExceptWosr {
@@ -9859,6 +9877,15 @@ namespace NMP.Commons.Resources {
         public static string lblNitrogenNVegetables {
             get {
                 return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) residue group.
+        /// </summary>
+        public static string lblNitrogenResidueGroup {
+            get {
+                return ResourceManager.GetString("lblNitrogenResidueGroup", resourceCulture);
             }
         }
         
@@ -13985,6 +14012,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Standard rate.
+        /// </summary>
+        public static string lblStandardRate {
+            get {
+                return ResourceManager.GetString("lblStandardRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start a {0} plan.
         /// </summary>
         public static string lblStartAPlan {
@@ -14748,6 +14784,15 @@ namespace NMP.Commons.Resources {
         public static string lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales {
             get {
                 return ResourceManager.GetString("lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This calculation is based on a farm average yield of {0} tonnes per hectare..
+        /// </summary>
+        public static string lblThisCalculationIsBasedOnAFarmAverageYield {
+            get {
+                return ResourceManager.GetString("lblThisCalculationIsBasedOnAFarmAverageYield", resourceCulture);
             }
         }
         
@@ -18168,6 +18213,15 @@ namespace NMP.Commons.Resources {
         public static string lblWinterRainfall1OctTo1March {
             get {
                 return ResourceManager.GetString("lblWinterRainfall1OctTo1March", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter rainfall adjustment.
+        /// </summary>
+        public static string lblWinterRainfallAdjustment {
+            get {
+                return ResourceManager.GetString("lblWinterRainfallAdjustment", resourceCulture);
             }
         }
         
