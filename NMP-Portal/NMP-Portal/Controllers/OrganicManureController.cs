@@ -10424,7 +10424,7 @@ namespace NMP.Portal.Controllers
                 .ToList();
         }
 
-        private void ResetOrganicManures(OrganicManureViewModel model)
+        private static void ResetOrganicManures(OrganicManureViewModel model)
         {
             model.OrganicManures ??= new List<OrganicManureDataViewModel>();
             model.OrganicManures.Clear();
