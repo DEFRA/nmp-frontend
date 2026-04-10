@@ -2041,7 +2041,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (model.FarmId != null && model.Country == null)
             {
-                (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -2851,7 +2851,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (error == null)
                 {
-                    (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                    (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
 
                     if (error == null && manureType != null && farmManureTypeList.Count > 0)
                     {
@@ -4095,14 +4095,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return View(model);
             }
             ReportViewModel? reportModel = GetReportDataFromSession();
-                        
-            if (model.IsLivestockCheckAnswer)
+
+            if (model.IsLivestockCheckAnswer && model.IsAnyLivestockNumber == reportModel?.IsAnyLivestockNumber)
             {
-                if (model.IsAnyLivestockNumber == reportModel?.IsAnyLivestockNumber)
-                {
-                    SetReportDataToSession(model);
-                    return RedirectToAction("LivestockCheckAnswer");
-                }
+                SetReportDataToSession(model);
+                return RedirectToAction("LivestockCheckAnswer");
             }
 
             SetReportDataToSession(model);

@@ -563,7 +563,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
 
         }
-        public bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
+        public static bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
         {
             if (string.IsNullOrWhiteSpace(warningPeriod))
                 return false;
@@ -578,10 +578,7 @@ namespace NMP.Portal.Helpers
 
             return IsWithinPeriod(applicationDate, startDay, startMonth, endDay, endMonth);
         }
-        private static Regex GetRegex() =>
-    new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)",
-        RegexOptions.Compiled | RegexOptions.NonBacktracking,
-        TimeSpan.FromMilliseconds(100));
+        private static Regex GetRegex() => new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)", RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
         private static (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
         {
