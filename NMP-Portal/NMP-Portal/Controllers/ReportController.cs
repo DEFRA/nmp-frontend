@@ -633,7 +633,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
                                 (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
-                                if (string.IsNullOrWhiteSpace(error?.Message))
+                                if (grassGrowthClasses != null && grassGrowthClasses.Count > 0)
                                 {
 
                                     if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
@@ -643,7 +643,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 }
                                 else
                                 {
-                                    TempData["ErrorOnSelectField"] = error.Message;
+                                    TempData["ErrorOnSelectField"] = error?.Message;
                                     return RedirectToAction("ExportFieldsOrCropType");
                                 }
 

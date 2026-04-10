@@ -6389,7 +6389,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
-        Error error = new Error();
+        Error? error = null;
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
         PlanViewModel planViewModelBeforeUpdate = GetCropFromSession() ?? new PlanViewModel();
         if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1)
@@ -6556,7 +6556,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         PlanViewModel model = GetCropFromSession();
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
-        Error error = new Error();
+        Error? error = null;
 
         try
         {
@@ -6654,7 +6654,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
-        Error error = new Error();
+        Error? error = null;
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
 
         if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
