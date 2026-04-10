@@ -49,4 +49,5 @@ public interface ICropLogic
     Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId);
     Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
     Task<(Recommendation?, Error?)> FetchRecommendationByManagementPeriodId(int managementPeriodID);
+    Task<(List<PreviousCroppingData>?, Error?)> FetchDataByFieldId(int fieldId, int year);
 }

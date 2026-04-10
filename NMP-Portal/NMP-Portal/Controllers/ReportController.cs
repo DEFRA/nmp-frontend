@@ -21,7 +21,7 @@ using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
-public class ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IFarmLogic farmLogic, IPreviousCroppingLogic previousCroppingLogic,
+public class ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IFarmLogic farmLogic,
     IFieldLogic fieldLogic, ICropLogic cropLogic, IOrganicManureLogic organicManureLogic, IMannerLogic mannerLogic, IScotlandNMaxValueLogic scotlandNMaxValueLogic,
      IReportLogic reportLogic, IStorageCapacityLogic storageCapacityLogic, IWarningLogic warningLogic) : Controller
 {
@@ -37,7 +37,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly IWarningLogic _warningLogic = warningLogic;
     private readonly IMannerLogic _mannerLogic = mannerLogic;
     private readonly IScotlandNMaxValueLogic _scotlandNMaxValueLogic = scotlandNMaxValueLogic;
-    private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private readonly string _error = "Error";
     private readonly string _numberInJanuary = "NumbersInJanuary";
     private readonly string _reportDataSessionKey = "ReportData";
@@ -908,7 +907,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    
+
     private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, List<FieldDetails> fieldDetail, int nMaxLimit, Error?)> GetNMaxReportData(List<HarvestYearPlanResponse> harvestYearPlanResponse, ReportViewModel model,
         List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse, List<int> selectedCropGroupList, List<ScotlandNMaxValue>? scotlandNMaxValue)
     {
@@ -936,7 +935,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 if (nmaxLimit != null)
                 {
-                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, crop, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue);
+                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue);
                     return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
                 }
 
@@ -951,9 +950,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
     }
-    
+
     // ======================================
-    // NMAX REPORT - CLEAN REFACTORED VERSION
+    // NMAX REPORT
     // ======================================
 
     private async Task<(
@@ -963,7 +962,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         int)>
     BindNmaxReportData(
         int nmaxLimit,
-        Crop crop,
         HarvestYearPlanResponse cropData,
         ReportViewModel model,
         List<NitrogenApplicationsForNMaxReportResponse> nitrogenList,
@@ -971,6 +969,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         List<FieldDetails> fieldDetail,
         List<ScotlandNMaxValue>? scotlandNMaxValue)
     {
+        (Crop? crop,_) = await _cropLogic.FetchCropById(cropData.CropID);
         var field = await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value);
 
         if (field?.IsWithinNVZ != true)
@@ -980,7 +979,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         int nMaxLimitForCropType = nmaxLimit;
 
         string previousCrop =
-            await GetPreviousCropAsync(field.ID.Value, model.Year.Value);
+            await _reportLogic.GetPreviousCropAsync(field.ID.Value, model.Year.Value);
 
         bool isScotland =
             model.FarmRB209CountryID ==
@@ -999,7 +998,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else
         {
-            await  _reportLogic.ProcessScotland(
+            await _reportLogic.ProcessScotland(
                 model,
                 cropData,
                 fieldDetail,
@@ -1022,10 +1021,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     // ======================================
     // ENGLAND & WALES
     // ======================================
-   
 
 
-    
+
+
 
 
     // ======================================
@@ -1069,35 +1068,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 : (int)Math.Round(((fertiliserN ?? 0) + (organicN ?? 0)) * field.CroppedArea.Value, 0)
         });
     }
-    
+
+
+
   
-
-    private async Task<string> GetPreviousCropAsync(int fieldId, int year)
-    {
-        // Step 1: Try crop plan
-        var (cropList, _) = await _cropLogic
-            .FetchCropPlanByFieldIdAndYear(fieldId, year - 1);
-
-        if (cropList?.Any() == true)
-        {
-            var cropTypeId = cropList[0].CropTypeID;
-            if (cropTypeId != null)
-                return await _fieldLogic.FetchCropTypeById(cropTypeId.Value);
-        }
-
-        // Step 2: Fallback to previous cropping data
-        var (previousCroppingList, _) = await _previousCroppingLogic
-            .FetchDataByFieldId(fieldId, year - 1);
-
-        if (previousCroppingList?.Any() == true)
-        {
-            var cropTypeId = previousCroppingList[0].CropTypeID;
-            if (cropTypeId != null)
-                return await _fieldLogic.FetchCropTypeById(cropTypeId.Value);
-        }
-
-        return string.Empty;
-    }
 
     private static decimal CalculateYield(decimal yield, decimal baseValue, decimal multiplier)
     {

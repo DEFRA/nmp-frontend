@@ -128,7 +128,7 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
         return await _reportService.UpdateNutrientsLoadingManuresAsync(nutrientsLoadingManure);
     }
 
-    public (int soilTypeAdjustment, int millingWheat, decimal yieldAdjustment)
+    public static (int soilTypeAdjustment, int millingWheat, decimal yieldAdjustment)
    BindAdjustmentsForCerealCropEngAndWales(Crop crop, Field field)
     {
         int soil = GetSoilAdjustment(crop, field);
@@ -393,7 +393,7 @@ BindAdjustmentsForScotland(
         return (rec, mpId);
     }
 
-    private bool ShouldCalculateScotlandAdjustment(
+    private static bool ShouldCalculateScotlandAdjustment(
         List<ScotlandNMaxValue>? scotlandValues,
         Crop crop)
     {
@@ -714,6 +714,32 @@ BindAdjustmentsForScotland(
         data.AdjustedNMaxLimit = (int)Math.Round(market + rainfall + yield, 0);
 
         nMaxList.Add(data);
+    }
+    public async Task<string> GetPreviousCropAsync(int fieldId, int year)
+    {
+        // Step 1: Try crop plan
+        var (cropList, _) = await _cropLogic
+            .FetchCropPlanByFieldIdAndYear(fieldId, year - 1);
+
+        if (cropList?.Any() == true)
+        {
+            var cropTypeId = cropList[0].CropTypeID;
+            if (cropTypeId != null)
+                return await _fieldLogic.FetchCropTypeById(cropTypeId.Value);
+        }
+
+        // Step 2: Fallback to previous cropping data
+        var (previousCroppingList, _) = await _cropLogic
+            .FetchDataByFieldId(fieldId, year - 1);
+
+        if (previousCroppingList?.Any() == true)
+        {
+            var cropTypeId = previousCroppingList[0].CropTypeID;
+            if (cropTypeId != null)
+                return await _fieldLogic.FetchCropTypeById(cropTypeId.Value);
+        }
+
+        return string.Empty;
     }
 }
 

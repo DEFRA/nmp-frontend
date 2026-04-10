@@ -31,13 +31,7 @@ public interface IReportLogic
             int paperCrumbleOrStrawMulch,
             decimal grassCut)>
         BindAdjustmentsForEnglandAndWales(Crop crop, Field field, int year);
-    (int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)
-BindAdjustmentsForScotland(
-    Crop crop,
-    int? winterRainfall,
-    int? nResidueGroup,
-    int soilTypeId,
-    decimal? standardYieldList);
+    (int yieldAdjustment, int marketAdjustment, int rainfallAdjustment) BindAdjustmentsForScotland(Crop crop,int? winterRainfall,int? nResidueGroup,int soilTypeId,decimal? standardYield);
     Task<(List<FieldDetails>, decimal, int, int)> BindNmaxResponseForScotland(
        ReportViewModel model,
        Crop crop,
@@ -61,4 +55,5 @@ BindAdjustmentsForScotland(
          List<NMaxLimitReportResponse> nMaxList,
          string previousCrop,
          List<ScotlandNMaxValue>? scotlandNMaxValue);
+     Task<string> GetPreviousCropAsync(int fieldId, int year);
 }
