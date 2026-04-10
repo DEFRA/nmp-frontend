@@ -6344,11 +6344,11 @@ managementPeriod.CropID.HasValue
             var warningHelper = new WarningWithinPeriod();
 
             if (IsNonScotland(model))
+            {
                 return HandleNonScotland(model, farm, warningList, closedPeriod, warningHelper, isSlurry, isPoultry);
+            }                
 
-            return await HandleScotland(
-                model, farm, warningList, cropId, fieldId,
-                closedPeriod, warningHelper, isPoultry);
+            return await HandleScotland(model, farm, warningList, cropId, fieldId,closedPeriod, isPoultry);
         }
         private static void SetHighN(OrganicManureViewModel model, ManureType? manureType)
         {
@@ -6369,7 +6369,7 @@ managementPeriod.CropID.HasValue
             return (model, null);
         }
 #pragma warning disable S107
-        private async Task<(OrganicManureViewModel, Error?)> HandleScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, int fieldId, string? closedPeriod, WarningWithinPeriod warningHelper, bool isPoultry)
+        private async Task<(OrganicManureViewModel, Error?)> HandleScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, int fieldId, string? closedPeriod, bool isPoultry)
         {
             var (organicManureId, error) = await GetOrganicManureId(model, fieldId);
             if (error != null)
@@ -6378,7 +6378,7 @@ managementPeriod.CropID.HasValue
             bool isRanExceptPoultry =
                 (model.HighReadilyAvailableNitrogen ?? false) && !isPoultry;
 
-            await ApplyScotlandWarningsIfNeeded(model, farm, warningList, cropId, closedPeriod, warningHelper, organicManureId, isRanExceptPoultry, isPoultry);
+            await ApplyScotlandWarningsIfNeeded(model, farm, warningList, cropId, closedPeriod, organicManureId, isRanExceptPoultry, isPoultry);
 
             return (model, null);
         }
@@ -6409,7 +6409,7 @@ managementPeriod.CropID.HasValue
             return (null, null);
         }
 #pragma warning disable S107
-        private async Task ApplyScotlandWarningsIfNeeded(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, string? closedPeriod, WarningWithinPeriod warningHelper, int? organicManureId, bool isRanExceptPoultry, bool isPoultry)
+        private async Task ApplyScotlandWarningsIfNeeded(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, int cropId, string? closedPeriod, int? organicManureId, bool isRanExceptPoultry, bool isPoultry)
         {
             if (!model.ApplicationDate.HasValue ||
                 string.IsNullOrWhiteSpace(closedPeriod) ||
@@ -6503,9 +6503,7 @@ managementPeriod.CropID.HasValue
             if (!model.ApplicationDate.HasValue)
                 return false;
 
-            return helper.CheckEndClosedPeriodAndFebruary(
-                model.ApplicationDate.Value,
-                closedPeriod) == true;
+            return helper.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value,closedPeriod) == true;
         }
 
         private void ApplyWarningsRanAndPoultryTotalRateLimit(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry)
