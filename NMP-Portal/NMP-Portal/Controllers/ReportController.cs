@@ -41,6 +41,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly string _error = "Error";
     private readonly string _numberInJanuary = "NumbersInJanuary";
     private readonly string _reportDataSessionKey = "ReportData";
+    private readonly string _errorOnYear = "ErrorOnYear";
+    private readonly string _errorOnReportOptions = "ErrorOnReportOptions";
+    private readonly string _errorOnSelectField = "ErrorOnSelectField";
     private ReportViewModel? GetReportDataFromSession()
     {
         if (HttpContext.Session.Exists(_reportDataSessionKey))
@@ -126,7 +129,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 else
                 {
                     List<HarvestYearPlanResponse>? cropTypeList = await BindCropTypeForNmax(model);
-                    if (cropTypeList == null || (cropTypeList != null && cropTypeList.Count == 0))
+                    if (cropTypeList == null || !cropTypeList.Any())
                     {
                         return RedirectExportFieldsOrCropType(model);
                     }
@@ -139,14 +142,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in ExportFieldsOrCropType() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
             {
-                TempData["ErrorOnYear"] = ex.Message;
+                TempData[_errorOnYear] = ex.Message;
                 return RedirectToAction("Year");
             }
             else
             {
                 if (model.ReportOption == (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan)
                 {
-                    TempData["ErrorOnReportOptions"] = ex.Message;
+                    TempData[_errorOnReportOptions] = ex.Message;
                     return RedirectToAction("ReportOptions");
                 }
                 else
@@ -191,7 +194,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else
                 {
-                    List<HarvestYearPlanResponse>? cropTypeList = await BindCropTypeForNmax(model);
+                    await BindCropTypeForNmax(model);
                 }
                 return View(model);
             }
@@ -209,7 +212,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in ExportFieldsOrCropType() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnSelectField"] = ex.Message;
+            TempData[_errorOnSelectField] = ex.Message;
             return View(model);
         }
     }
@@ -226,22 +229,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
             if (string.IsNullOrWhiteSpace(error?.Message) && cropTypeList != null && cropTypeList.Count > 0)
             {
-                List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
-
-                foreach (var cropType in cropTypeList)
-                {
-                    Field field = await _fieldLogic.FetchFieldByFieldId(cropType.FieldID);
-                    if (field != null && (!field.IsWithinNVZ.Value))
-                    {
-                        filteredList.Add(cropType);
-                    }
-                }
-                if (filteredList.Count > 0)
-                {
-                    // Remove all matching cropTypes from cropTypeList
-                    cropTypeList.RemoveAll(ct => filteredList.Contains(ct));
-                }
-                if (cropTypeList.Count > 0)
+                cropTypeList = await FilterCropTypeList(cropTypeList);
+                if (cropTypeList != null && cropTypeList.Any())
                 {
                     cropTypeList = await AddOrRemoveCropTypeItems(farm.CountryID.Value, cropTypeList, error, model.Year.Value);
                     if (cropTypeList.Count > 0)
@@ -265,6 +254,27 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return cropTypeList;
     }
 
+    private async Task<List<HarvestYearPlanResponse>?> FilterCropTypeList(List<HarvestYearPlanResponse>? cropTypeList)
+    {
+        List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
+        if (cropTypeList != null)
+        {
+            foreach (var cropType in cropTypeList)
+            {
+                Field field = await _fieldLogic.FetchFieldByFieldId(cropType.FieldID);
+                if (field != null && (!field.IsWithinNVZ.Value))
+                {
+                    filteredList.Add(cropType);
+                }
+            }
+            if (filteredList.Count > 0)
+            {
+                // Remove all matching cropTypes from cropTypeList
+                cropTypeList.RemoveAll(ct => filteredList.Contains(ct));
+            }
+        }
+        return cropTypeList;
+    }
     private async Task BindFieldForCropReport(ReportViewModel model)
     {
         (List<HarvestYearPlanResponse> fieldList, Error? error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
@@ -293,7 +303,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             else
             {
                 ViewBag.Years = GetReportYearsList();
-                TempData["ErrorOnYear"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                TempData[_errorOnYear] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                 return View("Year", model);
             }
         }
@@ -301,7 +311,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (model.ReportOption == (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan)
             {
-                TempData["ErrorOnReportOptions"] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
+                TempData[_errorOnReportOptions] = string.Format(Resource.lblNoCropTypesAvailable, model.Year);
                 return RedirectToAction("ReportOptions");
             }
             else
@@ -401,47 +411,43 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             List<HarvestYearPlanResponse> cropForNmaxReport = cropTypeList;
 
-            //if (missingCropTypes.Any())
-            //{
-            return await FilterCropTypeList(cropForNmaxReport, cropTypeList, error, year,scotlandNMaxValue);
-            //}
+            return await FilterCropTypeList(cropForNmaxReport, cropTypeList, error, scotlandNMaxValue);
+
         }
         return cropTypeList;
     }
 
-    private async Task<List<HarvestYearPlanResponse>> FilterCropTypeList(List<HarvestYearPlanResponse> cropForNmaxReport, List<HarvestYearPlanResponse> cropTypeList, Error? error, int year, List<ScotlandNMaxValue> scotlandNMaxValue)
+    private async Task<List<HarvestYearPlanResponse>> FilterCropTypeList(List<HarvestYearPlanResponse> cropForNmaxReport, List<HarvestYearPlanResponse> cropTypeList, Error? error, List<ScotlandNMaxValue> scotlandNMaxValue)
     {
-        List<HarvestYearPlanResponse> cropTypeWithNmaxValue = new();
-        foreach (var cropData in cropForNmaxReport)
+        var filtered = new List<HarvestYearPlanResponse>();
+
+        foreach (var crop in cropForNmaxReport)
         {
-            bool nmaxWithCrop = scotlandNMaxValue.Any(x => x.CropTypeID == cropData.CropTypeID);
-            (List<ManagementPeriod> managementPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(cropData.CropID, true);
-            if (managementPeriodList.Count > 0)
+            var hasNmaxCrop = scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID);
+            var (mpList, _) = await _cropLogic.FetchManagementperiodByCropId(crop.CropID, true);
+
+            var mpId = mpList.FirstOrDefault()?.ID;
+            if (mpId is null) continue;
+
+            var (rec, _) = await _cropLogic.FetchRecommendationByManagementPeriodId(mpId.Value);
+
+            if (rec != null &&
+                (hasNmaxCrop ? (rec.NIndex != null && Convert.ToInt32(rec.NIndex) is > 0) : rec.FertilizerN is > 0))
             {
-                //need to check for grass
-                int managementPeriodId = managementPeriodList.FirstOrDefault().ID.Value;
-                (Recommendation? recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementPeriodId);
-                if (recommendation != null)
-                {
-                    var hasNmaxValue = nmaxWithCrop ? (recommendation.NIndex != null && Convert.ToInt32(recommendation.NIndex) > 0) : ((recommendation?.FertilizerN != null && recommendation?.FertilizerN > 0) == true);
-
-                    if (hasNmaxValue)
-                    {
-                        cropTypeWithNmaxValue.Add(cropData);
-                    }
-                }
+                filtered.Add(crop);
             }
-
         }
 
+        return cropTypeList.Except(cropForNmaxReport.Except(filtered)).ToList();
 
-        cropForNmaxReport = cropForNmaxReport
-            .Except(cropTypeWithNmaxValue)
-            .ToList();
 
-        return cropTypeList
-              .Except(cropForNmaxReport)
-              .ToList();
+        //cropForNmaxReport = cropForNmaxReport
+        //    .Except(cropTypeWithNmaxValue)
+        //    .ToList();
+
+        //return cropTypeList
+        //      .Except(cropForNmaxReport)
+        //      .ToList();
     }
 
     private async Task<List<HarvestYearPlanResponse>> AddOrRemoveCropTypeItemsForEngAndWales(int countryID, List<HarvestYearPlanResponse> cropTypeList, Error? error)
@@ -487,7 +493,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         (CropAndFieldReportResponse? cropAndFieldReportResponse, error) = await _fieldLogic.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
-            TempData["ErrorOnSelectField"] = error.Message;
+            TempData[_errorOnSelectField] = error.Message;
             return RedirectToAction("ExportFieldsOrCropType");
         }
         else
@@ -580,7 +586,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 }
                                 else
                                 {
-                                    TempData["ErrorOnSelectField"] = error?.Message;
+                                    TempData[_errorOnSelectField] = error?.Message;
                                     return RedirectToAction("ExportFieldsOrCropType");
                                 }
 
@@ -671,7 +677,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                         }
                                         else
                                         {
-                                            TempData["ErrorOnSelectField"] = error.Message;
+                                            TempData[_errorOnSelectField] = error.Message;
                                             return RedirectToAction("ExportFieldsOrCropType");
                                         }
                                     }
@@ -871,7 +877,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                             if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
                             {
-                                TempData["ErrorOnSelectField"] = error.Message;
+                                TempData[_errorOnSelectField] = error.Message;
                                 return RedirectToAction("ExportFieldsOrCropType");
                             }
 
@@ -896,220 +902,236 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
-                TempData["ErrorOnSelectField"] = error?.Message;
+                TempData[_errorOnSelectField] = error?.Message;
                 return RedirectToAction("ExportFieldsOrCropType");
             }
         }
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in NMaxReport() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnSelectField"] = ex.Message;
+            TempData[_errorOnSelectField] = ex.Message;
             return RedirectToAction("ExportFieldsOrCropType");
         }
         return View(model);
     }
 
-    private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, List<FieldDetails> fieldDetail, int nMaxLimit, Error?)> GetNMaxReportData(List<HarvestYearPlanResponse> harvestYearPlanResponse, int cropTypeId, ReportViewModel model,
-        List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse, List<int> selectedCropGroupList, List<ScotlandNMaxValue>? scotlandNMaxValue)
+    //pooja
+    private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, List<FieldDetails>, int, Error?)>
+  GetNMaxReportData(
+      List<HarvestYearPlanResponse> harvestYearPlanResponse,
+      int cropTypeId,
+      ReportViewModel model,
+      List<NitrogenApplicationsForNMaxReportResponse> nitrogenList,
+      List<NMaxLimitReportResponse> nMaxList,
+      List<int> selectedCropGroupList,
+      List<ScotlandNMaxValue>? scotlandNMaxValue)
     {
-        List<HarvestYearPlanResponse> cropDetails = harvestYearPlanResponse.Where(x => selectedCropGroupList.Contains(x.CropTypeID)).ToList();
+        var cropDetails = harvestYearPlanResponse
+            .Where(x => selectedCropGroupList.Contains(x.CropTypeID))
+            .ToList();
+
         Error? error = null;
         int? nmaxLimit = 0;
-        string cropTypeName = string.Empty;
-
-        List<FieldDetails> fieldDetail = new List<FieldDetails>();
+        var fieldDetails = new List<FieldDetails>();
 
         foreach (var cropData in cropDetails)
         {
-            (Crop? crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
-            if (crop != null)
-            {
-                (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                if (error == null && cropTypeLinkingResponse != null && model.Farm != null && model.Farm.CountryID.HasValue)
-                {
-                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                    {
-                        nmaxLimit = await GetNMaxValueForScotland(error, model, cropData);
-                    }
-                    else
-                    {
-                        nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingResponse);
-                    }
-                    if (nmaxLimit != null)
-                    {
-                        int nMaxLimitForCropType = nmaxLimit.Value;
-                        Field field = await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value);
-                        if (field != null && field.IsWithinNVZ != null && field.IsWithinNVZ.Value)
-                        {
+            var result = await ProcessCrop(
+                cropData, model, scotlandNMaxValue,
+                nitrogenList, nMaxList, fieldDetails);
 
-                            //if (error == null)
-                            //{
-                            int soilTypeAdjustment = 0; int millingWheat = 0;
-                            decimal yieldAdjustment = 0; int paperCrumbleOrStrawMulch = 0; decimal grassCut = 0;
-                            int marketAdjustment = 0; int rainfallAdjustment = 0;
-                            cropTypeName = cropData.CropTypeName;
-                            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                            {
-                                (List<int> currentYearManureTypeIds, _) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(field.ID.Value), model.Year.Value, false);
-                                (List<int> previousYearManureTypeIds, _) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(field.ID.Value), model.Year.Value - 1, false);
-                                bool manureTypeCondition = CheckManureTypeCondition(currentYearManureTypeIds, previousYearManureTypeIds);
-                                cropTypeName = cropData.CropTypeName;
-                                //cropTypeName = (await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value));
+            if (result.error != null)
+                return (nitrogenList, nMaxList, fieldDetails, nmaxLimit ?? 0, result.error);
 
-                                (soilTypeAdjustment, millingWheat, yieldAdjustment, paperCrumbleOrStrawMulch, grassCut) = BindAdjustmentsForEnglandAndWales(crop, field, manureTypeCondition);
-
-                                if (nmaxLimit != null)
-                                {
-                                    nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + soilTypeAdjustment + yieldAdjustment + millingWheat + paperCrumbleOrStrawMulch + grassCut, 0));
-                                    NMaxLimitReportResponse nMaxLimitData = BindNMaxLimitReportResponse(field, crop, nMaxLimitForCropType, yieldAdjustment);
-                                    nMaxLimitData.CropTypeName = cropTypeName;
-                                    nMaxLimitData.AdjustmentForThreeOrMoreCuts = grassCut;
-                                    nMaxLimitData.SoilTypeAdjustment = soilTypeAdjustment;
-                                    nMaxLimitData.MillingWheat = millingWheat;
-                                    nMaxLimitData.AdjustedNMaxLimit = nMaxLimitForCropType;
-                                    nMaxLimitData.PaperCrumbleOrStrawMulch = paperCrumbleOrStrawMulch;
-                                    nMaxLimitReportResponse.Add(nMaxLimitData);
-                                }
-                            }
-                            else
-                            {
-                                Recommendation? recommendation = null;
-                                string previousCrop = string.Empty;
-                                List<SoilTypesResponse> soilTypes = await _fieldLogic.FetchSoilTypes();
-                                SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
-                                (List<Crop> cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(field.ID.Value, model.Year.Value - 1);
-                                if (cropList.Count > 0)
-                                {
-                                    int previousCropId = cropList.FirstOrDefault().CropTypeID.Value;
-                                    previousCrop = await _fieldLogic.FetchCropTypeById(previousCropId);
-                                }
-                                else
-                                {
-                                    (List<PreviousCroppingData> previousCroppingList, error) =
-                                      await _previousCroppingLogic.FetchDataByFieldId(field.ID.Value, model.Year.Value - 1);
-
-                                    if (previousCroppingList != null && previousCroppingList.Count > 0)
-                                    {
-                                        int previousCropId = previousCroppingList.FirstOrDefault().CropTypeID.Value;
-                                        previousCrop = await _fieldLogic.FetchCropTypeById(previousCropId);
-                                    }
-                                }
-                                (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
-
-                                (List<ManagementPeriod> managementPeriodList, _) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, true);
-                                if (managementPeriodList.Count > 0)
-                                {
-                                    //need to check for grass
-                                    int managementPeriodId = managementPeriodList.FirstOrDefault().ID.Value;
-                                    (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementPeriodId);
-                                    if (recommendation != null)
-                                    {
-                                        if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0 && scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID))
-                                        {
-                                            (yieldAdjustment, marketAdjustment, rainfallAdjustment) = BindAdjustmentsForScotland(crop, excessRainfalls != null ? excessRainfalls.WinterRainfall : null, recommendation.NIndex != null ? Convert.ToInt32(recommendation.NIndex) : null, field.SoilTypeID.Value, cropTypeLinkingResponse.DefaultYieldScotland);
-                                        }
-                                        fieldDetail.Add(new FieldDetails
-                                        {
-                                            FieldName = field.Name ?? "",
-                                            CroppedArea = field.CroppedArea,
-                                            SoilType = soilType?.SoilType,
-                                            PreviousCrop = previousCrop,
-                                            NitrogenResidueGroup = recommendation.NIndex != null
-                                            ? Convert.ToInt32(recommendation.NIndex)
-                                            : null
-                                        });
-
-                                    }
-                                }
-                                if (nmaxLimit != null)
-                                {
-                                    nMaxLimitForCropType = Convert.ToInt32(Math.Round(nMaxLimitForCropType + marketAdjustment + yieldAdjustment + rainfallAdjustment, 0));
-                                    NMaxLimitReportResponse nMaxLimitData = BindNMaxLimitReportResponse(field, crop, nMaxLimitForCropType, yieldAdjustment);
-                                    nMaxLimitData.CropTypeName = cropTypeName;
-                                    nMaxLimitData.MarketAdjustment = marketAdjustment;
-                                    nMaxLimitData.WinterRainfallAdjustment = rainfallAdjustment;
-                                    nMaxLimitData.StandardRate = nmaxLimit;
-                                    nMaxLimitData.AdjustedNMaxLimit = Convert.ToInt32(Math.Round((marketAdjustment + rainfallAdjustment + yieldAdjustment), 0));
-                                    nMaxLimitReportResponse.Add(nMaxLimitData);
-                                }
-
-                            }
-                            if (nmaxLimit != null)
-                            {
-                                decimal? totalFertiliserN = null;
-                                decimal? totalOrganicAvailableN = null;
-                                (List<ManagementPeriod> ManPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
-                                if (string.IsNullOrWhiteSpace(error?.Message) && ManPeriodList != null && ManPeriodList.Count > 0)
-                                {
-                                    foreach (var managementPeriod in ManPeriodList)
-                                    {
-                                        (decimal? totalNitrogen, error) = await _fertiliserManureLogic.FetchTotalNByManagementPeriodID(managementPeriod.ID.Value);
-                                        if (error == null && totalNitrogen != null)
-                                        {
-                                            if (totalFertiliserN == null)
-                                            {
-                                                totalFertiliserN = 0;
-                                            }
-                                            totalFertiliserN = totalFertiliserN + totalNitrogen;
-                                        }
-                                    }
-                                    foreach (var managementPeriod in ManPeriodList)
-                                    {
-                                        (decimal? totalNitrogen, error) = await _organicManureLogic.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
-                                        if (error == null && totalNitrogen != null)
-                                        {
-                                            if (totalOrganicAvailableN == null)
-                                            {
-                                                totalOrganicAvailableN = 0;
-                                            }
-                                            totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
-                                        }
-                                    }
-                                }
-                                var nitrogenResponse = new NitrogenApplicationsForNMaxReportResponse
-                                {
-                                    FieldId = field.ID.Value,
-                                    FieldName = field.Name ?? string.Empty,
-                                    CropTypeName = cropTypeName,
-                                    CropArea = field.CroppedArea.HasValue ? field.CroppedArea.Value : default(decimal),
-                                    InorganicNRate = totalFertiliserN != null ? (int)Math.Round(totalFertiliserN.Value, 0) : null,
-                                    InorganicNTotal = totalFertiliserN != null ? (int)Math.Round((totalFertiliserN.Value * field.CroppedArea.Value), 0) : null,
-                                    OrganicCropAvailableNRate = totalOrganicAvailableN != null ? (int)Math.Round(totalOrganicAvailableN.Value, 0) : null,
-                                    OrganicCropAvailableNTotal = (totalOrganicAvailableN != null ? (int)Math.Round((totalOrganicAvailableN.Value * field.CroppedArea.Value), 0) : null),
-                                    NRate = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (int)Math.Round((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0), 0),
-                                    NTotal = (totalFertiliserN == null && totalOrganicAvailableN == null) ? null : (int)Math.Round(((totalFertiliserN ?? 0) + (totalOrganicAvailableN ?? 0)) * field.CroppedArea.Value, 0),
-                                };
-
-                                if (nitrogenResponse != null)
-                                {
-                                    nitrogenApplicationsForNMaxReportResponse.Add(nitrogenResponse);
-                                }
-                            }
-
-                            //}
-                            //else
-                            //{
-                            //    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, nmaxLimit, error);
-                            //}
-                        }
-                    }
-                }
-                else
-                {
-                    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
-                }
-            }
-            else
-            {
-
-                TempData["ErrorOnSelectField"] = error?.Message;
-                return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
-            }
-
+            nmaxLimit = result.nmaxLimit ?? nmaxLimit;
         }
-        return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
+
+        return (nitrogenList, nMaxList, fieldDetails, nmaxLimit ?? 0, error);
     }
 
+    private async Task<(int? nmaxLimit, Error? error)> ProcessCrop(
+    HarvestYearPlanResponse cropData,
+    ReportViewModel model,
+    List<ScotlandNMaxValue>? scotlandNMaxValue,
+    List<NitrogenApplicationsForNMaxReportResponse> nitrogenList,
+    List<NMaxLimitReportResponse> nMaxList,
+    List<FieldDetails> fieldDetails)
+    {
+        var (crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
+        if (crop == null)
+            return (0, error);
+
+        var (linking, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+
+        if (model.Farm?.CountryID == null || linking == null)
+            return (0, error);
+
+        int? nmaxLimit = model.FarmRB209CountryID ==
+            (int)NMP.Commons.Enums.RB209Country.Scotland
+            ? await GetNMaxValueForScotland(error, cropData)
+            : FetchNmaxLimit(model.Farm.CountryID.Value, linking);
+
+        if (nmaxLimit == null)
+            return (0, error);
+
+        var field = await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value);
+        if (field?.IsWithinNVZ != true)
+            return (nmaxLimit, error);
+
+        if (model.FarmRB209CountryID ==
+            (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            await HandleScotland(crop, field, cropData, model, linking,
+                scotlandNMaxValue, nMaxList, fieldDetails, nmaxLimit.Value);
+        }
+        else
+        {
+            await HandleEngland(crop, field, cropData, model, linking,
+                nMaxList, nmaxLimit.Value);
+        }
+
+        await AddNitrogenData(crop, field, cropData, nitrogenList);
+
+        return (nmaxLimit, error);
+    }
+    private async Task<string> GetPreviousCrop(int fieldId, int year)
+    {
+        var (cropList, _) = await _cropLogic.FetchCropPlanByFieldIdAndYear(fieldId, year - 1);
+
+        if (cropList.Any())
+            return await _fieldLogic.FetchCropTypeById(cropList.First().CropTypeID.Value);
+
+        var (prevList, _) = await _previousCroppingLogic.FetchDataByFieldId(fieldId, year - 1);
+
+        if (prevList?.Any() == true)
+            return await _fieldLogic.FetchCropTypeById(prevList.First().CropTypeID.Value);
+
+        return string.Empty;
+    }
+
+    private async Task HandleEngland(
+    Crop crop,
+    Field field,
+    HarvestYearPlanResponse cropData,
+    ReportViewModel model,
+    CropTypeLinkingResponse linking,
+    List<NMaxLimitReportResponse> nMaxList,
+    int nmaxLimit)
+    {
+        var (currentManure, _) = await _organicManureLogic
+            .FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(field.ID.Value, model.Year.Value, false);
+
+        var (previousManure, _) = await _organicManureLogic
+            .FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(field.ID.Value, model.Year.Value - 1, false);
+
+        bool manureCondition = CheckManureTypeCondition(currentManure, previousManure);
+
+        var (soilAdj, milling, yieldAdj, paper, grass) =
+            BindAdjustmentsForEnglandAndWales(crop, field, manureCondition);
+
+        int finalNmax = (int)Math.Round(nmaxLimit + soilAdj + yieldAdj + milling + paper + grass, 0);
+
+        var data = BindNMaxLimitReportResponse(field, crop, finalNmax, yieldAdj);
+
+        data.CropTypeName = cropData.CropTypeName;
+        data.SoilTypeAdjustment = soilAdj;
+        data.MillingWheat = milling;
+        data.AdjustmentForThreeOrMoreCuts = grass;
+        data.PaperCrumbleOrStrawMulch = paper;
+        data.AdjustedNMaxLimit = finalNmax;
+
+        nMaxList.Add(data);
+    }
+
+    private async Task HandleScotland(
+    Crop crop,
+    Field field,
+    HarvestYearPlanResponse cropData,
+    ReportViewModel model,
+    CropTypeLinkingResponse linking,
+    List<ScotlandNMaxValue>? scotlandNMaxValue,
+    List<NMaxLimitReportResponse> nMaxList,
+    List<FieldDetails> fieldDetails,
+    int nmaxLimit)
+    {
+        var soilTypes = await _fieldLogic.FetchSoilTypes();
+        var soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
+
+        string previousCrop = await GetPreviousCrop(field.ID.Value, model.Year.Value);
+
+        var (rainfallData, _) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
+
+        var (mpList, _) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, true);
+        var mpId = mpList.FirstOrDefault()?.ID;
+
+        if (mpId == null) return;
+
+        var (rec, _) = await _cropLogic.FetchRecommendationByManagementPeriodId(mpId.Value);
+        if (rec == null) return;
+
+        decimal yieldAdj = 0;
+        int marketAdj = 0, rainAdj = 0;
+
+        if (scotlandNMaxValue?.Any(x => x.CropTypeID == crop.CropTypeID) == true)
+        {
+            (yieldAdj, marketAdj, rainAdj) =
+                BindAdjustmentsForScotland(
+                    crop,
+                    rainfallData?.WinterRainfall,
+                    rec.NIndex != null ? Convert.ToInt32(rec.NIndex) : null,
+                    field.SoilTypeID.Value,
+                    linking.DefaultYieldScotland);
+        }
+
+        fieldDetails.Add(new FieldDetails
+        {
+            FieldName = field.Name ?? "",
+            CroppedArea = field.CroppedArea,
+            SoilType = soilType?.SoilType,
+            PreviousCrop = previousCrop,
+            NitrogenResidueGroup = rec.NIndex != null ? Convert.ToInt32(rec.NIndex) : null
+        });
+
+        int finalNmax = (int)Math.Round(nmaxLimit + marketAdj + yieldAdj + rainAdj, 0);
+
+        var data = BindNMaxLimitReportResponse(field, crop, finalNmax, yieldAdj);
+
+        data.CropTypeName = cropData.CropTypeName;
+        data.MarketAdjustment = marketAdj;
+        data.WinterRainfallAdjustment = rainAdj;
+        data.StandardRate = nmaxLimit;
+        data.AdjustedNMaxLimit = finalNmax;
+
+        nMaxList.Add(data);
+    }
+    private async Task AddNitrogenData(
+    Crop crop,
+    Field field,
+    HarvestYearPlanResponse cropData,
+    List<NitrogenApplicationsForNMaxReportResponse> nitrogenList)
+    {
+        decimal? fertN = 0, orgN = 0;
+
+        var (periods, _) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
+
+        foreach (var p in periods)
+        {
+            var (n1, _) = await _fertiliserManureLogic.FetchTotalNByManagementPeriodID(p.ID.Value);
+            var (n2, _) = await _organicManureLogic.FetchAvailableNByManagementPeriodID(p.ID.Value);
+
+            fertN += n1 ?? 0;
+            orgN += n2 ?? 0;
+        }
+
+        nitrogenList.Add(new NitrogenApplicationsForNMaxReportResponse
+        {
+            FieldId = field.ID.Value,
+            FieldName = field.Name ?? "",
+            CropTypeName = cropData.CropTypeName,
+            CropArea = field.CroppedArea ?? 0,
+            NRate = (int?)Math.Round((fertN ?? 0) + (orgN ?? 0), 0)
+        });
+    }
     private NMaxLimitReportResponse BindNMaxLimitReportResponse(Field field, Crop crop, int nMaxLimitForCropType, decimal yieldAdjustment)
     {
         //, int nMaxLimitForCropType,int soilTypeAdjustment,decimal yieldAdjustment,int millingWheatAdjustment, int paperCrumbleOrStrawMulch,decimal grassCut
@@ -1127,7 +1149,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         };
 
     }
-    private bool CheckManureTypeCondition(List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds)
+    private static bool CheckManureTypeCondition(List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds)
     {
         bool manureTypeCondition = false;
         if (currentYearManureTypeIds.Count > 0)
@@ -1210,68 +1232,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 paperCrumbleOrStrawMulch = 80;
             }
-            if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterWheat)
-            {
-                if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
-                {
-                    soilTypeAdjustment = 20;
-                }
-                if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Commons.Enums.CropInfoOne.Milling)
-                {
-                    millingWheat = 40;
-                }
-                if (crop.Yield != null && crop.Yield > 8.0m)
-                {
-                    yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 8.0m) / 0.1m) * 2);
-                }
-            }
-            else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WholecropWinterWheat)
-            {
-                if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
-                {
-                    soilTypeAdjustment = 20;
-                }
-            }
-            else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.SpringWheat)
-            {
-                if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Commons.Enums.CropInfoOne.Milling)
-                {
-                    millingWheat = 40;
-                }
-                if (crop.Yield != null && crop.Yield > 7.0m)
-                {
-                    yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 7.0m) / 0.1m) * 2);
-                }
-            }
-            else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterBarley)
-            {
-                if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
-                {
-                    soilTypeAdjustment = 20;
-                }
-                if (crop.Yield != null && crop.Yield > 6.5m)
-                {
-                    yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 6.5m) / 0.1m) * 2);
-                }
-            }
-            else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WholecropWinterBarley)
-            {
-                if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
-                {
-                    soilTypeAdjustment = 20;
-                }
-            }
-            else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.SpringBarley)
-            {
-                if (crop.Yield != null && crop.Yield > 5.5m)
-                {
-                    yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 5.5m) / 0.1m) * 2);
-                }
-            }
-            else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && crop.Yield != null && crop.Yield > 3.5m)
-            {
-                yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 3.5m) / 0.1m) * 6);
-            }
+            (soilTypeAdjustment, millingWheat, yieldAdjustment) = BindAdjustmentsForCerealCropEngAndWales(crop, field);
 
         }
         return (
@@ -1282,7 +1243,80 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     grassCut
     );
     }
-    private (int yieldAdjustment, int marketAdjument, int rainfallAdjument) BindAdjustmentsForScotland(Crop crop, int? winterRainfall, int? nResidueGroup, int soilTypeId, decimal? standardYield)
+    private static (int soilTypeAdjustment, int millingWheat, decimal yieldAdjustment) BindAdjustmentsForCerealCropEngAndWales(Crop crop, Field field)
+    {
+        int soilTypeAdjustment = 0;
+        int millingWheat = 0;
+        decimal yieldAdjustment = 0;
+        if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterWheat)
+        {
+            if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
+            {
+                soilTypeAdjustment = 20;
+            }
+            if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Commons.Enums.CropInfoOne.Milling)
+            {
+                millingWheat = 40;
+            }
+            if (crop.Yield != null && crop.Yield > 8.0m)
+            {
+                yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 8.0m) / 0.1m) * 2);
+            }
+        }
+        else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WholecropWinterWheat)
+        {
+            if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
+            {
+                soilTypeAdjustment = 20;
+            }
+        }
+        else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.SpringWheat)
+        {
+            if (crop.CropInfo1 != null && crop.CropInfo1 == (int)NMP.Commons.Enums.CropInfoOne.Milling)
+            {
+                millingWheat = 40;
+            }
+            if (crop.Yield != null && crop.Yield > 7.0m)
+            {
+                yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 7.0m) / 0.1m) * 2);
+            }
+        }
+        else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterBarley)
+        {
+            if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
+            {
+                soilTypeAdjustment = 20;
+            }
+            if (crop.Yield != null && crop.Yield > 6.5m)
+            {
+                yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 6.5m) / 0.1m) * 2);
+            }
+        }
+        else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WholecropWinterBarley)
+        {
+            if (field.SoilTypeID != null && field.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
+            {
+                soilTypeAdjustment = 20;
+            }
+        }
+        else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.SpringBarley)
+        {
+            if (crop.Yield != null && crop.Yield > 5.5m)
+            {
+                yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 5.5m) / 0.1m) * 2);
+            }
+        }
+        else if (crop.CropTypeID.Value == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && crop.Yield != null && crop.Yield > 3.5m)
+        {
+            yieldAdjustment = (int)Math.Round(((crop.Yield.Value - 3.5m) / 0.1m) * 6);
+        }
+        return (
+   soilTypeAdjustment,
+   millingWheat,
+   yieldAdjustment
+   );
+    }
+    private static (int yieldAdjustment, int marketAdjument, int rainfallAdjument) BindAdjustmentsForScotland(Crop crop, int? winterRainfall, int? nResidueGroup, int soilTypeId, decimal? standardYield)
     {
         int yieldAdjustment = 0; int marketAdjument = 0; int rainfallAdjument = 0;
         if (crop.CropInfo1 == (int)NMP.Commons.Enums.CropInfoOne.Milling)
@@ -1370,26 +1404,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return (yieldAdjustment, marketAdjument, rainfallAdjument);
     }
-    private async Task<int?> GetNMaxValueForScotland(Error? error, ReportViewModel model, HarvestYearPlanResponse cropData)
+    private async Task<int?> GetNMaxValueForScotland(Error? error, HarvestYearPlanResponse cropData)
     {
         int? nMaxLimit = null;
         Recommendation? recommendation = null;
         (List<ManagementPeriod> managementPeriodList, _) = await _cropLogic.FetchManagementperiodByCropId(cropData.CropID, true);
         if (managementPeriodList.Count > 0)
         {
-            //need to check for grass
-            int? managementPeriodId = managementPeriodList.FirstOrDefault()?.ID;
-            if (managementPeriodId != null)
+            int managementPeriodId = managementPeriodList.First().ID.Value;
+
+            (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementPeriodId);
+            if (recommendation == null)
             {
-                (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementPeriodId.Value);
-                if (recommendation == null)
-                {
-                    return 0;
-                }
+                return null;
             }
+            nMaxLimit =await CalculateNmax(recommendation, nMaxLimit, cropData);
         }
-        (List<ScotlandNMaxValue>? scotlandNMaxValueList, error) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
-        if (error == null && scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
+
+        return nMaxLimit;
+    }
+    private async Task<int?> CalculateNmax(Recommendation recommendation, int? nMaxLimit, HarvestYearPlanResponse cropData)
+    {
+        (List<ScotlandNMaxValue>? scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
+        if (scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
             ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID);
 
@@ -1419,7 +1456,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return nMaxLimit;
     }
-
     private static string ShorthandDefoliationSequence(List<string> data)
     {
         if (data == null || data.Count == 0)
@@ -1592,7 +1628,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in ReportOptions() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnReportOptions"] = ex.Message;
+            TempData[_errorOnReportOptions] = ex.Message;
             return View(model);
         }
     }
@@ -1612,7 +1648,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in FieldAndPlanReports() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnReportOptions"] = ex.Message;
+            TempData[_errorOnReportOptions] = ex.Message;
             return RedirectToAction("ReportOptions");
         }
         return View(model);
@@ -1688,7 +1724,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in NVZComplianceReports() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnReportOptions"] = ex.Message;
+            TempData[_errorOnReportOptions] = ex.Message;
             return RedirectToAction("ReportOptions");
         }
         return View(model);
@@ -1907,7 +1943,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in Year() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnYear"] = ex.Message;
+            TempData[_errorOnYear] = ex.Message;
             return View(model);
         }
     }
@@ -1970,7 +2006,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Report Controller : Exception in IsGrasslandDerogation() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnYear"] = ex.Message;
+            TempData[_errorOnYear] = ex.Message;
             return RedirectToAction("Year");
         }
         return View(model);
