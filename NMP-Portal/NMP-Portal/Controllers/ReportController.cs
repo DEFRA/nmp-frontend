@@ -908,7 +908,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    //pooja
+    
     private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, List<FieldDetails> fieldDetail, int nMaxLimit, Error?)> GetNMaxReportData(List<HarvestYearPlanResponse> harvestYearPlanResponse, ReportViewModel model,
         List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse, List<int> selectedCropGroupList, List<ScotlandNMaxValue>? scotlandNMaxValue)
     {
@@ -951,7 +951,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
     }
-    //pooja
+    
     // ======================================
     // NMAX REPORT - CLEAN REFACTORED VERSION
     // ======================================
@@ -1069,7 +1069,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 : (int)Math.Round(((fertiliserN ?? 0) + (organicN ?? 0)) * field.CroppedArea.Value, 0)
         });
     }
-    //pooja
+    
   
 
     private async Task<string> GetPreviousCropAsync(int fieldId, int year)
