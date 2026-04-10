@@ -2,10 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NMP.Commons.Helpers;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Web;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -36,17 +38,17 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
                 }
                 else
                 {
-                    if (responseWrapper != null && responseWrapper.Error != null)
-                    {
-                        Error? error = responseWrapper?.Error?.ToObject<Error>();
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
-                    }
+                    _logger.ExtractError(responseWrapper, null);
                 }
             }
         }
         catch(HttpRequestException hre)
         {
-            _logger.LogError("{Message} : {StackTrace}", hre?.Message, hre?.StackTrace);
+            _logger.HandleHttpRequestException(hre, null);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, null);
         }
 
         return addresses;
