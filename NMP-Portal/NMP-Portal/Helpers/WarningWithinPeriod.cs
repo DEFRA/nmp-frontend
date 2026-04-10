@@ -563,7 +563,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
 
         }
-        public static bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
+        public bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
         {
             if (string.IsNullOrWhiteSpace(warningPeriod))
                 return false;
