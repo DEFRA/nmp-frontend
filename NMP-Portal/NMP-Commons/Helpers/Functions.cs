@@ -65,6 +65,14 @@ namespace NMP.Commons.Helpers
             }
             return 0;
         }
+        public static decimal ApplyYieldBonusScotland(decimal? yield, decimal threshold, decimal step, decimal increment)
+        {
+            if (yield.HasValue && yield > threshold)
+            {
+                return (int)Math.Round(((yield.Value - threshold) / step) * increment);
+            }
+            return 0;
+        }
 
         public static int ApplySoilTypeBonus(string soilType)
         {
