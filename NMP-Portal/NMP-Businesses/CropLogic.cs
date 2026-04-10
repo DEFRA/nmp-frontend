@@ -15,12 +15,13 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService, IPreviousCroppingLogic previousCroppingLogic) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
     private readonly ICropService _cropService = cropService;
     private readonly ISnsAnalysisService _snsAnalysisService = snsAnalysisService;
     private readonly IRecommendationService _recommendationService = recommendationService;
+    private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         _logger.LogTrace("Adding crop nutrient management plan");
@@ -256,5 +257,10 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
     {
         _logger.LogTrace("CropLogic : Fetch Recommendation By ManagementPeriodId:{0} called", managementPeriodID);
         return await _recommendationService.FetchRecommendationByManagementPeriodId(managementPeriodID);
+    }
+    public async Task<(List<PreviousCroppingData>?, Error?)> FetchDataByFieldId(int fieldId, int year)
+    {
+        _logger.LogTrace("CropLogic : Fetch PreviousCropping By FieldId:{0} and Year:{1} called", fieldId, year);
+        return await _previousCroppingLogic.FetchDataByFieldId(fieldId, year);
     }
 }

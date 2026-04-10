@@ -24,4 +24,36 @@ public interface IReportLogic
     Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id);
     Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId);
     Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
+    Task<(
+            int soilTypeAdjustment,
+            int millingWheat,
+            decimal yieldAdjustment,
+            int paperCrumbleOrStrawMulch,
+            decimal grassCut)>
+        BindAdjustmentsForEnglandAndWales(Crop crop, Field field, int year);
+    (int yieldAdjustment, int marketAdjustment, int rainfallAdjustment) BindAdjustmentsForScotland(Crop crop,int? winterRainfall,int? nResidueGroup,int soilTypeId,decimal? standardYield);
+    Task<(List<FieldDetails>, decimal, int, int)> BindNmaxResponseForScotland(
+       ReportViewModel model,
+       Crop crop,
+       Field field,
+       List<FieldDetails> fieldDetail,
+       decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue);
+    Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> ManPeriodList);
+    Task ProcessEnglandAndWales(
+       Crop crop,
+       Field field,
+       ReportViewModel model,
+       HarvestYearPlanResponse cropData,
+        string cropTypeName,
+        int nMaxLimitForCropType,
+       List<NMaxLimitReportResponse> nMaxList);
+    Task ProcessScotland(
+         ReportViewModel model,
+         HarvestYearPlanResponse cropData,
+         List<FieldDetails> fieldDetail,
+          int nMaxLimitForCropType,
+         List<NMaxLimitReportResponse> nMaxList,
+         string previousCrop,
+         List<ScotlandNMaxValue>? scotlandNMaxValue);
+     Task<string> GetPreviousCropAsync(int fieldId, int year);
 }
