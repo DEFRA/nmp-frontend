@@ -1378,5 +1378,39 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         _logger.LogError(ex, ex.Message);
         return error;
     }
+    public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(int cropTypeId, int soilTypeId, int residueGroup)
+    {
+        Error? error = null;
+        int? scotlandNmax = 0;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            string requestUrl = string.Format(ApiurlHelper.FetchScotlandNMaxValueByCropTypeIdSoilTypeIdResidueAsyncAPI, cropTypeId, soilTypeId, residueGroup);
+
+
+            var response = await httpClient.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                scotlandNmax = responseWrapper.Data != null ? responseWrapper.Data.ScotlandNMax : (decimal?)null;
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = HandleHttpRequestException(hre);
+        }
+        catch (Exception ex)
+        {
+            error = HandleException(ex);
+        }
+        return (scotlandNmax, error);
+    }
+
 
 }

@@ -783,11 +783,10 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return grassSeasons;
     }
 
-    public async Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds)
+    public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)
     {
         var fieldIdsRequest = new { fieldIds };
-        Error? error = null;
-        string message = string.Empty;
+        Error? error = null;        
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
         try
         {

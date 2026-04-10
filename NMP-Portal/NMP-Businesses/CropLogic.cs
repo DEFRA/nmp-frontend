@@ -116,7 +116,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(swardTypeId, swardManagementId, numberOfCut, isNewSward);
     }
 
-    public async Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds)
+    public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)
     {
         _logger.LogTrace("Fetching grass growth class for FieldIds: {FieldIds}", string.Join(", ", fieldIds));
         return await _cropService.FetchGrassGrowthClass(fieldIds);

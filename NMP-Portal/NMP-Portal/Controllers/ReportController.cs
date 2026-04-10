@@ -644,7 +644,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                             {
                                 (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
-                                if (string.IsNullOrWhiteSpace(error?.Message))
+                                if (grassGrowthClasses != null && grassGrowthClasses.Count > 0)
                                 {
 
                                     if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
@@ -654,7 +654,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 }
                                 else
                                 {
-                                    TempData["ErrorOnSelectField"] = error.Message;
+                                    TempData["ErrorOnSelectField"] = error?.Message;
                                     return RedirectToAction("ExportFieldsOrCropType");
                                 }
 
@@ -2254,7 +2254,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (model.FarmId != null && model.Country == null)
             {
-                (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
                     model.Country = farm.CountryID;
@@ -3064,7 +3064,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (error == null)
                 {
-                    (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                    (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
 
                     if (error == null && manureType != null && farmManureTypeList.Count > 0)
                     {
@@ -4308,14 +4308,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return View(model);
             }
             ReportViewModel? reportModel = GetReportDataFromSession();
-                        
-            if (model.IsLivestockCheckAnswer)
+
+            if (model.IsLivestockCheckAnswer && model.IsAnyLivestockNumber == reportModel?.IsAnyLivestockNumber)
             {
-                if (model.IsAnyLivestockNumber == reportModel?.IsAnyLivestockNumber)
-                {
-                    SetReportDataToSession(model);
-                    return RedirectToAction("LivestockCheckAnswer");
-                }
+                SetReportDataToSession(model);
+                return RedirectToAction("LivestockCheckAnswer");
             }
 
             SetReportDataToSession(model);

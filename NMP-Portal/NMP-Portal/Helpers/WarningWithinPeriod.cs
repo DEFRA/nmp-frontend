@@ -80,8 +80,6 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial, int? countryId)
         {
             string? closedPeriod = null;
-
-
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
@@ -546,7 +544,7 @@ namespace NMP.Portal.Helpers
             return WarningPeriod;
         }
 
-        public string? ClosedPeriodForFertiliser(int cropTypeId)
+        public static string? ClosedPeriodForFertiliser(int cropTypeId)
         {
             string? closedPeriod = null;
             if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
@@ -563,7 +561,7 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
 
         }
-        public bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
+        public static bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
         {
             if (string.IsNullOrWhiteSpace(warningPeriod))
                 return false;
@@ -578,10 +576,7 @@ namespace NMP.Portal.Helpers
 
             return IsWithinPeriod(applicationDate, startDay, startMonth, endDay, endMonth);
         }
-        private static Regex GetRegex() =>
-    new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)",
-        RegexOptions.Compiled | RegexOptions.NonBacktracking,
-        TimeSpan.FromMilliseconds(100));
+        private static Regex GetRegex() => new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)", RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
         private static (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
         {
@@ -599,20 +594,20 @@ namespace NMP.Portal.Helpers
         private static int GetMonthNumber(string month)
         {
             var months = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
-    {
-        { Resource.lblJanuary, 1 },
-        { Resource.lblFebruary, 2 },
-        { Resource.lblMarch, 3 },
-        { Resource.lblApril, 4 },
-        { Resource.lblMay, 5 },
-        { Resource.lblJune, 6 },
-        { Resource.lblJuly, 7 },
-        { Resource.lblAugust, 8 },
-        { Resource.lblSeptember, 9 },
-        { Resource.lblOctober, 10 },
-        { Resource.lblNovember, 11 },
-        { Resource.lblDecember, 12 }
-    };
+            {
+                { Resource.lblJanuary, 1 },
+                { Resource.lblFebruary, 2 },
+                { Resource.lblMarch, 3 },
+                { Resource.lblApril, 4 },
+                { Resource.lblMay, 5 },
+                { Resource.lblJune, 6 },
+                { Resource.lblJuly, 7 },
+                { Resource.lblAugust, 8 },
+                { Resource.lblSeptember, 9 },
+                { Resource.lblOctober, 10 },
+                { Resource.lblNovember, 11 },
+                { Resource.lblDecember, 12 }
+            };
 
             return months.TryGetValue(month, out int value) ? value : 0;
         }
@@ -650,8 +645,5 @@ namespace NMP.Portal.Helpers
             }
             return isWithinDateRange;
         }
-
-
-
     }
 }
