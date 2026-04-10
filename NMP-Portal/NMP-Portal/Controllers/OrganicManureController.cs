@@ -6388,8 +6388,7 @@ managementPeriod.CropID.HasValue
             int managementPeriodId = model.OrganicManures[0].ManagementPeriodID;
 
             var (managementIds, error) =
-                await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
-                    model.HarvestYear.Value, fieldId.ToString(), null, null);
+                await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldId.ToString(), null, null);
 
             if (error != null)
                 return (null, error);
@@ -6435,8 +6434,7 @@ managementPeriod.CropID.HasValue
             DateTime preStart = closedStartDate.AddDays(-28);
             DateTime preEnd = closedStartDate.AddDays(-1);
 
-            bool isInFebPeriod =
-                warningHelper.IsApplicationWithinWarningPeriod(applicationDate, closedPeriod);
+            bool isInFebPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(applicationDate, closedPeriod);
 
             bool isInPreClosedPeriod =
                 applicationDate >= preStart && applicationDate <= preEnd;
