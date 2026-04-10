@@ -55,12 +55,10 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
             {
-                JObject soilAnalysisJObject = responseWrapper?.Data["SoilAnalysis"] as JObject;
-                if (soilAnalysisJObject != null)
+                if (responseWrapper?.Data["SoilAnalysis"] is JObject soilAnalysisJObject)
                 {
                     soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>();
                 }
-
             }
             else
             {
@@ -69,15 +67,11 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre,hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
 
         return (soilAnalysis, error);
@@ -110,15 +104,11 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (soilAnalysis, error);
     }
@@ -144,15 +134,11 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
 
         return (message, error);

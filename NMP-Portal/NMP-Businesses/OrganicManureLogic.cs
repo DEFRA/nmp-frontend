@@ -14,7 +14,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
 {
     private readonly ILogger<OrganicManureLogic> _logger= logger;
     private readonly IOrganicManureService _organicManureService= organicManureService;
-    public async Task<(bool, Error)> AddOrganicManuresAsync(string organicManureData)
+    public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
     {
         _logger.LogTrace("OrganicManureLogic : AddOrganicManuresAsync() called");
         return await _organicManureService.AddOrganicManuresAsync(organicManureData);

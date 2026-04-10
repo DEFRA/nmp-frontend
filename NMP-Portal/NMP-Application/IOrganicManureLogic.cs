@@ -10,7 +10,7 @@ public interface IOrganicManureLogic
     Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName);
     Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder);
    
-    Task<(bool, Error)> AddOrganicManuresAsync(string organicManureData);
+    Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData);
 
     Task<(RainTypeResponse, Error)> FetchRainTypeDefault();
     Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString);
