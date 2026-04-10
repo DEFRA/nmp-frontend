@@ -7391,7 +7391,7 @@ managementPeriod.CropID.HasValue
         private async Task<(string?, Error?)> BindManureOutput(FarmResponse farmData, OrganicManureDataViewModel organic, OrganicManureViewModel model)
         {
             Error? error = null;
-            (ManagementPeriod? managementPeriod, Crop? crop, Field? fieldData, List<Country> countryList, error) = await FetchDataForMannerOutput(organic);
+            (Crop? crop, Field? fieldData, List<Country> countryList, error) = await FetchDataForMannerOutput(organic);
             if(error!=null&&string.IsNullOrWhiteSpace(error.Message))
             {
                 return (null, error);
@@ -7474,7 +7474,7 @@ managementPeriod.CropID.HasValue
 
         }
 
-        private async Task<(ManagementPeriod?, Crop?, Field?, List<Country>, Error?)> FetchDataForMannerOutput(OrganicManureDataViewModel organic)
+        private async Task<(Crop?, Field?, List<Country>, Error?)> FetchDataForMannerOutput(OrganicManureDataViewModel organic)
         {
             Error? error = null;
             Field? fieldData = null;
@@ -7491,11 +7491,11 @@ managementPeriod.CropID.HasValue
                     {
                         countryList = await _farmLogic.FetchCountryAsync();
 
-                        return (managementPeriod, crop, fieldData, countryList, error);
+                        return (crop, fieldData, countryList, error);
                     }
                 }
             }
-            return (managementPeriod, crop, fieldData, countryList, error);
+            return (crop, fieldData, countryList, error);
         }
         [HttpGet]
         public async Task<IActionResult> AutumnCropNitrogenUptakeDetail()
