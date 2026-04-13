@@ -935,8 +935,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 if (nmaxLimit != null)
                 {
-                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue);
-                    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
+                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue);                    
                 }
 
             }

@@ -693,8 +693,7 @@ BindAdjustmentsForScotland(
                 defaultYield,
                 previousCrop,
                 scotlandNMaxValue);
-
-        fieldDetail.AddRange(fields);
+                
 
         int nmaxLimit = nMaxLimitForCropType;
         nMaxLimitForCropType = (int)Math.Round(
