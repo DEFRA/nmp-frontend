@@ -230,7 +230,7 @@ namespace NMP.Commons.Helpers
         public static bool IsWinterOilseedRapeAutumn(int cropTypeId, int harvestYear, DateTime applicationDate)
         {
             bool isAutumn = false;
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && applicationDate >= new DateTime(harvestYear - 1, 8, 1) && applicationDate <= new DateTime(harvestYear - 1, 12, 31)) //Winter Oilseed Rape - autumn nitrogen
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && applicationDate >= DateTime.SpecifyKind(new DateTime(harvestYear - 1, 8, 1), DateTimeKind.Utc) && applicationDate <= DateTime.SpecifyKind(new DateTime(harvestYear - 1, 12, 31), DateTimeKind.Utc)) //Winter Oilseed Rape - autumn nitrogen
             {
                 isAutumn = true;
             }
