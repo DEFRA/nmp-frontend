@@ -2518,7 +2518,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     isResidueGroupThree = true;
                 }
-                if (recommendation != null && recommendation.NIndex == 4.ToString() || recommendation.NIndex == 5.ToString() || recommendation.NIndex == 6.ToString())
+                if (recommendation != null && (recommendation.NIndex == 4.ToString() || recommendation.NIndex == 5.ToString() || recommendation.NIndex == 6.ToString()))
                 {
                     isResidueGroup4To6 = true;
                 }
