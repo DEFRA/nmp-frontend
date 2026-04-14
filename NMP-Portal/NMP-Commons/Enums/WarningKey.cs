@@ -79,7 +79,10 @@ namespace NMP.Commons.Enums
         ManuresPoultryManureMaxApplicationRate,
 
         [EnumMember(Value = "INORGNMAXRATERESIDUEGROUP")]
-        InOrgNMAXRateResidueGroup
+        InOrgNMAXRateResidueGroup,
+
+        [EnumMember(Value = "RANMANUREJULYTOSEP")]
+        RanManureJulyToSep
 
     }
 
