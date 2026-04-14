@@ -836,13 +836,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectToAction(_checkAnswerActionName);
         }
 
-        
+
         if (model.IsDoubleCropAvailable)
         {
             return RedirectToAction(_doubleCropActionName);
         }
 
-        
+
         model.DoubleCrop = null;
         SetFertiliserManureToSession(model);
 
@@ -859,7 +859,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectToAction(_defoliationActionName);
         }
 
-        
+
         return null;
     }
 
@@ -2475,7 +2475,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 (int)NMP.Commons.Enums.CropTypes.Grass
                             };
 
-        
+
         int? fieldId = model.FieldID ?? null;
         Field field = await _fieldLogic.FetchFieldByFieldId(fieldId ?? 0);
         (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, field.NVZProgrammeID);
@@ -2542,7 +2542,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         (totalNitrogen, error) = await FetchNitrogenAsync(fieldId, startDate, endDate, model, managementId, _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate);
         if (error == null)
         {
-            
+
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
             HashSet<int> brassicaCrops = BrassicaCrops();
             string closedPeriod = WarningWithinPeriod.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
@@ -2759,6 +2759,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
             int? scotlandNmax = null;
             int residueGroup = 0;
+            bool isWinterOilseedRapeAutumn = false;
 
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
@@ -2785,8 +2786,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         residueGroup = Convert.ToInt32(recommendation.NIndex);
                     }
-
-                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, field.SoilTypeID ?? 0, residueGroup);
+                    isWinterOilseedRapeAutumn = Functions.IsWinterOilseedRapeAutumn(crop.CropTypeID ?? 0, model.HarvestYear ?? 0, model.Date.Value);
+                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, isWinterOilseedRapeAutumn ? -1 : field.SoilTypeID ?? 0, residueGroup);
                     if (scotlandNmax == null)
                     {
                         scotlandNmax = Convert.ToInt32(recommendation?.CropN);
@@ -2834,7 +2835,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
                                     }
 
-                                    nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
+                                    nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup,isWinterOilseedRapeAutumn);
                                 }
 
                                 decimal totalNitrogenApplied = 0;

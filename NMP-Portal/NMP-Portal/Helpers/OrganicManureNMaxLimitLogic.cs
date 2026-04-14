@@ -54,9 +54,9 @@ namespace NMP.Portal.Helpers
             return nmaxLimit;
         }
 
-        public static  decimal NMaxLimitScotland(decimal nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut, int? defoliationSequenceId, int? rainfall, int residueGroup)
+        public static  decimal NMaxLimitScotland(decimal nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId, int potentialCut, int? defoliationSequenceId, int? rainfall, int residueGroup, bool isWinterOilseedRapeAutumn)
         {
-            nmaxLimit += GetCropSpecificAdjustmentScotland(cropTypeId, yield, cropInfo1);
+            nmaxLimit += GetCropSpecificAdjustmentScotland(cropTypeId, yield, cropInfo1,isWinterOilseedRapeAutumn);
 
             int[] eligibleCropsForRainfallAdjustment =
             {
@@ -86,8 +86,6 @@ namespace NMP.Portal.Helpers
                 (int)CropTypes.PotatoVarietyGroup3,
                 (int)CropTypes.PotatoVarietyGroup4,
 
-                (int)CropTypes.WinterOilseedRape,
-
                 (int)CropTypes.SpringRye,
                 (int)CropTypes.ForageSpringRye,
 
@@ -98,7 +96,7 @@ namespace NMP.Portal.Helpers
 
             };
 
-            if (eligibleCropsForRainfallAdjustment.Contains(cropTypeId) && rainfall != null)
+            if ((eligibleCropsForRainfallAdjustment.Contains(cropTypeId) || (cropTypeId==(int)CropTypes.WinterOilseedRape && !isWinterOilseedRapeAutumn)) && rainfall != null)
             {
                 nmaxLimit += GetRainfallAdjustment(residueGroup, rainfall, soilType);
             }
@@ -106,7 +104,7 @@ namespace NMP.Portal.Helpers
             return nmaxLimit;
         }
 
-        private static decimal GetCropSpecificAdjustmentScotland(int cropTypeId, decimal? yield, int? cropInfo1)
+        private static decimal GetCropSpecificAdjustmentScotland(int cropTypeId, decimal? yield, int? cropInfo1, bool isWinterOilseedRapeAutumn)
         {
             decimal adjustment = 0;
 
@@ -161,7 +159,7 @@ namespace NMP.Portal.Helpers
                     break;
 
                 case (int)CropTypes.WinterOilseedRape:
-                    if (yield > 4.0m)
+                    if (!isWinterOilseedRapeAutumn && yield > 4.0m)
                         adjustment += 30;
                     break;
             }
