@@ -6089,6 +6089,7 @@ managementPeriod.CropID.HasValue
         {
             int farmCountryId = model.FarmCountryId ?? 0;
             int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
+            bool isWinterOilseedRapeAutumn = false;
             Error? error = null;
             decimal defaultNitrogen = model.OrganicManures?
                     .FirstOrDefault()?
@@ -6192,7 +6193,7 @@ managementPeriod.CropID.HasValue
                                             winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
                                         }
 
-                                        nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
+                                        nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
                                     }
 
 
@@ -6255,7 +6256,7 @@ managementPeriod.CropID.HasValue
                                                 {
                                                     winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
                                                 }
-                                                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup);
+                                                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
 
                                             }
 
@@ -6346,7 +6347,7 @@ managementPeriod.CropID.HasValue
             if (IsNonScotland(model))
             {
                 return HandleNonScotland(model, farm, warningList, closedPeriod, warningHelper, isSlurry, isPoultry);
-            }                
+            }
 
             return await HandleScotland(model, farm, warningList, cropId, fieldId,closedPeriod, isPoultry);
         }
@@ -6673,10 +6674,10 @@ managementPeriod.CropID.HasValue
                 (int)NMP.Commons.Enums.CropTypes.Grass)
                 return (model, null);
 
-            if (IsWithinRange(model, 7, 1, 7, 31))
+            if (IsWithinRange(model.HarvestYear ?? 0, model.ApplicationDate.Value, 7, 1, 7, 31))
                 return await ScotlandJulyHighNWarning(model);
 
-            if (IsWithinRange(model, 8, 1, 9, 30) &&
+            if (IsWithinRange(model.HarvestYear ?? 0 - 1, model.ApplicationDate.Value, 8, 1, 9, 30) &&
                 (sowingDate == null ||
                  (sowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
             {
@@ -6685,16 +6686,15 @@ managementPeriod.CropID.HasValue
 
             return (model, null);
         }
-        private static bool IsWithinRange(OrganicManureViewModel model, int startMonth, int startDay, int endMonth, int endDay)
+        private static bool IsWithinRange(int harvestYear, DateTime applicationDate, int startMonth, int startDay, int endMonth, int endDay)
         {
             var helper = new WarningWithinPeriod();
 
-            DateTime start = new DateTime(model.HarvestYear ?? 0, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
+            DateTime start = new DateTime(harvestYear, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
 
-            DateTime end = new DateTime(model.HarvestYear ?? 0, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
+            DateTime end = new DateTime(harvestYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
 
-            return helper.IsApplicationDateWithinDateRange(
-                model.ApplicationDate, start, end);
+            return helper.IsApplicationDateWithinDateRange(applicationDate, start, end);
         }
         private static bool IsLivestockCondition(OrganicManureViewModel model, List<ManureType> manureTypeList, bool isWithinNVZ)
         {
