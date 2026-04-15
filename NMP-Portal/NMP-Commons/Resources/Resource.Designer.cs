@@ -5029,6 +5029,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter farm average yield values.
+        /// </summary>
+        public static string lblEnterFarmAverageYieldValues {
+            get {
+                return ResourceManager.GetString("lblEnterFarmAverageYieldValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a GAI value before continuing.
         /// </summary>
         public static string lblEnterGAIValueBeforeContinue {
@@ -5493,6 +5502,114 @@ namespace NMP.Commons.Resources {
         public static string lblFarmAreaCanHaveOnlyTwoDecimalPlace {
             get {
                 return ResourceManager.GetString("lblFarmAreaCanHaveOnlyTwoDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farm average yield adjustment.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustment {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must have at least 3 years of record to demonstrate the actual yields achieved..
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentEight {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentEight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a yield previously achieved for the crop at {0}, or.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentFive {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A farm average yield adjustment must be based on either:.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentFour {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter a farm average yield for any of these crops?.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentNine {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The N-max limit is  based on standard yield values for these crops:.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentOne {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are using evidence from another farm, it must come from the same nitrate vulnerable zone (NVZ), with a similar soil type. It must show the soil nutrient values where yields were achieved from the same crop, using the same crop management system..
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentSeven {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentSeven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to evidence from another farm, if a new crop management system is being used.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentSix {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentSix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help with farm average yield adjustment.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentThree {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can adjust the N-max limit for these crops by entering a farm average yield, if you have one..
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentTwo {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you do not want to use a farm average yield for a crop, leave it blank.
+        /// </summary>
+        public static string lblFarmAverageYieldValuesContentOne {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldValuesContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farm average yield value for {0}.
+        /// </summary>
+        public static string lblFarmAverageYieldValuesContentTwo {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldValuesContentTwo", resourceCulture);
             }
         }
         

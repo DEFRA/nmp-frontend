@@ -157,8 +157,7 @@ namespace NMP.Commons.ViewModels
         public decimal? PhosphateStandard { get; set; }
         public bool IsManageLivestock { get; set; } = false;
         public bool IsLivestockCheckAnswer { get; set; } = false;
-
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
+                
         [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
         public int? OccupancyAndNitrogenOptions { get; set; }
@@ -168,6 +167,8 @@ namespace NMP.Commons.ViewModels
         public bool IsLivestockGroupChange { get; set; } = false;
         public int? Country { get; set; }
         public int? FarmRB209CountryID { get; set; }
+        public bool? IsFarmAverageYieldAdjustment { get; set; }
+        public List<FarmAverageYieldsViewModel>? FarmAverageYields { get; set; }
 
     }
 }
