@@ -6681,7 +6681,7 @@ managementPeriod.CropID.HasValue
                 (sowingDate == null ||
                  (sowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
             {
-                return await ScotlandAugustToSeptHighNWarning(model);
+                return await ScotlandJulyHighNWarning(model);
             }
 
             return (model, null);
@@ -6810,7 +6810,7 @@ managementPeriod.CropID.HasValue
         {
             //scotland warning excel sheet row no. 26
             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
+                model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
             model.ClosedPeriodWarningHeader = warning.Header;
             model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
             model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
@@ -6821,21 +6821,7 @@ managementPeriod.CropID.HasValue
 
             return (model, null);
         }
-        private async Task<(OrganicManureViewModel, Error?)> ScotlandAugustToSeptHighNWarning(OrganicManureViewModel model)
-        {
-            //scotland warning row no. 27
-            WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgFertDateOnly.ToString());
-            model.ClosedPeriodWarningHeader = warning.Header;
-            model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
-            model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
-            model.ClosedPeriodWarningPara1 = warning.Para1;
-            model.ClosedPeriodWarningPara2 = warning.Para2;
-            model.ClosedPeriodWarningPara3 = warning.Para3;
-            model.IsClosedPeriodWarning = true;
-
-            return (model, null);
-        }
+        
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleOrganicHighNWarning(
             OrganicManureViewModel model, WarningWithinPeriod warningMessage, Farm farm)
