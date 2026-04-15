@@ -1098,7 +1098,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
                 cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.records.ToObject<List<CropTypeLinkingResponse>>();
             }
