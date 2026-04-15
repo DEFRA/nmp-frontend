@@ -10,6 +10,7 @@ using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
 using System.Web;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Services;
 
@@ -212,16 +213,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = _logger.HandleHttpRequestException(hre, error);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = _logger.HandleException(ex, error);
+            _logger.HandleException(ex, error);
         }
         return planSummaryList;
     }
@@ -298,7 +299,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
     public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id)
     {        
-        string cropInfo1Name = string.Empty;
+        string? cropInfo1Name = string.Empty;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -308,7 +309,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
                 cropInfo1Name = responseWrapper?.Data["cropInfo1Name"];
-            }            
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, null);
+            }
         }
         catch (HttpRequestException hre)
         {
@@ -332,7 +337,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
                 cropInfo2Name = responseWrapper?.Data["cropInfo2Name"];
-            }            
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, null);
+            }
         }
         catch (HttpRequestException hre)
         {
@@ -364,7 +373,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -399,7 +408,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -427,13 +436,13 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var secondCrops = responseWrapper.Data.SecondCropID.ToObject<List<int>>();
+                    var secondCrops = responseWrapper?.Data?.SecondCropID.ToObject<List<int>>();
                     secondCropList.AddRange(secondCrops);
                 }
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -498,16 +507,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = _logger.HandleHttpRequestException(hre, error);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = _logger.HandleException(ex, error);
+            _logger.HandleException(ex, error);
         }
         return cropInfoOneQuestion;
     }
@@ -639,7 +648,6 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 error = _logger.ExtractError(responseWrapper, error);
             }
-
         }
         catch (HttpRequestException hre)
         {
@@ -708,16 +716,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = _logger.HandleHttpRequestException(hre, error);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = _logger.HandleException(ex, error);
+            _logger.HandleException(ex, error);
         }
         return grassSeasons;
     }
@@ -794,6 +802,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         return (managementPeriodList, error);
     }
+
     //grass
     public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward)
     {
@@ -1016,10 +1025,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         return (swardManagementResponse, error);
     }
+
     public async Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId)
     {
         Error? error = null;
-        List<SwardManagementResponse> swardManagementResponse = new List<SwardManagementResponse>();
+        List<SwardManagementResponse>? swardManagementResponse = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1050,7 +1060,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
     public async Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId)
     {
         Error? error = null;
-        SwardTypeResponse? swardTypeResponse = new SwardTypeResponse();
+        SwardTypeResponse? swardTypeResponse = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1079,8 +1089,8 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
     }
     public async Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking()
     {
-        Error error = null;
-        List<CropTypeLinkingResponse> cropTypeLinkingResponse = new List<CropTypeLinkingResponse>();
+        Error? error = null;
+        List<CropTypeLinkingResponse>? cropTypeLinkingResponse = new List<CropTypeLinkingResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1088,9 +1098,9 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.records.ToObject<List<CropTypeLinkingResponse>>();
+                cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.records.ToObject<List<CropTypeLinkingResponse>>();
             }
             else
             {

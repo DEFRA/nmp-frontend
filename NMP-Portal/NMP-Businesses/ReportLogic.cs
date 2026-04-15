@@ -387,8 +387,7 @@ BindAdjustmentsForScotland(
         if (mpId == null)
             return (null, null);
 
-        (Recommendation rec, _) =
-           await _cropLogic.FetchRecommendationByManagementPeriodId(mpId.Value);
+        (Recommendation? rec, _) =  await _cropLogic.FetchRecommendationByManagementPeriodId(mpId.Value);
 
         return (rec, mpId);
     }
@@ -684,7 +683,7 @@ BindAdjustmentsForScotland(
                 crop.CropTypeID.Value,
                 true);
 
-        (List<FieldDetails> fields, decimal yield, int market, int rainfall) =
+        (List<FieldDetails> _, decimal yield, int market, int rainfall) =
             await BindNmaxResponseForScotland(
                 model,
                 crop,
