@@ -2429,7 +2429,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (error == null)
                 {
 
-                    if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)
+                    if (model.FarmCountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0))
                     //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                     //totalNitrogen > 100 and brassica crop will work for Scotland as well
                     {
