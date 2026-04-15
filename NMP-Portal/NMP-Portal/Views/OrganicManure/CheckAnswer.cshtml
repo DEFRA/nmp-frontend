@@ -77,6 +77,7 @@
                     
                     @if (Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning)
                     {
+                       @*  We don't have to show this warning on check answer page (mentioned on scotland warning excel sheet row no. 6) *@
                         <p class="govuk-notification-banner__heading">
                             @if (Model.NmaxWarningPara1 != null)
                             {
