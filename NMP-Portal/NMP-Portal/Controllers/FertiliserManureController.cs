@@ -2501,6 +2501,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             bool isResidueGroupOne = false;
             bool isResidueGroupTwo = false;
             bool isResidueGroupThree = false;
+            bool isResidueGroup4To6 = false;
             Recommendation? recommendation = null;
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
@@ -2516,6 +2517,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (recommendation != null && recommendation.NIndex == 3.ToString())
                 {
                     isResidueGroupThree = true;
+                }
+                if (recommendation != null && (recommendation.NIndex == 4.ToString() || recommendation.NIndex == 5.ToString() || recommendation.NIndex == 6.ToString()))
+                {
+                    isResidueGroup4To6 = true;
                 }
             }
             bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
@@ -2543,21 +2548,31 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InOrgNMAXRateResidueGroup.ToString());
-                    if (isResidueGroupOne && (totalNitrogen > 10))
+                    WarningResponse warningResponse = new WarningResponse();
+                    if (hasValidResidue)
+                    {
+                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InOrgNMAXRateResidueGroup.ToString());
+                    }
+                    if (isResidueGroup4To6)
+                    {
+                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
+                        isNitrogenRateExceeded = true;
+
+                    }
+                    if (isResidueGroupOne && (totalNitrogen > 30))
                     {
                         isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 10) : null;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 30) : null;
                     }
                     else if (isResidueGroupTwo && (totalNitrogen > 20))
                     {
                         isNitrogenRateExceeded = true;
                         warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;
                     }
-                    else if (isResidueGroupThree && (totalNitrogen > 30))
+                    else if (isResidueGroupThree && (totalNitrogen > 10))
                     {
                         isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 30) : null;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 10) : null;
                     }
 
                     if (isNitrogenRateExceeded)
@@ -4792,7 +4807,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         string? closedPeriod = await GetClosedPeriodAsync(
             model,
             cropTypeId,
-            field.NVZProgrammeID??0,
+            field.NVZProgrammeID ?? 0,
             model.HarvestYear ?? 0);
 
         if (!string.IsNullOrWhiteSpace(closedPeriod))
