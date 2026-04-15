@@ -2555,7 +2555,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     }
                     if (isResidueGroup4To6)
                     {
-                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
+                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateResidueGroup4To6.ToString());
                         isNitrogenRateExceeded = true;
 
                     }
