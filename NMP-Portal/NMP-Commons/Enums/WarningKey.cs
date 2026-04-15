@@ -81,6 +81,9 @@ namespace NMP.Commons.Enums
         [EnumMember(Value = "INORGNMAXRATERESIDUEGROUP")]
         InOrgNMAXRateResidueGroup,
 
+        [EnumMember(Value = "INORGNMAXRATERESIDUEGROUP4TO6")]
+        InorgNMaxRateResidueGroup4To6,
+
         [EnumMember(Value = "RANMANUREJULYTOSEP")]
         RanManureJulyToSep
 

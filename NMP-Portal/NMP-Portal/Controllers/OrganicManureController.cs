@@ -6349,7 +6349,7 @@ managementPeriod.CropID.HasValue
                 return HandleNonScotland(model, farm, warningList, closedPeriod, warningHelper, isSlurry, isPoultry);
             }
 
-            return await HandleScotland(model, farm, warningList, cropId, fieldId,closedPeriod, isPoultry);
+            return await HandleScotland(model, farm, warningList, cropId, fieldId, closedPeriod, isPoultry);
         }
         private static void SetHighN(OrganicManureViewModel model, ManureType? manureType)
         {
@@ -6504,7 +6504,7 @@ managementPeriod.CropID.HasValue
             if (!model.ApplicationDate.HasValue)
                 return false;
 
-            return helper.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value,closedPeriod) == true;
+            return helper.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, closedPeriod) == true;
         }
 
         private void ApplyWarningsRanAndPoultryTotalRateLimit(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry)
@@ -6677,11 +6677,11 @@ managementPeriod.CropID.HasValue
             if (IsWithinRange(model.HarvestYear ?? 0, model.ApplicationDate.Value, 7, 1, 7, 31))
                 return await ScotlandJulyHighNWarning(model);
 
-            if (IsWithinRange(model.HarvestYear ?? 0 - 1, model.ApplicationDate.Value, 8, 1, 9, 30) &&
+            if (IsWithinRange((model.HarvestYear ?? 0) - 1, model.ApplicationDate.Value, 8, 1, 9, 30) &&
                 (sowingDate == null ||
                  (sowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
             {
-                return await ScotlandAugustToSeptHighNWarning(model);
+                return await ScotlandJulyHighNWarning(model);
             }
 
             return (model, null);
@@ -6800,6 +6800,7 @@ managementPeriod.CropID.HasValue
                 model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
                 model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
                 model.ClosedPeriodWarningPara1 = warning.Para1;
+                model.ClosedPeriodWarningPara2 = warning.Para2;
                 model.ClosedPeriodWarningPara3 = warning.Para3;
                 model.IsClosedPeriodWarning = true;
             }
@@ -6810,7 +6811,7 @@ managementPeriod.CropID.HasValue
         {
             //scotland warning excel sheet row no. 26
             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
+                model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
             model.ClosedPeriodWarningHeader = warning.Header;
             model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
             model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
@@ -6821,21 +6822,7 @@ managementPeriod.CropID.HasValue
 
             return (model, null);
         }
-        private async Task<(OrganicManureViewModel, Error?)> ScotlandAugustToSeptHighNWarning(OrganicManureViewModel model)
-        {
-            //scotland warning row no. 27
-            WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgFertDateOnly.ToString());
-            model.ClosedPeriodWarningHeader = warning.Header;
-            model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
-            model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
-            model.ClosedPeriodWarningPara1 = warning.Para1;
-            model.ClosedPeriodWarningPara2 = warning.Para2;
-            model.ClosedPeriodWarningPara3 = warning.Para3;
-            model.IsClosedPeriodWarning = true;
 
-            return (model, null);
-        }
 
         private async Task<(OrganicManureViewModel, Error?, string, bool)> HandleOrganicHighNWarning(
             OrganicManureViewModel model, WarningWithinPeriod warningMessage, Farm farm)
@@ -7388,7 +7375,7 @@ managementPeriod.CropID.HasValue
         {
             Error? error = null;
             (Crop? crop, Field? fieldData, List<Country> countryList, error) = await FetchDataForMannerOutput(organic);
-            if(error!=null&&string.IsNullOrWhiteSpace(error.Message))
+            if (error != null && string.IsNullOrWhiteSpace(error.Message))
             {
                 return (null, error);
             }

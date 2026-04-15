@@ -1254,7 +1254,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
     public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
     {
         Error? error = null;
-        decimal? totalRate = 0;
+        decimal? totalRate = (decimal?)null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1272,9 +1272,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             var response = await httpClient.GetAsync(requestUrl);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                totalRate = responseWrapper?.Data != null ? Convert.ToDecimal(responseWrapper.Data) : (decimal?)null;
+                totalRate =  Convert.ToDecimal(responseWrapper?.Data);
             }
             else
             {
