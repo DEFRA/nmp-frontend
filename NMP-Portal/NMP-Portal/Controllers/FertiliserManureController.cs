@@ -2355,7 +2355,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
 
         //warning excel sheet row no. 28
-        if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
+        if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass))
         {
             //31 october and end of closed period
             string warningPeriod = string.Empty;
@@ -2429,7 +2429,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (error == null)
                 {
 
-                    if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)
+                    if (model.FarmCountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0))
                     //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                     //totalNitrogen > 100 and brassica crop will work for Scotland as well
                     {
@@ -2528,7 +2528,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape
                 && isWithinWarningPeriod
-                && (!isScotland || hasValidResidue))
+                && (!isScotland || hasValidResidue || isResidueGroup4To6))
             {
                 bool isNitrogenRateExceeded = false;
 
