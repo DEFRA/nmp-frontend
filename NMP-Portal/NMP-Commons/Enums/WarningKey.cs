@@ -85,7 +85,13 @@ namespace NMP.Commons.Enums
         InorgNMaxRateResidueGroup4To6,
 
         [EnumMember(Value = "RANMANUREJULYTOSEP")]
-        RanManureJulyToSep
+        RanManureJulyToSep,
+
+        [EnumMember(Value = "SLURRY4WEEKPRIORTOCLOSEDPERIODSTART")]
+        Slurry4WeekPriorToClosedPeriodStart,
+
+        [EnumMember(Value = "POULTRY4WEEKPRIORTOCLOSEDPERIODSTART")] 
+        Poultry4WeekPriorToClosedPeriodStart
 
     }
 
