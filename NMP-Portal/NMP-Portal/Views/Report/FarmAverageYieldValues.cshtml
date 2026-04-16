@@ -3,6 +3,7 @@
 @{
     string heading = Resource.lblEnterFarmAverageYieldValues;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.FarmAverageYieldValues;
 
 }
 
@@ -24,23 +25,7 @@
 {
     <form asp-action="FarmAverageYieldValue" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFarmAverageYieldAdjustment" />
-
-            @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
-            {
-                @for (int i = 0; i < Model.CropTypeList.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]" />
-                }
-            }
-        </div>
+        @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-fieldset>
