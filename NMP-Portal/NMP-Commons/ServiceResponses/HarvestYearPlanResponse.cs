@@ -45,6 +45,9 @@ public class HarvestYearPlanResponse
     public int? SwardTypeID { get; set; }
     [JsonProperty("SwardManagementID")]
     public int? SwardManagementID { get; set; }
+
+    [JsonProperty("SoilTypeID")]
+    public int? SoilTypeID { get; set; }
     public int? PotentialCut { get; set; }
     public int? Establishment { get; set; }
     [JsonProperty("TotalOrganicManures")]
