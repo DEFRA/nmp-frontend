@@ -251,4 +251,5 @@ internal static class ApiurlHelper
     public const string FetchTotalApplicationRateByDateRangeAsyncAPI = "organic-manure/total-application-rate/{0}?startDate={1}&endDate={2}";
     public const string CheckGreenCompostExistanceByDateRangeAsyncAPI = "organic-manure/check-green-compost/{0}?startDate={1}&endDate={2}";
     public const string FetchScotlandNMaxValueByCropTypeIdSoilTypeIdResidueAsyncAPI = "scotland-nmax-values/{0}?soilTypeId={1}&residueGroup={2}";
+    public const string FetchFarmAverageYieldByFarmIdAndHarvestYearAsyncAPI = "farm-average-yields/{0}?harvestYear={1}";
 }

@@ -5,6 +5,7 @@
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.FarmAverageYieldAdjustment;
 
 }
 
@@ -26,61 +27,7 @@
 {
     <form asp-action="FarmAverageYieldAdjustment" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan" />
-             @if (Model.FarmAverageYields != null && Model.FarmAverageYields.Count > 0)
-            {
-                @for (int i = 0; i < Model.FarmAverageYields.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeID" value="@Model.FarmAverageYields[i].CropTypeID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeName" value="@Model.FarmAverageYields[i].CropTypeName" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].FarmID" value="@Model.FarmAverageYields[i].FarmID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].HarvestYear" value="@Model.FarmAverageYields[i].HarvestYear" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].AverageYield" value="@Model.FarmAverageYields[i].AverageYield" />
-                }
-            }
-
-            @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
-            {
-                @for (int i = 0; i < Model.CropTypeList.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]" />
-                }
-            }
-
-            @if (Model.FarmAverageYields != null && Model.FarmAverageYields.Count > 0)
-            {
-                @for (int i = 0; i < Model.FarmAverageYields.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].FarmID" value="@Model.FarmAverageYields[i].FarmID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].HarvestYear" value="@Model.FarmAverageYields[i].HarvestYear" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeID" value="@Model.FarmAverageYields[i].CropTypeID" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeName" value="@Model.FarmAverageYields[i].CropTypeName" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].AverageYield" value="@Model.FarmAverageYields[i].AverageYield" />
-                }
-            }
-
-        </div>
+        @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-radios asp-for="@Model.IsFarmAverageYieldAdjustment">
