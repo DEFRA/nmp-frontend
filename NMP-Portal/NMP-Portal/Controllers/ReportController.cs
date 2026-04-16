@@ -3506,7 +3506,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         model.Address4 = nutrientsLoadingManure.Address4;
                         model.Postcode = nutrientsLoadingManure.PostCode;
                         model.Comment = nutrientsLoadingManure.Comments;
-                        //model.IsComingFromPlan = false;
                         (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
                         if (error == null && manureType != null)
                         {
@@ -6979,7 +6978,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             foreach (var group in cropGroups)
             {
                 string cropGroupName = group.Key;
-                int cropTypeId = group.Value.First();
+                int cropTypeId = group.Value[0];
 
                 var filteredData = farmAverageYieldList
                     .FirstOrDefault(x => x.CropTypeID == cropTypeId);
@@ -7011,7 +7010,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction("FarmList", "Farm");
         }
         //fetch data from [FarmAverageYields]
-        //model.FarmAverageYields = await BindFarmAverageYieldList(model);
         SetReportDataToSession(model);
         return View(model);
     }
