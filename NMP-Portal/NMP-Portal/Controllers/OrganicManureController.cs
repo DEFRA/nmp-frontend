@@ -6512,13 +6512,13 @@ managementPeriod.CropID.HasValue
             if (isRanExceptPoultry && totalApplicationRate > 30)
             {
                 var warning = warningList.FirstOrDefault(x => x.CountryID == farm.CountryID && string.Equals(x.WarningKey?.Trim(),
-                        NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString(), StringComparison.OrdinalIgnoreCase));
+                        NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), StringComparison.OrdinalIgnoreCase));
                 SetWarning(model, warning);
             }
 
             if (isPoultry && totalApplicationRate > 5)
             {
-                var warning = _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.PoultryManureMaxApplicationRate.ToString()).Result;
+                var warning = _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.Poultry4WeekPriorToClosedPeriodStart.ToString()).Result;
 
                 SetWarning(model, warning);
             }
