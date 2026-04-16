@@ -205,6 +205,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
+                if (await IsAnyCropTypeForAverageYield(model))
+                {
+                    return RedirectToAction("FarmAverageYieldAdjustment");
+                }
                 return RedirectToAction("NMaxReport");
             }
         }
@@ -935,7 +939,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 if (nmaxLimit != null)
                 {
-                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue);                    
+                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue);
                 }
 
             }
@@ -968,7 +972,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         List<FieldDetails> fieldDetail,
         List<ScotlandNMaxValue>? scotlandNMaxValue)
     {
-        (Crop? crop,_) = await _cropLogic.FetchCropById(cropData.CropID);
+        (Crop? crop, _) = await _cropLogic.FetchCropById(cropData.CropID);
         var field = await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value);
 
         if (field?.IsWithinNVZ != true)
@@ -1070,7 +1074,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
 
-  
+
 
     private static decimal CalculateYield(decimal yield, decimal baseValue, decimal multiplier)
     {
@@ -1103,7 +1107,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         (List<ScotlandNMaxValue>? scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
-            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID);
+            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID&&x.SoilTypeID==cropData.SoilTypeID);
 
             string? nResidueGroup = recommendation?.NIndex;
             if (scotlandNMaxValue != null && int.TryParse(nResidueGroup, out int groupNo))
@@ -6861,5 +6865,114 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Willow);
         cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Sunflowers);
         cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Miscanthus);
+    }
+
+    private async Task<bool> IsAnyCropTypeForAverageYield(ReportViewModel model)
+    {
+        bool IsAnyCropTypeForAverageYield = false;
+        (List<ScotlandNMaxValue>? scotlandNMaxValue, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
+        (List<HarvestYearPlanResponse>? cropTypeList, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+        if (cropTypeList != null && cropTypeList.Count > 0 && scotlandNMaxValue != null && scotlandNMaxValue.Any(x => cropTypeList.Any(c => c.CropTypeID == x.CropTypeID)))
+        {
+            IsAnyCropTypeForAverageYield = true;
+        }
+        return IsAnyCropTypeForAverageYield;
+    }
+
+    private static ReportViewModel BindCropTypeListForAverageYield(ReportViewModel model)
+    {
+        
+        foreach (string cropTypeId in model.CropTypeList)
+        {
+            model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
+            string cropGroupName = GetGroupName(Convert.ToInt32(cropTypeId), model.Country.Value);
+            if (!string.IsNullOrWhiteSpace(cropGroupName))
+            {
+                model.FarmAverageYields.Add(new FarmAverageYieldsViewModel
+                {
+                    CropTypeName = cropGroupName,
+                    CropTypeID= Convert.ToInt32(cropTypeId),
+                    FarmID=model.FarmId.Value,
+                    HarvestYear=model.Year.Value
+                });
+            }
+        }
+        return model;
+    }
+
+    [HttpGet]
+    public IActionResult FarmAverageYieldAdjustment()
+    {
+        _logger.LogTrace("Report Controller : FarmAverageYieldAdjustment() action called");
+        ReportViewModel? model = GetReportDataFromSession();
+        if (model == null)
+        {
+            return RedirectToAction("FarmList", "Farm");
+        }
+        model = BindCropTypeListForAverageYield(model);
+        if (model.FarmAverageYields != null)
+        {
+            ViewBag.AverageYieldCropTypeList = model.FarmAverageYields.Select(x => x.CropTypeName).ToList();
+        }
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult FarmAverageYieldAdjustment(ReportViewModel model)
+    {
+        _logger.LogTrace("Report Controller : FarmAverageYieldAdjustment() post action called");
+        try
+        {
+            if (model.IsFarmAverageYieldAdjustment == null)
+            {
+                ModelState.AddModelError("IsFarmAverageYieldAdjustment", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model = BindCropTypeListForAverageYield(model);
+                if (model.FarmAverageYields != null)
+                {
+                    ViewBag.AverageYieldCropTypeList = model.FarmAverageYields.Select(x=>x.CropTypeName).ToList();
+                }
+                return View(model);
+            }
+
+            SetReportDataToSession(model);
+
+            if (model.IsFarmAverageYieldAdjustment != null)
+            {
+                if (model.IsFarmAverageYieldAdjustment.Value)
+                {
+                    return RedirectToAction("FarmAverageYieldValues");
+                }
+                else if (!model.IsFarmAverageYieldAdjustment.Value)
+                {
+                    return RedirectToAction("NMaxReport");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "Report Controller : Exception in FarmAverageYieldAdjustment() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData["ErrorOnFarmAverageYieldAdjustment"] = ex.Message;
+            return View(model);
+        }
+
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult FarmAverageYieldValues()
+    {
+        _logger.LogTrace("Report Controller : FarmAverageYieldValues() action called");
+        ReportViewModel? model = GetReportDataFromSession();
+        if (model == null)
+        {
+            return RedirectToAction("FarmList", "Farm");
+        }
+        //fetch data from [FarmAverageYields]
+        return View(model);
     }
 }
