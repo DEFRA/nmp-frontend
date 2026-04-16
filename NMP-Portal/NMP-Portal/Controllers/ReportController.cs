@@ -6881,10 +6881,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private static ReportViewModel BindCropTypeListForAverageYield(ReportViewModel model)
     {
-        
+
+        model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
         foreach (string cropTypeId in model.CropTypeList)
         {
-            model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
             string cropGroupName = GetGroupName(Convert.ToInt32(cropTypeId), model.Country.Value);
             if (!string.IsNullOrWhiteSpace(cropGroupName))
             {
