@@ -1967,7 +1967,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private void ValidateCheckAnwser(FieldViewModel model, bool isAddMode)
     {
-        ValidateGrassJourneyFields(model);
+        if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            ValidateGrassJourneyFields(model);
+        }
         if (model.RecentSoilAnalysisQuestion != null && model.RecentSoilAnalysisQuestion.Value && isAddMode)
         {
             ValidateSoilAnalysis(model);
