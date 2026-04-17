@@ -7721,4 +7721,7 @@ livestock manure.</value>
   <data name="lblFarmAverageYieldValuesContentTwo" xml:space="preserve">
     <value>Farm average yield value for {0}</value>
   </data>
+  <data name="lblEnterAValueBetween0And999999" xml:space="preserve">
+    <value>Enter a value between 0 and 999999.</value>
+  </data>
 </root>

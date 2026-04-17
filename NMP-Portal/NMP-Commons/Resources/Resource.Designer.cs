@@ -5002,6 +5002,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 999999..
+        /// </summary>
+        public static string lblEnterAValueBetween0And999999 {
+            get {
+                return ResourceManager.GetString("lblEnterAValueBetween0And999999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a value for mineralisation in kg per hectare.
         /// </summary>
         public static string lblEnterAValueForMineralisation {
