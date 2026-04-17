@@ -211,6 +211,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     return RedirectToAction("FarmAverageYieldAdjustment");
                 }
+                model.IsFarmAverageYieldAdjustment = null;
+                model.FarmAverageYields = null;
+                SetReportDataToSession(model);
                 return RedirectToAction("NMaxReport");
             }
         }
@@ -6561,10 +6564,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         };
     }
-    private static int? GetGroupFirstCropTypeId(int cropTypeId)
+    private static int? GetFirstCropTypeIdForYieldAdjustment(int cropTypeId)
     {
         var cropGroups = GetNmaxReportCropGroupsForScotland();
-
+        RemoveCropTypeWithNoYieldAdjustment(cropGroups);
         var group = cropGroups
     .FirstOrDefault(g => g.Value.Contains(cropTypeId));
 
@@ -6882,8 +6885,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         bool IsAnyCropTypeForAverageYield = false;
         (List<ScotlandNMaxValue>? scotlandNMaxValue, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
-        (List<HarvestYearPlanResponse>? cropTypeList, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-        if (cropTypeList != null && cropTypeList.Count > 0 && scotlandNMaxValue != null && scotlandNMaxValue.Any(x => cropTypeList.Any(c => c.CropTypeID == x.CropTypeID)))
+        if (model.CropTypeList != null && model.CropTypeList.Count > 0 && scotlandNMaxValue != null && scotlandNMaxValue.Any(x => model.CropTypeList.Any(c => Convert.ToInt32(c) == x.CropTypeID)))
         {
             IsAnyCropTypeForAverageYield = true;
         }
@@ -6896,7 +6898,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
         foreach (string cropTypeId in model.CropTypeList)
         {
-            int? cropTypeGroupId = GetGroupFirstCropTypeId(Convert.ToInt32(cropTypeId));
+            int? cropTypeGroupId = GetFirstCropTypeIdForYieldAdjustment(Convert.ToInt32(cropTypeId));
             string cropGroupName = GetGroupName(Convert.ToInt32(cropTypeId), model.Country.Value);
             if (!string.IsNullOrWhiteSpace(cropGroupName) && cropTypeGroupId != null)
             {
@@ -6911,6 +6913,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         }
         return model;
+    }
+
+    private static void RemoveCropTypeWithNoYieldAdjustment(Dictionary<string, int[]> cropGroups)
+    {
+        cropGroups.Remove(Resource.lblSpringTriticale);
+        cropGroups.Remove(Resource.lblSpringRye);
+        cropGroups.Remove(Resource.lblPotatoes);
+
     }
 
     [HttpGet]
@@ -7036,13 +7046,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     var farmAverageYield = model.FarmAverageYields[i];
 
-                    if (farmAverageYield.AverageYield != null &&
-                        (farmAverageYield.AverageYield < 0 || farmAverageYield.AverageYield > 9999))
+                    if (farmAverageYield.AverageYield != null)
                     {
-                        ModelState.AddModelError(
+                        if (farmAverageYield.AverageYield < 0 || farmAverageYield.AverageYield > 9999)
+                        {
+                            ModelState.AddModelError(
                             $"FarmAverageYields[{i}].AverageYield",
                             string.Format(Resource.MsgEnterAValueBetweenValue, 0, 9999)
                         );
+                        }
+                        if (decimal.Round(farmAverageYield.AverageYield.Value, 1) != farmAverageYield.AverageYield)
+                        {
+                            ModelState.AddModelError($"FarmAverageYields[{i}].AverageYield", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 9999));
+                        }
                     }
                 }
             }
