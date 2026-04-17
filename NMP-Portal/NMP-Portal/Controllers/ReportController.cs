@@ -14,8 +14,10 @@ using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Enums = NMP.Commons.Enums;
 using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
@@ -1107,7 +1109,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         (List<ScotlandNMaxValue>? scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
-            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID&&x.SoilTypeID==cropData.SoilTypeID);
+            ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID && x.SoilTypeID == cropData.SoilTypeID);
 
             string? nResidueGroup = recommendation?.NIndex;
             if (scotlandNMaxValue != null && int.TryParse(nResidueGroup, out int groupNo))
@@ -6559,6 +6561,15 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         };
     }
+    private static int? GetGroupFirstCropTypeId(int cropTypeId)
+    {
+        var cropGroups = GetNmaxReportCropGroupsForScotland();
+
+        var group = cropGroups
+    .FirstOrDefault(g => g.Value.Contains(cropTypeId));
+
+        return group.Value?.FirstOrDefault();
+    }
 
     private static Dictionary<string, int[]> GetNmaxReportLettuceGroups()
     {
@@ -6885,17 +6896,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
         foreach (string cropTypeId in model.CropTypeList)
         {
+            int? cropTypeGroupId = GetGroupFirstCropTypeId(Convert.ToInt32(cropTypeId));
             string cropGroupName = GetGroupName(Convert.ToInt32(cropTypeId), model.Country.Value);
-            if (!string.IsNullOrWhiteSpace(cropGroupName))
+            if (!string.IsNullOrWhiteSpace(cropGroupName) && cropTypeGroupId != null)
             {
                 model.FarmAverageYields.Add(new FarmAverageYieldsViewModel
                 {
-                    CropTypeName = cropGroupName,
-                    CropTypeID= Convert.ToInt32(cropTypeId),
-                    FarmID=model.FarmId.Value,
-                    HarvestYear=model.Year.Value
+                    CropGroupName = cropGroupName,
+                    CropTypeID = Convert.ToInt32(cropTypeGroupId),
+                    FarmID = model.FarmId.Value,
+                    HarvestYear = model.Year.Value
                 });
             }
+
         }
         return model;
     }
@@ -6912,14 +6925,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         model = BindCropTypeListForAverageYield(model);
         if (model.FarmAverageYields != null)
         {
-            ViewBag.AverageYieldCropTypeList = model.FarmAverageYields.Select(x => x.CropTypeName).ToList();
+            ViewBag.AverageYieldCropTypeList = model.FarmAverageYields.Select(x => x.CropGroupName).ToList();
         }
         return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult FarmAverageYieldAdjustment(ReportViewModel model)
+    public async Task<IActionResult> FarmAverageYieldAdjustment(ReportViewModel model)
     {
         _logger.LogTrace("Report Controller : FarmAverageYieldAdjustment() post action called");
         try
@@ -6934,7 +6947,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model = BindCropTypeListForAverageYield(model);
                 if (model.FarmAverageYields != null)
                 {
-                    ViewBag.AverageYieldCropTypeList = model.FarmAverageYields.Select(x=>x.CropTypeName).ToList();
+                    ViewBag.AverageYieldCropTypeList = model.FarmAverageYields.Select(x => x.CropGroupName).ToList();
                 }
                 return View(model);
             }
@@ -6949,7 +6962,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 else if (!model.IsFarmAverageYieldAdjustment.Value)
                 {
-                    return RedirectToAction("NMaxReport");
+                    model.FarmAverageYields = await BindFarmAverageYieldList(model, model.IsFarmAverageYieldAdjustment.Value);
+
+                    (_, Error? error) = await CreateFarmAveragYield(model);
+                    if (error == null)
+                    {
+                        return RedirectToAction("NMaxReport");
+                    }
+                    else
+                    {
+                        TempData["ErrorOnFarmAverageYieldAdjustment"] = error.Message;
+                        return View(model);
+                    }
                 }
             }
         }
@@ -6964,34 +6988,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
 
 
-    private async Task<List<FarmAverageYieldsViewModel>?> BindFarmAverageYieldList(ReportViewModel model)
+    private async Task<List<FarmAverageYieldsViewModel>?> BindFarmAverageYieldList(ReportViewModel model, bool isFarmAverageYieldAdjustment)
     {
         (List<FarmAverageYields>? farmAverageYieldList, _) = await _farmLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(model.FarmId.Value, model.Year.Value);
         if (farmAverageYieldList != null && farmAverageYieldList.Count > 0)
         {
-            var cropGroups = GetNmaxReportCropGroupsForScotland();
-            if (model.FarmAverageYields == null)
+            foreach (var farmAverageYield in farmAverageYieldList)
             {
-                model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
-            }
-
-            foreach (var group in cropGroups)
-            {
-                string cropGroupName = group.Key;
-                int cropTypeId = group.Value[0];
-
-                var filteredData = farmAverageYieldList
-                    .FirstOrDefault(x => x.CropTypeID == cropTypeId);
-                if (filteredData != null)
+                FarmAverageYieldsViewModel farmAverageYieldData = model.FarmAverageYields.FirstOrDefault(x => x.CropTypeID == farmAverageYield.CropTypeID);
+                if (farmAverageYieldData != null)
                 {
-                    model.FarmAverageYields.Add(new FarmAverageYieldsViewModel
-                    {
-                        CropTypeName = cropGroupName,
-                        CropTypeID = cropTypeId,
-                        FarmID = model.FarmId.Value,
-                        HarvestYear = model.Year.Value,
-                        AverageYield = filteredData.AverageYield
-                    });
+
+                    farmAverageYieldData.AverageYield = isFarmAverageYieldAdjustment ? farmAverageYield.AverageYield : null;
                 }
             }
 
@@ -7010,7 +7018,102 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction("FarmList", "Farm");
         }
         //fetch data from [FarmAverageYields]
+        model.FarmAverageYields = await BindFarmAverageYieldList(model, model.IsFarmAverageYieldAdjustment.Value);
         SetReportDataToSession(model);
         return View(model);
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> FarmAverageYieldValues(ReportViewModel model)
+    {
+        _logger.LogTrace("Report Controller : FarmAverageYieldValues() post action called");
+        try
+        {
+            if (model.FarmAverageYields != null)
+            {
+                for (int i = 0; i < model.FarmAverageYields.Count; i++)
+                {
+                    var farmAverageYield = model.FarmAverageYields[i];
+
+                    if (farmAverageYield.AverageYield != null &&
+                        (farmAverageYield.AverageYield < 0 || farmAverageYield.AverageYield > 9999))
+                    {
+                        ModelState.AddModelError(
+                            $"FarmAverageYields[{i}].AverageYield",
+                            string.Format(Resource.MsgEnterAValueBetweenValue, 0, 9999)
+                        );
+                    }
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            SetReportDataToSession(model);
+            (List<FarmAverageYields>? farmAverageYieldData, Error? error) = await CreateFarmAveragYield(model);
+            if (farmAverageYieldData != null && farmAverageYieldData.Count > 0 && error == null)
+            {
+                return RedirectToAction("NMaxReport");
+            }
+            else if (error != null)
+            {
+                TempData["ErrorOnFarmAverageYieldValue"] = error.Message;
+                return View(model);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "Report Controller : Exception in FarmAverageYieldValues() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData["ErrorOnFarmAverageYieldValue"] = ex.Message;
+            return View(model);
+        }
+
+        return View(model);
+    }
+    private async Task<(List<FarmAverageYields>?, Error?)> CreateFarmAveragYield(ReportViewModel model)
+    {
+        List<FarmAverageYields> farmAverageYieldList = CreateFarmAverageYieldListForAdd(model);
+        List<FarmAverageYields>? farmAverageYieldData = null; Error? error = null;
+        if (farmAverageYieldList.Count > 0)
+        {
+            (farmAverageYieldData, error) = await _farmLogic.AddFarmAverageYieldsAsync(farmAverageYieldList);
+        }
+        return (farmAverageYieldData, error);
+    }
+    private List<FarmAverageYields> CreateFarmAverageYieldListForAdd(ReportViewModel model)
+    {
+        var result = new List<FarmAverageYields>();
+
+        if (model?.FarmAverageYields == null || !model.FarmId.HasValue || !model.Year.HasValue)
+            return result;
+
+        var cropGroups = GetNmaxReportCropGroupsForScotland();
+
+        var yieldLookup = model.FarmAverageYields
+            .GroupBy(x => x.CropTypeID)
+            .ToDictionary(g => g.Key, g => g.First());
+        foreach (var values in cropGroups.Select(group => group.Value))
+        {
+            int cropTypeForFilter = values[0];
+
+            if (!yieldLookup.TryGetValue(cropTypeForFilter, out var farmAverageYieldData))
+                continue;
+
+            foreach (var cropTypeId in values)
+            {
+                result.Add(new FarmAverageYields
+                {
+                    CropTypeID = cropTypeId,
+                    FarmID = model.FarmId.Value,
+                    HarvestYear = model.Year.Value,
+                    AverageYield = farmAverageYieldData.AverageYield
+                });
+            }
+        }
+
+        return result;
+    }
+
 }

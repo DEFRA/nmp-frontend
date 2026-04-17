@@ -31,13 +31,14 @@ public interface IReportLogic
             int paperCrumbleOrStrawMulch,
             decimal grassCut)>
         BindAdjustmentsForEnglandAndWales(Crop crop, Field field, int year);
-    (int yieldAdjustment, int marketAdjustment, int rainfallAdjustment) BindAdjustmentsForScotland(Crop crop,int? winterRainfall,int? nResidueGroup,int soilTypeId,decimal? standardYield);
-    Task<(List<FieldDetails>, decimal, int, int)> BindNmaxResponseForScotland(
-       ReportViewModel model,
-       Crop crop,
-       Field field,
-       List<FieldDetails> fieldDetail,
-       decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue);
+    Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)> BindAdjustmentsForScotland(Crop crop,int? winterRainfall,int? nResidueGroup,int soilTypeId,decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue,int farmId);
+    Task<(List<FieldDetails>, decimal, int, int)>
+        BindNmaxResponseForScotland(
+            ReportViewModel model,
+            Crop crop,
+            Field field,
+            List<FieldDetails> fieldDetail,
+            decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue);
     Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> ManPeriodList);
     Task ProcessEnglandAndWales(
        Crop crop,

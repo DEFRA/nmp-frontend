@@ -9,6 +9,6 @@ namespace NMP.Commons.ViewModels
 {
     public class FarmAverageYieldsViewModel:FarmAverageYields
     {
-        public string? CropTypeName { get; set; }
+        public string? CropGroupName { get; set; }
     }
 }

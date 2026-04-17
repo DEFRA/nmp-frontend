@@ -2,13 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System;
-using NMP.Core.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,5 +60,40 @@ namespace NMP.Services;
             }
             return (farmAverageYieldList, error);
         }
+    public async Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData)
+    {
+        List<FarmAverageYields>? farmAverageYields = null;
+        Error? error = null;
+        try
+        {
+            string jsonData = JsonConvert.SerializeObject(farmAverageYieldData);
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.PostAsync(ApiurlHelper.AddFarmAverageYieldsAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data.FarmAverageYield!=null)
+            {
+                farmAverageYields =  responseWrapper?.Data.FarmAverageYield.ToObject<List<FarmAverageYields>>();
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            error = new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (farmAverageYields, error);
     }
+}
 

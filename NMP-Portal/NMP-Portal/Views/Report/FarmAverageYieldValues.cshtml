@@ -23,7 +23,7 @@
 
 @if (Model != null)
 {
-    <form asp-action="FarmAverageYieldValue" asp-controller="Report" method="post" autocomplete="off">
+    <form asp-action="FarmAverageYieldValues" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
@@ -40,14 +40,10 @@
                     {
                         @for (int i = 0; i < Model.FarmAverageYields.Count; i++)
                         {
-                            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].FarmID" value="@Model.FarmAverageYields[i].FarmID" />
-                            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].HarvestYear" value="@Model.FarmAverageYields[i].HarvestYear" />
-                            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeID" value="@Model.FarmAverageYields[i].CropTypeID" />
-                            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeName" value="@Model.FarmAverageYields[i].CropTypeName" />
-                            <govuk-input name="CropTypeID" asp-for=@Model.FarmAverageYields[i].CropTypeID type="number" inputmode="decimal"
+                            <govuk-input  asp-for=@Model.FarmAverageYields[i].AverageYield type="number" inputmode="decimal"
                                          pattern="^\d+(\.\d{0,3})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
                                 <govuk-input-label>
-                                    @string.Format(Resource.lblFarmAverageYieldValuesContentTwo, Model.FarmAverageYields[i].CropTypeName)
+                                    @string.Format(Resource.lblFarmAverageYieldValuesContentTwo, Model.FarmAverageYields[i].CropGroupName)
                                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
                                     @Resource.lblOptional
                                 </govuk-input-label>
@@ -56,9 +52,9 @@
                         }
                     }
                 </govuk-fieldset>
-                @*   <govuk-button type="submit" class="margin-bottom-forty">
+                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
-                </govuk-button> *@
+                </govuk-button> 
                 <p class="govuk-body cancel-link">
                     @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                     {

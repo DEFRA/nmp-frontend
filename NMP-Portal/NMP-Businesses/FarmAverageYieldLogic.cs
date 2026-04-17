@@ -24,5 +24,10 @@ namespace NMP.Businesses
             _logger.LogTrace("Fetch farm average yield by FarmId: {FarmId},and harvestYear: {Year}", farmId, harvestYear);
             return await _farmAverageYieldService.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId, harvestYear);
         }
+        public async Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData)
+        {
+            _logger.LogTrace("Add farm average yield");
+            return await _farmAverageYieldService.AddFarmAverageYieldsAsync(farmAverageYieldData);
+        }
     }
 }

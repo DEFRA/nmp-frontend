@@ -6,6 +6,8 @@ using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace NMP.Businesses;
 
@@ -194,17 +196,17 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
             ? (int)Math.Round(((yield - baseValue) / 0.1m) * multiplier)
             : 0;
     }
-    public (int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)
+    public async Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)>
 BindAdjustmentsForScotland(
     Crop crop,
     int? winterRainfall,
     int? nResidueGroup,
     int soilTypeId,
-    decimal? standardYield)
+    decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId)
     {
         int market = GetScotlandMarketAdjustment(crop);
         int rainfall = GetRainfallAdjustment(winterRainfall, nResidueGroup, soilTypeId);
-        int yield = GetScotlandYieldAdjustment(crop, standardYield);
+        int yield = await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
 
         return (yield, market, rainfall);
     }
@@ -272,15 +274,34 @@ BindAdjustmentsForScotland(
 
         return 0;
     }
-    private static int GetScotlandYieldAdjustment(Crop crop, decimal? standardYield)
+    private async Task<int> GetScotlandYieldAdjustment(Crop crop, decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId)
     {
         if (crop.Yield == null || standardYield == null)
             return 0;
 
-        if (crop.Yield <= standardYield)
-            return 0;
 
-        decimal yield = crop.Yield.Value;
+        decimal yield = 0;
+        List<FarmAverageYields>? farmAverageYieldList = null;
+        if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0 && scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID))
+        {
+            (farmAverageYieldList, _) = await _farmLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId, crop.Year);
+            if (farmAverageYieldList != null && farmAverageYieldList.Any(x => x.CropTypeID == crop.CropTypeID))
+            {
+                yield = farmAverageYieldList
+               .FirstOrDefault(x => x.CropTypeID == crop.CropTypeID)?
+               .AverageYield ?? 0;
+
+                if (yield <= standardYield)
+                    return 0;
+            }
+        }
+        else
+        {
+            if (crop.Yield <= standardYield)
+                return 0;
+            yield = crop.Yield.Value;
+        }
+
         decimal baseVal = standardYield.Value;
 
         int cropType = crop.CropTypeID.Value;
@@ -336,12 +357,12 @@ BindAdjustmentsForScotland(
         if (ShouldCalculateScotlandAdjustment(scotlandNMaxValue, crop))
         {
             (yieldAdjustment, marketAdjustment, rainfallAdjustment) =
-                CalculateScotlandAdjustments(
+               await CalculateScotlandAdjustments(
                     crop,
                     field,
                     excessRain,
                     recommendation,
-                    defaultYield);
+                    defaultYield, scotlandNMaxValue, model);
         }
 
         AddFieldDetails(
@@ -387,7 +408,7 @@ BindAdjustmentsForScotland(
         if (mpId == null)
             return (null, null);
 
-        (Recommendation? rec, _) =  await _cropLogic.FetchRecommendationByManagementPeriodId(mpId.Value);
+        (Recommendation? rec, _) = await _cropLogic.FetchRecommendationByManagementPeriodId(mpId.Value);
 
         return (rec, mpId);
     }
@@ -399,21 +420,22 @@ BindAdjustmentsForScotland(
         return scotlandValues?.Any(x => x.CropTypeID == crop.CropTypeID) == true;
     }
 
-    private (decimal, int, int) CalculateScotlandAdjustments(
+    private async Task<(decimal, int, int)> CalculateScotlandAdjustments(
         Crop crop,
         Field field,
         ExcessRainfalls? rain,
         Recommendation recommendation,
-        decimal? defaultYield)
+        decimal? defaultYield, List<ScotlandNMaxValue>? scotlandNMaxValue, ReportViewModel model)
     {
-        return BindAdjustmentsForScotland(
+        return await BindAdjustmentsForScotland(
             crop,
             rain?.WinterRainfall,
             recommendation.NIndex != null
                 ? Convert.ToInt32(recommendation.NIndex)
                 : null,
             field.SoilTypeID.Value,
-            defaultYield);
+            defaultYield, scotlandNMaxValue, model.FarmId
+            .Value);
     }
 
     private void AddFieldDetails(
@@ -678,10 +700,11 @@ BindAdjustmentsForScotland(
     {
         (Crop? crop, _) = await _cropLogic.FetchCropById(cropData.CropID);
         Field field = await _fieldLogic.FetchFieldByFieldId(cropData.FieldID);
-        decimal defaultYield =
+        decimal? defaultYield =
             await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(
                 crop.CropTypeID.Value,
                 true);
+
 
         (List<FieldDetails> _, decimal yield, int market, int rainfall) =
             await BindNmaxResponseForScotland(
@@ -692,7 +715,7 @@ BindAdjustmentsForScotland(
                 defaultYield,
                 previousCrop,
                 scotlandNMaxValue);
-                
+
 
         int nmaxLimit = nMaxLimitForCropType;
         nMaxLimitForCropType = (int)Math.Round(

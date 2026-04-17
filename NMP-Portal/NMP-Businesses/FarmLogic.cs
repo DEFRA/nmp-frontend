@@ -111,4 +111,10 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _logger.LogTrace("Fetch farm average yield by FarmID: {FarmId} and HarvestYear: {HarvestYear}",farmId,harvestYear);
         return await _farmAverageYieldLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId,harvestYear);
     }
+
+    public async Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData)
+    {
+        _logger.LogTrace("Add farm average yields");
+        return await _farmAverageYieldLogic.AddFarmAverageYieldsAsync(farmAverageYieldData);
+    }
 }
