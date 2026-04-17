@@ -280,7 +280,7 @@ BindAdjustmentsForScotland(
             return 0;
 
 
-        decimal? yield = 0;
+        decimal yield = 0;
         List<FarmAverageYields>? farmAverageYieldList = null;
         if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0 && scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID))
         {
