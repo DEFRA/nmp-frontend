@@ -43,7 +43,7 @@
                             <govuk-input  asp-for=@Model.FarmAverageYields[i].AverageYield type="number" inputmode="decimal"
                                          pattern="^\d+(\.\d{0,3})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
                                 <govuk-input-label>
-                                    @string.Format(Resource.lblFarmAverageYieldValuesContentTwo, Model.FarmAverageYields[i].CropTypeName)
+                                    @string.Format(Resource.lblFarmAverageYieldValuesContentTwo, Model.FarmAverageYields[i].CropGroupName)
                                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
                                     @Resource.lblOptional
                                 </govuk-input-label>

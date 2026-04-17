@@ -6,11 +6,12 @@
 
     int totalCount = Model.NMaxLimitReport.Count;
     string reportName = (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogen;
+    var backAction = (Model.FarmAverageYields != null && Model.FarmAverageYields.Count > 0) ? "FarmAverageYieldValues" : "ExportFieldsOrCropType";
 }
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ExportFieldsOrCropType" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
     </div>
 }
 
@@ -120,6 +121,11 @@
     <div class="govuk-grid-column-full">
         @foreach (var nmaxLimit in Model.NMaxLimitReport)
             {
+
+                var averageYield = Model.FarmAverageYields?
+                .FirstOrDefault(x => x.CropGroupName == nmaxLimit.GroupName)?
+                .AverageYield;
+
                 totalCount--;
                 <h2 class="govuk-heading-l">
                     @string.Format(Resource.LblCropTypeFields, nmaxLimit.GroupName)
@@ -152,11 +158,14 @@
                 </p>
                 @if (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland && nmaxLimit.FieldDetail != null)
                 {
-                    <p class="govuk-body">
-                        @string.Format(Resource.lblThisCalculationIsBasedOnAFarmAverageYield, 1)
+                    @if (averageYield != null)
+                    {
+                        <p class="govuk-body">
+                            @string.Format(Resource.lblThisCalculationIsBasedOnAFarmAverageYield, averageYield)
                         @* need to change *@
 
                     </p>
+                    }
                     <h3 class="govuk-heading-m">
                         @string.Format(Resource.lblGroupFieldDetail, nmaxLimit.GroupName)
                     </h3>

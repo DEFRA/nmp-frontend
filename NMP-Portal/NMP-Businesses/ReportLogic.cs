@@ -279,8 +279,7 @@ BindAdjustmentsForScotland(
         if (crop.Yield == null || standardYield == null)
             return 0;
 
-        if (crop.Yield <= standardYield)
-            return 0;
+        
         decimal yield = 0;
         List<FarmAverageYields>? farmAverageYieldList = null;
         if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0 && scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID))
@@ -289,10 +288,14 @@ BindAdjustmentsForScotland(
             if (farmAverageYieldList != null && farmAverageYieldList.FirstOrDefault(x => x.CropTypeID == crop.CropTypeID).AverageYield.HasValue)
             {
                 yield = farmAverageYieldList.FirstOrDefault(x => x.CropTypeID == crop.CropTypeID).AverageYield.Value;
+                if (yield <= standardYield)
+                    return 0;
             }
         }
         else
         {
+            if (crop.Yield <= standardYield)
+                return 0;
             yield = crop.Yield.Value;
         }
 

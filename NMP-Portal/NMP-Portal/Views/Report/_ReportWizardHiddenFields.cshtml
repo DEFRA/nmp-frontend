@@ -52,7 +52,7 @@
             @for (int i = 0; i < Model.FarmAverageYields.Count; i++)
             {
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeID" value="@Model.FarmAverageYields[i].CropTypeID" />
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropTypeName" value="@Model.FarmAverageYields[i].CropTypeName" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].CropGroupName" value="@Model.FarmAverageYields[i].CropGroupName" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].FarmID" value="@Model.FarmAverageYields[i].FarmID" />
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmAverageYields[i].HarvestYear" value="@Model.FarmAverageYields[i].HarvestYear" />
                 
