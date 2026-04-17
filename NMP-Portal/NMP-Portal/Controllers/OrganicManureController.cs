@@ -6673,7 +6673,9 @@ managementPeriod.CropID.HasValue
             if (error != null) return (model, error);
 
             if (cropTypeResponse.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
-            return (model, null);
+            {
+                return (model, null);
+            }
 
             if (IsWithinRange(model.HarvestYear ?? 0, model.ApplicationDate.Value, 7, 1, 7, 31))
             {
