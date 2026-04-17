@@ -152,11 +152,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 model.Crops[i].Year = model.Year ?? 0;
             }
-            if(model != null)
-            {
-                SetCropToSession(model);
-            }
-            
+                        
+            SetCropToSession(model);
+                        
             return RedirectToAction(_checkAnswerActionName);
         }
 
@@ -4599,7 +4597,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in UpdateExcessOrWinterRainfall() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model?.EncryptedFarmId, year = model?.EncryptedHarvestYear });
+            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
         }
 
         return View("UpdateExcessOrWinterRainfall", model);
