@@ -285,7 +285,7 @@ BindAdjustmentsForScotland(
         if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0 && scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID))
         {
             (farmAverageYieldList, _) = await _farmLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId, crop.Year);
-            if (farmAverageYieldList != null && farmAverageYieldList.FirstOrDefault(x => x.CropTypeID == crop.CropTypeID).AverageYield.HasValue)
+            if (farmAverageYieldList != null && farmAverageYieldList.Any(x => x.CropTypeID == crop.CropTypeID))
             {
                 yield = farmAverageYieldList.FirstOrDefault(x => x.CropTypeID == crop.CropTypeID).AverageYield.Value;
                 if (yield <= standardYield)

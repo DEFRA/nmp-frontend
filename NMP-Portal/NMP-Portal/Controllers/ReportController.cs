@@ -6970,7 +6970,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.FarmAverageYields = await BindFarmAverageYieldList(model, model.IsFarmAverageYieldAdjustment.Value);
 
                     (List<FarmAverageYields>? farmAverageYieldData, Error? error) = await CreateFarmAveragYield(model);
-                    if (farmAverageYieldData != null && farmAverageYieldData.Count > 0 && error == null)
+                    if (error == null)
                     {
                         return RedirectToAction("NMaxReport");
                     }
