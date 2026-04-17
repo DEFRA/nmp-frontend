@@ -6435,7 +6435,9 @@ managementPeriod.CropID.HasValue
             DateTime preStart = closedStartDate.AddDays(-28);
             DateTime preEnd = closedStartDate.AddDays(-1);
 
-            bool isInFebPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(applicationDate, closedPeriod);
+            WarningWithinPeriod warningWithinPeriod = new WarningWithinPeriod();
+            bool isInFebPeriod = warningWithinPeriod.IsApplicationDateWithinDateRange(applicationDate, febStart, febEnd);
+
 
             bool isInPreClosedPeriod =
                 applicationDate >= preStart && applicationDate <= preEnd;
@@ -6462,7 +6464,7 @@ managementPeriod.CropID.HasValue
                 warningList,
                 isRanExceptPoultry,
                 totalApplicationRate,
-                isPoultry);
+                isPoultry,isInFebPeriod);
         }
 #pragma warning restore S107
         private async Task<(ManureType?, Error?)> GetManureType(OrganicManureViewModel model)
@@ -6507,18 +6509,18 @@ managementPeriod.CropID.HasValue
             return helper.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, closedPeriod) == true;
         }
 
-        private void ApplyWarningsRanAndPoultryTotalRateLimit(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry)
+        private void ApplyWarningsRanAndPoultryTotalRateLimit(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry, bool isInFebPeriod)
         {
             if (isRanExceptPoultry && totalApplicationRate > 30)
             {
                 var warning = warningList.FirstOrDefault(x => x.CountryID == farm.CountryID && string.Equals(x.WarningKey?.Trim(),
-                        NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), StringComparison.OrdinalIgnoreCase));
+                        isInFebPeriod ? NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString() : NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), StringComparison.OrdinalIgnoreCase));
                 SetWarning(model, warning);
             }
 
             if (isPoultry && totalApplicationRate > 5)
             {
-                var warning = _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.Poultry4WeekPriorToClosedPeriodStart.ToString()).Result;
+                var warning = _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, isInFebPeriod ? NMP.Commons.Enums.WarningKey.PoultryManureMaxApplicationRate.ToString() : NMP.Commons.Enums.WarningKey.Poultry4WeekPriorToClosedPeriodStart.ToString()).Result;
 
                 SetWarning(model, warning);
             }
