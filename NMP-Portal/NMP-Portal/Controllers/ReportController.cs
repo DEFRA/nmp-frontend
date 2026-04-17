@@ -6920,6 +6920,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         cropGroups.Remove(Resource.lblSpringTriticale);
         cropGroups.Remove(Resource.lblSpringRye);
         cropGroups.Remove(Resource.lblPotatoes);
+        cropGroups.Remove(Resource.lblWinterOilseedRapeAutumn);
 
     }
 
