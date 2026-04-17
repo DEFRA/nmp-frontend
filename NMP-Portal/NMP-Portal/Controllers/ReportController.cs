@@ -7041,40 +7041,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         _logger.LogTrace("Report Controller : FarmAverageYieldValues() post action called");
         try
         {
-            if (model.FarmAverageYields != null)
-            {
-                for (int i = 0; i < model.FarmAverageYields.Count; i++)
-                {
-                    var farmAverageYield = model.FarmAverageYields[i];
-
-                    if (farmAverageYield.AverageYield != null)
-                    {
-                        if (farmAverageYield.AverageYield < 0 || farmAverageYield.AverageYield > 9999)
-                        {
-                            ModelState.AddModelError(
-                            $"FarmAverageYields[{i}].AverageYield",
-                            string.Format(Resource.MsgEnterAValueBetweenValue, 0, 9999)
-                        );
-                        }
-                        if (decimal.Round(farmAverageYield.AverageYield.Value, 1) != farmAverageYield.AverageYield)
-                        {
-                            ModelState.AddModelError($"FarmAverageYields[{i}].AverageYield", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 9999));
-                        }
-                    }
-                }
-            }
+            ValidateFarmAverageVales(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
             SetReportDataToSession(model);
-            (List<FarmAverageYields>? farmAverageYieldData, Error? error) = await CreateFarmAveragYield(model);
-            if (farmAverageYieldData != null && farmAverageYieldData.Count > 0 && error == null)
+            (_, Error? error) = await CreateFarmAveragYield(model);
+            if (error == null)
             {
                 return RedirectToAction("NMaxReport");
             }
-            else if (error != null)
+            else
             {
                 TempData["ErrorOnFarmAverageYieldValue"] = error.Message;
                 return View(model);
@@ -7088,6 +7067,32 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         return View(model);
+    }
+
+    private void ValidateFarmAverageVales(ReportViewModel model)
+    {
+        if (model.FarmAverageYields != null)
+        {
+            for (int i = 0; i < model.FarmAverageYields.Count; i++)
+            {
+                var farmAverageYield = model.FarmAverageYields[i];
+
+                if (farmAverageYield.AverageYield != null)
+                {
+                    if (farmAverageYield.AverageYield < 0 || farmAverageYield.AverageYield > 9999)
+                    {
+                        ModelState.AddModelError(
+                        $"FarmAverageYields[{i}].AverageYield",
+                        string.Format(Resource.MsgEnterAValueBetweenValue, 0, 9999)
+                    );
+                    }
+                    if (decimal.Round(farmAverageYield.AverageYield.Value, 1) != farmAverageYield.AverageYield)
+                    {
+                        ModelState.AddModelError($"FarmAverageYields[{i}].AverageYield", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 9999));
+                    }
+                }
+            }
+        }
     }
     private async Task<(List<FarmAverageYields>?, Error?)> CreateFarmAveragYield(ReportViewModel model)
     {
