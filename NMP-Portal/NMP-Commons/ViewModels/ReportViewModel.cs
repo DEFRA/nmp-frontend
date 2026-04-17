@@ -145,7 +145,7 @@ namespace NMP.Commons.ViewModels
         public int? NumbersInDecember { get; set; }
         public bool? IsDeleteLivestockImportExport { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        [Range(typeof(decimal), "0", "999999", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAValueBetween0And999999))]
         public decimal? AverageNumberOfPlaces { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheAverageOccupancy))]
