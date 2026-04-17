@@ -11,5 +11,6 @@ namespace NMP.Application
     public interface IFarmAverageYieldLogic
     {
         Task<(List<FarmAverageYields>?, Error?)> FetchFarmAverageYieldByFarmIdAndHarvestYear(int farmId, int harvestYear);
+        Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData);
     }
 }
