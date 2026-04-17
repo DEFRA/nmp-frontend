@@ -6565,15 +6565,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         var cropGroups = GetNmaxReportCropGroupsForScotland();
 
-        foreach (var group in cropGroups)
-        {
-            if (group.Value.Contains(cropTypeId))
-            {
-                return group.Value[0];
-            }
-        }
+        var group = cropGroups
+    .FirstOrDefault(g => g.Value.Contains(cropTypeId));
 
-        return null;
+        return group.Value?.FirstOrDefault();
     }
 
     private static Dictionary<string, int[]> GetNmaxReportLettuceGroups()
@@ -6969,12 +6964,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     model.FarmAverageYields = await BindFarmAverageYieldList(model, model.IsFarmAverageYieldAdjustment.Value);
 
-                    (List<FarmAverageYields>? farmAverageYieldData, Error? error) = await CreateFarmAveragYield(model);
+                    (_, Error? error) = await CreateFarmAveragYield(model);
                     if (error == null)
                     {
                         return RedirectToAction("NMaxReport");
                     }
-                    else if (error != null)
+                    else
                     {
                         TempData["ErrorOnFarmAverageYieldAdjustment"] = error.Message;
                         return View(model);
@@ -7099,15 +7094,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         var yieldLookup = model.FarmAverageYields
             .GroupBy(x => x.CropTypeID)
             .ToDictionary(g => g.Key, g => g.First());
-
-        foreach (var group in cropGroups)
+        foreach (var values in cropGroups.Select(group => group.Value))
         {
-            int cropTypeForFilter = group.Value[0];
+            int cropTypeForFilter = values[0];
 
             if (!yieldLookup.TryGetValue(cropTypeForFilter, out var farmAverageYieldData))
                 continue;
 
-            foreach (var cropTypeId in group.Value)
+            foreach (var cropTypeId in values)
             {
                 result.Add(new FarmAverageYields
                 {

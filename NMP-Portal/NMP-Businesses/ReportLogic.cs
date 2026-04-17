@@ -202,11 +202,11 @@ BindAdjustmentsForScotland(
     int? winterRainfall,
     int? nResidueGroup,
     int soilTypeId,
-    decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue,int farmId)
+    decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId)
     {
         int market = GetScotlandMarketAdjustment(crop);
         int rainfall = GetRainfallAdjustment(winterRainfall, nResidueGroup, soilTypeId);
-        int yield =await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
+        int yield = await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
 
         return (yield, market, rainfall);
     }
@@ -274,20 +274,23 @@ BindAdjustmentsForScotland(
 
         return 0;
     }
-    private async Task<int> GetScotlandYieldAdjustment(Crop crop, decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue,int farmId)
+    private async Task<int> GetScotlandYieldAdjustment(Crop crop, decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId)
     {
         if (crop.Yield == null || standardYield == null)
             return 0;
 
-        
-        decimal yield = 0;
+
+        decimal? yield = 0;
         List<FarmAverageYields>? farmAverageYieldList = null;
         if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0 && scotlandNMaxValue.Any(x => x.CropTypeID == crop.CropTypeID))
         {
             (farmAverageYieldList, _) = await _farmLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId, crop.Year);
             if (farmAverageYieldList != null && farmAverageYieldList.Any(x => x.CropTypeID == crop.CropTypeID))
             {
-                yield = farmAverageYieldList.FirstOrDefault(x => x.CropTypeID == crop.CropTypeID).AverageYield.Value;
+                yield = farmAverageYieldList
+               .FirstOrDefault(x => x.CropTypeID == crop.CropTypeID)?
+               .AverageYield ?? 0;
+
                 if (yield <= standardYield)
                     return 0;
             }
@@ -359,7 +362,7 @@ BindAdjustmentsForScotland(
                     field,
                     excessRain,
                     recommendation,
-                    defaultYield, scotlandNMaxValue,model);
+                    defaultYield, scotlandNMaxValue, model);
         }
 
         AddFieldDetails(
@@ -431,7 +434,7 @@ BindAdjustmentsForScotland(
                 ? Convert.ToInt32(recommendation.NIndex)
                 : null,
             field.SoilTypeID.Value,
-            defaultYield, scotlandNMaxValue,model.FarmId
+            defaultYield, scotlandNMaxValue, model.FarmId
             .Value);
     }
 

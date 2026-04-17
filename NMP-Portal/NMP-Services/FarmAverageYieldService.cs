@@ -75,10 +75,6 @@ namespace NMP.Services;
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data.FarmAverageYield!=null)
             {
                 farmAverageYields =  responseWrapper?.Data.FarmAverageYield.ToObject<List<FarmAverageYields>>();
-                //if (farmAverageYieldsJObject!=null)
-                //{
-                //    farmAverageYields = farmAverageYieldsJObject.ToObject<List<FarmAverageYields>>();
-                //}
             }
             else
             {
