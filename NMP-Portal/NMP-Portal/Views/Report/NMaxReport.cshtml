@@ -6,7 +6,14 @@
 
     int totalCount = Model.NMaxLimitReport.Count;
     string reportName = (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England || Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNMax : Resource.lblMaximumNitrogen;
-    var backAction = (Model.FarmAverageYields != null && Model.FarmAverageYields.Count > 0) ? "FarmAverageYieldValues" : "ExportFieldsOrCropType";
+    var backAction =
+    (Model.FarmAverageYields != null && Model.FarmAverageYields.Count > 0)
+        ? (Model.IsFarmAverageYieldAdjustment == true
+            ? "FarmAverageYieldValues"
+            : Model.IsFarmAverageYieldAdjustment == false
+                ? "FarmAverageYieldAdjustment"
+                : "ExportFieldsOrCropType")
+        : "ExportFieldsOrCropType";
 }
 
 @section BeforeContent {
