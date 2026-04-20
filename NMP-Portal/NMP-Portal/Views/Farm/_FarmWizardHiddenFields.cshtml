@@ -15,7 +15,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
     }
-    @if (currentStep != (int)FarmWizardSteps.Postcode)
+    @if (currentStep != (int)FarmWizardSteps.Postcode && currentStep != (int)FarmWizardSteps.ManualAddress)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode" />
     }
