@@ -7724,4 +7724,16 @@ livestock manure.</value>
   <data name="lblEnterAValueBetween0And999999" xml:space="preserve">
     <value>Enter a value between 0 and 999999.</value>
   </data>
+  <data name="lblPrivateBetaDisclaimer" xml:space="preserve">
+    <value>Private beta disclaimer</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimerContentOne" xml:space="preserve">
+    <value>Any recommendations and advice given in the private beta version of this tool cannot be used:</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimerContentTwo" xml:space="preserve">
+    <value>to demonstrate compliance with any regulation or legislation, such as NVZ rules</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimerContentThree" xml:space="preserve">
+    <value>as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI).</value>
+  </data>
 </root>

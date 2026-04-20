@@ -11960,6 +11960,42 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Private beta disclaimer.
+        /// </summary>
+        public static string lblPrivateBetaDisclaimer {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this tool cannot be used:.
+        /// </summary>
+        public static string lblPrivateBetaDisclaimerContentOne {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimerContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI)..
+        /// </summary>
+        public static string lblPrivateBetaDisclaimerContentThree {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimerContentThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to demonstrate compliance with any regulation or legislation, such as NVZ rules.
+        /// </summary>
+        public static string lblPrivateBetaDisclaimerContentTwo {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimerContentTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Purpose.
         /// </summary>
         public static string lblPurpose {

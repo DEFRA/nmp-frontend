@@ -100,115 +100,137 @@
             </div>
             <div class="govuk-grid-column-full">
                 <govuk-tabs>
+
                     @* Nutrient and Lime Recommendations tab *@
                     @if (Model.Crops.Count > 0)
                     {
                         var cropNumber = 1;
                         @foreach (var crop in Model.Crops)
                         {
-                                var tablabel = Model.Crops.Count == 1 ? Resource.lblNutrientAndLimeRecommendations : Resource.lblCrop1Recommendations;
+                            var tablabel = Model.Crops.Count == 1 ? Resource.lblNutrientAndLimeRecommendations : Resource.lblCrop1Recommendations;
+
                             var tabId = "crop-1";
-                            if(cropNumber == 2)
-                                {
-                                    tablabel = Resource.lblCrop2Recommendations;
-                                 tabId = "crop-2";
-                                }
-                         
-                                <govuk-tabs-item id=@tabId label=@tablabel>
+                            if (cropNumber == 2)
+                            {
+                                tablabel = Resource.lblCrop2Recommendations;
+                                tabId = "crop-2";
+                            }
 
-                                    @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
-                                                    && Model.Recommendations.Count > 0)
+                            <govuk-tabs-item id=@tabId label=@tablabel>
+                                <p class="govuk-heading-m">
+                                    @tablabel
+                                </p>
+                                <p class="govuk-heading-s">
+                                    @Resource.lblPrivateBetaDisclaimer
+                                </p>
+                                <p class="govuk-body">
+                                    @Resource.lblPrivateBetaDisclaimerContentOne
+                                </p>
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>
+                                        @Resource.lblPrivateBetaDisclaimerContentTwo
+                                    </li>
+                                    @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                     {
-                                        var cropManagementPeriods = Model.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
-                                        @* Recommendation *@
-                                        <h2 id="cropone" class="govuk-heading-m">
-                                            @string.Format(Resource.lblNutrientAndLimeRecommendationsForCropInField, crop.CropTypeName, Model.FieldName)
-                                        </h2>
-                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                        {
-                                            <p>
-                                                @ViewBag.GrassHeadingCropOne
-                                            </p>
+                                        <li>
+                                            @Resource.lblPrivateBetaDisclaimerContentThree
+                                        </li>
+                                    }
+                                    <hr class="seperator_five">
+                                </ul>
+                                @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
+                                                && Model.Recommendations.Count > 0)
+                                {
+                                    var cropManagementPeriods = Model.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
+                                    @* Recommendation *@
+                                    <h2 id="cropone" class="govuk-heading-m">
+                                        @string.Format(Resource.lblNutrientAndLimeRecommendationsForCropInField, crop.CropTypeName, Model.FieldName)
+                                    </h2>
+                                    @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                    {
+                                        <p>
+                                            @ViewBag.GrassHeadingCropOne
+                                        </p>
 
-                                            <hr class="seperator_five">
-                                        }
-                                        else
+                                        <hr class="seperator_five">
+                                    }
+                                    else
+                                    {
+                                        <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
+                                    }
+                                    @foreach (var mp in cropManagementPeriods)
+                                    {
+                                        var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
+                                        @foreach (var recommendation in rec)
                                         {
-                                            <p class="govuk-body-s">@Resource.lblAmountsArePerHectare</p>
-                                        }
-                                        @foreach (var mp in cropManagementPeriods)
-                                        {
-                                            var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
-                                            @foreach (var recommendation in rec)
+                                            var recommendationData = new RecommendationData
                                             {
-                                                var recommendationData = new RecommendationData
-                                                {
 
-                                                    Recommendation = recommendation,
-                                                    CropGroupID = crop.CropGroupID,
-                                                    ManagementTableIndex = managementTableIndex,
-                                                    DefoliationSequenceName = mp.DefoliationSequenceName,
-                                                };
+                                                Recommendation = recommendation,
+                                                CropGroupID = crop.CropGroupID,
+                                                ManagementTableIndex = managementTableIndex,
+                                                DefoliationSequenceName = mp.DefoliationSequenceName,
+                                            };
                                             @await Html.PartialAsync("~/Views/Crop/_RecommendationTabPartial.cshtml", recommendationData)
 
-                                            }
-                                            managementTableIndex++;
                                         }
-                                        
-    <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
+                                        managementTableIndex++;
+                                    }
 
-                                        @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
-                                        {
+                                    <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
 
-                                            <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
-                                            <div class="guidance">
-                                                @foreach (var mp in cropManagementPeriods)
+                                    @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
+                                    {
+
+                                        <h2 class="govuk-heading-m">@Resource.lblGuidance</h2>
+                                        <div class="guidance">
+                                            @foreach (var mp in cropManagementPeriods)
+                                            {
+                                                var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
+                                                @foreach (var recommendation in rec)
                                                 {
-                                                    var rec = Model.Recommendations.Where(r => r.ManagementPeriodID == mp.ID);
-                                                    @foreach (var recommendation in rec)
+                                                    @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
                                                     {
-                                                        @foreach (var recCom in Model.RecommendationComments.Where(rc => rc.RecommendationID == recommendation.ID))
+                                                        if (recCom.Nutrient != (int)NMP.Commons.Enums.Nutrients.Sodium)
                                                         {
-                                                            if (recCom.Nutrient != (int)NMP.Commons.Enums.Nutrients.Sodium)
-                                                            {
-                                                                <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
-                                                                <p class="govuk-body">
-                                                                    @Html.Raw(recCom.Comment)
-                                                                    <br />
-                                                                </p>
-                                                            }
+                                                            <h3 class="govuk-heading-s">@Model.Nutrients?.FirstOrDefault(x => x.nutrientId == recCom.Nutrient)?.nutrient</h3>
+                                                            <p class="govuk-body">
+                                                                @Html.Raw(recCom.Comment)
+                                                                <br />
+                                                            </p>
                                                         }
                                                     }
                                                 }
-                                            </div>
-                                        }
-                                        @* } *@
-
-
-                                        <hr class="seperator_five">
-                                        <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
-                                        <p class="govuk-body">
-                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContent1)
-                                        </p>
-                                        <p class="govuk-body">
-                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
-                                        </p>
-                                        <p class="govuk-body margin-bottom-forty">
-                                            @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
-                                        </p>
-
-                                        <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#crop-1">@Resource.lblBackToTheTop</a></p>
-
+                                            }
+                                        </div>
                                     }
+                                    @* } *@
 
-                                </govuk-tabs-item>
-                        
+
+                                    <hr class="seperator_five">
+                                    <h3 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h3>
+                                    <p class="govuk-body">
+                                        @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContent1)
+                                    </p>
+                                    <p class="govuk-body">
+                                        @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
+                                    </p>
+                                    <p class="govuk-body margin-bottom-forty">
+                                        @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
+                                    </p>
+
+                                    <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#crop-1">@Resource.lblBackToTheTop</a></p>
+
+                                }
+
+                            </govuk-tabs-item>
+
                             cropNumber++;
                         }
                     }
                     @* organic and inorganic material tab *@
                     <govuk-tabs-item id="organicAndInorganicMaterial" label="@Resource.lblorganicAndInorganicMaterial">
-                       
+
                         @* Organic material applications *@
                         <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
                         @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
