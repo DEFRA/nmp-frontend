@@ -6672,12 +6672,20 @@ managementPeriod.CropID.HasValue
 
             if (error != null) return (model, error);
 
-            if (cropTypeResponse.CropTypeId ==
-                (int)NMP.Commons.Enums.CropTypes.Grass)
+            if (cropTypeResponse.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
+            {
                 return (model, null);
+            }
 
             if (IsWithinRange(model.HarvestYear ?? 0, model.ApplicationDate.Value, 7, 1, 7, 31))
-                return await ScotlandJulyHighNWarning(model);
+            {
+                (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId((model.HarvestYear ?? 0) + 1, model.FarmId??0);
+                DateTime? nextHarvestYearEarliestPlan = harvestYearPlanResponse?.CropDetails?.Where(x => x.FieldID == fieldId).Min(x => x.PlantingDate);
+                if ((nextHarvestYearEarliestPlan == null || (nextHarvestYearEarliestPlan.Value - model.ApplicationDate.Value).TotalDays >= 43))
+                {
+                    return await ScotlandJulyHighNWarning(model);
+                }
+            }
 
             if (IsWithinRange((model.HarvestYear ?? 0) - 1, model.ApplicationDate.Value, 8, 1, 9, 30) &&
                 (sowingDate == null ||
