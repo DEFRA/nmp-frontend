@@ -4789,6 +4789,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
             }
+            else if (model.AverageOccupancy < 0 || model.AverageOccupancy > 100)
+            {
+                ModelState.AddModelError("AverageOccupancy", string.Format(Resource.MsgEnterValueInBetween, Resource.lblOccupancy, 0, 100));
+            }
+
 
             if (!ModelState.IsValid)
             {
@@ -4868,6 +4873,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError("NitrogenStandard", Resource.MsgEnterTheNitrogenStandardPerAnimal);
             }
+            else if (model.NitrogenStandard < 0 || model.NitrogenStandard > 9999)
+            {
+                ModelState.AddModelError("NitrogenStandard", Resource.MsgEnterAValueBetween0And9999);
+            }
+
             (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
             if (!ModelState.IsValid)
             {
