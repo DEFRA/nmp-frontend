@@ -68,15 +68,16 @@
                 </govuk-error-summary>
             }
             
-            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            @if ((Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning) || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-
-                    @if (Model.IsOrgManureNfieldLimitWarning)
+                    
+                    @if (Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning)
                     {
+                       @*  We don't have to show this warning on check answer page (mentioned on scotland warning excel sheet row no. 6) *@
                         <p class="govuk-notification-banner__heading">
                             @if (Model.NmaxWarningPara1 != null)
                             {
@@ -97,7 +98,7 @@
                     @if (Model.IsClosedPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @Resource.MsgApplicationDateEnteredIsInsideClosedPeriod
+                            @Model.ClosedPeriodWarningPara1
                         </p>
                     }
                     @if (Model.IsEndClosedPeriodFebruaryWarning)

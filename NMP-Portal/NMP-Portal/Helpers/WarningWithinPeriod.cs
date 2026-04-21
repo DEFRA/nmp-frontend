@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Identity.Client;
 using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -79,8 +80,6 @@ namespace NMP.Portal.Helpers
         public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial, int? countryId)
         {
             string? closedPeriod = null;
-
-
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
                                      fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow;
             var isFieldTypeGrass = fieldDetail.FieldType == (int)NMP.Commons.Enums.FieldType.Grass;
@@ -109,7 +108,7 @@ namespace NMP.Portal.Helpers
                 {
 
                     default:
-                        closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial,countryId);
+                        closedPeriod = ClosedPeriodNonOrganicFarm(fieldDetail, harvestYear, isPerennial, countryId);
 
                         break;
                 }
@@ -227,7 +226,7 @@ namespace NMP.Portal.Helpers
                     DateTime? endDateFebruary = null;
                     endDateFebruary = new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
 
-                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00,00,00, DateTimeKind.Unspecified);
+                    DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                     DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day, 00, 00, 00, DateTimeKind.Unspecified);
 
 
@@ -495,8 +494,8 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted:
                     case (int)NMP.Commons.Enums.CropTypes.KaleGrazed:
                     case (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed:
-                    case (int)NMP.Commons.Enums.CropTypes.SwedesGrazed:
-                    case (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted:
+                    case (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed:
+                    case (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted:
                     case (int)NMP.Commons.Enums.CropTypes.BrusselSprouts:
                     case (int)NMP.Commons.Enums.CropTypes.Cabbage:
                     case (int)NMP.Commons.Enums.CropTypes.Calabrese:
@@ -545,7 +544,7 @@ namespace NMP.Portal.Helpers
             return WarningPeriod;
         }
 
-        public string? ClosedPeriodForFertiliser(int cropTypeId)
+        public static string? ClosedPeriodForFertiliser(int cropTypeId)
         {
             string? closedPeriod = null;
             if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
@@ -562,81 +561,76 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
 
         }
-        public bool IsFertiliserApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
+        public static bool IsApplicationWithinWarningPeriod(DateTime applicationDate, string warningPeriod)
         {
-            bool isWithinWarningPeriod = false;
+            if (string.IsNullOrWhiteSpace(warningPeriod))
+                return false;
 
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
-            if (warningPeriod != null)
+            var match = GetRegex().Match(warningPeriod);
+            if (!match.Success)
+                return false;
+
+            var (startDay, startMonth, endDay, endMonth) = ExtractPeriod(match);
+            if (startMonth == 0 || endMonth == 0)
+                return false;
+
+            return IsWithinPeriod(applicationDate, startDay, startMonth, endDay, endMonth);
+        }
+        private static Regex GetRegex() => new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)", RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+
+        private static (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
+        {
+            int startDay = int.Parse(match.Groups[1].Value);
+            string startMonthStr = match.Groups[2].Value;
+
+            int endDay = int.Parse(match.Groups[3].Value);
+            string endMonthStr = match.Groups[4].Value;
+
+            int startMonth = GetMonthNumber(startMonthStr);
+            int endMonth = GetMonthNumber(endMonthStr);
+
+            return (startDay, startMonth, endDay, endMonth);
+        }
+        private static int GetMonthNumber(string month)
+        {
+            var months = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
             {
-                Match match = regex.Match(warningPeriod);
-                if (match.Success)
-                {
-                    int startDay = int.Parse(match.Groups[1].Value);
-                    string startMonthStr = match.Groups[2].Value;
-                    int endDay = int.Parse(match.Groups[3].Value);
-                    string endMonthStr = match.Groups[4].Value;
+                { Resource.lblJanuary, 1 },
+                { Resource.lblFebruary, 2 },
+                { Resource.lblMarch, 3 },
+                { Resource.lblApril, 4 },
+                { Resource.lblMay, 5 },
+                { Resource.lblJune, 6 },
+                { Resource.lblJuly, 7 },
+                { Resource.lblAugust, 8 },
+                { Resource.lblSeptember, 9 },
+                { Resource.lblOctober, 10 },
+                { Resource.lblNovember, 11 },
+                { Resource.lblDecember, 12 }
+            };
 
-                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                    dtfi.Add(0, Resource.lblJanuary);
-                    dtfi.Add(1, Resource.lblFebruary);
-                    dtfi.Add(2, Resource.lblMarch);
-                    dtfi.Add(3, Resource.lblApril);
-                    dtfi.Add(4, Resource.lblMay);
-                    dtfi.Add(5, Resource.lblJune);
-                    dtfi.Add(6, Resource.lblJuly);
-                    dtfi.Add(7, Resource.lblAugust);
-                    dtfi.Add(8, Resource.lblSeptember);
-                    dtfi.Add(9, Resource.lblOctober);
-                    dtfi.Add(10, Resource.lblNovember);
-                    dtfi.Add(11, Resource.lblDecember);
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
+            return months.TryGetValue(month, out int value) ? value : 0;
+        }
 
-                    DateTime warningPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                    DateTime warningPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+        private static bool IsWithinPeriod(DateTime applicationDate, int startDay, int startMonth, int endDay, int endMonth)
+        {
+            DateTime start = CreateDate(applicationDate.Year, startMonth, startDay);
+            DateTime end = CreateDate(applicationDate.Year, endMonth, endDay);
 
-                    int applicationMonth = applicationDate.Month;
-                    int applicationDay = applicationDate.Day;
+            // Normal case (same year)
+            if (startMonth <= endMonth)
+                return applicationDate >= start && applicationDate <= end;
 
-                    if (startMonth < endMonth)
-                    {
-                        if (applicationMonth >= startMonth && applicationMonth <= endMonth)
-                        {
-                            if (applicationDate >= warningPeriodStart && applicationDate <= warningPeriodEnd)
-                            {
-                                isWithinWarningPeriod = true;
-                            }
-                        }
-                    }
-                    if (startMonth > endMonth)
-                    {
-                        if (applicationDate >= warningPeriodEnd)
-                        {
-                            DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                            if (applicationDate >= warningPeriodStart && applicationDate <= closedPeriodEndNextYear)
-                            {
-                                isWithinWarningPeriod = true;
-                            }
-                        }
-                        if (applicationDate <= warningPeriodEnd)
-                        {
-                            DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+            // Cross-year case
+            DateTime endNextYear = CreateDate(applicationDate.Year + 1, endMonth, endDay);
+            DateTime startPrevYear = CreateDate(applicationDate.Year - 1, startMonth, startDay);
 
-                            if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= warningPeriodEnd)
-                            {
-                                isWithinWarningPeriod = true;
-                            }
-                        }
-
-
-                    }
-                    return isWithinWarningPeriod;
-                }
-            }
-
-            return isWithinWarningPeriod;
+            return (applicationDate >= start && applicationDate <= endNextYear) ||
+                   (applicationDate >= startPrevYear && applicationDate <= end);
+        }
+        private static DateTime CreateDate(int year, int month, int day)
+        {
+            return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
         }
 
         public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
@@ -651,6 +645,5 @@ namespace NMP.Portal.Helpers
             }
             return isWithinDateRange;
         }
-
     }
 }

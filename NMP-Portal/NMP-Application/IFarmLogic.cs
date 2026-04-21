@@ -21,4 +21,6 @@ public interface IFarmLogic
     Task<int> FetchFieldCountByFarmIdAsync(int farmId);
     Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId);
     Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId);
+    Task<(List<FarmAverageYields>?, Error?)> FetchFarmAverageYieldByFarmIdAndHarvestYear(int farmId, int harvestYear);
+    Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData);
 }

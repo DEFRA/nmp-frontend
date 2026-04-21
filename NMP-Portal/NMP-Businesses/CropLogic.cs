@@ -15,11 +15,13 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISnsAnalysisService snsAnalysisService) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService, IPreviousCroppingLogic previousCroppingLogic) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
     private readonly ICropService _cropService = cropService;
     private readonly ISnsAnalysisService _snsAnalysisService = snsAnalysisService;
+    private readonly IRecommendationService _recommendationService = recommendationService;
+    private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         _logger.LogTrace("Adding crop nutrient management plan");
@@ -56,7 +58,8 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeId(cropTypeId);
         if (farmRB209CountryID.HasValue)
         {
-            cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
+            // x.CropTypeId== (int)NMP.Commons.Enums.CropTypes.Sunflowers is added temporary untill rb209 cropinfo country id fixed.
+            cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All || x.CropTypeId== (int)NMP.Commons.Enums.CropTypes.Sunflowers).ToList();
         }
         return cropInfoOneResponse;
     }
@@ -115,7 +118,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         return await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(swardTypeId, swardManagementId, numberOfCut, isNewSward);
     }
 
-    public async Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds)
+    public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)
     {
         _logger.LogTrace("Fetching grass growth class for FieldIds: {FieldIds}", string.Join(", ", fieldIds));
         return await _cropService.FetchGrassGrowthClass(fieldIds);
@@ -250,5 +253,15 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
     {
         _logger.LogTrace("CropLogic : FetchIsPerennialByCropTypeId() called");
         return await _cropService.FetchIsPerennialByCropTypeId(cropTypeId);
+    }
+    public async Task<(Recommendation?, Error?)> FetchRecommendationByManagementPeriodId(int managementPeriodID)
+    {
+        _logger.LogTrace("CropLogic : Fetch Recommendation By ManagementPeriodId:{0} called", managementPeriodID);
+        return await _recommendationService.FetchRecommendationByManagementPeriodId(managementPeriodID);
+    }
+    public async Task<(List<PreviousCroppingData>?, Error?)> FetchDataByFieldId(int fieldId, int year)
+    {
+        _logger.LogTrace("CropLogic : Fetch PreviousCropping By FieldId:{0} and Year:{1} called", fieldId, year);
+        return await _previousCroppingLogic.FetchDataByFieldId(fieldId, year);
     }
 }

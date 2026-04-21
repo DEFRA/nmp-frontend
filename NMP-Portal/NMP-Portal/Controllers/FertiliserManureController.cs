@@ -11,6 +11,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Helpers;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Reflection;
@@ -279,29 +280,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
                     {
-                        int grassCropCounter = 0;
-                        foreach (var field in model.FieldList)
-                        {
-                            if (cropList.Count > 0)
-                            {
-                                cropList = cropList.Where(x => x.CropOrder == 1).ToList();
-                            }
-                            if (cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                            {
-                                (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.ID.Value).FirstOrDefault(), false);
+                        (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
 
-                                var filteredFertiliserManure = model.FertiliserManures
-                                .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
-                                fm.Defoliation == null).ToList();
-                                if (filteredFertiliserManure != null && filteredFertiliserManure.Count == managementPeriod.Count)
-                                {
-                                    model = RemoveListItem(model, managementPeriod);
-                                }
-                                grassCropCounter++;
-                                model.IsAnyCropIsGrass = true;
-                            }
-                        }
-                        model.GrassCropCount = grassCropCounter;
+                        model = await ApplyGrassCropLogicAsync(model, cropPlans);
+
                         model.IsSameDefoliationForAll = true;
                         SetFertiliserManureToSession(model);
                     }
@@ -530,65 +512,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             (managementIds, error) = await _fertiliserManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldIds, (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) ? null : model.FieldGroup, (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) ? 1 : null);
                             if (error == null)
                             {
-                                if (managementIds.Count > 0)
-                                {
-                                    if (model.FertiliserManures == null)
-                                    {
-                                        model.FertiliserManures = new List<FertiliserManureDataViewModel>();
-                                    }
-                                    if (model.FertiliserManures.Count > 0)
-                                    {
-                                        model.FertiliserManures.Clear();
-                                    }
-                                    int counter = 1;
-                                    foreach (var manIds in managementIds)
-                                    {
-                                        var fertiliserManure = new FertiliserManureDataViewModel
-                                        {
-                                            ManagementPeriodID = manIds,
-                                            EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
-                                        };
-                                        counter++;
-                                        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && fertiliserManureViewModel.FertiliserManures != null && fertiliserManureViewModel.FertiliserManures.Count > 0)
-                                        {
-                                            for (int i = 0; i < fertiliserManureViewModel.FertiliserManures.Count; i++)
-                                            {
-                                                if (fertiliserManureViewModel.FertiliserManures[i].ManagementPeriodID == manIds)
-                                                {
-                                                    fertiliserManure.Defoliation = fertiliserManureViewModel.FertiliserManures[i].Defoliation;
-                                                    if (fertiliserManure.Defoliation != null)
-                                                    {
-                                                        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
-                                                        if (error == null && managementPeriod != null)
-                                                        {
-                                                            HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
-                                                            if (crop != null && crop.DefoliationSequenceID != null)
-                                                            {
-                                                                (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                                                                if (error == null && defoliationSequence != null)
-                                                                {
-                                                                    string description = defoliationSequence.DefoliationSequenceDescription;
-
-                                                                    string[] defoliationParts = description.Split(',')
-                                                                                                           .Select(x => x.Trim())
-                                                                                                           .ToArray();
-
-                                                                    string selectedDefoliation = (fertiliserManure.Defoliation.Value > 0 && fertiliserManure.Defoliation.Value <= defoliationParts.Length)
-                                                                        ? $"{Enum.GetName(typeof(PotentialCut), fertiliserManure.Defoliation.Value)} ({defoliationParts[fertiliserManure.Defoliation.Value - 1]})"
-                                                                        : $"{fertiliserManure.Defoliation.Value}";
-
-                                                                    fertiliserManure.DefoliationName = selectedDefoliation;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        model.FertiliserManures.Add(fertiliserManure);
-                                    }
-                                    model.DefoliationCurrentCounter = 0;
-                                }
+                                (model, fertiliserManureViewModel) = await BuildFertiliserManureList(managementIds, model, fertiliserManureViewModel, cropPlans);
                             }
                             else
                             {
@@ -606,34 +530,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         SetFertiliserManureToSession(model);
                         if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && model.FieldList != null && model.FertiliserManures != null)
                         {
-                            int grassCropCounter = 0;
-                            foreach (var field in model.FieldList)
-                            {
-                                List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
+                            model = await ApplyGrassCropLogicAsync(model, cropPlans);
 
-                                if (cropList.Count > 0)
-                                {
-                                    if (!model.FieldGroup.Equals(Resource.lblAll) && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
-                                    {
-                                        cropList = cropList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).ToList();
-                                    }
-                                    else
-                                    {
-                                        cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
-                                    }
-                                }
-                                if (cropList.Count > 0)
-                                {
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                                    {
-                                        grassCropCounter++;
-                                        (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
-                                        model = RemoveListItem(model, managementPeriod);
-                                        model.IsAnyCropIsGrass = true;
-                                    }
-                                }
-                            }
-                            model.GrassCropCount = grassCropCounter;
                         }
                         else
                         {
@@ -651,39 +549,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 model.IsAnyChangeInField = true;
                             }
                         }
-                        int fertiliserCounter = 1;
-                        foreach (var fertiliser in model.FertiliserManures)
-                        {
-                            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
-                            if (error == null && managementPeriod != null)
-                            {
-                                HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
-                                if (crop != null)
-                                {
-                                    fertiliser.FieldID = crop.FieldID;
-                                    fertiliser.FieldName = (await _fieldLogic.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
-                                    fertiliser.EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString());
-                                    fertiliserCounter++;
-                                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                    {
-                                        fertiliser.IsGrass = true;
-                                    }
-                                    else if (model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == crop.FieldID))
-                                    {
-                                        model.DefoliationList.RemoveAll(x => x.FieldID == crop.FieldID);
-                                    }
-                                }
-                            }
-                        }
-                        var grass = model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
-                        if (grass != null && model.DefoliationList != null)
-                        {
-                            model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
-                        }
-                        else
-                        {
-                            model.DefoliationList = null;
-                        }
+                        model = await BindFieldData(model, cropPlans);
+
                         SetFertiliserManureToSession(model);
                     }
                 }
@@ -722,59 +589,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
             }
 
-            if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-            {
-                int counter = 1;
-                model.DefoliationList.ForEach(d =>
-                {
-                    d.Counter = counter;
-                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                });
-            }
-            if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-            {
-                int counter = 1;
-                model.DoubleCrop.ForEach(d =>
-                {
-                    d.Counter = counter;
-                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                });
-            }
-            if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
-            {
-                if (model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
-                {
-                    model.GrassCropCount = null;
-                    model.IsSameDefoliationForAll = null;
-                    model.IsAnyChangeInSameDefoliationFlag = false;
-                    SetFertiliserManureToSession(model);
-                }
-                SetFertiliserManureToSession(model);
-                return RedirectToAction(_checkAnswerActionName);
-            }
-            if (model.IsDoubleCropAvailable)
-            {
-                SetFertiliserManureToSession(model);
-                return RedirectToAction(_doubleCropActionName);
-            }
-            else
-            {
-                model.DoubleCrop = null;
-            }
+            model = RemoveFieldsFromDoubleCropList(model);
+            var result = ProcessFertiliserManureModel(model);
 
-            SetFertiliserManureToSession(model);
-            if (model.IsAnyCropIsGrass.HasValue && (model.IsAnyCropIsGrass.Value))
+            if (result != null)
             {
-                model.FieldID = model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldID).First();
-                model.FieldName = model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldName).First();
-                if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
-                {
-                    SetFertiliserManureToSession(model);
-                    return RedirectToAction("IsSameDefoliationForAll");
-                }
-                model.IsSameDefoliationForAll = true;
-                SetFertiliserManureToSession(model);
-                return RedirectToAction(_defoliationActionName);
+                return result;
             }
             SetFertiliserManureToSession(model);
             if (model.FieldGroup != null && !model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
@@ -785,8 +605,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Farm Controller : Exception in Fields() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+            _logger.LogTrace(ex, "Fertiliser Controller : Exception in Fields() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            if (model != null && string.IsNullOrWhiteSpace(model.EncryptedFertId))
             {
                 TempData["FieldGroupError"] = ex.Message;
                 if (TempData["FieldError"] != null)
@@ -804,7 +624,16 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return View(model);
     }
-
+    private static FertiliserManureViewModel RemoveFieldsFromDoubleCropList(FertiliserManureViewModel model)
+    {
+        //remove fields that's not in fieldList
+        if (model.FieldList != null && model.FieldList.Any() && model.DoubleCrop != null && model.DoubleCrop.Count > 0 &&
+        model.DoubleCrop.Any(dc => !model.FieldList.Contains(dc.FieldID.ToString())))
+        {
+            model.DoubleCrop?.RemoveAll(dc => !model.FieldList.Contains(dc.FieldID.ToString()));
+        }
+        return model;
+    }
     private async Task<FertiliserManureViewModel> BindGrassProperty(FertiliserManureViewModel model, List<HarvestYearPlanResponse> cropList, int fieldId, List<CommonResponse> fieldList, bool isFieldGet)
     {
         if (cropList.Count > 0)
@@ -900,6 +729,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
                 model.IsAnyCropIsGrass = false;
+                model.IsDoubleCropAvailable = false;
                 foreach (string field in model.FieldList)
                 {
 
@@ -914,62 +744,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                 if (managementIds.Count > 0)
                 {
-                    if (model.FertiliserManures == null)
-                    {
-                        model.FertiliserManures = new List<FertiliserManureDataViewModel>();
-                    }
-                    if (model.FertiliserManures.Count > 0)
-                    {
-                        model.FertiliserManures.Clear();
-                    }
-                    int counter = 1;
-                    foreach (var manIds in managementIds)
-                    {
-                        var fertiliserManure = new FertiliserManureDataViewModel
-                        {
-                            ManagementPeriodID = manIds,
-                            EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
-                        };
-                        counter++;
-                        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && fertiliserManureViewModel.FertiliserManures != null && fertiliserManureViewModel.FertiliserManures.Count > 0)
-                        {
-                            for (int i = 0; i < fertiliserManureViewModel.FertiliserManures.Count; i++)
-                            {
-                                if (fertiliserManureViewModel.FertiliserManures[i].ManagementPeriodID == manIds)
-                                {
-                                    fertiliserManure.Defoliation = fertiliserManureViewModel.FertiliserManures[i].Defoliation;
-                                    if (fertiliserManure.Defoliation != null)
-                                    {
-                                        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
-                                        if (managementPeriod != null && managementPeriod.CropID != null)
-                                        {
-                                            HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value);
-                                            if (crop != null && crop.DefoliationSequenceID != null)
-                                            {
-                                                (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                                                if (error == null && defoliationSequence != null)
-                                                {
-                                                    string description = defoliationSequence.DefoliationSequenceDescription;
-
-                                                    string[] defoliationParts = description.Split(',')
-                                                                                           .Select(x => x.Trim())
-                                                                                           .ToArray();
-
-                                                    string selectedDefoliation = (fertiliserManure.Defoliation.Value > 0 && fertiliserManure.Defoliation.Value <= defoliationParts.Length)
-                                                        ? $"{Enum.GetName(typeof(PotentialCut), fertiliserManure.Defoliation.Value)} ({defoliationParts[fertiliserManure.Defoliation.Value - 1]})"
-                                                        : $"{fertiliserManure.Defoliation.Value}";
-
-                                                    fertiliserManure.DefoliationName = selectedDefoliation;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        model.FertiliserManures.Add(fertiliserManure);
-                    }
-                    model.DefoliationCurrentCounter = 0;
+                    (model, fertiliserManureViewModel) = await BuildFertiliserManureList(managementIds, model, fertiliserManureViewModel, cropPlans);
                 }
                 else
                 {
@@ -1019,39 +794,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         model.IsAnyChangeInField = true;
                     }
                 }
-                int fertiliserCounter = 1;
-                foreach (var fertiliser in model.FertiliserManures)
-                {
-                    (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
-                    if (error == null && managementPeriod != null && managementPeriod.CropID != null)
-                    {
-                        HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value);
-                        if (error == null && crop != null)
-                        {
-                            fertiliser.FieldID = crop.FieldID;
-                            fertiliser.FieldName = (await _fieldLogic.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
-                            fertiliser.EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString());
-                            fertiliserCounter++;
-                            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                            {
-                                fertiliser.IsGrass = true;
-                            }
-                            else if (model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == crop.FieldID))
-                            {
-                                model.DefoliationList.RemoveAll(x => x.FieldID == crop.FieldID);
-                            }
-                        }
-                        var grass = model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
-                        if (grass != null && model.DefoliationList != null)
-                        {
-                            model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
-                        }
-                        else
-                        {
-                            model.DefoliationList = null;
-                        }
-                    }
-                }
+                model = await BindFieldData(model, cropPlans);
             }
             else
             {
@@ -1059,54 +802,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return View(model);
             }
 
-            if (model.DefoliationList != null && model.DefoliationList.Count > 0)
+            model = RemoveFieldsFromDoubleCropList(model);
+            var result = ProcessFertiliserManureModel(model);
+
+            if (result != null)
             {
-                int counter = 1;
-                model.DefoliationList.ForEach(d =>
-                {
-                    d.Counter = counter;
-                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                });
-            }
-            if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-            {
-                int counter = 1;
-                model.DoubleCrop.ForEach(d =>
-                {
-                    d.Counter = counter;
-                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                });
-            }
-            SetFertiliserManureToSession(model);
-            if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
-            {
-                if (model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
-                {
-                    model.GrassCropCount = null;
-                    model.IsSameDefoliationForAll = null;
-                    model.IsAnyChangeInSameDefoliationFlag = false;
-                    SetFertiliserManureToSession(model);
-                }
-                return RedirectToAction(_checkAnswerActionName);
-            }
-            if (model.IsDoubleCropAvailable)
-            {
-                return RedirectToAction(_doubleCropActionName);
-            }
-            else
-            {
-                model.DoubleCrop = null;
-            }
-            SetFertiliserManureToSession(model);
-            if (model.IsAnyCropIsGrass.HasValue && (model.IsAnyCropIsGrass.Value))
-            {
-                if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
-                {
-                    return RedirectToAction("IsSameDefoliationForAll");
-                }
-                model.IsSameDefoliationForAll = true;
-                SetFertiliserManureToSession(model);
-                return RedirectToAction(_defoliationActionName);
+                return result;
             }
             return RedirectToAction("InOrgnaicManureDuration");
         }
@@ -1116,6 +817,123 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             TempData["FieldError"] = ex.Message;
             return View(model);
         }
+    }
+    private IActionResult? ProcessFertiliserManureModel(FertiliserManureViewModel model)
+    {
+        model = BindDefoliationAndDiubleList(model);
+        SetFertiliserManureToSession(model);
+
+        // Check Answer flow
+        if (model.IsCheckAnswer && !model.IsAnyChangeInField)
+        {
+            if (model.IsAnyCropIsGrass.HasValue && (!model.IsAnyCropIsGrass.Value))
+            {
+                model.GrassCropCount = null;
+                model.IsSameDefoliationForAll = null;
+                model.IsAnyChangeInSameDefoliationFlag = false;
+                SetFertiliserManureToSession(model);
+            }
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+
+        if (model.IsDoubleCropAvailable)
+        {
+            return RedirectToAction(_doubleCropActionName);
+        }
+
+
+        model.DoubleCrop = null;
+        SetFertiliserManureToSession(model);
+
+
+        if (model.IsAnyCropIsGrass.HasValue && (model.IsAnyCropIsGrass.Value))
+        {
+            if (model.GrassCropCount != null && model.GrassCropCount.Value > 1)
+            {
+                return RedirectToAction("IsSameDefoliationForAll");
+            }
+
+            model.IsSameDefoliationForAll = true;
+            SetFertiliserManureToSession(model);
+            return RedirectToAction(_defoliationActionName);
+        }
+
+
+        return null;
+    }
+
+    private FertiliserManureViewModel BindDefoliationAndDiubleList(FertiliserManureViewModel model)
+    {
+        if (model.DefoliationList != null && model.DefoliationList.Count > 0)
+        {
+            int counter = 1;
+            model.DefoliationList.ForEach(d =>
+            {
+                d.Counter = counter;
+                d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
+            });
+        }
+        if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
+        {
+            int counter = 1;
+            model.DoubleCrop.ForEach(d =>
+            {
+                d.Counter = counter;
+                d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
+            });
+        }
+        return model;
+    }
+    private async Task<FertiliserManureViewModel> BindFieldData(FertiliserManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
+    {
+        int fertiliserCounter = 1;
+        if (model.FertiliserManures != null)
+        {
+
+            model.FertiliserManures = await BindFertiliserData(model, cropPlans, fertiliserCounter);
+
+            var grass = model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldID).ToHashSet();
+            if (model.DefoliationList != null)
+            {
+                model.DefoliationList = model.DefoliationList.Where(d => grass.Contains(d.FieldID)).ToList();
+            }
+            else
+            {
+                model.DefoliationList = null;
+            }
+        }
+
+
+        return model;
+    }
+
+    private async Task<List<FertiliserManureDataViewModel>> BindFertiliserData(FertiliserManureViewModel model, List<HarvestYearPlanResponse> cropPlans, int fertiliserCounter)
+    {
+        foreach (var fertiliser in model.FertiliserManures)
+        {
+            (ManagementPeriod? managementPeriod, _) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
+            if (managementPeriod != null && managementPeriod.CropID != null)
+            {
+                HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID.Value);
+                if (crop != null)
+                {
+                    fertiliser.FieldID = crop.FieldID;
+                    fertiliser.FieldName = (await _fieldLogic.FetchFieldByFieldId(fertiliser.FieldID.Value)).Name;
+                    fertiliser.EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString());
+                    fertiliserCounter++;
+                    if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                    {
+                        fertiliser.IsGrass = true;
+                    }
+                    else if (model.DefoliationList != null && model.DefoliationList.Any(x => x.FieldID == crop.FieldID))
+                    {
+                        model.DefoliationList.RemoveAll(x => x.FieldID == crop.FieldID);
+                    }
+                }
+            }
+        }
+        return model.FertiliserManures;
     }
 
     private static FertiliserManureViewModel RemoveListItem(FertiliserManureViewModel model, List<ManagementPeriod> managementPeriod)
@@ -1152,82 +970,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }).ToList();
                 ViewBag.InOrganicManureDurationsList = SelectListItem;
             }
-            if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-            {
-                foreach (var fertiliser in model.FertiliserManures)
-                {
-                    int? fieldId = fertiliser.FieldID ?? null;
-                    if (fieldId != null)
-                    {
-                        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
-                        if (field != null)
-                        {
-                            (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
-                            if (error == null && managementPeriod != null && managementPeriod.CropID != null)
-                            {
-                                (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                                if (error == null && crop != null && crop.CropTypeID != null)
-                                {
-                                    (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                                    if (error == null)
-                                    {
-                                        (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId??0, crop.CropTypeID.Value, field.NVZProgrammeID);
-                                        if (!string.IsNullOrWhiteSpace(closedPeriod))
-                                        {
-                                            int harvestYear = model.HarvestYear ?? 0;
-                                            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                            Regex regex = new(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
-                                            if (closedPeriod != null)
-                                            {
-                                                Match match = regex.Match(closedPeriod);
-                                                if (match.Success)
-                                                {
-                                                    int startDay = int.Parse(match.Groups[1].Value);
-                                                    string startMonthStr = match.Groups[2].Value;
-                                                    int endDay = int.Parse(match.Groups[3].Value);
-                                                    string endMonthStr = match.Groups[4].Value;
-
-                                                    Dictionary<int, string> dtfi = GetMonthDictionary();
-                                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                                                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
-                                                    DateTime? closedPeriodStartDate = null;
-                                                    DateTime? closedPeriodEndDate = null;
-                                                    if (startMonth <= endMonth)
-                                                    {
-                                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                    }
-                                                    else if (startMonth >= endMonth)
-                                                    {
-                                                        closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                    }
-
-                                                    string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
-                                                    string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
-
-
-
-                                                    //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                                                    if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                                                    {
-                                                        ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if (field != null && field.IsWithinNVZ == true)
-                                    {
-                                        model.IsWithinNVZ = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            await SetClosedPeriodAndNVZAsync(model);
 
         }
         catch (Exception ex)
@@ -1253,17 +996,15 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
         }
 
-        if (model != null && model.FieldList != null && model.FieldList.Count == 1)
+        if (model.FieldList != null && model.FieldList.Count == 1)
         {
             Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
             model.FieldName = field.Name;
         }
-        if (model != null)
-        {
-            model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
-            model.IsWarningMsgNeedToShow = false;
-            SetFertiliserManureToSession(model);
-        }
+
+        model.IsClosedPeriodWarningOnlyForGrassAndOilseed = false;
+        model.IsWarningMsgNeedToShow = false;
+        SetFertiliserManureToSession(model);
 
         return View(model);
     }
@@ -1293,7 +1034,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     public async Task<IActionResult> InOrgnaicManureDuration(FertiliserManureViewModel model)
     {
         _logger.LogTrace("Fertiliser Manure Controller : InOrgnaicManureDuration() post action called");
-        Error? error = null;
         try
         {
             if ((!ModelState.IsValid) && ModelState.ContainsKey("Date"))
@@ -1332,75 +1072,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             if (!ModelState.IsValid)
             {
-                if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-                {
-                    foreach (var fertiliser in model.FertiliserManures)
-                    {
-                        int? fieldId = fertiliser.FieldID ?? null;
-                        if (fieldId != null)
-                        {
-                            Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
-                            if (field != null)
-                            {
-                                (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
-                                if (error == null && managementPeriod != null && managementPeriod.CropID != null)
-                                {
-                                    (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                                    if (error == null && crop != null && crop.CropTypeID != null)
-                                    {
-                                        (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-
-                                        if (error == null)
-                                        {
-                                            (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
-                                            if (!string.IsNullOrWhiteSpace(closedPeriod))
-                                            {
-                                                int harvestYear = model.HarvestYear ?? 0;
-                                                string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                                Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
-                                                if (closedPeriod != null)
-                                                {
-                                                    Match match = regex.Match(closedPeriod);
-                                                    if (match.Success)
-                                                    {
-                                                        int startDay = int.Parse(match.Groups[1].Value);
-                                                        string startMonthStr = match.Groups[2].Value;
-                                                        int endDay = int.Parse(match.Groups[3].Value);
-                                                        string endMonthStr = match.Groups[4].Value;
-
-                                                        Dictionary<int, string> dtfi = GetMonthDictionary();
-                                                        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1; // Array.IndexOf(dtfi.Values, startMonthStr) + 1;
-                                                        int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;//Array.IndexOf(dtfi.AbbreviatedMonthNames, endMonthStr) + 1;
-                                                        DateTime? closedPeriodStartDate = null;
-                                                        DateTime? closedPeriodEndDate = null;
-                                                        if (startMonth <= endMonth)
-                                                        {
-                                                            closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                                                            closedPeriodEndDate = new DateTime(harvestYear - 1, endMonth, endDay);
-                                                        }
-                                                        else if (startMonth >= endMonth)
-                                                        {
-                                                            closedPeriodStartDate = new DateTime(harvestYear - 1, startMonth, startDay);
-                                                            closedPeriodEndDate = new DateTime(harvestYear, endMonth, endDay);
-                                                        }
-                                                        string formattedStartDate = closedPeriodStartDate?.ToString("d MMMM yyyy");
-                                                        string formattedEndDate = closedPeriodEndDate?.ToString("d MMMM yyyy");
-
-                                                        //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                                                        if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                                                        {
-                                                            ViewBag.ClosedPeriod = $"{formattedStartDate} to {formattedEndDate}";
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                await SetClosedPeriodAndNVZAsync(model);
                 return View(model);
             }
 
@@ -1442,7 +1114,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     if (int.TryParse(model.FieldList[0], out fieldId))
                     {
-                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error,fieldId);
+                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error, fieldId);
                     }
                 }
                 catch (Exception ex)
@@ -1486,7 +1158,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         if (int.TryParse(model.FieldList[0], out fieldId))
                         {
-                            (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error,fieldId);
+                            (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error, fieldId);
                         }
                     }
                     catch (Exception ex)
@@ -1533,6 +1205,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
                             if (field != null)
                             {
+                                model.FieldID = fieldId.Value;
                                 bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
                                 if (isFieldIsInNVZ)
                                 {
@@ -1645,12 +1318,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(int fieldId, int? cropTypeId,  string? defoliationSequenceName)>
+    private async Task<(int fieldId, int? cropTypeId, string? defoliationSequenceName)>
     PopulateRecommendationData(FertiliserManureViewModel model, Error? error, int fieldId)
     {
         model.FieldName = (await _fieldLogic.FetchFieldByFieldId(fieldId)).Name;
 
-         (List<RecommendationHeader> recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
+        (List<RecommendationHeader> recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
         if (error != null || recommendationsHeader == null || !recommendationsHeader.Any())
             return (fieldId, null, null);
 
@@ -1910,6 +1583,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     model.FarmName = farm?.Name;
                     model.FarmCountryId = farm?.CountryID;
+                    model.FarmRB209CountryID = farm?.RB209CountryID;
                 }
 
                 if (decryptedId > 0)
@@ -2640,8 +2314,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
                                 (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
                                 (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
-                                (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
-                                (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                                (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed,
+                                (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted,
                                 (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
                                 (int)NMP.Commons.Enums.CropTypes.Cabbage,
                                 (int)NMP.Commons.Enums.CropTypes.Calabrese,
@@ -2655,15 +2329,22 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 (int)NMP.Commons.Enums.CropTypes.Grass
                             };
 
-        WarningWithinPeriod warning = new WarningWithinPeriod();
-        int? fieldId = model.FieldID ?? null;
-        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId??0);
-        (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, field.NVZProgrammeID);
-        bool isWithinClosedPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
 
-        if (!filterCrops.Contains(cropTypeId) && isWithinClosedPeriod)
+        int? fieldId = model.FieldID ?? null;
+        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId ?? 0);
+        (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, field.NVZProgrammeID);
+        bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
+
+        bool isScotland = model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+
+        bool isCropAllowed = isScotland ? BrassicaCrops().Contains(cropTypeId) : filterCrops.Contains(cropTypeId);
+
+        if (!isCropAllowed && isWithinClosedPeriod)
         {
-            WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
+            WarningResponse warningResponse = await _warningLogic
+                .FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmCountryId ?? 0,
+                    NMP.Commons.Enums.WarningKey.NitroFertClosedPeriod.ToString());
 
             model.IsClosedPeriodWarning = true;
             model.ClosedPeriodWarningHeader = warningResponse.Header;
@@ -2674,7 +2355,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
 
         //warning excel sheet row no. 28
-        if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass)
+        if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass))
         {
             //31 october and end of closed period
             string warningPeriod = string.Empty;
@@ -2688,7 +2369,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 endPeriod = periods[1];
                 warningPeriod = $"{startPeriod} to {endPeriod}";
             }
-            bool isWithinWarningPeriod = warning.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
+            bool isWithinWarningPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
             if (isWithinWarningPeriod)
             {
@@ -2709,23 +2390,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         Error? error = null;
         decimal totalNitrogen = 0;
+        model.IsNitrogenExceedWarning = false;
         //if we are coming for update then we will exclude the fertiliserId.
-        if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-        {
-            (totalNitrogen, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endDate, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
-        }
-        else
-        {
-            (totalNitrogen, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endDate, null, false);
 
-        }
+        (totalNitrogen, error) = await FetchNitrogenAsync(fieldId, startDate, endDate, model, managementId, _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate);
         if (error == null)
         {
-            WarningWithinPeriod warningMessage = new WarningWithinPeriod();
+
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
             HashSet<int> brassicaCrops = BrassicaCrops();
-            string closedPeriod = warningMessage.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
-            bool isWithinClosedPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
+            string closedPeriod = WarningWithinPeriod.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
+            bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
             string startPeriod = string.Empty;
             string endPeriod = string.Empty;
             string[] periods = closedPeriod.Split(" to ");
@@ -2754,17 +2429,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (error == null)
                 {
 
-                    if (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0)  //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
+                    if (model.FarmCountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0))
+                    //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
+                    //totalNitrogen > 100 and brassica crop will work for Scotland as well
                     {
                         WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
 
-                        model.IsNitrogenExceedWarning = true;
-                        model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                        model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                        model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                        model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                        model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod, endPeriod) : null;
-                        model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                        SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod));
                     }
                 }
                 else
@@ -2799,13 +2470,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRate.ToString());
 
-                    model.IsNitrogenExceedWarning = true;
-                    model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                    model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                    model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                    model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                    model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod, endPeriod, maxNitrogenRate) : null;
-                    model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                    SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod, maxNitrogenRate));
                 }
             }
 
@@ -2815,10 +2480,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (periods.Length == 2)
             {
                 startPeriod = periods[0];
-                endPeriod = Resource.lbl31October;
+                endPeriod = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? endDate.ToString("dd MMMM") : Resource.lbl31October;
                 warningPeriod = $"{startPeriod} to {endPeriod}";
             }
-            bool isWithinWarningPeriod = warningMessage.IsFertiliserApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
+            bool isWithinWarningPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
             DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31, 00, 00, 00, DateTimeKind.Unspecified);
             decimal PreviousApplicationsNitrogen = 0;
@@ -2833,27 +2498,88 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             //warning excel sheet row no. 26
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && isWithinWarningPeriod)
+            bool isResidueGroupOne = false;
+            bool isResidueGroupTwo = false;
+            bool isResidueGroupThree = false;
+            bool isResidueGroup4To6 = false;
+            Recommendation? recommendation = null;
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
+                if (recommendation != null && recommendation.NIndex == 1.ToString())
+                {
+                    isResidueGroupOne = true;
+                }
+                if (recommendation != null && recommendation.NIndex == 2.ToString())
+                {
+                    isResidueGroupTwo = true;
+                }
+                if (recommendation != null && recommendation.NIndex == 3.ToString())
+                {
+                    isResidueGroupThree = true;
+                }
+                if (recommendation != null && (recommendation.NIndex == 4.ToString() || recommendation.NIndex == 5.ToString() || recommendation.NIndex == 6.ToString()))
+                {
+                    isResidueGroup4To6 = true;
+                }
+            }
+            bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
+            bool hasValidResidue = isResidueGroupOne || isResidueGroupTwo || isResidueGroupThree;
+
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape
+                && isWithinWarningPeriod
+                && (!isScotland || hasValidResidue || isResidueGroup4To6))
             {
                 bool isNitrogenRateExceeded = false;
 
-                if ((PreviousApplicationsNitrogen + model.N.Value) > 30)
+                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    isNitrogenRateExceeded = true;
+                    if ((PreviousApplicationsNitrogen + model.N.Value) > 30)
+                    {
+                        isNitrogenRateExceeded = true;
+                    }
+
+                    if (isNitrogenRateExceeded)
+                    {
+                        WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateOSR.ToString());
+
+                        SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
+                    }
                 }
-
-                if (isNitrogenRateExceeded)
+                else
                 {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateOSR.ToString());
+                    WarningResponse warningResponse = new WarningResponse();
+                    if (hasValidResidue)
+                    {
+                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InOrgNMAXRateResidueGroup.ToString());
+                    }
+                    if (isResidueGroup4To6)
+                    {
+                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateResidueGroup4To6.ToString());
+                        isNitrogenRateExceeded = true;
 
-                    model.IsNitrogenExceedWarning = true;
-                    model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                    model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                    model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                    model.ClosedPeriodNitrogenExceedWarningPara1 = Resource.MsgClosedPeriodNitrogenExceedWarningHeadingEngland;
-                    model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod) : null;
-                    model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                    }
+                    if (isResidueGroupOne && (totalNitrogen > 30))
+                    {
+                        isNitrogenRateExceeded = true;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 30) : null;
+                    }
+                    else if (isResidueGroupTwo && (totalNitrogen > 20))
+                    {
+                        isNitrogenRateExceeded = true;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;
+                    }
+                    else if (isResidueGroupThree && (totalNitrogen > 10))
+                    {
+                        isNitrogenRateExceeded = true;
+                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 10) : null;
+                    }
 
+                    if (isNitrogenRateExceeded)
+                    {
+
+                        SetClosedPeriodWarning(model, warningResponse, warningResponse.Para2);
+                    }
                 }
             }
             //warning excel sheet row no. 27
@@ -2885,13 +2611,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
 
-                    model.IsNitrogenExceedWarning = true;
-                    model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-                    model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-                    model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-                    model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-                    model.ClosedPeriodNitrogenExceedWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, startPeriod) : null;
-                    model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+                    SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
                 }
             }
 
@@ -2903,6 +2623,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             int cropId = managementPeriod?.CropID ?? 0;
             decimal previousApplicationsN = 0;
             decimal currentApplicationNitrogen = Convert.ToDecimal(model.N);
+            int farmCountryId = model.FarmCountryId ?? 0;
+            int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
+            CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
+            int? scotlandNmax = null;
+            int residueGroup = 0;
+            bool isWinterOilseedRapeAutumn = false;
+
             //if we are coming for update then we will exclude the fertiliserId.
             if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
             {
@@ -2917,51 +2644,90 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
 
-                if (crop?.CropTypeID != null && error == null &&
-                    (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass ||
-                        crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
-                )
+
+                if (farmCountryId == scotland)
                 {
-                    (CropTypeLinkingResponse cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                    if (error == null)
+
+                    Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+                    (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
+
+                    if (recommendation != null)
                     {
-                        int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
-                        if (nmaxLimitEnglandOrWales != null)
+                        residueGroup = Convert.ToInt32(recommendation.NIndex);
+                    }
+                    isWinterOilseedRapeAutumn = Functions.IsWinterOilseedRapeAutumn(crop.CropTypeID ?? 0, model.HarvestYear ?? 0, model.Date.Value);
+                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, isWinterOilseedRapeAutumn ? -1 : field.SoilTypeID ?? 0, residueGroup);
+                    if (scotlandNmax == null)
+                    {
+                        scotlandNmax = Convert.ToInt32(recommendation?.CropN);
+                    }
+                }
+                else
+                {
+                    (cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+
+                }
+                if (error == null)
+                {
+                    int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+
+                    if ((model.FarmCountryId != scotland && nmaxLimitEnglandOrWales != null) || (model.FarmCountryId == scotland && scotlandNmax != null))
+                    {
+                        (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
+                        if (error == null)
                         {
-                            (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
+                            decimal nMaxLimit = 0;
+
+                            (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                            (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
                             if (error == null)
                             {
-                                decimal nMaxLimit = 0;
+                                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                                nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
 
-                                (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
-                                if (error == null)
+                                OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                                bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+                                if (model.FarmCountryId != scotland)
                                 {
-                                    nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-
-                                    OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                    bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
                                     nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
-
-                                    decimal totalNitrogenApplied = 0;
-
-                                    totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
-
-                                    if (totalNitrogenApplied > nMaxLimit)
+                                }
+                                else
+                                {
+                                    int? winterRainfall = null;
+                                    (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
+                                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                                     {
-                                        string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
-                                        model.IsNMaxLimitWarning = true;
-                                        (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
+                                    }
+                                    else
+                                    {
+                                        winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
+                                    }
 
-                                        WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm?.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
+                                    nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
+                                }
 
-                                        model.CropNmaxLimitWarningHeader = warningResponse.Header;
-                                        model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
-                                        model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
-                                        model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
-                                        model.CropNmaxLimitWarningPara2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit) : null;
+                                decimal totalNitrogenApplied = 0;
 
-                                        model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
+                                totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
+
+                                if (totalNitrogenApplied > nMaxLimit)
+                                {
+                                    string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
+                                    model.IsNMaxLimitWarning = true;
+
+
+                                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm?.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
+                                    if (farmCountryId != scotland && crop?.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+                                    {
+
+                                        SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
+
+
+                                    }
+                                    if (farmCountryId == scotland)
+                                    {
+                                        SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
                                     }
                                 }
                                 else
@@ -2992,6 +2758,37 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (model, error);
     }
 
+
+    private static async Task<(decimal, Error?)> FetchNitrogenAsync(int fieldId, DateTime from,
+    DateTime to, FertiliserManureViewModel model, int managementId, Func<int, DateTime, DateTime, int?, bool, Task<(decimal, Error?)>> fetchFunc)
+    {
+        int? fertiliserId = model.UpdatedFertiliserIds?
+            .Where(x => x.ManagementPeriodId == managementId)
+            .Select(x => x.FertiliserId)
+            .FirstOrDefault();
+
+        return await fetchFunc(fieldId, from, to, fertiliserId, false);
+    }
+    private static void SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null)
+    {
+        model.IsNitrogenExceedWarning = true;
+        model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
+        model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
+        model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
+        model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
+        model.ClosedPeriodNitrogenExceedWarningPara2 = para2;
+        model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
+    }
+    private static void SetNMaxWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2)
+    {
+        model.IsNMaxLimitWarning = true;
+        model.CropNmaxLimitWarningHeader = warningResponse.Header;
+        model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
+        model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
+        model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
+        model.CropNmaxLimitWarningPara2 = para2;
+        model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
+    }
     private static HashSet<int> BrassicaCrops()
     {
         return new HashSet<int>
@@ -3000,8 +2797,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
                 (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
                 (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
-                (int)NMP.Commons.Enums.CropTypes.SwedesGrazed,
-                (int)NMP.Commons.Enums.CropTypes.TurnipsRootLifted,
+                (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed,
+                (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted,
                 (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
                 (int)NMP.Commons.Enums.CropTypes.Cabbage,
                 (int)NMP.Commons.Enums.CropTypes.Calabrese,
@@ -4810,5 +4607,212 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         HttpContext.Session.SetObjectAsJson(_fertiliserManureBeforeUpdateSessionKey, fertiliserManureViewModel);
     }
+    private async Task<FertiliserManureViewModel> ApplyGrassCropLogicAsync(FertiliserManureViewModel model, List<HarvestYearPlanResponse>? cropPlans)
+    {
+        int grassCropCounter = 0;
+        foreach (var field in model.FieldList)
+        {
+            List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
 
+            if (cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+            {
+                (List<ManagementPeriod> managementPeriod, _) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
+
+                if (model.FertiliserManures != null)
+                {
+                    var filteredFertiliserManure = model.FertiliserManures
+                    .Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
+                    fm.Defoliation == null).ToList();
+                    if (filteredFertiliserManure.Any() && filteredFertiliserManure.Count == managementPeriod.Count)
+                    {
+                        model = RemoveListItem(model, managementPeriod);
+                    }
+                }
+                grassCropCounter++;
+                model.IsAnyCropIsGrass = true;
+            }
+        }
+        model.GrassCropCount = grassCropCounter;
+        return model;
+    }
+    private async Task<(FertiliserManureViewModel, FertiliserManureViewModel?)> BuildFertiliserManureList(List<int> managementIds, FertiliserManureViewModel model, FertiliserManureViewModel? fertiliserManureViewModel, List<HarvestYearPlanResponse> cropPlans)
+    {
+        if (managementIds.Count > 0)
+        {
+            if (model.FertiliserManures == null)
+            {
+                model.FertiliserManures = new List<FertiliserManureDataViewModel>();
+            }
+            if (model.FertiliserManures.Count > 0)
+            {
+                model.FertiliserManures.Clear();
+            }
+            int counter = 1;
+            foreach (var manIds in managementIds)
+            {
+                var fertiliserManure = new FertiliserManureDataViewModel
+                {
+                    ManagementPeriodID = manIds,
+                    EncryptedCounter = _fieldDataProtector.Protect(counter.ToString())
+                };
+                counter++;
+                if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && fertiliserManureViewModel != null && fertiliserManureViewModel.FertiliserManures != null && fertiliserManureViewModel.FertiliserManures.Count > 0)
+                {
+                    fertiliserManure = await BindGrassData(fertiliserManureViewModel.FertiliserManures, fertiliserManure, cropPlans, manIds);
+                }
+                model.FertiliserManures.Add(fertiliserManure);
+            }
+            model.DefoliationCurrentCounter = 0;
+        }
+        return (model, fertiliserManureViewModel);
+    }
+    private async Task<FertiliserManureDataViewModel> BindGrassData(List<FertiliserManureDataViewModel> fertiliserManureViewModel, FertiliserManureDataViewModel fertiliserManure, List<HarvestYearPlanResponse> cropPlans, int manIds)
+    {
+        for (int i = 0; i < fertiliserManureViewModel.Count; i++)
+        {
+            if (fertiliserManureViewModel[i].ManagementPeriodID == manIds)
+            {
+                fertiliserManure.Defoliation = fertiliserManureViewModel[i].Defoliation;
+                if (fertiliserManure.Defoliation != null)
+                {
+                    Error? error = null;
+                    fertiliserManure = await BindDefoliationName(cropPlans, manIds, error, fertiliserManure);
+                }
+            }
+        }
+        return fertiliserManure;
+    }
+
+    private async Task<FertiliserManureDataViewModel> BindDefoliationName(List<HarvestYearPlanResponse> cropPlans, int manIds, Error? error, FertiliserManureDataViewModel fertiliserManure)
+    {
+        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manIds);
+        if (error == null && managementPeriod != null)
+        {
+            HarvestYearPlanResponse? crop = cropPlans.FirstOrDefault(x => x.CropID == managementPeriod.CropID);
+            if (crop != null && crop.DefoliationSequenceID != null)
+            {
+                (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                if (error == null && defoliationSequence != null)
+                {
+                    string description = defoliationSequence.DefoliationSequenceDescription;
+
+                    string[] defoliationParts = description.Split(',')
+                                                           .Select(x => x.Trim())
+                                                           .ToArray();
+
+                    string selectedDefoliation = (fertiliserManure.Defoliation.Value > 0 && fertiliserManure.Defoliation.Value <= defoliationParts.Length)
+                        ? $"{Enum.GetName(typeof(PotentialCut), fertiliserManure.Defoliation.Value)} ({defoliationParts[fertiliserManure.Defoliation.Value - 1]})"
+                        : $"{fertiliserManure.Defoliation.Value}";
+
+                    fertiliserManure.DefoliationName = selectedDefoliation;
+                }
+            }
+        }
+        return fertiliserManure;
+    }
+    private async Task<string?> GetClosedPeriodAsync(FertiliserManureViewModel model, int cropTypeId, int nvzProgrammeId, int harvestYear)
+    {
+        Error? error;
+
+        (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, cropTypeId, nvzProgrammeId);
+
+        if (error != null || string.IsNullOrWhiteSpace(closedPeriod))
+            return null;
+
+        string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+        Regex regex = new(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+
+        Match match = regex.Match(closedPeriod);
+        if (!match.Success)
+            return null;
+
+        int startDay = int.Parse(match.Groups[1].Value);
+        string startMonthStr = match.Groups[2].Value;
+        int endDay = int.Parse(match.Groups[3].Value);
+        string endMonthStr = match.Groups[4].Value;
+
+        Dictionary<int, string> dtfi = GetMonthDictionary();
+
+        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
+        int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+
+        DateTime startDate;
+        DateTime endDate;
+
+        if (startMonth <= endMonth)
+        {
+            startDate = new DateTime(harvestYear - 1, startMonth, startDay, 0, 0, 0, DateTimeKind.Unspecified);
+            endDate = new DateTime(harvestYear - 1, endMonth, endDay, 0, 0, 0, DateTimeKind.Unspecified);
+        }
+        else
+        {
+            startDate = new DateTime(harvestYear - 1, startMonth, startDay, 0, 0, 0, DateTimeKind.Unspecified);
+            endDate = new DateTime(harvestYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Unspecified);
+        }
+
+        return $"{startDate:d MMMM yyyy} to {endDate:d MMMM yyyy}";
+    }
+    private async Task SetClosedPeriodAndNVZAsync(FertiliserManureViewModel model)
+    {
+        if (model.FertiliserManures == null || model.FertiliserManures.Count == 0)
+            return;
+
+        foreach (var fertiliser in model.FertiliserManures)
+        {
+            var field = await GetFieldAsync(fertiliser.FieldID);
+            if (field == null) continue;
+
+            var crop = await GetCropAsync(fertiliser.ManagementPeriodID);
+            if (crop?.CropTypeID == null) continue;
+
+            await SetClosedPeriodIfApplicable(model, crop.CropTypeID.Value, field);
+
+            if (field.IsWithinNVZ == true)
+                model.IsWithinNVZ = true;
+        }
+    }
+    private async Task<Field?> GetFieldAsync(int? fieldId)
+    {
+        if (fieldId == null) return null;
+
+        return await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+    }
+    private async Task<Crop?> GetCropAsync(int managementPeriodId)
+    {
+        var (managementPeriod, error) =
+            await _cropLogic.FetchManagementperiodById(managementPeriodId);
+
+        if (error != null || managementPeriod?.CropID == null)
+            return null;
+
+        var (crop, cropError) =
+            await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
+
+        if (cropError != null)
+            return null;
+
+        return crop;
+    }
+    private async Task SetClosedPeriodIfApplicable(
+    FertiliserManureViewModel model,
+    int cropTypeId,
+    Field field)
+    {
+        var (cropTypeLinkingResponse, error) =
+            await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
+
+        if (error != null || cropTypeLinkingResponse.NMaxLimitEngland == 0)
+            return;
+
+        string? closedPeriod = await GetClosedPeriodAsync(
+            model,
+            cropTypeId,
+            field.NVZProgrammeID ?? 0,
+            model.HarvestYear ?? 0);
+
+        if (!string.IsNullOrWhiteSpace(closedPeriod))
+        {
+            ViewBag.ClosedPeriod = closedPeriod;
+        }
+    }
 }

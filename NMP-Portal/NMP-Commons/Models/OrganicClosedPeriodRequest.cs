@@ -11,7 +11,7 @@ namespace NMP.Commons.Models
         public int SoilTypeId { get; set; }
         public int FieldType { get; set; }
         public int HarvestYear { get; set; }
-        public DateTime? SowingDate { get; set; }
+        public string? SowingDate { get; set; }
         public int CountryId { get; set; }
         public int? CropGroupId { get; set; }
         public int? CropTypeId { get; set; }

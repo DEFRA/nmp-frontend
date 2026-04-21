@@ -1,0 +1,77 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
+@{
+    string heading = Resource.lblEnterFarmAverageYieldValues;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.FarmAverageYieldValues;
+
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="FarmAverageYieldAdjustment" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnFarmAverageYieldValue"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnFarmAverageYieldValue"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="FarmAverageYieldValues" asp-controller="Report" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-fieldset>
+                    <govuk-fieldset-legend class="govuk-fieldset__legend--l">
+                        @Resource.lblEnterFarmAverageYieldValues
+                    </govuk-fieldset-legend>
+                    <div class="govuk-hint">
+                        @Resource.lblFarmAverageYieldValuesContentOne
+                    </div>
+
+                    @if (Model.FarmAverageYields != null)
+                    {
+                        @for (int i = 0; i < Model.FarmAverageYields.Count; i++)
+                        {
+                            <govuk-input  asp-for=@Model.FarmAverageYields[i].AverageYield type="number" inputmode="decimal"
+                                         pattern="^\d+(\.\d{0,3})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                                <govuk-input-label>
+                                    @string.Format(Resource.lblFarmAverageYieldValuesContentTwo, Model.FarmAverageYields[i].CropGroupName)
+                                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
+                                    @Resource.lblOptional
+                                </govuk-input-label>
+                                <govuk-input-suffix>@Resource.lblTonnesAndHectare.ToLower()</govuk-input-suffix>
+                            </govuk-input>
+                        }
+                    }
+                </govuk-fieldset>
+                 <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button> 
+                <p class="govuk-body cancel-link">
+                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
+                    {
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            @Resource.lblCancel
+                        </a>
+                    }
+                </p>
+
+            </div>
+
+        </div>
+    </form>
+}

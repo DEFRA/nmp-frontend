@@ -5002,6 +5002,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value between 0 and 999999..
+        /// </summary>
+        public static string lblEnterAValueBetween0And999999 {
+            get {
+                return ResourceManager.GetString("lblEnterAValueBetween0And999999", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a value for mineralisation in kg per hectare.
         /// </summary>
         public static string lblEnterAValueForMineralisation {
@@ -5025,6 +5034,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterDifferentFiguresForEachField {
             get {
                 return ResourceManager.GetString("lblEnterDifferentFiguresForEachField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter farm average yield values.
+        /// </summary>
+        public static string lblEnterFarmAverageYieldValues {
+            get {
+                return ResourceManager.GetString("lblEnterFarmAverageYieldValues", resourceCulture);
             }
         }
         
@@ -5493,6 +5511,114 @@ namespace NMP.Commons.Resources {
         public static string lblFarmAreaCanHaveOnlyTwoDecimalPlace {
             get {
                 return ResourceManager.GetString("lblFarmAreaCanHaveOnlyTwoDecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farm average yield adjustment.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustment {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must have at least 3 years of record to demonstrate the actual yields achieved..
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentEight {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentEight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a yield previously achieved for the crop at {0}, or.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentFive {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentFive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A farm average yield adjustment must be based on either:.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentFour {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to enter a farm average yield for any of these crops?.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentNine {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentNine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The N-max limit is  based on standard yield values for these crops:.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentOne {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are using evidence from another farm, it must come from the same nitrate vulnerable zone (NVZ), with a similar soil type. It must show the soil nutrient values where yields were achieved from the same crop, using the same crop management system..
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentSeven {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentSeven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to evidence from another farm, if a new crop management system is being used.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentSix {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentSix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help with farm average yield adjustment.
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentThree {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can adjust the N-max limit for these crops by entering a farm average yield, if you have one..
+        /// </summary>
+        public static string lblFarmAverageYieldAdjustmentContentTwo {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldAdjustmentContentTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you do not want to use a farm average yield for a crop, leave it blank.
+        /// </summary>
+        public static string lblFarmAverageYieldValuesContentOne {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldValuesContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farm average yield value for {0}.
+        /// </summary>
+        public static string lblFarmAverageYieldValuesContentTwo {
+            get {
+                return ResourceManager.GetString("lblFarmAverageYieldValuesContentTwo", resourceCulture);
             }
         }
         
@@ -6235,6 +6361,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forage swedes.
+        /// </summary>
+        public static string lblForageSwedes {
+            get {
+                return ResourceManager.GetString("lblForageSwedes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forage turnips.
+        /// </summary>
+        public static string lblForageTurnips {
+            get {
+                return ResourceManager.GetString("lblForageTurnips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For a steel or concrete store, you must keep a minimum of 30cm of freeboard..
         /// </summary>
         public static string lblForASteelOrConcreteStore {
@@ -6636,6 +6780,15 @@ namespace NMP.Commons.Resources {
         public static string lblGroup3Vegetables {
             get {
                 return ResourceManager.GetString("lblGroup3Vegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} field details.
+        /// </summary>
+        public static string lblGroupFieldDetail {
+            get {
+                return ResourceManager.GetString("lblGroupFieldDetail", resourceCulture);
             }
         }
         
@@ -7896,6 +8049,15 @@ namespace NMP.Commons.Resources {
         public static string lblK2O {
             get {
                 return ResourceManager.GetString("lblK2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kale.
+        /// </summary>
+        public static string lblKale {
+            get {
+                return ResourceManager.GetString("lblKale", resourceCulture);
             }
         }
         
@@ -9305,6 +9467,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Market adjustment.
+        /// </summary>
+        public static string lblMarketAdjustment {
+            get {
+                return ResourceManager.GetString("lblMarketAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max application rate (everything except WOSR, Brassicas &amp; Grass).
         /// </summary>
         public static string lblMaxApplicationRateEverythingExceptWosr {
@@ -9793,9 +9964,18 @@ namespace NMP.Commons.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nitrogen applications for {0} .
         /// </summary>
-        public static string lblNitrogenApplicationsForCropTypeFields {
+        public static string lblNitrogenApplicationsForCropType {
             get {
-                return ResourceManager.GetString("lblNitrogenApplicationsForCropTypeFields", resourceCulture);
+                return ResourceManager.GetString("lblNitrogenApplicationsForCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen applications for {0} fields.
+        /// </summary>
+        public static string lblNitrogenApplicationsForCropTypeField {
+            get {
+                return ResourceManager.GetString("lblNitrogenApplicationsForCropTypeField", resourceCulture);
             }
         }
         
@@ -9850,6 +10030,15 @@ namespace NMP.Commons.Resources {
         public static string lblNitrogenNVegetables {
             get {
                 return ResourceManager.GetString("lblNitrogenNVegetables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) residue group.
+        /// </summary>
+        public static string lblNitrogenResidueGroup {
+            get {
+                return ResourceManager.GetString("lblNitrogenResidueGroup", resourceCulture);
             }
         }
         
@@ -9918,6 +10107,15 @@ namespace NMP.Commons.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to {0} limit for {1} .
+        /// </summary>
+        public static string lblNMaxLimitForWinterWheat {
+            get {
+                return ResourceManager.GetString("lblNMaxLimitForWinterWheat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} limit for {1} fields.
         /// </summary>
         public static string lblNMaxLimitForWinterWheatFields {
             get {
@@ -11812,6 +12010,42 @@ namespace NMP.Commons.Resources {
         public static string lblPrivacyNotice {
             get {
                 return ResourceManager.GetString("lblPrivacyNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private beta disclaimer.
+        /// </summary>
+        public static string lblPrivateBetaDisclaimer {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any recommendations and advice given in the private beta version of this tool cannot be used:.
+        /// </summary>
+        public static string lblPrivateBetaDisclaimerContentOne {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimerContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI)..
+        /// </summary>
+        public static string lblPrivateBetaDisclaimerContentThree {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimerContentThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to demonstrate compliance with any regulation or legislation, such as NVZ rules.
+        /// </summary>
+        public static string lblPrivateBetaDisclaimerContentTwo {
+            get {
+                return ResourceManager.GetString("lblPrivateBetaDisclaimerContentTwo", resourceCulture);
             }
         }
         
@@ -13949,11 +14183,38 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spring oats.
+        /// </summary>
+        public static string lblSpringOats {
+            get {
+                return ResourceManager.GetString("lblSpringOats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spring rye.
+        /// </summary>
+        public static string lblSpringRye {
+            get {
+                return ResourceManager.GetString("lblSpringRye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Spring sown (April to June).
         /// </summary>
         public static string lblSpringSown {
             get {
                 return ResourceManager.GetString("lblSpringSown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spring triticale.
+        /// </summary>
+        public static string lblSpringTriticale {
+            get {
+                return ResourceManager.GetString("lblSpringTriticale", resourceCulture);
             }
         }
         
@@ -13981,6 +14242,15 @@ namespace NMP.Commons.Resources {
         public static string lblStandardNutrientValuesWhwnWeHaveValues {
             get {
                 return ResourceManager.GetString("lblStandardNutrientValuesWhwnWeHaveValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard rate.
+        /// </summary>
+        public static string lblStandardRate {
+            get {
+                return ResourceManager.GetString("lblStandardRate", resourceCulture);
             }
         }
         
@@ -14748,6 +15018,15 @@ namespace NMP.Commons.Resources {
         public static string lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales {
             get {
                 return ResourceManager.GetString("lblThisApplicationWillTakeYouOverTheOrganicManureNFieldLimitWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This calculation is based on a farm average yield of {0} tonnes per hectare..
+        /// </summary>
+        public static string lblThisCalculationIsBasedOnAFarmAverageYield {
+            get {
+                return ResourceManager.GetString("lblThisCalculationIsBasedOnAFarmAverageYield", resourceCulture);
             }
         }
         
@@ -17920,7 +18199,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone (NVZ) is {0} in ?.
+        ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone (NVZ) is {0} in?.
         /// </summary>
         public static string lblWhichNitrateVulnerableZoneNVZIsIn {
             get {
@@ -18127,6 +18406,33 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter oats.
+        /// </summary>
+        public static string lblWinterOats {
+            get {
+                return ResourceManager.GetString("lblWinterOats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter Oilseed Rape - autumn nitrogen.
+        /// </summary>
+        public static string lblWinterOilseedRapeAutumn {
+            get {
+                return ResourceManager.GetString("lblWinterOilseedRapeAutumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter Oilseed Rape - spring nitrogen.
+        /// </summary>
+        public static string lblWinterOilseedRapeSpring {
+            get {
+                return ResourceManager.GetString("lblWinterOilseedRapeSpring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Winter rainfall.
         /// </summary>
         public static string lblWinterRainfall {
@@ -18145,11 +18451,38 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Winter rainfall adjustment.
+        /// </summary>
+        public static string lblWinterRainfallAdjustment {
+            get {
+                return ResourceManager.GetString("lblWinterRainfallAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Winter rainfall is {0}..
         /// </summary>
         public static string lblWinterRainfallIs450OrMoreOrLess {
             get {
                 return ResourceManager.GetString("lblWinterRainfallIs450OrMoreOrLess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter rye.
+        /// </summary>
+        public static string lblWinterRye {
+            get {
+                return ResourceManager.GetString("lblWinterRye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter triticale.
+        /// </summary>
+        public static string lblWinterTriticale {
+            get {
+                return ResourceManager.GetString("lblWinterTriticale", resourceCulture);
             }
         }
         

@@ -45,11 +45,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            _logger.LogError(hre, hre.Message);
+             _logger.HandleHttpRequestException(hre, null);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.HandleException(ex, null);
         }
         return potatoVarieties;
     }
@@ -82,11 +82,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            _logger.LogError(hre, hre.Message);
+            _logger.HandleHttpRequestException(hre, null);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.HandleException(ex, null);
         }
         return cropTypeId;
     }
@@ -184,15 +184,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (success, error);
     }
@@ -217,20 +213,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            _logger.HandleException(ex, error);
         }
         return planSummaryList;
     }
@@ -260,15 +252,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (harvestYearPlanList, error);
     }
@@ -300,22 +288,18 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (recommendationList, error);
     }
 
     public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id)
     {        
-        string cropInfo1Name = string.Empty;
+        string? cropInfo1Name = string.Empty;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -325,15 +309,19 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
                 cropInfo1Name = responseWrapper?.Data["cropInfo1Name"];
-            }            
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, null);
+            }
         }
         catch (HttpRequestException hre)
-        {           
-            _logger.LogError(hre, hre.Message);            
+        {
+             _logger.HandleHttpRequestException(hre, null);
         }
         catch (Exception ex)
-        {            
-            _logger.LogError(ex, ex.Message);            
+        {
+            _logger.HandleException(ex, null);
         }
         return cropInfo1Name?? string.Empty;
     }
@@ -349,15 +337,19 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
                 cropInfo2Name = responseWrapper?.Data["cropInfo2Name"];
-            }            
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, null);
+            }
         }
         catch (HttpRequestException hre)
-        {           
-            _logger.LogError(hre, hre.Message);           
+        {
+            _logger.HandleHttpRequestException(hre, null);
         }
         catch (Exception ex)
-        {            
-            _logger.LogError(ex, ex.Message);           
+        {
+            _logger.HandleException(ex, null);
         }
         return cropInfo2Name?? string.Empty;
     }
@@ -381,20 +373,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            _logger.HandleException(ex, error);
         }
         return cropList;
     }
@@ -420,20 +408,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            _logger.HandleException(ex, error);
         }
         return defaultYield ?? 0;
     }
@@ -452,26 +436,22 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var secondCrops = responseWrapper.Data.SecondCropID.ToObject<List<int>>();
+                    var secondCrops = responseWrapper?.Data?.SecondCropID.ToObject<List<int>>();
                     secondCropList.AddRange(secondCrops);
                 }
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            _logger.HandleException(ex, error);
         }
         return secondCropList;
     }
@@ -499,15 +479,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (harvestYearPlan, error);
     }
@@ -531,20 +507,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error??= new Error();   
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            _logger.HandleException(ex, error);
         }
         return cropInfoOneQuestion;
     }
@@ -574,15 +546,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (managementPeriod, error);
     }
@@ -612,15 +580,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
 
         return (crop, error);
@@ -656,15 +620,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (message?? string.Empty, error);
     }
@@ -688,19 +648,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 error = _logger.ExtractError(responseWrapper, error);
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
 
         return (isCropsGroupNameExist, error);
@@ -731,15 +686,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (crops, error);
     }
@@ -765,29 +716,24 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            _logger.HandleException(ex, error);
         }
         return grassSeasons;
     }
 
-    public async Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds)
+    public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)
     {
         var fieldIdsRequest = new { fieldIds };
-        Error? error = null;
-        string message = string.Empty;
+        Error? error = null;        
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
         try
         {
@@ -817,15 +763,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (grassGrowthClasses, error);
     }
@@ -852,19 +794,15 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (managementPeriodList, error);
     }
+
     //grass
     public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward)
     {
@@ -889,15 +827,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (defoliationSequenceResponses, error);
     }
@@ -926,15 +860,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (potentialCuts, error);
     }
@@ -965,15 +895,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            error = _logger.HandleException(ex, error);
         }
         return (swardManagementResponses, error);
     }
@@ -1004,16 +930,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            error = _logger.HandleException(ex, error);
         }
         return (swardTypeResponses, error);
     }
@@ -1064,15 +985,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (defoliationSequenceResponse, error);
     }
@@ -1100,22 +1017,19 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            error = _logger.HandleException(ex, error);
         }
         return (swardManagementResponse, error);
     }
+
     public async Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId)
     {
         Error? error = null;
-        List<SwardManagementResponse> swardManagementResponse = new List<SwardManagementResponse>();
+        List<SwardManagementResponse>? swardManagementResponse = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1134,15 +1048,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            error = _logger.HandleException(ex, error);
         }
         return (swardManagementResponse, error);
     }
@@ -1150,7 +1060,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
     public async Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId)
     {
         Error? error = null;
-        SwardTypeResponse? swardTypeResponse = new SwardTypeResponse();
+        SwardTypeResponse? swardTypeResponse = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1169,22 +1079,18 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);           
+            error = _logger.HandleException(ex, error);
         }
         return (swardTypeResponse, error);
     }
     public async Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking()
     {
-        Error error = null;
-        List<CropTypeLinkingResponse> cropTypeLinkingResponse = new List<CropTypeLinkingResponse>();
+        Error? error = null;
+        List<CropTypeLinkingResponse>? cropTypeLinkingResponse = new List<CropTypeLinkingResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -1192,9 +1098,9 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.records.ToObject<List<CropTypeLinkingResponse>>();
+                cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.records.ToObject<List<CropTypeLinkingResponse>>();
             }
             else
             {
@@ -1203,15 +1109,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);           
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);            
+            error = _logger.HandleException(ex, error);
         }
         return (cropTypeLinkingResponse, error);
     }
@@ -1252,15 +1154,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (success, error);
     }
@@ -1287,15 +1185,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (success, error);
     }
@@ -1326,15 +1220,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (crops, error);
     }
@@ -1363,11 +1253,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            _logger.LogError(hre, hre.Message);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.HandleException(ex, error);
         }
         return isPerennial;
     }

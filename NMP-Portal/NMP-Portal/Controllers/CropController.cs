@@ -152,8 +152,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 model.Crops[i].Year = model.Year ?? 0;
             }
-
+                        
             SetCropToSession(model);
+                        
             return RedirectToAction(_checkAnswerActionName);
         }
 
@@ -189,7 +190,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 new
                 {
                     id = model.EncryptedFarmId,
-                    year = _farmDataProtector.Protect(model.Year.ToString())
+                    year = _farmDataProtector.Protect(plaintext: model.Year.ToString())
                 });
         }
 
@@ -292,7 +293,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            PlanViewModel CropData = GetCropFromSession();
+            PlanViewModel? CropData = GetCropFromSession();
 
             if (CropData == null)
             {
@@ -529,7 +530,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<int> fieldRemoveList = new List<int>();
             (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year ?? 0, farmID);
 
-            var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
+            
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse
                 .Where(x => x.IsBasePlan != null && (!x.IsBasePlan.Value)).ToList();
 
@@ -551,7 +552,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     }));
                 }
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                await BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
+                BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -660,8 +661,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         {
                             foreach (var crop in cropsToRemove)
                             {
-                                model.FieldList.Remove(crop.FieldID.ToString());
-                                model.CropGroupName = string.Empty;
+                                if(crop != null && crop.FieldID != null && model.FieldList != null)
+                                {
+                                    model.FieldList.Remove(crop.FieldID.ToString());
+                                    model.CropGroupName = string.Empty;
+                                }
                             }
                         }
 
@@ -757,11 +761,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 return RedirectToAction(_checkAnswerActionName);
             }
-            return RedirectToAction("SowingDateQuestion");
+            return await Task.FromResult(RedirectToAction("SowingDateQuestion"));
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Crop Controller : Exception in VarietyName() post action : {0}, {1}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in VarietyName() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnVariety"] = ex.Message;
             return View(model);
         }
@@ -780,7 +784,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            Error error = null;
+            Error? error = null;
             int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
             List<Field> allFields = await _fieldLogic.FetchFieldsByFarmId(farmID);
             List<Field> fieldList = new List<Field>(allFields);
@@ -805,7 +809,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             List<int> fieldsAllowedForSecondCrop = new List<int>();
             List<int> fieldRemoveList = new List<int>();
-            var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
+            
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
@@ -839,7 +843,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     }
                 }
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                await BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
+                BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -875,7 +879,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : CropFields() post action called");
         try
         {
-            Error error = null;
+            Error? error = null;
             int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
             List<Field> allFields = await _fieldLogic.FetchFieldsByFarmId(farmID);
             List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter = new List<HarvestYearPlanResponse>();
@@ -899,7 +903,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }).ToList();
             List<int> fieldsAllowedForSecondCrop = new List<int>();
             List<int> fieldRemoveList = new List<int>();
-            var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
+            
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
                 if (model.FieldList != null)
@@ -935,7 +939,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
 
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                await BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
+                BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -957,11 +961,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.fieldList = selectListItem.Count > 0 ? selectListItem.OrderBy(x => x.Text).ToList() : null;
                 return View(model);
             }
-            if (model.FieldList.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
+            if (model.FieldList?.Count > 0 && model.FieldList.Contains(Resource.lblSelectAll))
             {
                 model.FieldList = selectListItem.Where(item => item.Value != Resource.lblSelectAll).Select(item => item.Value).ToList();
             }
-            if (model.FieldList.Count > 0)
+            if (model.FieldList?.Count > 0)
             {
                 if (model.Crops == null)
                 {
@@ -1041,7 +1045,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             bool matchFound = false;
             if (model.IsCheckAnswer && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
             {
-                PlanViewModel planViewModel = GetCropFromSession();
+                PlanViewModel? planViewModel = GetCropFromSession();
                 if (planViewModel != null)
                 {
                     if (planViewModel.Crops != null && planViewModel.Crops.Count > 0)
@@ -1083,11 +1087,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            if (harvestYearPlanResponseForFilter.Count > 0)
+            if (harvestYearPlanResponseForFilter?.Count > 0)
             {
                 var fieldIds = harvestYearPlanResponseForFilter.Select(x => x.FieldID.ToString()).ToList();
 
-                model.IsAnyChangeInField = fieldIds.Except(model.FieldList).Any() || model.FieldList.Except(fieldIds).Any();
+                model.IsAnyChangeInField = fieldIds.Except(model.FieldList ?? new List<string>()).Any() || (model.FieldList ?? new List<string>()).Except(fieldIds).Any();
             }
 
             SetCropToSession(model);
@@ -1110,7 +1114,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private async Task BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
+    private void BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
     {
         foreach (var removeFieldId in fieldRemoveList)
         {
@@ -1144,13 +1148,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> SowingDateQuestion()
     {
         _logger.LogTrace("Crop Controller : SowingDateQuestion() action called");
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession();
         try
         {
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in SowingDateQuestion() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
             }
 
             if (model.IsQuestionChange)
@@ -1260,7 +1264,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     [HttpGet]
     public async Task<IActionResult> SowingDate(string q)
     {
-        _logger.LogTrace("Crop Controller : SowingDate({q}) action called");
+        _logger.LogTrace("Crop Controller : SowingDate action called");
         PlanViewModel? model = GetCropFromSession();
         if (model == null)
         {
@@ -1932,8 +1936,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.CropInfoTwoList = cropInfoTwoList.OrderBy(c => c.CropInfo2);
                 return View(model);
             }
-            model.CropInfo2Name = cropInfoTwoList.FirstOrDefault(x => x.CropInfo2Id == model.CropInfo2).CropInfo2;
-            for (int i = 0; i < model.Crops.Count; i++)
+            var cropInfoTwoListItem = cropInfoTwoList.FirstOrDefault(x => x.CropInfo2Id == model.CropInfo2);
+            model.CropInfo2Name = cropInfoTwoListItem?.CropInfo2;
+            for (int i = 0; i < model.Crops?.Count; i++)
             {
                 model.Crops[i].CropInfo2 = model.CropInfo2;
             }
@@ -2790,7 +2795,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 else
                 {
                     //if yield null then save as 0
-                    crop.Yield = crop.Yield;
+                    crop.Yield = crop.Yield ?? 0;
 
                     crop.DefoliationSequenceID = model.DefoliationSequenceId;
                     crop.SwardTypeID = model.SwardTypeId;
@@ -6389,7 +6394,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
-        Error error = new Error();
+        Error? error = null;
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
         PlanViewModel planViewModelBeforeUpdate = GetCropFromSession() ?? new PlanViewModel();
         if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1)
@@ -6556,7 +6561,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         PlanViewModel model = GetCropFromSession();
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
-        Error error = new Error();
+        Error? error = null;
 
         try
         {
@@ -6654,7 +6659,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         List<int> fieldIds = new List<int>();
         List<int> grassGrowthClassIds = new List<int>();
-        Error error = new Error();
+        Error? error = null;
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
 
         if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)

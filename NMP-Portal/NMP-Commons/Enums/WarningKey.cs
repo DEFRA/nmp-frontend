@@ -15,6 +15,9 @@ namespace NMP.Commons.Enums
         [EnumMember(Value = "ORGANICMANURENFIELDLIMITCOMPOST")]
         OrganicManureNFieldLimitCompost,
 
+        [EnumMember(Value = "ORGANICMANURENFIELDLIMITCOMPOSTPAS")]
+        OrganicManureNFieldLimitCompostPAS,
+
         [EnumMember(Value = "ORGANICMANURENFIELDLIMITCOMPOSTMULCH")]
         OrganicManureNFieldLimitCompostMulch,
 
@@ -73,7 +76,23 @@ namespace NMP.Commons.Enums
         ManureSlurryMaxApplicationRate,
 
         [EnumMember(Value = "MANURESPOULTRYMANUREMAXAPPLICATIONRATE")]
-        ManuresPoultryManureMaxApplicationRate
+        ManuresPoultryManureMaxApplicationRate,
+
+        [EnumMember(Value = "INORGNMAXRATERESIDUEGROUP")]
+        InOrgNMAXRateResidueGroup,
+
+        [EnumMember(Value = "INORGNMAXRATERESIDUEGROUP4TO6")]
+        InorgNMaxRateResidueGroup4To6,
+
+        [EnumMember(Value = "RANMANUREJULYTOSEP")]
+        RanManureJulyToSep,
+
+        [EnumMember(Value = "SLURRY4WEEKPRIORTOCLOSEDPERIODSTART")]
+        Slurry4WeekPriorToClosedPeriodStart,
+
+        [EnumMember(Value = "POULTRY4WEEKPRIORTOCLOSEDPERIODSTART")] 
+        Poultry4WeekPriorToClosedPeriodStart
+
     }
 
 }
