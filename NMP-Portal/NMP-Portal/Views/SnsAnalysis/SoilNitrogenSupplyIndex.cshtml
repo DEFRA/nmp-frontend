@@ -19,13 +19,14 @@
     {
         actionMethod = "AdjustmentValue";
     }
-    else if (Model.SnsCategoryId != null && Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
+    else if (Model.SnsCategoryId != null && Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables||Model.FarmRB209CountryId==(int)NMP.Commons.Enums.RB209Country.Scotland)
     {
         actionMethod = "SampleDepth";
     }
 
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.SnsAnalysisWizardSteps.SoilNitrogenSupplyIndex;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@actionMethod" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
@@ -67,6 +68,7 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId"/>
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"/>
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryId" />
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -80,10 +82,15 @@
             <h1 class="govuk-heading-l">@string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)</h1>
             
             <h3 class="govuk-heading-s">@Resource.lblSnsIndex</h3>
-            @if (Model.SnsIndex > -1)
+            @if (Model.SnsIndex > -1&&Model.FarmRB209CountryId!=(int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 <p class="govuk-body">
                 @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}",Model.SnsValue))</p>
+            }
+            else{
+                <p class="govuk-body">
+                    @Model.SnsIndex
+                    </p>
             }
 
             <govuk-button type="submit" class="margin-bottom-forty">
