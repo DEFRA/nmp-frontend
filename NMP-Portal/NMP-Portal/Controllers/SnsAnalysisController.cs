@@ -525,8 +525,7 @@ namespace NMP.Portal.Controllers
                     }
 
                 }
-                else
-                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
                 {
                     if (model.SoilOrganicMatter != null)
                     {
@@ -683,7 +682,6 @@ namespace NMP.Portal.Controllers
                     if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         model.SnsIndex = snsResponse.ResidueGroupId;
-                        //model.SnsValue = snsResponse.SnsValue;
                         HttpContext.Session.SetObjectAsJson("SnsData", model);
                     }
                 }

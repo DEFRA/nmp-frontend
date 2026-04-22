@@ -683,7 +683,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.PostAsync(ApiurlHelper.FetchSNSIndexByMeasurementMethodForScotlandAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
 
                 JObject? farmDataJObject = responseWrapper?.Data as JObject;
