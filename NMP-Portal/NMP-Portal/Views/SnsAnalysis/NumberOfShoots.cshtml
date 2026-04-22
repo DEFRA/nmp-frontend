@@ -2,6 +2,7 @@
 @model NMP.Commons.ViewModels.SnsAnalysisViewModel
 @{
     ViewData["Title"] = $"{Resource.lblEnterTheNumberOfShootsPerSquareMetre} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.SnsAnalysisWizardSteps.NumberOfShoots;
 }
 
 @section BeforeContent {
@@ -9,42 +10,7 @@
 }
 <form asp-action="NumberOfShoots" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="true">
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"/>
-    @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"/> *@
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndexOrCropHeight" value="@Model.GreenAreaIndexOrCropHeight"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt030CM"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt3060CM"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt6090CM"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDepth"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogenNo" value="@Model.IsCalculateNitrogenNo"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNumberOfShoots" value="@Model.IsNumberOfShoots"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropHeight" value="@Model.IsCropHeight"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGreenAreaIndex" value="@Model.IsGreenAreaIndex"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"/>
-
-    <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDate"></govuk-date-input>
-    
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropId"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldName"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"/>
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
-    </div>
+    @await Html.PartialAsync("~/Views/SnsAnalysis/_SnsAnalysisWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (TempData["Error"] != null)
@@ -57,9 +23,6 @@
 
             <govuk-input asp-for="@Model.NumberOfShoots" input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false"></govuk-input>
 
-            @* <govuk-govuk-input asp-for=@Model.NumberOfShoots input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
-            <govuk-input-label is-page-heading="true" class="govuk-label--l"> @Resource.lblWhatIsTheNumberOfShootsPerSquareMetre</govuk-input-label>
-            </govuk-govuk-input> *@
             <govuk-radios asp-for="@Model.SeasonId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>

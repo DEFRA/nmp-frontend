@@ -671,6 +671,45 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         return (snsResponse, error);
     }
+    public async Task<(SnsResponseForScotland, Error)> FetchSNSIndexByMeasurementMethodForScotlandAsync(MeasurementDataForScotland measurementDataForScotland)
+    {
+        string jsonData = JsonConvert.SerializeObject(measurementDataForScotland);
+        SnsResponseForScotland snsResponse = new SnsResponseForScotland();
+        Error error = new Error();
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchSNSIndexByMeasurementMethodForScotlandAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+
+                JObject? farmDataJObject = responseWrapper?.Data as JObject;
+                if (farmDataJObject != null)
+                {
+                    snsResponse = farmDataJObject.ToObject<SnsResponseForScotland>();
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+
+        }
+        catch (HttpRequestException hre)
+        {
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (snsResponse, error);
+    }
 
     public async Task<(Field, Error)> UpdateFieldAsync(FieldData fieldData, int fieldId)
     {
