@@ -12,14 +12,16 @@ using System.Globalization;
 namespace NMP.Portal.Controllers
 {
     public class SnsAnalysisController(ILogger<SnsAnalysisController> logger, IDataProtectionProvider dataProtectionProvider,
-         IFieldLogic fieldLogic, ICropLogic cropLogic, ISnsAnalysisLogic snsAnalysisLogic) : Controller
+         IFieldLogic fieldLogic, ICropLogic cropLogic, ISnsAnalysisLogic snsAnalysisLogic, IFarmLogic farmLogic) : Controller
     {
         private readonly ILogger<SnsAnalysisController> _logger = logger;
         private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
+        private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IFieldLogic _fieldLogic = fieldLogic;
         private readonly ICropLogic _cropLogic = cropLogic;
         private readonly ISnsAnalysisLogic _snsAnalysisLogic = snsAnalysisLogic;
         private readonly string _soilMineralNitrogen = Resource.lblSoilMineralNitrogenWithSpace;
+        private readonly IFarmLogic _farmLogic = farmLogic;
 
         public IActionResult Index()
         {
@@ -45,6 +47,7 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrWhiteSpace(model.EncryptedFarmId))
             {
                 model.EncryptedFarmId = q ?? string.Empty;
+                
             }
             if (string.IsNullOrWhiteSpace(model.EncryptedFieldId))
             {
@@ -63,6 +66,15 @@ namespace NMP.Portal.Controllers
                 model.CropId = Convert.ToInt32(_cropDataProtector.Unprotect(c));
                 (Crop crop, NMP.Commons.ServiceResponses.Error error) = await _cropLogic.FetchCropById(model.CropId);
                 model.CropTypeId = crop.CropTypeID;
+            }
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFarmId))
+            {
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                if (farm != null)
+                {
+                    model.FarmRB209CountryId = farm.RB209CountryID;
+                }
             }
             if (!string.IsNullOrWhiteSpace(f))
             {
@@ -143,7 +155,7 @@ namespace NMP.Portal.Controllers
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
             model.SnsCategoryId = snsCategoryId;
             HttpContext.Session.SetObjectAsJson("SnsData", model);
-            if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
+            if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 return RedirectToAction("SampleDepth");
             }
@@ -484,8 +496,39 @@ namespace NMP.Portal.Controllers
 
                 //sns logic
                 var postMeasurementData = new MeasurementData();
+                var postMeasurementDataForScotland = new MeasurementDataForScotland();
                 int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
-                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
+                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    if (model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        postMeasurementData = new MeasurementData
+                        {
+                            CropTypeId = model.CropTypeId ?? 0,
+                            //SeasonId = 1,
+                            Step1Veg = new Step1Veg
+                            {
+                                DepthCm = model.SampleDepth,
+                                DepthValue = model.SoilMineralNitrogen
+                            },
+                            Step3 = new Step3
+                            {
+                                Adjustment = null,
+                                OrganicMatterPercentage = null
+                            }
+                        };
+                    }
+                    else
+                    {
+                        postMeasurementDataForScotland = new MeasurementDataForScotland
+                        {
+                            smnDepth = model.SampleDepth.Value,
+                            measuredSmn = model.SoilMineralNitrogen.Value
+                        };
+                    }
+
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
                 {
                     if (model.SoilOrganicMatter != null)
                     {
@@ -621,37 +664,29 @@ namespace NMP.Portal.Controllers
                         }
                     };
 
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
-                {
-                    postMeasurementData = new MeasurementData
-                    {
-                        CropTypeId = model.CropTypeId ?? 0,
-                        //SeasonId = 1,
-                        Step1Veg = new Step1Veg
-                        {
-                            DepthCm = model.SampleDepth,
-                            DepthValue = model.SoilMineralNitrogen
-                        },
-                        Step3 = new Step3
-                        {
-                            Adjustment = null,
-                            OrganicMatterPercentage = null
-                        }
-                    };
-
-                }
+                }                
                 else
                 {
                     return RedirectToAction("CheckAnswer");
                 }
-
-                (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
-                if (string.IsNullOrWhiteSpace(error?.Message))
+                if (model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    model.SnsIndex = snsResponse.SnsIndex;
-                    model.SnsValue = snsResponse.SnsValue;
-                    HttpContext.Session.SetObjectAsJson("SnsData", model);
+                    (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
+                    if (string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        model.SnsIndex = snsResponse.SnsIndex;
+                        model.SnsValue = snsResponse.SnsValue;
+                        HttpContext.Session.SetObjectAsJson("SnsData", model);
+                    }
+                }
+                else
+                {
+                    (SnsResponseForScotland snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodForScotlandAsync(postMeasurementDataForScotland);
+                    if (string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        model.SnsIndex = snsResponse.ResidueGroupId;
+                        HttpContext.Session.SetObjectAsJson("SnsData", model);
+                    }
                 }
             }
             catch (Exception ex)

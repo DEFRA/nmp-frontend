@@ -1,0 +1,94 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.ViewModels;
+@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.SnsAnalysisViewModel
+@{
+    var currentStep = ViewBag.CurrentStep as int?;
+}
+<div hidden="hidden">
+    @if (currentStep != (int)SnsAnalysisWizardSteps.SoilSampleDate)
+    {
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDate"></govuk-date-input>
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.SoilMineralNitrogenAnalysisResults)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt030CM" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt3060CM" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt6090CM" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.EstimateOfNitrogenMineralisationQuestion)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.CalculateSoilNitrogenMineralisation)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()" />
+
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.SoilOrganicMatter)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.AdjustmentValue)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.CalculateNitrogenInCurrentCropQuestion)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.NumberOfShoots)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots" />
+        
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.NumberOfShoots && currentStep != (int)SnsAnalysisWizardSteps.CropHeight)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.GreenAreaIndexOrCropHeightQuestion)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndexOrCropHeight" value="@Model.GreenAreaIndexOrCropHeight" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.CropHeight)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.GreenAreaIndex)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex" />
+    }
+
+    @if (currentStep != (int)SnsAnalysisWizardSteps.SampleDepth)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDepth" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen" />
+    }
+    @if (currentStep != (int)SnsAnalysisWizardSteps.RemoveSnsAnalysis)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSnsRemove" />
+    }
+    <div hidden="hidden">       
+        
+        
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogenNo" value="@Model.IsCalculateNitrogenNo" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNumberOfShoots" value="@Model.IsNumberOfShoots" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropHeight" value="@Model.IsCropHeight" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGreenAreaIndex" value="@Model.IsGreenAreaIndex" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue" />        
+
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldName" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId" value="@Model.CropTypeId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
+    </div>
+
+</div>
