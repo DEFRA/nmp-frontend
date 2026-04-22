@@ -304,7 +304,17 @@
                             @string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}", Model.SnsValue))
+                            @if (Model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}", Model.SnsValue))
+                            }
+                            else
+                            {
+                                
+                                    @string.Format("{0} ({1})", Model.SnsIndex, Model.NitrogenResidueGroup)
+                            }
+
+                            
                         </govuk-summary-list-row-value>
 
                     </govuk-summary-list-row>

@@ -164,7 +164,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilMineralNitrogenAnalysisResults()
+        public IActionResult SoilMineralNitrogenAnalysisResults()
         {
             _logger.LogTrace($"SnsAnalysis Controller : SoilMineralNitrogenAnalysisResults() action called");
             SnsAnalysisViewModel model = new SnsAnalysisViewModel();
@@ -685,6 +685,7 @@ namespace NMP.Portal.Controllers
                     if (string.IsNullOrWhiteSpace(error?.Message))
                     {
                         model.SnsIndex = snsResponse.ResidueGroupId;
+                        model.NitrogenResidueGroup = snsResponse.ResidueGroup;
                         HttpContext.Session.SetObjectAsJson("SnsData", model);
                     }
                 }
@@ -1706,6 +1707,7 @@ namespace NMP.Portal.Controllers
                     AdjustmentValue = model.AdjustmentValue,
                     SoilNitrogenSupplyValue = model.SnsValue,
                     SoilNitrogenSupplyIndex = model.SnsIndex,
+                    NitrogenResidueGroup=model.NitrogenResidueGroup,
                     CreatedOn = DateTime.Now,
                     CreatedByID = userId,
                     ModifiedOn = model.ModifiedOn,
