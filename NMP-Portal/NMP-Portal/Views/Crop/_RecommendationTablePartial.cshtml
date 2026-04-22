@@ -22,7 +22,7 @@
                 }
                 else
                 {
-                    @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)                    
+                    @(string.IsNullOrWhiteSpace(Model.Recommendation.NIndex) ? Resource.lblHyphen : Model.Recommendation.NIndex)
                 }
             </td>
             <td class="govuk-table__cell">
@@ -46,7 +46,13 @@
                 }
             </td>
             <td class="govuk-table__cell">
-                @(Model.Recommendation.NBalance == null ? Resource.lblHyphen : Model.Recommendation.NBalance == 0 ? Model.Recommendation.NBalance : string.Format("{0:N0}", Model.Recommendation.NBalance))
+                @(
+                                Model.Recommendation?.NBalance == null
+                                ? Resource.lblHyphen
+                                : Model.Recommendation.NBalance == 0
+                                ? Model.Recommendation.NBalance.ToString()
+                                : Model.Recommendation.NBalance.Value.ToString("N0")
+                                )
             </td>
             <td class="govuk-table__cell">
                 @{
