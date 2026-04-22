@@ -143,7 +143,7 @@ internal static class ApiurlHelper
     public const string UpdateOnlyFieldAsyncAPI = "fields-update";
     public const string FetchCountryByIdAsyncAPI = "countries/By-Id/{0}";
     public const string FetchPscIndexesAsyncAPI = "psc-indexes";
-    public const string FetchAllSoilAnalysesMethodAsyncAPI = "soil-analyses-method";
+    public const string FetchAllSoilMethodologiesByNutrientAndCountryIdAsyncAPI = "api/Soil/Methodologies/{0}/{1}";
     public const string FetchPscIndexeByIdAsyncAPI = "psc-indexes/{0}";
     public const string FetchAllSoilAnalysesMethodByIdAsyncAPI = "soil-analyses-method/{0}";
     public const string FetchRecommendationByManagementPeriodIdAsyncAPI = "recommendations/{0}";
