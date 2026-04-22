@@ -47,12 +47,7 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrWhiteSpace(model.EncryptedFarmId))
             {
                 model.EncryptedFarmId = q ?? string.Empty;
-                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
-                if (farm != null)
-                {
-                    model.FarmRB209CountryId = farm.RB209CountryID;
-                }
+                
             }
             if (string.IsNullOrWhiteSpace(model.EncryptedFieldId))
             {
@@ -72,7 +67,15 @@ namespace NMP.Portal.Controllers
                 (Crop crop, NMP.Commons.ServiceResponses.Error error) = await _cropLogic.FetchCropById(model.CropId);
                 model.CropTypeId = crop.CropTypeID;
             }
-
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFarmId))
+            {
+                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                if (farm != null)
+                {
+                    model.FarmRB209CountryId = farm.RB209CountryID;
+                }
+            }
             if (!string.IsNullOrWhiteSpace(f))
             {
                 model.EncryptedFieldName = f ?? string.Empty;
