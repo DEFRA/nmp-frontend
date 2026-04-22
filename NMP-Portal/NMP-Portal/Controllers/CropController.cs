@@ -4719,20 +4719,21 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public IActionResult IsWinterRainfallMoreThan450(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : IsWinterRainfallMoreThan450() post action called");
-        try
+
+        if (model.IsWinterRainfallMoreThan450 == null)
         {
-            if (model.IsWinterRainfallMoreThan450 == null)
-            {
-                ModelState.AddModelError("IsWinterRainfallMoreThan450", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-            else if (model.IsWinterRainfallMoreThan450.Value)
-            {
-                model.WinterRainfallName = Resource.lbl450OrMore;
-            }
-            else
-            {
-                model.WinterRainfallName = Resource.lblLessThan450;
-            }
+            ModelState.AddModelError("IsWinterRainfallMoreThan450", Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+        else if (model.IsWinterRainfallMoreThan450.Value)
+        {
+            model.WinterRainfallName = Resource.lbl450OrMore;
+        }
+        else
+        {
+            model.WinterRainfallName = Resource.lblLessThan450;
+        }
+        try
+        {            
 
             if (!ModelState.IsValid)
             {
