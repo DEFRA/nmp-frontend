@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ServiceResponses
 {
-    public class SoilNutrientIndiceResponse
+    public class SoilNutrientStatusResponse
     {
+        public int? nutrientId { get; set; }
         public int? indexId { get; set; }
-        public string index { get; set; } = string.Empty;
+        public string indexText { get; set; } = string.Empty;
         public double? minRange { get; set; }
         public double? maxRange { get; set; }
     }

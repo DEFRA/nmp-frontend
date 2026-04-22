@@ -37,11 +37,11 @@
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
                         </govuk-radios-fieldset-legend>
-                        @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
+                        @if (Model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
                         {
                             <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
                         }
-                        else @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.RB209)
+                        else  @if (Model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.SoilAnalysesMethod.RB209)
                         {
                             <govuk-radios-item value=@asAnIndex disabled=true>@Resource.lblAsAnIndex</govuk-radios-item>
                         }

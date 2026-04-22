@@ -142,8 +142,7 @@ namespace NMP.Portal.Controllers
                             return View(model);
                         }
 
-                        model.SoilAnalysesMethodID = soilAnalysis.PhosphorusMethodologyID;
-
+                        
                         model.PhosphorusMethodologyID = soilAnalysis.PhosphorusMethodologyID;
                         model.PotassiumMethodologyID = soilAnalysis.PotassiumMethodologyID;
                         model.MagnesiumMethodologyID = soilAnalysis.MagnesiumMethodologyID;
@@ -398,7 +397,7 @@ namespace NMP.Portal.Controllers
                 phosphorusId = phosphorusNutrient.nutrientId;
             }
 
-            (List<string>? phosphorusStatusList, error) = await _soilLogic.FetchSoilNutrientStatusList(phosphorusId, model.SoilAnalysesMethodID.Value, model.FarmRB209CountryID.Value);
+            (List<SoilNutrientStatusResponse>? phosphorusStatusList, error) = await _soilLogic.FetchSoilNutrientStatusList(model.PhosphorusMethodologyID.Value);
 
             List<SelectListItem> phosphorusSelectList = new();
             if (phosphorusStatusList != null && phosphorusStatusList.Any())
@@ -406,8 +405,8 @@ namespace NMP.Portal.Controllers
                 phosphorusSelectList = phosphorusStatusList
                     .Select(x => new SelectListItem
                     {
-                        Text = x,
-                        Value = x
+                        Text = x.indexText,
+                        Value = x.indexId.Value.ToString()
                     })
                     .ToList();
                 ViewBag.PhosphorusSelectList = phosphorusSelectList;
@@ -423,7 +422,7 @@ namespace NMP.Portal.Controllers
                 potassiumId = phosphorusNutrient.nutrientId;
             }
 
-            (List<string>? potassiumStatusList, error) = await _soilLogic.FetchSoilNutrientStatusList(potassiumId, model.SoilAnalysesMethodID.Value, model.FarmRB209CountryID.Value);
+            (List<SoilNutrientStatusResponse>? potassiumStatusList, error) = await _soilLogic.FetchSoilNutrientStatusList(model.PotassiumMethodologyID.Value);
 
             List<SelectListItem> potassiumSelectList = new();
             if (potassiumStatusList != null && potassiumStatusList.Any())
@@ -431,8 +430,8 @@ namespace NMP.Portal.Controllers
                 potassiumSelectList = potassiumStatusList
                     .Select(x => new SelectListItem
                     {
-                        Text = x,
-                        Value = x
+                        Text = x.indexText,
+                        Value = x.indexId.Value.ToString()
                     })
                     .ToList();
                 ViewBag.PhosphorusSelectList = potassiumSelectList;
@@ -447,7 +446,7 @@ namespace NMP.Portal.Controllers
                 magnesiumId = magnesiumNutrient.nutrientId;
             }
 
-            (List<string>? magnesiumStatusList, error) = await _soilLogic.FetchSoilNutrientStatusList(magnesiumId, model.SoilAnalysesMethodID.Value, model.FarmRB209CountryID.Value);
+            (List<SoilNutrientStatusResponse>? magnesiumStatusList, error) = await _soilLogic.FetchSoilNutrientStatusList(model.MagnesiumMethodologyID.Value);
 
             List<SelectListItem> magnesiumSelectList = new();
             if (magnesiumStatusList != null && magnesiumStatusList.Any())
@@ -455,8 +454,8 @@ namespace NMP.Portal.Controllers
                 magnesiumSelectList = magnesiumStatusList
                     .Select(x => new SelectListItem
                     {
-                        Text = x,
-                        Value = x
+                        Text = x.indexText,
+                        Value = x.indexId.Value.ToString()
                     })
                     .ToList();
                 ViewBag.MagnesiumSelectList = magnesiumSelectList;
@@ -488,7 +487,7 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.SoilAnalysesMethodID.HasValue)
+            if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 await BindViewBagForScotlandNutrient(model);
             }
@@ -651,24 +650,20 @@ namespace NMP.Portal.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.SoilAnalysesMethodID.HasValue)
+                    if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
                         await BindViewBagForScotlandNutrient(model);
                     }
                     return View(model);
                 }
 
-                model.PhosphorusMethodologyID = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? model.SoilAnalysesMethodID : (int)PhosphorusMethodology.Olsens;
-                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    model.PotassiumMethodologyID = model.SoilAnalysesMethodID;
-                    model.MagnesiumMethodologyID = model.SoilAnalysesMethodID;
+                    model.PhosphorusMethodologyID = (int)NMP.Commons.Enums.PhosphorusMethodology.Olsens;
                 }
-                else
-                {
-                    model.PotassiumMethodologyID = (int)NMP.Commons.Enums.PotassiumMethodology.None;
-                    model.MagnesiumMethodologyID = (int)NMP.Commons.Enums.MagnesiumMethodology.None;
-                }
+                model.PotassiumMethodologyID = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? model.PhosphorusMethodologyID : (int)PotassiumMethodology.None;
+                model.MagnesiumMethodologyID = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? model.PhosphorusMethodologyID : (int)MagnesiumMethodology.None;
+
 
                 if (model.SoilNutrientValueType != null && model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                 {
@@ -1207,14 +1202,14 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() post action called.");
 
-            ValidateSoilAnalysisMethod(model.SoilAnalysesMethodID, "SoilAnalysesMethodID");
+            ValidateSoilAnalysisMethod(model.PhosphorusMethodologyID, "PhosphorusMethodologyID");
 
             if (!ModelState.IsValid)
             {
                 await ReturnViewWithMethods(model);
             }
             SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession();
-            if (soilAnalysisViewModel != null && soilAnalysisViewModel.SoilAnalysesMethodID == model.SoilAnalysesMethodID)
+            if (soilAnalysisViewModel != null && soilAnalysisViewModel.PhosphorusMethodologyID == model.PhosphorusMethodologyID)
             {
                 model.IsSoilAnalysesMethodChange = false;
                 SetSoilAnalysisDataToSession(model);
@@ -1261,7 +1256,7 @@ namespace NMP.Portal.Controllers
         }
         private async Task FetchSoilAnalysisMethodName(SoilAnalysisViewModel model)
         {
-            (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilLogic.FetchSoilAnalysesMethodById(model.SoilAnalysesMethodID ?? 0);
+            (CommonResponse? soilAnalysisMethodData, Error? error) = await _soilLogic.FetchSoilAnalysesMethodById(model.PhosphorusMethodologyID ?? 0);
             if (soilAnalysisMethodData != null && error == null)
             {
                 ViewBag.SoilAnalysisMethodName = soilAnalysisMethodData.Name;

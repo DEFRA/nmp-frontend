@@ -91,7 +91,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
 
         _logger.LogTrace("Soil Service: soil-analyses-methods called.");
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchAllSoilAnalysesMethodByIdAsyncAPI,id));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchAllSoilAnalysesMethodByIdAsyncAPI, id));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -108,25 +108,23 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         }
         return (soilAnalysesMethod, error);
     }
-    public async Task<(List<string>?, Error?)> FetchSoilNutrientStatusList(int nutrientId, int methodologyId, int countryId)
+    public async Task<(List<SoilNutrientStatusResponse>?, Error?)> FetchSoilNutrientStatusList(int methodologyId)
     {
         Error? error = null;
-        List<string>? statusList = null;
+        List<SoilNutrientStatusResponse>? statusList = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientIndexValueAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()), HttpUtility.UrlEncode(countryId.ToString()));
+        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientStatusListAsyncAPI, HttpUtility.UrlEncode(HttpUtility.UrlEncode(methodologyId.ToString())));
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper?.Data != null)
         {
-            List<SoilNutrientIndiceResponse>? soilNutrientIndiceResponse = responseWrapper?.Data?.ToObject<List<SoilNutrientIndiceResponse>>();
+            List<SoilNutrientStatusResponse>? soilNutrientIndiceResponse = responseWrapper?.Data?.ToObject<List<SoilNutrientStatusResponse>>();
 
             if (soilNutrientIndiceResponse != null)
             {
-                statusList = soilNutrientIndiceResponse?
-                                .Select(x => x.index)
-                                .ToList() ?? new List<string>();
+                statusList = soilNutrientIndiceResponse;
             }
         }
         else

@@ -107,6 +107,7 @@ internal static class ApiurlHelper
     public const string FetchManagementperiodByIdAsyncAPI = "management-periods/{0}";
     public const string FetchCropByIdAsyncAPI = "crops/{0}";
     public const string FetchSoilNutrientIndexValueAsyncAPI = "vendors/rb209/Soil/NutrientIndices/{0}/{1}/{2}";
+    public const string FetchSoilNutrientStatusListAsyncAPI = "vendors/rb209/Soil/NutrientIndexes/{0}";
     public const string AddSoilAnalysisAsyncAPI = "soil-analyses";
     public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
     public const string DeleteCropPlanByIdsAPI = "crops/{0}";
