@@ -1436,15 +1436,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
         }
 
-        ValidateSoilAnalysisPhosphorusIndex();
-        ValidateSoilAnalysesMagnesiumIndex();
+        ValidateSoilAnalysisPhosphorusIndex(model);
+        ValidateSoilAnalysesMagnesiumIndex(model);
     }
 
     private void ValidateSoilNutrientValues(FieldViewModel model)
     {
         if (model.SoilAnalyses.SoilNutrientValueType.HasValue)
         {
-            if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland && model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
+            if (model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
             {
                 ValidateSoilNutrientIndex(model);
             }
@@ -1526,8 +1526,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-    private void ValidateSoilAnalysesMagnesiumIndex()
+    private void ValidateSoilAnalysesMagnesiumIndex(FieldViewModel model)
     {
+
+        int magnesiumIndexIndexMaxValue = model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland ? 9 : 4;
+        if (model.SoilAnalyses.MagnesiumIndex.HasValue && (model.SoilAnalyses.MagnesiumIndex > magnesiumIndexIndexMaxValue || model.SoilAnalyses.PhosphorusIndex < 0))
+        {
+            ModelState.AddModelError("SoilAnalyses.MagnesiumIndex", string.Format(Resource.MsgEnterValidValueForNutrientIndex, magnesiumIndexIndexMaxValue));
+        }
         if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.MagnesiumIndex"))
         {
             var InvalidFormatError = ModelState["SoilAnalyses.MagnesiumIndex"]?.Errors.Count > 0 ?
@@ -1541,8 +1547,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-    private void ValidateSoilAnalysisPhosphorusIndex()
+    private void ValidateSoilAnalysisPhosphorusIndex(FieldViewModel model)
     {
+
+        int phosphorusIndexMaxValue = model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland ? 9 : 4;
+        if (model.SoilAnalyses.PhosphorusIndex.HasValue && (model.SoilAnalyses.PhosphorusIndex > phosphorusIndexMaxValue || model.SoilAnalyses.PhosphorusIndex < 0))
+        {
+            ModelState.AddModelError("SoilAnalyses.PhosphorusIndex", string.Format(Resource.MsgEnterValidValueForNutrientIndex, phosphorusIndexMaxValue));
+        }
         if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.PhosphorusIndex"))
         {
             var InvalidFormatError = ModelState["SoilAnalyses.PhosphorusIndex"]?.Errors.Count > 0 ?
@@ -1560,12 +1572,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
         {
+            int potassiumIndexMaxValue = (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland) ? 4 : 9;
             string potassiumIndexValue = model.PotassiumIndexValue.Replace(" ", "");
             if (int.TryParse(potassiumIndexValue, out int potassiumValue))
             {
-                if (potassiumValue > 9 || potassiumValue < 0)
+                if (potassiumValue > potassiumIndexMaxValue || potassiumValue < 0)
                 {
-                    ModelState.AddModelError(_potassiumIndexValue, Resource.MsgEnterValidValueForNutrientIndex);
+                    ModelState.AddModelError(_potassiumIndexValue,string.Format(Resource.MsgEnterValidValueForNutrientIndex,potassiumIndexMaxValue));
                 }
                 if (potassiumValue == 2)
                 {

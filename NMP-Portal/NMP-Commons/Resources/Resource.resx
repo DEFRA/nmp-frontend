@@ -598,7 +598,7 @@
     <value>Enter an amount between 0 and 9,998 litres</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
-    <value>Enter an index between 0 and 9</value>
+    <value>Enter an index between 0 and {0}</value>
   </data>
   <data name="lblBasedOnRecentSNA" xml:space="preserve">
     <value>Calculate based on a recent soil mineral nitrogen (N) analysis result</value>
