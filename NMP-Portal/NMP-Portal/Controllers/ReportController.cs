@@ -339,44 +339,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (cropTypeList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape))
         {
             bool isAutumn = false;
-            var existing = cropTypeList.FirstOrDefault(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape);
-            if (existing != null)
-            {
-                WinterOilseedAutumnSpring isWinterOilseedRapeAutumn = await WinterOilseedRapeAutumnSpringCheck(existing.Year, existing.CropID);
-                if (isWinterOilseedRapeAutumn.IsAutumnOnly || isWinterOilseedRapeAutumn.IsAutumnSpringBoth)
-                {
-                    isAutumn = true;
-                }
-                if (isWinterOilseedRapeAutumn.IsAutumnOnly || isWinterOilseedRapeAutumn.IsAutumnSpringBoth)
-                {
-                    var copy = JsonConvert.DeserializeObject<HarvestYearPlanResponse>(JsonConvert.SerializeObject(existing));
-                    copy.CropTypeID = -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
-                    cropTypeList.Add(copy);
-                }
-                if(isWinterOilseedRapeAutumn.IsAutumnOnly && !isWinterOilseedRapeAutumn.IsAutumnSpringBoth)
-                {
-                    cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape);
-                }
-
-            }
-            if (isAutumn)
-            {
-                cropTypes.Add(new CropTypeResponse
-                {
-                    CropTypeId = -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
-                    CropType = "Winter oilseed rape",
-                    CropGroupId = 1,
-                    CountryId = 3
-                });
-            }
-
+            (cropTypeList, isAutumn) = await HandleWinterOilseedRapeAutumnSpringCropType(cropTypeList, isAutumn);
+            cropTypes = await AddAutumnInCropType(cropTypes, isAutumn);
         }
-
 
         var cropTypeMap = cropTypes.ToDictionary(c => c.CropTypeId, c => c.CropType);
 
-        if (countryID == (int)NMP.Commons.Enums.FarmCountry.England ||
-            countryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        if (countryID == (int)NMP.Commons.Enums.FarmCountry.England || countryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
         {
             SetVegetableHints(cropGroups, cropTypeMap);
         }
@@ -391,8 +360,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             SetLettuceHint(cropGroups, cropTypeMap);
         }
 
-        var list = new List<SelectListItem>();
+        List<SelectListItem> list = await SelectListCropGroupData(cropGroups, cropTypeList);
 
+
+        // Final sorted distinct list
+        ViewBag.CropTypeList = list
+            .DistinctBy(x => x.Value)   // avoid duplicates by ID
+            .OrderBy(x => x.Text)
+            .ToList();
+    }
+    private static async Task<List<SelectListItem>> SelectListCropGroupData(Dictionary<string, int[]> cropGroups, List<HarvestYearPlanResponse> cropTypeList)
+    {
+        var list = new List<SelectListItem>();
         foreach (var group in cropGroups)
         {
             // Find which IDs from this group exist in cropTypeList
@@ -427,12 +406,45 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             });
 
         list.AddRange(remainingCrops);
+        return list;
+    }
+    private static async Task<List<CropTypeResponse>> AddAutumnInCropType(List<CropTypeResponse> cropTypes, bool isAutumn)
+    {
+        if (isAutumn)
+        {
+            cropTypes.Add(new CropTypeResponse
+            {
+                CropTypeId = -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
+                CropType = "Winter oilseed rape",
+                CropGroupId = 1,
+                CountryId = 3
+            });
+        }
+        return cropTypes;
+    }
+    private async Task<(List<HarvestYearPlanResponse>, bool)> HandleWinterOilseedRapeAutumnSpringCropType(List<HarvestYearPlanResponse> cropTypeList, bool isAutumn)
+    {
+        var existing = cropTypeList.FirstOrDefault(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape);
+        if (existing != null)
+        {
+            WinterOilseedAutumnSpring isWinterOilseedRapeAutumn = await WinterOilseedRapeAutumnSpringCheck(existing.Year, existing.CropID);
+            if (isWinterOilseedRapeAutumn.IsAutumnOnly || isWinterOilseedRapeAutumn.IsAutumnSpringBoth)
+            {
+                isAutumn = true;
+            }
+            if (isWinterOilseedRapeAutumn.IsAutumnOnly || isWinterOilseedRapeAutumn.IsAutumnSpringBoth)
+            {
+                var copy = JsonConvert.DeserializeObject<HarvestYearPlanResponse>(JsonConvert.SerializeObject(existing));
+                copy.CropTypeID = -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
+                cropTypeList.Add(copy);
+            }
+            if (isWinterOilseedRapeAutumn.IsAutumnOnly && !isWinterOilseedRapeAutumn.IsAutumnSpringBoth)
+            {
+                cropTypeList.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape);
+            }
 
-        // Final sorted distinct list
-        ViewBag.CropTypeList = list
-            .DistinctBy(x => x.Value)   // avoid duplicates by ID
-            .OrderBy(x => x.Text)
-            .ToList();
+        }
+        return (cropTypeList, isAutumn);
     }
     private async Task<List<HarvestYearPlanResponse>> AddOrRemoveCropTypeItems(int countryID, List<HarvestYearPlanResponse> cropTypeList, Error? error)
     {
@@ -884,7 +896,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         foreach (int cropGroup in cropGroupIds)
                         {
-                            bool isAutumn = cropGroup==-(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape?true:false;
+                            bool isAutumn = cropGroup == -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
 
                             List<int> selectedCropGroupList = idToGroup
                            .Where(x => x.Key == cropGroup).SelectMany(x => x.Value).ToList();
@@ -963,7 +975,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         var normalizedCropGroupList = selectedCropGroupList.Select(x => x == -winterOilseedRapeCropTypeId ? winterOilseedRapeCropTypeId : x).ToList();
 
         List<HarvestYearPlanResponse> cropDetails = harvestYearPlanResponse.Where(x => normalizedCropGroupList.Contains(x.CropTypeID)).ToList();
-        //List<HarvestYearPlanResponse> cropDetails = harvestYearPlanResponse.Where(x => selectedCropGroupList.Contains(x.CropTypeID)).ToList();
         Error? error = null;
         int? nmaxLimit = 0;
         List<FieldDetails> fieldDetail = new List<FieldDetails>();
@@ -987,7 +998,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 if (nmaxLimit != null)
                 {
-                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue,isAutumn);
+                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue, isAutumn);
                 }
 
             }
@@ -1063,7 +1074,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             crop,
             field,
             cropTypeName,
-            nitrogenList,isAutumn);
+            nitrogenList, isAutumn);
 
         return (nitrogenList, nMaxList, fieldDetail, nmaxLimit);
     }
@@ -1155,7 +1166,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         (List<ScotlandNMaxValue>? scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
-            //WinterOilseedAutumnSpring isWinterOilseedRapeAutumn = await WinterOilseedRapeAutumnSpringCheck(cropData.Year, cropData.CropID);
             ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID && x.SoilTypeID == (isAutumn ? -1 : cropData.SoilTypeID));
 
             string? nResidueGroup = recommendation?.NIndex;
@@ -6941,7 +6951,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         (List<ScotlandNMaxValue>? scotlandNMaxValue, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (scotlandNMaxValue != null && scotlandNMaxValue.Count > 0)
         {
-            RemoveCropWithNoYieldAjustment(scotlandNMaxValue);
+            scotlandNMaxValue = RemoveCropWithNoYieldAjustment(scotlandNMaxValue);
             if (model.CropTypeList != null && model.CropTypeList.Count > 0 && scotlandNMaxValue.Any(x => model.CropTypeList.Any(c => Convert.ToInt32(c) == x.CropTypeID)))
             {
                 IsAnyCropTypeForAverageYield = true;
@@ -6964,7 +6974,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup3);
         scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.PotatoVarietyGroup4);
 
-        //scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape);
         return scotlandNMaxValues;
     }
 
@@ -6974,7 +6983,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         model.FarmAverageYields = new List<FarmAverageYieldsViewModel>();
         foreach (string cropTypeId in model.CropTypeList)
         {
-            if(Convert.ToInt32(cropTypeId) != -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
+            if (Convert.ToInt32(cropTypeId) != -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
             {
                 int? cropTypeGroupId = GetFirstCropTypeIdForYieldAdjustment(Convert.ToInt32(cropTypeId));
                 string cropGroupName = GetGroupName(Convert.ToInt32(cropTypeId), model.Country.Value);
@@ -6999,7 +7008,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         cropGroups.Remove(Resource.lblSpringTriticale);
         cropGroups.Remove(Resource.lblSpringRye);
         cropGroups.Remove(Resource.lblPotatoes);
-        //cropGroups.Remove(Resource.lblWinterOilseedRapeAutumn);
 
     }
 

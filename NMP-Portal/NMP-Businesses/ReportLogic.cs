@@ -472,40 +472,34 @@ BindAdjustmentsForScotland(
     }
 
 
-    public async Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> ManPeriodList, bool isAutumn)
+    public async Task<(decimal?, decimal?)> FetchTotalNitroegen(
+    List<ManagementPeriod> manPeriodList, bool isAutumn)
     {
-        decimal? totalFertiliserN = null;
-        decimal? totalOrganicAvailableN = null;
-       
-        foreach (var managementPeriod in ManPeriodList)
+        if (manPeriodList == null || !manPeriodList.Any())
+            return (0, 0);
+
+        // Run fertiliser queries in parallel
+        var fertiliserTasks = manPeriodList.Select(mp =>
+            _fertiliserManureLogic.FetchTotalNByManagementPeriodIDIsAutumn(mp.ID!.Value, isAutumn));
+
+        var fertiliserResults = await Task.WhenAll(fertiliserTasks);
+
+        decimal totalFertiliserN = fertiliserResults.Where(r => r.Item1.HasValue).Sum(r => r.Item1!.Value);
+
+        decimal totalOrganicAvailableN = 0;
+
+        // Only run organic logic if NOT autumn
+        if (!isAutumn)
         {
-            (decimal? totalNitrogen, _) = await _fertiliserManureLogic.FetchTotalNByManagementPeriodIDIsAutumn(managementPeriod.ID.Value, isAutumn);
-            if (totalNitrogen != null)
-            {
-                if (totalFertiliserN == null)
-                {
-                    totalFertiliserN = 0;
-                }
-                totalFertiliserN = totalFertiliserN + totalNitrogen;
-            }
+            var organicTasks = manPeriodList.Select(mp =>
+                _organicManureLogic.FetchAvailableNByManagementPeriodID(mp.ID!.Value));
+
+            var organicResults = await Task.WhenAll(organicTasks);
+
+            totalOrganicAvailableN = organicResults.Where(r => r.Item1.HasValue).Sum(r => r.Item1!.Value);
         }
-        foreach (var managementPeriod in ManPeriodList)
-        {
-            if(!isAutumn)
-            {
-                (decimal? totalNitrogen, _) = await _organicManureLogic.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
-                if (totalNitrogen != null)
-                {
-                    if (totalOrganicAvailableN == null)
-                    {
-                        totalOrganicAvailableN = 0;
-                    }
-                    totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
-                }
-            }
-            
-        }
-        return (totalFertiliserN, totalOrganicAvailableN??0);
+
+        return (totalFertiliserN, totalOrganicAvailableN);
     }
 
     // ===============================

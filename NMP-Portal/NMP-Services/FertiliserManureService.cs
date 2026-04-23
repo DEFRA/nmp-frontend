@@ -684,12 +684,15 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = new Error();
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
+                    if (responseWrapper?.Error != null)
                     {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                        error = responseWrapper.Error.ToObject<Error>();
+                        if (error != null)
+                        {
+                            _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                        }
                     }
+                    
                 }
             }
         }
