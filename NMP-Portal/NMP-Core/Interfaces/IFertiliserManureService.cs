@@ -19,6 +19,6 @@ namespace NMP.Core.Interfaces
         Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData);
         Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID);
         Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId);
-        Task<(decimal?, Error)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn);
+        Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn);
     }
 }

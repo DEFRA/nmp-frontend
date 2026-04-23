@@ -967,14 +967,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-
     private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, List<FieldDetails> fieldDetail, int nMaxLimit, Error?)> GetNMaxReportData(List<HarvestYearPlanResponse> harvestYearPlanResponse, ReportViewModel model,
         List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse, List<int> selectedCropGroupList, List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn)
     {
-        int winterOilseedRapeCropTypeId = (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
-        var normalizedCropGroupList = selectedCropGroupList.Select(x => x == -winterOilseedRapeCropTypeId ? winterOilseedRapeCropTypeId : x).ToList();
-
-        List<HarvestYearPlanResponse> cropDetails = harvestYearPlanResponse.Where(x => normalizedCropGroupList.Contains(x.CropTypeID)).ToList();
+        List<HarvestYearPlanResponse> cropDetails = await UpdateCropDetailsForAutumnSpring(selectedCropGroupList, harvestYearPlanResponse);
         Error? error = null;
         int? nmaxLimit = 0;
         List<FieldDetails> fieldDetail = new List<FieldDetails>();
@@ -1012,11 +1008,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
     }
+    private async Task<List<HarvestYearPlanResponse>> UpdateCropDetailsForAutumnSpring(List<int> selectedCropGroupList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
+    {
+        int winterOilseedRapeCropTypeId = (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
+        var normalizedCropGroupList = selectedCropGroupList.Select(x => x == -winterOilseedRapeCropTypeId ? winterOilseedRapeCropTypeId : x).ToList();
 
+        List<HarvestYearPlanResponse> cropDetails = harvestYearPlanResponse.Where(x => normalizedCropGroupList.Contains(x.CropTypeID)).ToList();
+        return cropDetails;
+    }
     // ======================================
     // NMAX REPORT
     // ======================================
-
+#pragma warning disable S107
     private async Task<(
         List<NitrogenApplicationsForNMaxReportResponse>,
         List<NMaxLimitReportResponse>,
@@ -1078,7 +1081,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return (nitrogenList, nMaxList, fieldDetail, nmaxLimit);
     }
-
+#pragma warning restore S107
 
     // ======================================
     // ENGLAND & WALES

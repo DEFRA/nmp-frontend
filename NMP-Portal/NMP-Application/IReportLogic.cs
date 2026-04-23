@@ -39,7 +39,7 @@ public interface IReportLogic
             Field field,
             List<FieldDetails> fieldDetail,
             decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue);
-    Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> ManPeriodList, bool isAutumn);
+    Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> manPeriodList, bool isAutumn);
     Task ProcessEnglandAndWales(
        Crop crop,
        Field field,

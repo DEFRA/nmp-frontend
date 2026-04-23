@@ -663,9 +663,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
             return (default, new Error { Message = ex.Message });
         }
     }
-    public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
+    public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
     {
-        Error error = null;
+        Error? error = null;
         decimal? totalN = null;
         try
         {
@@ -677,22 +677,18 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    totalN = responseWrapper.Data.TotalN;//!= null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0
+                    totalN = responseWrapper?.Data?.TotalN;
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                if (responseWrapper?.Error != null)
                 {
-                    if (responseWrapper?.Error != null)
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
                     {
-                        error = responseWrapper.Error.ToObject<Error>();
-                        if (error != null)
-                        {
-                            _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                        }
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
                     }
-                    
                 }
             }
         }
@@ -701,14 +697,12 @@ public class FertiliserManureService : Service, IFertiliserManureService
             error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error ??= new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
         }
         return (totalN, error);
     }

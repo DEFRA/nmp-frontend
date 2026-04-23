@@ -816,7 +816,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var organicManureFertilisers = responseWrapper.Data.ToObject<OrganicManureFertiliserResponse>();
+                    var organicManureFertilisers = responseWrapper?.Data?.ToObject<OrganicManureFertiliserResponse>();
                     if (organicManureFertilisers != null)
                     {
                         organicManureFertiliserResponse = organicManureFertilisers;
@@ -825,24 +825,27 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                if (responseWrapper?.Error != null)
                 {
                     error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error ??= new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.LogError(ex, ex.Message);
         }
         return (organicManureFertiliserResponse, error);
     }
