@@ -66,7 +66,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
     public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations()
     {
-        string url = string.Format(ApiurlHelper.FetchInOrganicManureDurationsAsyncAPI);
+        string url = ApiurlHelper.FetchInOrganicManureDurationsAsyncAPI;
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.InorganicManureDurations.ToObject<List<InOrganicManureDurationResponse>>(), url);
         return (data ?? new List<InOrganicManureDurationResponse>(), error);
     }
@@ -306,7 +306,6 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
         catch (Exception ex)
         {
-            error = new Error { Message = ex.Message };
             _logger.LogError(ex, ex.Message);
             throw;
         }

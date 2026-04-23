@@ -7228,7 +7228,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return result;
     }
-#pragma warning disable S4457
+#pragma warning disable S6967
     public async Task<WinterOilseedAutumnSpring> WinterOilseedRapeAutumnSpringCheck(int year, int cropId)
     {
         var startDate = new DateTime(year - 1, 8, 1, 0, 0, 0, DateTimeKind.Unspecified);
@@ -7264,5 +7264,5 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return result;
     }
-#pragma warning restore S4457
+#pragma warning restore S6967
 }
