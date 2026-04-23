@@ -1008,7 +1008,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
     }
-    private async Task<List<HarvestYearPlanResponse>> UpdateCropDetailsForAutumnSpring(List<int> selectedCropGroupList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
+    private static async Task<List<HarvestYearPlanResponse>> UpdateCropDetailsForAutumnSpring(List<int> selectedCropGroupList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
     {
         int winterOilseedRapeCropTypeId = (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
         var normalizedCropGroupList = selectedCropGroupList.Select(x => x == -winterOilseedRapeCropTypeId ? winterOilseedRapeCropTypeId : x).ToList();

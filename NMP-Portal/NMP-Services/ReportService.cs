@@ -827,7 +827,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper?.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
+                    error = responseWrapper?.Error.ToObject<Error>();
                     if (error != null)
                     {
                         _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
