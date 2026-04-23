@@ -880,7 +880,26 @@ namespace NMP.Portal.Controllers
                 {
                     ClearNutrientValues(model);
                 }
+                if (model.Phosphorus == null &&
+                             model.Potassium == null && model.Magnesium == null)
+                {
+                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+                    {
+                        model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
+                        model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
+                    }
+                    else
+                    {
+                        model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
+                        model.SoilNutrientValueTypeName = Resource.lblIndexValues;
+                    }
 
+                }
+                else
+                {
+                    model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
+                    model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
+                }
             }
             catch (Exception ex)
             {

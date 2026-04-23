@@ -1808,6 +1808,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             await FetchPscIndexName(model);
             ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
             SetFieldDataToSession(model);
+
         }
         catch (Exception ex)
         {
