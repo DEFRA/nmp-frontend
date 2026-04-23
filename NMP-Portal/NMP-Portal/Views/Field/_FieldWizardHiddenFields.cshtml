@@ -68,7 +68,7 @@
     }
     @if (currentStep != (int)FieldWizardSteps.SoilAnalysisDate)
     {
-        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date"></govuk-date-input>
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" for="@Model.SoilAnalyses.Date"></govuk-date-input>
     }
     @if (currentStep != (int)FieldWizardSteps.SoilAnalysisMethod)
     {
@@ -93,8 +93,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumStatus" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusStatus" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumMethodologyID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumMethodologyID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumMethodologyID" />        
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.OrganicMatterPercentage" />
     }

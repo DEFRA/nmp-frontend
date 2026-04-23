@@ -23,15 +23,15 @@ public class SoilLogic(ILogger<SoilLogic> logger, ISoilService soilService) : IS
         return await _soilService.FetchSoilTypeById(soilTypeId);
     }
 
-    public async Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod()
+    public async Task<(List<SoilMethologiesResponse>?, Error?)> FetchSoilMethodologies(int nutrientId, int countryId)
     {
         _logger.LogTrace("Fetch all soil analysis method");
-        return await _soilService.FetchAllSoilAnalysesMethod();
+        return await _soilService.FetchSoilMethodologies(nutrientId,countryId);
     }
-    public async Task<(CommonResponse?, Error?)> FetchSoilAnalysesMethodById(int id)
+    public async Task<(SoilMethologiesResponse?, Error?)> FetchSoilMethodologyNameByNutrientIdAndMethodologyId(int nutrientId, int methodologyId)
     {
-        _logger.LogTrace("Fetch all soil analysis method");
-        return await _soilService.FetchSoilAnalysesMethodById(id);
+        _logger.LogTrace("Fetch soil methodology name by NutrientId:{nutrientId} and MethodologyId:{methodologyId}", nutrientId, methodologyId);
+        return await _soilService.FetchSoilMethodologyNameByNutrientIdAndMethodologyId(nutrientId,methodologyId);
     }
 
     public async Task<(List<SoilNutrientStatusResponse>?, Error?)> FetchSoilNutrientStatusList(int methodologyId)

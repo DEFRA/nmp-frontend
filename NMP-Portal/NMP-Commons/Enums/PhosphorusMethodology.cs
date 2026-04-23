@@ -2,5 +2,6 @@
 public enum PhosphorusMethodology
 {
     Olsens=0,
-    Resin=1
+    Resin=1,
+    Sac=2
 }

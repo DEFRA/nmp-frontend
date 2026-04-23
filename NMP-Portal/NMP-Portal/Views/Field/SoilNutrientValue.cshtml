@@ -62,26 +62,26 @@
                     </p>
                     @if (isFieldsEmpty)
                     {
-                        <govuk-error-message asp-for="@Model.SoilAnalyses.PH">
+                        <govuk-error-message  for="@Model.SoilAnalyses.PH">
                             @Resource.MsgForPhPhosphorusPotassiumMagnesium
                         </govuk-error-message>
                     }
-                    <govuk-input asp-for="@Model.SoilAnalyses.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
+                    <govuk-input for="@Model.SoilAnalyses.PH" input-class="govuk-input--width-5" spellcheck="false" type="number" step="any">
                         <govuk-input-label is-page-heading="false">@Resource.lblPHLevelOption</govuk-input-label>
                     </govuk-input>
-                    @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland && Model.SoilAnalyses.SoilNutrientValueType.HasValue && Model.SoilAnalyses.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
+                    @if (Model.SoilAnalyses.SoilNutrientValueType.HasValue && Model.SoilAnalyses.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                     {
 
-                        <govuk-input asp-for="@Model.SoilAnalyses.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
+                        <govuk-input for="@Model.SoilAnalyses.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
                             <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
                         </govuk-input>
 
-                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.SoilAnalyses.PotassiumIndexValue">
+                        <govuk-input input-class="govuk-input--width-5" for="@Model.SoilAnalyses.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="false">@Resource.lblPotassiumIndexOptional</govuk-input-label>
                             <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
                         </govuk-input>
 
-                        <govuk-input input-class="govuk-input--width-5" asp-for="@Model.SoilAnalyses.MagnesiumIndex" type="number" step="1">
+                        <govuk-input input-class="govuk-input--width-5" for="@Model.SoilAnalyses.MagnesiumIndex" type="number" step="1">
                             <govuk-input-label is-page-heading="false">@Resource.lblMagnesiumIndexOptional</govuk-input-label>
                         </govuk-input>
 
@@ -90,7 +90,7 @@
                     @if (Model.SoilAnalyses.SoilNutrientValueType.HasValue && Model.SoilAnalyses.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                     {
 
-                        <govuk-input asp-for=@Model.SoilAnalyses.Phosphorus type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
+                        <govuk-input for=@Model.SoilAnalyses.Phosphorus type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label is-page-heading="false">
                                 @Resource.lblPhosphorusPerLitreOfSoil
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMgL)</span>
@@ -98,7 +98,7 @@
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                         </govuk-input>
-                        <govuk-input asp-for=@Model.SoilAnalyses.Potassium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
+                        <govuk-input for=@Model.SoilAnalyses.Potassium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label is-page-heading="false">
                                 @Resource.lblPotassiumPerLitreOfSoil
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMgL)</span>
@@ -106,7 +106,7 @@
                             </govuk-input-label>
                             <govuk-input-suffix>@Resource.lblMgL</govuk-input-suffix>
                         </govuk-input>
-                        <govuk-input asp-for=@Model.SoilAnalyses.Magnesium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
+                        <govuk-input for=@Model.SoilAnalyses.Magnesium type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">
                             <govuk-input-label is-page-heading="false">
                                 @Resource.lblMagnesiumPerLitreOfSoil
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblMgL)</span>
@@ -119,7 +119,7 @@
                     else
                     @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
-                        <govuk-radios asp-for="@Model.SoilAnalyses.PhosphorusStatus">
+                        <govuk-radios for="@Model.SoilAnalyses.PhosphorusStatus">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="false">
                                     @Resource.lblPhosphorusStatusOptional
@@ -135,7 +135,7 @@
 
                             </govuk-radios-fieldset>
                         </govuk-radios>
-                        <govuk-radios asp-for="@Model.SoilAnalyses.PotassiumStatus">
+                        <govuk-radios for="@Model.SoilAnalyses.PotassiumStatus">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="false">
                                     @Resource.lblPotashStatusOptional
@@ -151,7 +151,7 @@
 
                             </govuk-radios-fieldset>
                         </govuk-radios>
-                        <govuk-radios asp-for="@Model.SoilAnalyses.MagnesiumStatus">
+                        <govuk-radios for="@Model.SoilAnalyses.MagnesiumStatus">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="false">
                                     @Resource.lblMagnesiumStatusOptional
@@ -174,7 +174,7 @@
                 </govuk-fieldset>
              
             </div>
-            <govuk-input asp-for=@Model.SoilAnalyses.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.SoilAnalyses.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblOrganicMatter
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblOptional

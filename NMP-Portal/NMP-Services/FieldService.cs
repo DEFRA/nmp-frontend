@@ -932,7 +932,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchAllSoilMethodologiesByNutrientAndCountryIdAsyncAPI, fieldId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldSoilAnalysisAndSnsByIdAsyncAPI, fieldId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
