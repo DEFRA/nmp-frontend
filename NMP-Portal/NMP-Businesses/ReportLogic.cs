@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
@@ -204,10 +205,23 @@ BindAdjustmentsForScotland(
     int soilTypeId,
     decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId)
     {
-        int market = GetScotlandMarketAdjustment(crop);
-        int rainfall = GetRainfallAdjustment(winterRainfall, nResidueGroup, soilTypeId);
-        int yield = await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
+        (HarvestYearResponseHeader? harvestYearPlanResponse, Error? error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(crop.Year, farmId);
+        var startDate = new DateTime(crop.Year - 1, 8, 1, 0, 0, 0, DateTimeKind.Unspecified);
+        var endDate = new DateTime(crop.Year - 1, 12, 31, 0, 0, 0, DateTimeKind.Unspecified);
+        bool isWinterOilseedRapeAutumn = false;
+        if (error == null)
+        {
+            isWinterOilseedRapeAutumn = harvestYearPlanResponse?.InorganicFertiliserApplication?.Any(x => x.ApplicationDate.HasValue && x.ApplicationDate.Value >= startDate && x.ApplicationDate.Value <= endDate) ?? false;
+        }
 
+        int rainfall = 0;
+        int yield = 0;
+        int market = GetScotlandMarketAdjustment(crop);
+        if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || !isWinterOilseedRapeAutumn)
+        {
+            rainfall = GetRainfallAdjustment(winterRainfall, nResidueGroup, soilTypeId);
+            yield = await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
+        }
         return (yield, market, rainfall);
     }
     private static int GetScotlandMarketAdjustment(Crop crop)
@@ -458,13 +472,14 @@ BindAdjustmentsForScotland(
     }
 
 
-    public async Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> ManPeriodList)
+    public async Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> ManPeriodList, bool isAutumn)
     {
         decimal? totalFertiliserN = null;
         decimal? totalOrganicAvailableN = null;
+       
         foreach (var managementPeriod in ManPeriodList)
         {
-            (decimal? totalNitrogen, _) = await _fertiliserManureLogic.FetchTotalNByManagementPeriodID(managementPeriod.ID.Value);
+            (decimal? totalNitrogen, _) = await _fertiliserManureLogic.FetchTotalNByManagementPeriodIDIsAutumn(managementPeriod.ID.Value, isAutumn);
             if (totalNitrogen != null)
             {
                 if (totalFertiliserN == null)
@@ -476,17 +491,21 @@ BindAdjustmentsForScotland(
         }
         foreach (var managementPeriod in ManPeriodList)
         {
-            (decimal? totalNitrogen, _) = await _organicManureLogic.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
-            if (totalNitrogen != null)
+            if(!isAutumn)
             {
-                if (totalOrganicAvailableN == null)
+                (decimal? totalNitrogen, _) = await _organicManureLogic.FetchAvailableNByManagementPeriodID(managementPeriod.ID.Value);
+                if (totalNitrogen != null)
                 {
-                    totalOrganicAvailableN = 0;
+                    if (totalOrganicAvailableN == null)
+                    {
+                        totalOrganicAvailableN = 0;
+                    }
+                    totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
                 }
-                totalOrganicAvailableN = totalOrganicAvailableN + totalNitrogen;
             }
+            
         }
-        return (totalFertiliserN, totalOrganicAvailableN);
+        return (totalFertiliserN, totalOrganicAvailableN??0);
     }
 
     // ===============================
@@ -761,6 +780,13 @@ BindAdjustmentsForScotland(
         }
 
         return string.Empty;
+    }
+
+
+    public async Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId)
+    {
+        _logger.LogTrace("Fetching organic manure and fertiliser list by cropId");
+        return await _reportService.FetchOrganicManureFertiliserByCropId(cropId);
     }
 }
 

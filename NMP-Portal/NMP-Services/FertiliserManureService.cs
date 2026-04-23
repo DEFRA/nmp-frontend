@@ -663,4 +663,50 @@ public class FertiliserManureService : Service, IFertiliserManureService
             return (default, new Error { Message = ex.Message });
         }
     }
+    public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
+    {
+        Error error = null;
+        decimal? totalN = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI, managementPeriodID, isAutumn));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    totalN = responseWrapper.Data.TotalN;//!= null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0
+                }
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = new Error();
+                    error = responseWrapper.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+            throw new Exception(error.Message, hre);
+        }
+        catch (Exception ex)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+            throw new Exception(error.Message, ex);
+        }
+        return (totalN, error);
+    }
 }

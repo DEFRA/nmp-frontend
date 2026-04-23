@@ -253,4 +253,6 @@ internal static class ApiurlHelper
     public const string FetchScotlandNMaxValueByCropTypeIdSoilTypeIdResidueAsyncAPI = "scotland-nmax-values/{0}?soilTypeId={1}&residueGroup={2}";
     public const string FetchFarmAverageYieldByFarmIdAndHarvestYearAsyncAPI = "farm-average-yields/{0}?harvestYear={1}";
     public const string AddFarmAverageYieldsAsyncAPI = "farm-average-yields";
+    public const string FetchOrganicManuresFertilisersByCropIdAsyncAPI = "crops/organic-inorganic/{0}";
+    public const string FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI = "fertiliser-manures/total-nitrogen-by-autumn/{0}?isAutumn={1}";
 }
