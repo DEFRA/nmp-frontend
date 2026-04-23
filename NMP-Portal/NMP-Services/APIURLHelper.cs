@@ -90,6 +90,7 @@ internal static class ApiurlHelper
     public const string FetchOrganicManureExistanceByDateRangeAsyncAPI = "organic-manures/check-existence?managementPeriodID={0}&dateFrom={1}&dateTo={2}&confirm={3}&isSlurryOnly={4}";
     public const string FetchSeasonsAsyncAPI = "vendors/rb209/Measurement/Seasons";
     public const string FetchSNSIndexByMeasurementMethodAsyncAPI = "vendors/rb209/Measurement/MeasurementMethod";
+    public const string FetchSNSIndexByMeasurementMethodForScotlandAsyncAPI = "vendors/rb209/MeasurementScotland/MeasurementMethod";
     public const string FetchSecondCropListByFirstCropIdAsyncAPI = "second-crop-linkings/{0}?rB209CountryID={1}";
     public const string FetchSoilAnalysisByIdAsyncAPI = "soil-analyses/{0}";
     public const string UpdateSoilAnalysisAsyncAPI = "soil-analyses/{0}";

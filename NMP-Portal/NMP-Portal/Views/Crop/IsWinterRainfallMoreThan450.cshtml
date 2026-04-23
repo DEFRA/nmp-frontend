@@ -35,7 +35,7 @@
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         <p class="govuk-body">
-                            @Html.Raw(string.Format(Resource.lblSEPAPublishRainfallDataForScotland, previousYear, Model.Year, Model.FarmName))
+                            @Html.Raw(string.Format(Resource.lblSEPAPublishRainfallDataForScotland, Html.Encode(previousYear), Html.Encode(Model.Year), Html.Encode(Model.FarmName)))
                         </p>
                     </govuk-radios-hint>
                     <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
@@ -44,7 +44,7 @@
             </govuk-radios>
 
             <fieldset class="govuk-fieldset">
-                <button class="govuk-button" data-module="govuk-button">Continue</button>
+                <button class="govuk-button" data-module="govuk-button">@Resource.lblContinue</button>
             </fieldset>
 
             <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">Cancel</a></p>
