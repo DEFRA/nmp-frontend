@@ -377,7 +377,7 @@
                         }
                     }
                 }
-                else @if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
+                else if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                 {
                     @if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.PhosphorusIndex == null && string.IsNullOrWhiteSpace(Model.PotassiumIndexValue) && Model.SoilAnalyses.MagnesiumIndex == null)
                     {
@@ -445,7 +445,7 @@
                         }
                     }
                 }
-                else @if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
+                else if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
                 {
                     @if (Model.SoilAnalyses.PH == null && string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) && string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) && string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus))
                     {

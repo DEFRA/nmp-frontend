@@ -1295,7 +1295,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             methodologyId ?? (int)MagnesiumMethodology.None;
     }
 
-    private bool IsScotland(FieldViewModel model)
+    private static bool IsScotland(FieldViewModel model)
     {
         return model.FarmRB209CountryID ==
                (int)NMP.Commons.Enums.RB209Country.Scotland;

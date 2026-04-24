@@ -26,15 +26,14 @@
                     {
                         <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
                     }
+                    else if (Model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Rb209)
+                    {
+                        <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
+                    }
                     else
-                        @if (Model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Rb209)
-                        {
-                            <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
-                        }
-                        else
-                        {
-                            <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
-                        }
+                    {
+                        <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
+                    }
                   
                     <govuk-radios-item value=@inMilligramsPerLitre disabled=@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                                 
