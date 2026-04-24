@@ -21,7 +21,7 @@ using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
-public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
+public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider, SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic,
      IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
@@ -32,6 +32,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IFieldLogic _fieldLogic = fieldLogic ?? throw new ArgumentNullException(nameof(fieldLogic));
     private readonly ISoilLogic _soilService = soilLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
+    private readonly SoilAnalysisNutrientValuesLogic _soilAnalysisNutrientValuesLogic = soilAnalysisNutrientValuesLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
     private const string _farmSummaryActionName = "FarmSummary";
@@ -1001,61 +1002,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return RedirectToAction("SoilNutrientValue");
     }
-    private async Task BindViewBagForScotlandNutrient(FieldViewModel model)
-    {
-        var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+    
 
-        var (statusList, _) = await _soilService
-            .FetchSoilNutrientStatusList(model.SoilAnalyses.PhosphorusMethodologyID.Value);
-
-        if (statusList == null || !statusList.Any())
-            return;
-
-        ViewBag.PhosphorusSelectList = BuildSelectList(statusList, nutrients, Resource.lblPhosphate, 1);
-        ViewBag.PotassiumSelectList = BuildSelectList(statusList, nutrients, Resource.lblPotash, 2);
-        ViewBag.MagnesiumSelectList = BuildSelectList(statusList, nutrients, Resource.lblMagnesium, 3);
-    }
-
-    private List<SelectListItem> BuildSelectList(
-        List<SoilNutrientStatusResponse> statusList,
-        List<NutrientResponseWrapper> nutrients,
-        string nutrientName,
-        int defaultId)
-    {
-        var nutrientId = nutrients
-            .FirstOrDefault(n => n.nutrient.Equals(nutrientName))?.nutrientId
-            ?? defaultId;
-
-        return statusList
-            .Where(x => x.nutrientId == nutrientId)
-            .Select(x => new SelectListItem
-            {
-                Text = x.indexText,
-                Value = MapIndexText(x.indexText)
-            })
-            .ToList();
-    }
-
-    private static string MapIndexText(string indexText) => indexText switch
-    {
-        "Very low (1)" => "VL",
-        "Low (2)" => "L",
-        "Moderate minus (3)" => "-M",
-        "Moderate plus (4)" => "+M",
-        "High (5)" => "H",
-        "Very high (6)" => "VH",
-        _ => indexText
-    };
-    private static string MapValueToText(string value) => value switch
-    {
-        "VL" => "Very low (1)",
-        "L" => "Low (2)",
-        "-M" => "Moderate minus (3)",
-        "+M" => "Moderate plus (4)",
-        "H" => "High (5)",
-        "VH" => "Very high (6)",
-        _ => value
-    };
     private void BindNutrientStatusText(FieldViewModel model)
     {
         if (model?.SoilAnalyses == null)
@@ -1071,7 +1019,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (string.IsNullOrWhiteSpace(value))
             return;
 
-        TempData[key] = MapValueToText(value);
+        TempData[key] =_soilAnalysisNutrientValuesLogic.MapValueToText(value);
     }
     [HttpGet]
     public async Task<IActionResult> SoilNutrientValue()
@@ -1086,7 +1034,16 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
-            await BindViewBagForScotlandNutrient(model);
+            var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+
+            var (statusList, _) = await _soilService
+                .FetchSoilNutrientStatusList(model.SoilAnalyses.PhosphorusMethodologyID.Value);
+            if (statusList != null)
+            {
+                ViewBag.PhosphorusSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
+                ViewBag.PotassiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
+                ViewBag.MagnesiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
+            }
         }
         return View(model);
     }
@@ -1230,7 +1187,16 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 if (IsScotland(model))
                 {
-                    await BindViewBagForScotlandNutrient(model);
+                    var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+
+                    var (statusList, _) = await _soilService
+                        .FetchSoilNutrientStatusList(model.SoilAnalyses.PhosphorusMethodologyID.Value);
+                    if (statusList != null)
+                    {
+                        ViewBag.PhosphorusSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
+                        ViewBag.PotassiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
+                        ViewBag.MagnesiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
+                    }
                 }
                 return View(model);
             }

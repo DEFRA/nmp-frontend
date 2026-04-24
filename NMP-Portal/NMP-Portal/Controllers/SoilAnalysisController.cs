@@ -10,13 +10,14 @@ using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
+using NMP.Portal.Helpers;
 using System.Globalization;
 
 namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class SoilAnalysisController(ILogger<SoilAnalysisController> logger, IDataProtectionProvider dataProtectionProvider, IFarmLogic farmLogic, ISoilLogic soilLogic,
-        IFieldLogic fieldLogic, ISoilAnalysisLogic soilAnalysisLogic, IPKBalanceLogic pKBalanceLogic) : Controller
+        IFieldLogic fieldLogic, ISoilAnalysisLogic soilAnalysisLogic, IPKBalanceLogic pKBalanceLogic, SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic) : Controller
     {
         private readonly ILogger<SoilAnalysisController> _logger = logger;
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -27,6 +28,7 @@ namespace NMP.Portal.Controllers
         private readonly ISoilAnalysisLogic _soilAnalysisLogic = soilAnalysisLogic;
         private readonly ISoilLogic _soilLogic = soilLogic;
         private readonly IPKBalanceLogic _pKBalanceLogic = pKBalanceLogic;
+        private readonly SoilAnalysisNutrientValuesLogic _soilAnalysisNutrientValuesLogic = soilAnalysisNutrientValuesLogic;
         private const string _changeSoilAnalysisError = "ChangeSoilAnalysisError";
         private const string _changeSoilAnalysisActionName = "ChangeSoilAnalysis";
         private const string _soilNutrientValueTypeActionName = "SoilNutrientValueType";
@@ -150,16 +152,7 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgNutrientValueTypeForCheckAnswereNotSet);
             }
         }
-        private static string MapValueToText(string value) => value switch
-        {
-            "VL" => "Very low (1)",
-            "L" => "Low (2)",
-            "-M" => "Moderate minus (3)",
-            "+M" => "Moderate plus (4)",
-            "H" => "High (5)",
-            "VH" => "Very high (6)",
-            _ => value
-        };
+        
         private void BindNutrientStatusText(SoilAnalysisViewModel model)
         {
             if (model == null)
@@ -175,7 +168,7 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrWhiteSpace(value))
                 return;
 
-            TempData[key] = MapValueToText(value);
+            TempData[key] =_soilAnalysisNutrientValuesLogic.MapValueToText(value);
         }
         [HttpGet]
         public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
@@ -292,9 +285,9 @@ namespace NMP.Portal.Controllers
 
                 if (model != null)
                 {
-                    
-                        BindNutrientStatusText(model);
-                    
+
+                    BindNutrientStatusText(model);
+
                     model.IsCheckAnswer = true;
                     model.IsSoilAnalysesMethodChange = false;
                     model.IsSoilNutrientValueTypeChange = false;
@@ -493,51 +486,8 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
 
-        private async Task BindViewBagForScotlandNutrient(SoilAnalysisViewModel model)
-        {
-            var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
 
-            var (statusList, _) = await _soilLogic
-                .FetchSoilNutrientStatusList(model.PhosphorusMethodologyID.Value);
-
-            if (statusList == null || !statusList.Any())
-                return;
-
-            ViewBag.PhosphorusSelectList = BuildSelectList(statusList, nutrients, Resource.lblPhosphate, 1);
-            ViewBag.PotassiumSelectList = BuildSelectList(statusList, nutrients, Resource.lblPotash, 2);
-            ViewBag.MagnesiumSelectList = BuildSelectList(statusList, nutrients, Resource.lblMagnesium, 3);
-        }
-
-        private List<SelectListItem> BuildSelectList(
-            List<SoilNutrientStatusResponse> statusList,
-            List<NutrientResponseWrapper> nutrients,
-            string nutrientName,
-            int defaultId)
-        {
-            var nutrientId = nutrients
-                .FirstOrDefault(n => n.nutrient.Equals(nutrientName))?.nutrientId
-                ?? defaultId;
-
-            return statusList
-                .Where(x => x.nutrientId == nutrientId)
-                .Select(x => new SelectListItem
-                {
-                    Text = x.indexText,
-                    Value = MapIndexText(x.indexText)
-                })
-                .ToList();
-        }
-
-        private static string MapIndexText(string indexText) => indexText switch
-        {
-            "Very low (1)" => "VL",
-            "Low (2)" => "L",
-            "Moderate minus (3)" => "-M",
-            "Moderate plus (4)" => "+M",
-            "High (5)" => "H",
-            "Very high (6)" => "VH",
-            _ => indexText
-        };
+        
         [HttpGet]
         public async Task<IActionResult> SoilNutrientValue()
         {
@@ -564,7 +514,16 @@ namespace NMP.Portal.Controllers
             if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
                 && model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
             {
-                await BindViewBagForScotlandNutrient(model);
+                var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+
+                var (statusList, _) = await _soilLogic
+                    .FetchSoilNutrientStatusList(model.PhosphorusMethodologyID.Value);
+                if (statusList != null)
+                {
+                    ViewBag.PhosphorusSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
+                    ViewBag.PotassiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
+                    ViewBag.MagnesiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
+                }
             }
 
             SetSoilAnalysisDataToSession(model);
@@ -740,7 +699,16 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
-                        await BindViewBagForScotlandNutrient(model);
+                        var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+
+                        var (statusList, _) = await _soilLogic
+                            .FetchSoilNutrientStatusList(model.PhosphorusMethodologyID.Value);
+                        if (statusList != null)
+                        {
+                            ViewBag.PhosphorusSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
+                            ViewBag.PotassiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
+                            ViewBag.MagnesiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
+                        }
                     }
                     return View(model);
                 }
