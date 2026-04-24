@@ -38,7 +38,7 @@ namespace NMP.Portal.Helpers
             "Very high (6)" => "VH",
             _ => indexText
         };
-        public static string MapValueToText(string value) => value switch
+        public  string MapValueToText(string value) => value switch
         {
             "VL" => "Very low (1)",
             "L" => "Low (2)",
