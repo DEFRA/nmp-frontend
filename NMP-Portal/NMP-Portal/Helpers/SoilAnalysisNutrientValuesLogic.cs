@@ -59,11 +59,11 @@ namespace NMP.Portal.Helpers
             else if (model.Phosphorus != null ||
              model.Potassium != null || model.Magnesium != null)
             {
-                model.SoilNutrientValueTypeName = Resource.lblIndexValues;
+                model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
             }
             else
             {
-                model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
+                model.SoilNutrientValueTypeName = Resource.lblIndexValues;
             }
             return model;
         }

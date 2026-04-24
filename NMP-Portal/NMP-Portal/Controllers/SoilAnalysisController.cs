@@ -517,7 +517,7 @@ namespace NMP.Portal.Controllers
             if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
                 && model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
             {
-              
+                await BindViewbegForSoilNutrientValue(model);
             }
 
             SetSoilAnalysisDataToSession(model);
@@ -580,7 +580,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("FocusFirstEmptyField", Resource.MsgForPhPhosphorusPotassiumMagnesium);
                     }
                     if (!ModelState.IsValid)
-                    {
+                    {                       
                         var phosphorusIndexkey = _phosphorusIndex;
 
                         if (ModelState.TryGetValue(phosphorusIndexkey, out var entry) && entry.Errors.Count > 0)
