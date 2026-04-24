@@ -7,7 +7,6 @@
     string title = Resource.lblMannerEstimate;
     string heading =string.Format(Resource.lblWhatTypeOfManureGroupWouldYouLikeUse,Model.ManureGroupName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    var cancelAction = Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "ManureGroup")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
