@@ -52,12 +52,11 @@ namespace NMP.Portal.Helpers
         public  SoilAnalysisViewModel BindSoilNutrientValueType(SoilAnalysisViewModel model)
         {
 
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.SoilNutrientValueType==(int)NMP.Commons.Enums.SoilNutrientValueType.Status))
             {
                 model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
             }
-            else if (model.Phosphorus != null ||
-             model.Potassium != null || model.Magnesium != null)
+            else if ((model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram))
             {
                 model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
             }
