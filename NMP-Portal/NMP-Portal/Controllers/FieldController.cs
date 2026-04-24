@@ -21,7 +21,7 @@ using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
-public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider, SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic,
+public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
      IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
@@ -32,7 +32,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IFieldLogic _fieldLogic = fieldLogic ?? throw new ArgumentNullException(nameof(fieldLogic));
     private readonly ISoilLogic _soilService = soilLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
-    private readonly SoilAnalysisNutrientValuesLogic _soilAnalysisNutrientValuesLogic = soilAnalysisNutrientValuesLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
     private const string _farmSummaryActionName = "FarmSummary";
@@ -1019,7 +1018,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (string.IsNullOrWhiteSpace(value))
             return;
 
-        TempData[key] =_soilAnalysisNutrientValuesLogic.MapValueToText(value);
+        SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
+        TempData[key] =soilAnalysisNutrientValuesLogic.MapValueToText(value);
     }
     [HttpGet]
     public async Task<IActionResult> SoilNutrientValue()
@@ -1040,9 +1040,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 .FetchSoilNutrientStatusList(model.SoilAnalyses.PhosphorusMethodologyID.Value);
             if (statusList != null)
             {
-                ViewBag.PhosphorusSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
-                ViewBag.PotassiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
-                ViewBag.MagnesiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
+
+                SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
+                ViewBag.PhosphorusSelectList = soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
+                ViewBag.PotassiumSelectList = soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
+                ViewBag.MagnesiumSelectList = soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
             }
         }
         return View(model);
@@ -1193,9 +1195,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                         .FetchSoilNutrientStatusList(model.SoilAnalyses.PhosphorusMethodologyID.Value);
                     if (statusList != null)
                     {
-                        ViewBag.PhosphorusSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
-                        ViewBag.PotassiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
-                        ViewBag.MagnesiumSelectList = _soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
+
+                        SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
+                        ViewBag.PhosphorusSelectList = soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPhosphate, 1);
+                        ViewBag.PotassiumSelectList = soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblPotash, 2);
+                        ViewBag.MagnesiumSelectList = soilAnalysisNutrientValuesLogic.BindViewBagForScotlandNutrient(statusList, nutrients, Resource.lblMagnesium, 3);
                     }
                 }
                 return View(model);

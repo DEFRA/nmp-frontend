@@ -32,12 +32,12 @@
         @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
         {
 
-            string? phosphorusIndex = Model.PhosphorusIndex.HasValue
+             phosphorusIndex = Model.PhosphorusIndex.HasValue
                       ? Model.PhosphorusIndex.ToString()
                       : Resource.lblNotSet;
-            string potassiumIndex = ((string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) ? Resource.lblNotSet : Model.PotassiumIndexValue);
+             potassiumIndex = ((string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) ? Resource.lblNotSet : Model.PotassiumIndexValue);
 
-            string magnesiumIndex = ((!Model.MagnesiumIndex.HasValue) ? Resource.lblNotSet : Model.MagnesiumIndex.ToString());
+             magnesiumIndex = ((!Model.MagnesiumIndex.HasValue) ? Resource.lblNotSet : Model.MagnesiumIndex.ToString());
             @if (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                                                                    (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue)
             {
