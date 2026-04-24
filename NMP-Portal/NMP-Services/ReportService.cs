@@ -801,4 +801,52 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         }
         return (nutrientsLoadingLiveStocks, error);
     }
+
+    public async Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId)
+    {
+        Error? error = null;
+        OrganicManureFertiliserResponse organicManureFertiliserResponse = new OrganicManureFertiliserResponse();
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchOrganicManuresFertilisersByCropIdAsyncAPI, cropId));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var organicManureFertilisers = responseWrapper?.Data?.ToObject<OrganicManureFertiliserResponse>();
+                    if (organicManureFertilisers != null)
+                    {
+                        organicManureFertiliserResponse = organicManureFertilisers;
+                    }
+                }
+            }
+            else
+            {
+                if (responseWrapper?.Error != null)
+                {
+                    error = responseWrapper?.Error.ToObject<Error>();
+                    if (error != null)
+                    {
+                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (organicManureFertiliserResponse, error);
+    }
 }
