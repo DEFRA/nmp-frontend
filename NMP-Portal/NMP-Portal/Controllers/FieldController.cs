@@ -997,9 +997,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 SetFieldDataToSession(model);
             }
         }
-        SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
-        model.SoilAnalyses = soilAnalysisNutrientValuesLogic.BindSoilNutrientValueType(model.SoilAnalyses);
-
+        model.SoilAnalyses = SoilAnalysisNutrientValuesLogic
+      .BindSoilNutrientValueType(model.SoilAnalyses);
         SetFieldDataToSession(model);
 
         return RedirectToAction("SoilNutrientValue");
@@ -1021,8 +1020,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (string.IsNullOrWhiteSpace(value))
             return;
 
-        SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
-        TempData[key] = soilAnalysisNutrientValuesLogic.MapValueToText(value);
+        
+        TempData[key] = SoilAnalysisNutrientValuesLogic.MapValueToText(value);
     }
     [HttpGet]
     public async Task<IActionResult> SoilNutrientValue()

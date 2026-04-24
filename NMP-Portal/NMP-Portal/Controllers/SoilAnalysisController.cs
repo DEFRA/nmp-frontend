@@ -167,8 +167,8 @@ namespace NMP.Portal.Controllers
         {
             if (string.IsNullOrWhiteSpace(value))
                 return;
-            SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
-            TempData[key] = soilAnalysisNutrientValuesLogic.MapValueToText(value);
+            
+            TempData[key] = SoilAnalysisNutrientValuesLogic.MapValueToText(value);
         }
         [HttpGet]
         public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
@@ -467,8 +467,8 @@ namespace NMP.Portal.Controllers
                 model.IsSoilNutrientValueTypeChange = true;
             }
 
-            SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
-            model = soilAnalysisNutrientValuesLogic.BindSoilNutrientValueType(model);
+            
+            model = SoilAnalysisNutrientValuesLogic.BindSoilNutrientValueType(model);
 
             SetSoilAnalysisDataToSession(model);
             if (soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)

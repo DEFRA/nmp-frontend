@@ -10,7 +10,7 @@ namespace NMP.Portal.Helpers
     public class SoilAnalysisNutrientValuesLogic
     {
         
-        public List<SelectListItem>? BindViewBagForScotlandNutrient(List<SoilNutrientStatusResponse> statusList,
+        public  List<SelectListItem>? BindViewBagForScotlandNutrient(List<SoilNutrientStatusResponse> statusList,
             List<NutrientResponseWrapper> nutrients,
             string nutrientName,
             int defaultId)
@@ -39,7 +39,7 @@ namespace NMP.Portal.Helpers
             "Very high (6)" => "VH",
             _ => indexText
         };
-        public  string MapValueToText(string value) => value switch
+        public static  string MapValueToText(string value) => value switch
         {
             "VL" => "Very low (1)",
             "L" => "Low (2)",
@@ -49,7 +49,7 @@ namespace NMP.Portal.Helpers
             "VH" => "Very high (6)",
             _ => value
         };
-        public  SoilAnalysisViewModel BindSoilNutrientValueType(SoilAnalysisViewModel model)
+        public static SoilAnalysisViewModel BindSoilNutrientValueType(SoilAnalysisViewModel model)
         {
 
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.SoilNutrientValueType==(int)NMP.Commons.Enums.SoilNutrientValueType.Status))
