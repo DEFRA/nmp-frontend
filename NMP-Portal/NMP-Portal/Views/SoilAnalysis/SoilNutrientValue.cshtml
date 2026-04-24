@@ -97,8 +97,7 @@
                         </govuk-input>
 
                     }
-                    else
-                    @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
+                    else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                     {
 
                         <govuk-input for=@Model.Phosphorus type="number" step="1" input-class="govuk-input--width-5" spellcheck="false">

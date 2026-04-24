@@ -16,7 +16,7 @@
     {
         <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
     }
-    else   @if (Model != null && (Model.IsSoilAnalysesMethodChange))
+    else   if (Model != null && (Model.IsSoilAnalysesMethodChange))
     {
         <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? "SoilAnalysesMethod" : "Date")"
                          asp-controller="SoilAnalysis">
