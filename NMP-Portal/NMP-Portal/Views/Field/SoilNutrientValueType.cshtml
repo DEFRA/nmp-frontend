@@ -10,27 +10,33 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer" : (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "SoilAnalysesMethod" : "SoilDate"))" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange) && (!Model.SoilAnalyses.IsSoilAnalysesMethodChange)) ? "CheckAnswer" : (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "SoilAnalysesMethod" : "SoilDate"))" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SoilNutrientValueType" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios" asp-for="@Model.SoilNutrientValueTypeIndex">
+            <govuk-radios class="govuk-radios" for="@Model.SoilAnalyses.SoilNutrientValueType">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
                     </govuk-radios-fieldset-legend>
-                    @if (Model.SoilAnalyses.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
+                    @if (Model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
                     {
                         <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
+                    }
+                    else if (Model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Rb209)
+                    {
+                        <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
                     }
                     else
                     {
                         <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
                     }
-                    <govuk-radios-item value=@inMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
+                  
+                    <govuk-radios-item value=@inMilligramsPerLitre disabled=@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
+                                
                 </govuk-radios-fieldset>
             </govuk-radios>
             <govuk-button type="submit" class="margin-bottom-forty">

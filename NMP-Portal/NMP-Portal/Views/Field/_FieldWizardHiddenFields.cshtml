@@ -68,15 +68,17 @@
     }
     @if (currentStep != (int)FieldWizardSteps.SoilAnalysisDate)
     {
-        <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Date"></govuk-date-input>
+        <govuk-date-input class="govuk-visually-hidden" type="hidden" for="@Model.SoilAnalyses.Date"></govuk-date-input>
     }
     @if (currentStep != (int)FieldWizardSteps.SoilAnalysisMethod)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.SoilAnalysesMethodID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.IsSoilAnalysesMethodChange" />
     }
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValueType)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeIndex" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.SoilNutrientValueType" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.IsSoilNutrientValueTypeChange" />
     }
     @if (currentStep != (int)FieldWizardSteps.SoilNutrientValue)
     {
@@ -87,7 +89,11 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumIndex" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.Magnesium" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumIndex" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusMethodologyID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumStatus" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumStatus" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusStatus" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumMethodologyID" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumMethodologyID" />        
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.OrganicMatterPercentage" />
     }
@@ -134,6 +140,7 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldRemove" />
     }    
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeName" value="@Model.SoilNutrientValueTypeName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNVZProgrammeNeedToShow" value="@Model.IsNVZProgrammeNeedToShow.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" value="@Model.CropGroup" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />

@@ -107,6 +107,7 @@ internal static class ApiurlHelper
     public const string FetchManagementperiodByIdAsyncAPI = "management-periods/{0}";
     public const string FetchCropByIdAsyncAPI = "crops/{0}";
     public const string FetchSoilNutrientIndexValueAsyncAPI = "vendors/rb209/Soil/NutrientIndices/{0}/{1}/{2}";
+    public const string FetchSoilNutrientStatusListAsyncAPI = "vendors/rb209/Soil/NutrientIndexes/{0}";
     public const string AddSoilAnalysisAsyncAPI = "soil-analyses";
     public const string DeleteSoilAnalysisByIdAPI = "soilAnalysis/{0}";
     public const string DeleteCropPlanByIdsAPI = "crops/{0}";
@@ -142,9 +143,9 @@ internal static class ApiurlHelper
     public const string UpdateOnlyFieldAsyncAPI = "fields-update";
     public const string FetchCountryByIdAsyncAPI = "countries/By-Id/{0}";
     public const string FetchPscIndexesAsyncAPI = "psc-indexes";
-    public const string FetchAllSoilAnalysesMethodAsyncAPI = "soil-analyses-method";
+    public const string FetchSoilMethodologiesByNutrientAndCountryIdAsyncAPI = "vendors/rb209/Soil/Methodologies/{0}/{1}";
     public const string FetchPscIndexeByIdAsyncAPI = "psc-indexes/{0}";
-    public const string FetchAllSoilAnalysesMethodByIdAsyncAPI = "soil-analyses-method/{0}";
+    public const string FetchAllSoilMethodologyNameAsyncAPI = "vendors/rb209/Soil/Methodology/{0}/{1}";
     public const string FetchRecommendationByManagementPeriodIdAsyncAPI = "recommendations/{0}";
     public const string FetchAllScotlandNMaxValuesAsyncAPI = "scotland-nmax-values/getAll";
     //Manner APi Url
