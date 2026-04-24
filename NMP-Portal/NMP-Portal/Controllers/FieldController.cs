@@ -1276,7 +1276,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
     }
-    private void ApplyMethodologies(FieldViewModel model)
+    private static void ApplyMethodologies(FieldViewModel model)
     {
         if (!IsScotland(model))
         {

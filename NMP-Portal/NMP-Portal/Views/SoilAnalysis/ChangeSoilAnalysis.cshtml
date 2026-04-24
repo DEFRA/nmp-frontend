@@ -233,7 +233,7 @@
 
                         }
                     }
-                    else @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
+                    else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                     {
                         @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                         Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
@@ -338,7 +338,7 @@
                         }
 
                     }
-                                else @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
+                                else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
                     {
                         @if (Model.PH.HasValue || !string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ||
                                         !string.IsNullOrWhiteSpace(Model.PotassiumStatus) || !string.IsNullOrWhiteSpace(Model.PhosphorusStatus))
