@@ -997,6 +997,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 SetFieldDataToSession(model);
             }
         }
+        SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
+        model.SoilAnalyses = soilAnalysisNutrientValuesLogic.BindSoilNutrientValueType(model.SoilAnalyses);
+
         SetFieldDataToSession(model);
 
         return RedirectToAction("SoilNutrientValue");

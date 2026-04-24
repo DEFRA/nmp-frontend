@@ -18,7 +18,7 @@
     @if (currentStep != (int)SoilAnalysisWizardSteps.SoilNutrientValueType)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueType" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeName" value="@Model.SoilNutrientValueTypeName" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeName" />
   
     }
     @if (currentStep != (int)SoilAnalysisWizardSteps.SoilAnalysesMethod)

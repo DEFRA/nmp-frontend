@@ -152,7 +152,7 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("IsSoilNutrientValueTypeIndex", Resource.MsgNutrientValueTypeForCheckAnswereNotSet);
             }
         }
-        
+
         private void BindNutrientStatusText(SoilAnalysisViewModel model)
         {
             if (model == null)
@@ -168,7 +168,7 @@ namespace NMP.Portal.Controllers
             if (string.IsNullOrWhiteSpace(value))
                 return;
             SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
-            TempData[key] =soilAnalysisNutrientValuesLogic.MapValueToText(value);
+            TempData[key] = soilAnalysisNutrientValuesLogic.MapValueToText(value);
         }
         [HttpGet]
         public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
@@ -253,26 +253,25 @@ namespace NMP.Portal.Controllers
                         model.PhosphorusStatus = soilAnalysis.PhosphorusStatus;
                         model.PotassiumStatus = soilAnalysis.PotassiumStatus;
 
-                        if (model.Phosphorus == null &&
-                             model.Potassium == null && model.Magnesium == null)
-                        {
-                            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
-                            {
-                                model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
-                                model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
-                            }
-                            else
-                            {
-                                model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
-                                model.SoilNutrientValueTypeName = Resource.lblIndexValues;
-                            }
 
+                        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+                        {
+                            model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
+                            model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
+                        }
+                        else if (model.Phosphorus != null ||
+                         model.Potassium != null || model.Magnesium != null)
+                        {
+                            model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;
+                            model.SoilNutrientValueTypeName = Resource.lblIndexValues;
                         }
                         else
                         {
                             model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
                             model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
                         }
+
+
                     }
                     else
                     {
@@ -483,11 +482,14 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_soilNutrientValueActionName);
             }
+            SoilAnalysisNutrientValuesLogic soilAnalysisNutrientValuesLogic = new SoilAnalysisNutrientValuesLogic();
+            model = soilAnalysisNutrientValuesLogic.BindSoilNutrientValueType(model);
+
             return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
 
 
-        
+
         [HttpGet]
         public async Task<IActionResult> SoilNutrientValue()
         {
@@ -807,26 +809,7 @@ namespace NMP.Portal.Controllers
                 {
                     ClearNutrientValues(model);
                 }
-                if (model.Phosphorus == null &&
-                             model.Potassium == null && model.Magnesium == null)
-                {
-                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
-                    {
-                        model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
-                        model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
-                    }
-                    else
-                    {
-                        model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
-                        model.SoilNutrientValueTypeName = Resource.lblIndexValues;
-                    }
 
-                }
-                else
-                {
-                    model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
-                    model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
-                }
             }
             catch (Exception ex)
             {
@@ -840,6 +823,7 @@ namespace NMP.Portal.Controllers
 
             return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
         }
+
         private static void ClearNutrientValues(SoilAnalysisViewModel model)
         {
             if (model.SoilNutrientValueType == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)

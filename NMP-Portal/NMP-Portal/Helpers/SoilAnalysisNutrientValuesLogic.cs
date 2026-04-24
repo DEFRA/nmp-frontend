@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using NMP.Commons.Resources;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NMP.Application;
 using NMP.Businesses;
 using NMP.Commons.ServiceResponses;
@@ -48,5 +49,23 @@ namespace NMP.Portal.Helpers
             "VH" => "Very high (6)",
             _ => value
         };
+        public  SoilAnalysisViewModel BindSoilNutrientValueType(SoilAnalysisViewModel model)
+        {
+
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && (model.MagnesiumStatus != null || model.PotassiumStatus != null || model.PhosphorusStatus != null))
+            {
+                model.SoilNutrientValueTypeName = Resource.lblAsAStatus;
+            }
+            else if (model.Phosphorus != null ||
+             model.Potassium != null || model.Magnesium != null)
+            {
+                model.SoilNutrientValueTypeName = Resource.lblIndexValues;
+            }
+            else
+            {
+                model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
+            }
+            return model;
+        }
     }
 }
