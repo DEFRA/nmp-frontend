@@ -30,7 +30,7 @@ public class SoilLogic(ILogger<SoilLogic> logger, ISoilService soilService) : IS
     }
     public async Task<(SoilMethologiesResponse?, Error?)> FetchSoilMethodologyNameByNutrientIdAndMethodologyId(int nutrientId, int methodologyId)
     {
-        _logger.LogTrace("Fetch soil methodology name by NutrientId:{nutrientId} and MethodologyId:{methodologyId}", nutrientId, methodologyId);
+        _logger.LogTrace("Fetch soil methodology name by NutrientId:{NutrientId} and MethodologyId:{MethodologyId}",nutrientId,methodologyId);
         return await _soilService.FetchSoilMethodologyNameByNutrientIdAndMethodologyId(nutrientId,methodologyId);
     }
 

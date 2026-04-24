@@ -85,8 +85,7 @@
                             <govuk-summary-list-row-value>
                                 @if (ViewBag.MethodologyName == null)
                                 {
-                                    @Resource.lblNotSet
-                                    ;
+                                    @Resource.lblNotSet                                    
                                 }
                                 else
                                 {
@@ -106,7 +105,6 @@
                             @if (string.IsNullOrWhiteSpace(Model.SoilNutrientValueTypeName))
                             {
                                 @Resource.lblNotSet
-                                ;
                             }
                             else
                             {
@@ -350,7 +348,7 @@
                                     @Resource.lblPhosphorusStatus
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotEntered : Model.PhosphorusStatus)
+                                    @(string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotEntered : TempData["PhosphorusStatus"]?.ToString())
                                     @* @Model.PhosphorusIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -362,7 +360,7 @@
                                     @Resource.lblPotashStatus
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotEntered : Model.PotassiumStatus)
+                                    @(string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotEntered : TempData["PotassiumStatus"]?.ToString())
                                     @* @Model.PotassiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -374,7 +372,7 @@
                                     @Resource.lblMagnesiumStatus
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotEntered : Model.MagnesiumStatus)
+                                    @(string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotEntered : TempData["MagnesiumStatus"]?.ToString())
                                     @* @Model.MagnesiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -400,7 +398,7 @@
                                     @Resource.lblPhosphorusStatus
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotEntered : Model.PhosphorusStatus)
+                                    @(string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotEntered :  TempData["PhosphorusStatus"]?.ToString())
                                     @* @Model.PhosphorusIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -412,7 +410,7 @@
                                     @Resource.lblPotashStatus
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotEntered : Model.PotassiumStatus)
+                                    @(string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotEntered : TempData["PotassiumStatus"]?.ToString())
                                     @* @Model.PotassiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -424,7 +422,7 @@
                                     @Resource.lblMagnesiumStatus
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotEntered : Model.MagnesiumStatus)
+                                    @(string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotEntered : TempData["MagnesiumStatus"]?.ToString())
                                     @* @Model.MagnesiumIndex *@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>

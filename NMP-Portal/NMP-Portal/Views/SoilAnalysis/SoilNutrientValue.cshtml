@@ -128,6 +128,7 @@
 
                     }
                     else
+                    {
                     @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
                         <govuk-radios for="@Model.PhosphorusStatus">
@@ -181,7 +182,7 @@
 
 
                     }
-
+                    }
                 </govuk-fieldset>
             </div>
 

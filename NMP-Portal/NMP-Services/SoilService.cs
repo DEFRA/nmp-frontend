@@ -13,7 +13,7 @@ namespace NMP.Services;
 public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ISoilService
 {
     private readonly ILogger<SoilService> _logger = logger;
-
+    private const string _errorLog= "{Code} : {Message} : {Stack} : {Path}";
     public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId)
     {
         Error error = null;
@@ -35,7 +35,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
                 error = responseWrapper?.Error?.ToObject<Error>();
                 if (error != null)
                 {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLog, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -78,7 +78,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
             if (responseWrapper != null && responseWrapper.Error != null)
             {
                 error = responseWrapper?.Error?.ToObject<Error>();
-                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
+                _logger.LogError(_errorLog, error?.Code, error?.Message, error?.Stack, error?.Path);
             }
         }
         return (soilMethodologyList, error);
@@ -103,7 +103,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
             if (responseWrapper != null && responseWrapper.Error != null)
             {
                 error = responseWrapper?.Error?.ToObject<Error>();
-                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
+                _logger.LogError(_errorLog, error?.Code, error?.Message, error?.Stack, error?.Path);
             }
         }
         return (soilAnalysesMethod, error);
@@ -134,7 +134,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
                 error = responseWrapper?.Error?.ToObject<Error>();
                 if (error != null)
                 {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLog, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }

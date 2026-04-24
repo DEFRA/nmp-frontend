@@ -459,21 +459,21 @@
                         summaryRows.Add(new SummaryListRowViewModel
                         {
                             Key = Resource.lblPhosphorusStatus,
-                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PhosphorusStatus),
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString()),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
                         });
                         summaryRows.Add(new SummaryListRowViewModel
                         {
                             Key = Resource.lblPotashStatus,
-                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PotassiumStatus),
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString()),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
                         });
                         summaryRows.Add(new SummaryListRowViewModel
                         {
                             Key = Resource.lblMagnesiumStatus,
-                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.MagnesiumStatus),
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString()),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
                         });
@@ -485,7 +485,7 @@
                             summaryRows.Add(new SummaryListRowViewModel
                                     {
                                         Key = Resource.lblPhosphorusStatus,
-                                        Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PhosphorusStatus),
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString()),
                                         ActionName = "SoilNutrientValue",
                                         ControllerName = "Field"
                                     });
@@ -495,7 +495,7 @@
                             summaryRows.Add(new SummaryListRowViewModel
                                     {
                                         Key = Resource.lblPotashStatus,
-                                        Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PotassiumStatus),
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString()),
                                         ActionName = "SoilNutrientValue",
                                         ControllerName = "Field"
                                     });
@@ -505,7 +505,7 @@
                             summaryRows.Add(new SummaryListRowViewModel
                                     {
                                         Key = Resource.lblMagnesiumStatus,
-                                        Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.MagnesiumStatus),
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString()),
                                         ActionName = "SoilNutrientValue",
                                         ControllerName = "Field"
                                     });
