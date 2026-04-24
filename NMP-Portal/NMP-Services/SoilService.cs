@@ -13,7 +13,7 @@ namespace NMP.Services;
 public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ISoilService
 {
     private readonly ILogger<SoilService> _logger = logger;
-
+    private const string _errorLog= "{Code} : {Message} : {Stack} : {Path}";
     public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId)
     {
         Error error = null;
@@ -35,7 +35,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
                 error = responseWrapper?.Error?.ToObject<Error>();
                 if (error != null)
                 {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_errorLog, error.Code, error.Message, error.Stack, error.Path);
                 }
             }
         }
@@ -59,54 +59,86 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         return soilType;
     }
 
-    public async Task<(List<CommonResponse>?, Error?)> FetchAllSoilAnalysesMethod()
+    public async Task<(List<SoilMethologiesResponse>?, Error?)> FetchSoilMethodologies(int nutrientId,int countryId)
     {
-        List<CommonResponse>? soilAnalysesMethodList = null;
+        List<SoilMethologiesResponse>? soilMethodologyList = null;
         Error? error = null;
 
         _logger.LogTrace("Soil Service: soil-analyses-methods called.");
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(ApiurlHelper.FetchAllSoilAnalysesMethodAsyncAPI);
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilMethodologiesByNutrientAndCountryIdAsyncAPI, nutrientId,countryId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            soilAnalysesMethodList = responseWrapper?.Data?.records.ToObject<List<CommonResponse>>();
+            soilMethodologyList = responseWrapper?.Data?.ToObject<List<SoilMethologiesResponse>>();
         }
         else
         {
             if (responseWrapper != null && responseWrapper.Error != null)
             {
                 error = responseWrapper?.Error?.ToObject<Error>();
-                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
+                _logger.LogError(_errorLog, error?.Code, error?.Message, error?.Stack, error?.Path);
             }
         }
-        return (soilAnalysesMethodList, error);
+        return (soilMethodologyList, error);
     }
 
-    public async Task<(CommonResponse?, Error?)> FetchSoilAnalysesMethodById(int id)
+    public async Task<(SoilMethologiesResponse?, Error?)> FetchSoilMethodologyNameByNutrientIdAndMethodologyId(int nutrientId,int methodologyId)
     {
-        CommonResponse? soilAnalysesMethod = null;
+        SoilMethologiesResponse? soilAnalysesMethod = null;
         Error? error = null;
 
         _logger.LogTrace("Soil Service: soil-analyses-methods called.");
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchAllSoilAnalysesMethodByIdAsyncAPI,id));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchAllSoilMethodologyNameAsyncAPI, nutrientId, methodologyId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            soilAnalysesMethod = responseWrapper?.Data?.records.ToObject<CommonResponse>();
+            soilAnalysesMethod = responseWrapper?.Data?.ToObject<SoilMethologiesResponse>();
         }
         else
         {
             if (responseWrapper != null && responseWrapper.Error != null)
             {
                 error = responseWrapper?.Error?.ToObject<Error>();
-                _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
+                _logger.LogError(_errorLog, error?.Code, error?.Message, error?.Stack, error?.Path);
             }
         }
         return (soilAnalysesMethod, error);
     }
+    public async Task<(List<SoilNutrientStatusResponse>?, Error?)> FetchSoilNutrientStatusList(int methodologyId)
+    {
+        Error? error = null;
+        List<SoilNutrientStatusResponse>? statusList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientStatusListAsyncAPI, HttpUtility.UrlEncode(HttpUtility.UrlEncode(methodologyId.ToString())));
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper?.Data != null)
+        {
+            List<SoilNutrientStatusResponse>? soilNutrientIndiceResponse = responseWrapper?.Data?.ToObject<List<SoilNutrientStatusResponse>>();
 
+            if (soilNutrientIndiceResponse != null)
+            {
+                statusList = soilNutrientIndiceResponse;
+            }
+        }
+        else
+        {
+            if (responseWrapper != null && responseWrapper.Error != null)
+            {
+                error = responseWrapper?.Error?.ToObject<Error>();
+                if (error != null)
+                {
+                    _logger.LogError(_errorLog, error.Code, error.Message, error.Stack, error.Path);
+                }
+            }
+        }
+
+        return (statusList, error);
+    }
 }

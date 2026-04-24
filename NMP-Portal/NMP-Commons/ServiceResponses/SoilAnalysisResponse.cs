@@ -57,14 +57,14 @@ public class SoilAnalysisResponse
     [JsonProperty("phosphorusStatus")]
     public string? PhosphorusStatus { get; set; }
 
-    [JsonProperty("potassiumAnalysis")]
-    public string? PotassiumAnalysis { get; set; }
+    [JsonProperty("potassiumMethodologyID")]
+    public string? PotassiumMethodologyID { get; set; }
 
     [JsonProperty("potassiumStatus")]
     public string? PotassiumStatus { get; set; }
 
-    [JsonProperty("magnesiumAnalysis")]
-    public string? MagnesiumAnalysis { get; set; }
+    [JsonProperty("magnesiumMethodologyID")]
+    public string? MagnesiumMethodologyID { get; set; }
 
     [JsonProperty("magnesiumStatus")]
     public string? MagnesiumStatus { get; set; }

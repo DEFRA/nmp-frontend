@@ -12,18 +12,18 @@
 }
 
 @section BeforeContent {
-    @if (Model != null && Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
+    @if (Model != null && Model.IsCheckAnswer && (!Model.IsSoilAnalysesMethodChange))
+    {
+        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+    }
+    else   if (Model != null && (Model.IsSoilAnalysesMethodChange))
     {
         <govuk-back-link asp-action="@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? "SoilAnalysesMethod" : "Date")"
                          asp-controller="SoilAnalysis">
             @Resource.lblBack
         </govuk-back-link>
     }
-    else
-    @if (Model != null)
-    {
-        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
-    }
+      
 }
 <form asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -32,20 +32,20 @@
         @if (Model != null)
         {
             <div class="govuk-grid-column-two-thirds">
-                <govuk-radios class="govuk-radios" asp-for="@Model.SoilNutrientValueType">
+                <govuk-radios class="govuk-radios" for="@Model.SoilNutrientValueType">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @Resource.lblHowWouldYouLikeToEnterYourSoilNutrientValues
                         </govuk-radios-fieldset-legend>
-                        @if (Model.SoilAnalysesMethodID == (int)NMP.Commons.Enums.SoilAnalysesMethod.Sac)
+                        @if (Model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
                         {
-                            <govuk-radios-item value=@asAnStatus disabled=true>@Resource.lblAsAStatus</govuk-radios-item>
+                            <govuk-radios-item value=@asAnStatus>@Resource.lblAsAStatus</govuk-radios-item>
                         }
-                        else
-                        {
+                        else  
+                        {                         
                             <govuk-radios-item value=@asAnIndex>@Resource.lblAsAnIndex</govuk-radios-item>
                         }
-                        <govuk-radios-item value=@inMilligramsPerLitre>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
+                        <govuk-radios-item value=@inMilligramsPerLitre disabled=@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? true : false>@Resource.lblInMilligramsPerLitre</govuk-radios-item>
                     </govuk-radios-fieldset>
                 </govuk-radios>
                

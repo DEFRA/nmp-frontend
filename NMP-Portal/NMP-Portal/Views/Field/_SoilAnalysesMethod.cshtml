@@ -3,29 +3,21 @@
 @using NMP.Commons.ViewModels
 @model SoilAnalysisViewModel
 
-<govuk-radios class="govuk-radios" asp-for="@Model.SoilAnalysesMethodID">
+<govuk-radios  for="@Model.PhosphorusMethodologyID">
     <govuk-radios-fieldset>
 
         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
             @Resource.lblWhichSoilAnalysisMethodWasUsed
         </govuk-radios-fieldset-legend>
 
-        @if (ViewBag.SoilAnalysesMethodList != null)
+        @if (ViewBag.SoilMethologiesList != null)
         {
-         @foreach (var item in ViewBag.SoilAnalysesMethodList)
+            @foreach (var item in ViewBag.SoilMethologiesList)
 {
-                @if (item.Value == ((int)NMP.Commons.Enums.SoilAnalysesMethod.Sac).ToString())
-                {
-                    <govuk-radios-item value="@item.Value" disabled="true">
-                        @item.Text
-                    </govuk-radios-item>
-                }
-                else
-                {
                     <govuk-radios-item value="@item.Value">
                         @item.Text
                     </govuk-radios-item>
-                }
+                
             }
         }
 

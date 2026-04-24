@@ -24,7 +24,6 @@ public class FieldViewModel : Field
     public int? CropTypeID { get; set; }
     public string? FarmName { get; set; } = string.Empty;
     public string EncryptedFarmId { get; set; } = string.Empty;
-    public int? SoilNutrientValueTypeIndex { get; set; }
     public int? CropGroupId { get; set; }
     public bool IsCheckAnswer { get; set; } = false;
     public string? SoilType { get; set; } = string.Empty;

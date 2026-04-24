@@ -598,7 +598,7 @@
     <value>Enter an amount between 0 and 9,998 litres</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
-    <value>Enter an index between 0 and 9</value>
+    <value>Enter an index between 0 and {0}</value>
   </data>
   <data name="lblBasedOnRecentSNA" xml:space="preserve">
     <value>Calculate based on a recent soil mineral nitrogen (N) analysis result</value>
@@ -7735,5 +7735,23 @@ livestock manure.</value>
   </data>
   <data name="lblPrivateBetaDisclaimerContentThree" xml:space="preserve">
     <value>as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI).</value>
+  </data>
+  <data name="lblPhosphorusStatusOptional" xml:space="preserve">
+    <value>Phosphorus (P) status (Optional)</value>
+  </data>
+  <data name="lblPotashStatusOptional" xml:space="preserve">
+    <value>Potassium (K) status (Optional)</value>
+  </data>
+  <data name="lblMagnesiumStatusOptional" xml:space="preserve">
+    <value>Magnesium (Mg) status (Optional)</value>
+  </data>
+  <data name="lblPhosphorusStatus" xml:space="preserve">
+    <value>Phosphorus (P) status</value>
+  </data>
+  <data name="lblPotashStatus" xml:space="preserve">
+    <value>Potassium (K) status</value>
+  </data>
+  <data name="lblMagnesiumStatus" xml:space="preserve">
+    <value>Magnesium (Mg) status</value>
   </data>
 </root>

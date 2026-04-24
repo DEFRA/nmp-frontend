@@ -265,19 +265,23 @@
                 summaryRows.Add(new SummaryListRowViewModel
                 {
                     Key = Resource.lblSoilAnalysisMethod,
-                    Value = ViewBag.SoilAnalysisMethodName,
+                    Value = ViewBag.MethodologyName,
                     ActionName = "SoilAnalysesMethod",
                     ControllerName = "Field"
                 });
             }
             string soilNutrientValueTypeIndex = "";
-            @if (!Model.SoilNutrientValueTypeIndex.HasValue)
+            @if (!Model.SoilAnalyses.SoilNutrientValueType.HasValue)
             {
                 soilNutrientValueTypeIndex = Resource.lblNotSet;
             }
-            else if (Model.SoilNutrientValueTypeIndex.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
+            else if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
             {
                 soilNutrientValueTypeIndex = Resource.lblIndexValues;
+            }
+            else if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
+            {
+                soilNutrientValueTypeIndex = Resource.lblAsAStatus;
             }
             else
             {
@@ -290,7 +294,7 @@
                 ActionName = "SoilNutrientValueType",
                 ControllerName = "Field"
             });
-            if (Model.SoilNutrientValueTypeIndex.HasValue)
+            if (Model.SoilAnalyses.SoilNutrientValueType.HasValue)
             {
                 if (Model.SoilAnalyses.PH != null)
                 {
@@ -302,7 +306,7 @@
                         ControllerName = "Field"
                     });
                 }
-                     @if (Model.SoilNutrientValueTypeIndex.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
+                     @if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                 {
                     if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.Potassium == null &&
                 Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Magnesium == null)
@@ -373,7 +377,7 @@
                         }
                     }
                 }
-                else
+                else if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
                 {
                     @if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.PhosphorusIndex == null && string.IsNullOrWhiteSpace(Model.PotassiumIndexValue) && Model.SoilAnalyses.MagnesiumIndex == null)
                     {
@@ -438,6 +442,73 @@
                                 ActionName = "SoilNutrientValue",
                                 ControllerName = "Field"
                             });
+                        }
+                    }
+                }
+                else if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
+                {
+                    @if (Model.SoilAnalyses.PH == null && string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) && string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) && string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus))
+                    {
+                        summaryRows.Add(new SummaryListRowViewModel
+                        {
+                            Key = (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
+                            Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
+                            ActionName = "SoilNutrientValue",
+                            ControllerName = "Field"
+                        });
+                        summaryRows.Add(new SummaryListRowViewModel
+                        {
+                            Key = Resource.lblPhosphorusStatus,
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString()),
+                            ActionName = "SoilNutrientValue",
+                            ControllerName = "Field"
+                        });
+                        summaryRows.Add(new SummaryListRowViewModel
+                        {
+                            Key = Resource.lblPotashStatus,
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString()),
+                            ActionName = "SoilNutrientValue",
+                            ControllerName = "Field"
+                        });
+                        summaryRows.Add(new SummaryListRowViewModel
+                        {
+                            Key = Resource.lblMagnesiumStatus,
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString()),
+                            ActionName = "SoilNutrientValue",
+                            ControllerName = "Field"
+                        });
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) || !string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) || !string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus))
+                    {
+                        if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus))
+                        {
+                            summaryRows.Add(new SummaryListRowViewModel
+                                    {
+                                        Key = Resource.lblPhosphorusStatus,
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString()),
+                                        ActionName = "SoilNutrientValue",
+                                        ControllerName = "Field"
+                                    });
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus))
+                        {
+                            summaryRows.Add(new SummaryListRowViewModel
+                                    {
+                                        Key = Resource.lblPotashStatus,
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString()),
+                                        ActionName = "SoilNutrientValue",
+                                        ControllerName = "Field"
+                                    });
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus))
+                        {
+                            summaryRows.Add(new SummaryListRowViewModel
+                                    {
+                                        Key = Resource.lblMagnesiumStatus,
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString()),
+                                        ActionName = "SoilNutrientValue",
+                                        ControllerName = "Field"
+                                    });
                         }
                     }
                 }
