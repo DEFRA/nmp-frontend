@@ -28,7 +28,7 @@ namespace NMP.Portal.Helpers
                 .ToList();
         }
 
-        public  string MapIndexText(string indexText) => indexText switch
+        public static string MapIndexText(string indexText) => indexText switch
         {
             "Very low (1)" => "VL",
             "Low (2)" => "L",
