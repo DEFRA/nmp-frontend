@@ -259,7 +259,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
             : string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
 
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.ClosedPeriod.ToObject<string>(), url);
-        return (data ?? 0, error);
+        return (data ?? string.Empty, error);
 
     }
 
