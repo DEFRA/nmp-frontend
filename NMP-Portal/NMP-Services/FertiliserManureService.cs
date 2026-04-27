@@ -130,8 +130,10 @@ public class FertiliserManureService : Service, IFertiliserManureService
             url += $"&fertiliserId={fertiliserId.Value}";
         }
         url = string.Format(url, fieldId, fromdate, toDate, confirm);
-        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN.ToObject<decimal>(), url);
-        return (data ?? 0, error);
+        var (data, error) = await HandleApiRequest(rw => (decimal?)rw?.Data?.TotalN == null
+      ? 0m
+      : rw.Data.TotalN.Value<decimal>(), url);
+        return (data??0, error);
     }
     public async Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds)
     {
