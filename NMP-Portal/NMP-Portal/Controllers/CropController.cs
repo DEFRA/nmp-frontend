@@ -1968,6 +1968,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         bool isBasePlan = false;
         bool allSowingAreSame = true;
         DateTime? firstSowingDate = null;
+        FarmResponse? farm = null;
+        int farmID = 0;
         try
         {
             if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
@@ -2006,6 +2008,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.CropOrder = Convert.ToInt32(_cropDataProtector.Unprotect(w));
                 }
 
+                farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+                (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
+                if (farm != null && string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    model.FarmRB209CountryID = farm.RB209CountryID;
+                    model.CountryId = farm.CountryID;
+                }
                 (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                 if (error == null && harvestYearPlanResponse.Count > 0)
                 {
@@ -2180,7 +2189,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
             model.IsCurrentSwardChange = false;
-            int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+            farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
 
             //fetch all fields
             List<Field> allFieldList = await _fieldLogic.FetchFieldsByFarmId(farmID);
@@ -2277,7 +2286,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
                 if (harvestYearPlanResponse != null && harvestYearPlanResponse.Count == 1)
                 {
-                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
                     List<Field> allFieldListForFilter = [.. allFieldList];
                     if (allFieldListForFilter.Count > 0)
                     {
@@ -2313,7 +2321,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-            (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
+            (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmID);
             if (farm != null && string.IsNullOrWhiteSpace(error?.Message))
             {
                 model.FarmRB209CountryID = farm.RB209CountryID;

@@ -51,7 +51,12 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.QuestionForSpreadInorganicFertiliser" value="@Model.QuestionForSpreadInorganicFertiliser.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCounter" value="@Model.EncryptedCounter" />
-    
+
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWarningMsgNeedToShow" value="@Model.IsWarningMsgNeedToShow.ToString().ToLower()" />    
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningExceptGrassAndOilseed" value="@Model.IsClosedPeriodWarningExceptGrassAndOilseed.ToString().ToLower()" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed" value="@Model.IsClosedPeriodWarningOnlyForGrassAndOilseed.ToString().ToLower()" />
+
+
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"/>
