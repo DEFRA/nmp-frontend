@@ -45,7 +45,13 @@ namespace NMP.Portal.Controllers
         private const string _organicManureSessionKey = "OrganicManure";
         private const string _fieldGroup = "FieldGroup";
         private const string _checkAnswer = "CheckAnswer";
-
+        private const string _harvestYearOverview = "HarvestYearOverview";
+        private const string _fieldGroupError = "FieldGroupError";
+        private const string _manureGroup = "ManureGroup";
+        private const string _nutrientRecommendationsError = "NutrientRecommendationsError";
+        private const string _recommendations = "Recommendations";
+        private const string _addOrganicManureError = "AddOrganicManureError";
+        private const string _farmList = "FarmList";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
             if (HttpContext.Session.Exists(_organicManureSessionKey))
@@ -74,7 +80,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Organic Manure Controller : CreateManureCancel({Q}, {R}) action called", q, r);
             RemoveOrganicManureSession();
-            return RedirectToAction("HarvestYearOverview", "Crop", new { Id = q, year = r });
+            return RedirectToAction(_harvestYearOverview, "Crop", new { Id = q, year = r });
         }
 
         [HttpGet]
@@ -94,7 +100,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
                 {
-                    model = await InitializeModelAsync(q, r, model);
+                    model = await InitializeModelAsync(q, r);
                 }
 
                 if (model != null)
@@ -110,13 +116,13 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in FieldGroup() action");
-                TempData["FieldGroupError"] = ex.Message;
+                TempData[_fieldGroupError] = ex.Message;
             }
 
             return FinalizeAndReturnView(model, s);
         }
 
-        private async Task<bool> ValidateQueryParametersAsync(string q, string r, OrganicManureViewModel? model)
+        private static async Task<bool> ValidateQueryParametersAsync(string q, string r, OrganicManureViewModel? model)
         {
             if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r) && model == null)
             {
@@ -126,18 +132,18 @@ namespace NMP.Portal.Controllers
             return await Task.FromResult(true);
         }
 
-        private async Task<OrganicManureViewModel> InitializeModelAsync(string q, string r, OrganicManureViewModel? model)
+        private async Task<OrganicManureViewModel> InitializeModelAsync(string q, string r)
         {
 
-            model = new OrganicManureViewModel();
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
             model.EncryptedFarmId = q;
             model.EncryptedHarvestYear = r;
             (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
-            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
-                TempData["FieldGroupError"] = error.Message;
+                TempData[_fieldGroupError] = error.Message;
                 return model;
             }
             if (farm != null)
@@ -162,7 +168,7 @@ namespace NMP.Portal.Controllers
             await UpdateEncryptedCountersAsync(model);
 
             SetOrganicManureToSession(model);
-            return RedirectToAction("ManureGroup");
+            return RedirectToAction(_manureGroup);
         }
 
         private async Task SetupSpecificFieldModeAsync(string s, OrganicManureViewModel model)
@@ -181,15 +187,15 @@ namespace NMP.Portal.Controllers
 
         private async Task<IActionResult?> TryLoadFieldManureDataAsync(string q, string r, string s, OrganicManureViewModel model)
         {
-            string fieldId = model.FieldList.First();
+            string fieldId = model.FieldList[0];
             var (manIds, error) = await _fertiliserManureLogic
                 .FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
                     model.HarvestYear!.Value, fieldId, null, 1);
 
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["NutrientRecommendationsError"] = error.Message;
-                return RedirectToAction("Recommendations", "Crop", new { q, r = s, s = r });
+                TempData[_nutrientRecommendationsError] = error.Message;
+                return RedirectToAction(_recommendations, "Crop", new { q, r = s, s = r });
             }
 
             if (!manIds.Any())
@@ -223,7 +229,7 @@ namespace NMP.Portal.Controllers
 
             foreach (var fieldId in model.FieldList)
             {
-                var (cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(
+                var (cropList, _) = await _cropLogic.FetchCropPlanByFieldIdAndYear(
                     Convert.ToInt32(fieldId), model.HarvestYear!.Value);
 
                 if (!cropList.Any()) continue;
@@ -234,8 +240,8 @@ namespace NMP.Portal.Controllers
                     continue;
                 }
 
-                var grassCrop = cropList.First();
-                var (mgmtList, err2) = await _cropLogic.FetchManagementperiodByCropId(grassCrop.ID!.Value, false);
+                var grassCrop = cropList.FirstOrDefault();
+                var (mgmtList, _) = await _cropLogic.FetchManagementperiodByCropId(grassCrop.ID!.Value, false);
                 if (mgmtList == null) continue;
 
                 var toRemove = model.OrganicManures
@@ -286,7 +292,7 @@ namespace NMP.Portal.Controllers
 
             if ((error != null && !string.IsNullOrWhiteSpace(error.Message)) || !cropTypes.Any())
             {
-                TempData["FieldGroupError"] = error.Message;
+                TempData[_fieldGroupError] = error?.Message;
                 return;
             }
 
@@ -345,7 +351,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Organic Manure Controller: Exception in FieldGroup() post action");
-                TempData["FieldGroupError"] = ex.Message;
+                TempData[_fieldGroupError] = ex.Message;
                 return View("Views/OrganicManure/FieldGroup.cshtml", model);
             }
             return RedirectToAction("Fields");
@@ -391,7 +397,7 @@ namespace NMP.Portal.Controllers
             }
             else if (error != null)
             {
-                TempData["FieldGroupError"] = error.Message;
+                TempData[_fieldGroupError] = error.Message;
             }
             return selectListItem;
         }
@@ -448,12 +454,12 @@ namespace NMP.Portal.Controllers
                 {
                     if (model != null && string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                     {
-                        TempData["FieldGroupError"] = error.Message;
+                        TempData[_fieldGroupError] = error.Message;
                         return RedirectToAction(_fieldGroup, model);
                     }
                     else
                     {
-                        TempData["AddOrganicManureError"] = error.Message;
+                        TempData[_addOrganicManureError] = error.Message;
                         return RedirectToAction(_checkAnswer);
                     }
                 }
@@ -493,7 +499,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    return RedirectToAction("FarmList", "Farm");
+                                    return RedirectToAction(_farmList, "Farm");
                                 }
                                 string fieldIds = string.Join(",", model.FieldList);
                                 List<int> managementIds = new List<int>();
@@ -508,7 +514,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData["FieldGroupError"] = error.Message;
+                                    TempData[_fieldGroupError] = error.Message;
                                     return View(_fieldGroup, model);
                                 }
                             }
@@ -529,21 +535,16 @@ namespace NMP.Portal.Controllers
                                             cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
                                         }
                                     }
-                                    if (cropList.Count > 0)
+                                    if (cropList.Count > 0 && cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                     {
-                                        if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
-                                        {
-                                            grassCropCounter++;
-                                            (List<ManagementPeriod> ManagementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
-                                            var managementPeriodIdsToRemove = ManagementPeriod
-                                            .Skip(1)
-                                            .Select(mp => mp.ID.Value)
-                                            .ToList();
-                                            model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
-                                            model.IsAnyCropIsGrass = true;
-                                        }
-
-
+                                        grassCropCounter++;
+                                        (List<ManagementPeriod> ManagementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
+                                        var managementPeriodIdsToRemove = ManagementPeriod
+                                        .Skip(1)
+                                        .Select(mp => mp.ID.Value)
+                                        .ToList();
+                                        model.OrganicManures.RemoveAll(fm => managementPeriodIdsToRemove.Contains(fm.ManagementPeriodID));
+                                        model.IsAnyCropIsGrass = true;
                                     }
                                 }
                                 model.GrassCropCount = grassCropCounter;
@@ -595,24 +596,22 @@ namespace NMP.Portal.Controllers
                                             //check early and late for winter cereals and winter oilseed rape
                                             //if sowing date after 15 sept then late
                                             DateTime? sowingDate = crop.Select(x => x.SowingDate).FirstOrDefault();
-                                            if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape)
+                                            if ((cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal || cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlyStablishedWinterOilseedRape) && sowingDate != null)
                                             {
-                                                if (sowingDate != null)
+                                                int day = sowingDate.Value.Day;
+                                                int month = sowingDate.Value.Month;
+                                                if (month == (int)NMP.Commons.Enums.Month.September && day > 15)
                                                 {
-                                                    int day = sowingDate.Value.Day;
-                                                    int month = sowingDate.Value.Month;
-                                                    if (month == (int)NMP.Commons.Enums.Month.September && day > 15)
+                                                    if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal)
                                                     {
-                                                        if (cropCategoryId == (int)NMP.Commons.Enums.CropCategory.EarlySownWinterCereal)
-                                                        {
-                                                            cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal;
-                                                        }
-                                                        else
-                                                        {
-                                                            cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape;
-                                                        }
+                                                        cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateSownWinterCereal;
+                                                    }
+                                                    else
+                                                    {
+                                                        cropCategoryId = (int)NMP.Commons.Enums.CropCategory.LateStablishedWinterOilseedRape;
                                                     }
                                                 }
+
                                             }
 
                                             if (model.ApplicationDate.Value.Month >= (int)NMP.Commons.Enums.Month.August && model.ApplicationDate.Value.Month <= (int)NMP.Commons.Enums.Month.October)
@@ -643,11 +642,11 @@ namespace NMP.Portal.Controllers
                             }
                         }
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                        return RedirectToAction("ManureGroup");
+                        return RedirectToAction(_manureGroup);
                     }
                     else
                     {
-                        TempData["FieldGroupError"] = error.Message;
+                        TempData[_fieldGroupError] = error.Message;
                         return View(_fieldGroup, model);
                     }
                 }
@@ -669,7 +668,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            TempData["AddOrganicManureError"] = error.Message;
+                            TempData[_addOrganicManureError] = error?.Message;
                             return RedirectToAction(_checkAnswer);
                         }
                     }
@@ -683,12 +682,12 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Organic Manure Controller : Exception in Fields() action : {ex.Message}, {ex.StackTrace}");
                 if (model != null && string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                 {
-                    TempData["FieldGroupError"] = ex.Message;
+                    TempData[_fieldGroupError] = ex.Message;
                     return RedirectToAction(_fieldGroup, model);
                 }
                 else
                 {
-                    TempData["AddOrganicManureError"] = ex.Message;
+                    TempData[_addOrganicManureError] = ex.Message;
                     return RedirectToAction(_checkAnswer);
                 }
             }
@@ -759,7 +758,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData["AddOrganicManureError"] = error.Message;
+                                    TempData[_addOrganicManureError] = error.Message;
                                     return RedirectToAction(_checkAnswer);
                                 }
                             }
@@ -776,7 +775,7 @@ namespace NMP.Portal.Controllers
                     (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
-                        TempData["FieldGroupError"] = error.Message;
+                        TempData[_fieldGroupError] = error.Message;
                         return RedirectToAction(_fieldGroup);
                     }
                     foreach (string field in model.FieldList)
@@ -898,7 +897,7 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("ManureGroup");
+            return RedirectToAction(_manureGroup);
         }
 
         private OrganicManureViewModel BindDefoliationOrDoubleCropList(OrganicManureViewModel model)
@@ -1629,7 +1628,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
 
                 List<ManureType> manureTypeList = new List<ManureType>();
@@ -1691,7 +1690,7 @@ managementPeriod.CropID.HasValue
                         }
                         else
                         {
-                            return RedirectToAction("FarmList", "Farm");
+                            return RedirectToAction(_farmList, "Farm");
                         }
                         if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                         {
@@ -1902,7 +1901,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             try
@@ -2367,7 +2366,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             return View(model);
@@ -2667,7 +2666,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
             {
@@ -2714,7 +2713,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             try
             {
@@ -2852,7 +2851,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        return RedirectToAction("FarmList", "Farm");
+                        return RedirectToAction(_farmList, "Farm");
                     }
                     if (organicManureViewModel != null)
                     {
@@ -2987,7 +2986,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
 
 
@@ -3075,7 +3074,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
                 if (organicManureViewModel != null)
                 {
@@ -3227,7 +3226,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             model.IsWarningMsgNeedToShow = false;
             model.IsOrgManureNfieldLimitWarning = false;
@@ -3327,7 +3326,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             if (organicManureViewModel != null)
             {
@@ -3452,7 +3451,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
             {
@@ -3643,7 +3642,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        return RedirectToAction("FarmList", "Farm");
+                        return RedirectToAction(_farmList, "Farm");
                     }
                     if (organicManure.IncorporationMethod != null && organicManure.IncorporationMethod == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
                     {
@@ -3675,7 +3674,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             try
@@ -3808,7 +3807,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
 
                 //Autumn crop Nitrogen uptake
@@ -4060,7 +4059,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             if (model.IsCheckAnswer)
@@ -4093,7 +4092,7 @@ managementPeriod.CropID.HasValue
                 if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
                 {
                     string fieldId = model.FieldList[0];
-                    return RedirectToAction("Recommendations", "Crop", new
+                    return RedirectToAction(_recommendations, "Crop", new
                     {
                         q = model.EncryptedFarmId,
                         r = _fieldDataProtector.Protect(fieldId),
@@ -4241,9 +4240,9 @@ managementPeriod.CropID.HasValue
                                         {
                                             if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId) && (model.IsComingFromRecommendation))
                                             {
-                                                TempData["NutrientRecommendationsError"] = error.Message;
+                                                TempData[_nutrientRecommendationsError] = error.Message;
                                                 string fieldId = model.FieldList[0];
-                                                return RedirectToAction("Recommendations", "Crop", new
+                                                return RedirectToAction(_recommendations, "Crop", new
                                                 {
                                                     q = model.EncryptedFarmId,
                                                     r = _fieldDataProtector.Protect(fieldId),
@@ -4263,9 +4262,9 @@ managementPeriod.CropID.HasValue
                                     {
                                         if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId) && (model.IsComingFromRecommendation))
                                         {
-                                            TempData["NutrientRecommendationsError"] = error.Message;
+                                            TempData[_nutrientRecommendationsError] = error.Message;
                                             string fieldId = model.FieldList[0];
-                                            return RedirectToAction("Recommendations", "Crop", new
+                                            return RedirectToAction(_recommendations, "Crop", new
                                             {
                                                 q = model.EncryptedFarmId,
                                                 r = _fieldDataProtector.Protect(fieldId),
@@ -4927,7 +4926,7 @@ managementPeriod.CropID.HasValue
                 {
                     TempData["ErrorOnHarvestYearOverview"] = ex.Message;
                     HttpContext.Session.Remove(_organicManureSessionKey);
-                    return RedirectToAction("HarvestYearOverview", "Crop", new
+                    return RedirectToAction(_harvestYearOverview, "Crop", new
                     {
                         id = model.EncryptedFarmId,
                         year = model.EncryptedHarvestYear
@@ -5184,13 +5183,13 @@ managementPeriod.CropID.HasValue
                                 }
                                 else
                                 {
-                                    TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                    TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                                     return View(model);
                                 }
                             }
                             else
                             {
-                                TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                                TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                                 return View(model);
                             }
                         }
@@ -5198,7 +5197,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                        TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                         return View(model);
                     }
 
@@ -5314,7 +5313,7 @@ managementPeriod.CropID.HasValue
                 (bool success, error) = await _organicManureLogic.AddOrganicManuresAsync(jsonString);
                 if (!success || error != null)
                 {
-                    TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                    TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                     return View(model);
                 }
 
@@ -5344,7 +5343,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        TempData["AddOrganicManureError"] = error.Message;
+                        TempData[_addOrganicManureError] = error.Message;
                         return View(model);
                     }
 
@@ -5356,7 +5355,7 @@ managementPeriod.CropID.HasValue
                     HttpContext.Session.Remove(_organicManureSessionKey);
                     if (!model.IsComingFromRecommendation)
                     {
-                        return RedirectToAction("HarvestYearOverview", "Crop", new
+                        return RedirectToAction(_harvestYearOverview, "Crop", new
                         {
                             id = model.EncryptedFarmId,
                             year = model.EncryptedHarvestYear,
@@ -5368,7 +5367,7 @@ managementPeriod.CropID.HasValue
                     else
                     {
                         string fieldId = model.FieldList[0];
-                        return RedirectToAction("Recommendations", "Crop", new
+                        return RedirectToAction(_recommendations, "Crop", new
                         {
                             q = model.EncryptedFarmId,
                             r = _fieldDataProtector.Protect(fieldId),
@@ -5384,7 +5383,7 @@ managementPeriod.CropID.HasValue
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in CheckAnswer() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["AddOrganicManureError"] = Resource.MsgWeCounldNotAddOrganicManure;
+                TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                 return View(model);
             }
             return View(model);
@@ -5394,7 +5393,7 @@ managementPeriod.CropID.HasValue
         private IActionResult RedirectToHarvestYearPage(OrganicManureViewModel model, Error error)
         {
             TempData["ErrorOnHarvestYearOverview"] = error.Message;
-            return RedirectToAction("HarvestYearOverview", "Crop", new
+            return RedirectToAction(_harvestYearOverview, "Crop", new
             {
                 id = model.EncryptedFarmId,
                 year = model.EncryptedHarvestYear
@@ -5410,14 +5409,14 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             model.IsCheckAnswer = false;
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId) && (!model.IsComingFromRecommendation))
             {
                 HttpContext.Session.Remove(_organicManureSessionKey);
-                return RedirectToAction("HarvestYearOverview", "Crop", new
+                return RedirectToAction(_harvestYearOverview, "Crop", new
                 {
                     id = model.EncryptedFarmId,
                     year = model.EncryptedHarvestYear
@@ -5427,7 +5426,7 @@ managementPeriod.CropID.HasValue
             {
                 HttpContext.Session.Remove(_organicManureSessionKey);
                 string fieldId = model.FieldList[0];
-                return RedirectToAction("Recommendations", "Crop", new
+                return RedirectToAction(_recommendations, "Crop", new
                 {
                     q = model.EncryptedFarmId,
                     r = _fieldDataProtector.Protect(fieldId),
@@ -5449,7 +5448,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             if (f != null)
@@ -5552,7 +5551,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             return View(model);
@@ -5628,7 +5627,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             (List<RainTypeResponse> rainType, Error error) = await _organicManureLogic.FetchRainTypeList();
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -5674,7 +5673,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             return View(model);
 
@@ -5704,7 +5703,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             return View(model);
 
@@ -5810,7 +5809,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             (List<MoistureTypeResponse> moisterTypes, Error error) = await _organicManureLogic.FetchMoisterTypeList();
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -6464,7 +6463,7 @@ managementPeriod.CropID.HasValue
                 warningList,
                 isRanExceptPoultry,
                 totalApplicationRate,
-                isPoultry,isInFebPeriod);
+                isPoultry, isInFebPeriod);
         }
 #pragma warning restore S107
         private async Task<(ManureType?, Error?)> GetManureType(OrganicManureViewModel model)
@@ -6679,7 +6678,7 @@ managementPeriod.CropID.HasValue
 
             if (IsWithinRange(model.HarvestYear ?? 0, model.ApplicationDate.Value, 7, 1, 7, 31))
             {
-                (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId((model.HarvestYear ?? 0) + 1, model.FarmId??0);
+                (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId((model.HarvestYear ?? 0) + 1, model.FarmId ?? 0);
                 DateTime? nextHarvestYearEarliestPlan = harvestYearPlanResponse?.CropDetails?.Where(x => x.FieldID == fieldId).Min(x => x.PlantingDate);
                 if ((nextHarvestYearEarliestPlan == null || (nextHarvestYearEarliestPlan.Value - model.ApplicationDate.Value).TotalDays >= 43))
                 {
@@ -7501,7 +7500,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             return View(model);
@@ -7537,7 +7536,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
             }
             catch (Exception ex)
@@ -7634,7 +7633,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        return RedirectToAction("FarmList", "Farm");
+                        return RedirectToAction(_farmList, "Farm");
                     }
                     if (model != null)
                     {
@@ -7702,11 +7701,11 @@ managementPeriod.CropID.HasValue
                 _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveOrganicManure() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 if (model.IsComingFromRecommendation)
                 {
-                    TempData["NutrientRecommendationsError"] = ex.Message;
-                    return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = r, s = model.EncryptedHarvestYear });
+                    TempData[_nutrientRecommendationsError] = ex.Message;
+                    return RedirectToAction(_recommendations, "Crop", new { q = model.EncryptedFarmId, r = r, s = model.EncryptedHarvestYear });
                 }
 
-                TempData["AddOrganicManureError"] = ex.Message;
+                TempData[_addOrganicManureError] = ex.Message;
                 return RedirectToAction(_checkAnswer);
             }
             return View(model);
@@ -7800,13 +7799,13 @@ managementPeriod.CropID.HasValue
                                     string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
                                     if (!string.IsNullOrWhiteSpace(encryptedFieldId))
                                     {
-                                        return RedirectToAction("Recommendations", "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), u = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) });
+                                        return RedirectToAction(_recommendations, "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), u = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) });
                                     }
                                 }
                             }
                             else
                             {
-                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) }) + Resource.lblOrganicMaterialApplicationsForSorting);
+                                return Redirect(Url.Action(_harvestYearOverview, "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) }) + Resource.lblOrganicMaterialApplicationsForSorting);
                             }
                         }
                         else
@@ -7870,14 +7869,14 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
 
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["AddOrganicManureError"] = ex.Message;
+                TempData[_addOrganicManureError] = ex.Message;
                 return RedirectToAction(_checkAnswer);
             }
 
@@ -7906,7 +7905,7 @@ managementPeriod.CropID.HasValue
                 HttpContext.Session.Remove(_organicManureSessionKey);
                 if (!model.IsComingFromRecommendation)
                 {
-                    return RedirectToAction("HarvestYearOverview", "Crop", new
+                    return RedirectToAction(_harvestYearOverview, "Crop", new
                     {
                         id = model.EncryptedFarmId,
                         year = model.EncryptedHarvestYear
@@ -7915,7 +7914,7 @@ managementPeriod.CropID.HasValue
                 else
                 {
                     string fieldId = model.FieldList[0];
-                    return RedirectToAction("Recommendations", "Crop", new
+                    return RedirectToAction(_recommendations, "Crop", new
                     {
                         q = model.EncryptedFarmId,
                         r = _fieldDataProtector.Protect(fieldId),
@@ -8173,7 +8172,7 @@ managementPeriod.CropID.HasValue
                                             if (model.IsComingFromRecommendation)
                                             {
                                                 string fieldId = model.FieldList[0];
-                                                return RedirectToAction("Recommendations", "Crop", new
+                                                return RedirectToAction(_recommendations, "Crop", new
                                                 {
                                                     q = model.EncryptedFarmId,
                                                     r = _fieldDataProtector.Protect(fieldId),
@@ -8185,7 +8184,7 @@ managementPeriod.CropID.HasValue
                                             }
                                             else
                                             {
-                                                return Redirect(Url.Action("HarvestYearOverview", "Crop", new
+                                                return Redirect(Url.Action(_harvestYearOverview, "Crop", new
                                                 {
                                                     id = model.EncryptedFarmId,
                                                     year = model.EncryptedHarvestYear,
@@ -8197,7 +8196,7 @@ managementPeriod.CropID.HasValue
                                         }
                                         else if (!model.IsComingFromRecommendation)
                                         {
-                                            return Redirect(Url.Action("HarvestYearOverview", "Crop", new
+                                            return Redirect(Url.Action(_harvestYearOverview, "Crop", new
                                             {
                                                 id = model.EncryptedFarmId,
                                                 year = model.EncryptedHarvestYear,
@@ -8304,7 +8303,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             try
@@ -8331,7 +8330,7 @@ managementPeriod.CropID.HasValue
                         }
                         if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
-                            return RedirectToAction("ManureGroup");
+                            return RedirectToAction(_manureGroup);
                         }
                         else if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
@@ -8720,7 +8719,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
             try
             {
@@ -8746,14 +8745,14 @@ managementPeriod.CropID.HasValue
                 else
                 {
                     TempData["ManureGroupError"] = error.Message;
-                    return RedirectToAction("ManureGroup", model);
+                    return RedirectToAction(_manureGroup, model);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in ManureType() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ManureGroupError"] = ex.Message;
-                return RedirectToAction("ManureGroup", model);
+                return RedirectToAction(_manureGroup, model);
             }
         }
 
@@ -8776,7 +8775,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
@@ -9028,7 +9027,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             if (model.IsAnyChangeInSameDefoliationFlag)
@@ -9192,7 +9191,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
                 if (model.IsAnyChangeInSameDefoliationFlag)
                 {
@@ -9231,7 +9230,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToAction(_farmList, "Farm");
                 }
 
                 if (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsManureTypeChange || model.IsAnyChangeInField || model.IsFieldGroupChange)))
@@ -9271,7 +9270,7 @@ managementPeriod.CropID.HasValue
                         }
                         if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
-                            return RedirectToAction("ManureGroup");
+                            return RedirectToAction(_manureGroup);
                         }
                         if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
@@ -9338,7 +9337,7 @@ managementPeriod.CropID.HasValue
                                     return RedirectToAction(_checkAnswer);
                                 }
                                 TempData["ManureGroupError"] = error.Message;
-                                return RedirectToAction("ManureGroup");
+                                return RedirectToAction(_manureGroup);
                             }
 
                             if (cropList.Count > 0)
@@ -9365,7 +9364,7 @@ managementPeriod.CropID.HasValue
                                         return RedirectToAction(_checkAnswer);
                                     }
                                     TempData["ManureGroupError"] = error.Message;
-                                    return RedirectToAction("ManureGroup");
+                                    return RedirectToAction(_manureGroup);
                                 }
                                 if (managementPeriodList.Count > 0)
                                 {
@@ -9425,7 +9424,7 @@ managementPeriod.CropID.HasValue
                     return RedirectToAction(_checkAnswer);
                 }
                 TempData["ManureGroupError"] = error.Message;
-                return RedirectToAction("ManureGroup");
+                return RedirectToAction(_manureGroup);
             }
         }
 
@@ -9667,7 +9666,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm");
             }
 
             if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
@@ -9682,7 +9681,7 @@ managementPeriod.CropID.HasValue
 
             if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
             {
-                return RedirectToAction("ManureGroup");
+                return RedirectToAction(_manureGroup);
             }
 
             if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
