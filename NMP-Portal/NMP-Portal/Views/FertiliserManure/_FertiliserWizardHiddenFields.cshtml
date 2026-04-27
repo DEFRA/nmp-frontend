@@ -10,16 +10,12 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup" />
     }
-    @if (currentStep != (int)FertiliserWizardSteps.Field)
+    @if (currentStep != (int)FertiliserWizardSteps.Field && (Model.FieldList != null && Model.FieldList.Count > 0))
     {
-        @if (Model.FieldList != null && Model.FieldList.Count > 0)
-        {
             @for (int i = 0; i < Model.FieldList.Count; i++)
             {
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]" />
             }
-
-        }
     }
     @if (currentStep != (int)FertiliserWizardSteps.Date)
     {
