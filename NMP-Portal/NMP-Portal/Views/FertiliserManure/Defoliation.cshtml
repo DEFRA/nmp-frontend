@@ -35,7 +35,7 @@
             @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0 && Model.FertiliserManures.Any(x => x.IsGrass))
             {
                 @for (int i = 0; i < Model.DefoliationList.Count; i++)
-                {                   
+                {
                     @if (Model.DefoliationCurrentCounter == i)
                     {
                         <govuk-radios for="@Model.DefoliationList[i].Defoliation">
@@ -46,7 +46,7 @@
                                         @((Model.GrassCropCount != null && Model.GrassCropCount == 1) ?
                                                                 string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName) :
                                                                 Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField)
-                                                }
+                                    }
                                     else
                                     {
                                         @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, Model.FieldName)
@@ -64,11 +64,13 @@
                             </govuk-radios-fieldset>
                         </govuk-radios>
                     }
-                        else
-                        {
-                        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
-                        }
+                    else
+                    {
+                        <div hidden="true">
+                            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].Defoliation" />
+                        </div>
                     }
+                }
             }
 
             <govuk-button type="submit" class="margin-bottom-forty">
