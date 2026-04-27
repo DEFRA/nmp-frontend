@@ -498,8 +498,8 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
 
     public async Task<(StoreCapacity, Error)> FetchStoreCapacityByIdAsync(int id)
     {
-        StoreCapacity storeCapacity = new StoreCapacity();
-        Error error = null;
+        StoreCapacity? storeCapacity = new StoreCapacity();
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -510,7 +510,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    storeCapacity = responseWrapper.Data.records.ToObject<StoreCapacity>();
+                    storeCapacity = responseWrapper?.Data?.records.ToObject<StoreCapacity>();
                 }
             }
             else
