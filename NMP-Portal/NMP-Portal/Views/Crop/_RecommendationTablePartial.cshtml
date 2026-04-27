@@ -46,23 +46,30 @@
                 }
             </td>
             <td class="govuk-table__cell">
-                @(
-                                Model.Recommendation?.NBalance == null
-                                ? Resource.lblHyphen
-                                : Model.Recommendation.NBalance == 0
-                                ? Model.Recommendation.NBalance.ToString()
-                                : Model.Recommendation.NBalance.Value.ToString("N0")
-                                )
+                @if (Model.Recommendation?.NBalance == null)
+                {
+                    @Resource.lblHyphen
+                }
+                else
+                {   if (Model.Recommendation.NBalance == 0)
+                    {
+                        @Model.Recommendation.NBalance
+                    }
+                    else
+                    {
+                        @string.Format("{0:N0}", Model.Recommendation.NBalance)
+                    }
+                }
             </td>
             <td class="govuk-table__cell">
                 @{
-                    @if (!Model.Recommendation.ManureN.HasValue)
+                    @if (Model.Recommendation?.ManureN == null)
                     {
                         @Resource.lblHyphen
                     }
                     else
                     {
-                        @if ((Model.Recommendation.ManureN.HasValue && Model.Recommendation.ManureN == 0))
+                        @if (Model.Recommendation.ManureN == 0)
                         {
                             @Model.Recommendation.ManureN
                         }
@@ -75,13 +82,13 @@
             </td>
             <td class="govuk-table__cell">
                 @{
-                    @if (!Model.Recommendation.FertilizerN.HasValue)
+                    @if (Model.Recommendation?.FertilizerN== null)
                     {
                         @Resource.lblHyphen
                     }
                     else
                     {
-                        @if (Model.Recommendation.FertilizerN.HasValue && (Model.Recommendation.FertilizerN == 0 || Model.Recommendation.FertilizerN < 0))
+                        @if (Model.Recommendation.FertilizerN == 0 || Model.Recommendation.FertilizerN < 0)
                         {
                             @Model.Recommendation.FertilizerN
                         }
@@ -96,17 +103,17 @@
 
                 @if (Model.Recommendation?.FertiliserAppliedN == null)
                 {
-                    Resource.lblHyphen.ToString();
+                    @Resource.lblHyphen
                 }
                 else
                 {
                     if (Model.Recommendation.FertiliserAppliedN == 0)
                     {
-                        Model.Recommendation.FertiliserAppliedN.Value.ToString();
+                        @Model.Recommendation.FertiliserAppliedN
                     }
                     else
                     {
-                        string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedN, Resource.lblkg);
+                        @(string.Format("{0:N0}{1}", Model.Recommendation.FertiliserAppliedN, Resource.lblkg))
                     }
                 }
             </td>
@@ -114,22 +121,23 @@
         <tr class="govuk-table__row">
             <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
             <td class="govuk-table__cell">
+
                 @(string.IsNullOrWhiteSpace(Model.Recommendation?.PIndex) ? Resource.lblHyphen : Model.Recommendation.PIndex)
             </td>
             <td class="govuk-table__cell">
                 @if (Model.Recommendation?.CropP2O5 == null)
                 {
-                    Resource.lblHyphen.ToString();
+                    @Resource.lblHyphen
                 }
                 else
                 {
                     if (Model.Recommendation.CropP2O5 == 0)
                     {
-                        Model.Recommendation.CropP2O5.ToString();
+                        @Model.Recommendation.CropP2O5
                     }
                     else
                     {
-                        string.Format("{0:N0}{1}", Model.Recommendation.CropP2O5, Resource.lblkg);
+                        @(string.Format("{0:N0}{1}", Model.Recommendation.CropP2O5, Resource.lblkg))
                     }
                 } 
             </td>
