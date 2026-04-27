@@ -263,12 +263,12 @@ namespace NMP.Portal.Controllers
                          model.Potassium != null || model.Magnesium != null)
                         {
                             model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;
-                            model.SoilNutrientValueTypeName = Resource.lblIndexValues;
+                            model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
                         }
                         else
                         {
-                            model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;// @Resource.lblMiligramValues
-                            model.SoilNutrientValueTypeName = Resource.lblMiligramValues;
+                            model.SoilNutrientValueType = (int)NMP.Commons.Enums.SoilNutrientValueType.Index;
+                            model.SoilNutrientValueTypeName = Resource.lblIndexValues;
                         }
 
 
