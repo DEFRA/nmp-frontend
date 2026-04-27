@@ -54,16 +54,16 @@
     
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmCountryId" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFertId" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName"/>
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationCurrentCounter" value="@Model.DefoliationCurrentCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationEncryptedCounter" value="@Model.DefoliationEncryptedCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" value="@Model.FieldID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropGroupChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInField" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassCropCount" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropEncryptedCounter" value="@Model.DoubleCropEncryptedCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCropCurrentCounter" value="@Model.DoubleCropCurrentCounter" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropAvailable" value="@Model.IsDoubleCropAvailable.ToString().ToLower()" />
     @* warning model properties start *@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsClosedPeriodWarning" value="@Model.IsClosedPeriodWarning.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNitrogenExceedWarning" value="@Model.IsNitrogenExceedWarning.ToString().ToLower()" />
