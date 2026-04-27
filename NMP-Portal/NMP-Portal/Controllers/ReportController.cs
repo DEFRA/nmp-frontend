@@ -6964,6 +6964,16 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
     private static List<ScotlandNMaxValue> RemoveCropWithNoYieldAjustment(List<ScotlandNMaxValue> scotlandNMaxValues)
     {
+        //excluding wholecrops start
+        scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropSpringBarley);
+        scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropSpringOats);
+        scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropSpringWheat);
+
+        scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropWinterBarley);
+        scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropWinterOats);
+        scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropWinterWheat);
+        //excluding wholecrops end
+
         scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SpringRye);
         scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.ForageSpringRye);
         scotlandNMaxValues.RemoveAll(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.SpringRyeUndersown);
