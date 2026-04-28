@@ -1286,7 +1286,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return true;
     }
-    void SetNutrientValue(string value, FieldViewModel model, int nutrientId)
+   static void SetNutrientValue(string value, FieldViewModel model, int nutrientId)
     {
         if (model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
         {
@@ -1313,7 +1313,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-    void SetPotashValue(string value, FieldViewModel model)
+   static void SetPotashValue(string value, FieldViewModel model)
     {
         if (model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
         {
@@ -1343,14 +1343,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (!string.IsNullOrWhiteSpace(indexValue))
         {
-            //if (int.TryParse(indexValue, out _))
-            //{
-            //    assignIndex(nutrientId, Convert.ToInt32(indexValue.Trim()));
-            //}
-            //else
-            //{
                 assignIndex(nutrientId, indexValue.Trim());
-            //}
         }
 
         return true;
