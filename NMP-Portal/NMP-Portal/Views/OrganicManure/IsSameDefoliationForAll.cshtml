@@ -33,14 +33,13 @@
     {
         <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
-    else
-    @if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
+    else if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
     {
         <govuk-back-link asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        @if (Model.FieldGroup == Resource.lblSelectSpecificFields)
+        if (Model.FieldGroup == Resource.lblSelectSpecificFields)
         {
             backAction = "Fields";
         }
@@ -61,7 +60,7 @@
     <form asp-action="IsSameDefoliationForAll" asp-controller="OrganicManure" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
 
-        <div hidden="true">
+        <div hidden="hidden">
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId"/>
@@ -120,8 +119,6 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDoubleCropValueChange" value="@Model.IsDoubleCropValueChange.ToString().ToLower()" />
-
-
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptake"/>
             <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilDrainageEndDate" value="@Model.SoilDrainageEndDate"></govuk-date-input>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RainfallWithinSixHoursID"/>
@@ -162,18 +159,17 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyCropIsGrass" value="@Model.IsAnyCropIsGrass.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyChangeInSameDefoliationFlag" value="@Model.IsAnyChangeInSameDefoliationFlag.ToString().ToLower()"/>
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange"/>
-            @* <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSameDefoliationForAll"/> *@
-
+            
             @if (Model.FieldList != null && Model.FieldList.Count > 0)
             {
-                @for (int i = 0; i < Model.FieldList.Count; i++)
+                for (int i = 0; i < Model.FieldList.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]"/>
                 }
             }
             @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
             {
-                @for (int i = 0; i < Model.OrganicManures.Count; i++)
+                for (int i = 0; i < Model.OrganicManures.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManagementPeriodID" value="@Model.OrganicManures[i].ManagementPeriodID"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OrganicManures[i].ManureTypeID" value="@Model.OrganicManures[i].ManureTypeID"/>
@@ -213,7 +209,7 @@
             }
             @if (Model.AutumnCropNitrogenUptakes != null && Model.AutumnCropNitrogenUptakes.Count > 0)
             {
-                @for (int i = 0; i < Model.AutumnCropNitrogenUptakes.Count; i++)
+                for (int i = 0; i < Model.AutumnCropNitrogenUptakes.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId" value="@Model.AutumnCropNitrogenUptakes[i].EncryptedFieldId"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AutumnCropNitrogenUptakes[i].FieldName" value="@Model.AutumnCropNitrogenUptakes[i].FieldName"/>
@@ -225,7 +221,7 @@
 
             @if (Model.UpdatedOrganicIds != null && Model.UpdatedOrganicIds.Count > 0)
             {
-                @for (int i = 0; i < Model.UpdatedOrganicIds.Count; i++)
+                for (int i = 0; i < Model.UpdatedOrganicIds.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].OrganicManureId" value="@Model.UpdatedOrganicIds[i].OrganicManureId"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UpdatedOrganicIds[i].ManagementPeriodId" value="@Model.UpdatedOrganicIds[i].ManagementPeriodId"/>
@@ -235,7 +231,7 @@
             }
             @if (Model.DoubleCrop != null && Model.DoubleCrop.Count > 0)
             {
-                @for (int i = 0; i < Model.DoubleCrop.Count; i++)
+                for (int i = 0; i < Model.DoubleCrop.Count; i++)
                 {
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].CropID"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DoubleCrop[i].FieldName"/>
@@ -247,7 +243,7 @@
             }
             @if (Model.DefoliationList != null && Model.DefoliationList.Count > 0)
             {
-                @for (int i = 0; i < Model.DefoliationList.Count; i++)
+                for (int i = 0; i < Model.DefoliationList.Count; i++)
                 {
 
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefoliationList[i].CropID" />
@@ -288,12 +284,6 @@
                     <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
                 }
             </p>
-
         </div>
-
-
-
-
     </form>
-
 </div>

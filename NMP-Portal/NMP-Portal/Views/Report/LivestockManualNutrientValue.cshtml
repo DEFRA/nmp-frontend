@@ -4,7 +4,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.LivestockManualNutrientValue;
     var suffixUnit = "";
     string heading = string.Empty;
-    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+    if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
     {
         heading = string.Format(Resource.lblEnterTheValuesForYour, Model.OtherMaterialName);
     }
@@ -13,7 +13,7 @@
         heading = string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName);
     }
     string action = string.Empty;
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
     {
         action = Resource.lblUpdate;
     }
@@ -27,7 +27,7 @@
         suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne;
     }
     var backAction = "";
-    @if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
+    if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
     {
         backAction = "LivestockImportExportCheckAnswer";
     }
@@ -157,10 +157,9 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else
-                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
-                            @if (!Model.IsCheckList)
+                            if (!Model.IsCheckList)
                             {
                                 <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                                     @Resource.lblCancel
@@ -181,9 +180,7 @@
                         }
                     }
                 </p>
-
             </div>
-
         </div>
     </form>
 }

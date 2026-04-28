@@ -2,29 +2,11 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
     string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
-
-
     string heading = (string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var backAction = "";
-    // if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
-    // {
-    //     backAction = "ManureGroup";
-    // }
-    // else if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
-    // {
-    //     backAction = "OtherMaterialName";
-    // }
-    // else if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
-    // {
-    //     backAction = "LivestockImportExportCheckAnswer";
-    // }
-    // else
-    // {
-    //     backAction = "ManureType";
-    // }
-
+   
     if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
     {
         backAction = "LivestockImportExportCheckAnswer";
@@ -88,10 +70,9 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else
-  @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
-                            @if (!Model.IsCheckList)
+                            if (!Model.IsCheckList)
                             {
                                 <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                                     @Resource.lblCancel
@@ -112,9 +93,7 @@
                         }
                     }
                 </p>
-
             </div>
-
         </div>
     </form>
 }
