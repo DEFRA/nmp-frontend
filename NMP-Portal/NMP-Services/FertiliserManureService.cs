@@ -130,10 +130,8 @@ public class FertiliserManureService : Service, IFertiliserManureService
             url += $"&fertiliserId={fertiliserId.Value}";
         }
         url = string.Format(url, fieldId, fromdate, toDate, confirm);
-        var (data, error) = await HandleApiRequest(rw => (decimal?)rw?.Data?.TotalN == null
-      ? 0m
-      : rw.Data.TotalN.Value<decimal>(), url);
-        return (data??0, error);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
+        return (data ?? 0, error);
     }
     public async Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds)
     {
@@ -248,7 +246,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
     public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
     {
         string url = string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID);
-        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN, url);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
         return (data ?? 0, error);
 
     }
@@ -268,7 +266,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
     public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
     {
         string url = string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI, managementPeriodID, isAutumn);
-        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN, url);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
         return (data ?? 0, error);
     }
 
