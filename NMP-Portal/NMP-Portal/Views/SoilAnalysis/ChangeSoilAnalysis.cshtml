@@ -54,18 +54,37 @@
         }
         else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
         {
-            @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
-                            Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
+            @if (Model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
             {
-                phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
-                potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
-                magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
+                @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
+                                                                                        Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
+                {
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
+                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PotassiumStatus})");
+                    magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.MagnesiumStatus})");
+                }
+                else
+                {
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
+                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PotassiumStatus})");
+                    magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.MagnesiumStatus})");
+                }
             }
             else
             {
-                phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
-                potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
-                magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
+                @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
+                                                                    Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
+                {
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
+                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
+                    magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
+                }
+                else
+                {
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
+                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
+                    magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
+                }
             }
         }
         else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
@@ -73,15 +92,15 @@
             @if (Model.PH.HasValue || !string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ||
                             !string.IsNullOrWhiteSpace(Model.PotassiumStatus) || !string.IsNullOrWhiteSpace(Model.PhosphorusStatus))
             {
-                phosphorusStatus = string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotEntered : TempData["PhosphorusStatus"]?.ToString();
-                potassiumStatus = string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotEntered : TempData["PotassiumStatus"]?.ToString();
-                magnesiumStatus = string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotEntered : TempData["MagnesiumStatus"]?.ToString();
+                phosphorusStatus = string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotEntered : Model.PhosphorusStatus;
+                potassiumStatus = string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotEntered : Model.PotassiumStatus;
+                magnesiumStatus = string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotEntered : Model.MagnesiumStatus;
             }
             else
             {
-                phosphorusStatus = string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString();
-                potassiumStatus = string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString();
-                magnesiumStatus = string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString();
+                phosphorusStatus = string.IsNullOrWhiteSpace(Model.PhosphorusStatus) ? Resource.lblNotSet : Model.PhosphorusStatus;
+                potassiumStatus = string.IsNullOrWhiteSpace(Model.PotassiumStatus) ? Resource.lblNotSet : Model.PotassiumStatus;
+                magnesiumStatus = string.IsNullOrWhiteSpace(Model.MagnesiumStatus) ? Resource.lblNotSet : Model.MagnesiumStatus;
             }
         }
 
@@ -89,7 +108,9 @@
         @if (((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index) && (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                                             (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue))
                                             || ((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram) && ((Model.PH.HasValue) || Model.Potassium.HasValue ||
-                                            Model.Phosphorus.HasValue || Model.Magnesium.HasValue)))
+                                            Model.Phosphorus.HasValue || Model.Magnesium.HasValue))
+                                            || ((Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status) && ((Model.PH.HasValue) || !string.IsNullOrWhiteSpace(Model.PotassiumStatus) ||
+                                             !string.IsNullOrWhiteSpace(Model.PhosphorusStatus) || !string.IsNullOrWhiteSpace(Model.MagnesiumStatus))))
         {
             ph = ((!Model.PH.HasValue) ? Resource.lblNotEntered : (Model.PH.ToString()));
         }
@@ -324,7 +345,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumStatus)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>                      
+                        </govuk-summary-list-row>
                     }
 
                     <govuk-summary-list-row>

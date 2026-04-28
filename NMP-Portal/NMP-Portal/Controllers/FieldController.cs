@@ -1003,26 +1003,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return RedirectToAction("SoilNutrientValue");
     }
+       
 
-
-    private void BindNutrientStatusText(FieldViewModel model)
-    {
-        if (model?.SoilAnalyses == null)
-            return;
-
-        BindStatus(nameof(ViewBag.MagnesiumStatus), model.SoilAnalyses.MagnesiumStatus);
-        BindStatus(nameof(ViewBag.PotassiumStatus), model.SoilAnalyses.PotassiumStatus);
-        BindStatus(nameof(ViewBag.PhosphorusStatus), model.SoilAnalyses.PhosphorusStatus);
-    }
-
-    private void BindStatus(string key, string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-            return;
-
-        
-        TempData[key] = SoilAnalysisNutrientValuesLogic.MapValueToText(value);
-    }
+    
     [HttpGet]
     public async Task<IActionResult> SoilNutrientValue()
     {
@@ -1286,25 +1269,62 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return false;
         }
 
-        if (!await TryPopulateIndexAsync(Resource.lblPhosphate, model.SoilAnalyses.Phosphorus, (id, value) => model.SoilAnalyses.PhosphorusIndex = value, model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? (int)PhosphorusMethodology.Resin : (int)PhosphorusMethodology.Olsens, nutrients))
+        if (!await TryPopulateIndexAsync(Resource.lblPhosphate, model.SoilAnalyses.Phosphorus, (id, value) => SetNutrientValue(value, model, 1), model.SoilAnalyses.PhosphorusMethodologyID.Value, nutrients, model.FarmRB209CountryID.Value))
         {
             return false;
         }
 
-        if (!await TryPopulateIndexAsync(Resource.lblMagnesium, model.SoilAnalyses.Magnesium, (id, value) => model.SoilAnalyses.MagnesiumIndex = value, (int)MagnesiumMethodology.None, nutrients))
+        if (!await TryPopulateIndexAsync(Resource.lblMagnesium, model.SoilAnalyses.Magnesium, (id, value) => SetNutrientValue(value, model, 2), model.SoilAnalyses.MagnesiumMethodologyID.Value, nutrients, model.FarmRB209CountryID.Value))
         {
             return false;
         }
 
-        if (!await TryPopulateIndexAsync(Resource.lblPotash, model.SoilAnalyses.Potassium, (_, value) => model.PotassiumIndexValue = value.ToString(), (int)PotassiumMethodology.None, nutrients))
+        if (!await TryPopulateIndexAsync(Resource.lblPotash, model.SoilAnalyses.Potassium, (_, value) => SetPotashValue(value, model), model.SoilAnalyses.PotassiumMethodologyID.Value, nutrients, model.FarmRB209CountryID.Value))
         {
             return false;
         }
 
         return true;
     }
+    void SetNutrientValue(string value, FieldViewModel model, int nutrientId)
+    {
+        if (model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
+        {
+            if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Phosphate)
+            {
+                model.SoilAnalyses.PhosphorusStatus = value;
+            }
+            else
+            {
+                model.SoilAnalyses.MagnesiumStatus = value;
+            }
+        }
+        else
+        {
+            if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Phosphate)
+            {
+                model.SoilAnalyses.PhosphorusIndex = Convert.ToInt32(value);
+            }
+            else
+            {
+                model.SoilAnalyses.MagnesiumIndex = Convert.ToInt32(value);
+            }
 
-    private async Task<bool> TryPopulateIndexAsync(string nutrientName, int? nutrientValue, Action<int, dynamic> assignIndex, int methodologyId, List<NutrientResponseWrapper> nutrients)
+        }
+    }
+
+    void SetPotashValue(string value, FieldViewModel model)
+    {
+        if (model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
+        {
+            model.SoilAnalyses.PotassiumStatus = value;
+        }
+        else
+        {
+            model.PotassiumIndexValue = value;
+        }
+    }
+    private async Task<bool> TryPopulateIndexAsync(string nutrientName, int? nutrientValue, Action<int, dynamic> assignIndex, int methodologyId, List<NutrientResponseWrapper> nutrients, int countryId)
     {
         if (nutrientValue == null)
         {
@@ -1313,7 +1333,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         var nutrientId = nutrients.FirstOrDefault(n => n.nutrient.Equals(nutrientName))?.nutrientId ?? 0;
 
-        (string indexValue, Error error) = await _soilService.FetchSoilNutrientIndex(nutrientId, nutrientValue, methodologyId);
+        (string indexValue, Error error) = await _soilService.FetchSoilNutrientIndex(nutrientId, nutrientValue, methodologyId, countryId);
 
         if (error != null)
         {
@@ -1323,14 +1343,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (!string.IsNullOrWhiteSpace(indexValue))
         {
-            if (int.TryParse(indexValue, out _))
-            {
-                assignIndex(nutrientId, Convert.ToInt32(indexValue.Trim()));
-            }
-            else
-            {
+            //if (int.TryParse(indexValue, out _))
+            //{
+            //    assignIndex(nutrientId, Convert.ToInt32(indexValue.Trim()));
+            //}
+            //else
+            //{
                 assignIndex(nutrientId, indexValue.Trim());
-            }
+            //}
         }
 
         return true;
@@ -1743,11 +1763,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         FieldViewModel? model = LoadFieldDataFromSession();
         try
         {
-            if (model != null)
-            {
-                BindNutrientStatusText(model);
-            }
-
             if (model == null)
             {
                 _logger.LogTrace("Field Controller : CheckAnswer() Field Data session not found");

@@ -244,7 +244,7 @@
             }
             else
             {
-                 sulphurDeficient = Resource.lblNo;
+                sulphurDeficient = Resource.lblNo;
             }
             summaryRows.Add(new SummaryListRowViewModel
             {
@@ -300,52 +300,97 @@
                 {
                     summaryRows.Add(new SummaryListRowViewModel
                     {
-                        Key = (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
+                        Key = (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblPhLevel : Resource.lblSoilPHLevel),
                         Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
                         ActionName = "SoilNutrientValue",
                         ControllerName = "Field"
                     });
                 }
-                     @if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
+                @if (Model.SoilAnalyses.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
                 {
-                    if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.Potassium == null &&
-                Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Magnesium == null)
+                    @if (Model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
                     {
-                        summaryRows.Add(new SummaryListRowViewModel
+                        if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.Potassium == null &&
+                   Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Magnesium == null)
                         {
-                            Key =(Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
-                            Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
-                            ActionName = "SoilNutrientValue",
-                            ControllerName = "Field"
-                        });
-                        summaryRows.Add(new SummaryListRowViewModel
-                        {
-                            Key = Resource.lblPhosphorusPerLitreOfSoil,
-                            Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.SoilAnalyses.PhosphorusIndex})"),
-                            ActionName = "SoilNutrientValue",
-                            ControllerName = "Field"
-                        });
-                        summaryRows.Add(new SummaryListRowViewModel
-                        {
-                            Key = Resource.lblPotassiumPerLitreOfSoil,
-                            Value = ((!Model.SoilAnalyses.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndexValue})"),
-                            ActionName = "SoilNutrientValue",
-                            ControllerName = "Field"
-                        });
-                        summaryRows.Add(new SummaryListRowViewModel
-                        {
-                            Key = Resource.lblMagnesiumPerLitreOfSoil,
-                            Value = ((!Model.SoilAnalyses.Magnesium.HasValue) ? @Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.SoilAnalyses.MagnesiumIndex})"),
-                            ActionName = "SoilNutrientValue",
-                            ControllerName = "Field"
-                        });
-                    }
+                            summaryRows.Add(new SummaryListRowViewModel
+                            {
+                                Key = (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblPhLevel : Resource.lblSoilPHLevel),
+                                Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
+                            summaryRows.Add(new SummaryListRowViewModel
+                            {
+                                Key = Resource.lblPhosphorusPerLitreOfSoil,
+                                Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.SoilAnalyses.PhosphorusStatus})"),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
+                            summaryRows.Add(new SummaryListRowViewModel
+                            {
+                                Key = Resource.lblPotassiumPerLitreOfSoil,
+                                Value = ((!Model.SoilAnalyses.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.SoilAnalyses.PotassiumStatus})"),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
+                            summaryRows.Add(new SummaryListRowViewModel
+                            {
+                                Key = Resource.lblMagnesiumPerLitreOfSoil,
+                                Value = ((!Model.SoilAnalyses.Magnesium.HasValue) ? @Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.SoilAnalyses.MagnesiumStatus})"),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
+                        }
 
-                    if (Model.SoilAnalyses.Potassium != null ||
-                    Model.SoilAnalyses.Phosphorus != null || Model.SoilAnalyses.Magnesium != null)
-                    {
-                        @if (Model.SoilAnalyses.Phosphorus != null)
+                        else if (Model.SoilAnalyses.Potassium != null ||
+                          Model.SoilAnalyses.Phosphorus != null || Model.SoilAnalyses.Magnesium != null)
                         {
+                            @if (Model.SoilAnalyses.Phosphorus != null)
+                            {
+                                summaryRows.Add(new SummaryListRowViewModel
+                                {
+                                    Key = Resource.lblPhosphorusPerLitreOfSoil,
+                                    Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.SoilAnalyses.PhosphorusStatus})"),
+                                    ActionName = "SoilNutrientValue",
+                                    ControllerName = "Field"
+                                });
+                            }
+                            @if (Model.SoilAnalyses.Potassium != null)
+                            {
+
+                                summaryRows.Add(new SummaryListRowViewModel
+                                {
+                                    Key = Resource.lblPotassiumPerLitreOfSoil,
+                                    Value = ((!Model.SoilAnalyses.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.SoilAnalyses.PotassiumStatus})"),
+                                    ActionName = "SoilNutrientValue",
+                                    ControllerName = "Field"
+                                });
+                            }
+                            @if (Model.SoilAnalyses.Magnesium != null)
+                            {
+                                summaryRows.Add(new SummaryListRowViewModel
+                                {
+                                    Key = Resource.lblMagnesiumPerLitreOfSoil,
+                                    Value = ((!Model.SoilAnalyses.Magnesium.HasValue) ? @Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.SoilAnalyses.MagnesiumStatus})"),
+                                    ActionName = "SoilNutrientValue",
+                                    ControllerName = "Field"
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Model.SoilAnalyses.PH == null && Model.SoilAnalyses.Potassium == null &&
+                    Model.SoilAnalyses.Phosphorus == null && Model.SoilAnalyses.Magnesium == null)
+                        {
+                            summaryRows.Add(new SummaryListRowViewModel
+                            {
+                                Key = (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblPhLevel : Resource.lblSoilPHLevel),
+                                Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
                             summaryRows.Add(new SummaryListRowViewModel
                             {
                                 Key = Resource.lblPhosphorusPerLitreOfSoil,
@@ -353,10 +398,6 @@
                                 ActionName = "SoilNutrientValue",
                                 ControllerName = "Field"
                             });
-                        }
-                        @if (Model.SoilAnalyses.Potassium != null)
-                        {
-
                             summaryRows.Add(new SummaryListRowViewModel
                             {
                                 Key = Resource.lblPotassiumPerLitreOfSoil,
@@ -364,9 +405,6 @@
                                 ActionName = "SoilNutrientValue",
                                 ControllerName = "Field"
                             });
-                        }
-                        @if (Model.SoilAnalyses.Magnesium != null)
-                        {
                             summaryRows.Add(new SummaryListRowViewModel
                             {
                                 Key = Resource.lblMagnesiumPerLitreOfSoil,
@@ -374,6 +412,42 @@
                                 ActionName = "SoilNutrientValue",
                                 ControllerName = "Field"
                             });
+                        }
+
+                      else  if (Model.SoilAnalyses.Potassium != null ||
+                        Model.SoilAnalyses.Phosphorus != null || Model.SoilAnalyses.Magnesium != null)
+                        {
+                            @if (Model.SoilAnalyses.Phosphorus != null)
+                            {
+                                summaryRows.Add(new SummaryListRowViewModel
+                                {
+                                    Key = Resource.lblPhosphorusPerLitreOfSoil,
+                                    Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.SoilAnalyses.PhosphorusIndex})"),
+                                    ActionName = "SoilNutrientValue",
+                                    ControllerName = "Field"
+                                });
+                            }
+                            @if (Model.SoilAnalyses.Potassium != null)
+                            {
+
+                                summaryRows.Add(new SummaryListRowViewModel
+                                {
+                                    Key = Resource.lblPotassiumPerLitreOfSoil,
+                                    Value = ((!Model.SoilAnalyses.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndexValue})"),
+                                    ActionName = "SoilNutrientValue",
+                                    ControllerName = "Field"
+                                });
+                            }
+                            @if (Model.SoilAnalyses.Magnesium != null)
+                            {
+                                summaryRows.Add(new SummaryListRowViewModel
+                                {
+                                    Key = Resource.lblMagnesiumPerLitreOfSoil,
+                                    Value = ((!Model.SoilAnalyses.Magnesium.HasValue) ? @Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.SoilAnalyses.MagnesiumIndex})"),
+                                    ActionName = "SoilNutrientValue",
+                                    ControllerName = "Field"
+                                });
+                            }
                         }
                     }
                 }
@@ -383,7 +457,7 @@
                     {
                         summaryRows.Add(new SummaryListRowViewModel
                         {
-                            Key = (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
+                            Key = (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblPhLevel : Resource.lblSoilPHLevel),
                             Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
@@ -451,7 +525,7 @@
                     {
                         summaryRows.Add(new SummaryListRowViewModel
                         {
-                            Key = (Model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland?Resource.lblPhLevel: Resource.lblSoilPHLevel),
+                            Key = (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblPhLevel : Resource.lblSoilPHLevel),
                             Value = ((!Model.SoilAnalyses.PH.HasValue) ? Resource.lblNotSet : (Model.SoilAnalyses.PH.ToString())),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
@@ -459,21 +533,21 @@
                         summaryRows.Add(new SummaryListRowViewModel
                         {
                             Key = Resource.lblPhosphorusStatus,
-                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString()),
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PhosphorusStatus),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
                         });
                         summaryRows.Add(new SummaryListRowViewModel
                         {
                             Key = Resource.lblPotashStatus,
-                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString()),
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PotassiumStatus),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
                         });
                         summaryRows.Add(new SummaryListRowViewModel
                         {
                             Key = Resource.lblMagnesiumStatus,
-                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString()),
+                            Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.MagnesiumStatus),
                             ActionName = "SoilNutrientValue",
                             ControllerName = "Field"
                         });
@@ -483,39 +557,39 @@
                         if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus))
                         {
                             summaryRows.Add(new SummaryListRowViewModel
-                                    {
-                                        Key = Resource.lblPhosphorusStatus,
-                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : TempData["PhosphorusStatus"]?.ToString()),
-                                        ActionName = "SoilNutrientValue",
-                                        ControllerName = "Field"
-                                    });
+                            {
+                                Key = Resource.lblPhosphorusStatus,
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PhosphorusStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PhosphorusStatus),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
                         }
                         if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus))
                         {
                             summaryRows.Add(new SummaryListRowViewModel
-                                    {
-                                        Key = Resource.lblPotashStatus,
-                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : TempData["PotassiumStatus"]?.ToString()),
-                                        ActionName = "SoilNutrientValue",
-                                        ControllerName = "Field"
-                                    });
+                            {
+                                Key = Resource.lblPotashStatus,
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.PotassiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.PotassiumStatus),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
                         }
                         if (!string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus))
                         {
                             summaryRows.Add(new SummaryListRowViewModel
-                                    {
-                                        Key = Resource.lblMagnesiumStatus,
-                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : TempData["MagnesiumStatus"]?.ToString()),
-                                        ActionName = "SoilNutrientValue",
-                                        ControllerName = "Field"
-                                    });
+                            {
+                                Key = Resource.lblMagnesiumStatus,
+                                Value = (string.IsNullOrWhiteSpace(Model.SoilAnalyses.MagnesiumStatus) ? Resource.lblNotSet : Model.SoilAnalyses.MagnesiumStatus),
+                                ActionName = "SoilNutrientValue",
+                                ControllerName = "Field"
+                            });
                         }
                     }
                 }
                 summaryRows.Add(new SummaryListRowViewModel
                 {
                     Key = Resource.lblOrganicMatter,
-                    Value = ((!Model.SoilAnalyses.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : (string.Format("{0}{1}", Model.SoilAnalyses.OrganicMatterPercentage.ToString(),Resource.lblPercentage))),
+                    Value = ((!Model.SoilAnalyses.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : (string.Format("{0}{1}", Model.SoilAnalyses.OrganicMatterPercentage.ToString(), Resource.lblPercentage))),
                     ActionName = "SoilNutrientValue",
                     ControllerName = "Field"
                 });
@@ -561,10 +635,10 @@
         summaryRows.Add(new SummaryListRowViewModel
         {
             Key = string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name),
-            Value =string.Empty,
+            Value = string.Empty,
             ActionName = "GrassLastThreeHarvestYear",
             ControllerName = "Field",
-    IsGrassYearsRow = true
+            IsGrassYearsRow = true
         });
 
 
@@ -653,17 +727,18 @@
                 <govuk-summary-list-row-key>@row.Key</govuk-summary-list-row-key>
                 <govuk-summary-list-row-value>
                     @if (row.Key==string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name))
-                {
+                    {
                         @if (Model.PreviousGrassYears == null || !Model.PreviousGrassYears.Any())
-{
-    @Resource.lblNotSet
-}
-else
-{
-    foreach (var year in Model.PreviousGrassYears.OrderByDescending(x => x))
-    {
-        @year <br />
-    }
+                        {
+                            @Resource.lblNotSet
+                        }
+                        else
+                        {
+                            foreach (var year in Model.PreviousGrassYears.OrderByDescending(x => x))
+                            {
+                                @year
+                                <br />
+                            }
                         }
                     }
                     else
