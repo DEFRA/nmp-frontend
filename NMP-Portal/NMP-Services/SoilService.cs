@@ -14,12 +14,12 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
 {
     private readonly ILogger<SoilService> _logger = logger;
     private const string _errorLog= "{Code} : {Message} : {Stack} : {Path}";
-    public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId)
+    public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId,int countryId)
     {
         Error error = null;
         string nutrientIndex = string.Empty;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientIndexAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(nutrientValue.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()));
+        var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientIndexAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(nutrientValue.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()), HttpUtility.UrlEncode(countryId.ToString()));
         var response = await httpClient.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();

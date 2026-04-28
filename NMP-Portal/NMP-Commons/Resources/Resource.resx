@@ -7754,4 +7754,7 @@ livestock manure.</value>
   <data name="lblMagnesiumStatus" xml:space="preserve">
     <value>Magnesium (Mg) status</value>
   </data>
+  <data name="lblStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>

@@ -10,6 +10,7 @@ namespace NMP.Commons.ServiceResponses
     {
         public int? nutrientId { get; set; }
         public int? indexId { get; set; }
+        public string? index { get; set; }
         public string indexText { get; set; } = string.Empty;
         public double? minRange { get; set; }
         public double? maxRange { get; set; }
