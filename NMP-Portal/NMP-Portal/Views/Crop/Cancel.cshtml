@@ -16,14 +16,8 @@
     };
 }
 @section BeforeContent {
-    @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-    { *@
         <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
-    @* }
-    else
-    {
-        <govuk-back-link asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblBack</govuk-back-link>
-    } *@
+ 
 
 }
 

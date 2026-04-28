@@ -117,7 +117,7 @@
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
 
-                        <govuk-radios asp-for="@Model.Crops[i].Yield">
+                        <govuk-radios for="@Model.Crops[i].Yield">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @(Model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, Model.Crops[i].FieldName, Model.Crops[i].Year))

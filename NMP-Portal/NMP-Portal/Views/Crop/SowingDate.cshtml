@@ -129,7 +129,7 @@
                     </div>
                     @if (Model.SowingDateCurrentCounter == i)
                     {
-                        <govuk-date-input asp-for="@Model.Crops[i].SowingDate">
+                        <govuk-date-input for="@Model.Crops[i].SowingDate">
                             <govuk-date-input-fieldset>
                                 <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @pageHeading
@@ -146,7 +146,7 @@
                     else
                     {
                         <div hidden="true">
-                            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[@i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
+                            <govuk-date-input class="govuk-visually-hidden" type="hidden" for="@Model.Crops[@i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
                         </div>
                     }
                 }

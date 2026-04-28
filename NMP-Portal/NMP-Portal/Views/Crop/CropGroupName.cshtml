@@ -17,14 +17,8 @@
 }
 
 @section BeforeContent {
-    @* @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
-    { *@
     <govuk-back-link asp-action="@backAction" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
-    @*  }
-    else
-    {
-        <govuk-back-link asp-action="UpdateCropGroupNameCheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName==null?null:ViewBag.EncryptedCropGroupName)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblBack</govuk-back-link>
-    } *@
+    
 }
 <form asp-action="CropGroupName" asp-controller="Crop" method="post">
     @Html.AntiForgeryToken()
