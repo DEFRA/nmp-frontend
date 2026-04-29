@@ -5,9 +5,15 @@
 
 @model SoilAnalysisViewModel
 @{
-    ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
-    ? $"{string.Format(Resource.lblChangeSoilAnalysisFromDate, Model.Date != null ? Model.Date.Value.ToString("dd MMMM yyyy") : "")} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
-    $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
+    if (Model != null && !string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId))
+    {
+        ViewData["Title"] = $"{string.Format(Resource.lblChangeSoilAnalysisFromDate, Model.Date != null ? Model.Date.Value.ToString("dd MMMM yyyy") : "")} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}";
+    }
+    else
+    {
+        ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
+    }
+    
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.ChangeSoilAnalysis;
     string? phosphorusIndex = string.Empty;
     string? potassiumIndex = string.Empty;
@@ -169,7 +175,21 @@
                             @Resource.lblSulphurDeficiencyStatus
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @((!Model.SulphurDeficient.HasValue) ? Resource.lblNotEntered : (Model.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo))
+                            @if(Model.SulphurDeficient.HasValue)
+                            {
+                                @if (Model.SulphurDeficient.Value)
+                                {
+                                    @Resource.lblYes
+                                }
+                                else
+                                {
+                                    @Resource.lblNo
+                                }
+                            }
+                            else
+                            {
+                                @Resource.lblNotEntered
+                            }                            
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblSulphurDeficiencyStatus)</span></govuk-summary-list-row-action>
@@ -228,12 +248,8 @@
                             <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPh)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-
-                   
-
                     @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
-                    {
-                       
+                    {                       
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @Resource.lblPhosphorusIndex
@@ -250,8 +266,7 @@
                                 @Resource.lblPotassiumIndex
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @potassiumIndex
-                                @* @Model.PotassiumIndex *@
+                                @potassiumIndex                                
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumIndex)</span></govuk-summary-list-row-action>
@@ -276,8 +291,7 @@
                                 @Resource.lblPhosphorusPerLitreOfSoil
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @phosphorus
-                                @* @Model.PhosphorusIndex *@
+                                @phosphorus                               
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusPerLitreOfSoil)</span></govuk-summary-list-row-action>
@@ -288,8 +302,7 @@
                                 @Resource.lblPotassiumPerLitreOfSoil
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @potassium
-                                @* @Model.PotassiumIndex *@
+                                @potassium                                
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
@@ -300,15 +313,12 @@
                                 @Resource.lblMagnesiumPerLitreOfSoil
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @magnesium
-                                @* @Model.MagnesiumIndex *@
+                                @magnesium                                
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-
-                     
+                        </govuk-summary-list-row>                     
                     }
                     else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
                     {
@@ -317,8 +327,7 @@
                                 @Resource.lblPhosphorusStatus
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @phosphorusStatus
-                                @* @Model.PhosphorusIndex *@
+                                @phosphorusStatus                               
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusStatus)</span></govuk-summary-list-row-action>
@@ -381,8 +390,6 @@
                         @Resource.lblSaveChanges
                     }
                 </govuk-button>
-
-
                 <p class="govuk-body cancel-link">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId))
                     {
@@ -390,7 +397,7 @@
                     }
                     else
                     {
-                        @if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                        if (ViewBag.IsDataChange != null && (bool)ViewBag.IsDataChange)
                         {
                             <a asp-action="Cancel" asp-controller="SoilAnalysis">@Resource.lblCancel</a>
                         }
@@ -400,7 +407,6 @@
                         }
                     }
                 </p>
-
             </div>
         </div>
     </form>

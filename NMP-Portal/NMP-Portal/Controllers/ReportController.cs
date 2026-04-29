@@ -110,15 +110,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         if (fields.Count == fieldCount)
                         {
                             ViewBag.NoPlan = string.Format(Resource.lblYouHaveNotEnteredAnyCropInformation, model.Year);
-
                         }
                     }
                     else
                     {
                         ViewBag.NoField = string.Format(Resource.lblYouHaveNotEnteredAnyField, model.Year);
-
                     }
-
                 }
             }
             if (ViewBag.NoPlan == null && ViewBag.NoField == null)
@@ -135,7 +132,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         return RedirectExportFieldsOrCropType(model);
                     }
                 }
-
             }
         }
         catch (Exception ex)
@@ -183,7 +179,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
                 }
-
             }
 
             SetReportDataToSession(model);
@@ -244,14 +239,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     if (cropTypeList.Count > 0)
                     {
                         //grouping of same type crops into one crop for nmax reporting
-
                         await BindViewBagForNMax(farm.CountryID.Value, cropTypeList);
                     }
                     else
                     {
                         return cropTypeList;
                     }
-
                 }
                 else
                 {
@@ -295,7 +288,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }).ToList();
             ViewBag.fieldList = SelectListItem.DistinctBy(x => x.Text).OrderBy(x => x.Text).ToList();
         }
-
     }
 
     private IActionResult RedirectExportFieldsOrCropType(ReportViewModel model)
@@ -2628,7 +2620,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     [HttpGet]
     public async Task<IActionResult> UpdateLivestockImportExport(string q, string? r)//q=FarmId, r=success msg
     {
-        _logger.LogTrace($"Report Controller : UpdateLivestockImportExport({q},{r}) action called");
+        _logger.LogTrace("Report Controller : UpdateLivestockImportExport({Q},{R}) action called", q, r);
         ReportViewModel model = new ReportViewModel();
         if (!string.IsNullOrWhiteSpace(q))
         {

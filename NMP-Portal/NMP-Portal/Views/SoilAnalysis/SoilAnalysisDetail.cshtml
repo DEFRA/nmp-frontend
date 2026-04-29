@@ -81,7 +81,23 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblSoilSulphurDeficient</td>
-                        <td class="govuk-table__cell">@(Model.SulphurDeficient != null ? (Model.SulphurDeficient.Value ? Resource.lblYes : Resource.lblNo) : Resource.lblNotEntered)</td>
+                        <td class="govuk-table__cell">
+                            @if(Model.SulphurDeficient.HasValue)
+                            {
+                                if (Model.SulphurDeficient.Value)
+                                {
+                                    @Resource.lblYes
+                                }
+                                else
+                                {
+                                    @Resource.lblNo
+                                }
+                            }
+                            else
+                            {
+                                @Resource.lblNotEntered
+                            } 
+                        </td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblPhosphorusAnalysisTypeForSoilDetail</td>
