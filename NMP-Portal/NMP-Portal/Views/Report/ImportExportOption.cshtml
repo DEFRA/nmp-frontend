@@ -4,7 +4,7 @@
     string heading = string.Empty;
     string action = string.Empty;
     action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
-    @if (Model.IsManageImportExport || !string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+    if (Model.IsManageImportExport || !string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
     {
         heading = Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExportingOrganicMaterial;
     }
@@ -88,10 +88,9 @@
                                 @Resource.lblCancel
                             </a>
                         }
-                        else
-                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                        else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                         {
-                            @if (!Model.IsCheckList)
+                            if (!Model.IsCheckList)
                             {
                                 <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                                     @Resource.lblCancel
@@ -112,9 +111,7 @@
                         }
                     }
                 </p>
-
             </div>
-
         </div>
     </form>
 }

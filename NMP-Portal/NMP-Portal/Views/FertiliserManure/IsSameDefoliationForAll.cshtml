@@ -3,13 +3,10 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{Resource.lblForMultipleDefoliation} {Resource.lblHyphen} {title}";
-
-    var count = 0;
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     string backAction = "FieldGroup";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.FertiliserWizardSteps.IsSameDefoliationForAll;
-    
 }
 
 @section BeforeContent {
@@ -17,13 +14,13 @@
     {
         <govuk-back-link asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
-    else @if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
+    else if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
     {
         <govuk-back-link asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        @if (Model.FieldGroup == Resource.lblSelectSpecificFields)
+        if (Model.FieldGroup == Resource.lblSelectSpecificFields)
         {
             backAction = "Fields";
         }
@@ -74,12 +71,7 @@
                     <a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
                 }
             </p>
-
         </div>
-
-
-
-
     </form>
 
 </div>

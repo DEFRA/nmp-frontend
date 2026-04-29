@@ -44,10 +44,9 @@
                             @Resource.lblCancel
                         </a>
                     }
-                    else
-                @if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+                    else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                     {
-                        @if (!Model.IsCheckList)
+                        if (!Model.IsCheckList)
                         {
                             <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
                                 @Resource.lblCancel
@@ -68,8 +67,6 @@
                     }
                 }
             </p>
-
         </div>
-
     </div>
 </form>
