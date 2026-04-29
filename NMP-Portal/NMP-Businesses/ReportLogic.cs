@@ -203,21 +203,12 @@ BindAdjustmentsForScotland(
     int? winterRainfall,
     int? nResidueGroup,
     int soilTypeId,
-    decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId)
+    decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId, bool isAutumn)
     {
-        (HarvestYearResponseHeader? harvestYearPlanResponse, Error? error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(crop.Year, farmId);
-        var startDate = new DateTime(crop.Year - 1, 8, 1, 0, 0, 0, DateTimeKind.Unspecified);
-        var endDate = new DateTime(crop.Year - 1, 12, 31, 0, 0, 0, DateTimeKind.Unspecified);
-        bool isWinterOilseedRapeAutumn = false;
-        if (error == null)
-        {
-            isWinterOilseedRapeAutumn = harvestYearPlanResponse?.InorganicFertiliserApplication?.Any(x => x.ApplicationDate.HasValue && x.ApplicationDate.Value >= startDate && x.ApplicationDate.Value <= endDate) ?? false;
-        }
-
         int rainfall = 0;
         int yield = 0;
         int market = GetScotlandMarketAdjustment(crop);
-        if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || !isWinterOilseedRapeAutumn)
+        if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || !isAutumn)
         {
             rainfall = GetRainfallAdjustment(winterRainfall, nResidueGroup, soilTypeId);
             yield = await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
@@ -334,7 +325,8 @@ BindAdjustmentsForScotland(
             (int)NMP.Commons.Enums.CropTypes.SpringOats => CalculateScotlandYieldAdjustment(yield, baseVal, 1.5m),
             (int)NMP.Commons.Enums.CropTypes.OatsSpringUndersown => CalculateScotlandYieldAdjustment(yield, baseVal, 1.5m),
 
-            (int)NMP.Commons.Enums.CropTypes.SpringOilseedRape => CalculateScotlandYieldAdjustment(yield, baseVal, 30),
+            (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape => 30, // yield adjustment for WinterOilseedRape is 30
+
 
             _ => 0
         };
@@ -353,7 +345,7 @@ BindAdjustmentsForScotland(
         Crop crop,
         Field field,
         List<FieldDetails> fieldDetail,
-        decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue)
+        decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn)
     {
         decimal yieldAdjustment = 0;
         int marketAdjustment = 0;
@@ -376,7 +368,7 @@ BindAdjustmentsForScotland(
                     field,
                     excessRain,
                     recommendation,
-                    defaultYield, scotlandNMaxValue, model);
+                    defaultYield, scotlandNMaxValue, model, isAutumn);
         }
 
         AddFieldDetails(
@@ -439,7 +431,7 @@ BindAdjustmentsForScotland(
         Field field,
         ExcessRainfalls? rain,
         Recommendation recommendation,
-        decimal? defaultYield, List<ScotlandNMaxValue>? scotlandNMaxValue, ReportViewModel model)
+        decimal? defaultYield, List<ScotlandNMaxValue>? scotlandNMaxValue, ReportViewModel model, bool isAutumn)
     {
         return await BindAdjustmentsForScotland(
             crop,
@@ -449,7 +441,7 @@ BindAdjustmentsForScotland(
                 : null,
             field.SoilTypeID.Value,
             defaultYield, scotlandNMaxValue, model.FarmId
-            .Value);
+            .Value, isAutumn);
     }
 
     private void AddFieldDetails(
@@ -709,7 +701,7 @@ BindAdjustmentsForScotland(
          int nMaxLimitForCropType,
         List<NMaxLimitReportResponse> nMaxList,
         string previousCrop,
-        List<ScotlandNMaxValue>? scotlandNMaxValue)
+        List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn)
     {
         (Crop? crop, _) = await _cropLogic.FetchCropById(cropData.CropID);
         Field field = await _fieldLogic.FetchFieldByFieldId(cropData.FieldID);
@@ -727,7 +719,7 @@ BindAdjustmentsForScotland(
                 fieldDetail,
                 defaultYield,
                 previousCrop,
-                scotlandNMaxValue);
+                scotlandNMaxValue, isAutumn);
 
 
         int nmaxLimit = nMaxLimitForCropType;

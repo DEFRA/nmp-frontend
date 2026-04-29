@@ -1070,7 +1070,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                  nMaxLimitForCropType,
                 nMaxList,
                 previousCrop,
-                scotlandNMaxValue);
+                scotlandNMaxValue,isAutumn);
         }
 
         await AddNitrogenResponse(
