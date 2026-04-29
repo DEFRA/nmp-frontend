@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    const selectAllCheckbox = document.getElementById("select-all");
+    const selectAllCheckbox = document.querySelector('input[name="select-all"]');
 
     if (selectAllCheckbox) {
 
