@@ -394,7 +394,7 @@
                                 @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
                             }
                         </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value id="nutrient_list">
+                        <govuk-summary-list-row-value class="nutrient_list">
                             @if ((Model.N.HasValue))
                             {
                                   <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.N.Value)</span></span>
