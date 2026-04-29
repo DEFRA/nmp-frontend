@@ -14,12 +14,12 @@
 }
 <form asp-action="AnotherCrop" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    @if (TempData["SowingDateQuestionError"] != null)
+    @if (TempData["AnotherCropError"] != null)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["SowingDateQuestionError"]</govuk-error-summary-item>
+                    <govuk-error-summary-item href="#">@TempData["AnotherCropError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             </div>
         </div>
