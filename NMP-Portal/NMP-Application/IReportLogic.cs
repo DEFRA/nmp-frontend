@@ -32,7 +32,7 @@ public interface IReportLogic
             decimal grassCut)>
         BindAdjustmentsForEnglandAndWales(Crop crop, Field field, int year);
     Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)> BindAdjustmentsForScotland(ScotlandAdjustmentContext ctx);
-    Task<(List<FieldDetails>, decimal, int, int)> BindNmaxResponseForScotland(BindNmaxResponseForScotlandContext context);
+    Task<(List<FieldDetails>, decimal, int, int)> BindNmaxResponseForScotland(BindNmaxResponseForScotlandContext ctx);
     Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> manPeriodList, bool isAutumn);
     Task ProcessEnglandAndWales(
        Crop crop,
