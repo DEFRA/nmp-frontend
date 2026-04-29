@@ -201,6 +201,7 @@
 
 
           
+            @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
             @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
             {
                 <h1 class="govuk-heading-l">

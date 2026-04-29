@@ -33,7 +33,7 @@ namespace NMP.Commons.Enums
         AddOrRemoveField=22,
         CopyCheckAnswer=23,
         CopyExistingPlan=24,
-        CopyOrganicInorganicApplications=25
+        CopyOrganicInorganicApplications=25,
             CopyPlanYears=26
     }
 }
