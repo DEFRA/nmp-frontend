@@ -1063,14 +1063,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else
         {
-            await _reportLogic.ProcessScotland(
-                model,
-                cropData,
-                fieldDetail,
-                 nMaxLimitForCropType,
-                nMaxList,
-                previousCrop,
-                scotlandNMaxValue,isAutumn);
+            var context = new ProcessScotlandContext
+            {
+                Model = model,
+                CropData = cropData,
+                FieldDetails = fieldDetail,
+                NMaxLimitForCropType = nMaxLimitForCropType,
+                NMaxList = nMaxList,
+                PreviousCrop = previousCrop,
+                ScotlandNMaxValues = scotlandNMaxValue,
+                IsAutumn = isAutumn
+            };
+
+            await _reportLogic.ProcessScotland(context);
         }
 
         await AddNitrogenResponse(

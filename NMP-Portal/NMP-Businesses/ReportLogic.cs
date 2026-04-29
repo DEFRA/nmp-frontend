@@ -197,21 +197,15 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
             ? (int)Math.Round(((yield - baseValue) / 0.1m) * multiplier)
             : 0;
     }
-    public async Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)>
-BindAdjustmentsForScotland(
-    Crop crop,
-    int? winterRainfall,
-    int? nResidueGroup,
-    int soilTypeId,
-    decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue, int farmId, bool isAutumn)
+    public async Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)> BindAdjustmentsForScotland(ScotlandAdjustmentContext ctx)
     {
         int rainfall = 0;
         int yield = 0;
-        int market = GetScotlandMarketAdjustment(crop);
-        if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || !isAutumn)
+        int market = GetScotlandMarketAdjustment(ctx.Crop);
+        if (ctx.Crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape || !ctx.IsAutumn)
         {
-            rainfall = GetRainfallAdjustment(winterRainfall, nResidueGroup, soilTypeId);
-            yield = await GetScotlandYieldAdjustment(crop, standardYield, scotlandNMaxValue, farmId);
+            rainfall = GetRainfallAdjustment(ctx.WinterRainfall, ctx.NResidueGroup, ctx.SoilTypeId);
+            yield = await GetScotlandYieldAdjustment(ctx.Crop, ctx.StandardYield, ctx.ScotlandNMaxValues, ctx.FarmId);
         }
         return (yield, market, rainfall);
     }
@@ -340,45 +334,40 @@ BindAdjustmentsForScotland(
     // ===============================
 
     public async Task<(List<FieldDetails>, decimal, int, int)>
-    BindNmaxResponseForScotland(
-        ReportViewModel model,
-        Crop crop,
-        Field field,
-        List<FieldDetails> fieldDetail,
-        decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn)
+    BindNmaxResponseForScotland(BindNmaxResponseForScotlandContext ctx)
     {
         decimal yieldAdjustment = 0;
         int marketAdjustment = 0;
         int rainfallAdjustment = 0;
 
-        var soilType = await GetSoilType(field);
+        var soilType = await GetSoilType(ctx.Field);
 
-        var excessRain = await GetExcessRainfall(model);
+        var excessRain = await GetExcessRainfall(ctx.Model);
 
-        var (recommendation, mpId) = await GetRecommendation(crop);
+        var (recommendation, mpId) = await GetRecommendation(ctx.Crop);
 
         if (recommendation == null || mpId == null)
-            return (fieldDetail, yieldAdjustment, marketAdjustment, rainfallAdjustment);
+            return (ctx.FieldDetails, yieldAdjustment, marketAdjustment, rainfallAdjustment);
 
-        if (ShouldCalculateScotlandAdjustment(scotlandNMaxValue, crop))
+        if (ShouldCalculateScotlandAdjustment(ctx.ScotlandNMaxValues, ctx.Crop))
         {
-            (yieldAdjustment, marketAdjustment, rainfallAdjustment) =
-               await CalculateScotlandAdjustments(
-                    crop,
-                    field,
-                    excessRain,
-                    recommendation,
-                    defaultYield, scotlandNMaxValue, model, isAutumn);
+            var calculateScotlandAdjustmentsContext = new CalculateScotlandAdjustmentsContext
+            {
+                Crop = ctx.Crop,
+                Field= ctx.Field,
+                Rain = excessRain,
+                Recommendation = recommendation,
+                DefaultYield=ctx.DefaultYield,
+                ScotlandNMaxValues = ctx.ScotlandNMaxValues,
+                Model=ctx.Model,
+                IsAutumn = ctx.IsAutumn
+            };
+            (yieldAdjustment, marketAdjustment, rainfallAdjustment) = await CalculateScotlandAdjustments(calculateScotlandAdjustmentsContext);
         }
 
-        AddFieldDetails(
-            fieldDetail,
-            field,
-            soilType,
-            previousCrop,
-            recommendation);
+        AddFieldDetails(ctx.FieldDetails, ctx.Field, soilType, ctx.PreviousCrop, recommendation);
 
-        return (fieldDetail, yieldAdjustment, marketAdjustment, rainfallAdjustment);
+        return (ctx.FieldDetails, yieldAdjustment, marketAdjustment, rainfallAdjustment);
     }
 
 
@@ -426,22 +415,23 @@ BindAdjustmentsForScotland(
         return scotlandValues?.Any(x => x.CropTypeID == crop.CropTypeID) == true;
     }
 
-    private async Task<(decimal, int, int)> CalculateScotlandAdjustments(
-        Crop crop,
-        Field field,
-        ExcessRainfalls? rain,
-        Recommendation recommendation,
-        decimal? defaultYield, List<ScotlandNMaxValue>? scotlandNMaxValue, ReportViewModel model, bool isAutumn)
+    private async Task<(decimal, int, int)> CalculateScotlandAdjustments(CalculateScotlandAdjustmentsContext ctx)
     {
-        return await BindAdjustmentsForScotland(
-            crop,
-            rain?.WinterRainfall,
-            recommendation.NIndex != null
-                ? Convert.ToInt32(recommendation.NIndex)
-                : null,
-            field.SoilTypeID.Value,
-            defaultYield, scotlandNMaxValue, model.FarmId
-            .Value, isAutumn);
+        var context = new ScotlandAdjustmentContext
+        {
+            Crop = ctx.Crop,
+            WinterRainfall = ctx.Rain?.WinterRainfall,
+            NResidueGroup = ctx.Recommendation.NIndex != null
+            ? Convert.ToInt32(ctx.Recommendation.NIndex)
+            : null,
+            SoilTypeId = ctx.Field.SoilTypeID.Value,
+            StandardYield = ctx.DefaultYield,
+            ScotlandNMaxValues = ctx.ScotlandNMaxValues,
+            FarmId = ctx.Model.FarmId.Value,
+            IsAutumn = ctx.IsAutumn
+        };
+
+        return await BindAdjustmentsForScotland(context);
     }
 
     private void AddFieldDetails(
@@ -694,52 +684,45 @@ BindAdjustmentsForScotland(
     // ======================================
     // SCOTLAND
     // ======================================
-    public async Task ProcessScotland(
-        ReportViewModel model,
-        HarvestYearPlanResponse cropData,
-        List<FieldDetails> fieldDetail,
-         int nMaxLimitForCropType,
-        List<NMaxLimitReportResponse> nMaxList,
-        string previousCrop,
-        List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn)
+    public async Task ProcessScotland(ProcessScotlandContext ctx)
     {
-        (Crop? crop, _) = await _cropLogic.FetchCropById(cropData.CropID);
-        Field field = await _fieldLogic.FetchFieldByFieldId(cropData.FieldID);
-        decimal? defaultYield =
-            await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(
-                crop.CropTypeID.Value,
-                true);
+        (Crop? crop, _) = await _cropLogic.FetchCropById(ctx.CropData.CropID);
+        Field field = await _fieldLogic.FetchFieldByFieldId(ctx.CropData.FieldID);
+        decimal? defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(crop.CropTypeID.Value, true);
+        var nmaxScotlandContext = new BindNmaxResponseForScotlandContext
+        {
+            Model = ctx.Model,
+            Crop = crop,
+            PreviousCrop = ctx.PreviousCrop,
+            DefaultYield = defaultYield,
+            Field = field,
+            FieldDetails = ctx.FieldDetails,
+            ScotlandNMaxValues = ctx.ScotlandNMaxValues,
+            IsAutumn = ctx.IsAutumn
+        };
 
 
-        (List<FieldDetails> _, decimal yield, int market, int rainfall) =
-            await BindNmaxResponseForScotland(
-                model,
-                crop,
-                field,
-                fieldDetail,
-                defaultYield,
-                previousCrop,
-                scotlandNMaxValue, isAutumn);
+        (List<FieldDetails> _, decimal yield, int market, int rainfall) = await BindNmaxResponseForScotland(nmaxScotlandContext);
 
 
-        int nmaxLimit = nMaxLimitForCropType;
-        nMaxLimitForCropType = (int)Math.Round(
-            nMaxLimitForCropType + market + yield + rainfall,
+        int nmaxLimit = ctx.NMaxLimitForCropType;
+        ctx.NMaxLimitForCropType = (int)Math.Round(
+            ctx.NMaxLimitForCropType + market + yield + rainfall,
             0);
 
         var data = BindNMaxLimitReportResponse(
             field,
             crop,
-            nMaxLimitForCropType,
+            ctx.NMaxLimitForCropType,
             yield);
 
-        data.CropTypeName = cropData.CropTypeName;
+        data.CropTypeName = ctx.CropData.CropTypeName;
         data.MarketAdjustment = market;
         data.WinterRainfallAdjustment = rainfall;
         data.StandardRate = nmaxLimit;
         data.AdjustedNMaxLimit = (int)Math.Round(market + rainfall + yield, 0);
 
-        nMaxList.Add(data);
+        ctx.NMaxList.Add(data);
     }
     public async Task<string> GetPreviousCropAsync(int fieldId, int year)
     {

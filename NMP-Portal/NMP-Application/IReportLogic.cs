@@ -31,14 +31,8 @@ public interface IReportLogic
             int paperCrumbleOrStrawMulch,
             decimal grassCut)>
         BindAdjustmentsForEnglandAndWales(Crop crop, Field field, int year);
-    Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)> BindAdjustmentsForScotland(Crop crop,int? winterRainfall,int? nResidueGroup,int soilTypeId,decimal? standardYield, List<ScotlandNMaxValue>? scotlandNMaxValue,int farmId, bool isAutumn);
-    Task<(List<FieldDetails>, decimal, int, int)>
-        BindNmaxResponseForScotland(
-            ReportViewModel model,
-            Crop crop,
-            Field field,
-            List<FieldDetails> fieldDetail,
-            decimal? defaultYield, string previousCrop, List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn);
+    Task<(int yieldAdjustment, int marketAdjustment, int rainfallAdjustment)> BindAdjustmentsForScotland(ScotlandAdjustmentContext ctx);
+    Task<(List<FieldDetails>, decimal, int, int)> BindNmaxResponseForScotland(BindNmaxResponseForScotlandContext context);
     Task<(decimal?, decimal?)> FetchTotalNitroegen(List<ManagementPeriod> manPeriodList, bool isAutumn);
     Task ProcessEnglandAndWales(
        Crop crop,
@@ -48,14 +42,7 @@ public interface IReportLogic
         string cropTypeName,
         int nMaxLimitForCropType,
        List<NMaxLimitReportResponse> nMaxList);
-    Task ProcessScotland(
-         ReportViewModel model,
-         HarvestYearPlanResponse cropData,
-         List<FieldDetails> fieldDetail,
-          int nMaxLimitForCropType,
-         List<NMaxLimitReportResponse> nMaxList,
-         string previousCrop,
-         List<ScotlandNMaxValue>? scotlandNMaxValue, bool isAutumn);
+    Task ProcessScotland(ProcessScotlandContext ctx);
      Task<string> GetPreviousCropAsync(int fieldId, int year);
     Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId);
 }
