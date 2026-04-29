@@ -765,27 +765,27 @@ hr.seperator_thirty {
     }
 }
 
-#nutrient_list .nutrient_row {
+.nutrient_list .nutrient_row {
     display: block;
     width: 100%;
     clear: both;
     padding-bottom: 5px;
 }
 
-    #nutrient_list .nutrient_row:last-child {
+    .nutrient_list .nutrient_row:last-child {
         padding-bottom: 10px;
         float: left;
     }
 
-    #nutrient_list .nutrient_row .figure {
+    .nutrient_list .nutrient_row .figure {
         float: right;
         padding-right: 5px;
     }
-        #nutrient_list .nutrient_row .figure.w31 {
+        .nutrient_list .nutrient_row .figure.w31 {
             width: 31%;
         }
 
-        #nutrient_list .nutrient_row .figure.w35 {
+        .nutrient_list .nutrient_row .figure.w35 {
             width: 35%;
         }
 
