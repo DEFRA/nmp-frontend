@@ -4,8 +4,7 @@
     ViewData["Title"] = $"{string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    // var backAction = Model.IsSoilReleasingClay == true ? "SoilReleasingClay" :
-    //                 "SulphurDeficient";
+   
     var action = "";
     var controller = "";
     if (Model.IsCheckAnswer)
@@ -53,8 +52,7 @@
             </govuk-date-input>
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button>
-            @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p> *@
+            </govuk-button>           
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
@@ -66,6 +64,5 @@
                 }
             </p>
         </div>
-
     </div>
 </form>
