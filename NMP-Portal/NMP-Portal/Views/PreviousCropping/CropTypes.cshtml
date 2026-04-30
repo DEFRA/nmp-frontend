@@ -1,8 +1,10 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     //ViewData["Title"] = Resource.lblCropType;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.HarvestYear)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
+    ViewBag.CurrentStep = (int)PreviousCroppingWizardSteps.CropType;
 }
 
 @section BeforeContent {
@@ -10,36 +12,7 @@
 }
 <form asp-action="CropTypes" asp-controller="PreviousCropping" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-    <div hidden="true">
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName" value="@Model.CropTypeName" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedYear" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGrassInLastThreeYear" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassManagementOptionID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HasGreaterThan30PercentClover" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNitrogenSupplyItemID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LayDuration" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousYearGrass" value="@Model.IsPreviousYearGrass.ToString().ToLower()" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsHasGrassInLastThreeYearChange" value="@Model.IsHasGrassInLastThreeYearChange.ToString().ToLower()" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
-        @if (Model != null)
-        {
-            @if (Model.PreviousGrassYears != null && Model.PreviousGrassYears.Count > 0)
-            {
-                @for (int i = 0; i < Model.PreviousGrassYears.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassYears[i]" value="@Model.PreviousGrassYears[i]" />
-                }
-            }
-        }
-    </div>
+    @await Html.PartialAsync("~/Views/PreviousCropping/_PreviousCroppingHiddenField.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 

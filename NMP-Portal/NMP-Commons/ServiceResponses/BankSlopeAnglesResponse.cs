@@ -6,7 +6,7 @@ public class BankSlopeAnglesResponse
     public int ID { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [JsonProperty("angle")]
     public decimal Angle { get; set; }

@@ -84,4 +84,15 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         _logger.LogTrace("Updating fertiliser");
         return await _fertiliserManureService.UpdateFertiliser(fertliserData);
     }
+    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId)
+    {
+        _logger.LogTrace("Fetch fertiliser manure closed period");
+        return await _fertiliserManureService.FetchFertiliserManureClosedPeriod(countryId, cropTypeId, nvzProgramId);
+    }
+
+    public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
+    {
+        _logger.LogTrace("Fetching total N by management perios Id and isAutumn");
+        return await _fertiliserManureService.FetchTotalNByManagementPeriodIDIsAutumn(managementPeriodID, isAutumn);
+    }
 }

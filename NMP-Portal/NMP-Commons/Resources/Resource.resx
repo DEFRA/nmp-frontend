@@ -598,7 +598,7 @@
     <value>Enter an amount between 0 and 9,998 litres</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
-    <value>Enter an index between 0 and 9</value>
+    <value>Enter an index between 0 and {0}</value>
   </data>
   <data name="lblBasedOnRecentSNA" xml:space="preserve">
     <value>Calculate based on a recent soil mineral nitrogen (N) analysis result</value>
@@ -2892,7 +2892,7 @@ cubic metres per hectare  not set</value>
   <data name="lblIncorporationMethod" xml:space="preserve">
     <value>Incorporation method</value>
   </data>
-  <data name="lblInorganicFertiliserAndLimeApplicationsForField" xml:space="preserve">
+  <data name="lblInorganicFertiliserAndLimeApplicationsForFieldPerHectare" xml:space="preserve">
     <value>Inorganic fertiliser and lime applications for {0} (per hectare)</value>
   </data>
   <data name="lblManagement" xml:space="preserve">
@@ -4392,7 +4392,7 @@ cubic metres per hectare  not set</value>
   <data name="LblCropTypeFields" xml:space="preserve">
     <value>{0} fields</value>
   </data>
-  <data name="lblNitrogenApplicationsForCropTypeFields" xml:space="preserve">
+  <data name="lblNitrogenApplicationsForCropType" xml:space="preserve">
     <value>Nitrogen applications for {0} </value>
   </data>
   <data name="lblNitrogenApplicationsToCropTypeContent1" xml:space="preserve">
@@ -4404,7 +4404,7 @@ cubic metres per hectare  not set</value>
   <data name="lblNMaxLimitForCropTypeFieldsBeforeAdjustmentsPerHectare" xml:space="preserve">
     <value>{0} limit for {1} before adjustments: {2}kg per hectare.</value>
   </data>
-  <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
+  <data name="lblNMaxLimitForWinterWheat" xml:space="preserve">
     <value>{0} limit for {1} </value>
   </data>
   <data name="lblTotal" xml:space="preserve">
@@ -7170,7 +7170,7 @@ livestock manure.</value>
     <value>Stranraer Lowlands</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent7" xml:space="preserve">
-    <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt; Nitrate Vulnerable Zones (NVZs) &lt;/a&gt; (opens in a new window).</value>
+    <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt;Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent8" xml:space="preserve">
     <value>You should follow the guidance in the &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops.</value>
@@ -7401,7 +7401,7 @@ livestock manure.</value>
     <value>Is the wheat early or late sown?</value>
   </data>
   <data name="lblViewMapsOfTheNitrateVulnerableZonesInScotland" xml:space="preserve">
-    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland.&lt;/a&gt; (opens in a new window).</value>
+    <value>&lt;a href="https://www.gov.scot/publications/nitrate-vulnerable-zones-maps/"  target="_blank"&gt;View maps of the Nitrate Vulnerable Zones (NVZs) in Scotland&lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblItWillAlsoTellYou" xml:space="preserve">
     <value>It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
@@ -7440,7 +7440,7 @@ livestock manure.</value>
     <value>What is the land parcel identification number (LPID) (optional)?</value>
   </data>
   <data name="lblHintOfLPIDNumber" xml:space="preserve">
-    <value>For example,AA/12345/12345.This will only be shown on your reports.</value>
+    <value>For example, AA/12345/12345. This will only be shown on your reports.</value>
   </data>
   <data name="MsgLPIDNumberFormatError" xml:space="preserve">
     <value>LPID number should match the following format AA/12345/12345.</value>
@@ -7476,13 +7476,13 @@ livestock manure.</value>
     <value>Existing manure storage capacity</value>
   </data>
   <data name="lblWhichNitrateVulnerableZoneNVZIsIn" xml:space="preserve">
-    <value>Which Nitrate Vulnerable Zone(NVZ) is {0} in ?</value>
+    <value>Which Nitrate Vulnerable Zone (NVZ) is {0} in?</value>
   </data>
   <data name="lblPhosphorusSorptionCapacity" xml:space="preserve">
     <value>Phosphorus sorption capacity (PSC)</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentOne" xml:space="preserve">
-    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus</value>
+    <value>The phosphorus sorption capacity (PSC) of soil is its ability to bind with applied phosphorus.</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentTwo" xml:space="preserve">
     <value>If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices.</value>
@@ -7537,5 +7537,224 @@ livestock manure.</value>
   </data>
   <data name="msgViewAhdbGuidence" xml:space="preserve">
     <value>View the AHDB guidance</value>
+  </data>
+  <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
+    <value>Which soil analysis method was used?</value>
+  </data>
+  <data name="lblAsAStatus" xml:space="preserve">
+    <value>As a status</value>
+  </data>
+  <data name="lblWhichNVZIsTheFieldIn" xml:space="preserve">
+    <value>Which nitrate vulnerable zone (NVZ) is the field in?</value>
+  </data>
+  <data name="lblSoilAnalysisMethod" xml:space="preserve">
+    <value>Soil analysis method</value>
+  </data>
+  <data name="lblLandParcelIdentificationNumber" xml:space="preserve">
+    <value>Land parcel identification number (LPID)</value>
+  </data>
+  <data name="lblEnterWinterRainfallForHarvestYear" xml:space="preserve">
+    <value>Enter winter rainfall for harvest year {0}.</value>
+  </data>
+  <data name="lblYouHaveNotEnteredWinterRainfall" xml:space="preserve">
+    <value>You have not entered winter rainfall.</value>
+  </data>
+  <data name="lblChangeWinterRainfallForHarvestYear" xml:space="preserve">
+    <value>Change winter rainfall for harvest year {0}.</value>
+  </data>
+  <data name="lblWinterRainfallIs450OrMoreOrLess" xml:space="preserve">
+    <value>Winter rainfall is {0}.</value>
+  </data>
+  <data name="lblWinterRainfall1OctTo1March" xml:space="preserve">
+    <value>Winter rainfall (1 October {0} to 1 March {1})</value>
+  </data>
+  <data name="lblIsTheWinterRainfallFrom1OctTo1March" xml:space="preserve">
+    <value>Is the winter rainfall (from 1 October {0} to 1 March {1}) at {2} 450mm or more?</value>
+  </data>
+  <data name="lblSEPAPublishRainfallDataForScotland" xml:space="preserve">
+    <value>SEPA publish rainfall data for Scotland. &lt;a href="https://www2.sepa.org.uk/rainfall" target="_blank"&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;</value>
+  </data>
+  <data name="lblUpdateRainfall" xml:space="preserve">
+    <value>Update rainfall</value>
+  </data>
+  <data name="lblCreateRainfall" xml:space="preserve">
+    <value>Create rainfall</value>
+  </data>
+  <data name="lblUpdateWinterRainfall" xml:space="preserve">
+    <value>Update winter rainfall</value>
+  </data>
+  <data name="lblLessThan450" xml:space="preserve">
+    <value>less than 450mm</value>
+  </data>
+  <data name="lbl450OrMore" xml:space="preserve">
+    <value>450mm or more</value>
+  </data>
+  <data name="MsgAddWinterRainfallContentOne" xml:space="preserve">
+    <value>Winter Rainfall for {0} updated</value>
+  </data>
+  <data name="lblStatusSlashPH" xml:space="preserve">
+    <value>Status/pH</value>
+  </data>
+  <data name="lblOrgMaterialApplicationForFieldName" xml:space="preserve">
+    <value>Organic material application for {0}</value>
+  </data>
+  <data name="lblApplicationDetail" xml:space="preserve">
+    <value>Application detail</value>
+  </data>
+  <data name="lbOrganicMaterialType" xml:space="preserve">
+    <value>Organic material type</value>
+  </data>
+  <data name="lblApplicationRatePerHectare" xml:space="preserve">
+    <value>Application rate (per hectare)</value>
+  </data>
+  <data name="lblNumber" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="lblNutrientTotalsFromOrganicMaterialApplications" xml:space="preserve">
+    <value>Nutrient totals from organic material applications</value>
+  </data>
+  <data name="lblInorganicFertiliserAndLimeApplicationsForField" xml:space="preserve">
+    <value>Inorganic fertiliser and lime applications for {0}</value>
+  </data>
+  <data name="lblPreviousCropInYear" xml:space="preserve">
+    <value>Previous crop in {0}</value>
+  </data>
+  <data name="lblGuidanceForScotland" xml:space="preserve">
+    <value>Crop need is based on guidance in the SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+  </data>
+  <data name="lblWinterRainfall" xml:space="preserve">
+    <value>Winter rainfall</value>
+  </data>
+  <data name="lblWinterOats" xml:space="preserve">
+    <value>Winter oats</value>
+  </data>
+  <data name="lblSpringOats" xml:space="preserve">
+    <value>Spring oats</value>
+  </data>
+  <data name="lblWinterRye" xml:space="preserve">
+    <value>Winter rye</value>
+  </data>
+  <data name="lblSpringRye" xml:space="preserve">
+    <value>Spring rye</value>
+  </data>
+  <data name="lblWinterTriticale" xml:space="preserve">
+    <value>Winter triticale</value>
+  </data>
+  <data name="lblSpringTriticale" xml:space="preserve">
+    <value>Spring triticale</value>
+  </data>
+  <data name="lblKale" xml:space="preserve">
+    <value>Kale</value>
+  </data>
+  <data name="lblForageSwedes" xml:space="preserve">
+    <value>Forage swedes</value>
+  </data>
+  <data name="lblForageTurnips" xml:space="preserve">
+    <value>Forage turnips</value>
+  </data>
+  <data name="lblWinterOilseedRapeSpring" xml:space="preserve">
+    <value>Winter Oilseed Rape - spring nitrogen</value>
+  </data>
+  <data name="lblWinterOilseedRapeAutumn" xml:space="preserve">
+    <value>Winter Oilseed Rape - autumn nitrogen</value>
+  </data>
+  <data name="lblStandardRate" xml:space="preserve">
+    <value>Standard rate</value>
+  </data>
+  <data name="lblMarketAdjustment" xml:space="preserve">
+    <value>Market adjustment</value>
+  </data>
+  <data name="lblWinterRainfallAdjustment" xml:space="preserve">
+    <value>Winter rainfall adjustment</value>
+  </data>
+  <data name="lblNitrogenResidueGroup" xml:space="preserve">
+    <value>Nitrogen (N) residue group</value>
+  </data>
+  <data name="lblGroupFieldDetail" xml:space="preserve">
+    <value>{0} field details</value>
+  </data>
+  <data name="lblThisCalculationIsBasedOnAFarmAverageYield" xml:space="preserve">
+    <value>This calculation is based on a farm average yield of {0} tonnes per hectare.</value>
+  </data>
+  <data name="lblNMaxLimitForWinterWheatFields" xml:space="preserve">
+    <value>{0} limit for {1} fields</value>
+  </data>
+  <data name="lblNitrogenApplicationsForCropTypeField" xml:space="preserve">
+    <value>Nitrogen applications for {0} fields</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustment" xml:space="preserve">
+    <value>Farm average yield adjustment</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentOne" xml:space="preserve">
+    <value>The N-max limit is  based on standard yield values for these crops:</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentTwo" xml:space="preserve">
+    <value>You can adjust the N-max limit for these crops by entering a farm average yield, if you have one.</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentThree" xml:space="preserve">
+    <value>Help with farm average yield adjustment</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentFour" xml:space="preserve">
+    <value>A farm average yield adjustment must be based on either:</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentFive" xml:space="preserve">
+    <value>a yield previously achieved for the crop at {0}, or</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentSix" xml:space="preserve">
+    <value>evidence from another farm, if a new crop management system is being used</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentSeven" xml:space="preserve">
+    <value>If you are using evidence from another farm, it must come from the same nitrate vulnerable zone (NVZ), with a similar soil type. It must show the soil nutrient values where yields were achieved from the same crop, using the same crop management system.</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentEight" xml:space="preserve">
+    <value>You must have at least 3 years of record to demonstrate the actual yields achieved.</value>
+  </data>
+  <data name="lblFarmAverageYieldAdjustmentContentNine" xml:space="preserve">
+    <value>Do you want to enter a farm average yield for any of these crops?</value>
+  </data>
+  <data name="lblEnterFarmAverageYieldValues" xml:space="preserve">
+    <value>Enter farm average yield values</value>
+  </data>
+  <data name="lblFarmAverageYieldValuesContentOne" xml:space="preserve">
+    <value>If you do not want to use a farm average yield for a crop, leave it blank</value>
+  </data>
+  <data name="lblFarmAverageYieldValuesContentTwo" xml:space="preserve">
+    <value>Farm average yield value for {0}</value>
+  </data>
+  <data name="lblEnterAValueBetween0And999999" xml:space="preserve">
+    <value>Enter a value between 0 and 999999.</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimer" xml:space="preserve">
+    <value>Private beta disclaimer</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimerContentOne" xml:space="preserve">
+    <value>Any recommendations and advice given in the private beta version of this tool cannot be used:</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimerContentTwo" xml:space="preserve">
+    <value>to demonstrate compliance with any regulation or legislation, such as NVZ rules</value>
+  </data>
+  <data name="lblPrivateBetaDisclaimerContentThree" xml:space="preserve">
+    <value>as evidence for any government scheme, such as the Sustainable Farming Incentive (SFI).</value>
+  </data>
+  <data name="lblPhosphorusStatusOptional" xml:space="preserve">
+    <value>Phosphorus (P) status (Optional)</value>
+  </data>
+  <data name="lblPotashStatusOptional" xml:space="preserve">
+    <value>Potassium (K) status (Optional)</value>
+  </data>
+  <data name="lblMagnesiumStatusOptional" xml:space="preserve">
+    <value>Magnesium (Mg) status (Optional)</value>
+  </data>
+  <data name="lblPhosphorusStatus" xml:space="preserve">
+    <value>Phosphorus (P) status</value>
+  </data>
+  <data name="lblPotashStatus" xml:space="preserve">
+    <value>Potassium (K) status</value>
+  </data>
+  <data name="lblMagnesiumStatus" xml:space="preserve">
+    <value>Magnesium (Mg) status</value>
+  </data>
+  <data name="lblStatus" xml:space="preserve">
+    <value>Status</value>
   </data>
 </root>

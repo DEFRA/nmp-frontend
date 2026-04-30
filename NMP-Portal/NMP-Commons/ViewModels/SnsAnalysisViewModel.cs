@@ -47,4 +47,5 @@ public class SnsAnalysisViewModel:SnsAnalysis
     public bool IsRecentSoilAnalysisQuestionChange { get; set; } = false;
     public bool? IsSnsRemove { get; set; }
     public bool? IsCancel { get; set; }
+    public int? FarmRB209CountryId { get; set; }
 }

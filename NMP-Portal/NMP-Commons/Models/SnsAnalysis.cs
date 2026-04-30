@@ -18,6 +18,7 @@ public class SnsAnalysis
     public decimal? AdjustmentValue { get; set; }
     public int? SoilNitrogenSupplyValue { get; set; }
     public int? SoilNitrogenSupplyIndex { get; set; }
+    public string? NitrogenResidueGroup { get; set; }
     public DateTime? CreatedOn { get; set; }
     public int? CreatedByID { get; set; }
     public DateTime? ModifiedOn { get; set; }

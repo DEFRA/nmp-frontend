@@ -1,0 +1,29 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.ViewModels;
+@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+    var currentStep = ViewBag.CurrentStep as int?;
+}
+<div hidden="hidden">
+@if (currentStep != (int)ExcessWinterRainfallWizardSteps.ExcessWinterRainfall)
+{
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallId" />
+}
+    @if (currentStep != (int)ExcessWinterRainfallWizardSteps.WinterRainfall)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWinterRainfallMoreThan450" />
+    }
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AnnualRainfall" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallCheckAnswer" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallName" value="@Model.ExcessWinterRainfallName" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ExcessWinterRainfallValue" value="@Model.ExcessWinterRainfallValue" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsExcessOrWinterRainfallUpdated" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.WinterRainfallName" value="@Model.WinterRainfallName" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
+
+</div>

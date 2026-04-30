@@ -7,7 +7,7 @@
     ViewData["Title"] = $"{Resource.lblRemoveTheSoilNitrogenSupplyAnalysis} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-
+    
 }
 
 @if (Model != null)
@@ -20,11 +20,11 @@
     <form asp-action="RemoveSnsAnalysis" asp-controller="SnsAnalysis" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         <div hidden="true">
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" value="@Model.EncryptedFarmId"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" value="@Model.EncryptedFieldId"/>
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId" value="@Model.CropId"/>
-            </div>
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" value="@Model.EncryptedFarmId" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" value="@Model.EncryptedHarvestYear" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" value="@Model.EncryptedFieldId" />
+            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId" value="@Model.CropId" />
+        </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (TempData["RemoveSNSError"] != null)

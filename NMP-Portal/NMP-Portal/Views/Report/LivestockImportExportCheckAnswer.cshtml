@@ -4,7 +4,7 @@
 @{
     string action = string.Empty;
     string heading = string.Empty;
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
     {
         heading = Resource.lblUpdateAnOrganicMaterialImportOrExport;
         action = Resource.lblUpdate;
@@ -18,12 +18,12 @@
 
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     string importExport = "";
-    @if (Model.IsImport == null)
+    if (Model.IsImport == null)
     {
         importExport = Enum.GetName(typeof(NMP.Commons.Enums.ImportExport), Model.ImportExport);
     }
     var IsAnyLivestockImportExport = "";
-    @if (Model.IsAnyLivestockImportExport != null)
+    if (Model.IsAnyLivestockImportExport != null)
     {
         switch (Model.IsAnyLivestockImportExport)
         {
@@ -36,7 +36,7 @@
         }
     }
     string unit = "";
-    @if (Model.IsManureTypeLiquid != null)
+    if (Model.IsManureTypeLiquid != null)
     {
         unit = Model.IsManureTypeLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
     }
@@ -68,112 +68,7 @@
 {
     <form class="form-with-overlay" asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="hidden">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Year" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalFarmArea" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.TotalAreaInNVZ" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumbers" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckList" value="@Model.IsCheckList" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrasslandDerogation" value="@Model.IsGrasslandDerogation" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport" />
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport" />
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockQuantity" />
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockImportExportDate"></govuk-date-input>
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeId" />
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureTypeName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.DryMatter" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.TotalN" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NH4N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.NO3N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.Uric" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.P2O5" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.K2O" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.MgO" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureType.SO3" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterPercent" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NH4N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NO3N" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.UricAcid" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.P2O5" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3" />
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupId" />
-            <govuk-input class=" govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ManureGroupIdForFilter" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Country" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManureTypeLiquid" />
-            <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultFarmManureValueDate" value="@Model.DefaultFarmManureValueDate"></govuk-date-input>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsThisDefaultValueOfRB209" value="@Model.IsThisDefaultValueOfRB209" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyNeedToStoreNutrientValueForFuture" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DefaultNutrientValue" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDefaultValueChange" value="@Model.IsDefaultValueChange" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address1" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address2" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address3" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Address4" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Postcode" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReceiverName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Comment" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsManageImportExport" value="@Model.IsManageImportExport" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer.ToString().ToLower()" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromImportExportOverviewPage" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromSuccessMsg" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherMaterialName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassPercentage" />
-
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockNumber" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockGroupName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeId" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockTypeName" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.LivestockNumberQuestion" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumber" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJanuary" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInFebruary" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInMarch" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInApril" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInMay" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJune" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInJuly" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInAugust" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInSeptember" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInOctober" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInNovember" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumbersInDecember" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageNumberOfPlaces" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AverageOccupancy" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NitrogenStandard" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsLivestockCheckAnswer" value="@Model.IsLivestockCheckAnswer.ToString().ToLower()" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OccupancyAndNitrogenOptions" />
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphateStandard" />
-            @if (Model.FieldList != null && Model.FieldList.Count > 0)
-            {
-                @for (int i = 0; i < Model.FieldList.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldList[i]" value="@Model.FieldList[i]" />
-                }
-            }
-            @if (Model.CropTypeList != null && Model.CropTypeList.Count > 0)
-            {
-                @for (int i = 0; i < Model.CropTypeList.Count; i++)
-                {
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeList[i]" value="@Model.CropTypeList[i]" />
-                }
-            }
-        </div>
+        @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 <govuk-fieldset>
@@ -232,7 +127,7 @@
                     </govuk-summary-list-row>
                     @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
-                            @if (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
+                            if (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
                             {
                                 <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
@@ -258,7 +153,8 @@
                                                                                                                  </govuk-summary-list-row-value>
                                                                                                                  <govuk-summary-list-row-actions>
                                                                                                                      <govuk-summary-list-row-action asp-action="LivestockImportExportDate" asp-controller="Report">
-                                                                                                                         @Resource.lblChange<span class="govuk-visually-hidden">
+                                                                                                                         @Resource.lblChange
+                                                                                                                         <span class="govuk-visually-hidden">
                                     @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                                                                                                                                  </span>
@@ -304,9 +200,9 @@
                                         }
                         @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                         {
-                            @if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                            if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
                             {
-                                @if (Model.DefaultNutrientValue == Resource.lblYes)
+                                if (Model.DefaultNutrientValue == Resource.lblYes)
                                 {
                                     <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
@@ -323,7 +219,7 @@
                                         <govuk-summary-list-row-key>
                                             @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                         </govuk-summary-list-row-key>
-                                        <govuk-summary-list-row-value class="margin-bottom-thirty" id="nutrient_list">
+                                        <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
                                             @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
                                             {
                                                 <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.ManureType.DryMatter.Value)</span></span>
@@ -380,7 +276,7 @@
                                         <govuk-summary-list-row-key>
                                             @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                         </govuk-summary-list-row-key>
-                                        <govuk-summary-list-row-value class="margin-bottom-thirty" id="nutrient_list">
+                                        <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
                                             @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
                                             {
                                                 <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
@@ -443,7 +339,7 @@
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value  class="margin-bottom-thirty"  id="nutrient_list">
+                                    <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
                                         @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
@@ -509,52 +405,52 @@
                                     @string.Format(Resource.lblNutrientValuesForMixedManure, Model.ManureTypeName)
                                 </govuk-summary-list-row-key>
 
-                                <govuk-summary-list-row-value class="margin-bottom-thirty" id="nutrient_list">
+                                <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
                                     @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                                     {
-                                        @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
+                                        if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
 
                                         }
-                                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                                        if ((Model.N.HasValue) && Model.N.Value > 0)
                                         {
                                             totalN = Model.N.Value;
                                             <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
 
                                         }
-                                        @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
+                                        if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NH4N.Value)</span></span>
 
                                         }
-                                        @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
+                                        if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.UricAcid.Value)</span></span>
 
                                         }
-                                        @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
+                                        if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NO3N.Value)</span></span>
 
                                         }
-                                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                                        if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
                                         {
                                             totalP2O5 = Model.P2O5.Value;
                                             <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
 
                                         }
-                                        @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                                        if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.K2O.Value)</span></span>
 
                                         }
-                                        @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                                        if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.SO3.Value)</span></span>
 
                                         }
-                                        @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
+                                        if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.MgO.Value)</span></span>
 
@@ -562,49 +458,49 @@
                                     }
                                     else
                                     {
-                                        @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
+                                        if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.ManureType.DryMatter.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
+                                        if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
                                         {
                                             totalN = Model.ManureType.TotalN.Value;
                                             <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.TotalN.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
+                                        if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.NH4N.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
+                                        if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.Uric.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
+                                        if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.NO3N.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
+                                        if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
                                         {
                                             totalP2O5 = Model.ManureType.P2O5.Value;
                                             <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.P2O5.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
+                                        if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.K2O.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
+                                        if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.SO3.Value)</span></span>
 
                                         }
-                                        @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
+                                        if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
                                         {
                                             <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.MgO.Value)</span></span>
 
@@ -622,19 +518,16 @@
                                         </govuk-summary-list-row-action>
                                     }
                                 </govuk-summary-list-row-actions>
-
                             </govuk-summary-list-row>
                         }
 
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.ReceiverName) ? "govuk-error-message" : "")>
-                            @(Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
-                                                        Resource.lblWhoAreYouImportingThisLivestockManureFrom :
-                                                        Resource.lblWhoAreYouExportingThisLivestockManureTo)
-                                                                                                        </govuk-summary-list-row-key>
-                                                                                                        <govuk-summary-list-row-value>
-                            @(string.IsNullOrWhiteSpace(Model.ReceiverName) ?
-                                                        Resource.lblNotSet : Model.ReceiverName)
+                            @(Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ?
+                                                        Resource.lblWhoAreYouImportingThisLivestockManureFrom : Resource.lblWhoAreYouExportingThisLivestockManureTo)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(string.IsNullOrWhiteSpace(Model.ReceiverName) ? Resource.lblNotSet : Model.ReceiverName)
                             @for (int i = 0; i < allAddress.Count; i++)
                                 {
                                     <br />
@@ -690,7 +583,7 @@
                             <govuk-summary-list-row>
                                 <govuk-summary-list-row-key>
                                     @string.Format(Resource.lblTotalPhosphateInThisImportOrExport,
-                                    Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                                    Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ?
                                     Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
@@ -716,15 +609,14 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
                     {
-                        @if (Model.ImportExport != null)
+                        if (Model.ImportExport != null)
                         {
                             @(
                                             Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblImport.ToLower()) :
                                             string.Format(Resource.lblAddOrUpdateImportOrExport, char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1), Resource.lblExport.ToLower())
                                             )
-                                        }
-                        else
-                        @if (Model.IsImport != null)
+                                }
+                        else if (Model.IsImport != null)
                         {
                             if (Model.IsImport.Value)
                             {
@@ -758,11 +650,8 @@
                             <a asp-action="BackLivestockImportExportCheckAnswer" asp-controller="Report">@Resource.lblCancel</a>
                         }
                     }
-
                 </p>
-
             </div>
-
         </div>
     </form>
 }

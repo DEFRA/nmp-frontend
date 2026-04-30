@@ -478,7 +478,7 @@ namespace NMP.Portal.Controllers
             var address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address == null) return;
 
-            farm.Address1 = $"{Functions.FormatPart(address.SubBuildingName)}{Functions.FormatPart(address.BuildingNumber)}{Functions.FormatPart(address.BuildingName)}{address.Street}";
+            farm.Address1 = $"{Functions.FormatPart(address.SubBuildingName)}{Functions.FormatPart(address.BuildingNumber)}{Functions.FormatPart(address.BuildingName)}{address.Street}".TrimEnd(',', ' ');
             farm.Address2 = address.Locality;
             farm.Address3 = address.Town;
             farm.Address4 = address.HistoricCounty;

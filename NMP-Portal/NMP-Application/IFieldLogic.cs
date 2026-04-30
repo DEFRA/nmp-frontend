@@ -27,6 +27,7 @@ public interface IFieldLogic
     Task<List<SeasonResponse>> FetchSeasons();
 
     Task<(SnsResponse, Error)> FetchSNSIndexByMeasurementMethodAsync(MeasurementData measurementData);
+    Task<(SnsResponseForScotland, Error)> FetchSNSIndexByMeasurementMethodForScotlandAsync(MeasurementDataForScotland measurementDataForScotland);
     Task<(Field, Error)> UpdateFieldAsync(FieldData field, int fieldId);
     Task<(string, Error)> DeleteFieldByIdAsync(int fieldId);
     Task<List<CommonResponse>> GetGrassManagementOptions();
@@ -38,4 +39,5 @@ public interface IFieldLogic
     Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year);
    Task<List<Crop>> FetchCropsByFieldId(int fieldId);
     Task<List<CommonResponse>> FetchPscIndex();
+    Task<CommonResponse?> FetchPscIndexById(int id);
 }

@@ -6,7 +6,7 @@ public class FieldViewModel : Field
 {
     public FieldViewModel()
     {
-        SoilAnalyses=new SoilAnalysis();
+        SoilAnalyses=new SoilAnalysisViewModel();
         Crops=new List<Crop>();
         Fields = new List<Field>();
         ManagementPeriods = new List<ManagementPeriod>();
@@ -17,14 +17,13 @@ public class FieldViewModel : Field
     public List<Field> Fields { get; set; }
     public List<ManagementPeriod> ManagementPeriods { get; set; }
     public bool IsSoilReleasingClay { get; set; } = false;
-    public SoilAnalysis SoilAnalyses { get; set; }
+    public SoilAnalysisViewModel SoilAnalyses { get; set; }
     public PreviousCropping PreviousCroppings { get; set; }
     public List<Crop> Crops { get; set; }
     public PKBalance PKBalance { get; set; }
     public int? CropTypeID { get; set; }
     public string? FarmName { get; set; } = string.Empty;
     public string EncryptedFarmId { get; set; } = string.Empty;
-    public bool? IsSoilNutrientValueTypeIndex { get; set; }
     public int? CropGroupId { get; set; }
     public bool IsCheckAnswer { get; set; } = false;
     public string? SoilType { get; set; } = string.Empty;
@@ -57,4 +56,5 @@ public class FieldViewModel : Field
     public List<PreviousCroppingData> PreviousCroppingsList { get; set; }
     public bool IsLastHarvestYearChange { get; set; } = false;
     public bool IsNVZProgrammeNeedToShow { get; set; } = false;
+    public string? SoilNutrientValueTypeName { get; set; } = string.Empty;
 }

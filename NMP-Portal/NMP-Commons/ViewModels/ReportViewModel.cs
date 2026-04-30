@@ -145,7 +145,7 @@ namespace NMP.Commons.ViewModels
         public int? NumbersInDecember { get; set; }
         public bool? IsDeleteLivestockImportExport { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAPositiveValue))]
+        [Range(typeof(decimal), "0", "999999", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterAValueBetween0And999999))]
         public decimal? AverageNumberOfPlaces { get; set; }
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheAverageOccupancy))]
@@ -157,8 +157,7 @@ namespace NMP.Commons.ViewModels
         public decimal? PhosphateStandard { get; set; }
         public bool IsManageLivestock { get; set; } = false;
         public bool IsLivestockCheckAnswer { get; set; } = false;
-
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatPercentageOfTheLandIsFarmedAsGrass))]
+                
         [Range(80, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgToHaveADerogationAtLeast80PercentOfYourFarm))]
         public int? GrassPercentage { get; set; }
         public int? OccupancyAndNitrogenOptions { get; set; }
@@ -168,6 +167,8 @@ namespace NMP.Commons.ViewModels
         public bool IsLivestockGroupChange { get; set; } = false;
         public int? Country { get; set; }
         public int? FarmRB209CountryID { get; set; }
+        public bool? IsFarmAverageYieldAdjustment { get; set; }
+        public List<FarmAverageYieldsViewModel>? FarmAverageYields { get; set; }
 
     }
 }

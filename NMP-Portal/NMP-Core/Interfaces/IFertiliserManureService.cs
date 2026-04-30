@@ -18,5 +18,7 @@ namespace NMP.Core.Interfaces
         Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId,int farmId,int harvestYear);
         Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData);
         Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID);
+        Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId);
+        Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn);
     }
 }

@@ -24,9 +24,9 @@
 }
 @await Html.PartialAsync("_ReportPrintHeader")
 
-<div class="govuk-grid-row margin-bottom-ten">
-    <div class="govuk-grid-column-full">
-        <span class="govuk-caption-l">@Model.Farm.Name</span>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full margin-bottom-ten">
+        <span class="govuk-caption-l">@Model.Farm?.Name</span>
         <h1 class="govuk-heading-xl margin-bottom-twenty">
             @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                         string.Format(Resource.lblHoldingNitrogenLimitForYear, Model.Year) :
@@ -38,23 +38,23 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
         <p class="govuk-body">
-            @Model.Farm.Name, <br>
-            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address1))
+            @Model.Farm?.Name, <br>
+            @if (!string.IsNullOrWhiteSpace(Model.Farm?.Address1))
             {
                 @Model.Farm.Address1
                 <br />
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address2))
+            @if (!string.IsNullOrWhiteSpace(Model.Farm?.Address2))
             {
                 @Model.Farm.Address2
                 <br />
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address3))
+            @if (!string.IsNullOrWhiteSpace(Model.Farm?.Address3))
             {
                 @Model.Farm.Address3
                 <br />
             }
-            @Model.Farm.Postcode
+            @Model.Farm?.Postcode
         </p>
     </div>
     <div class="govuk-grid-column-two-third">
@@ -87,8 +87,6 @@
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">
             @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? @Resource.lblComplianceWithHoldingNitrogenLimit : Resource.lblComplianceWithNVZLivestockManureNitrogenFarmLimit)
-
-
         </h2>
         <h3 class="govuk-heading-s">
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
@@ -113,7 +111,9 @@
                     @Resource.lblLivestockReportContentFifteen
                 }
             }
+
         </h3>
+
         @if (ViewBag.IsAllNotInNVZ != null)
         {
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
@@ -133,7 +133,6 @@
                     {
                         @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
                     }
-
                 </p>
             }
         }
@@ -156,7 +155,6 @@
                     {
                         @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
                     }
-                    @* @string.Format("{0}{1}", string.Format((Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblWaterResourceRegulationsForWales : Resource.lblLivestockContentTwoForNonDerogation), ViewBag.FarmLimit), ".") *@
                 </p>
             }
         }
@@ -168,6 +166,12 @@
             </h3>
             <div class="table-container">
                 <table class="govuk-table data-table">
+                    @* <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header"></th>
+                            <th scope="col" class="govuk-table__header"></th>
+                        </tr>
+                    </thead> *@
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblLivestockManureTotalNitrogenCapacity</td>
@@ -199,11 +203,13 @@
         {
             <div class="table-container margin-bottom-ten">
                 <table class="farm_area_derogated govuk-table data-table">
-                    <tbody class="govuk-table__body">
+                    <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblAreaRequiredForLivestockManure</th>
                             <th scope="col" class="govuk-table__header">@Resource.lblAreas</th>
                         </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblForGrazingLivestockManure</td>
                             <td class="govuk-table__cell">
@@ -299,6 +305,7 @@
         </div>
     </div>
 </div>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">
@@ -350,7 +357,6 @@
                             <td class="govuk-table__cell">
                                 @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null) ? Resource.lblHyphen : (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP != null && ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP > 0) ? string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg) : 0)
                             </td>
-
                         }
                     </tr>
                     <tr class="govuk-table__row">
@@ -446,7 +452,7 @@
         </div>
     </div>
 </div>
-<div id="printbreak"></div>
+
 @if (ViewBag.NutrientsLoadingLiveStockGrazingList != null)
 {
     <div class="govuk-grid-row">
@@ -513,10 +519,10 @@
                                         @Resource.lblTotals
                                     }
                                 </th>
-                                <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalN, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalN, Resource.lblkg)</td>
                                 @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                                 {
-                                    <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalP, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalP, Resource.lblkg)</td>
                                 }
                             </tr>
                         }
@@ -536,6 +542,7 @@ else
         </div>
     </div>
 }
+
 @if (ViewBag.NutrientsLoadingLiveStockNonGrazingList != null)
 {
     <div class="govuk-grid-row">
@@ -617,10 +624,10 @@ else
                                         @Resource.lblTotals
                                     }
                                 </th>
-                                <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN, Resource.lblkg)</td>
                                 @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                                 {
-                                    <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg)</td>
                                 }
                             </tr>
                         }
@@ -640,15 +647,14 @@ else
         </div>
     </div>
 }
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full margin-bottom-ten">
-        @if (ViewBag.ImportOfLivestockManureList != null || ViewBag.ExportOfLivestockManureList != null)
-        {
 
+@if (ViewBag.ImportOfLivestockManureList != null || ViewBag.ExportOfLivestockManureList != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-ten">
             <h2 class="govuk-heading-m">@Resource.lblLivestockReportContentThirtyTwo</h2>
             <p class="govuk-body">
-                @Resource.lblLivestockReportContentThirtyThree
-                @* @(ViewBag.TotalImportExportTotalN=string.Format("{0:N0}", ViewBag.TotalImportExportTotalN)) *@
+                @Resource.lblLivestockReportContentThirtyThree                
                 <span class="">@string.Format(Resource.lblLivestockReportContentThirtyFour, ViewBag.TotalImportExportTotalN)</span>
             </p>
             @if (ViewBag.ImportOfLivestockManureList != null)
@@ -778,10 +784,8 @@ else
                                             if (!string.IsNullOrEmpty(exportOfLivestockManure.Manure.Address4)) parts.Add(exportOfLivestockManure.Manure.Address4);
                                             if (!string.IsNullOrEmpty(exportOfLivestockManure.Manure.PostCode)) parts.Add(exportOfLivestockManure.Manure.PostCode);
 
-                                            var displayString = string.Join(", ", parts);
-                                            displayString.Trim();
+                                            var displayString = string.Join(", ", parts).Trim();
                                         }
-
                                         @displayString
                                     </td>
                                 </tr>
@@ -791,7 +795,6 @@ else
                                         <td class="govuk-table__cell" colspan="6">@string.Format(Resource.lblNoteWithComment, exportOfLivestockManure.Manure.Comments)</td>
                                     </tr>
                                 }
-
                             }
                             <tr class="govuk-table__row total_row">
                                 <td class="govuk-table__cell">@Resource.lblTotal</td>
@@ -816,29 +819,42 @@ else
                     @Resource.lblThereAreNoExportsOfLivestockManure
                 </h3>
             }
-        }
-        else
-        {
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-thirty">
             <h3 class="govuk-heading-s">
                 @Resource.lblThereAreNoImportsOfLivestockManure
             </h3>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-ten">
             <h3 class="govuk-heading-s">
                 @Resource.lblThereAreNoExportsOfLivestockManure
             </h3>
-        }
-
+        </div>
     </div>
-</div>
+}
 
+<hr class="seperator_forty margin-bottom-forty">
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <hr class="margin-bottom-forty">
         <h2 class="govuk-heading-s">
             @Resource.lblLivestockReportContentThirtyFive
         </h2>
         <p class="govuk-body-s">
             @Resource.lblLivestockReportContentThirtySix
         </p>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-s">
             @Resource.lblAboutRecommendationGuidenceAdvice
         </h2>

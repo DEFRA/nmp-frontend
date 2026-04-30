@@ -10,11 +10,12 @@ using NMP.Core.Interfaces;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService) : IFarmLogic
+public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService, IFarmAverageYieldLogic farmAverageYieldLogic) : IFarmLogic
 {
     private readonly ILogger<FarmLogic> _logger = logger;
     private readonly IFarmService _farmService = farmService;
     private readonly IFieldService _fieldService = fieldService;
+    private readonly IFarmAverageYieldLogic _farmAverageYieldLogic = farmAverageYieldLogic;
 
     public async Task<(ExcessRainfalls?, Error?)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
@@ -37,10 +38,8 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     public async Task<List<Country>> FetchCountryAsync()
     {
         _logger.LogTrace("Fetching list of countries");
-        (List<Country> countryList, _) = await _farmService.FetchCountryAsync();
-
-        return countryList.Where(c => c.ID != (int)FarmCountry.Scotland).OrderBy(c => c.Name).ToList();
-
+        (List<Country> countryList, _) = await _farmService.FetchCountryAsync();        
+        return countryList;        
     }
 
     public async Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year)
@@ -105,5 +104,17 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     {
         _logger.LogTrace("Fetching farm and farms nvz with ID: {FarmId}", farmId);
         return await _farmService.FetchFarmAndFarmsNvzByFarmIdAsync(farmId);
+    }
+
+    public async Task<(List<FarmAverageYields>?, Error?)> FetchFarmAverageYieldByFarmIdAndHarvestYear(int farmId, int harvestYear)
+    {
+        _logger.LogTrace("Fetch farm average yield by FarmID: {FarmId} and HarvestYear: {HarvestYear}",farmId,harvestYear);
+        return await _farmAverageYieldLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId,harvestYear);
+    }
+
+    public async Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData)
+    {
+        _logger.LogTrace("Add farm average yields");
+        return await _farmAverageYieldLogic.AddFarmAverageYieldsAsync(farmAverageYieldData);
     }
 }

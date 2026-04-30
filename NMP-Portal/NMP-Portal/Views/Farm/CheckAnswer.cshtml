@@ -221,7 +221,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>

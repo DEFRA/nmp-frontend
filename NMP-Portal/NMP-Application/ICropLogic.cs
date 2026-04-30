@@ -18,16 +18,16 @@ public interface ICropLogic
     Task<List<Crop>> FetchCropsByFieldId(int fieldId);
 
     Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland);
-    Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
+    Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId, int rb209CountryId);
     Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
-    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId);
+    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId,int countryId);
     Task<(ManagementPeriod?, Error?)> FetchManagementperiodById(int id);
     Task<(Crop?, Error?)> FetchCropById(int id);
     Task<(string, Error?)> RemoveCropPlan(List<int> cropIds);
     Task<(bool, Error?)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId);
     Task<(List<Crop>, Error)> UpdateCrop(string cropData);
     Task<List<GrassSeasonResponse>> FetchGrassSeasons();
-    Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
+    Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds);
 
     Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward);
     Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
@@ -48,4 +48,6 @@ public interface ICropLogic
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId, int year);
     Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId);
     Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
+    Task<(Recommendation?, Error?)> FetchRecommendationByManagementPeriodId(int managementPeriodID);
+    Task<(List<PreviousCroppingData>?, Error?)> FetchDataByFieldId(int fieldId, int year);
 }

@@ -354,7 +354,7 @@
                         <govuk-details>
                             <govuk-details-summary>
 
-                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England || Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                 {
                                     @Resource.lblMoreAboutTheseNVZRules
                                 }

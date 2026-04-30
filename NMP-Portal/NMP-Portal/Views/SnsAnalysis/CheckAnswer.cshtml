@@ -36,123 +36,94 @@
             <h1 class="govuk-heading-l">
                 @Resource.lblCheckYourAnswers
             </h1>
-            <div hidden="hidden">
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogen" value="@Model.IsCalculateNitrogen"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NumberOfShoots"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SeasonId" value="@Model.SeasonId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndexOrCropHeight" value="@Model.GreenAreaIndexOrCropHeight"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt030CM"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt3060CM"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogenAt6090CM"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDepth"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilMineralNitrogen"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropHeight"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GreenAreaIndex"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsBasedOnSoilOrganicMatter" value="@Model.IsBasedOnSoilOrganicMatter.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsEstimateOfNitrogenMineralisation" value="@Model.IsEstimateOfNitrogenMineralisation"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.AdjustmentValue"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilOrganicMatter"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateNitrogenNo" value="@Model.IsCalculateNitrogenNo"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNumberOfShoots" value="@Model.IsNumberOfShoots"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropHeight" value="@Model.IsCropHeight"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGreenAreaIndex" value="@Model.IsGreenAreaIndex"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsCategoryId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.RecentSoilAnalysisQuestion" value="@Model.RecentSoilAnalysisQuestion.ToString().ToLower()"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsIndex"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SnsValue"/>
+            @await Html.PartialAsync("~/Views/SnsAnalysis/_SnsAnalysisWizardHiddenFields.cshtml", Model)
 
-                <govuk-date-input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SampleDate"></govuk-date-input>
+            <govuk-summary-list>
 
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldName"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropId"/>
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName"/>
-            </div>
-         
-                <govuk-summary-list>
+                <govuk-summary-list-row class=@((!Model.SampleDate.HasValue)?"govuk-error-message":"")>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.SampleDate.HasValue? Model.SampleDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="SoilSampleDate" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
 
-                    <govuk-summary-list-row class=@((!Model.SampleDate.HasValue)?"govuk-error-message":"")>
-                        <govuk-summary-list-row-key>
-                            @string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @(Model.SampleDate.HasValue? Model.SampleDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilSampleDate" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-
-                    @if (Model.SnsCategoryId != null)
+                @if (Model.SnsCategoryId != null)
+                {
+                    if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || Model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
-                        @if (Model.SnsCategoryId != (int)NMP.Commons.Enums.SnsCategories.Vegetables)
-                        {
-                            <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt030CM.HasValue)?"govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblKilogramsOfSoilMineralNitrogenAt030CM
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.SoilMineralNitrogenAt030CM.HasValue ? string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt030CM, Resource.lblkg) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt030CM</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                            <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt3060CM.HasValue)?"govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.SoilMineralNitrogenAt3060CM.HasValue ? string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt3060CM, Resource.lblkg) : Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                            @if (Model.SoilMineralNitrogenAt6090CM != null)
-                            {
-                                <govuk-summary-list-row>
-                                    <govuk-summary-list-row-key>
-                                        @Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                        @string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt6090CM, Resource.lblkg)
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional</span></govuk-summary-list-row-action>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                            }
-                        }
-                        else
-                        {
-                            <govuk-summary-list-row class=@((!Model.SampleDepth.HasValue)?"govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblWhatWasTheSampleDepth
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.SampleDepth.HasValue? Model.SampleDepth: Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSampleDepth</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                            <govuk-summary-list-row class=@((!Model.SoilMineralNitrogen.HasValue)?"govuk-error-message":"")>
-                                <govuk-summary-list-row-key>
-                                    @Resource.lblWhatWasTheSoilMineralNitrogen
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @(Model.SoilMineralNitrogen.HasValue? Model.SoilMineralNitrogen: Resource.lblNotSet)
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSoilMineralNitrogen</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
+                        <govuk-summary-list-row class=@((!Model.SampleDepth.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblWhatWasTheSampleDepth
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.SampleDepth.HasValue? Model.SampleDepth: Resource.lblNotSet)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSampleDepth</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row class=@((!Model.SoilMineralNitrogen.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblWhatWasTheSoilMineralNitrogen
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.SoilMineralNitrogen.HasValue? Model.SoilMineralNitrogen: Resource.lblNotSet)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSoilMineralNitrogen</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
 
+                    }
+                    else
+                    {
+                        <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt030CM.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblKilogramsOfSoilMineralNitrogenAt030CM
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.SoilMineralNitrogenAt030CM.HasValue ? string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt030CM, Resource.lblkg) : Resource.lblNotSet)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt030CM</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt3060CM.HasValue)?"govuk-error-message":"")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if(Model.SoilMineralNitrogenAt3060CM.HasValue)
+                                {                                   
+                                    @string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt3060CM, Resource.lblkg)
+                                }
+                                else
+                                {
+                                    @Resource.lblNotSet
+                                }
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                        @if (Model.SoilMineralNitrogenAt6090CM != null)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt6090CM, Resource.lblkg)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
                         }
                         @if (Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                         {
@@ -161,7 +132,21 @@
                                     @Resource.lblWouldYouLikeUsToHelpYouCalculateTheNitrogen
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.IsCalculateNitrogen.HasValue ? (Model.IsCalculateNitrogen == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                                    @if(Model.IsCalculateNitrogen.HasValue)
+                                    {
+                                        if (Model.IsCalculateNitrogen == true)
+                                        {
+                                            @Resource.lblYes
+                                        }
+                                        else
+                                        {
+                                            @Resource.lblNo
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Resource.lblNotSet
+                                    }            
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="CalculateNitrogenInCurrentCropQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeUsToHelpYouCalculateTheNitrogen</span></govuk-summary-list-row-action>
@@ -188,7 +173,14 @@
                                             @Resource.lblWhenWasThisMeasured
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.SeasonId != 0 ? (Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn ? Resource.lblAutumn : Resource.lblSpring) : Resource.lblNotSet)
+                                            @if(Model.SeasonId != 0)
+                                            {
+                                                 @((Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn) ? Resource.lblAutumn : Resource.lblSpring)
+                                            }
+                                            else
+                                            {
+                                                @Resource.lblNotSet
+                                            }  
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
@@ -202,7 +194,21 @@
                                             @Resource.lblDoYouWantToEnterGAIOrCropHeight
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.GreenAreaIndexOrCropHeight != 0 ? (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.GAI ? Resource.lblGreenAreaIndex : Resource.lblCropHeight) : Resource.lblNotSet)
+                                            @if(Model.GreenAreaIndexOrCropHeight != 0)
+                                            {
+                                                if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.GAI)
+                                                {
+                                                    @Resource.lblGreenAreaIndex
+                                                }
+                                                else if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight)
+                                                {
+                                                    @Resource.lblCropHeight
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Resource.lblNotSet
+                                            }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="GreenAreaIndexOrCropHeightQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToEnterGAIOrCropHeight</span></govuk-summary-list-row-action>
@@ -226,7 +232,7 @@
                                                 @Resource.lblWhenWasThisMeasured
                                             </govuk-summary-list-row-key>
                                             <govuk-summary-list-row-value>
-                                                @if(Model.SeasonId != 0)
+                                                @if (Model.SeasonId != 0)
                                                 {
                                                     @((Model.SeasonId == (int)NMP.Commons.Enums.Season.Autumn) ? Resource.lblAutumn : Resource.lblSpring)
                                                 }
@@ -265,41 +271,84 @@
                                     @Resource.lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.IsEstimateOfNitrogenMineralisation.HasValue ? (Model.IsEstimateOfNitrogenMineralisation == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                                    @if(Model.IsEstimateOfNitrogenMineralisation.HasValue)
+                                    {
+                                        if (Model.IsEstimateOfNitrogenMineralisation == true)
+                                        {
+                                            @Resource.lblYes
+                                        }
+                                        else
+                                        {
+                                            @Resource.lblNo
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Resource.lblNotSet
+                                    }
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="EstimateOfNitrogenMineralisationQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
-                            if (Model.IsEstimateOfNitrogenMineralisation == true)
+                            @if (Model.IsEstimateOfNitrogenMineralisation == true)
                             {
                                 <govuk-summary-list-row class=@((!Model.IsBasedOnSoilOrganicMatter.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation, Model.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.IsBasedOnSoilOrganicMatter.HasValue ? (Model.IsBasedOnSoilOrganicMatter == true ? Resource.lblEstimateBasedOnSoilOrganicMatterContent : Resource.lblEnterAValueForMineralisation) : Resource.lblNotSet)
+                                        @if (Model.IsBasedOnSoilOrganicMatter.HasValue)
+                                        {
+                                            if (Model.IsBasedOnSoilOrganicMatter == true)
+                                            {
+                                                @Resource.lblEstimateBasedOnSoilOrganicMatterContent
+                                            }
+                                            else
+                                            {
+                                                @Resource.lblEnterAValueForMineralisation
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @Resource.lblNotSet
+                                        }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="IsBasedOnSoilOrganicMatter" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation, Model.FieldName)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                if (Model.IsBasedOnSoilOrganicMatter == true)
+                                @if (Model.IsBasedOnSoilOrganicMatter == true)
                                 {
                                     <govuk-summary-list-row class=@((!Model.SoilOrganicMatter.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
                                             @Resource.lblWhatIsThePercentageOfOrganicMatter
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @(Model.SoilOrganicMatter.HasValue ? string.Concat(Model.SoilOrganicMatter % 1 == 0
-                                                                        ? ((int)Model.SoilOrganicMatter).ToString()
-                                                                        : Model.SoilOrganicMatter.ToString(), Resource.lblPercentage) : Resource.lblNotSet)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilOrganicMatter" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsThePercentageOfOrganicMatter</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-                                        }
+                                            @if (Model.SoilOrganicMatter.HasValue)
+                                            {
+                                                string soilOrganicMatterDisplay;
+                                                if (Model.SoilOrganicMatter % 1 == 0)
+                                                {
+                                                    soilOrganicMatterDisplay = ((int)Model.SoilOrganicMatter).ToString();
+                                                }
+                                                else
+                                                {
+                                                    soilOrganicMatterDisplay = Model.SoilOrganicMatter.ToString();
+                                                }
+                                                @string.Concat(soilOrganicMatterDisplay, Resource.lblPercentage)
+                                            }
+                                            else
+                                            {
+                                                @Resource.lblNotSet
+                                            }
+
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                            <govuk-summary-list-row-action asp-action="SoilOrganicMatter" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsThePercentageOfOrganicMatter</span></govuk-summary-list-row-action>
+                                        </govuk-summary-list-row-actions>
+                                    </govuk-summary-list-row>
+                                }
                                 else
                                 {
                                     <govuk-summary-list-row class=@((!Model.AdjustmentValue.HasValue)?"govuk-error-message":"")>
@@ -307,9 +356,9 @@
                                             @Resource.lblWhatIsTheAdjustmentValuePerHectare
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
-                                            @if(Model.AdjustmentValue.HasValue)
+                                            @if (Model.AdjustmentValue.HasValue)
                                             {
-                                                 string adjustmentValueDisplay;
+                                                string adjustmentValueDisplay;
                                                 if (Model.AdjustmentValue % 1 == 0)
                                                 {
                                                     adjustmentValueDisplay = ((int)Model.AdjustmentValue).ToString();
@@ -323,43 +372,45 @@
                                             else
                                             {
                                                 @Resource.lblNotSet
-                                            }                                            
-                                            </govuk-summary-list-row-value>
-                                            <govuk-summary-list-row-actions>
-                                                <govuk-summary-list-row-action asp-action="AdjustmentValue" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAdjustmentValuePerHectare</span></govuk-summary-list-row-action>
-                                            </govuk-summary-list-row-actions>
+                                            }
+                                        </govuk-summary-list-row-value>
+                                        <govuk-summary-list-row-actions>
+                                            <govuk-summary-list-row-action asp-action="AdjustmentValue" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAdjustmentValuePerHectare</span></govuk-summary-list-row-action>
+                                        </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
-                                    }
                                 }
+                            }
 
                         }
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}", Model.SnsValue))
-                            </govuk-summary-list-row-value>
-
-                        </govuk-summary-list-row>
                     }
 
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblSoilNitrogenSupplyIndex, Model.FieldName)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @if (Model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                @string.Format(Resource.lblSnsDetail, Model.SnsIndex, string.Format("{0:N0}", Model.SnsValue))
+                            }
+                            else
+                            {
+
+                                @string.Format("{0} ({1})", Model.SnsIndex, Model.NitrogenResidueGroup)
+                            }
 
 
-                </govuk-summary-list>
+                        </govuk-summary-list-row-value>
+
+                    </govuk-summary-list-row>
+                }
+            </govuk-summary-list>
 
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
                 @Resource.lblAddTheseAnalysisResults
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @* @if (!Model.IsCheckAnswer)
-                { *@
-                <a class="govuk-link" asp-action="Cancel" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-                @*  }
-                else
-                {
-                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-                } *@
+            <p class="govuk-body cancel-link">                
+                <a class="govuk-link" asp-action="Cancel" asp-controller="SnsAnalysis">@Resource.lblCancel</a>               
             </p>
         </div>
     </div>

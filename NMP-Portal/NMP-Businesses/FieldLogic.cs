@@ -134,6 +134,11 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, 
         _logger.LogTrace("Fetching SNS Index by measurement method");
         return await _fieldService.FetchSNSIndexByMeasurementMethodAsync(measurementData);
     }
+    public async Task<(SnsResponseForScotland, Error)> FetchSNSIndexByMeasurementMethodForScotlandAsync(MeasurementDataForScotland measurementDataForScotland)
+    {
+        _logger.LogTrace("Fetching SNS Index by measurement for scotland method");
+        return await _fieldService.FetchSNSIndexByMeasurementMethodForScotlandAsync(measurementDataForScotland);
+    }
 
     public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId, string shortSummary)
     {
@@ -204,5 +209,10 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService, 
     {
         _logger.LogTrace("Fetch Psc index");
         return await _fieldService.FetchPscIndex();
+    }
+    public async Task<CommonResponse?> FetchPscIndexById(int id)
+    {
+        _logger.LogTrace("Fetch Psc index by id");
+        return await _fieldService.FetchPscIndexById(id);
     }
 }

@@ -3,6 +3,7 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{Resource.lblWhichYearWouldYouLikeToCopy} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.StorageCapacityWizardStep.CopyExistingManureStorageYearList;
 }
 
 @section BeforeContent {
@@ -23,24 +24,11 @@
 {
     <form asp-action="CopyExistingManureStorageYearList" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div hidden="true">
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCopyExistingManureStorage"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"/>
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"/>
-        </div>
+        @await Html.PartialAsync("~/Views/StorageCapacity/_StorageCapacityWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <govuk-radios asp-for="@Model.YearToCopyFrom">
+                <govuk-radios for="@Model.YearToCopyFrom">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @Resource.lblWhichYearWouldYouLikeToCopy
