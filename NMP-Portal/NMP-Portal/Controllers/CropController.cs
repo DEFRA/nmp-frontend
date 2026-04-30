@@ -1964,7 +1964,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         PlanViewModel model = new PlanViewModel();
         Error? error = null;
         List<HarvestYearPlanResponse>? harvestYearPlanResponse = null;
-        string? sowingQuestion = null;
+        
         bool isBasePlan = false;
         bool allSowingAreSame = true;
         DateTime? firstSowingDate = null;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -141,11 +143,7 @@ namespace NMP.Portal.Security
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
-        /// <summary>        
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+                
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
         {
             await Task.CompletedTask.ConfigureAwait(false);
@@ -278,7 +276,9 @@ namespace NMP.Portal.Security
             string currentRelationShipId = string.Empty;
             string organisationName = string.Empty;
             Guid? organisationId = null;
-
+            List<string> relationShipsArray = new List<string>();
+            List<string> rolesArray = new List<string>();
+            List<Organisation> organisations = new List<Organisation>();
             foreach (var claim in jwtToken.Claims)
             {
                 // Add the claims to the ClaimsIdentity
@@ -301,47 +301,25 @@ namespace NMP.Portal.Security
                         break;
                     case "currentRelationshipId":
                         currentRelationShipId = claim.Value;
-                        break;
-                    case "enrolmentCount":
-                        identity?.AddClaim(new Claim("enrolmentCount", claim.Value));
-                        break;
+                        break;                    
                     case "relationships":
-                        ParseOrganisationData(identity, userData, currentRelationShipId, ref organisationName, ref organisationId, claim);
+                        ParseRelationshipsData(claim, ref relationShipsArray);                       
                         break;
                     case "roles":
-                        ParseRolesData(identity, currentRelationShipId, claim);
+                        ParseRolesData(claim, ref rolesArray);
                         break;
                     default:
                         break;
                 }
             }
+
+            ParseOrganisations(identity, userData, currentRelationShipId, ref organisationName, ref organisationId, ref relationShipsArray, ref organisations);
+            
+            ParseRole(identity, currentRelationShipId, ref rolesArray);
         }
 
-        private static void ParseRolesData(ClaimsIdentity? identity, string currentRelationShipId, Claim claim)
-        {
-            List<string> rolesArray = new List<string>();
-            List<string> roleDetails = new List<string>();
-            if (claim.Value.GetType().IsArray)
-            {
-                rolesArray.AddRange(claim.Value.Split(","));
-            }
-            else
-            {
-                rolesArray.Add(claim.Value);
-            }
-            var rd = rolesArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
-            if (rd != null)
-            {
-                roleDetails.AddRange(rd.Split(":"));
-                identity?.AddClaim(new Claim(ClaimTypes.Role, roleDetails[1]));
-                identity?.AddClaim(new Claim("roleStatus", roleDetails[2]));
-            }
-        }
-
-        private static void ParseOrganisationData(ClaimsIdentity? identity, UserData userData, string currentRelationShipId, ref string organisationName, ref Guid? organisationId, Claim claim)
-        {
-            List<string> relationShipsArray = new List<string>();
-            List<string> relationShipDetails = new List<string>();
+        private static void ParseRelationshipsData(Claim claim, ref List<string> relationShipsArray)
+        {            
             if (claim.Value.GetType().IsArray)
             {
                 relationShipsArray.AddRange(claim.Value.Split(","));
@@ -350,6 +328,50 @@ namespace NMP.Portal.Security
             {
                 relationShipsArray.Add(claim.Value);
             }
+        }
+
+        private static void ParseRolesData( Claim claim, ref List<string> rolesArray)
+        {  
+            if (claim.Value.GetType().IsArray)
+            {
+                rolesArray.AddRange(claim.Value.Split(","));
+            }
+            else
+            {
+                rolesArray.Add(claim.Value);
+            }            
+        }
+
+        private static void ParseRole(ClaimsIdentity? identity, string currentRelationShipId, ref List<string> rolesArray)
+        {
+            List<string> roleDetails = new List<string>();
+            var rd = rolesArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
+            if (rd != null)
+            {
+                roleDetails.AddRange(rd.Split(":"));
+                identity?.AddClaim(new Claim("roleName", roleDetails[1]));
+                identity?.AddClaim(new Claim("roleStatus", roleDetails[2]));
+            }
+        }
+
+        private static void ParseOrganisations(ClaimsIdentity? identity, UserData userData, string currentRelationShipId, ref string organisationName, ref Guid? organisationId, ref List<string> relationShipsArray, ref List<Organisation> organisations)
+        {
+            List<string> relationShipDetails = new List<string>();
+            foreach (var item in relationShipsArray)
+            {
+                var relationshipArray = item.Split(":");
+                if (relationshipArray[4] == "Citizen")
+                {
+                    organisations.Add(new Organisation { ID = Guid.Parse(relationshipArray[0]), Name = $"{userData.User.GivenName} {userData.User.Surname}" });
+                }
+                else
+                {
+                    organisations.Add(new Organisation { ID = Guid.Parse(relationshipArray[1]), Name = relationshipArray[2] });
+                }
+            }
+
+            string serializedOrganisations = JsonConvert.SerializeObject(organisations);
+            identity?.AddClaim(new Claim("organisations", serializedOrganisations));            
             var rs = relationShipsArray.FirstOrDefault(r => r.Contains(currentRelationShipId));
             if (rs != null)
             {

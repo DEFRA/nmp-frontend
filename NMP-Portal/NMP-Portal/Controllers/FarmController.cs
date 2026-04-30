@@ -1684,6 +1684,72 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult Transfer(string id)
+        {
+            _logger.LogTrace("Farm Controller : Transfer() action called");
+            FarmTransferViewModel model = new();
+
+            try
+            {
+                model.FarmId = Convert.ToInt32(_dataProtector.Unprotect(id));                             
+                
+                ViewBag.Organisations = GetOrganisationsFromClaims();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "farm Controller : Exception in Transfer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Transfer(FarmTransferViewModel model)
+        {
+            _logger.LogTrace("Farm Controller : Transfer() action called");
+
+            // check validation that organisation must exist in Organisation table by OrganisationId
+            
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    // Call API to transfer farm to another organisation based on model.FarmId and model.OrganisationId
+                    // Redirect to farm list page after successful transfer
+                    RedirectToAction("FarmList", new { id = _dataProtector.Protect(model.FarmId.ToString()), q = _dataProtector.Protect("true") });
+                }
+
+                ViewBag.Organisations = GetOrganisationsFromClaims();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "farm Controller : Exception in Transfer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }            
+        }
+
+
+        private SelectList GetOrganisationsFromClaims()
+        {
+            List<Organisation> organisations = new List<Organisation>();
+            Claim? claim = HttpContext.User.FindFirst("organisations");
+            Claim? organisationIdClaim = HttpContext.User.FindFirst("organisationId");
+            if (claim != null)
+            {
+                organisations = JsonConvert.DeserializeObject<List<Organisation>>(claim.Value) ?? new List<Organisation>();
+                if (organisationIdClaim != null)
+                {
+                    Guid.TryParse(organisationIdClaim.Value, out Guid organisationId);
+                    organisations = organisations.Where(o => o.ID != organisationId).ToList();
+                }
+            }
+
+            return new SelectList(organisations, "ID", "Name");
+        }
+
         private FarmViewModel? GetFarmFromSession()
         {
             if (HttpContext.Session.Exists("FarmData"))
