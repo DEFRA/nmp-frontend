@@ -6192,7 +6192,7 @@ livestock manure.</value>
     <value>Does {0} have sloped edges not set.</value>
   </data>
   <data name="MsgWhatIsTheEstimatedAngleOfTheBankNotSet" xml:space="preserve">
-    <value>What is the estimated angle of the bank slope not set.</value>
+    <value>What is the bank slope not set.</value>
   </data>
   <data name="MsgWhatIsTheTotalCapacityOfNotSet" xml:space="preserve">
     <value>What is the total capacity of {0} not set.</value>
