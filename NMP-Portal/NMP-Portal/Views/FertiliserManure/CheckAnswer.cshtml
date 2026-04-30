@@ -31,11 +31,10 @@
                     <govuk-error-summary-item href="#">@TempData["CheckYourAnswerError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            @if (Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning))
+            @if ((Model.IsWarningMsgNeedToShow && (Model.IsClosedPeriodWarningExceptGrassAndOilseed || Model.IsClosedPeriodWarningOnlyForGrassAndOilseed || Model.IsNitrogenExceedWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning)) && (Model.N>0))
             {
-                @if(Model.N>0)
-                {
-                    <govuk-notification-banner>
+                
+                <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
@@ -72,7 +71,7 @@
                     }
 
                 </govuk-notification-banner>
-                }
+                
                 
             }
 
@@ -236,12 +235,12 @@
                         {
                             @foreach (var doubleCrop in Model.DoubleCrop)
                             {
-                                <govuk-summary-list-row class=@((doubleCrop.CropID==null)?"govuk-error-message":"")>
+                                <govuk-summary-list-row class=@((doubleCrop.CropID==0)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblWhichCropIsThisFertiliserApplication, doubleCrop.FieldName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @((doubleCrop.CropID == null) ? Resource.lblNotSet : string.Format("{0} {1} {2}{3}{4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
+                                        @((doubleCrop.CropID == 0) ? Resource.lblNotSet : string.Format("{0} {1} {2}{3}{4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@doubleCrop.EncryptedCounter">@Resource.lblChange
@@ -265,8 +264,17 @@
                                     @Resource.lblForMultipleDefoliation
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.IsSameDefoliationForAll.HasValue ? (Model.IsSameDefoliationForAll.Value ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
-                                    @* @(!string.IsNullOrWhiteSpace(fertiliser.DefoliationName) ? fertiliser.DefoliationName : Resource.lblNotSet) *@
+                                    @{
+                                         string defoliationText;
+                                     
+                                         if (!Model.IsSameDefoliationForAll.HasValue)
+                                             defoliationText = Resource.lblNotSet;
+                                         else if (Model.IsSameDefoliationForAll.Value)
+                                             defoliationText = Resource.lblYes;
+                                         else
+                                             defoliationText = Resource.lblNo;
+                                     }
+                                     @defoliationText
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="IsSameDefoliationForAll" asp-controller="FertiliserManure">@Resource.lblChange

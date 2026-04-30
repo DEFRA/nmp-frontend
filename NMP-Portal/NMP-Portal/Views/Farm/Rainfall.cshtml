@@ -4,7 +4,14 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateFarm, Resource.lblFarm.ToLower()) : Resource.lblAddAFarm;
     ViewData["Title"] = $"{string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode)) ? "ClimatePostCode" :(Model.IsManualAddress == true ? "ManualAddress" : "Address");
+    string backAction;
+
+    if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode))
+        backAction = "ClimatePostCode";
+    else if (Model.IsManualAddress == true)
+        backAction = "ManualAddress";
+    else
+        backAction = "Address";
     
 }
 

@@ -2,7 +2,6 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
-    //  ViewData["Title"] = Resource.lblAbove300SeaLevel;
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{Resource.lblAddField} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{Resource.lblAddField}  {Resource.lblHyphen} {Resource.lblAddField}";
     ViewData["Title"] = $"{string.Format(Resource.lblIsAbove300SeaLevel, Model.Name)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
