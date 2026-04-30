@@ -4,11 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {title}";
     
-    int trueWarningCount = 0;
-    if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
-    if (Model.IsNMaxLimitWarning) trueWarningCount++;
-    if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
-    if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150) trueWarningCount++;
     var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
 
     var suffixUnit = "";
@@ -34,152 +29,18 @@
             }
 
             @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
-            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-            {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @if (trueWarningCount == 1)
-                    {
-                        @if (Model.IsOrgManureNfieldLimitWarning)
-                        {
-                            <p class="govuk-notification-banner__heading">
-                                @Model.NmaxWarningPara1
-                            </p>
-                            <p class="govuk-body">@Model.NmaxWarningPara2</p>
-                            @if (Model.NmaxWarningPara3 != null)
-                            {
-                                <p class="govuk-body">@Model.NmaxWarningPara3</p>
-                            }
-                        }
-                        @if (Model.IsNMaxLimitWarning)
-                        {
-                            <p class="govuk-notification-banner__heading">
-                                @Model.CropNmaxLimitWarningPara1
-                            </p>
-                            <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
-                            @if (Model.CropNmaxLimitWarningPara3 != null)
-                            {
-                                <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
-                            }
-                        }
-                        @if (Model.IsEndClosedPeriodFebruaryWarning)
-                        {
-                            <p class="govuk-notification-banner__heading">
-                                @Model.EndClosedPeriodEndFebWarningPara1
-                            </p>
-                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara2</p>
-                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara3</p>
-                        }
-                        @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-                        {
-                            <p class="govuk-notification-banner__heading">
-                                @Model.StartClosedPeriodEndFebWarningPara1
-                            </p>
-                            <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara2</p>
-                            <p class="govuk-body">
-                                @Model.StartClosedPeriodEndFebWarningPara3
-                            </p>
-                        }
-                    }
-                    @if (trueWarningCount > 1)
-                    {
-                        @* <div class="govuk-notification-banner__content">*@
-                        <p class="govuk-notification-banner__heading">
-                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England)
-                            {
-                                @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
-                            }
-                            @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                            {
-                                @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
-                            }
-                        </p>
-                        <ul class="govuk-list govuk-list--bullet">
-                            @if (Model.IsOrgManureNfieldLimitWarning)
-                            {
-                                <li>@Model.NmaxWarningPara1</li>
-                            }
-                            @if (Model.IsNMaxLimitWarning)
-                            {
-                                <li>@Model.CropNmaxLimitWarningPara1</li>
-                            }
-                            @if (Model.IsEndClosedPeriodFebruaryWarning)
-                            {
-                                <li>@Model.EndClosedPeriodEndFebWarningPara1</li>
-                            }
-                            @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-                            {
-                                <li>@Model.StartClosedPeriodEndFebWarningPara1</li>
-                            }
-                        </ul>
-                        <govuk-details>
-                            <govuk-details-summary>
-
-                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England || Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
-                                {
-                                    @Resource.lblMoreAboutTheseNVZRules
-                                }
-                                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                                {
-                                    @Resource.lblMoreAboutTheseWaterResourceRegulation
-                                }
-                            </govuk-details-summary>
-                            <govuk-details-text>
-                                @if (Model.IsOrgManureNfieldLimitWarning)
-                                {
-                                    <h2 class="govuk-heading-s">@Model.NmaxWarningPara1</h2>
-                                    <p class="govuk-body">@Model.NmaxWarningPara2</p>
-                                }
-                                @if (Model.IsNMaxLimitWarning)
-                                {
-                                    <h2 class="govuk-heading-s">@Model.CropNmaxLimitWarningPara1</h2>
-                                    <p class="govuk-body warning-text">@Model.CropNmaxLimitWarningPara2</p>
-                                }
-                                @if (Model.IsEndClosedPeriodFebruaryWarning)
-                                {
-                                    <h2 class="govuk-heading-s">@Model.EndClosedPeriodEndFebWarningPara1</h2>
-                                    <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara2</p>
-                                }
-                                @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-                                {
-                                    <h2 class="govuk-heading-s">@Model.StartClosedPeriodEndFebWarningPara1</h2>
-                                    <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara2</p>
-
-                                }
-                            </govuk-details-text>
-                        </govuk-details>
-                        @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
-                        {
-                            <p class="govuk-body">@Model.StartClosedPeriodEndFebWarningPara3</p>
-                        }
-                        else if (Model.IsEndClosedPeriodFebruaryWarning)
-                        {
-                            <p class="govuk-body">@Model.EndClosedPeriodEndFebWarningPara3</p>
-                        }
-                        else if (Model.IsNMaxLimitWarning)
-                        {
-                            <p class="govuk-body">@Model.CropNmaxLimitWarningPara3</p>
-                        }
-                        else if (Model.IsOrgManureNfieldLimitWarning)
-                        {
-                            <p class="govuk-body">@Model.NmaxWarningPara3</p>
-                        }
-                    }
-
-                </govuk-notification-banner>
-            }
+            @await Html.PartialAsync("~/Views/OrganicManure/_ApplicationRateWarningPartial.cshtml", Model)
+            
 
             
             <h1 class="govuk-heading-l">@Resource.lblEnterTheAreaAndQuantity</h1>
-            <govuk-input asp-for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
