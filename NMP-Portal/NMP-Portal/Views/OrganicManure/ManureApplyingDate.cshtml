@@ -22,7 +22,7 @@
         <form class="form" action="ManureApplyingDate" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
    @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
-            @if ((Model.IsClosedPeriodWarning != null || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks != null) && Model.IsWarningMsgNeedToShow)
+            @if (Model.IsWarningMsgNeedToShow)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
