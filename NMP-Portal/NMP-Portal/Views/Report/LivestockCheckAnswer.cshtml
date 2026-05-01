@@ -92,7 +92,23 @@
                                         @string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @((Model.IsAnyLivestockNumber.HasValue) ? (Model.IsAnyLivestockNumber == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                                    @{
+                                        string isAnyLivestockNumberText;
+
+                                        if (!Model.IsAnyLivestockNumber.HasValue)
+                                        {
+                                            isAnyLivestockNumberText = Resource.lblNotSet;
+                                        }
+                                        else if (Model.IsAnyLivestockNumber.Value)
+                                        {
+                                            isAnyLivestockNumberText = Resource.lblYes;
+                                        }
+                                        else
+                                        {
+                                            isAnyLivestockNumberText = Resource.lblNo;
+                                        }
+                                    }
+                                    @isAnyLivestockNumberText
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="IsAnyLivestockNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDidYouHaveAnyLivestockOn, Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
@@ -127,7 +143,23 @@
                                         @string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategoryForLivestockNumber, Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.LivestockNumberQuestion.HasValue ? (Model.LivestockNumberQuestion == (int)NMP.Commons.Enums.LivestockNumberQuestion.ANumberForEachMonth ? Resource.lblEnterANumberForEachMonth : Resource.lblEnterTheAverageNumberForTheYear) : Resource.lblNotSet)
+                                    @{
+                                        string livestockNumberQuestionText;
+
+                                        if (!Model.LivestockNumberQuestion.HasValue)
+                                        {
+                                            livestockNumberQuestionText = Resource.lblNotSet;
+                                        }
+                                        else if (Model.LivestockNumberQuestion == (int)NMP.Commons.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+                                        {
+                                            livestockNumberQuestionText = Resource.lblEnterANumberForEachMonth;
+                                        }
+                                        else
+                                        {
+                                            livestockNumberQuestionText = Resource.lblEnterTheAverageNumberForTheYear;
+                                        }
+                                    }
+                                    @livestockNumberQuestionText
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="LivestockNumberQuestion" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToEnterYourLivestockNumbers, ViewBag.LivestockCategoryForLivestockNumber, Model.Year)</span></govuk-summary-list-row-action>
@@ -196,7 +228,27 @@
                                         @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName.ToLower(), Model.Year)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.AverageNumberOfPlaces.HasValue ? (string.Concat(string.Format("{0:N1}", Model.AverageNumberOfPlaces), (Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? (" " + Resource.lblPlaces) : (" " + Resource.lblThousandPlaces))) : Resource.lblNotSet)
+                                    @{
+                                        string averageNumberOfPlacesText;
+
+                                        if (!Model.AverageNumberOfPlaces.HasValue)
+                                        {
+                                            averageNumberOfPlacesText = Resource.lblNotSet;
+                                        }
+                                        else
+                                        {
+                                            string formattedValue = string.Format("{0:N1}", Model.AverageNumberOfPlaces);
+
+                                            bool isPlaces =
+                                            Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs ||
+                                            Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich;
+
+                                            string unit = isPlaces ? Resource.lblPlaces : Resource.lblThousandPlaces;
+
+                                            averageNumberOfPlacesText = string.Concat(formattedValue, " ", unit);
+                                        }
+                                    }
+                                    @averageNumberOfPlacesText
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="NonGrazingLivestockAverageNumber" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThis, Model.LivestockGroupName.ToLower(), Model.Year)</span></govuk-summary-list-row-action>
