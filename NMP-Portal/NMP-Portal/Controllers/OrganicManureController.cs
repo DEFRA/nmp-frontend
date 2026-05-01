@@ -6036,7 +6036,7 @@ managementPeriod.CropID.HasValue
 
                         }
                     }
-                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland && isCompost)
                     {
                         if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
                         {
