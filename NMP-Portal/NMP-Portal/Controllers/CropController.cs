@@ -1136,7 +1136,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (crop, null);
     }
 
-    private Crop BindCropInfoOneTwoOrCropGroupName(PlanViewModel model, Crop crop, List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, List<Field> allFields, int fieldId)
+    private static Crop BindCropInfoOneTwoOrCropGroupName(PlanViewModel model, Crop crop, List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, List<Field> allFields, int fieldId)
     {
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
         {
@@ -1161,7 +1161,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return crop;
     }
-    private List<Field> FilterFieldListForCropUpdate(PlanViewModel model, List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
+    private static List<Field> FilterFieldListForCropUpdate(PlanViewModel model, List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
     {
         if (harvestYearPlanResponse.Count > 0 && !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
         {
@@ -1171,7 +1171,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return fieldList;
     }
-    private void BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
+    private static void BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
     {
         foreach (var removeFieldId in fieldRemoveList)
         {
