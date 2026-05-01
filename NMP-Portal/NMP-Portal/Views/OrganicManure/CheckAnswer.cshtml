@@ -1,7 +1,25 @@
-﻿@using NMP.Commons.Resources;
+﻿@using Microsoft.AspNetCore.Html
+@using NMP.Commons.Resources;
 @using System.Globalization
 @model NMP.Commons.ViewModels.OrganicManureViewModel
 
+@functions{
+    public IHtmlContent RenderNutrientRow(decimal? value, string label, bool isPercent = false)
+    {
+        if (!value.HasValue || value.Value < 0)
+            return HtmlString.Empty;
+
+        var formattedValue = isPercent
+            ? string.Format("{0}%", value.Value)
+            : string.Format(Resource.lblValueKgPerTonne, value.Value);
+
+        return new HtmlString($@"
+            <span class='nutrient_row'>
+                {label}
+                <span class='figure w31'>{formattedValue}</span>
+            </span>");
+    }
+}
 @{
     var heading="";
     if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
@@ -46,29 +64,6 @@
             break;
     }
     var manure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName;
-
-    var dryMatter = Model.ManureType?.DryMatter ?? Model.DryMatterPercent;
-    var n = Model.ManureType?.TotalN ?? Model.N;
-    var nh4n = Model.ManureType?.NH4N ?? Model.NH4N;
-    var uricAcid = Model.ManureType?.Uric ?? Model.UricAcid;
-    var no3n = Model.ManureType?.NO3N ?? Model.NO3N;
-    var p2o5 = Model.ManureType?.P2O5 ?? Model.P2O5;
-    var k2o = Model.ManureType?.K2O ?? Model.K2O;
-    var so3 = Model.ManureType?.SO3 ?? Model.SO3;
-    var mgo = Model.ManureType?.MgO ?? Model.MgO;
-
-    var nutrients = new[]
-    {
-        new { Value = dryMatter, Label = Resource.lblDryMatterContent, Format = "{0}%" },
-        new { Value = n, Label = Resource.lblNitrogen, Format = Resource.lblValueKgPerTonne },
-        new { Value = nh4n, Label = Resource.lblAmmoniumHypenN, Format = Resource.lblValueKgPerTonne },
-        new { Value = uricAcid, Label = Resource.lblUricAcid, Format = Resource.lblValueKgPerTonne },
-        new { Value = no3n, Label = Resource.lblNitrate, Format = Resource.lblValueKgPerTonne },
-        new { Value = p2o5, Label = Resource.lblPhosphateP2O5, Format = Resource.lblValueKgPerTonne },
-        new { Value = k2o, Label = Resource.lblPotashK2O, Format = Resource.lblValueKgPerTonne },
-        new { Value = so3, Label = Resource.lblSulphurSO3, Format = Resource.lblValueKgPerTonne },
-        new { Value = mgo, Label = Resource.lblMagnesiumMgO, Format = Resource.lblValueKgPerTonne }
-    };
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -533,19 +528,16 @@
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value   class="margin-bottom-thirty nutrient_list">
-                                        @foreach (var item in nutrients)
-                                        {
-                                            if (item.Value.HasValue && item.Value.Value >= 0)
-                                            {
-                                                <span class="nutrient_row">
-                                                    @item.Label
-                                                    <span class="figure w31">
-                                                        @string.Format(item.Format, item.Value.Value)
-                                                    </span>
-                                                </span>
-                                            }
-                                        }
-
+                                        @RenderNutrientRow(Model.ManureType.DryMatter, Resource.lblDryMatterContent, true)
+                                        @RenderNutrientRow(Model.ManureType.TotalN, Resource.lblNitrogen)
+                                        @RenderNutrientRow(Model.ManureType.NH4N, Resource.lblAmmoniumHypenN)
+                                        @RenderNutrientRow(Model.ManureType.Uric, Resource.lblUricAcid)
+                                        @RenderNutrientRow(Model.ManureType.NO3N, Resource.lblNitrate)
+                                        @RenderNutrientRow(Model.ManureType.P2O5, Resource.lblPhosphateP2O5)
+                                        @RenderNutrientRow(Model.ManureType.K2O, Resource.lblPotashK2O)
+                                        @RenderNutrientRow(Model.ManureType.SO3, Resource.lblSulphurSO3)
+                                        @RenderNutrientRow(Model.ManureType.MgO, Resource.lblMagnesiumMgO)
+                                        
                                     </govuk-summary-list-row-value>                                  
                                     <govuk-summary-list-row-actions>
                                     </govuk-summary-list-row-actions>
@@ -576,18 +568,16 @@
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
-                                        @foreach (var item in nutrients)
-                                        {
-                                            if (item.Value.HasValue && item.Value.Value >= 0)
-                                            {
-                                                <span class="nutrient_row">
-                                                    @item.Label
-                                                    <span class="figure w31">
-                                                        @string.Format(item.Format, item.Value.Value)
-                                                    </span>
-                                                </span>
-                                            }
-                                        }
+                                        @RenderNutrientRow(Model.DryMatterPercent, Resource.lblDryMatterContent, true)
+                                        @RenderNutrientRow(Model.N, Resource.lblNitrogen)
+                                        @RenderNutrientRow(Model.NH4N, Resource.lblAmmoniumHypenN)
+                                        @RenderNutrientRow(Model.UricAcid, Resource.lblUricAcid)
+                                        @RenderNutrientRow(Model.NO3N, Resource.lblNitrate)
+                                        @RenderNutrientRow(Model.P2O5, Resource.lblPhosphateP2O5)
+                                        @RenderNutrientRow(Model.K2O, Resource.lblPotashK2O)
+                                        @RenderNutrientRow(Model.SO3, Resource.lblSulphurSO3)
+                                        @RenderNutrientRow(Model.MgO, Resource.lblMagnesiumMgO)
+
 
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
@@ -607,18 +597,16 @@
                                     @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                 </govuk-summary-list-row-key>
                            <govuk-summary-list-row-value  class="margin-bottom-thirty nutrient_list">
-                                        @foreach (var item in nutrients)
-                                        {
-                                            if (item.Value.HasValue && item.Value.Value >= 0)
-                                            {
-                                                <span class="nutrient_row">
-                                                    @item.Label
-                                                    <span class="figure w31">
-                                                        @string.Format(item.Format, item.Value.Value)
-                                                    </span>
-                                                </span>
-                                            }
-                                        }
+                                        @RenderNutrientRow(Model.DryMatterPercent, Resource.lblDryMatterContent, true)
+                                        @RenderNutrientRow(Model.N, Resource.lblNitrogen)
+                                        @RenderNutrientRow(Model.NH4N, Resource.lblAmmoniumHypenN)
+                                        @RenderNutrientRow(Model.UricAcid, Resource.lblUricAcid)
+                                        @RenderNutrientRow(Model.NO3N, Resource.lblNitrate)
+                                        @RenderNutrientRow(Model.P2O5, Resource.lblPhosphateP2O5)
+                                        @RenderNutrientRow(Model.K2O, Resource.lblPotashK2O)
+                                        @RenderNutrientRow(Model.SO3, Resource.lblSulphurSO3)
+                                        @RenderNutrientRow(Model.MgO, Resource.lblMagnesiumMgO)
+
 
                                     </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
@@ -640,33 +628,29 @@
                             <govuk-summary-list-row-value  class="margin-bottom-thirty nutrient_list">
                                 @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                                 {
-                                   @foreach (var item in nutrients)
-                                        {
-                                            if (item.Value.HasValue && item.Value.Value >= 0)
-                                            {
-                                                <span class="nutrient_row">
-                                                    @item.Label
-                                                    <span class="figure w31">
-                                                        @string.Format(item.Format, item.Value.Value)
-                                                    </span>
-                                                </span>
-                                            }
-                                        }
+                                        @RenderNutrientRow(Model.DryMatterPercent, Resource.lblDryMatterContent, true)
+                                        @RenderNutrientRow(Model.N, Resource.lblNitrogen)
+                                        @RenderNutrientRow(Model.NH4N, Resource.lblAmmoniumHypenN)
+                                        @RenderNutrientRow(Model.UricAcid, Resource.lblUricAcid)
+                                        @RenderNutrientRow(Model.NO3N, Resource.lblNitrate)
+                                        @RenderNutrientRow(Model.P2O5, Resource.lblPhosphateP2O5)
+                                        @RenderNutrientRow(Model.K2O, Resource.lblPotashK2O)
+                                        @RenderNutrientRow(Model.SO3, Resource.lblSulphurSO3)
+                                        @RenderNutrientRow(Model.MgO, Resource.lblMagnesiumMgO)
+                                   
                                 }
                                 else
                                 {
-                                      @foreach (var item in nutrients)
-                                        {
-                                            if (item.Value.HasValue && item.Value.Value >= 0)
-                                            {
-                                                <span class="nutrient_row">
-                                                    @item.Label
-                                                    <span class="figure w31">
-                                                        @string.Format(item.Format, item.Value.Value)
-                                                    </span>
-                                                </span>
-                                            }
-                                        }
+                                    @RenderNutrientRow(Model.ManureType.DryMatter, Resource.lblDryMatterContent, true)
+                                    @RenderNutrientRow(Model.ManureType.TotalN, Resource.lblNitrogen)
+                                    @RenderNutrientRow(Model.ManureType.NH4N, Resource.lblAmmoniumHypenN)
+                                    @RenderNutrientRow(Model.ManureType.Uric, Resource.lblUricAcid)
+                                    @RenderNutrientRow(Model.ManureType.NO3N, Resource.lblNitrate)
+                                    @RenderNutrientRow(Model.ManureType.P2O5, Resource.lblPhosphateP2O5)
+                                    @RenderNutrientRow(Model.ManureType.K2O, Resource.lblPotashK2O)
+                                    @RenderNutrientRow(Model.ManureType.SO3, Resource.lblSulphurSO3)
+                                    @RenderNutrientRow(Model.ManureType.MgO, Resource.lblMagnesiumMgO)
+
                                 }
 
                             </govuk-summary-list-row-value>

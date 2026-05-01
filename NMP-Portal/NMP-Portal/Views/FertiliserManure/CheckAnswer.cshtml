@@ -1,6 +1,42 @@
-﻿﻿@using NMP.Commons.Resources
+﻿@using Microsoft.AspNetCore.Html
+﻿@using NMP.Commons.Resources
 @using System.Globalization
 @model NMP.Commons.ViewModels.FertiliserManureViewModel
+
+@functions {
+    public IHtmlContent RenderValueRow(string label, object value, string suffix = "")
+    {
+        if (value == null) return HtmlString.Empty;
+
+        var strValue = value.ToString();
+
+        if (string.IsNullOrWhiteSpace(strValue)) return HtmlString.Empty;
+
+        return new HtmlString($@"
+            <span class='nutrient_row'>
+                {label}
+                <span class='figure w31'>{strValue}{suffix}</span>
+            </span>");
+    }
+
+    public IHtmlContent RenderNullableDecimalRow(string label, decimal? value, string suffix = "")
+    {
+        if (!value.HasValue || value.Value <= 0) return HtmlString.Empty;
+
+        return new HtmlString($@"
+            <span class='nutrient_row'>
+                {label}
+                <span class='figure w31'>{string.Format(suffix,value)}</span>
+            </span>");
+    }
+
+    public IHtmlContent RenderWarning(bool condition, string message)
+    {
+        if (!condition || string.IsNullOrWhiteSpace(message)) return HtmlString.Empty;
+
+        return new HtmlString($@"<p class='govuk-notification-banner__heading'>{message}</p>");
+    }
+}
 @{
     var heading="";
     if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
@@ -39,36 +75,12 @@
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
 
-                    @if (Model.IsClosedPeriodWarning && !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1))
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodWarningPara1
-                        </p>
-                    }
-                    @if (Model.IsClosedPeriodWarningExceptGrassAndOilseed)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Resource.MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle
-                        </p>
-                    }
-                    @if (Model.IsClosedPeriodWarningOnlyForGrassAndOilseed)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle
-                        </p>
-                    }
-                    @if (Model.IsNitrogenExceedWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodNitrogenExceedWarningPara1
-                        </p>
-                    }
-                    @if (Model.IsNMaxLimitWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Model.CropNmaxLimitWarningPara1
-                        </p>
-                    }
+                    @RenderWarning(Model.IsClosedPeriodWarning, Model.ClosedPeriodWarningPara1)
+                    @RenderWarning(Model.IsClosedPeriodWarningExceptGrassAndOilseed, Resource.MsgClosedPeriodForFertliserExceptOilseedAndGrassTitle)
+                    @RenderWarning(Model.IsClosedPeriodWarningOnlyForGrassAndOilseed, Resource.MsgClosedPeriodForGrassAndOilseedFertliserWarningMsgTitle)
+                    @RenderWarning(Model.IsNitrogenExceedWarning, Model.ClosedPeriodNitrogenExceedWarningPara1)
+                    @RenderWarning(Model.IsNMaxLimitWarning, Model.CropNmaxLimitWarningPara1)
+                    
 
                 </govuk-notification-banner>
                 
@@ -190,11 +202,11 @@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 
-                                    <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">
+                                <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">
                                        @Resource.lblChange                                        
                                     @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                     {         
-                                    <span class="govuk-visually-hidden">
+                                        <span class="govuk-visually-hidden">
                                             @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
                                             {
                                                 @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
@@ -205,7 +217,7 @@
                                             }
                                         </span>
                                     }
-                                    </govuk-summary-list-row-action>
+                                </govuk-summary-list-row-action>
                                
 
                             </govuk-summary-list-row-actions>
@@ -403,27 +415,12 @@
                             }
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value class="nutrient_list">
-                            @if ((Model.N.HasValue))
-                            {
-                                  <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.N.Value)</span></span>
-                                
-                            }
-                            @if ((Model.P2O5.HasValue))
-                            {
-                                <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.P2O5.Value)</span></span>
-                            }
-                            @if ((Model.K2O.HasValue))
-                            {
-                                <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.K2O.Value)</span></span>
-                            }
-                            @if ((Model.SO3.HasValue))
-                            {
-                                <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.SO3.Value)</span></span>
-                            }
-                            @if ((Model.MgO.HasValue))
-                            {
-                                <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w35">@string.Format(Resource.lblValueKgPerHectare,Model.MgO.Value)</span></span>
-                            }
+                            @RenderNullableDecimalRow(Resource.lblTotalNitrogen, Model.N, Resource.lblValueKgPerHectare)
+                            @RenderNullableDecimalRow(Resource.lblPhosphateP2O5, Model.P2O5, Resource.lblValueKgPerHectare)
+                            @RenderNullableDecimalRow(Resource.lblPotashK2O, Model.K2O, Resource.lblValueKgPerHectare)
+                            @RenderNullableDecimalRow(Resource.lblSulphurSO3, Model.SO3, Resource.lblValueKgPerHectare)
+                            @RenderNullableDecimalRow(Resource.lblMagnesiumMgO, Model.MgO, Resource.lblValueKgPerHectare)
+                            
                             @if ((Model.Lime.HasValue))
                             {
                                 <span class="nutrient_row">@Resource.lblLime <span class="figure w35">@($"{Model.Lime.Value}{Resource.lblTonnesForReport}")</span></span>
