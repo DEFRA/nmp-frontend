@@ -12,6 +12,8 @@ using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
+using NMP.Portal.Helpers;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -750,7 +752,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
 
                         fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+
                     }
+                    fieldData.SoilAnalysis = await BindSoilAnalysisResponse(model.FarmRB209CountryID.Value,fieldData.SoilAnalysis);
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
                 model.CropAndFieldReport.Farm.ArableArea = totalArableArea;
@@ -763,6 +767,35 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
+    private async Task<SoilAnalysisForReportResponse> BindSoilAnalysisResponse(int countryId,
+     SoilAnalysisForReportResponse response)
+    {
+        if (response != null && countryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            var (nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+            var (statusList, _) = await _fieldLogic.FetchSoilNutrientStatusList(response.PhosphorusMethodologyID.Value);
+
+            var logic = new SoilAnalysisNutrientValuesLogic();
+
+            response.PhosphorusStatus = GetText(logic, statusList, nutrients, Resource.lblPhosphate, 1, response.PhosphorusStatus);
+            response.PotassiumStatus = GetText(logic, statusList, nutrients, Resource.lblPotash, 2, response.PotassiumStatus);
+            response.MagnesiumStatus = GetText(logic, statusList, nutrients, Resource.lblMagnesium, 3, response.MagnesiumStatus);
+        }
+        return response;
+    }
+    private static string? GetText(
+    SoilAnalysisNutrientValuesLogic logic,
+    List<SoilNutrientStatusResponse> statusList,
+    List<NutrientResponseWrapper> nutrients,
+    string label,
+    int order,
+    string? value)
+    {
+        return logic
+            .BindViewBagForScotlandNutrient(statusList, nutrients, label, order)?
+            .FirstOrDefault(x => x.Value == value)?
+            .Text;
+    }
     [HttpGet]
     public async Task<IActionResult> ReportType(string i, string? j)
     {
