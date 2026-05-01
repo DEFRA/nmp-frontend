@@ -26,6 +26,17 @@
             ? newText
             : existingText;
     }
+    
+    public static IHtmlContent RenderNutrients(IEnumerable<dynamic> items)
+    {
+        var sb = new HtmlContentBuilder();
+        foreach (var item in items)
+        {
+            sb.AppendHtml(RenderNutrientRow(item.Value, item.Label, item.IsPercent));
+        }
+        return sb;
+    }
+
 }
 @{
     var heading=GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear));
@@ -530,10 +541,7 @@
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value   class="margin-bottom-thirty nutrient_list">
-                                        @foreach (var item in manureNutrients)
-                                        {
-                                            @RenderNutrientRow(item.Value, item.Label, item.IsPercent)
-                                        }
+                                        @RenderNutrients(manureNutrients)
                                     </govuk-summary-list-row-value>                                  
                                     <govuk-summary-list-row-actions>
                                     </govuk-summary-list-row-actions>
@@ -564,11 +572,7 @@
                                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
-                                        @foreach (var item in nutrients)
-                                        {
-                                            @RenderNutrientRow(item.Value, item.Label, item.IsPercent)
-                                        }
-
+                                        @RenderNutrients(nutrients)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="ManualNutrientValues" asp-controller="OrganicManure">@Resource.lblChange
@@ -587,12 +591,7 @@
                                     @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                                 </govuk-summary-list-row-key>
                            <govuk-summary-list-row-value  class="margin-bottom-thirty nutrient_list">
-                                        
-                                        @foreach (var item in nutrients)
-                                        {
-                                            @RenderNutrientRow(item.Value, item.Label, item.IsPercent)
-                                        }
-
+                                        @RenderNutrients(nutrients)
                                     </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="ManualNutrientValues" asp-controller="OrganicManure">@Resource.lblChange
@@ -613,19 +612,11 @@
                             <govuk-summary-list-row-value  class="margin-bottom-thirty nutrient_list">
                                 @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                                 {
-                                    @foreach (var item in nutrients)
-                                    {
-                                        @RenderNutrientRow(item.Value, item.Label, item.IsPercent)
-                                    }
-                                   
+                                    @RenderNutrients(nutrients)
                                 }
                                 else
                                 {
-                                    @foreach (var item in manureNutrients)
-                                    {
-                                        @RenderNutrientRow(item.Value, item.Label, item.IsPercent)
-                                    }
-
+                                    @RenderNutrients(manureNutrients)
                                 }
 
                             </govuk-summary-list-row-value>
