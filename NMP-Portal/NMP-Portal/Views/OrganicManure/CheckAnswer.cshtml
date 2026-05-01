@@ -4,7 +4,7 @@
 @model NMP.Commons.ViewModels.OrganicManureViewModel
 
 @functions{
-    public IHtmlContent RenderNutrientRow(decimal? value, string label, bool isPercent = false)
+    public static IHtmlContent RenderNutrientRow(decimal? value, string label, bool isPercent = false)
     {
         if (!value.HasValue || value.Value < 0)
             return HtmlString.Empty;

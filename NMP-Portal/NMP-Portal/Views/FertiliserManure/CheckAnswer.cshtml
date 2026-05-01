@@ -4,7 +4,7 @@
 @model NMP.Commons.ViewModels.FertiliserManureViewModel
 
 @functions {
-    public IHtmlContent RenderValueRow(string label, object value, string suffix = "")
+    public static IHtmlContent RenderValueRow(string label, object value, string suffix = "")
     {
         if (value == null) return HtmlString.Empty;
 
@@ -19,7 +19,7 @@
             </span>");
     }
 
-    public IHtmlContent RenderNullableDecimalRow(string label, decimal? value, string suffix = "")
+    public static IHtmlContent RenderNullableDecimalRow(string label, decimal? value, string suffix = "")
     {
         if (!value.HasValue || value.Value <= 0) return HtmlString.Empty;
 
@@ -30,7 +30,7 @@
             </span>");
     }
 
-    public IHtmlContent RenderWarning(bool condition, string message)
+    public static IHtmlContent RenderWarning(bool condition, string message)
     {
         if (!condition || string.IsNullOrWhiteSpace(message)) return HtmlString.Empty;
 
