@@ -566,7 +566,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     }));
                 }
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
+                selectListItem= BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -687,17 +687,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.Crops != null && model.Crops.Count > 0)
         {
-            bool hasAllowedFields = fieldsAllowedForSecondCrop?.Any() == true;
+            var allowedFields = fieldsAllowedForSecondCrop ?? new List<int>();
+            bool hasAllowedFields = allowedFields.Any();
 
             var cropsToRemove = model.Crops
-                .Where(crop =>
-                    crop.CropOrder == 2 &&
-                    (
-                        (!hasAllowedFields) ||
-                        (hasAllowedFields && !fieldsAllowedForSecondCrop.Contains(crop.FieldID.Value))
-                    )
-                )
-                .ToList();
+            .Where(crop =>
+                crop.CropOrder == 2 &&
+                (!hasAllowedFields ||
+                 !allowedFields.Contains(crop.FieldID.Value)))
+            .ToList();
 
             if (model.FieldList?.Any() == true)
             {
@@ -833,7 +831,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             List<HarvestYearPlanResponse> harvestYearPlanResponse = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            fieldList = FilterFieldListForCropUpdate(model, fieldList, harvestYearPlanResponse);
+            cropPlanForFirstCropFilter = harvestYearPlanResponse;
+            (fieldList, harvestYearPlanResponse) = FilterFieldListForCropUpdate(model, fieldList, harvestYearPlanResponse);
+
             List<SelectListItem> selectListItem = fieldList.Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
@@ -861,7 +861,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     allFieldList.RemoveAll(field => cropPlanForFirstCropFilter
                      .Any(x => x.FieldID == field.ID.Value));
 
-                    cropPlanForFirstCropFilter.RemoveAll(field => fieldIdsToRemove.Contains(field.FieldID));
+                    //cropPlanForFirstCropFilter.RemoveAll(field => fieldIdsToRemove.Contains(field.FieldID));
 
                     foreach (var field in allFieldList)
                     {
@@ -876,7 +876,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     }
                 }
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
+                selectListItem = BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -919,7 +919,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<Field> fieldList = new List<Field>(allFields);
             List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = new List<HarvestYearPlanResponse>();
             (harvestYearPlanResponseForFilter, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-            fieldList = FilterFieldListForCropUpdate(model, fieldList, harvestYearPlanResponseForFilter);
+            cropPlanForFirstCropFilter = harvestYearPlanResponseForFilter;
+            (fieldList, harvestYearPlanResponseForFilter) = FilterFieldListForCropUpdate(model, fieldList, harvestYearPlanResponseForFilter);
             List<SelectListItem> selectListItem = fieldList.Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
@@ -963,7 +964,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
 
                 (fieldsAllowedForSecondCrop, fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-                BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
+                selectListItem = BindSelectItemList(fieldsAllowedForSecondCrop, fieldRemoveList, selectListItem, allFields);
             }
             else
             {
@@ -1063,7 +1064,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             PlanViewModel? planViewModel = GetCropFromSession();
             if (planViewModel?.Crops?.Any() == true && model.Crops != null)
             {
-                (model, matchFound) = BindSowingOrYieldQuestionProperty(model, matchFound, planViewModel);
+                (model, matchFound) = BindSowingOrYieldQuestionProperty(model, planViewModel);
             }
             else
             {
@@ -1075,8 +1076,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (model, null, matchFound);
     }
 
-    private (PlanViewModel, bool) BindSowingOrYieldQuestionProperty(PlanViewModel model, bool matchFound, PlanViewModel? planViewModel)
+    private (PlanViewModel, bool) BindSowingOrYieldQuestionProperty(PlanViewModel model, PlanViewModel? planViewModel)
     {
+        bool matchFound = false;
         bool isSingleCrop = model.Crops.Count == 1;
         matchFound = model.Crops.All(crop1 => planViewModel.Crops.Any(crop2 => crop2.FieldID == crop1.FieldID));
         if (matchFound && isSingleCrop)
@@ -1174,7 +1176,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return crop;
     }
-    private static List<Field> FilterFieldListForCropUpdate(PlanViewModel model, List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
+    private static (List<Field>, List<HarvestYearPlanResponse>) FilterFieldListForCropUpdate(PlanViewModel model, List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponse)
     {
         if (harvestYearPlanResponse.Count > 0 && !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
         {
@@ -1182,9 +1184,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             fieldList = FilterFieldList(fieldList, harvestYearPlanResponse);
 
         }
-        return fieldList;
+        return (fieldList, harvestYearPlanResponse);
     }
-    private static void BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
+    private static List<SelectListItem> BindSelectItemList(List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList, List<SelectListItem> selectListItem, List<Field> allFields)
     {
         foreach (var removeFieldId in fieldRemoveList)
         {
@@ -1204,6 +1206,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
         }
+        return selectListItem;
     }
     private static List<Field> FilterFieldList(List<Field> fieldList, List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter)
     {
