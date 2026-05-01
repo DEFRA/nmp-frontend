@@ -861,7 +861,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     allFieldList.RemoveAll(field => cropPlanForFirstCropFilter
                      .Any(x => x.FieldID == field.ID.Value));
 
-                    //cropPlanForFirstCropFilter.RemoveAll(field => fieldIdsToRemove.Contains(field.FieldID));
+                    cropPlanForFirstCropFilter.RemoveAll(field => fieldIdsToRemove.Contains(field.FieldID));
 
                     foreach (var field in allFieldList)
                     {
