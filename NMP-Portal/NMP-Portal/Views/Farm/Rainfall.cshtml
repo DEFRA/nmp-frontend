@@ -8,7 +8,7 @@
 
     if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode))
         backAction = "ClimatePostCode";
-    else if (Model.IsManualAddress == true)
+    else if (Model.IsManualAddress)
         backAction = "ManualAddress";
     else
         backAction = "Address";

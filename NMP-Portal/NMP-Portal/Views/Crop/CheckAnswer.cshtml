@@ -21,20 +21,7 @@
     int CerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
     var yieldQuestion = "";
     var sowingDateQuestion = "";
-    string backActionForYield;
-
-    if (Model.Crops.Count > 1)
-    {
-        backActionForYield = "Yield";
-    }
-    else if (Model.SowingDateQuestion != (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
-    {
-        backActionForYield = "SowingDate";
-    }
-    else
-    {
-        backActionForYield = "SowingDateQuestion";
-    }
+    
     var backActionForYieldQuestion = (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SowingDate";
     switch (Model.SowingDateQuestion)
@@ -176,7 +163,20 @@
     var hasMultipleCrops = Model.Crops.Count > 1;
     var isSingleDateForAll =  Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
 
-    string cropName =  isOther ? Model.OtherCropName : isPotato ? Model.Variety : Model.CropType;
+    string cropName;
+
+    if (isOther)
+    {
+        cropName = Model.OtherCropName;
+    }
+    else if (isPotato)
+    {
+        cropName = Model.Variety;
+    }
+    else
+    {
+        cropName = Model.CropType;
+    }
 
     
     string yieldQuestionText;
@@ -593,11 +593,11 @@
                                             <span class="govuk-visually-hidden"> 
                                         @if (!isGrass)
                                         {
-                                            string.Format(Resource.lblSowingDiffrentDateForCheckAnswer, cropName, crop.FieldName);
+                                            @string.Format(Resource.lblSowingDiffrentDateForCheckAnswer, cropName, crop.FieldName)
                                         }
                                         else
                                         {
-                                           string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, crop.FieldName);
+                                            @string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, crop.FieldName)
                                         }
                                         </span> 
                                         </govuk-summary-list-row-action>
