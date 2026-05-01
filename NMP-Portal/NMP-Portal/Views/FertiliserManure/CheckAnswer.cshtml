@@ -36,17 +36,14 @@
 
         return new HtmlString($@"<p class='govuk-notification-banner__heading'>{message}</p>");
     }
+     public string GetFertiliserText(string newText, string existingText)
+    {
+        return string.IsNullOrWhiteSpace(Model.EncryptedFertId) ? newText : existingText;
+    }
 }
 @{
-    var heading="";
-    if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-    {
-        heading = Resource.lblCheckYourAnswers;
-    }
-    else
-    {
-        heading = string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0);
-    }
+    var heading=GetFertiliserText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0));
+    
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     int counter = 1;
@@ -89,15 +86,7 @@
             }
 
             <h1 class="govuk-heading-l">
-                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                {
-                    @Resource.lblCheckYourAnswers
-                }
-                else
-                {
-                    @string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0)
-                }
-
+                @GetFertiliserText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0))
             </h1>
             @* <div> *@
                 <govuk-summary-list>
@@ -105,15 +94,7 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
-                                }
-                                else
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
-                                }
-                                @* @Resource.lblWhichFieldsWouldYouLikeToAddAnOrganic *@
+                              @GetFertiliserText(Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications,Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @Model.CropGroupName
@@ -121,14 +102,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange
                                    <span class="govuk-visually-hidden">
-                                      @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                      {
-                                          @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
-                                      }
-                                      else
-                                      {
-                                          @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
-                                      }
+                                   @GetFertiliserText(Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications,Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic)
                                    </span>
                                 </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
@@ -138,15 +112,7 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
-                                }
-                                else
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
-                                }
-                                @* @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic *@
+                                @GetFertiliserText(Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications,Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @Model.FieldName
@@ -163,14 +129,7 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
-                                }
-                                else
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
-                                }
+                                @GetFertiliserText(Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications,Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @if (ViewBag.SelectedFields != null)
@@ -208,14 +167,7 @@
                                     @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                     {         
                                         <span class="govuk-visually-hidden">
-                                            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                            {
-                                                @Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications
-                                            }
-                                            else
-                                            {
-                                                @Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic
-                                            }
+                                           @GetFertiliserText(Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications,Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic)
                                         </span>
                                     }
                                 </govuk-summary-list-row-action>
@@ -406,14 +358,7 @@
                     </govuk-summary-list-row>
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                            {
-                                @Resource.lblHowMuchOfEachNutrientDoYouPlan
-                            }
-                            else
-                            {
-                                @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
-                            }
+                            @GetFertiliserText(Resource.lblHowMuchOfEachNutrientDoYouPlan,Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value class="nutrient_list">
                             @RenderNullableDecimalRow(Resource.lblTotalNitrogen, Model.N, Resource.lblValueKgPerHectare)
@@ -430,14 +375,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange
                                 <span class="govuk-visually-hidden">
-                                    @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                    {
-                                        @Resource.lblHowMuchOfEachNutrientDoYouPlan
-                                    }
-                                    else
-                                    {
-                                        @Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate
-                                    }
+                                   @GetFertiliserText(Resource.lblHowMuchOfEachNutrientDoYouPlan,Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate)
                                 </span>
                             </govuk-summary-list-row-action>
 
@@ -468,15 +406,7 @@
 
 
             <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
-                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                {
-                    @Resource.lblAddToPlan
-                }
-                else
-                {
-                    @Resource.lblUpdate
-                }
-
+                @GetFertiliserText(Resource.lblAddToPlan,Resource.lblUpdate)
             </govuk-button>
             <p class="govuk-body cancel-link">
             @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))

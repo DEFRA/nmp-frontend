@@ -19,22 +19,21 @@
                 <span class='figure w31'>{formattedValue}</span>
             </span>");
     }
+
+     public string GetManureText(string newText, string existingText)
+    {
+        return string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)
+            ? newText
+            : existingText;
+    }
 }
 @{
-    var heading="";
-    if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
-    {
-        heading = Resource.lblCheckYourAnswers;
-    }
-    else
-    {
-        heading = string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear);
-    }
+    var heading=GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear));
+    
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
 
-    var DefaultNutrientValue = "";
     var howWouldYouEnterApplicationRate = "";
     int counter = 1;
     bool needToShowIncorporationsBtn = true;
@@ -171,14 +170,8 @@
             }
 
             <h1 class="govuk-heading-l">
-                @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
-                {
-                    @Resource.lblCheckYourAnswers
-                }
-                else
-                {
-                    @string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear)
-                }
+                @GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear))
+
             </h1>
             @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
            
@@ -202,15 +195,8 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
-                                }
-                                else
-                                {
-                                    @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
-                                }
-
+                             @GetManureText(Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic,string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear))
+                                
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @if (ViewBag.SelectedFields != null)
@@ -245,14 +231,7 @@
                                          @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                 {
                                        <span class="govuk-visually-hidden">
-                                           @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
-                                           {
-                                               @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
-                                           }
-                                           else
-                                           {
-                                               @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
-                                           }
+                                           @GetManureText(Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic, string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear))
                                        </span>
                                        }
                                     </govuk-summary-list-row-action>
@@ -264,14 +243,7 @@
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                 @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
-                                {
-                                    @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
-                                }
-                                else
-                                {
-                                    @string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear)
-                                }
+                                @GetManureText(Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic, string.Format(Resource.lblWhichFieldsDoYouWantToUpdateThisOrganicManureApplicationFor, Model.HarvestYear))
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @Model.FieldName
@@ -982,20 +954,11 @@
                         }
                     </p>
                 }
-           
-
-            @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
-            {
+            
                 <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
-                    @Resource.lblAddToPlan
+                    @GetManureText(Resource.lblAddToPlan, Resource.lblUpdate)
                 </govuk-button>
-            }
-            else
-            {
-                <govuk-button type="submit" class="margin-bottom-forty" prevent-double-click="true">
-                    @Resource.lblUpdate
-                </govuk-button>
-            }
+            
             <p class="govuk-body cancel-link">
                 @if (string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId))
                 {
