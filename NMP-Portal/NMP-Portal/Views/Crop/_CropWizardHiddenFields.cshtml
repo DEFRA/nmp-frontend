@@ -13,15 +13,8 @@
     
     @if (currentStep != (int)CropWizardSteps.CropType)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />        
-    }
-    else
-    {
-        if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
-        {
-            <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" value="@Model.CropTypeID"/>
-        }
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName" value="@Model.OtherCropName" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" value="@Model.CropTypeID"/>        
     }
 
     @if (currentStep != (int)CropWizardSteps.CropGroupName)
