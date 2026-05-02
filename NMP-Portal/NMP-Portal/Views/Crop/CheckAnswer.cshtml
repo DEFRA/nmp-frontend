@@ -1,6 +1,58 @@
 ﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
+@using NMP.Commons.ViewModels
 @model NMP.Commons.ViewModels.PlanViewModel
+
+@functions {
+
+    string GetCropName(PlanViewModel model)
+    {
+        if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
+            return model.OtherCropName;
+        if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes)
+            return model.Variety;
+        return model.CropType;
+    }
+    
+    string FormatYield(decimal? value, int decimals = 1)
+    {
+        if (!value.HasValue) return Resource.lblNotSet;
+        return value == 0
+            ? "0"
+            : $"{value.Value.ToString($"N{decimals}")} {Resource.lblTonnesPerHectare}";
+    }
+
+    string GetSowingDateQuestionText(int? question)
+    {
+        return question switch
+        {
+            (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater 
+                => Resource.lblNoIWillEnterTheDateLater,
+            (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields 
+                => Resource.lblYesIHaveASingleDateForAllTheseFields,
+            (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields 
+                => Resource.lblYesIHaveDifferentDatesForEachOfTheseFields,
+            _ => Resource.lblNotSet
+        };
+    }
+
+    string GetPotentialCutName(int? cut)
+    {
+        return cut switch
+        {
+            (int)NMP.Commons.Enums.PotentialCut.One => Resource.lblOne,
+            (int)NMP.Commons.Enums.PotentialCut.Two => Resource.lblTwo,
+            (int)NMP.Commons.Enums.PotentialCut.Three => Resource.lblThree,
+            (int)NMP.Commons.Enums.PotentialCut.Four => Resource.lblFour,
+            (int)NMP.Commons.Enums.PotentialCut.Five => Resource.lblFive,
+            (int)NMP.Commons.Enums.PotentialCut.Six => Resource.lblSix,
+            (int)NMP.Commons.Enums.PotentialCut.Seven => Resource.lblSeven,
+            (int)NMP.Commons.Enums.PotentialCut.Eight => Resource.lblEight,
+            (int)NMP.Commons.Enums.PotentialCut.Nine => Resource.lblNine,
+            _ => Resource.lblNotSet
+        };
+    }
+}
 @{
 
     var heading= "";
@@ -493,21 +545,7 @@
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SowingDateQuestion" asp-controller="Crop">@Resource.lblChange 
                                     <span class="govuk-visually-hidden"> 
-                                        @{
-                                            string? cropName=string.Empty;
-                                         if (Model.CropGroupId == OtherGroupId)
-                                         {
-                                             cropName = Model.OtherCropName;
-                                         }
-                                         else if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes)
-                                         {
-                                             cropName = Model.Variety;
-                                         }
-                                         else
-                                         {
-                                             cropName = Model.CropType;
-                                         }
-                                        }
+                                        string cropName = GetCropName(Model);
                                 @if(Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
                                 {
                                          
@@ -636,20 +674,7 @@
                                 {
                                     var isOptional = ViewBag.IsYieldOptional != null;
                                     var isMultiple = Model.Crops.Count > 1 && Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-
-                                     string cropName;
-                                     if (Model.CropGroupId == OtherGroupId)
-                                     {
-                                         cropName = Model.OtherCropName;
-                                     }
-                                     else if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes)
-                                     {
-                                         cropName = Model.Variety;
-                                     }
-                                     else
-                                     {
-                                         cropName = Model.CropType;
-                                     }
+                                    string cropName = GetCropName(Model);
                                      string yieldLabel;
 
                                      if (isOptional)
@@ -683,19 +708,7 @@
                                             }
                                             else
                                             {
-                                                string yieldDisplay;
-                                                if (crop.Yield.HasValue)
-                                                {
-                                                    if (crop.Yield.Value == 0.0m)
-                                                        yieldDisplay = "0";
-                                                    else
-                                                        yieldDisplay = string.Format("{0:N1}", crop.Yield.Value) + " " + Resource.lblTonnesPerHectare;
-                                                }
-                                                else
-                                                {
-                                                    yieldDisplay = Resource.lblNotSet;
-                                                }
-                                                @yieldDisplay
+                                                @FormatYield(crop.Yield)
                                             }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
@@ -747,19 +760,7 @@
                                         }
                                         else
                                         {
-                                           string yieldDisplay;
-                                           if (crop.Yield.HasValue)
-                                           {
-                                               if (crop.Yield.Value == 0.0m)
-                                                   yieldDisplay = "0";
-                                               else
-                                                   yieldDisplay = string.Format("{0:N1}", crop.Yield.Value) + " " + Resource.lblTonnesPerHectare;
-                                           }
-                                           else
-                                           {
-                                               yieldDisplay = Resource.lblNotSet;
-                                           }
-                                           @yieldDisplay
+                                           @FormatYield(crop.Yield)
                                         }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
@@ -797,19 +798,7 @@
                                             }
                                             else
                                             {
-                                                string yieldDisplay;
-                                                if (crop.Yield.HasValue)
-                                                {
-                                                    if (crop.Yield.Value == 0.0m)
-                                                        yieldDisplay = "0";
-                                                    else
-                                                        yieldDisplay = string.Format("{0:N1}", crop.Yield.Value) + " " + Resource.lblTonnesPerHectare;
-                                                }
-                                                else
-                                                {
-                                                    yieldDisplay = Resource.lblNotSet;
-                                                }
-                                                @yieldDisplay
+                                               @FormatYield(crop.Yield)
                                             }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
