@@ -36,13 +36,50 @@
         }
         return sb;
     }
-
+    string GetApplicationRateText()
+    {
+        if (!Model.ApplicationRate.HasValue)
+            return Resource.lblNotSet;
+    
+        var unit = (Model.IsManureTypeLiquid == true)
+            ? Resource.lblMeterCubePerHa
+            : Resource.lblTonPerHa;
+    
+        return $"{Model.ApplicationRate} {unit}";
+    }
+    public static IEnumerable<dynamic> BuildNutrients(
+    decimal? dryMatter,
+    decimal? n,
+    decimal? nh4n,
+    decimal? uric,
+    decimal? no3n,
+    decimal? p2o5,
+    decimal? k2o,
+    decimal? so3,
+    decimal? mgo)
+    {
+        return new[]
+        {
+            new { Value = dryMatter, Label = Resource.lblDryMatterContent, IsPercent = true },
+            new { Value = n, Label = Resource.lblNitrogen, IsPercent = false },
+            new { Value = nh4n, Label = Resource.lblAmmoniumHypenN, IsPercent = false },
+            new { Value = uric, Label = Resource.lblUricAcid, IsPercent = false },
+            new { Value = no3n, Label = Resource.lblNitrate, IsPercent = false },
+            new { Value = p2o5, Label = Resource.lblPhosphateP2O5, IsPercent = false },
+            new { Value = k2o, Label = Resource.lblPotashK2O, IsPercent = false },
+            new { Value = so3, Label = Resource.lblSulphurSO3, IsPercent = false },
+            new { Value = mgo, Label = Resource.lblMagnesiumMgO, IsPercent = false }
+        };
+    }
 }
 @{
     var heading=GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear));
     
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+    bool isManureTypeOther = Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials;
+    bool isManureGroupIdForFilterOther = Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials;
 
 
     var howWouldYouEnterApplicationRate = "";
@@ -73,36 +110,11 @@
             howWouldYouEnterApplicationRate = string.Format(Resource.lblUseTypicalApplicationRate, Model.ApplicationRateArable, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare);
             break;
     }
-    var manure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName;
+    var manure = isManureTypeOther ? Model.OtherMaterialName : Model.ManureTypeName;
 
+    var nutrients = BuildNutrients(Model.DryMatterPercent, Model.N, Model.NH4N, Model.UricAcid, Model.NO3N, Model.P2O5, Model.K2O, Model.SO3, Model.MgO);
     
-    
-    var nutrients = new[]
-    {
-        new { Value = Model.DryMatterPercent, Label = Resource.lblDryMatterContent, IsPercent = true },
-        new { Value = Model.N, Label = Resource.lblNitrogen, IsPercent = false },
-        new { Value = Model.NH4N, Label = Resource.lblAmmoniumHypenN, IsPercent = false },
-        new { Value = Model.UricAcid, Label = Resource.lblUricAcid, IsPercent = false },
-        new { Value = Model.NO3N, Label = Resource.lblNitrate, IsPercent = false },
-        new { Value = Model.P2O5, Label = Resource.lblPhosphateP2O5, IsPercent = false },
-        new { Value = Model.K2O, Label = Resource.lblPotashK2O, IsPercent = false },
-        new { Value = Model.SO3, Label = Resource.lblSulphurSO3, IsPercent = false },
-        new { Value = Model.MgO, Label = Resource.lblMagnesiumMgO, IsPercent = false }
-    };
-
-    var manureNutrients = new[]
-    {
-        new { Value = Model.ManureType.DryMatter, Label = Resource.lblDryMatterContent, IsPercent = true },
-        new { Value = Model.ManureType.TotalN, Label = Resource.lblNitrogen, IsPercent = false },
-        new { Value = Model.ManureType.NH4N, Label = Resource.lblAmmoniumHypenN, IsPercent = false },
-        new { Value = Model.ManureType.Uric, Label = Resource.lblUricAcid, IsPercent = false },
-        new { Value = Model.ManureType.NO3N, Label = Resource.lblNitrate, IsPercent = false },
-        new { Value = Model.ManureType.P2O5, Label = Resource.lblPhosphateP2O5, IsPercent = false },
-        new { Value = Model.ManureType.K2O, Label = Resource.lblPotashK2O, IsPercent = false },
-        new { Value = Model.ManureType.SO3, Label = Resource.lblSulphurSO3, IsPercent = false },
-        new { Value = Model.ManureType.MgO, Label = Resource.lblMagnesiumMgO, IsPercent = false }
-    };
-
+    var manureNutrients = BuildNutrients(Model.ManureType.DryMatter, Model.ManureType.TotalN, Model.ManureType.NH4N, Model.ManureType.Uric, Model.ManureType.NO3N, Model.ManureType.P2O5, Model.ManureType.K2O, Model.ManureType.SO3, Model.ManureType.MgO);
 
 }
 @section BeforeContent {
@@ -281,7 +293,7 @@
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) && (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)))
+                    @if ((isManureTypeOther) && (!isManureGroupIdForFilterOther))
                     {
                          <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
                              <govuk-summary-list-row-key>
@@ -485,7 +497,7 @@
                         </govuk-summary-list-row>
                     }
 
-                    @if (!(Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
+                    @if (!isManureTypeOther)
                     {
                         <govuk-summary-list-row class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)?"govuk-error-message":"")>
                             <govuk-summary-list-row-key>
@@ -515,9 +527,9 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
-                    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                    @if (isManureTypeOther)
                     {
-                        @if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                        @if (isManureGroupIdForFilterOther)
                         {
                             @if (Model.DefaultNutrientValue == Resource.lblYes)
                             {
@@ -656,24 +668,7 @@
                                 @string.Format(Resource.lblApplicationRateRow, (Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblMeterCubePerHa : Resource.lblTonPerHa)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @{
-                                     string applicationRateText;
-                                 
-                                     if (!Model.ApplicationRate.HasValue)
-                                         applicationRateText = Resource.lblNotSet;
-                                     else
-                                     {
-                                         string unit;
-                                 
-                                         if (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid.Value)
-                                             unit = Resource.lblMeterCubePerHa;
-                                         else
-                                             unit = Resource.lblTonPerHa;
-                                 
-                                         applicationRateText = string.Format("{0} {1}", Model.ApplicationRate, unit);
-                                     }
-                                 }
-                                 @applicationRateText
+                                @GetApplicationRateText()
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblChange
@@ -724,24 +719,7 @@
                                 @string.Format(Resource.lblApplicationRateRow, (Model.IsManureTypeLiquid != null && Model.IsManureTypeLiquid.Value) ? Resource.lblMeterCubePerHa : Resource.lblTonPerHa)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @{
-                                     string applicationRateText;
-                                 
-                                     if (!Model.ApplicationRate.HasValue)
-                                         applicationRateText = Resource.lblNotSet;
-                                     else
-                                     {
-                                         string unit;
-                                 
-                                         if (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid.Value)
-                                             unit = Resource.lblMeterCubePerHa;
-                                         else
-                                             unit = Resource.lblTonPerHa;
-                                 
-                                         applicationRateText = string.Format("{0} {1}", Model.ApplicationRate, unit);
-                                     }
-                                 }
-                                 @applicationRateText
+                                @GetApplicationRateText()
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 

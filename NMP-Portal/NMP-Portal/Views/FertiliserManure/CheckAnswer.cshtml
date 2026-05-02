@@ -40,6 +40,34 @@
     {
         return string.IsNullOrWhiteSpace(Model.EncryptedFertId) ? newText : existingText;
     }
+
+    public string GetApplicationDateLabel()
+    {
+        if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
+        {
+            if (!Model.FieldGroup.Equals(Resource.lblAll) && !Model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
+            {
+                return string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropGroupName);
+            }
+    
+            return Model.FieldList?.Count > 1
+                ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields
+                : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields, Model.FieldName);
+        }
+    
+        return Model.FieldList?.Count > 1
+            ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields
+            : string.Format(Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField, Model.FieldName);
+    }
+    public string GetDefoliationLabel(string fieldName)
+    {
+        if (Model.GrassCropCount.HasValue && Model.GrassCropCount > 1)
+        {
+            return Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField;
+        }
+    
+        return string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, fieldName);
+    }
 }
 @{
     var heading=GetFertiliserText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0));
@@ -259,13 +287,7 @@
                                 {
                                     <govuk-summary-list-row class=@((!defoliation.Defoliation.HasValue)?"govuk-error-message":"")>
                                         <govuk-summary-list-row-key>
-                                            @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
-                                            {
-                                            @Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField
-                                            }
-                                            else{
-                                                 @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, defoliation.FieldName)
-                                            }
+                                            @GetDefoliationLabel(defoliation.FieldName)
                                         </govuk-summary-list-row-key>
                                         <govuk-summary-list-row-value>
                                             
@@ -274,13 +296,7 @@
                                         <govuk-summary-list-row-actions>
                                             <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="FertiliserManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblChange
                                                 <span class="govuk-visually-hidden">
-                                                     @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
-                                                     {
-                                                     @Resource.lblWhichCutOrGrazingInThisInorganicApplicationForAllField
-                                                     }
-                                                     else{
-                                                          @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, defoliation.FieldName)
-                                                     }
+                                                     @GetDefoliationLabel(defoliation.FieldName)
                                                 </span>
                                             </govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
@@ -314,22 +330,7 @@
                     }
                     <govuk-summary-list-row class=@((!Model.Date.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                            {
-                               if (!Model.FieldGroup.Equals(Resource.lblAll) && !Model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
-        {
-                                    @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropGroupName)
-                                }
-                                else
-                                {
-                                    @(Model.FieldList?.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
-                                }
-                            }
-                            else
-                            {
-                                @(Model.FieldList?.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
-                            }
-                            @* @Resource.lblWhenDoYouFirstPlanToSpreadInOrganicFertiliser *@
+                            @GetApplicationDateLabel()
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.Date.HasValue) ? Model.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
@@ -337,21 +338,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange
                                 <span class="govuk-visually-hidden">
-                                    @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
-                                    {
-                                        if (!Model.FieldGroup.Equals(Resource.lblAll) && !Model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
-        {
-                                            @string.Format(Resource.lblWhenAreYouApplyingInOrganicfertiliser, Model.CropGroupName)
-                                        }
-                                        else
-                                        {
-                                            @(Model.FieldList?.Count > 1 ? Resource.lblWhenAreYouApplyingInorganicFertiliserForTheseFields : string.Format(Resource.lblWhenAreYouApplyingInorganicFertiliserForThisFields,Model.FieldName))
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @(Model.FieldList?.Count > 1 ? Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnTheseFields: string.Format( Resource.lblWhenDoYouPlanToSpreadInorganicFertiliserOnThisField,Model.FieldName))
-                                    }
+                                    @GetApplicationDateLabel()
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
