@@ -5,7 +5,7 @@
 
 @functions {
 
-    string GetCropName(PlanViewModel model)
+    public static string GetCropName(PlanViewModel model)
     {
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
             return model.OtherCropName;
@@ -14,7 +14,7 @@
         return model.CropType;
     }
     
-    string FormatYield(decimal? value, int decimals = 1)
+    public static string FormatYield(decimal? value, int decimals = 1)
     {
         if (!value.HasValue) return Resource.lblNotSet;
         return value == 0
@@ -22,7 +22,7 @@
             : $"{value.Value.ToString($"N{decimals}")} {Resource.lblTonnesPerHectare}";
     }
 
-    string GetSowingDateQuestionText(int? question)
+    public static string GetSowingDateQuestionText(int? question)
     {
         return question switch
         {
@@ -36,7 +36,7 @@
         };
     }
 
-    string GetPotentialCutName(int? cut)
+    public static string GetPotentialCutName(int? cut)
     {
         return cut switch
         {

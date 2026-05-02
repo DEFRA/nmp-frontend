@@ -47,6 +47,7 @@
     
         return $"{Model.ApplicationRate} {unit}";
     }
+    #pragma warning disable S107
     public static IEnumerable<dynamic> BuildNutrients(
     decimal? dryMatter,
     decimal? n,
@@ -71,6 +72,7 @@
             new { Value = mgo, Label = Resource.lblMagnesiumMgO, IsPercent = false }
         };
     }
+    #pragma warning restore S107
 }
 @{
     var heading=GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear));
