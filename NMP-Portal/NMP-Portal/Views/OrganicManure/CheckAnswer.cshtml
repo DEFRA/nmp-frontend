@@ -47,32 +47,36 @@
     
         return $"{Model.ApplicationRate} {unit}";
     }
-    #pragma warning disable S107
-    public static IEnumerable<dynamic> BuildNutrients(
-    decimal? dryMatter,
-    decimal? n,
-    decimal? nh4n,
-    decimal? uric,
-    decimal? no3n,
-    decimal? p2o5,
-    decimal? k2o,
-    decimal? so3,
-    decimal? mgo)
+
+    public class NutrientInput
+    {
+        public decimal? DryMatter { get; set; }
+        public decimal? N { get; set; }
+        public decimal? NH4N { get; set; }
+        public decimal? Uric { get; set; }
+        public decimal? NO3N { get; set; }
+        public decimal? P2O5 { get; set; }
+        public decimal? K2O { get; set; }
+        public decimal? SO3 { get; set; }
+        public decimal? MgO { get; set; }
+    }
+
+    public static IEnumerable<dynamic> BuildNutrients(NutrientInput input)
     {
         return new[]
         {
-            new { Value = dryMatter, Label = Resource.lblDryMatterContent, IsPercent = true },
-            new { Value = n, Label = Resource.lblNitrogen, IsPercent = false },
-            new { Value = nh4n, Label = Resource.lblAmmoniumHypenN, IsPercent = false },
-            new { Value = uric, Label = Resource.lblUricAcid, IsPercent = false },
-            new { Value = no3n, Label = Resource.lblNitrate, IsPercent = false },
-            new { Value = p2o5, Label = Resource.lblPhosphateP2O5, IsPercent = false },
-            new { Value = k2o, Label = Resource.lblPotashK2O, IsPercent = false },
-            new { Value = so3, Label = Resource.lblSulphurSO3, IsPercent = false },
-            new { Value = mgo, Label = Resource.lblMagnesiumMgO, IsPercent = false }
+            new { Value = input.DryMatter, Label = Resource.lblDryMatterContent, IsPercent = true },
+            new { Value = input.N, Label = Resource.lblNitrogen, IsPercent = false },
+            new { Value = input.NH4N, Label = Resource.lblAmmoniumHypenN, IsPercent = false },
+            new { Value = input.Uric, Label = Resource.lblUricAcid, IsPercent = false },
+            new { Value = input.NO3N, Label = Resource.lblNitrate, IsPercent = false },
+            new { Value = input.P2O5, Label = Resource.lblPhosphateP2O5, IsPercent = false },
+            new { Value = input.K2O, Label = Resource.lblPotashK2O, IsPercent = false },
+            new { Value = input.SO3, Label = Resource.lblSulphurSO3, IsPercent = false },
+            new { Value = input.MgO, Label = Resource.lblMagnesiumMgO, IsPercent = false }
         };
     }
-    #pragma warning restore S107
+
 }
 @{
     var heading=GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear));
@@ -114,10 +118,31 @@
     }
     var manure = isManureTypeOther ? Model.OtherMaterialName : Model.ManureTypeName;
 
-    var nutrients = BuildNutrients(Model.DryMatterPercent, Model.N, Model.NH4N, Model.UricAcid, Model.NO3N, Model.P2O5, Model.K2O, Model.SO3, Model.MgO);
+    var nutrients = BuildNutrients(new NutrientInput
+    {
+        DryMatter = Model.DryMatterPercent,
+        N = Model.N,
+        NH4N = Model.NH4N,
+        Uric = Model.UricAcid,
+        NO3N = Model.NO3N,
+        P2O5 = Model.P2O5,
+        K2O = Model.K2O,
+        SO3 = Model.SO3,
+        MgO = Model.MgO
+    });
+    var manureNutrients = BuildNutrients(new NutrientInput
+    {
+        DryMatter = Model.ManureType.DryMatter,
+        N = Model.ManureType.TotalN,
+        NH4N = Model.ManureType.NH4N,
+        Uric = Model.ManureType.Uric,
+        NO3N = Model.ManureType.NO3N,
+        P2O5 = Model.ManureType.P2O5,
+        K2O = Model.ManureType.K2O,
+        SO3 = Model.ManureType.SO3,
+        MgO = Model.ManureType.MgO
+    });
     
-    var manureNutrients = BuildNutrients(Model.ManureType.DryMatter, Model.ManureType.TotalN, Model.ManureType.NH4N, Model.ManureType.Uric, Model.ManureType.NO3N, Model.ManureType.P2O5, Model.ManureType.K2O, Model.ManureType.SO3, Model.ManureType.MgO);
-
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
