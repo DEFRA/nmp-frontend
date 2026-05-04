@@ -5,16 +5,6 @@
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 
-    var allEmpty = false;
-    if (Model.NumbersInJanuary == null && Model.NumbersInFebruary == null &&
-        Model.NumbersInMarch == null && Model.NumbersInApril == null &&
-        Model.NumbersInMay == null && Model.NumbersInJune == null &&
-        Model.NumbersInJuly == null && Model.NumbersInAugust == null &&
-        Model.NumbersInSeptember == null && Model.NumbersInOctober == null &&
-        Model.NumbersInNovember == null && Model.NumbersInDecember == null)
-    {
-        allEmpty = true;
-    }
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.LivestockNumbersMonthly;
 }
 

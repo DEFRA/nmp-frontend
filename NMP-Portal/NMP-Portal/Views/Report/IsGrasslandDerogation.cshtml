@@ -6,10 +6,24 @@
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.IsGrasslandDerogation;
+    var backAction="";
+
+    if (Model.IsCheckList)
+    {
+        backAction = "LivestockManureNitrogenReportChecklist";
+    }
+    else if (Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)
+    {
+        backAction = "Year";
+    }
+    else
+    {
+        backAction = "NVZComplianceReports";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckList ? "LivestockManureNitrogenReportChecklist" : (Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value) ? "Year" : "NVZComplianceReports")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsGrasslandDerogation"] != null)
 {

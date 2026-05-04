@@ -4,10 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)} {Resource.lblHyphen} {title}";
     
-    int trueWarningCount = 0;
-    if (Model.IsOrgManureNfieldLimitWarning) trueWarningCount++;
-    if (Model.IsNMaxLimitWarning) trueWarningCount++;
-    if (Model.IsEndClosedPeriodFebruaryWarning) trueWarningCount++;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.OtherMaterialName;
 
 }

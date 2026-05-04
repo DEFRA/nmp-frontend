@@ -12,6 +12,8 @@ using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
+using NMP.Portal.Helpers;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -750,7 +752,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         }
 
                         fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
-                    }
+
+                    }                    
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
                 model.CropAndFieldReport.Farm.ArableArea = totalArableArea;
@@ -763,7 +766,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    [HttpGet]
+    
     public async Task<IActionResult> ReportType(string i, string? j)
     {
         _logger.LogTrace("Report Controller : ReportType() action called");

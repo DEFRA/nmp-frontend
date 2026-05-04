@@ -4,19 +4,7 @@
 
 @{
     ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
-    var addRecentSoilAnalysis = "";
-    if (Model.RecentSoilAnalysisQuestion != null)
-    {
-        switch (Model.RecentSoilAnalysisQuestion)
-        {
-            case true:
-                addRecentSoilAnalysis = Resource.lblYes;
-                break;
-            case false:
-                addRecentSoilAnalysis = Resource.lblNo;
-                break;
-        }
-    }
+    
 
 }
 @section BeforeContent {

@@ -7,10 +7,18 @@
     var inMilligramsPerLitre = (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram;
     var asAnStatus = (int)NMP.Commons.Enums.SoilNutrientValueType.Status;
     ViewBag.CurrentStep = (int)FieldWizardSteps.SoilNutrientValueType;
+    string backAction;
+
+    if (Model.IsCheckAnswer && !Model.IsRecentSoilAnalysisQuestionChange && !Model.SoilAnalyses.IsSoilAnalysesMethodChange)
+        backAction = "CheckAnswer";
+    else if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        backAction = "SoilAnalysesMethod";
+    else
+        backAction = "SoilDate";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange) && (!Model.SoilAnalyses.IsSoilAnalysesMethodChange)) ? "CheckAnswer" : (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "SoilAnalysesMethod" : "SoilDate"))" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SoilNutrientValueType" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

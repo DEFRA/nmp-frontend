@@ -3,9 +3,7 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication} {Resource.lblHyphen} {title}";
-
-    var backAction = (Model.FieldGroup == Resource.lblSelectSpecificFields && Model.IsComingFromRecommendation) ? "HarvestYearOverview" :
-    (Model.FieldGroup == Resource.lblSelectSpecificFields && (!Model.IsComingFromRecommendation)) ? "Fields" : "FieldGroup";
+    
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.ManureGroup;
 }
 

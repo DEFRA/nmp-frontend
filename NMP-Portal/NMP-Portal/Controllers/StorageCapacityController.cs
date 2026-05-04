@@ -107,7 +107,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in OrganicMaterialStorageNotAvailable() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in OrganicMaterialStorageNotAvailable() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
 
                 TempData["ErrorOnYear"] = ex.Message;
                 return RedirectToAction("Year", "Report");
@@ -135,7 +135,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Exception in MaterialStates(): {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Exception in MaterialStates(): {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return await HandleMaterialStatesExceptionAsync(model, ex, f);
             }
         }
@@ -173,8 +173,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(
-                    $"StorageCapacity Controller : Exception in MaterialStates() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in MaterialStates() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
 
                 TempData["ErrorOnMaterialStates"] = ex.Message;
                 return View(model);
@@ -199,7 +198,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Exception in StoreName(): {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Exception in StoreName(): {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnMaterialStates"] = ex.Message;
                 return RedirectToAction("MaterialStates");
             }
@@ -252,7 +251,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StoreName() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in StoreName() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStoreName"] = ex.Message;
                 return View(model);
             }
@@ -261,16 +260,12 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> StorageTypes()
         {
             _logger.LogTrace("StorageCapacity Controller : StorageTypes() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToFarmList();
                 }
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage ||
                     model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
@@ -303,7 +298,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StorageTypes() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStoreName"] = ex.Message;
                 return RedirectToAction("StoreName");
 
@@ -404,7 +399,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StorageTypes() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageTypes() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStorageTypes"] = ex.Message;
                 return View(model);
             }
@@ -413,21 +408,17 @@ namespace NMP.Portal.Controllers
         public IActionResult Dimensions()
         {
             _logger.LogTrace("StorageCapacity Controller : Dimension() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToFarmList();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in Dimension() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in Dimension() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStorageTypes"] = ex.Message;
                 return RedirectToAction("StorageTypes");
             }
@@ -616,7 +607,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in Dimension() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in Dimension() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnDimension"] = ex.Message;
                 return View(model);
             }
@@ -781,16 +772,12 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> WeightCapacity()
         {
             _logger.LogTrace("StorageCapacity Controller : WeightCapacity() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToFarmList();
                 }
                 (SolidManureTypeResponse solidManureTypeResponse, Error error) = await _storageCapacityLogic.FetchSolidManureTypeById(model.StorageTypeID.Value);
                 if (error == null)
@@ -803,7 +790,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in WeightCapacity() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in WeightCapacity() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnDimension"] = ex.Message;
                 return RedirectToAction("Dimensions");
             }
@@ -842,7 +829,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in WeightCapacity() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in WeightCapacity() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnWeightCapacity"] = ex.Message;
                 return View(model);
             }
@@ -899,22 +886,17 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> StorageBagCapacity()
         {
             _logger.LogTrace("StorageCapacity Controller : StorageBagCapacity() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+                    return RedirectToFarmList();
                 }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
-
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StorageBagCapacity() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageBagCapacity() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStorageTypes"] = ex.Message;
                 return RedirectToAction("StorageTypes");
             }
@@ -950,7 +932,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StorageBagCapacity() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageBagCapacity() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStorageBagCapacity"] = ex.Message;
                 return View(model);
             }
@@ -996,18 +978,13 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> BankSlopeAngle()
         {
             _logger.LogTrace("StorageCapacity Controller : BankSlopeAngle() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+                    return RedirectToFarmList();
                 }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
-
                 (List<BankSlopeAnglesResponse> bankSlopeAngles, Error error) = await _storageCapacityLogic.FetchBankSlopeAngles();
                 if (error == null)
                 {
@@ -1022,7 +999,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in StorageTypes() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnSlopeQuestion"] = ex.Message;
                 return RedirectToAction("SlopeQuestion");
 
@@ -1069,7 +1046,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in BankSlopeAngle() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in BankSlopeAngle() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnBankSlopeAngle"] = ex.Message;
                 return View(model);
             }
@@ -1079,19 +1056,15 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(string? storeCapId, string? q, string? r)
         {
             _logger.LogTrace("StorageCapacity Controller : CheckAnswer() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
                 Error error = null;
                 if (string.IsNullOrWhiteSpace(storeCapId))
                 {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                    if (!TryGetStorageSession(out model))
                     {
-                        model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                    }
-                    else
-                    {
-                        return RedirectToAction("FarmList", "Farm");
+                        return RedirectToFarmList();
                     }
 
                     if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
@@ -1247,7 +1220,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in CheckAnswer() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in CheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnCheckAnswer"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
@@ -1460,7 +1433,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in CheckAnswer() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in CheckAnswer() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnCheckAnswer"] = ex.Message;
                 return View(model);
             }
@@ -1469,13 +1442,9 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace($"Farm Controller : BackLivestockCheckAnswer() action called");
             StorageCapacityViewModel? model = null;
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+            if (!TryGetStorageSession(out model))
             {
-                model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-            }
-            else
-            {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToFarmList();
             }
             model.IsCheckAnswer = false;
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
@@ -1626,22 +1595,18 @@ namespace NMP.Portal.Controllers
         public IActionResult Cancel()
         {
             _logger.LogTrace("StorageCapacity Controller : Cancel() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
+                    return RedirectToFarmList();
                 }
 
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in Cancel() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnCheckAnswer"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
@@ -1885,7 +1850,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorage() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in CopyExistingManureStorage() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
                 return View(model);
             }
@@ -2002,7 +1967,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in CopyExistingManureStorageYearList() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in CopyExistingManureStorageYearList() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnCopyExistingManureStorageYearList"] = ex.Message;
                 return View(model);
             }
@@ -2014,22 +1979,17 @@ namespace NMP.Portal.Controllers
         public IActionResult RemoveStorageCapacity()
         {
             _logger.LogTrace("StorageCapacity Controller : RemoveStorageCapacity() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel model;
             try
             {
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+                if (!TryGetStorageSession(out model))
                 {
-                    model = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+                    return RedirectToFarmList();
                 }
-                else
-                {
-                    return RedirectToAction("FarmList", "Farm");
-                }
-
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"StorageCapacity Controller : Exception in RemoveStorageCapacity() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "StorageCapacity Controller : Exception in RemoveStorageCapacity() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnCheckAnswer"] = ex.Message;
                 return RedirectToAction("CheckAnswer");
             }
@@ -2559,6 +2519,28 @@ namespace NMP.Portal.Controllers
                 ?.Session
                 .SetObjectAsJson(_storageCapacityDataSessionKey, model);
         }
+        private bool TryGetStorageSession(out StorageCapacityViewModel model)
+        {
+            model = new StorageCapacityViewModel();
 
+            var context = _httpContextAccessor.HttpContext;
+
+            if (context != null)
+            {
+                var data = context.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+                if (data != null)
+                {
+                    model = data;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private IActionResult RedirectToFarmList()
+        {
+            return RedirectToAction("FarmList", "Farm");
+        }
     }
 }
