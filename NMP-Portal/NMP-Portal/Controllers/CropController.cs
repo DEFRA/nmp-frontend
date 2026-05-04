@@ -1707,7 +1707,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.IsYieldOptional = Resource.lblYes;
                 ViewBag.DefaultYield = defaultYieldForCropType;
             }
-            if (string.IsNullOrWhiteSpace(q)&&hasCrops)
+            if (string.IsNullOrWhiteSpace(q) && hasCrops)
             {
                 BindFieldAndYieldCounter(model, q);
             }
@@ -1843,14 +1843,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private PlanViewModel BindFieldAndYieldCounter(PlanViewModel model, string q)
     {
-        
-            model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
-            if (model.YieldCurrentCounter == 0)
-            {
-                model.FieldID = model.Crops[0].FieldID.Value;
-            }
-            SetCropToSession(model);
-        
+
+        model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
+        if (model.YieldCurrentCounter == 0)
+        {
+            model.FieldID = model.Crops[0].FieldID.Value;
+        }
+        SetCropToSession(model);
+
         return model;
     }
     private (PlanViewModel, IActionResult) BindYieldValueForStandardYield(PlanViewModel model, decimal defaultYieldForCropType)
@@ -2749,7 +2749,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             action = await BindActionForBackCheckAnswer(model);
-
             model.IsCheckAnswer = false;
             SetCropToSession(model);
         }
@@ -3022,18 +3021,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private string BindActionForBackCheckAnswerGrass(PlanViewModel model)
     {
         string action = string.Empty;
-        if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay)
+        bool isGrazeSilageAndHay = (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay);
+        if (isGrazeSilageAndHay)
         {
             if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
             {
-                if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
-                {
-                    action = "DryMatterYield";
-                }
-                else
-                {
-                    action = "GrassGrowthClass";
-                }
+                bool isDryMatterAction = (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1);
+                action = isDryMatterAction ? "DryMatterYield" : "GrassGrowthClass";
             }
             else
             {
@@ -3041,7 +3035,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
         }
 
-        if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
+        bool isGrazeCutAndSilageOnly = (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly);
+        if (isGrazeCutAndSilageOnly)
         {
             if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
             {
@@ -3057,28 +3052,27 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<string> BindActionForBackCheckAnswerForCereal(PlanViewModel model, List<CropInfoOneResponse> cropInfoOneList)
     {
         string action = string.Empty;
-        if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals)
+        bool isCereal = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals;
+        if (isCereal)
         {
-            action = _cropInfoTwoActionName;
+            return _cropInfoTwoActionName;
         }
         else
         {
+            bool isUseStandardOrNoYield =
+            (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield);
 
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other || cropInfoOneList.Count == 1)
             {
-                if (model.YieldQuestion != (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
-                {
-                    action = "YieldQuestion";
-                }
-                else
-                {
-                    action = "Yield";
-                }
+                action = isUseStandardOrNoYield
+                         ? "YieldQuestion"
+                         : "Yield";
             }
             else
             {
                 action = "CropInfoOne";
             }
+
         }
         return action;
     }
