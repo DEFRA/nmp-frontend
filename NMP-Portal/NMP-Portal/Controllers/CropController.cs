@@ -1209,7 +1209,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public IActionResult SowingDateQuestion(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : SowingDateQuestion() action called");
-        if (!ValidateSowingDateQuestion(model))
+        model = ValidateSowingDateQuestion(model);
+
+        if (!ModelState.IsValid)
         {
             return View(model);
         }
@@ -1258,79 +1260,78 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return null;
     }
-    private bool IsSameSowingQuestionWithNoChanges(PlanViewModel oldModel, PlanViewModel newModel)
+    private static bool IsSameSowingQuestionWithNoChanges(PlanViewModel oldModel, PlanViewModel newModel)
     {
         return oldModel.SowingDateQuestion == newModel.SowingDateQuestion &&
                !newModel.IsAnyChangeInField &&
                !newModel.IsCropGroupChange &&
                !newModel.IsCropTypeChange;
     }
-    private bool ValidateSowingDateQuestion(PlanViewModel model)
+    private PlanViewModel ValidateSowingDateQuestion(PlanViewModel model)
     {
         if (model.SowingDateQuestion == null)
         {
             ModelState.AddModelError("SowingDateQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
-        return ModelState.IsValid;
+        return model;
     }
     private IActionResult BindSowingDateQuestion(PlanViewModel model)
     {
-        if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater)
+        bool isNoDateOption = model.SowingDateQuestion ==
+                              (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
+
+        if (isNoDateOption)
         {
-            // Reset sowing dates
-            if (model.Crops != null)
-            {
-                foreach (var crop in model.Crops)
-                {
-                    crop.SowingDate = null;
-                }
-            }
+            return HandleNoDateOption(model);
+        }
 
-            // Store once
-            SetCropToSession(model);
+        return HandleDateEntryOption(model);
+    }
+    private IActionResult HandleNoDateOption(PlanViewModel model)
+    {
+        ResetSowingDates(model);
+        SetCropToSession(model);
 
-            // Common condition
-            bool isCheckAnswerValid = model.IsCheckAnswer &&
-                                      !model.IsAnyChangeInField &&
-                                      !model.IsCropGroupChange &&
-                                      !model.IsCropTypeChange &&
-                                      !model.IsCurrentSwardChange;
+        if (IsCheckAnswerValid(model))
+            return RedirectToAction(_checkAnswerActionName);
 
-            // If not grass
-            if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
-            {
-                if (isCheckAnswerValid)
-                {
-                    return RedirectToAction(_checkAnswerActionName);
-                }
-
-                return RedirectToAction("YieldQuestion");
-            }
-
-            // If grass
-            bool isGrassCheckValid = model.IsCheckAnswer &&
-                                     !model.IsCropGroupChange &&
-                                     !model.IsAnyChangeInField &&
-                                     !model.IsCurrentSwardChange;
-
-            if (isGrassCheckValid)
-            {
-                return RedirectToAction(_checkAnswerActionName);
-            }
-
+        if (IsGrass(model))
             return RedirectToAction("SwardType");
-        }
-        else
-        {
-            if (model.IsCheckAnswer)
-            {
-                model.SowingDateCurrentCounter = 0;
-                SetCropToSession(model);
-            }
 
-            return RedirectToAction("SowingDate");
+        return RedirectToAction("YieldQuestion");
+    }
+    private IActionResult HandleDateEntryOption(PlanViewModel model)
+    {
+        if (model.IsCheckAnswer)
+        {
+            model.SowingDateCurrentCounter = 0;
+            SetCropToSession(model);
         }
+
+        return RedirectToAction("SowingDate");
+    }
+    private void ResetSowingDates(PlanViewModel model)
+    {
+        if (model.Crops == null) return;
+
+        foreach (var crop in model.Crops)
+        {
+            crop.SowingDate = null;
+        }
+    }
+    private bool IsCheckAnswerValid(PlanViewModel model)
+    {
+        return model.IsCheckAnswer &&
+               !model.IsAnyChangeInField &&
+               !model.IsCropGroupChange &&
+               !model.IsCropTypeChange &&
+               !model.IsCurrentSwardChange;
+    }
+
+    private bool IsGrass(PlanViewModel model)
+    {
+        return model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass;
     }
     [HttpGet]
     public async Task<IActionResult> SowingDate(string q)
@@ -1385,7 +1386,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : SowingDate() post action called");
         try
         {
-            model = await ValidateSowingDate(model);
+            model = await ValidateSowingDatePost(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -1501,63 +1502,101 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return (model, RedirectToAction("YieldQuestion"));
     }
-    private async Task<PlanViewModel> ValidateSowingDate(PlanViewModel model)
+    private async Task<PlanViewModel> ValidateSowingDatePost(PlanViewModel model)
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("Crops[" + model.SowingDateCurrentCounter + "].SowingDate"))
-        {
-            var dateError = ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"]?.Errors.Count > 0 ?
-                            ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"]?.Errors[0].ErrorMessage.ToString() : null;
+        ValidateDateFormatErrors(model);
+        ValidateRequiredDate(model);
+        await ValidateDateRangeRules(model);
+        ValidateCropSpecificRules(model);
 
-            if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, "SowingDate")) ||
-                dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, "SowingDate")) ||
-                 dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, "SowingDate")) ||
-                 dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, "SowingDate")) ||
-                 dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, "SowingDate")) ||
-                 dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, "SowingDate")) ||
-                 dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, "SowingDate"))))
+        return model;
+    }
+    private void ValidateDateFormatErrors(PlanViewModel model)
+    {
+        var key = GetCropKey(model);
+
+        if (!ModelState.IsValid && ModelState.ContainsKey(key))
+        {
+            var entry = ModelState[key];
+            var error = entry?.Errors.FirstOrDefault()?.ErrorMessage;
+
+            if (error != null && IsDateFormatError(error))
             {
-                ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"]?.Errors.Clear();
-                ModelState["Crops[" + model.SowingDateCurrentCounter + "].SowingDate"]?.Errors.Add(Resource.MsgTheDateMustInclude);
+                entry?.Errors.Clear();
+                entry?.Errors.Add(Resource.MsgTheDateMustInclude);
             }
         }
+    }
+    private bool IsDateFormatError(string error)
+    {
+        string[] patterns =
+        {
+        Resource.MsgDateMustBeARealDate,
+        Resource.MsgDateMustIncludeAMonth,
+        Resource.MsgDateMustIncludeAMonthAndYear,
+        Resource.MsgDateMustIncludeADayAndYear,
+        Resource.MsgDateMustIncludeAYear,
+        Resource.MsgDateMustIncludeADay,
+        Resource.MsgDateMustIncludeADayAndMonth
+    };
+
+        return patterns.Any(p => error.Equals(string.Format(p, "SowingDate")));
+    }
+    private void ValidateRequiredDate(PlanViewModel model)
+    {
         if (model.Crops[model.SowingDateCurrentCounter].SowingDate == null)
         {
-            ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", Resource.MsgEnterADateBeforeContinuing);
+            ModelState.AddModelError(GetCropKey(model), Resource.MsgEnterADateBeforeContinuing);
         }
-
+    }
+    private async Task ValidateDateRangeRules(PlanViewModel model)
+    {
         bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeID.Value);
 
-        //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-        DateTime maxDate = new DateTime(model.Year.Value, 12, 31, 00, 00, 00, DateTimeKind.Unspecified);
+        var date = model.Crops[model.SowingDateCurrentCounter].SowingDate;
+        var year = model.Year.Value;
 
-        if (model.Crops[model.SowingDateCurrentCounter].SowingDate > maxDate)
+        DateTime maxDate = new(year, 12, 31);
+
+        if (date > maxDate)
         {
-            //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-            ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateAfterHarvestYear, model.Year.Value, maxDate.Date.ToString("dd MMMM yyyy")));
+            ModelState.AddModelError(GetCropKey(model),
+                string.Format(Resource.MsgPlantingDateAfterHarvestYear, year, maxDate.ToString("dd MMMM yyyy")));
         }
 
         if (!isPerennial)
         {
-            DateTime minDate = new DateTime(model.Year.Value - 1, 01, 01, 00, 00, 00, DateTimeKind.Unspecified);
-            if (model.Crops[model.SowingDateCurrentCounter].SowingDate < minDate)
+            DateTime minDate = new(year - 1, 1, 1);
+
+            if (date < minDate)
             {
-                //Anil Yadav 23.01.2025 : NMPT1070 NMPT Date Validation Rules​: If perennial flag is true = no minimum date validation.Max date = end of calendar
-                ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgPlantingDateBeforeHarvestYear, model.Year.Value, minDate.Date.ToString("dd MMMM yyyy")));
+                ModelState.AddModelError(GetCropKey(model),
+                    string.Format(Resource.MsgPlantingDateBeforeHarvestYear, year, minDate.ToString("dd MMMM yyyy")));
             }
         }
-
-        if ((model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
-            model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WinterTriticale ||
-            model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.ForageWinterTriticale ||
-            model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.WholecropWinterWheat) && model.Crops[model.SowingDateCurrentCounter].SowingDate != null &&
-                model.Crops[model.SowingDateCurrentCounter]?.SowingDate.Value.Month >= 2 && model.Crops[model.SowingDateCurrentCounter].SowingDate.Value.Month <= 6)
-        {
-            ModelState.AddModelError("Crops[" + model.SowingDateCurrentCounter + "].SowingDate", string.Format(Resource.MsgForSowingDate, model.CropType));
-        }
-
-        return model;
     }
+    private void ValidateCropSpecificRules(PlanViewModel model)
+    {
+        var cropType = model.CropTypeID;
 
+        bool isWinterCrop =
+            cropType == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
+            cropType == (int)NMP.Commons.Enums.CropTypes.WinterTriticale ||
+            cropType == (int)NMP.Commons.Enums.CropTypes.ForageWinterTriticale ||
+            cropType == (int)NMP.Commons.Enums.CropTypes.WholecropWinterWheat;
+
+        var date = model.Crops[model.SowingDateCurrentCounter].SowingDate;
+
+        if (isWinterCrop && date != null && date.Value.Month is >= 2 and <= 6)
+        {
+            ModelState.AddModelError(GetCropKey(model),
+                string.Format(Resource.MsgForSowingDate, model.CropType));
+        }
+    }
+    private string GetCropKey(PlanViewModel model)
+    {
+        return $"Crops[{model.SowingDateCurrentCounter}].SowingDate";
+    }
     [HttpGet]
     public async Task<IActionResult> YieldQuestion()
     {
