@@ -241,6 +241,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 var grassCrop = cropList.FirstOrDefault();
+                if (grassCrop == null || grassCrop.ID == null) continue;
                 var (mgmtList, _) = await _cropLogic.FetchManagementperiodByCropId(grassCrop.ID!.Value, false);
                 if (mgmtList == null) continue;
 
@@ -535,7 +536,7 @@ namespace NMP.Portal.Controllers
                                             cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
                                         }
                                     }
-                                    if (cropList.Count > 0 && cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                                     {
                                         grassCropCounter++;
                                         (List<ManagementPeriod> ManagementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
@@ -679,7 +680,7 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Organic Manure Controller : Exception in Fields() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace(ex, "Organic Manure Controller : Exception in Fields() action");
                 if (model != null && string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                 {
                     TempData[_fieldGroupError] = ex.Message;
@@ -758,7 +759,7 @@ namespace NMP.Portal.Controllers
                                 }
                                 else
                                 {
-                                    TempData[_addOrganicManureError] = error.Message;
+                                    TempData[_addOrganicManureError] = error?.Message;
                                     return RedirectToAction(_checkAnswer);
                                 }
                             }
@@ -1730,7 +1731,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Organic Manure Controller : Exception in ApplicationMethod() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ApplicationMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 ViewBag.Error = ex.Message;
                 return RedirectToAction("ManureApplyingDate");
             }
@@ -2650,7 +2651,9 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Organic Manure Controller : Exception in ManualNutrientValues() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ManualNutrientValues() post action : {Message}, {StackTrace}",
+                   ex.Message, ex.StackTrace);
+
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -2760,7 +2763,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, $"Organic Manure Controller : Exception in ApplicationRateMethod() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 ViewBag.Error = ex.Message;
                 return RedirectToAction("DefaultNutrientValues");
             }
@@ -2967,7 +2970,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Organic Manure Controller : Exception in ApplicationRateMethod() post action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -3485,7 +3488,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, $"Organic Manure Controller : Exception in IncorporationMethod() : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in IncorporationMethod() : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 if (model.ApplicationRateMethod != (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                 {
                     TempData["ManualApplicationRateError"] = ex.Message;
@@ -3979,7 +3982,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Organic Manure Controller : Exception in ConditionsAffectingNutrients() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ConditionsAffectingNutrients() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 if (model.IsApplicationMethodChange)
                 {
                     TempData["ManureApplyingDateError"] = ex.Message;
@@ -4040,7 +4043,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogTrace($"Organic Manure Controller : Exception in ConditionsAffectingNutrients() : {ex.Message}, {ex.StackTrace}");
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ConditionsAffectingNutrients() : {Message}, {StackTrace}",ex.Message, ex.StackTrace);
                 TempData["ConditionsAffectingNutrientsError"] = ex.Message;
                 return View(model);
             }
@@ -9219,7 +9222,7 @@ managementPeriod.CropID.HasValue
         [HttpGet]
         public async Task<IActionResult> Defoliation(string q)
         {
-            _logger.LogTrace($"OrganicManure Controller : Defoliation({q}) action called");
+            _logger.LogTrace("OrganicManure Controller : Defoliation({Q}) action called", q);
             OrganicManureViewModel model = new OrganicManureViewModel();
             Error? error = null;
             try

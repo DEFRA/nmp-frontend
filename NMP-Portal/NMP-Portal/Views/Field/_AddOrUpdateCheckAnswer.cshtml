@@ -618,11 +618,19 @@
             ControllerName = "Field",
         });
 
+        string cloverText;
+
+        if (!Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue)
+            cloverText = Resource.lblNotSet;
+        else if (Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
+            cloverText = Resource.lblYes;
+        else
+            cloverText = Resource.lblNo;
 
         summaryRows.Add(new SummaryListRowViewModel
         {
             Key = string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.Name),
-            Value = (Model.PreviousCroppings.HasGreaterThan30PercentClover != null ? (Model.PreviousCroppings.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet),
+            Value = cloverText,
             ActionName = "HasGreaterThan30PercentClover",
             ControllerName = "Field"
         });

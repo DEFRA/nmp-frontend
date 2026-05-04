@@ -4,17 +4,18 @@
     var YesIHaveASingleDateForAllTheseFields = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
     var NoIWillEnterTheDateLater = (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater;
     var YesIHaveDifferentDatesForEachOfTheseFields = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields;
-    // int PotatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
+    
     int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
-    var heading = "";
-    @if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
-    {
-        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
-    }
+    string cropName;
+    if (Model.CropGroupId == OtherGroupId) cropName = Model.OtherCropName;
+    else if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes) cropName = Model.Variety;
+    else cropName = Model.CropType;
+
+    string heading;
+    if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
+        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouPlantedYour, cropName);
     else
-    {
-        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
-    }
+        heading = string.Format(Resource.lblDoYouHaveADateForWhenYouSowedYour, cropName);
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";

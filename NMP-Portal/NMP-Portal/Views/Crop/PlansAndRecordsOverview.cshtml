@@ -80,7 +80,7 @@
                                         }
                                     </td>
                                     <td class="govuk-table__cell">
-                                        @if (Model.HarvestYear[i].IsAnyPlan != null && Model.HarvestYear[i].IsAnyPlan)
+                                        @if (Model.HarvestYear[i].IsAnyPlan)
                                         {
                                             <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear">
                                                 @string.Format(Resource.lblViewEditThePlan, Model.HarvestYear[i].Year)

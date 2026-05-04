@@ -13,7 +13,10 @@
         heading = string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, Model.FieldName);
     }
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    if (ViewData["Title"] == null)
+    {
+        ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    }
 
 
     string defoliation = string.Empty;

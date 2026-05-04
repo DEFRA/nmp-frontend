@@ -5,6 +5,61 @@
 @model PlanViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblPlanHeader, Model.FarmName, Model.Year)} {Resource.lblHyphen} {Resource.lblDetails}";
+    string sortOrganicListOrderByDate;
+
+    if (Model.SortOrganicListOrderByDate != null && Model.SortOrganicListOrderByDate == Resource.lblDesc)
+    {
+        sortOrganicListOrderByDate = string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign);
+    }
+    else if (Model.SortOrganicListOrderByDate != null && Model.SortOrganicListOrderByDate == Resource.lblAsc)
+    {
+        sortOrganicListOrderByDate = string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign);
+    }
+    else
+    {
+        sortOrganicListOrderByDate = Resource.lblApplicationDate;
+    }
+    string sortOrganicListOrderByFieldName;
+
+    if (Model.SortOrganicListOrderByFieldName == Resource.lblDesc)
+        sortOrganicListOrderByFieldName = string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign);
+    else if (Model.SortOrganicListOrderByFieldName == Resource.lblAsc)
+        sortOrganicListOrderByFieldName = string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign);
+    else
+        sortOrganicListOrderByFieldName = Resource.lblField;
+
+    string sortOrganicListOrderByCropType;
+
+    if (Model.SortOrganicListOrderByCropType == Resource.lblDesc)
+        sortOrganicListOrderByCropType = string.Format("{0} {1}", Resource.lblCrop, Resource.lblDescSign);
+    else if (Model.SortOrganicListOrderByCropType == Resource.lblAsc)
+        sortOrganicListOrderByCropType = string.Format("{0} {1}", Resource.lblCrop, Resource.lblAscSign);
+    else
+        sortOrganicListOrderByCropType = Resource.lblCrop;
+
+    string sortInOrganicListOrderByDate;
+    if (Model.SortInOrganicListOrderByDate == Resource.lblDesc)
+        sortInOrganicListOrderByDate = string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign);
+    else if (Model.SortInOrganicListOrderByDate == Resource.lblAsc)
+        sortInOrganicListOrderByDate = string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign);
+    else
+        sortInOrganicListOrderByDate = Resource.lblApplicationDate;
+
+    string sortInOrganicListOrderByFieldName;
+    if (Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
+        sortInOrganicListOrderByFieldName = string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign);
+    else if (Model.SortInOrganicListOrderByFieldName == Resource.lblAsc)
+        sortInOrganicListOrderByFieldName = string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign);
+    else
+        sortInOrganicListOrderByFieldName = Resource.lblField;
+
+    string sortInOrganicListOrderByCropType;
+    if (Model.SortInOrganicListOrderByCropType == Resource.lblDesc)
+        sortInOrganicListOrderByCropType = string.Format("{0} {1}", Resource.lblCrop, Resource.lblDescSign);
+    else if (Model.SortInOrganicListOrderByCropType == Resource.lblAsc)
+        sortInOrganicListOrderByCropType = string.Format("{0} {1}", Resource.lblCrop, Resource.lblAscSign);
+    else
+        sortInOrganicListOrderByCropType = Resource.lblCrop;
 }
 
 @if (TempData["ErrorOnHarvestYearOverview"] != null)
@@ -108,7 +163,7 @@
                     </govuk-button> *@
                                 </div>
                                 @* big_crop_table_version_five *@                                
-                                                                                <div class="table-container">
+                                                                                                                                <div class="table-container">
                                     <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
                                         <caption class="govuk-table__caption--m govuk-visually-hidden">
                                             @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
@@ -217,33 +272,21 @@
                                     <thead class="govuk-table__head">
                                         <tr class="govuk-table__row">
                                             <th scope="col" class="govuk-table__header">
-                                                @((Model.SortOrganicListOrderByDate != null && Model.SortOrganicListOrderByDate == Resource.lblDesc)
-                                                                                    ? string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)
-                                                                                    : (Model.SortOrganicListOrderByDate != null && Model.SortOrganicListOrderByDate == Resource.lblAsc)
-                                                                                    ? string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)
-                                                                                    : Resource.lblApplicationDate)
-                                                                                                              </th>
-                                                                                                              <th scope="col" class="govuk-table__header">
-                                                @((Model.SortOrganicListOrderByFieldName != null && Model.SortOrganicListOrderByFieldName == Resource.lblDesc)
-                                                                                    ? string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)
-                                                                                    : (Model.SortOrganicListOrderByFieldName != null && Model.SortOrganicListOrderByFieldName == Resource.lblAsc)
-                                                                                    ? string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)
-                                                                                    : Resource.lblField)
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="govuk-table__header">
-                                                @((Model.SortOrganicListOrderByCropType != null && Model.SortOrganicListOrderByCropType == Resource.lblDesc)
-                                                                                    ? string.Format("{0} {1}", Resource.lblCrop, Resource.lblDescSign)
-                                                                                    : (Model.SortOrganicListOrderByCropType != null && Model.SortOrganicListOrderByCropType == Resource.lblAsc)
-                                                                                    ? string.Format("{0} {1}", Resource.lblCrop, Resource.lblAscSign)
-                                                                                    : Resource.lblCrop)
-                                </th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblType</th>
-                                <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
-                                <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                            @foreach (var organicManure in Model.HarvestYearPlans.OrganicManureList)
+                                                @sortOrganicListOrderByDate
+                                            </th>
+                                            <th scope="col" class="govuk-table__header">
+                                                @sortOrganicListOrderByFieldName
+                                            </th>
+                                            <th scope="col" class="govuk-table__header">
+                                                @sortOrganicListOrderByCropType
+                                            </th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblType</th>
+                                            <th scope="col" class="govuk-table__header">@Resource.lblRate</th>
+                                            <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="govuk-table__body">
+                                        @foreach (var organicManure in Model.HarvestYearPlans.OrganicManureList)
                                         {
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">@organicManure.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
@@ -286,33 +329,21 @@
                                     <thead class="govuk-table__head">
                                         <tr class="govuk-table__row">
                                             <th scope="col" class="govuk-table__header">
-                                                @((Model.SortInOrganicListOrderByDate != null && Model.SortInOrganicListOrderByDate == Resource.lblDesc)
-                                                                                    ? string.Format(Resource.lblApplicationDateWithArrow, Resource.lblDescSign)
-                                                                                    : (Model.SortInOrganicListOrderByDate != null && Model.SortInOrganicListOrderByDate == Resource.lblAsc)
-                                                                                    ? string.Format(Resource.lblApplicationDateWithArrow, Resource.lblAscSign)
-                                                                                    : Resource.lblApplicationDate)
-                                                                                                              </th>
-                                                                                                              <th scope="col" class="govuk-table__header">
-                                                @((Model.SortInOrganicListOrderByFieldName != null && Model.SortInOrganicListOrderByFieldName == Resource.lblDesc)
-                                                                                    ? string.Format(Resource.lblFieldWithArrow, Resource.lblDescSign)
-                                                                                    : (Model.SortInOrganicListOrderByFieldName != null && Model.SortInOrganicListOrderByFieldName == Resource.lblAsc)
-                                                                                    ? string.Format(Resource.lblFieldWithArrow, Resource.lblAscSign)
-                                                                                    : Resource.lblField)
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="govuk-table__header">
-                                                @((Model.SortInOrganicListOrderByCropType != null && Model.SortInOrganicListOrderByCropType == Resource.lblDesc)
-                                                                                    ? string.Format("{0} {1}", Resource.lblCrop, Resource.lblDescSign)
-                                                                                    : (Model.SortInOrganicListOrderByCropType != null && Model.SortInOrganicListOrderByCropType == Resource.lblAsc)
-                                                                                    ? string.Format("{0} {1}", Resource.lblCrop, Resource.lblAscSign)
-                                                                                    : Resource.lblCrop)
-                                </th>
+                                                @sortInOrganicListOrderByDate
+                                            </th>
+                                            <th scope="col" class="govuk-table__header">
+                                                @sortInOrganicListOrderByFieldName
+                                            </th>
+                                            <th scope="col" class="govuk-table__header">
+                                                @sortInOrganicListOrderByCropType
+                                            </th>
 
                                             <th scope="col" class="govuk-table__header">@Resource.lblNutrients</th>
                                             <th scope="col" class="govuk-table__header"><span class="sr-only">@Resource.lblAction</span></th>
                                         </tr>
                                     </thead>
                                     <tbody class="govuk-table__body">
-                            @foreach (var inorganicFertiliser in Model.HarvestYearPlans.InorganicFertiliserList)
+                                        @foreach (var inorganicFertiliser in Model.HarvestYearPlans.InorganicFertiliserList)
                                         {
                                             <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell">@inorganicFertiliser.ApplicationDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
