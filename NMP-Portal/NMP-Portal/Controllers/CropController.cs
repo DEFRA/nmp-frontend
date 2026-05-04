@@ -49,6 +49,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _cropTypeTempErrorName = "CropTypeError";
     private const string _cropPrefix = "Crops[";
     private const string _yieldPrefix = "].Yield";
+    private const string _grassGrowthClassActionName = "GrassGrowthClass";
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
@@ -1709,7 +1710,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             if (string.IsNullOrWhiteSpace(q) && hasCrops)
             {
-                BindFieldAndYieldCounter(model, q);
+              model= BindFieldAndYieldCounter(model);
             }
             else if (hasCrops)
             {
@@ -1841,7 +1842,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return model;
     }
-    private PlanViewModel BindFieldAndYieldCounter(PlanViewModel model, string q)
+    private PlanViewModel BindFieldAndYieldCounter(PlanViewModel model)
     {
 
         model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
@@ -2982,7 +2983,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_checkAnswerActionName);
         }
     }
-    private string FetchEncryptedCounter(PlanViewModel model)
+    private static string FetchEncryptedCounter(PlanViewModel model)
     {
         string encryptedCounter = string.Empty;
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
@@ -3018,7 +3019,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return action;
     }
-    private string BindActionForBackCheckAnswerGrass(PlanViewModel model)
+    private static string BindActionForBackCheckAnswerGrass(PlanViewModel model)
     {
         string action = string.Empty;
         bool isGrazeSilageAndHay = (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay);
@@ -3027,7 +3028,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
             {
                 bool isDryMatterAction = (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1);
-                action = isDryMatterAction ? "DryMatterYield" : "GrassGrowthClass";
+                action = isDryMatterAction ? "DryMatterYield" : _grassGrowthClassActionName;
             }
             else
             {
@@ -3040,7 +3041,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
             {
-                action = "GrassGrowthClass";
+                action = _grassGrowthClassActionName;
             }
             else
             {
@@ -3049,7 +3050,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return action;
     }
-    private async Task<string> BindActionForBackCheckAnswerForCereal(PlanViewModel model, List<CropInfoOneResponse> cropInfoOneList)
+    private static async Task<string> BindActionForBackCheckAnswerForCereal(PlanViewModel model, List<CropInfoOneResponse> cropInfoOneList)
     {
         string action = string.Empty;
         bool isCereal = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals;
@@ -5362,7 +5363,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         ValidateSowingDate(model, i, otherGroupId);
         if (model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
         {
-            await ValidateYield(model, otherGroupId);
+            await ValidateYieldForCheckAsnwer(model, otherGroupId);
         }
 
         if (model.CropTypeID == null)
@@ -5422,7 +5423,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
     }
-    private async Task ValidateYield(PlanViewModel model, int otherGroupId)
+    private async Task ValidateYieldForCheckAsnwer(PlanViewModel model, int otherGroupId)
     {
 
         int i = 0;
@@ -6099,7 +6100,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.GrassGrowthClassCounter = 0;
                         SetCropToSession(model);
                     }
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 else
                 {
@@ -6118,7 +6119,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.GrassGrowthClassCounter = 0;
                         SetCropToSession(model);
                     }
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 else
                 {
@@ -6137,7 +6138,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         model.GrassGrowthClassCounter = 0;
                         SetCropToSession(model);
                     }
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 else
                 {
@@ -6190,7 +6191,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
                 {
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 else
                 {
@@ -6456,7 +6457,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["GrassGrowthClassError"] = error.Message;
-                        return RedirectToAction("GrassGrowthClass");
+                        return RedirectToAction(_grassGrowthClassActionName);
                     }
                     else
                     {
@@ -6558,7 +6559,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 else
                 {
@@ -6576,7 +6577,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.DryMatterYieldCounter = 0;
                     model.DryMatterYieldEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
@@ -6587,7 +6588,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     TempData["GrassGrowthClassError"] = error.Message;
-                    return RedirectToAction("GrassGrowthClass");
+                    return RedirectToAction(_grassGrowthClassActionName);
                 }
                 else
                 {
@@ -6603,7 +6604,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in DryMatterYield() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["DryMatterYieldError"] = ex.Message;
-            return RedirectToAction("GrassGrowthClass");
+            return RedirectToAction(_grassGrowthClassActionName);
         }
     }
 
@@ -6664,7 +6665,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["DryMatterYieldError"] = error.Message;
-            return RedirectToAction("GrassGrowthClass");
+            return RedirectToAction(_grassGrowthClassActionName);
         }
         else
         {
@@ -6691,7 +6692,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                         {
                             TempData["DryMatterYieldError"] = error.Message;
-                            return RedirectToAction("GrassGrowthClass");
+                            return RedirectToAction(_grassGrowthClassActionName);
                         }
                         else
                         {
