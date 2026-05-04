@@ -138,6 +138,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         _logger.LogTrace("Fertiliser Manure Controller : FieldGroup({Q}, {R}, {S}) action called", q, r, s);
         FertiliserManureViewModel? model = GetFertiliserManureFromSession();
+        if (model == null)
+        {
+            _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
         Error? error = null;
         try
         {
@@ -345,7 +350,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             else
             {
-                TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                TempData["ErrorOnHarvestYearOverview"] = error?.Message;
                 if (TempData["FieldGroupError"] != null)
                 {
                     TempData["FieldGroupError"] = null;
@@ -373,7 +378,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 TempData["FieldError"] = null;
             }
-
+            
             SetFertiliserManureToSession(model);
             return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
         }
@@ -1275,14 +1280,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         }
                                         else
                                         {
-                                            TempData["NutrientValuesError"] = error.Message;
+                                            TempData["NutrientValuesError"] = error?.Message;
                                             return RedirectToAction("NutrientValues", model);
                                         }
 
                                     }
                                     else
                                     {
-                                        TempData["NutrientValuesError"] = error.Message;
+                                        TempData["NutrientValuesError"] = error?.Message;
                                         return RedirectToAction("NutrientValues", model);
                                     }
                                 }
@@ -2986,7 +2991,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         }
                         else
                         {
-                            TempData["CheckYourAnswerError"] = error.Message;
+                            TempData["CheckYourAnswerError"] = error?.Message;
                             return RedirectToAction(_checkAnswerActionName);
                         }
                     }
@@ -3453,11 +3458,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             if (managementPeriodList.Count > 0)
                             {
                                 var field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+                                var firstManagement = managementPeriodList.FirstOrDefault();
+
+                                if (firstManagement == null || firstManagement.ID == null)
+                                {
+                                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                                }
 
                                 var defoliationList = new DefoliationList
                                 {
                                     CropID = cropId,
-                                    ManagementPeriodID = managementPeriodList.FirstOrDefault().ID.Value,
+                                    ManagementPeriodID = firstManagement.ID.Value,
                                     Defoliation = (model.DefoliationList != null && model.DefoliationList.Count > 0)
                                     ? model.DefoliationList
                                         .Where(x => managementPeriodList.Any(m => m.ID == x.ManagementPeriodID))
@@ -3535,7 +3546,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    TempData["DefoliationError"] = error.Message;
+                    TempData["DefoliationError"] = error?.Message;
                 }
                 return View(model);
             }
@@ -3721,7 +3732,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    TempData["DefoliationError"] = error.Message;
+                    TempData["DefoliationError"] = error?.Message;
                 }
                 return View(model);
             }

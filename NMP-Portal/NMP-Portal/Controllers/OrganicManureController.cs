@@ -731,7 +731,7 @@ namespace NMP.Portal.Controllers
                         }
                         else
                         {
-                            TempData["FieldError"] = error.Message;
+                            TempData["FieldError"] = error?.Message;
                             return View(model);
                         }
                     }
@@ -1301,8 +1301,8 @@ managementPeriod.CropID.HasValue
                         model.ManureTypeName = manureType.Name;
                         isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
                     }
-                    isHighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen ?? false;
-                    model.HighReadilyAvailableNitrogen = manureType.HighReadilyAvailableNitrogen;
+                    isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
+                    model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
                 }
                 else
                 {
@@ -2743,7 +2743,7 @@ managementPeriod.CropID.HasValue
                     else
                     {
                         model.ManureTypeName = string.Empty;
-                        ViewBag.Error = error.Message;
+                        ViewBag.Error = error?.Message;
                     }
                 }
 
@@ -3529,8 +3529,10 @@ managementPeriod.CropID.HasValue
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        isLiquid = manureType.IsLiquid.HasValue ? manureType.IsLiquid.Value : false;
-
+                        if (manureType != null)
+                        {
+                            isLiquid = manureType.IsLiquid.HasValue ? manureType.IsLiquid.Value : false;
+                        }
                     }
 
                     string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
@@ -3564,7 +3566,11 @@ managementPeriod.CropID.HasValue
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        bool isLiquid = manureType.IsLiquid.Value;
+                        bool isLiquid = false;
+                        if (manureType != null)
+                        {
+                            isLiquid = manureType.IsLiquid.Value;
+                        }
                         string applicableFor = Resource.lblNull;
                         (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                         if (error == null && incorporationDelaysList.Count == 1)
@@ -3617,8 +3623,8 @@ managementPeriod.CropID.HasValue
                     {
                         TempData["IncorporationMethodError"] = error.Message;
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        bool isLiquid = manureType.IsLiquid.Value;
-                        string applicableFor = isLiquid ? Resource.lblL : Resource.lblB;
+                        bool? isLiquid = manureType == null ? false : manureType.IsLiquid;
+                        string applicableFor = isLiquid == true ? Resource.lblL : Resource.lblB;
                         List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                         var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
                         string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
@@ -3688,12 +3694,12 @@ managementPeriod.CropID.HasValue
                 {
                     (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                 }
-                bool isLiquid = false;
+                bool? isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                    isLiquid = manureType.IsLiquid.Value;
-                    applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
+                    isLiquid = manureType == null ? false : manureType.IsLiquid;
+                    applicableFor = isLiquid == true ? Resource.lblL : Resource.lblS;
                     if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                     {
                         applicableFor = Resource.lblP;
@@ -3746,12 +3752,15 @@ managementPeriod.CropID.HasValue
                     {
                         (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
                     }
-                    bool isLiquid = false;
+                    bool? isLiquid = false;
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        isLiquid = manureType.IsLiquid.Value;
-                        applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
+                        if (manureType != null)
+                        {
+                            isLiquid = manureType.IsLiquid;
+                        }
+                        applicableFor = isLiquid == true ? Resource.lblL : Resource.lblS;
                         if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                         {
                             applicableFor = Resource.lblP;
@@ -4043,7 +4052,7 @@ managementPeriod.CropID.HasValue
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Organic Manure Controller : Exception in ConditionsAffectingNutrients() : {Message}, {StackTrace}",ex.Message, ex.StackTrace);
+                _logger.LogError(ex, "Organic Manure Controller : Exception in ConditionsAffectingNutrients() : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ConditionsAffectingNutrientsError"] = ex.Message;
                 return View(model);
             }
@@ -8853,7 +8862,7 @@ managementPeriod.CropID.HasValue
                     //if manure type change 
                     if (model.IsCheckAnswer)
                     {
-                        if (orgManureViewModel.ManureTypeId != model.ManureTypeId)
+                        if (orgManureViewModel?.ManureTypeId != model.ManureTypeId)
                         {
                             model.IsManureTypeChange = true;
                             if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
@@ -9371,12 +9380,19 @@ managementPeriod.CropID.HasValue
                                 }
                                 if (managementPeriodList.Count > 0)
                                 {
+                                    var firstManagement = managementPeriodList.FirstOrDefault();
+
+                                    if (firstManagement?.ID == null)
+                                    {
+                                        _logger.LogError("Organic Manure Controller : Management period not found in Defoliation() action");
+                                        return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                                    }
                                     var field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
 
                                     var defoliationList = new DefoliationList
                                     {
                                         CropID = cropId,
-                                        ManagementPeriodID = managementPeriodList.FirstOrDefault().ID.Value,
+                                        ManagementPeriodID = firstManagement.ID.Value,
                                         Defoliation = (model.DefoliationList != null && model.DefoliationList.Count > 0)
                                         ? model.DefoliationList
                                             .Where(x => managementPeriodList.Any(m => m.ID == x.ManagementPeriodID))
@@ -9426,7 +9442,7 @@ managementPeriod.CropID.HasValue
                     TempData["CheckYourAnswerError"] = ex.Message;
                     return RedirectToAction(_checkAnswer);
                 }
-                TempData["ManureGroupError"] = error.Message;
+                TempData["ManureGroupError"] = error?.Message;
                 return RedirectToAction(_manureGroup);
             }
         }
@@ -9457,7 +9473,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        TempData["DefoliationError"] = error.Message;
+                        TempData["DefoliationError"] = error?.Message;
                     }
                     return View(model);
                 }
@@ -9645,7 +9661,7 @@ managementPeriod.CropID.HasValue
                     }
                     else
                     {
-                        TempData["DefoliationError"] = error.Message;
+                        TempData["DefoliationError"] = error?.Message;
                     }
                     return View(model);
                 }

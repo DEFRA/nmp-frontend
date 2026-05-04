@@ -572,7 +572,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<(List<SelectListItem>, List<int>)> FilterSelectListItemForFieldForInsert(PlanViewModel model, List<SelectListItem> selectListItem, List<HarvestYearPlanResponse> harvestYearPlanResponse, List<HarvestYearPlanResponse> cropPlanForFirstCropFilter)
     {
         //Fetch fields allowed for second crop based on first crop
-        (List<int> fieldsAllowedForSecondCrop,  _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
+        (List<int> fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
 
         if (harvestYearPlanResponse.Count > 0 || selectListItem.Count == 1)
         {
@@ -2405,7 +2405,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             //Fetch fields allowed for second crop based on first crop
             var grassTypeId = (int)NMP.Commons.Enums.CropTypes.Grass;
 
-            (fieldsAllowedForSecondCrop,  _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
+            (fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
 
             (model, _) = await BindGrassProperties(model);
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
@@ -4623,14 +4623,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : UpdateExcessOrWinterRainfall() action called");
         PlanViewModel? model = GetHarvestYearPlanFromSession();
-
+        if (model == null)
+        {
+            _logger.LogTrace("Crop Controller : session not found in UpdateExcessOrWinterRainfall() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
         try
         {
-            if (model == null)
-            {
-                _logger.LogTrace("Crop Controller : session not found in UpdateExcessOrWinterRainfall() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-            }
+            return View("UpdateExcessOrWinterRainfall", model);
         }
         catch (Exception ex)
         {
@@ -4639,7 +4639,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
         }
 
-        return View("UpdateExcessOrWinterRainfall", model);
+
     }
 
     [HttpPost]
@@ -6970,7 +6970,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called");
         PlanViewModel? model = GetCropFromSession();
-        Error? error = null;
 
         try
         {
@@ -6985,7 +6984,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-            TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
+            TempData[_tempDataErrorKey] = ex.Message;
             return RedirectToAction(_farmSummaryActionName, "Farm");
         }
     }
@@ -7014,7 +7013,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called");
         PlanViewModel? model = GetCropFromSession();
-        Error? error = null;
         try
         {
             if (model == null)
@@ -7030,7 +7028,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-            TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
+            TempData[_tempDataErrorKey] = ex.Message;
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm"));
         }
     }
@@ -7057,29 +7055,31 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 ModelState.AddModelError("OrganicInorganicCopy", Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet);
             }
-        }
 
-        if (!ModelState.IsValid)
-        {
-            return View("CopyCheckAnswer", model);
-        }
 
-        Error? error = null;
-        bool isOrganic = false;
-        bool isFertiliser = false;
-        isOrganic = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.OrganicMaterial) != 0;
-        isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.InorganicFertiliser) != 0;
-        (bool success, error) = await _cropLogic.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
+            if (!ModelState.IsValid)
+            {
+                return View("CopyCheckAnswer", model);
+            }
 
-        if (string.IsNullOrWhiteSpace(error?.Message) && success)
-        {
-            return BackActionForCopyCheckAnswer(model, success);
+            Error? error = null;
+            bool isOrganic = false;
+            bool isFertiliser = false;
+            isOrganic = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.OrganicMaterial) != 0;
+            isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.InorganicFertiliser) != 0;
+            (bool success, error) = await _cropLogic.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
+            {
+                return BackActionForCopyCheckAnswer(model, success);
+            }
+            else
+            {
+                TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction("CopyCheckAnswer");
+            }
         }
-        else
-        {
-            TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-            return RedirectToAction("CopyCheckAnswer");
-        }
+        return View("CopyCheckAnswer", model);
     }
 
     public async Task<IActionResult> BackCopyCheckAnswer()
