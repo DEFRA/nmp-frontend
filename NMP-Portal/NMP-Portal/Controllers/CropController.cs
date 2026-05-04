@@ -1707,9 +1707,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.IsYieldOptional = Resource.lblYes;
                 ViewBag.DefaultYield = defaultYieldForCropType;
             }
-            if (string.IsNullOrWhiteSpace(q))
+            if (string.IsNullOrWhiteSpace(q)&&hasCrops)
             {
-                BindFieldAndYieldCounter(model, q, hasCrops);
+                BindFieldAndYieldCounter(model, q);
             }
             else if (hasCrops)
             {
@@ -1841,17 +1841,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return model;
     }
-    private PlanViewModel BindFieldAndYieldCounter(PlanViewModel model, string q, bool hasCrops)
+    private PlanViewModel BindFieldAndYieldCounter(PlanViewModel model, string q)
     {
-        if (hasCrops)
-        {
+        
             model.YieldEncryptedCounter = _fieldDataProtector.Protect(model.YieldCurrentCounter.ToString());
             if (model.YieldCurrentCounter == 0)
             {
                 model.FieldID = model.Crops[0].FieldID.Value;
             }
             SetCropToSession(model);
-        }
+        
         return model;
     }
     private (PlanViewModel, IActionResult) BindYieldValueForStandardYield(PlanViewModel model, decimal defaultYieldForCropType)
