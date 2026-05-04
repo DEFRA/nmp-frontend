@@ -1557,7 +1557,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         var date = model.Crops[model.SowingDateCurrentCounter].SowingDate;
         var year = model.Year.Value;
 
-        DateTime maxDate = new(year, 12, 31);
+        DateTime maxDate = new DateTime(year, 12, 31, 00, 00, 00, DateTimeKind.Unspecified);
 
         if (date > maxDate)
         {
@@ -1567,7 +1567,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (!isPerennial)
         {
-            DateTime minDate = new DateTime(year - 1, 1, 1);
+            DateTime minDate = new DateTime(year - 1, 01, 01, 00, 00, 00, DateTimeKind.Unspecified);
+
 
             if (date < minDate)
             {
