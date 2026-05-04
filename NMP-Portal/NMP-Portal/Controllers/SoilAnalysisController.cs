@@ -327,13 +327,13 @@ namespace NMP.Portal.Controllers
                                 ModelState["Date"]?.Errors[0].ErrorMessage.ToString() : null;
 
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate)) ||
+                if (dateError != null && (dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, Resource.lblTheDate)) ||
                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, Resource.lblTheDate)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, Resource.lblTheDate)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, Resource.lblTheDate)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, Resource.lblTheDate)) ||
                      dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, Resource.lblTheDate)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate)))
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, Resource.lblTheDate))))
                 {
                     ModelState["Date"]?.Errors.Clear();
                     ModelState["Date"]?.Errors.Add(Resource.MsgTheDateMustInclude);
@@ -1093,14 +1093,13 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("SoilAnalysis Controller : Cancel() action called");
             SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            if (model == null)
+            {
+                _logger.LogTrace("SoilAnalysisController: Session expired in Cancel() action.");
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+            }
             try
             {
-                if (model == null)
-                {
-                    _logger.LogTrace("SoilAnalysisController: Session expired in Cancel() action.");
-                    return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
-                }
-
                 model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
                 SetSoilAnalysisDataToSession(model);
             }
@@ -1146,14 +1145,13 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("SoilAnalysis Controller : BackActionForCheckAnswer() action called");
             SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            if (model == null)
+            {
+                _logger.LogTrace("Soil Analysis Controller: Session expired in BackActionForCheckAnswer action.");
+                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+            }
             try
             {
-                if (model == null)
-                {
-                    _logger.LogTrace("Soil Analysis Controller: Session expired in BackActionForCheckAnswer action.");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
-                }
-
                 model.IsCheckAnswer = false;
                 SetSoilAnalysisDataToSession(model);
 
