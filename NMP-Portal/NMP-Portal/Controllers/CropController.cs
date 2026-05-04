@@ -47,6 +47,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _cropDataBeforeUpdateSessionKey = "CropDataBeforeUpdate";
     private const string _defoliationActionName = "Defoliation";
     private const string _cropTypeTempErrorName = "CropTypeError";
+    private const string _cropPrefix = "Crops[";
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
@@ -1311,7 +1312,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return RedirectToAction("SowingDate");
     }
-    private void ResetSowingDates(PlanViewModel model)
+    private static void ResetSowingDates(PlanViewModel model)
     {
         if (model.Crops == null) return;
 
@@ -1320,7 +1321,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             crop.SowingDate = null;
         }
     }
-    private bool IsCheckAnswerValid(PlanViewModel model)
+    private static bool IsCheckAnswerValid(PlanViewModel model)
     {
         return model.IsCheckAnswer &&
                !model.IsAnyChangeInField &&
@@ -1329,7 +1330,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                !model.IsCurrentSwardChange;
     }
 
-    private bool IsGrass(PlanViewModel model)
+    private static bool IsGrass(PlanViewModel model)
     {
         return model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass;
     }
@@ -1522,12 +1523,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (error != null && IsDateFormatError(error))
             {
-                entry?.Errors.Clear();
-                entry?.Errors.Add(Resource.MsgTheDateMustInclude);
+                entry.Errors.Clear();
+                entry.Errors.Add(Resource.MsgTheDateMustInclude);
             }
         }
     }
-    private bool IsDateFormatError(string error)
+    private static bool IsDateFormatError(string error)
     {
         string[] patterns =
         {
@@ -1566,7 +1567,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (!isPerennial)
         {
-            DateTime minDate = new(year - 1, 1, 1);
+            DateTime minDate = new DateTime(year - 1, 1, 1);
 
             if (date < minDate)
             {
@@ -1593,7 +1594,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 string.Format(Resource.MsgForSowingDate, model.CropType));
         }
     }
-    private string GetCropKey(PlanViewModel model)
+    private static string GetCropKey(PlanViewModel model)
     {
         return $"Crops[{model.SowingDateCurrentCounter}].SowingDate";
     }
@@ -1769,18 +1770,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.Crops[model.YieldCurrentCounter].Yield == null)
                 {
-                    ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
+                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + "].Yield", string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
                 }
             }
             if (model.Crops[model.YieldCurrentCounter].Yield != null)
             {
                 if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
                 {
-                    ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
+                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
                 }
                 if (model.Crops[model.YieldCurrentCounter].Yield < 0)
                 {
-                    ModelState.AddModelError("Crops[" + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
+                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
                 }
             }
 
@@ -5373,12 +5374,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
                 {
-                    ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
+                    ModelState.AddModelError(string.Concat(_cropPrefix, i, "].SowingDate"), string.Format(Resource.lblSowingSingleDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType));
                     break;
                 }
                 else if (model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
                 {
-                    ModelState.AddModelError(string.Concat("Crops[", i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
+                    ModelState.AddModelError(string.Concat(_cropPrefix, i, "].SowingDate"), string.Format(Resource.lblSowingDiffrentDateNotSet, model.CropGroupId == otherGroupId ? model.OtherCropName : model.CropType, crop.FieldName));
                 }
             }
             i++;
@@ -5475,13 +5476,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                     {
-                        ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, crop.Year));
+                        ModelState.AddModelError(string.Concat(_cropPrefix, i, "].Yield"), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, crop.Year));
 
                         break;
                     }
                     else if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                     {
-                        ModelState.AddModelError(string.Concat("Crops[", i, "].Yield"), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, crop.Year));
+                        ModelState.AddModelError(string.Concat(_cropPrefix, i, "].Yield"), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, crop.Year));
 
                     }
                 }
@@ -6320,7 +6321,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
             {
-                ModelState.AddModelError("Crops[" + model.GrassGrowthClassCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError(_cropPrefix + model.GrassGrowthClassCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
             }
         }
         if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
@@ -6585,7 +6586,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.Crops[model.DryMatterYieldCounter].Yield == null)
             {
-                ModelState.AddModelError("Crops[" + model.DryMatterYieldCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError(_cropPrefix + model.DryMatterYieldCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
             if (!ModelState.IsValid)
