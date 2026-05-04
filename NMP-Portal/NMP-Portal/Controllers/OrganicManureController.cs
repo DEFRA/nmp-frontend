@@ -2052,7 +2052,6 @@ managementPeriod.CropID.HasValue
                             {
                                 model.ManureType = manureType;
                             }
-                            // (List<FarmManureTypeResponse> farmManureTypeList, Error error1) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
                             if (error == null && !string.IsNullOrWhiteSpace(model.ManureTypeName))
                             {
                                 farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && model.ManureTypeName.Equals(model.OtherMaterialName));
@@ -2134,52 +2133,6 @@ managementPeriod.CropID.HasValue
                         }
                     }
 
-
-
-                    //(ManureType manureType, Error manureTypeError) = await _organicManureService.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                    //FarmManureTypeResponse? farmManure = null;
-
-                    //(List<FarmManureTypeResponse> farmManureTypeList, Error error) = await _organicManureService.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
-
-                    //if (error == null && farmManureTypeList.Count > 0)
-                    //{
-                    //    farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                    //    if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
-                    //    {
-                    //        if (farmManure != null)
-                    //        {
-                    //            model.ManureType.DryMatter = farmManure.DryMatter;
-                    //            model.ManureType.TotalN = farmManure.TotalN;
-                    //            model.ManureType.NH4N = farmManure.NH4N;
-                    //            model.ManureType.Uric = farmManure.Uric;
-                    //            model.ManureType.NO3N = farmManure.NO3N;
-                    //            model.ManureType.P2O5 = farmManure.P2O5;
-                    //            model.ManureType.K2O = farmManure.K2O;
-                    //            model.ManureType.SO3 = farmManure.SO3;
-                    //            model.ManureType.MgO = farmManure.MgO;
-                    //            if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials && model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
-                    //            {
-                    //                ViewBag.FarmManureApiOption = Resource.lblTrue;
-                    //            }
-                    //        }
-                    //        else
-                    //        {
-                    //            if (manureTypeError == null)
-                    //            {
-                    //                model.ManureType = manureType;
-                    //            }
-                    //            model.DefaultNutrientValue = Resource.lblYes;
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (manureTypeError == null)
-                    //    {
-                    //        model.ManureType = manureType;
-                    //    }
-
-                    //}
                     return View(model);
                 }
                 if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
@@ -3622,9 +3575,7 @@ managementPeriod.CropID.HasValue
                     else if (error != null)
                     {
                         TempData["IncorporationMethodError"] = error.Message;
-                        //var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        //bool? isLiquid = manureType == null ? false : manureType.IsLiquid;
-                        //string applicableFor = isLiquid == true ? Resource.lblL : Resource.lblB;
+                        
                         List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                         var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
                         string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
