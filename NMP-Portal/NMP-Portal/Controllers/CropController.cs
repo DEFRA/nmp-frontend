@@ -48,6 +48,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _defoliationActionName = "Defoliation";
     private const string _cropTypeTempErrorName = "CropTypeError";
     private const string _cropPrefix = "Crops[";
+    private const string _yieldPrefix = "].Yield";
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
@@ -1771,18 +1772,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.Crops[model.YieldCurrentCounter].Yield == null)
                 {
-                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + "].Yield", string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
+                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + _yieldPrefix, string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
                 }
             }
             if (model.Crops[model.YieldCurrentCounter].Yield != null)
             {
                 if (model.Crops[model.YieldCurrentCounter].Yield > Convert.ToInt32(Resource.lblFiveDigit))
                 {
-                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + "].Yield", Resource.MsgEnterAValueOfNoMoreThan5Digits);
+                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + _yieldPrefix, Resource.MsgEnterAValueOfNoMoreThan5Digits);
                 }
                 if (model.Crops[model.YieldCurrentCounter].Yield < 0)
                 {
-                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + "].Yield", string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
+                    ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + _yieldPrefix, string.Format(Resource.lblEnterAPositiveValueOfPropertyName, Resource.lblYield));
                 }
             }
 
@@ -5477,13 +5478,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                     {
-                        ModelState.AddModelError(string.Concat(_cropPrefix, i, "].Yield"), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, crop.Year));
+                        ModelState.AddModelError(string.Concat(_cropPrefix, i, _yieldPrefix), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, crop.Year));
 
                         break;
                     }
                     else if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                     {
-                        ModelState.AddModelError(string.Concat(_cropPrefix, i, "].Yield"), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, crop.Year));
+                        ModelState.AddModelError(string.Concat(_cropPrefix, i, _yieldPrefix), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, crop.Year));
 
                     }
                 }
@@ -6322,7 +6323,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
             {
-                ModelState.AddModelError(_cropPrefix + model.GrassGrowthClassCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError(_cropPrefix + model.GrassGrowthClassCounter + _yieldPrefix, Resource.MsgSelectAnOptionBeforeContinuing);
             }
         }
         if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
@@ -6587,7 +6588,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.Crops[model.DryMatterYieldCounter].Yield == null)
             {
-                ModelState.AddModelError(_cropPrefix + model.DryMatterYieldCounter + "].Yield", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError(_cropPrefix + model.DryMatterYieldCounter + _yieldPrefix, Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
             if (!ModelState.IsValid)
