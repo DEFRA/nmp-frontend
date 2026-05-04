@@ -143,7 +143,7 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear[i].IsAnyPlan" value="@Model.HarvestYear[i].IsAnyPlan" />
         }
     }
-    @if (currentStep != (int)CropWizardSteps.CropType && (Model.FieldList != null && Model.FieldList.Count > 0))
+    @if (currentStep != (int)CropWizardSteps.CropField && (Model.FieldList != null && Model.FieldList.Count > 0))
     {
         @for (int i = 0; i < Model.FieldList.Count; i++)
         {

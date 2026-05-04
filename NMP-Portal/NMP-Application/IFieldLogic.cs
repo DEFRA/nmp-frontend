@@ -40,4 +40,5 @@ public interface IFieldLogic
    Task<List<Crop>> FetchCropsByFieldId(int fieldId);
     Task<List<CommonResponse>> FetchPscIndex();
     Task<CommonResponse?> FetchPscIndexById(int id);
+    Task<(List<SoilNutrientStatusResponse>?, Error?)> FetchSoilNutrientStatusList(int methodologyId);
 }
