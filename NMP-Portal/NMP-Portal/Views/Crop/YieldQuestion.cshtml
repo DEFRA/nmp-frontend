@@ -9,22 +9,25 @@
      "SowingDate";
     int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
 
-    var pageHeading = "";
-    if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
-    {
-        pageHeading = (string.Format(Model.Crops.Count > 1 ? Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields : Resource.lblYieldQuestionForSingleField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType));
-    }
+    string cropName;
+    if (Model.CropGroupId == OtherGroupId) cropName = Model.OtherCropName;
+    else if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes) cropName = Model.Variety;
+    else cropName = Model.CropType;
+
+    bool isMultiple = Model.Crops.Count > 1;
+    bool hasDefaultYield = ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0;
+
+    string pageHeading;
+
+    if (hasDefaultYield && isMultiple)
+        pageHeading = string.Format(Resource.lblHowDoYouWantToEnterTheExpectedYieldForInTheseFields, cropName);
+    else if (hasDefaultYield)
+        pageHeading = string.Format(Resource.lblYieldQuestionForSingleField, cropName);
+    else if (isMultiple)
+        pageHeading = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, cropName);
     else
-    {
-        if (Model.Crops.Count > 1)
-        {
-            pageHeading = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInTheseFields, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType);
-        }
-        else
-        {
-            pageHeading = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, (Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes ? Model.Variety : Model.CropType), Model.FieldName);
-        }
-    }
+        pageHeading = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, cropName, Model.FieldName);
+
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.YieldQuestion;

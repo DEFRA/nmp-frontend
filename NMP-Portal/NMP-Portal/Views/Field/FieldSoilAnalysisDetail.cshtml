@@ -5,6 +5,34 @@
 @model FieldViewModel
 @{
     ViewData["Title"] = $"{Model.Name} {Resource.lblHyphen} {Resource.lblDetails}";
+    
+    string totalAreaText;
+
+    if (Model.TotalArea == null)
+        totalAreaText = Resource.lblNotEntered;
+    else if (Model.TotalArea == 0)
+        totalAreaText = ((int)Model.TotalArea).ToString();
+    else
+        totalAreaText = string.Format("{0:N2} {1}", Model.TotalArea, Resource.lblhectar);
+
+    string croppedAreaText;
+
+    if (Model.CroppedArea == null)
+        croppedAreaText = Resource.lblNotEntered;
+    else if (Model.CroppedArea == 0)
+        croppedAreaText = ((int)Model.CroppedArea).ToString();
+    else
+        croppedAreaText = string.Format("{0:N2} {1}", Model.CroppedArea, Resource.lblhectar);
+
+    string manureNonSpreadingAreaText;
+
+    if (Model.ManureNonSpreadingArea == null)
+        manureNonSpreadingAreaText = Resource.lblNotEntered;
+    else if (Model.ManureNonSpreadingArea == 0)
+        manureNonSpreadingAreaText = ((int)Model.ManureNonSpreadingArea).ToString();
+    else
+        manureNonSpreadingAreaText = string.Format("{0:N2} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar);
+
 }
 
 @if (ViewBag.Error != null)
@@ -80,15 +108,15 @@
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblFieldArea</td>
-                        <td class="govuk-table__cell">@(Model.TotalArea == null ? Resource.lblNotEntered : ((Model.TotalArea == 0) ? ((int)Model.TotalArea) : string.Format("{0:N2} {1}", Model.TotalArea, Resource.lblhectar)))</td>
+                        <td class="govuk-table__cell">@totalAreaText</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblCropedArea</td>
-                        <td class="govuk-table__cell">@(Model.CroppedArea == null ? Resource.lblNotEntered : ((Model.CroppedArea == 0) ? ((int)Model.CroppedArea) : string.Format("{0:N2} {1}", Model.CroppedArea, Resource.lblhectar)))</td>
+                        <td class="govuk-table__cell">@croppedAreaText</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblManureNonSpreadArea</td>
-                        <td class="govuk-table__cell">@(Model.ManureNonSpreadingArea == null ? Resource.lblNotEntered : ((Model.ManureNonSpreadingArea == 0) ? ((int)Model.ManureNonSpreadingArea) : string.Format("{0:N2} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar)))</td>
+                        <td class="govuk-table__cell">@manureNonSpreadingAreaText</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblSoilType</td>

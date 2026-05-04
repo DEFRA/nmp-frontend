@@ -3,7 +3,32 @@
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblAddYearCropHistoryToFieldName, Model.HarvestYear, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
     bool needToShowCropGroupEngand = (Model.HasGrassInLastThreeYear.HasValue && (!Model.HasGrassInLastThreeYear.Value) || (Model.IsPreviousYearGrass.HasValue && !Model.IsPreviousYearGrass.Value));
+    string grassText;
 
+    if (!Model.HasGrassInLastThreeYear.HasValue)
+        grassText = Resource.lblNotSet;
+    else if (Model.HasGrassInLastThreeYear.Value)
+        grassText = Resource.lblYes;
+    else
+        grassText = Resource.lblNo;
+
+    string layDurationText;
+
+    if (!Model.LayDuration.HasValue)
+        layDurationText = Resource.lblNotSet;
+    else if (Model.LayDuration.Value == (int)NMP.Commons.Enums.LayDuration.OneToTwoYears)
+        layDurationText = Resource.lbl1To2Years;
+    else
+        layDurationText = Resource.lbl3YearsOrMore;
+
+    string cloverText;
+
+    if (!Model.HasGreaterThan30PercentClover.HasValue)
+        cloverText = Resource.lblNotSet;
+    else if (Model.HasGreaterThan30PercentClover.Value)
+        cloverText = Resource.lblYes;
+    else
+        cloverText = Resource.lblNo;
 }
 
 @section BeforeContent {
@@ -35,7 +60,7 @@
                                 @string.Format(Resource.lblWasFutureFieldUsedForGrassInYear, Model.FieldName, Model.HarvestYear, Model.HarvestYear - 1, Model.HarvestYear - 2)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.HasGrassInLastThreeYear.HasValue ? (Model.HasGrassInLastThreeYear.Value ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                                @grassText
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear, Model.FieldName))</span></govuk-summary-list-row-action>
@@ -76,7 +101,7 @@
                                         @string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.LayDuration != null ? (Model.LayDuration.Value == (int)NMP.Commons.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore) : Resource.lblNotSet)
+                                        @layDurationText
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
@@ -102,7 +127,7 @@
                                     @string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.HasGreaterThan30PercentClover != null ? (Model.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                                    @cloverText
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="HasGreaterThan30PercentClover" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.FieldName))</span></govuk-summary-list-row-action>

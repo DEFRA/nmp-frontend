@@ -2,7 +2,6 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
-    //ViewData["Title"] = Resource.lblHasGrassInLastThreeYear;
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
     ViewData["Title"] = $"{string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);

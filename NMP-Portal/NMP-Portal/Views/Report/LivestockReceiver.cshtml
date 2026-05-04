@@ -6,19 +6,34 @@
                                         Resource.lblWhoAreYouExportingThisLivestockManureTo);
     string action = string.IsNullOrWhiteSpace(Model.EncryptedId) ? Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1) : Resource.lblUpdate;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
-    var suffixUnit = "";
-    if (Model.IsManureTypeLiquid != null)
-    {
-        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne;
-    }
+    
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.LivestockReceiver;
+
+    var actionName="";
+
+    if (Model.IsCheckAnswer)
+    {
+        actionName = "LivestockImportExportCheckAnswer";
+    }
+    else
+    {
+        bool isManualEntry =
+            !string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) &&
+            Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+
+        if (isManualEntry)
+        {
+            actionName = "LivestockManualNutrientValue";
+        }
+        else
+        {
+            actionName = "LivestockDefaultNutrientValue";
+        }
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                                      "LivestockImportExportCheckAnswer" :
-                                      (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis) ?
-                                      "LivestockManualNutrientValue" : "LivestockDefaultNutrientValue")) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@actionName asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockReceiver"] != null)
 {

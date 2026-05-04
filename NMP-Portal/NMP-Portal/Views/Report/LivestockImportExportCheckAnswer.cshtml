@@ -125,23 +125,19 @@
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
-                    @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                    @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) && (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)))
                         {
-                            if (!(Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials))
-                            {
-                                <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
-                                    <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                        @((Model.OtherMaterialName != null) ? Model.OtherMaterialName : Resource.lblNotSet)
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</span></govuk-summary-list-row-action>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                            }
-
+                            <govuk-summary-list-row class=@(Model.OtherMaterialName==null?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @((Model.OtherMaterialName != null) ? Model.OtherMaterialName : Resource.lblNotSet)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
                         }
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@((!Model.LivestockImportExportDate.HasValue) ? "govuk-error-message" : "")>
@@ -184,15 +180,32 @@
                                 <govuk-summary-list-row-key class=@(string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)? "govuk-error-message" : "")>
                                     @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblDefaultNutrientValueContentSecond, Model.ManureTypeName) :
                                                                 string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureTypeName))
-                                                                                                                                                          </govuk-summary-list-row-key>
-                                                                                                                                                          <govuk-summary-list-row-value>
-                                                                                                                                                              @((!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue)) ? ((Model.DefaultNutrientValue == Resource.lblYes || Model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) ? Resource.lblYesUseTheseValues : Model.DefaultNutrientValue) : Resource.lblNotSet)
-                                                                                                                                                          </govuk-summary-list-row-value>
-                                                                                                                                                          <govuk-summary-list-row-actions>
-                                                                                                                                                              <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">
-                                                                                                                                                                  @Resource.lblChange<span class="govuk-visually-hidden">
-                                            @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblDefaultNutrientValueContentSecond, Model.ManureTypeName) :
-                                                                                string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureTypeName))
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @{
+                                        string defaultNutrientText;
+
+                                        if (string.IsNullOrWhiteSpace(Model.DefaultNutrientValue))
+                                        {
+                                            defaultNutrientText = Resource.lblNotSet;
+                                        }
+                                        else if (Model.DefaultNutrientValue == Resource.lblYes ||
+                                        Model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+                                        {
+                                            defaultNutrientText = Resource.lblYesUseTheseValues;
+                                        }
+                                        else
+                                        {
+                                            defaultNutrientText = Model.DefaultNutrientValue;
+                                        }
+                                    }
+                            @defaultNutrientText
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">
+                                @Resource.lblChange<span class="govuk-visually-hidden">
+                                    @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblDefaultNutrientValueContentSecond, Model.ManureTypeName) :
+                                                                        string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureTypeName))
                                 </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>

@@ -2,7 +2,6 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
-    //ViewData["Title"] = Resource.lblLayDuration;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0])} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
     var oneToTwoYears = (int)NMP.Commons.Enums.LayDuration.OneToTwoYears;
     var threeYearsOrMore = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
