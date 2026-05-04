@@ -776,28 +776,25 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         try
         {
-            if (model == null && string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j))
+            if (string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j))
             {
                 return RedirectToAction("FarmList", "Farm");
             }
 
-            if (model == null)
+            if (!(string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j)))
             {
-                model = new ReportViewModel();
-                if (!(string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(j)))
-                {
 
-                    model.EncryptedFarmId = i;
-                    model.EncryptedHarvestYear = j;
-                    model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                    model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (farm != null)
-                    {
-                        model.FarmName = farm.Name;
-                    }
+                model.EncryptedFarmId = i;
+                model.EncryptedHarvestYear = j;
+                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                if (farm != null)
+                {
+                    model.FarmName = farm.Name;
                 }
             }
+
         }
         catch (Exception ex)
         {
@@ -1263,36 +1260,32 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         try
         {
 
-            if (model == null && string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
+            if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
             {
                 return RedirectToAction("FarmList", "Farm");
             }
 
-            if (model == null)
+            if (!string.IsNullOrWhiteSpace(f))
             {
-                model = new ReportViewModel();
-                if (!string.IsNullOrWhiteSpace(f))
+                model.EncryptedFarmId = f;
+                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                if (farm != null)
                 {
-                    model.EncryptedFarmId = f;
-                    model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (farm != null)
-                    {
-                        model.FarmName = farm.Name;
-                        model.Country = farm.CountryID;
-                        model.FarmRB209CountryID = farm.RB209CountryID;
-                    }
+                    model.FarmName = farm.Name;
+                    model.Country = farm.CountryID;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
                 }
-                if (!string.IsNullOrWhiteSpace(h))
-                {
-                    model.IsComingFromPlan = true;
-                    model.EncryptedHarvestYear = h;
-                    model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                }
-                else
-                {
-                    model.IsComingFromPlan = false;
-                }
+            }
+            if (!string.IsNullOrWhiteSpace(h))
+            {
+                model.IsComingFromPlan = true;
+                model.EncryptedHarvestYear = h;
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+            }
+            else
+            {
+                model.IsComingFromPlan = false;
             }
 
             if (model.FarmId != null && model.Country == null)
@@ -4841,7 +4834,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 model.PhosphateStandard = livestock?.P2O5;
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -5536,7 +5529,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         {
                             var livestockDict = livestockGroups.Where(x => x != null).ToDictionary(x => x.Id, x => x);
 
-                            int? cattleLivestockId = livestockDict.TryGetValue((int)NMP.Commons.Enums.LivestockGroup.Cattle, out var cattle)? cattle.Id : (int?)null;
+                            int? cattleLivestockId = livestockDict.TryGetValue((int)NMP.Commons.Enums.LivestockGroup.Cattle, out var cattle) ? cattle.Id : (int?)null;
 
                             int? pigsLivestockId = livestockDict.TryGetValue((int)NMP.Commons.Enums.LivestockGroup.Pigs, out var pigs)
                                 ? pigs.Id : (int?)null;
@@ -6302,9 +6295,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
             return RedirectToAction("LivestockManureNitrogenReportChecklist");
         }
-        ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail.LandInNVZ * 170;
-        ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail.LandNotNVZ * 250;
-        ViewBag.LivestockManureTotalNCapacity = (int)Math.Round(((nutrientsLoadingFarmDetail.LandInNVZ.Value * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
+        ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail?.LandInNVZ * 170;
+        ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail?.LandNotNVZ * 250;
+        ViewBag.LivestockManureTotalNCapacity = (int)Math.Round((((nutrientsLoadingFarmDetail?.LandInNVZ ?? 0) * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
         decimal totalNImportedLivestock = 0;
         decimal totalNExportedLivestock = 0;
         decimal totalImportedGrazingLivestock = 0;
@@ -6477,7 +6470,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         ViewBag.ExportOfLivestockManureList = allExportData;
                     }
-                    nutrientsLoadingManureList = nutrientsLoadingManureList.Where(x => selectedManureTypeIds.Contains(x.ManureTypeID) && x.ManureLookupType == Resource.lblExport).ToList();
                 }
             }
             else if (error != null && !string.IsNullOrWhiteSpace(error.Message))

@@ -46,7 +46,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _harvestYearForPlanActionName = "HarvestYearForPlan";
     private const string _cropDataBeforeUpdateSessionKey = "CropDataBeforeUpdate";
     private const string _defoliationActionName = "Defoliation";
-    private const string _cropTypeTempErrorName = "CropTypeError";
+    private const string _cropTypeTempErrorName = "CropTypeError"; 
+        private const string _copyCheckAnswerActionName = "CopyCheckAnswer";
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
@@ -7005,7 +7006,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         SetCropToSession(model);
-        return RedirectToAction("CopyCheckAnswer");
+        return RedirectToAction(_copyCheckAnswerActionName);
     }
 
     [HttpGet]
@@ -7059,7 +7060,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (!ModelState.IsValid)
             {
-                return View("CopyCheckAnswer", model);
+                return View(_copyCheckAnswerActionName, model);
             }
 
             Error? error = null;
@@ -7076,10 +7077,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-                return RedirectToAction("CopyCheckAnswer");
+                return RedirectToAction(_copyCheckAnswerActionName);
             }
         }
-        return View("CopyCheckAnswer", model);
+        return View(_copyCheckAnswerActionName, model);
     }
 
     public async Task<IActionResult> BackCopyCheckAnswer()

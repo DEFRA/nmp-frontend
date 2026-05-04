@@ -3622,9 +3622,9 @@ managementPeriod.CropID.HasValue
                     else if (error != null)
                     {
                         TempData["IncorporationMethodError"] = error.Message;
-                        var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        bool? isLiquid = manureType == null ? false : manureType.IsLiquid;
-                        string applicableFor = isLiquid == true ? Resource.lblL : Resource.lblB;
+                        //var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
+                        //bool? isLiquid = manureType == null ? false : manureType.IsLiquid;
+                        //string applicableFor = isLiquid == true ? Resource.lblL : Resource.lblB;
                         List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                         var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
                         string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
@@ -3700,7 +3700,7 @@ managementPeriod.CropID.HasValue
                     var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                     isLiquid = manureType == null ? false : manureType.IsLiquid;
                     applicableFor = isLiquid == true ? Resource.lblL : Resource.lblS;
-                    if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
+                    if (manureType?.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                     {
                         applicableFor = Resource.lblP;
                     }
@@ -3761,7 +3761,7 @@ managementPeriod.CropID.HasValue
                             isLiquid = manureType.IsLiquid;
                         }
                         applicableFor = isLiquid == true ? Resource.lblL : Resource.lblS;
-                        if (manureType.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
+                        if (manureType?.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
                         {
                             applicableFor = Resource.lblP;
                         }
@@ -8860,113 +8860,112 @@ managementPeriod.CropID.HasValue
                         model.ManureGroupId = model.ManureGroupIdForFilter;
                     }
                     //if manure type change 
-                    if (model.IsCheckAnswer)
+                    if (model.IsCheckAnswer && orgManureViewModel?.ManureTypeId != model.ManureTypeId)
                     {
-                        if (orgManureViewModel?.ManureTypeId != model.ManureTypeId)
+
+                        model.IsManureTypeChange = true;
+                        if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                         {
-                            model.IsManureTypeChange = true;
-                            if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
+                            model.ApplicationRate = null;
+                            foreach (var orgManure in model.OrganicManures)
                             {
-                                model.ApplicationRate = null;
-                                foreach (var orgManure in model.OrganicManures)
-                                {
-                                    orgManure.ApplicationRate = null;
-                                }
+                                orgManure.ApplicationRate = null;
                             }
+                        }
 
-                            //if manure type is changed liquid to soild or solid to liquid then ApplicationMethod,IncorporationMethod,IncorporationDelay need to set null
-                            if (orgManureViewModel.IsManureTypeLiquid.Value != model.IsManureTypeLiquid.Value)
+                        //if manure type is changed liquid to soild or solid to liquid then ApplicationMethod,IncorporationMethod,IncorporationDelay need to set null
+                        if (orgManureViewModel?.IsManureTypeLiquid != model.IsManureTypeLiquid)
+                        {
+                            model.ApplicationMethod = null;
+                            model.IncorporationMethod = null;
+                            model.IncorporationDelay = null;
+                            model.ApplicationMethodName = string.Empty;
+                            model.IncorporationMethodName = string.Empty;
+                            model.IncorporationDelayName = string.Empty;
+                            foreach (var orgManure in model.OrganicManures)
                             {
-                                model.ApplicationMethod = null;
-                                model.IncorporationMethod = null;
-                                model.IncorporationDelay = null;
-                                model.ApplicationMethodName = string.Empty;
-                                model.IncorporationMethodName = string.Empty;
-                                model.IncorporationDelayName = string.Empty;
-                                foreach (var orgManure in model.OrganicManures)
-                                {
-                                    orgManure.ApplicationMethodID = null;
-                                    orgManure.IncorporationDelayID = null;
-                                    orgManure.IncorporationMethodID = null;
-                                }
+                                orgManure.ApplicationMethodID = null;
+                                orgManure.IncorporationDelayID = null;
+                                orgManure.IncorporationMethodID = null;
                             }
+                        }
 
-                            //if manure type is changed then we need to bind default values
-                            (ManureType manureTypeData, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                            if (error == null)
+                        //if manure type is changed then we need to bind default values
+                        (ManureType manureTypeData, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                        if (error == null)
+                        {
+                            model.ManureType = manureTypeData;
+                            if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
                             {
-                                model.ManureType = manureTypeData;
-                                if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
-                                {
-                                    model.DryMatterPercent = model.ManureType.DryMatter;
-                                    model.N = model.ManureType.TotalN;
-                                    model.P2O5 = model.ManureType.P2O5;
-                                    model.NH4N = model.ManureType.NH4N;
-                                    model.UricAcid = model.ManureType.Uric;
-                                    model.SO3 = model.ManureType.SO3;
-                                    model.K2O = model.ManureType.K2O;
-                                    model.MgO = model.ManureType.MgO;
-                                    model.NO3N = model.ManureType.NO3N;
-                                }
-                                model.DryMatterPercent = manureTypeData.DryMatter;
-                                model.N = manureTypeData.TotalN;
-                                model.NH4N = manureTypeData.NH4N;
-                                model.NO3N = manureTypeData.NO3N;
-                                model.K2O = manureTypeData.K2O;
-                                model.SO3 = manureTypeData.SO3;
-                                model.MgO = manureTypeData.MgO;
-                                model.P2O5 = manureTypeData.P2O5;
-                                model.UricAcid = manureTypeData.Uric;
+                                model.DryMatterPercent = model.ManureType.DryMatter;
+                                model.N = model.ManureType.TotalN;
+                                model.P2O5 = model.ManureType.P2O5;
+                                model.NH4N = model.ManureType.NH4N;
+                                model.UricAcid = model.ManureType.Uric;
+                                model.SO3 = model.ManureType.SO3;
+                                model.K2O = model.ManureType.K2O;
+                                model.MgO = model.ManureType.MgO;
+                                model.NO3N = model.ManureType.NO3N;
+                            }
+                            model.DryMatterPercent = manureTypeData.DryMatter;
+                            model.N = manureTypeData.TotalN;
+                            model.NH4N = manureTypeData.NH4N;
+                            model.NO3N = manureTypeData.NO3N;
+                            model.K2O = manureTypeData.K2O;
+                            model.SO3 = manureTypeData.SO3;
+                            model.MgO = manureTypeData.MgO;
+                            model.P2O5 = manureTypeData.P2O5;
+                            model.UricAcid = manureTypeData.Uric;
+                            foreach (var orgManure in model.OrganicManures)
+                            {
+                                orgManure.DryMatterPercent = manureTypeData.DryMatter;
+                                orgManure.N = manureTypeData.TotalN;
+                                orgManure.NH4N = manureTypeData.NH4N;
+                                orgManure.NO3N = manureTypeData.NO3N;
+                                orgManure.K2O = manureTypeData.K2O;
+                                orgManure.SO3 = manureTypeData.SO3;
+                                orgManure.MgO = manureTypeData.MgO;
+                                orgManure.P2O5 = manureTypeData.P2O5;
+                                orgManure.UricAcid = manureTypeData.Uric;
+                            }
+                        }
+                        else
+                        {
+                            TempData["ManureTypeError"] = error.Message;
+                            return View(model);
+                        }
+
+
+                        //if manure type is solid then need to set application method value.
+                        if (!model.IsManureTypeLiquid.Value)
+                        {
+                            List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                            var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
+
+
+                            (List<ApplicationMethodResponse> applicationMethodList, error) = await _mannerLogic.FetchApplicationMethodList(fieldType ?? 0, model.IsManureTypeLiquid.Value);
+                            if (error == null && applicationMethodList.Count > 0)
+                            {
+                                model.ApplicationMethod = applicationMethodList[0].ID;
                                 foreach (var orgManure in model.OrganicManures)
                                 {
-                                    orgManure.DryMatterPercent = manureTypeData.DryMatter;
-                                    orgManure.N = manureTypeData.TotalN;
-                                    orgManure.NH4N = manureTypeData.NH4N;
-                                    orgManure.NO3N = manureTypeData.NO3N;
-                                    orgManure.K2O = manureTypeData.K2O;
-                                    orgManure.SO3 = manureTypeData.SO3;
-                                    orgManure.MgO = manureTypeData.MgO;
-                                    orgManure.P2O5 = manureTypeData.P2O5;
-                                    orgManure.UricAcid = manureTypeData.Uric;
+                                    orgManure.ApplicationMethodID = model.ApplicationMethod.Value;
+                                }
+                                (model.ApplicationMethodName, error) = await _mannerLogic.FetchApplicationMethodById(model.ApplicationMethod.Value);
+                                if (error != null)
+                                {
+                                    TempData["ManureTypeError"] = error.Message;
+                                    return View(model);
                                 }
                             }
-                            else
+                            else if (error != null)
                             {
                                 TempData["ManureTypeError"] = error.Message;
                                 return View(model);
                             }
 
-
-                            //if manure type is solid then need to set application method value.
-                            if (!model.IsManureTypeLiquid.Value)
-                            {
-                                List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                                var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
-
-
-                                (List<ApplicationMethodResponse> applicationMethodList, error) = await _mannerLogic.FetchApplicationMethodList(fieldType ?? 0, model.IsManureTypeLiquid.Value);
-                                if (error == null && applicationMethodList.Count > 0)
-                                {
-                                    model.ApplicationMethod = applicationMethodList[0].ID;
-                                    foreach (var orgManure in model.OrganicManures)
-                                    {
-                                        orgManure.ApplicationMethodID = model.ApplicationMethod.Value;
-                                    }
-                                    (model.ApplicationMethodName, error) = await _mannerLogic.FetchApplicationMethodById(model.ApplicationMethod.Value);
-                                    if (error != null)
-                                    {
-                                        TempData["ManureTypeError"] = error.Message;
-                                        return View(model);
-                                    }
-                                }
-                                else if (error != null)
-                                {
-                                    TempData["ManureTypeError"] = error.Message;
-                                    return View(model);
-                                }
-
-                            }
                         }
+
                     }
                 }
 
