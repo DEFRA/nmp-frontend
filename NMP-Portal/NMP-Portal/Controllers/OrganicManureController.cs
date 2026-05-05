@@ -483,10 +483,14 @@ namespace NMP.Portal.Controllers
                                     model = await BindGrassProperty(model, cropList, Convert.ToInt32(field));
                                 }
 
-                                var organicManureViewModel = GetModelOrRedirect(out var redirect1);
-                                if (redirect1 != null)
+                                OrganicManureViewModel? organicManureViewModel = null;
+                                if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
                                 {
-                                    return redirect1;
+                                    organicManureViewModel = GetOrganicManureFromSession();
+                                }
+                                else
+                                {
+                                    return RedirectToAction(_farmList, "Farm");
                                 }
                                 string fieldIds = string.Join(",", model.FieldList);
                                 List<int> managementIds = new List<int>();
@@ -1567,14 +1571,19 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ApplicationMethod()
         {
             _logger.LogTrace($"Organic Manure Controller : ApplicationMethod() action called");
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             Error? error = null;
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
-            {
-                return redirect;
-            }
             try
             {
+                if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
+                {
+                    model = GetOrganicManureFromSession();
+                }
+                else
+                {
+                    return RedirectToAction(_farmList, "Farm");
+                }
+
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
@@ -1624,10 +1633,12 @@ managementPeriod.CropID.HasValue
                     }
                     if (model.IsCheckAnswer)
                     {
-                        var organicManureViewModel = GetModelOrRedirect(out var redirect1);
-                        if (redirect1 != null)
+                        OrganicManureViewModel? organicManureViewModel = new OrganicManureViewModel();
+                        organicManureViewModel = GetOrganicManureFromSession();
+
+                        if (organicManureViewModel == null)
                         {
-                            return redirect1;
+                            return RedirectToAction(_farmList, "Farm");
                         }
                         if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                         {
@@ -1825,11 +1836,13 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> DefaultNutrientValues()
         {
             _logger.LogTrace($"Organic Manure Controller : DefaultNutrientValues() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             try
             {
                 if (model.IsCheckAnswer && (!model.IsApplicationMethodChange) && (!model.IsFieldGroupChange)
@@ -2187,10 +2200,11 @@ managementPeriod.CropID.HasValue
         public IActionResult ManualNutrientValues()
         {
             _logger.LogTrace($"Organic Manure Controller : ManualNutrientValues() post action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
 
             return View(model);
@@ -2485,10 +2499,11 @@ managementPeriod.CropID.HasValue
         [HttpGet]
         public IActionResult NutrientValuesStoreForFuture()
         {
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             if (IsOtherManureType(model))
             {
@@ -2528,10 +2543,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ApplicationRateMethod()
         {
             _logger.LogTrace($"Organic Manure Controller : ApplicationRateMethod() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             try
             {
@@ -2647,10 +2663,11 @@ managementPeriod.CropID.HasValue
 
                     string message = string.Empty;
 
-                    var organicManureViewModel = GetModelOrRedirect(out var redirect);
-                    if (redirect != null)
+                    OrganicManureViewModel? organicManureViewModel = new OrganicManureViewModel();
+                    organicManureViewModel = GetOrganicManureFromSession();
+                    if (organicManureViewModel == null)
                     {
-                        return redirect;
+                        return RedirectToAction(_farmList, "Farm");
                     }
                     if (organicManureViewModel != null)
                     {
@@ -2766,13 +2783,16 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ManualApplicationRate()
         {
             _logger.LogTrace($"Organic Manure Controller : ManualApplicationRate() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
-            {
-                return redirect;
-            }
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             try
             {
+                model = GetOrganicManureFromSession();
+                if (model == null)
+                {
+                    return RedirectToAction(_farmList, "Farm");
+                }
+
+
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error? error = null;
                 if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
@@ -2840,10 +2860,10 @@ managementPeriod.CropID.HasValue
 
                 string message = string.Empty;
 
-                var organicManureViewModel = GetModelOrRedirect(out var redirect);
-                if (redirect != null)
+                OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+                if (organicManureViewModel == null)
                 {
-                    return redirect;
+                    return RedirectToAction(_farmList, "Farm");
                 }
                 if (organicManureViewModel != null)
                 {
@@ -2983,10 +3003,11 @@ managementPeriod.CropID.HasValue
         public IActionResult AreaQuantity()
         {
             _logger.LogTrace("Organic Manure Controller : AreaQuantity() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             ResetWarnings(model);
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -3075,11 +3096,10 @@ managementPeriod.CropID.HasValue
             model.IsEndClosedPeriodFebruaryWarning = false;
             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
             string message = string.Empty;
-            
-            var organicManureViewModel = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession(); 
+            if (organicManureViewModel == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             if (organicManureViewModel != null)
             {
@@ -3191,11 +3211,12 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> IncorporationMethod()
         {
             _logger.LogTrace($"Organic Manure Controller : IncorporationMethod() action called");
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             Error? error = null;
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
             {
@@ -3383,10 +3404,11 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    var organicManure = GetModelOrRedirect(out var redirect);
-                    if (redirect != null)
+                    OrganicManureViewModel? organicManure = new OrganicManureViewModel();
+                    organicManure = GetOrganicManureFromSession();
+                    if (organicManure == null)
                     {
-                        return redirect;
+                        return RedirectToAction(_farmList, "Farm");
                     }
                     if (organicManure.IncorporationMethod != null && organicManure.IncorporationMethod == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
                     {
@@ -3410,13 +3432,14 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> IncorporationDelay()
         {
             _logger.LogTrace($"Organic Manure Controller : IncorporationDelay() action called");
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             Error? error = null;
-
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             try
             {
                 string applicableFor = string.Empty;
@@ -3540,11 +3563,12 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ConditionsAffectingNutrients()
         {
             _logger.LogTrace($"Organic Manure Controller : ConditionsAffectingNutrients() action called");
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             Error? error = new Error();
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             try
             {
@@ -3790,11 +3814,13 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> BackActionForManureGroup()
         {
             _logger.LogTrace($"Organic Manure Controller : BackActionForManureGroup() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             if (model.IsCheckAnswer)
             {
                 model.ManureGroupIdForFilter = model.ManureGroupId;
@@ -5122,10 +5148,11 @@ managementPeriod.CropID.HasValue
         public IActionResult BackCheckAnswer()
         {
             _logger.LogTrace($"Organic Manure Controller : BackCheckAnswer() post action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             model.IsCheckAnswer = false;
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -5157,10 +5184,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> AutumnCropNitrogenUptake(string? f)
         {
             _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptake() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
 
             if (f != null)
@@ -5256,11 +5284,13 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> SoilDrainageEndDate()
         {
             _logger.LogTrace($"Organic Manure Controller : SoilDrainageEndDate() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             return View(model);
         }
 
@@ -5327,10 +5357,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> RainfallWithinSixHour()
         {
             _logger.LogTrace($"Organic Manure Controller : RainfallWithinSixHour() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             (List<RainTypeResponse> rainType, Error error) = await _organicManureLogic.FetchRainTypeList();
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -5369,10 +5400,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> EffectiveRainfall()
         {
             _logger.LogTrace($"Organic Manure Controller : EffectiveRainfall() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             return View(model);
 
@@ -5395,10 +5427,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> EffectiveRainfallManual()
         {
             _logger.LogTrace($"Organic Manure Controller : EffectiveRainfallManual() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             return View(model);
 
@@ -5493,10 +5526,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> TopsoilMoisture()
         {
             _logger.LogTrace($"Organic Manure Controller : TopsoilMoisture() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             (List<MoistureTypeResponse> moisterTypes, Error error) = await _organicManureLogic.FetchMoisterTypeList();
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -7180,11 +7214,12 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> AutumnCropNitrogenUptakeDetail()
         {
             _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptakeDetail() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             return View(model);
 
         }
@@ -7209,10 +7244,19 @@ managementPeriod.CropID.HasValue
         public IActionResult OtherMaterialName()
         {
             _logger.LogTrace("Organic Manure Controller : OtherMaterialName() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
+            try
             {
-                return redirect;
+                if (model == null)
+                {
+                    return RedirectToAction(_farmList, "Farm");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "Organic Manure Controller : Exception in OtherMaterialName() get action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                TempData["CropTypeError"] = ex.Message;
+                return RedirectToAction("ManureTypes");
             }
             return View(model);
         }
@@ -7296,10 +7340,10 @@ managementPeriod.CropID.HasValue
             {
                 if (string.IsNullOrWhiteSpace(q))
                 {
-                    model = GetModelOrRedirect(out var redirect);
-                    if (redirect != null)
+                    model = GetOrganicManureFromSession();
+                    if (model == null)
                     {
-                        return redirect;
+                        return RedirectToAction(_farmList, "Farm");
                     }
                     if (model != null)
                     {
@@ -7526,11 +7570,22 @@ managementPeriod.CropID.HasValue
         public IActionResult Cancel()
         {
             _logger.LogTrace("Organic Manure Controller : Cancel() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
+            try
             {
-                return redirect;
+                if (model == null)
+                {
+                    return RedirectToAction(_farmList, "Farm");
+                }
+
             }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "Organic Manure Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                TempData[_addOrganicManureError] = ex.Message;
+                return RedirectToAction(_checkAnswer);
+            }
+
             return View(model);
         }
 
@@ -7947,11 +8002,13 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> DoubleCrop(string q)
         {
             _logger.LogTrace("Organic Manure Controller : DoubleCrop() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new OrganicManureViewModel();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             try
             {
                 if (string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0
@@ -8354,10 +8411,10 @@ managementPeriod.CropID.HasValue
         {
             _logger.LogTrace($"Organic Manure Controller : ManureType() action called");
             Error? error = null;
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = GetOrganicManureFromSession(); 
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
             try
             {
@@ -8402,10 +8459,12 @@ managementPeriod.CropID.HasValue
             }
             try
             {
-                var orgManureViewModel = GetModelOrRedirect(out var redirect);
-                if (redirect != null)
+                OrganicManureViewModel? orgManureViewModel = null;
+
+                orgManureViewModel = GetOrganicManureFromSession();
+                if (orgManureViewModel == null)
                 {
-                    return redirect;
+                    return RedirectToAction(_farmList, "Farm");
                 }
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
@@ -8645,11 +8704,13 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"OrganicManure Controller : IsSameDefoliationForAll() action called");
             Error error = new Error();
 
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = new();
+            model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             if (model.IsAnyChangeInSameDefoliationFlag)
             {
                 model.IsAnyChangeInSameDefoliationFlag = false;
@@ -8840,14 +8901,16 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> Defoliation(string q)
         {
             _logger.LogTrace("OrganicManure Controller : Defoliation({Q}) action called", q);
+            OrganicManureViewModel? model = new OrganicManureViewModel();
             Error? error = null;
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
-            {
-                return redirect;
-            }
             try
             {
+                model = GetOrganicManureFromSession();
+                if (model == null)
+                {
+                    return RedirectToAction(_farmList, "Farm");
+                }
+
                 if (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsManureTypeChange || model.IsAnyChangeInField || model.IsFieldGroupChange)))
                 {
                     model.DefoliationCurrentCounter = 0;
@@ -9269,11 +9332,12 @@ managementPeriod.CropID.HasValue
         public IActionResult backFromManureApplyingDate()
         {
             _logger.LogTrace($"OrganicManure Controller : backFromManureApplyingDate() action called");
-            var model = GetModelOrRedirect(out var redirect);
-            if (redirect != null)
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
+            if (model == null)
             {
-                return redirect;
+                return RedirectToAction(_farmList, "Farm");
             }
+
             if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
             {
                 return RedirectToAction("Defoliation", new { q = model.DefoliationEncryptedCounter });
@@ -9909,21 +9973,6 @@ managementPeriod.CropID.HasValue
             target.K2O = source.K2O;
             target.SO3 = source.SO3;
             target.MgO = source.MgO;
-        }
-        private OrganicManureViewModel? GetModelOrRedirect(out IActionResult? redirect)
-        {
-            redirect = null;
-
-            var model = GetOrganicManureFromSession();
-
-            if (model == null)
-            {
-                _logger.LogTrace("OrganicManure Controller : model is null in session");
-                redirect = RedirectToAction("FarmList", "Farm");
-                return null;
-            }
-
-            return model;
         }
 
     }
