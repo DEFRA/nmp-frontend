@@ -51,7 +51,7 @@ namespace NMP.Portal.Controllers
         private const string _nutrientRecommendationsError = "NutrientRecommendationsError";
         private const string _recommendations = "Recommendations";
         private const string _addOrganicManureError = "AddOrganicManureError";
-        private const string _farmList = "FarmList";
+        private const string _farmList = "FarmList";  
         private const string _fieldErrorTempDataKey = "FieldError";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
@@ -135,7 +135,7 @@ namespace NMP.Portal.Controllers
 
         private async Task<OrganicManureViewModel> InitializeModelAsync(string q, string r)
         {
-
+             
             OrganicManureViewModel? model = new OrganicManureViewModel();
             model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
@@ -2641,12 +2641,75 @@ managementPeriod.CropID.HasValue
                     if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                     {
                         (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                        //all warning logic are moved to single method and called here to avoid code repetition
-                        (model, error) = await ApplyAllWarningsAsync(model, farm);
-                        if (error != null)
+                        foreach (var organicManure in model.OrganicManures)
                         {
-                            TempData["ApplicationRateMethodError"] = error.Message;
-                            return View(model);
+                            int? fieldId = organicManure.FieldID ?? null;
+                            if (fieldId != null)
+                            {
+                                Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+                                if (field != null)
+                                {
+                                    bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
+                                    if (isFieldIsInNVZ)
+                                    {
+
+                                        (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
+                                        if (error == null)
+                                        {
+                                            (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
+                                            if (error == null)
+                                            {
+                                                (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
+                                                if (error == null)
+                                                {
+                                                    (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
+                                                    if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                                    {
+                                                        (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
+
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    TempData["ApplicationRateMethodError"] = error.Message;
+                                                    return View(model);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                TempData["ApplicationRateMethodError"] = error.Message;
+                                                return View(model);
+                                            }
+
+                                            //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
+                                            if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                            {
+                                                (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
+                                                if (error == null)
+                                                {
+                                                    if (!string.IsNullOrWhiteSpace(message))
+                                                    {
+                                                        TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    TempData["ApplicationRateMethodError"] = error.Message;
+                                                    return View(model);
+                                                }
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            TempData["ApplicationRateMethodError"] = error.Message;
+                                            return View(model);
+                                        }
+
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -2734,7 +2797,7 @@ managementPeriod.CropID.HasValue
                     }
                 }
                 ValidateApplicationRate(model);
-
+                
                 if (!ModelState.IsValid)
                 {
                     return View("ManualApplicationRate", model);
@@ -2762,12 +2825,76 @@ managementPeriod.CropID.HasValue
                 if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                 {
                     (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                    //all warning logic are moved to single method and called here to avoid code repetition
-                    (model, error) = await ApplyAllWarningsAsync(model, farm);
-                    if (error != null)
+                    foreach (var organicManure in model.OrganicManures)
                     {
-                        TempData["ManualApplicationRateError"] = error.Message;
-                        return View(model);
+                        int? fieldId = organicManure.FieldID ?? null;
+                        if (fieldId != null)
+                        {
+                            Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+                            if (field != null)
+                            {
+                                bool isFieldIsInNVZ = field.IsWithinNVZ != null && field.IsWithinNVZ.Value;
+                                if (isFieldIsInNVZ)
+                                {
+
+                                    (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
+                                    if (error == null)
+                                    {
+                                        (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
+                                        if (error == null)
+                                        {
+                                            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
+                                            if (error == null)
+                                            {
+                                                (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
+
+                                                if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                                {
+                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
+
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                TempData["ManualApplicationRateError"] = error.Message;
+                                                return View(model);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TempData["ManualApplicationRateError"] = error.Message;
+                                            return View(model);
+                                        }
+
+                                        //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
+                                        if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
+                                        {
+                                            (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
+                                            if (error == null)
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(message))
+                                                {
+                                                    TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                TempData["ManualApplicationRateError"] = error.Message;
+                                                return View(model);
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        TempData["ManualApplicationRateError"] = error.Message;
+                                        return View(model);
+                                    }
+
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -2887,7 +3014,7 @@ managementPeriod.CropID.HasValue
             model.IsEndClosedPeriodFebruaryWarning = false;
             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
             string message = string.Empty;
-            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession(); 
             if (organicManureViewModel == null)
             {
                 return RedirectToAction(_farmList, "Farm");
@@ -8043,7 +8170,7 @@ managementPeriod.CropID.HasValue
         {
             _logger.LogTrace($"Organic Manure Controller : ManureType() action called");
             Error? error = null;
-            OrganicManureViewModel? model = GetOrganicManureFromSession();
+            OrganicManureViewModel? model = GetOrganicManureFromSession(); 
             if (model == null)
             {
                 return RedirectToAction(_farmList, "Farm");
@@ -9708,81 +9835,6 @@ managementPeriod.CropID.HasValue
                 }
             }
 
-        }
-        private async Task<(OrganicManureViewModel, Error?)> ApplyAllWarningsAsync(OrganicManureViewModel model, Farm farm)
-        {
-            Error? error = null;
-            foreach (var organicManure in model.OrganicManures)
-            {
-                int? fieldId = organicManure.FieldID ?? null;
-                if (fieldId != null)
-                {
-                    Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
-                    if (field != null)
-                    {
-                        bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
-                        if (isFieldIsInNVZ)
-                        {
-
-                            (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
-                            if (error == null)
-                            {
-                                (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
-                                if (error == null)
-                                {
-                                    (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
-                                    if (error == null)
-                                    {
-                                        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                                        if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
-                                        {
-                                            (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
-
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        TempData["ApplicationRateMethodError"] = error.Message;
-                                        return (model, error);
-                                    }
-                                }
-                                else
-                                {
-                                    TempData["ApplicationRateMethodError"] = error.Message;
-                                    return (model, error);
-                                }
-
-                                //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
-                                if (!(model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
-                                {
-                                    (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, string message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
-                                    if (error == null)
-                                    {
-                                        if (!string.IsNullOrWhiteSpace(message))
-                                        {
-                                            TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TempData["ApplicationRateMethodError"] = error.Message;
-                                        return (model, error);
-                                    }
-                                }
-
-                            }
-                            else
-                            {
-                                TempData["ApplicationRateMethodError"] = error.Message;
-                                return (model, error);
-                            }
-
-                        }
-                    }
-                }
-            }
-            return (model, error);
         }
     }
 
