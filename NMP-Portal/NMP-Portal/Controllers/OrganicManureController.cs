@@ -51,7 +51,8 @@ namespace NMP.Portal.Controllers
         private const string _nutrientRecommendationsError = "NutrientRecommendationsError";
         private const string _recommendations = "Recommendations";
         private const string _addOrganicManureError = "AddOrganicManureError";
-        private const string _farmList = "FarmList";
+        private const string _farmList = "FarmList";  
+        private const string _fieldErrorTempDataKey = "FieldError";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
             if (HttpContext.Session.Exists(_organicManureSessionKey))
@@ -297,13 +298,8 @@ namespace NMP.Portal.Controllers
                 return;
             }
 
-            var items = cropTypes
-                .DistinctBy(x => x.CropGroupName)
-                .Select(f => new SelectListItem
-                {
-                    Value = f.CropGroupName,
-                    Text = string.Format(Resource.lblGroupNameFieldsWithCropTypeName, f.CropGroupName, f.CropType)
-                }).ToList();
+            var distinctCropTypes = cropTypes.DistinctBy(x => x.CropGroupName);
+            var items = ToSelectList(distinctCropTypes, x => x.CropGroupName, x => string.Format(Resource.lblGroupNameFieldsWithCropTypeName, x.CropGroupName, x.CropType));
 
             items.Insert(0, new SelectListItem
             {
@@ -387,11 +383,8 @@ namespace NMP.Portal.Controllers
             (List<ManureCropTypeResponse> cropGroupList, Error error) = await _fertiliserManureLogic.FetchCropTypeByFarmIdAndHarvestYear(model.FarmId.Value, model.HarvestYear.Value);
             if (error == null && cropGroupList.Count > 0)
             {
-                selectListItem = cropGroupList.Select(f => new SelectListItem
-                {
-                    Value = f.CropGroupName.ToString(),
-                    Text = string.Format(Resource.lblGroupNameFieldsWithCropTypeName, f.CropGroupName.ToString(), f.CropType.ToString())
-                }).ToList();
+                selectListItem = ToSelectList(cropGroupList, f => f.CropGroupName.ToString(), f => string.Format(Resource.lblGroupNameFieldsWithCropTypeName, f.CropGroupName.ToString(), f.CropType.ToString()));
+
                 selectListItem.Insert(0, new SelectListItem { Value = Resource.lblAll, Text = string.Format(Resource.lblAllFieldsInTheYearPlan, model.HarvestYear) });
                 selectListItem.Add(new SelectListItem { Value = Resource.lblSelectSpecificFields, Text = Resource.lblSelectSpecificFields });
 
@@ -471,7 +464,7 @@ namespace NMP.Portal.Controllers
                             if (fieldList.Count > 0)
                             {
 
-                                var selectListItem = await BuildFieldSelectListAsync(fieldList);
+                                var selectListItem = ToSelectList(fieldList, f => f.Id.ToString(), f => f.Name);
                                 ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
                             }
                             return View(model);
@@ -656,11 +649,7 @@ namespace NMP.Portal.Controllers
                         (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
                         if (string.IsNullOrWhiteSpace(error?.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
                         {
-                            var SelectListItem = organicManureResponse.Select(f => new SelectListItem
-                            {
-                                Value = f.Id.ToString(),
-                                Text = f.Name.ToString()
-                            }).ToList().DistinctBy(x => x.Value);
+                            var SelectListItem = ToSelectList(organicManureResponse, f => f.Id.ToString(), f => f.Name.ToString());
                             ViewBag.FieldList = SelectListItem.OrderBy(x => x.Text).ToList();
                             return View(model);
                         }
@@ -708,7 +697,7 @@ namespace NMP.Portal.Controllers
                 (List<CommonResponse> fieldList, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
-                    var selectListItem = await BuildFieldSelectListAsync(fieldList);
+                    var selectListItem = ToSelectList(fieldList, f => f.Id.ToString(), f => f.Name);
                     ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
                     if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                     {
@@ -716,18 +705,12 @@ namespace NMP.Portal.Controllers
 
                         if (string.IsNullOrWhiteSpace(error?.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
                         {
-                            selectListItem = organicManureResponse.Select(f => new SelectListItem
-                            {
-                                Value = f.Id.ToString(),
-                                Text = f.Name.ToString()
-                            }).GroupBy(x => x.Value)
-                            .Select(g => g.First())
-                            .ToList();
+                            selectListItem = ToSelectList(organicManureResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name.ToString());
                             ViewBag.FieldList = selectListItem.OrderBy(x => x.Text).ToList();
                         }
                         else
                         {
-                            TempData["FieldError"] = error?.Message;
+                            TempData[_fieldErrorTempDataKey] = error?.Message;
                             return View(model);
                         }
                     }
@@ -745,11 +728,7 @@ namespace NMP.Portal.Controllers
                                 (List<FertiliserAndOrganicManureUpdateResponse> organicManureResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
                                 if (string.IsNullOrWhiteSpace(error?.Message) && organicManureResponse != null && organicManureResponse.Count > 0)
                                 {
-                                    var SelectListItem = organicManureResponse.Select(f => new SelectListItem
-                                    {
-                                        Value = f.Id.ToString(),
-                                        Text = f.Name.ToString()
-                                    }).ToList().DistinctBy(x => x.Value);
+                                    var SelectListItem = ToSelectList(organicManureResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name.ToString());
                                     ViewBag.FieldList = SelectListItem.OrderBy(x => x.Text).ToList();
                                     return View(model);
                                 }
@@ -813,7 +792,7 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        TempData["FieldError"] = error.Message;
+                        TempData[_fieldErrorTempDataKey] = error.Message;
                         return View(model);
                     }
                     if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value && model.OrganicManures != null && model.FieldList != null)
@@ -883,14 +862,14 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    TempData["FieldError"] = error.Message;
+                    TempData[_fieldErrorTempDataKey] = error.Message;
                     return View(model);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in Fields() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["FieldError"] = ex.Message;
+                TempData[_fieldErrorTempDataKey] = ex.Message;
                 return View(model);
             }
 
@@ -1093,20 +1072,14 @@ managementPeriod.CropID.HasValue
                     (List<FarmManureTypeResponse> farmManureGroupList, error) = await FetchFarmManureGroup(model.FarmId.Value);
                     if (error != null)
                     {
-                        TempData["FieldError"] = error.Message;
+                        TempData[_fieldErrorTempDataKey] = error.Message;
                         return RedirectToAction("Fields", model);
                     }
 
                     if (farmManureGroupList.Any())
                     {
-                        var selectListItems = farmManureGroupList.Select(f => new SelectListItem
-                        {
-                            Value = f.ID.ToString(),
-                            Text = f.ManureTypeName
-                        }).OrderBy(x => x.Text).ToList();
-
+                        var selectListItems = ToSelectList(farmManureGroupList, f => f.ID.ToString(), f => f.ManureTypeName);
                         ViewBag.FarmManureTypeList = selectListItems;
-
 
                         if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
                         {
@@ -1135,7 +1108,7 @@ managementPeriod.CropID.HasValue
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in ManureGroup() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["FieldError"] = ex.Message;
+                TempData[_fieldErrorTempDataKey] = ex.Message;
             }
             return View(model);
 
@@ -1167,11 +1140,7 @@ managementPeriod.CropID.HasValue
                         }
                         if (farmManureGroupList.Any())
                         {
-                            var selectListItems = farmManureGroupList.Select(f => new SelectListItem
-                            {
-                                Value = f.ID.ToString(),
-                                Text = f.ManureTypeName
-                            }).OrderBy(x => x.Text).ToList();
+                            var selectListItems = ToSelectList(farmManureGroupList, f => f.ID.ToString(), f => f.ManureTypeName);
                             ViewBag.FarmManureTypeList = selectListItems;
                         }
                     }
@@ -3999,11 +3968,8 @@ managementPeriod.CropID.HasValue
                                     model.UpdatedOrganicIds.RemoveAll(x => x.OrganicManureId != organicManure.ID);
                                     organicManureResponse.RemoveAll(x => x.OrganicManureId != organicManure.ID);
                                 }
-                                var selectListItem = organicManureResponse.Select(f => new SelectListItem
-                                {
-                                    Value = f.Id.ToString(),
-                                    Text = f.Name?.ToString()
-                                }).ToList().DistinctBy(x => x.Value);
+                                var selectListItem = ToSelectList(organicManureResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name);
+
 
                                 ViewBag.Fields = selectListItem.OrderBy(x => x.Text).ToList();
                                 List<string> fieldName = [];
@@ -4493,11 +4459,7 @@ managementPeriod.CropID.HasValue
                             (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
                             if (string.IsNullOrWhiteSpace(error?.Message) && organicResponse != null && organicResponse.Count > 0)
                             {
-                                var SelectListItem = organicResponse.Select(f => new SelectListItem
-                                {
-                                    Value = f.Id.ToString(),
-                                    Text = f.Name
-                                }).DistinctBy(x => x.Value).ToList();
+                                var SelectListItem = ToSelectList(organicResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name);
                                 ViewBag.Fields = SelectListItem.OrderBy(x => x.Text).ToList();
                             }
                         }
@@ -4941,11 +4903,7 @@ managementPeriod.CropID.HasValue
                             (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
                             if (string.IsNullOrWhiteSpace(error?.Message) && organicResponse != null && organicResponse.Count > 0)
                             {
-                                var SelectListItem = organicResponse.Select(f => new SelectListItem
-                                {
-                                    Value = f.Id.ToString(),
-                                    Text = f.Name.ToString()
-                                }).ToList().DistinctBy(x => x.Value);
+                                var SelectListItem = ToSelectList(organicResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name);
                                 ViewBag.Fields = SelectListItem.OrderBy(x => x.Text).ToList();
                             }
                         }
@@ -8518,11 +8476,7 @@ managementPeriod.CropID.HasValue
                     if (manureTypeList.Count > 0)
                     {
                         var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
-                        var SelectListItem = manures.Select(f => new SelectListItem
-                        {
-                            Value = f.Id.ToString(),
-                            Text = f.Name
-                        }).ToList();
+                        var SelectListItem = ToSelectList(manures, f => f.Id.ToString(), f => f.Name);
                         ViewBag.ManureTypeList = SelectListItem.ToList();
                     }
                     return View(model);
@@ -8570,11 +8524,7 @@ managementPeriod.CropID.HasValue
                     if (manureTypeList.Count > 0)
                     {
                         var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
-                        var SelectListItem = manures.Select(f => new SelectListItem
-                        {
-                            Value = f.Id.ToString(),
-                            Text = f.Name
-                        }).ToList();
+                        var SelectListItem = ToSelectList(manures, f => f.Id.ToString(), f => f.Name);
                         ViewBag.ManureTypeList = SelectListItem.OrderBy(x => x.Text).ToList(); ;
 
                     }
@@ -9180,11 +9130,7 @@ managementPeriod.CropID.HasValue
                 (List<SelectListItem> defoliationsList, error) = await GetDefoliationList(model);
                 if (error == null && defoliationsList.Count > 0)
                 {
-                    ViewBag.DefoliationList = defoliationsList.Select(f => new SelectListItem
-                    {
-                        Value = f.Value,
-                        Text = f.Text.ToString()
-                    }).ToList();
+                    ViewBag.DefoliationList = ToSelectList(defoliationsList, f => f.Value, f => f.Text);
                 }
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -9229,11 +9175,7 @@ managementPeriod.CropID.HasValue
                     (List<SelectListItem> defoliationList, error) = await GetDefoliationList(model);
                     if (error == null && defoliationList.Count > 0)
                     {
-                        ViewBag.DefoliationList = defoliationList.Select(f => new SelectListItem
-                        {
-                            Value = f.Value,
-                            Text = f.Text.ToString()
-                        }).ToList();
+                        ViewBag.DefoliationList = ToSelectList(defoliationList, f => f.Value, f => f.Text);
                     }
                     else
                     {
@@ -9417,11 +9359,7 @@ managementPeriod.CropID.HasValue
                     (List<SelectListItem> defoliationList, error) = await GetDefoliationList(model);
                     if (error == null && defoliationList.Count > 0)
                     {
-                        ViewBag.DefoliationList = defoliationList.Select(f => new SelectListItem
-                        {
-                            Value = f.Value,
-                            Text = f.Text.ToString()
-                        }).ToList();
+                        ViewBag.DefoliationList = ToSelectList(defoliationList, f => f.Value, f => f.Text);
                     }
                     else
                     {
@@ -9814,11 +9752,7 @@ managementPeriod.CropID.HasValue
             (List<CommonResponse> manureGroupList, Error? error) = await _mannerLogic.FetchManureGroupList();
             if (error == null && manureGroupList.Count > 0)
             {
-                selectListItems = manureGroupList.OrderBy(x => x.SortOrder).Select(f => new SelectListItem
-                {
-                    Value = f.Id.ToString(),
-                    Text = f.Name.ToString()
-                }).ToList();
+                selectListItems = ToSelectList(manureGroupList.OrderBy(x => x.SortOrder), f => f.Id.ToString(), f => f.Name);
             }
             return (selectListItems, error);
         }
@@ -9980,19 +9914,6 @@ managementPeriod.CropID.HasValue
             }
 
             return result;
-        }
-
-
-        private async Task<List<SelectListItem>> BuildFieldSelectListAsync(List<CommonResponse> fieldList)
-        {
-            return fieldList
-                .Select(f => new SelectListItem
-                {
-                    Value = f.Id.ToString(),
-                    Text = f.Name
-                })
-                .OrderBy(x => x.Text)
-                .ToList();
         }
 
         private static void ResetOrganicManures(OrganicManureViewModel model)
