@@ -2,7 +2,6 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
-    //ViewData["Title"] = Resource.lblCropType;
     ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
 
     var backAction = "";

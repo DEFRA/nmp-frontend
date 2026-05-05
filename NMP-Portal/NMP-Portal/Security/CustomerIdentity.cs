@@ -160,7 +160,7 @@ namespace NMP.Portal.Security
         {
             if (!string.IsNullOrWhiteSpace(configuration?["CustomerIdentityReturnURI"]?.ToString()))
             {
-                context.ProtocolMessage.RedirectUri = configuration?["CustomerIdentityReturnURI"]?.ToString();                
+                context.ProtocolMessage.RedirectUri = configuration["CustomerIdentityReturnURI"]?.ToString();                
             }
             context.ProtocolMessage.Parameters["serviceId"] = configuration?["CustomerIdentityServiceId"]?.ToString() ?? string.Empty;
             context.ProtocolMessage.Parameters["forceReselection"] = "true";

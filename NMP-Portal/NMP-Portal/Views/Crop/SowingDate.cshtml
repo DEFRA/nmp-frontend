@@ -5,16 +5,27 @@
     int SingleDateForAllTheseFields = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
     int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
 
-    var pageHeading = "";
+    string cropName;
+    if (Model.CropGroupId == OtherGroupId) cropName = Model.OtherCropName;
+    else cropName = Model.CropType;
+
+    bool isMultiple = Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields;
+
+    string pageHeading;
+
     if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
     {
-        pageHeading = (Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields ? string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
-                                                                string.Format(Resource.lblWhatIsThePlantingDate, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.SowingDateCurrentCounter].FieldName));
+        if (isMultiple)
+            pageHeading = string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, cropName);
+        else
+            pageHeading = string.Format(Resource.lblWhatIsThePlantingDate, cropName, Model.Crops[Model.SowingDateCurrentCounter].FieldName);
     }
     else
     {
-        pageHeading = (Model.Crops.Count > 1 && Model.SowingDateQuestion == SingleDateForAllTheseFields ? string.Format(Resource.lblWhatIsTheSowingDateForCrop, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType) :
-                                                                string.Format(Resource.lblWhatIsTheSowingDateForCropInField, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.SowingDateCurrentCounter].FieldName));
+        if (isMultiple)
+            pageHeading = string.Format(Resource.lblWhatIsTheSowingDateForCrop, cropName);
+        else
+            pageHeading = string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, Model.Crops[Model.SowingDateCurrentCounter].FieldName);
     }
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;

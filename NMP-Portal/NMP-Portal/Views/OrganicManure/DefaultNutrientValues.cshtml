@@ -21,17 +21,20 @@
 
     var DefaultNutrientValues = true;
     var NotDefaultNutrientValues = false;
-    var backAction = (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange) ? "CheckAnswer" : Model.ApplicationMethodCount > 0 ? "ApplicationMethod" : "ManureApplyingDate";
+    string backAction;
 
-    var unit = "";
+    if (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange)
+        backAction = "CheckAnswer";
+    else if (Model.ApplicationMethodCount > 0)
+        backAction = "ApplicationMethod";
+    else
+        backAction = "ManureApplyingDate";
+
     if (Model.IsManureTypeLiquid == null)
     {
         Model.IsManureTypeLiquid = false;
     }
-    if (Model.IsManureTypeLiquid != null)
-    {
-        unit = Model.IsManureTypeLiquid.Value ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon;
-    }
+    
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.DefaultNutrient;
 
 }

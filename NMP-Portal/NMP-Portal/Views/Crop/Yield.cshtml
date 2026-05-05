@@ -4,17 +4,24 @@
     int EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     var backAction = "";
-    var pageHeading = "";
-    @if (ViewBag.IsYieldOptional != null)
-    {
-        pageHeading = (Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.YieldCurrentCounter].FieldName));
-    }
+    string cropName;
+    if (Model.CropGroupId == OtherGroupId) cropName = Model.OtherCropName;
+    else cropName = Model.CropType;
+
+    bool isMultiple = Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields;
+    bool isOptional = ViewBag.IsYieldOptional != null;
+
+    string pageHeading;
+
+    if (isOptional && isMultiple)
+        pageHeading = string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName);
+    else if (isOptional)
+        pageHeading = string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[Model.YieldCurrentCounter].FieldName);
+    else if (isMultiple)
+        pageHeading = string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName);
     else
-    {
-        pageHeading = (Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[Model.YieldCurrentCounter].FieldName));
-    }
+        pageHeading = string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[Model.YieldCurrentCounter].FieldName);
+
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
     if (Model.Crops.Count > 1)
@@ -60,18 +67,23 @@
                 {
                     @if (Model.YieldCurrentCounter == i)
                     {
-                        var question ="";
-                        if (ViewBag.IsYieldOptional != null)
-                        {
-                            question = Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName);
-                        }
+                        string cropName;
+                        if (Model.CropGroupId == OtherGroupId) cropName = Model.OtherCropName;
+                        else cropName = Model.CropType;
+
+                        bool isMultiple = Model.Crops.Count > 1 && Model.YieldQuestion == EnterASingleFigureForAllTheseFields;
+                        bool isOptional = ViewBag.IsYieldOptional != null;
+
+                        string question;
+
+                        if (isOptional && isMultiple)
+                            question = string.Format(Resource.lblWhatIsTheExpectedYieldWithSuffix, cropName);
+                        else if (isOptional)
+                            question = string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInWithSuffix, cropName, Model.Crops[i].FieldName);
+                        else if (isMultiple)
+                            question = string.Format(Resource.lblWhatIsTheExpectedYieldForTheseFieldWithSuffix, cropName);
                         else
-                        {
-                            question = Model.Crops.Count > 1 &&
-                                        Model.YieldQuestion == EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheExpectedYieldForTheseFieldWithSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                        : string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInSuffix, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType, Model.Crops[i].FieldName);
-                        }
+                            question = string.Format(Resource.lblWhatIsTheExpectedYieldForFieldInSuffix, cropName, Model.Crops[i].FieldName);
                         <govuk-input for=@Model.Crops[i].Yield input-class="govuk-input--width-5" type="number" step="any" spellcheck="false">
                             <govuk-input-label is-page-heading="true" class="govuk-label--l">
                                 @question<span class="govuk-visually-hidden">@string.Format(Resource.lblInUnit, Resource.lblTonnesAndHectare)</span>@((ViewBag.IsYieldOptional != null) ? Resource.lblOptionalQues : Resource.lblQuestionMark)

@@ -67,7 +67,26 @@
                             @Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @(Model.CopyExistingPlan.HasValue ? (Model.CopyExistingPlan == true ? Resource.lblYes : Resource.lblNo) : Resource.lblNotSet)
+                        @{
+                            string copyQuestion = "";
+                            if (Model.CopyExistingPlan.HasValue)
+                            {
+                                if(Model.CopyExistingPlan == true)
+                                {
+                                    copyQuestion = Resource.lblYes;
+                                }
+                                else
+                                {
+                                    copyQuestion = Resource.lblNo;
+                                }
+                            }
+                            else
+                            {
+                                copyQuestion = Resource.lblNotSet;
+                            }
+
+                        }
+                        @copyQuestion
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="CopyExistingPlan" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear</span></govuk-summary-list-row-action>

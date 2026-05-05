@@ -1,11 +1,10 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
-   
+
     var enterAnApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
     var calculateBasedOnAreaAndQuantity = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
-    // var backaction = (Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "CheckAnswer" : (Model.DefaultNutrientValue != null && (!Model.DefaultNutrientValue.Value) ? "NutrientValuesStoreForFuture" : "DefaultNutrientValues");
 
     var backaction = "";
     if (Model.IsCheckAnswer && (!Model.IsManureTypeChange))
@@ -14,20 +13,13 @@
     }
     else if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
     {
-        // if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
-        // {
         backaction = "ManualNutrientValues";
-        //}
-        // else
-        // {
-        //     backaction = "NutrientValuesStoreForFuture";
-        // }
     }
     else
     {
         backaction = "DefaultNutrientValues";
     }
-       
+
     bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {title}";
@@ -47,7 +39,7 @@
                     <govuk-error-summary-item>@TempData["ApplicationRateMethodError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-        @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
+            @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
             @await Html.PartialAsync("~/Views/OrganicManure/_ApplicationRateWarningPartial.cshtml", Model)
 
             <govuk-radios for="@Model.ApplicationRateMethod">

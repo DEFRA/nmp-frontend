@@ -59,7 +59,9 @@
 
             @if (Model.CropGroupId == otherGroupId)
             {
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
+                <div hidden="hidden">
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
+                </div>
                 <govuk-input for="@Model.OtherCropName">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">@Resource.lblWhatIsTheNameOfTheCrop</govuk-input-label>
                 </govuk-input>
@@ -67,7 +69,9 @@
             }
             else
             {
-                <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName" />
+                <div hidden="hidden">
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName" />
+                </div>
                 <govuk-radios for="@Model.CropTypeID">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
@@ -76,9 +80,21 @@
 
                         <govuk-radios-hint>
                             <p>
+                                @{
+                                    string cropNameHint = "";
+                                    if (Model.CropGroupId == PotatoGroupId)
+                                    {
+                                        cropNameHint = Resource.lblPotatoGroups;
+                                    }
+                                    else
+                                    {
+                                        cropNameHint = Resource.lblCroupTypes;
+                                    }
+                                }
+                            
                                 @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ?
-                                                            Resource.lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes : string.Format(Resource.lblTheseOptionsComeFromRB209, Model.CropGroupId == PotatoGroupId ? Resource.lblPotatoGroups : Resource.lblCroupTypes))
-                        </p>
+                                            Resource.lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes : string.Format(Resource.lblTheseOptionsComeFromRB209, cropNameHint))
+                            </p>
                         @if (Model.CropGroupId == PotatoGroupId)
                             {
                                 <p>

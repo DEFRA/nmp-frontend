@@ -2,7 +2,6 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
-    //ViewData["Title"] = Resource.lblCropType;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropType, Model.HarvestYear)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
     ViewBag.CurrentStep = (int)PreviousCroppingWizardSteps.CropType;
 }

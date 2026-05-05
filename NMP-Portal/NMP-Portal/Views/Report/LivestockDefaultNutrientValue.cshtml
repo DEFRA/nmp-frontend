@@ -16,21 +16,32 @@
         heading = string.Format(Resource.lblNutrientValuesFor, Model.ManureTypeName);
     }
     ViewData["Title"] = $"{heading} {Resource.lblHyphen}  {action} {Resource.lblImportsExportsOfLivestockManure}";
-    var unit = "";
+
     if (Model.IsManureTypeLiquid == null)
     {
         Model.IsManureTypeLiquid = false;
     }
-    if (Model.IsManureTypeLiquid != null)
-    {
-        unit = Model.IsManureTypeLiquid.Value ? Resource.lblValueKgPerMeterCube : Resource.lblValueKgPerTon;
-    }
+
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.LivestockDefaultNutrientValue;
+
+    var actionName = "";
+
+    if (Model.IsCheckAnswer && !Model.IsManureTypeChange)
+    {
+        actionName = "LivestockImportExportCheckAnswer";
+    }
+    else if (Model.IsCheckAnswer && Model.IsManureTypeChange)
+    {
+        actionName = "ManureType";
+    }
+    else
+    {
+        actionName = "LivestockQuantity";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer &&(!Model.IsManureTypeChange)?
-                                      "LivestockImportExportCheckAnswer" : ((Model.IsCheckAnswer&&Model.IsManureTypeChange) ? "ManureType" : "LivestockQuantity") ) asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@actionName asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockDefaultNutrientValue"] != null)
 {
@@ -148,8 +159,8 @@
                             <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis</govuk-radios-item>
 
                         }
-                        else 
-                        {                           
+                        else
+                        {
                             <govuk-radios-item value="@Resource.lblYes">@Resource.lblYesUseTheseValues</govuk-radios-item>
                             <govuk-radios-item value="@Resource.lblIwantToEnterARecentOrganicMaterialAnalysis">
                                 @(((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) && Model.DefaultFarmManureValueDate != null) ? Resource.lblIwantToEnterARecentOrganicMaterialAnalysis : Resource.lblNoChangeTheseValues)
