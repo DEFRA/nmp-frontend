@@ -1862,15 +1862,7 @@ managementPeriod.CropID.HasValue
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName));
                         if (farmManure != null)
                         {
-                            model.ManureType.DryMatter = farmManure.DryMatter;
-                            model.ManureType.TotalN = farmManure.TotalN;
-                            model.ManureType.NH4N = farmManure.NH4N;
-                            model.ManureType.Uric = farmManure.Uric;
-                            model.ManureType.NO3N = farmManure.NO3N;
-                            model.ManureType.P2O5 = farmManure.P2O5;
-                            model.ManureType.K2O = farmManure.K2O;
-                            model.ManureType.SO3 = farmManure.SO3;
-                            model.ManureType.MgO = farmManure.MgO;
+                            CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
                             model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                         }
                         else
@@ -1904,15 +1896,7 @@ managementPeriod.CropID.HasValue
                             model.IsDefaultValueChange = false;
                             if (farmManure != null)
                             {
-                                model.ManureType.DryMatter = farmManure.DryMatter;
-                                model.ManureType.TotalN = farmManure.TotalN;
-                                model.ManureType.NH4N = farmManure.NH4N;
-                                model.ManureType.Uric = farmManure.Uric;
-                                model.ManureType.NO3N = farmManure.NO3N;
-                                model.ManureType.P2O5 = farmManure.P2O5;
-                                model.ManureType.K2O = farmManure.K2O;
-                                model.ManureType.SO3 = farmManure.SO3;
-                                model.ManureType.MgO = farmManure.MgO;
+                                CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
                                 ViewBag.FarmManureApiOption = Resource.lblTrue;
                                 model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                             }
@@ -1995,15 +1979,7 @@ managementPeriod.CropID.HasValue
                                 farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && model.ManureTypeName.Equals(model.OtherMaterialName));
                                 if (farmManure != null)
                                 {
-                                    model.ManureType.DryMatter = farmManure.DryMatter;
-                                    model.ManureType.TotalN = farmManure.TotalN;
-                                    model.ManureType.NH4N = farmManure.NH4N;
-                                    model.ManureType.Uric = farmManure.Uric;
-                                    model.ManureType.NO3N = farmManure.NO3N;
-                                    model.ManureType.P2O5 = farmManure.P2O5;
-                                    model.ManureType.K2O = farmManure.K2O;
-                                    model.ManureType.SO3 = farmManure.SO3;
-                                    model.ManureType.MgO = farmManure.MgO;
+                                    CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
                                 }
                             }
                             model.IsDefaultNutrient = true;
@@ -2027,15 +2003,7 @@ managementPeriod.CropID.HasValue
                                 model.IsDefaultValueChange = false;
                                 if (farmManure != null)
                                 {
-                                    model.ManureType.DryMatter = farmManure.DryMatter;
-                                    model.ManureType.TotalN = farmManure.TotalN;
-                                    model.ManureType.NH4N = farmManure.NH4N;
-                                    model.ManureType.Uric = farmManure.Uric;
-                                    model.ManureType.NO3N = farmManure.NO3N;
-                                    model.ManureType.P2O5 = farmManure.P2O5;
-                                    model.ManureType.K2O = farmManure.K2O;
-                                    model.ManureType.SO3 = farmManure.SO3;
-                                    model.ManureType.MgO = farmManure.MgO;
+                                    CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
                                     ViewBag.FarmManureApiOption = Resource.lblTrue;
                                     model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                                 }
@@ -2116,15 +2084,7 @@ managementPeriod.CropID.HasValue
                                 FarmManureTypeResponse? farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName);
                                 if (farmManure != null)
                                 {
-                                    model.ManureType.DryMatter = farmManure.DryMatter;
-                                    model.ManureType.TotalN = farmManure.TotalN;
-                                    model.ManureType.NH4N = farmManure.NH4N;
-                                    model.ManureType.Uric = farmManure.Uric;
-                                    model.ManureType.NO3N = farmManure.NO3N;
-                                    model.ManureType.P2O5 = farmManure.P2O5;
-                                    model.ManureType.K2O = farmManure.K2O;
-                                    model.ManureType.SO3 = farmManure.SO3;
-                                    model.ManureType.MgO = farmManure.MgO;
+                                    CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
                                 }
 
                                 model.IsThisDefaultValueOfRB209 = false;
@@ -2179,15 +2139,7 @@ managementPeriod.CropID.HasValue
 
                                 if (farmManure != null)
                                 {
-                                    model.ManureType.DryMatter = farmManure.DryMatter;
-                                    model.ManureType.TotalN = farmManure.TotalN;
-                                    model.ManureType.NH4N = farmManure.NH4N;
-                                    model.ManureType.Uric = farmManure.Uric;
-                                    model.ManureType.NO3N = farmManure.NO3N;
-                                    model.ManureType.P2O5 = farmManure.P2O5;
-                                    model.ManureType.K2O = farmManure.K2O;
-                                    model.ManureType.SO3 = farmManure.SO3;
-                                    model.ManureType.MgO = farmManure.MgO;
+                                    CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
 
                                 }
                                 if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
@@ -10006,6 +9958,23 @@ managementPeriod.CropID.HasValue
                 .OrderBy(x => x.Text)
                 .ToList();
         }
+        private static void CopyFarmManureToManureNutrientValues(ManureType target, FarmManureTypeResponse? source)
+        {
+            if (target == null || source == null)
+            {
+                return;
+            }
+            target.DryMatter = source.DryMatter;
+            target.TotalN = source.TotalN;
+            target.NH4N = source.NH4N;
+            target.Uric = source.Uric;
+            target.NO3N = source.NO3N;
+            target.P2O5 = source.P2O5;
+            target.K2O = source.K2O;
+            target.SO3 = source.SO3;
+            target.MgO = source.MgO;
+        }
+
     }
 
 }
