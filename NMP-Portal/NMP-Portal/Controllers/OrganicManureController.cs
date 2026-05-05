@@ -51,7 +51,7 @@ namespace NMP.Portal.Controllers
         private const string _nutrientRecommendationsError = "NutrientRecommendationsError";
         private const string _recommendations = "Recommendations";
         private const string _addOrganicManureError = "AddOrganicManureError";
-        private const string _farmList = "FarmList";  
+        private const string _farmList = "FarmList";
         private const string _fieldErrorTempDataKey = "FieldError";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
@@ -135,7 +135,7 @@ namespace NMP.Portal.Controllers
 
         private async Task<OrganicManureViewModel> InitializeModelAsync(string q, string r)
         {
-             
+
             OrganicManureViewModel? model = new OrganicManureViewModel();
             model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
@@ -1238,11 +1238,8 @@ managementPeriod.CropID.HasValue
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error? error = null;
 
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                    model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
-                }
+                (manureTypeList, error) =await GetManureTypeList(model);
+                model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
                 bool isHighReadilyAvailableNitrogen = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -1576,10 +1573,8 @@ managementPeriod.CropID.HasValue
                 }
 
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -1686,10 +1681,8 @@ managementPeriod.CropID.HasValue
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 bool isLiquid = false;
                 if (!ModelState.IsValid)
                 {
@@ -2519,10 +2512,8 @@ managementPeriod.CropID.HasValue
                 {
                     List<ManureType> manureTypeList = new List<ManureType>();
                     Error? error = null;
-                    if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                    {
-                        (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                    }
+                    (manureTypeList, error) = await GetManureTypeList(model);
+
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
@@ -2566,10 +2557,8 @@ managementPeriod.CropID.HasValue
                 Error? error = null;
                 AddErrorIfNull(model.ApplicationRateMethod, "ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 if (!ModelState.IsValid)
                 {
                     if (error == null && manureTypeList.Count > 0)
@@ -2756,10 +2745,8 @@ managementPeriod.CropID.HasValue
 
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error? error = null;
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
                 ApplyManureTypeName(model, manureType);
 
@@ -2797,7 +2784,7 @@ managementPeriod.CropID.HasValue
                     }
                 }
                 ValidateApplicationRate(model);
-                
+
                 if (!ModelState.IsValid)
                 {
                     return View("ManualApplicationRate", model);
@@ -3014,7 +3001,7 @@ managementPeriod.CropID.HasValue
             model.IsEndClosedPeriodFebruaryWarning = false;
             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
             string message = string.Empty;
-            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession(); 
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
             if (organicManureViewModel == null)
             {
                 return RedirectToAction(_farmList, "Farm");
@@ -3143,10 +3130,8 @@ managementPeriod.CropID.HasValue
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 bool isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -3194,10 +3179,8 @@ managementPeriod.CropID.HasValue
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 if (!ModelState.IsValid)
                 {
 
@@ -3359,10 +3342,8 @@ managementPeriod.CropID.HasValue
             {
                 string applicableFor = string.Empty;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 bool? isLiquid = false;
                 if (error == null && manureTypeList.Count > 0)
                 {
@@ -3414,10 +3395,8 @@ managementPeriod.CropID.HasValue
                 {
                     string applicableFor = string.Empty;
                     List<ManureType> manureTypeList = new List<ManureType>();
-                    if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                    {
-                        (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                    }
+                    (manureTypeList, error) = await GetManureTypeList(model);
+
                     bool? isLiquid = false;
                     if (error == null && manureTypeList.Count > 0)
                     {
@@ -4367,10 +4346,8 @@ managementPeriod.CropID.HasValue
                                 {
 
                                     List<ManureType> manureTypeList = new List<ManureType>();
-                                    if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                                    {
-                                        (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                                    }
+                                    (manureTypeList, error) = await GetManureTypeList(model);
+
                                     bool isHighReadilyAvailableNitrogen = false;
                                     if (error == null && manureTypeList.Count > 0)
                                     {
@@ -6598,10 +6575,8 @@ managementPeriod.CropID.HasValue
             {
                 bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 bool isHighReadilyAvailableNitrogen = false;
 
                 decimal totalNitrogen = model.OrganicManures?
@@ -8170,7 +8145,7 @@ managementPeriod.CropID.HasValue
         {
             _logger.LogTrace($"Organic Manure Controller : ManureType() action called");
             Error? error = null;
-            OrganicManureViewModel? model = GetOrganicManureFromSession(); 
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
             if (model == null)
             {
                 return RedirectToAction(_farmList, "Farm");
@@ -8226,10 +8201,8 @@ managementPeriod.CropID.HasValue
                     return RedirectToAction(_farmList, "Farm");
                 }
                 List<ManureType> manureTypeList = new List<ManureType>();
-                if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                {
-                    (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                }
+                (manureTypeList, error) = await GetManureTypeList(model);
+
                 if (error == null)
                 {
                     if (manureTypeList.Count > 0)
@@ -9836,6 +9809,16 @@ managementPeriod.CropID.HasValue
             }
 
         }
-    }
+        private async Task<(List<ManureType>, Error?)> GetManureTypeList(OrganicManureViewModel? model)
+        {
+            if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
+            {
+                var (manureTypeList, error) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
+                model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
+                return (manureTypeList, error);
+            }
+            return (new List<ManureType>(), null);
+        }
 
+    }
 }
