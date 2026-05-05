@@ -41,7 +41,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _recommendationsActionName = "Recommendations";
     private const string _fieldsActionName = "Fields";
     private const string _fieldGroupActionName = "FieldGroup";
-    private const string _fertiliserManureBeforeUpdateSessionKey = "FertiliserManureBeforeUpdate";
+    private const string _fertiliserManureBeforeUpdateSessionKey = "FertiliserManureBeforeUpdate";  //FieldGroupError
+    private const string _fieldGroupErrorTempDataKey = "FieldGroupError";
+    private const string _fieldErrorTempDataKey = "FieldError"; 
+    private const string _inOrgnaicManureDurationErrorTempDataKey = "InOrgnaicManureDurationError";
+
     private FertiliserManureViewModel? GetFertiliserManureFromSession()
     {
         if (HttpContext.Session.Exists(_fertiliserManureSessionKey))
@@ -172,7 +176,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     TempData["ErrorOnHarvestYearOverview"] = error.Message;
 
-                    ClearTempErrors("FieldGroupError", "FieldError");
+                    ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
                     return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
                 }
 
@@ -188,7 +192,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         TempData["NutrientRecommendationsError"] = error.Message;
-                        ClearTempErrors("FieldGroupError", "FieldError");
+                        ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
                         return RedirectToAction(_recommendationsActionName, "Crop", new { q = q, r = s, s = r });
                     }
                     if (cropList.Count > 0)
@@ -240,7 +244,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     else
                     {
                         TempData["NutrientRecommendationsError"] = error.Message;
-                        ClearTempErrors("FieldGroupError", "FieldError");
+                        ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
                         return RedirectToAction(_recommendationsActionName, "Crop", new { q = q, r = s, s = r });
                     }
 
@@ -329,7 +333,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             else
             {
                 TempData["ErrorOnHarvestYearOverview"] = error?.Message;
-                ClearTempErrors("FieldGroupError", "FieldError");
+                ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
 
                 SetFertiliserManureToSession(model);
                 return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
@@ -340,7 +344,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogTrace(ex, "Farm Controller : Exception in FieldGroup() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
 
-            ClearTempErrors("FieldGroupError", "FieldError");
+            ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
             SetFertiliserManureToSession(model);
             return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
         }
@@ -376,7 +380,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             else
             {
-                TempData["FieldGroupError"] = error?.Message;
+                TempData[_fieldGroupErrorTempDataKey] = error?.Message;
             }
             if (!ModelState.IsValid)
             {
@@ -404,7 +408,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Farm Controller : Exception in FieldGroup() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["FieldGroupError"] = ex.Message;
+            TempData[_fieldGroupErrorTempDataKey] = ex.Message;
             return View("Views/FertiliserManure/FieldGroup.cshtml", model);
         }
         return RedirectToAction(_fieldsActionName);
@@ -455,8 +459,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                         (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
                         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                         {
-                            TempData["FieldGroupError"] = error.Message;
-                            ClearTempErrors("FieldError");
+                            TempData[_fieldGroupErrorTempDataKey] = error.Message;
+                            ClearTempErrors(_fieldErrorTempDataKey);
                             return RedirectToAction(_fieldGroupActionName);
                         }
 
@@ -480,8 +484,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             }
                             else
                             {
-                                TempData["FieldGroupError"] = error.Message;
-                                ClearTempErrors("FieldError");
+                                TempData[_fieldGroupErrorTempDataKey] = error.Message;
+                                ClearTempErrors(_fieldErrorTempDataKey);
                                 return RedirectToAction(_fieldGroupActionName);
                             }
                         }
@@ -517,8 +521,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    TempData["FieldGroupError"] = error.Message;
-                    ClearTempErrors("FieldError");
+                    TempData[_fieldGroupErrorTempDataKey] = error.Message;
+                    ClearTempErrors(_fieldErrorTempDataKey);
                     return RedirectToAction(_fieldGroupActionName);
                 }
             }
@@ -566,8 +570,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogTrace(ex, "Fertiliser Controller : Exception in Fields() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             if (model != null && string.IsNullOrWhiteSpace(model.EncryptedFertId))
             {
-                TempData["FieldGroupError"] = ex.Message;
-                ClearTempErrors("FieldError");
+                TempData[_fieldGroupErrorTempDataKey] = ex.Message;
+                ClearTempErrors(_fieldErrorTempDataKey);
             }
             else
             {
@@ -653,14 +657,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     }
                     else
                     {
-                        TempData["FieldError"] = error?.Message;
+                        TempData[_fieldErrorTempDataKey] = error?.Message;
                         return View(model);
                     }
                 }
                 (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
-                    TempData["FieldGroupError"] = error.Message;
+                    TempData[_fieldGroupErrorTempDataKey] = error.Message;
                     return RedirectToAction(_fieldGroupActionName);
                 }
 
@@ -703,7 +707,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    TempData["FieldError"] = error.Message;
+                    TempData[_fieldErrorTempDataKey] = error.Message;
                     return View(model);
                 }
                 if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
@@ -753,7 +757,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             else
             {
-                TempData["FieldError"] = error.Message;
+                TempData[_fieldErrorTempDataKey] = error.Message;
                 return View(model);
             }
 
@@ -769,7 +773,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Farm Controller : Exception in Fields() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["FieldError"] = ex.Message;
+            TempData[_fieldErrorTempDataKey] = ex.Message;
             return View(model);
         }
     }
@@ -933,14 +937,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogTrace(ex, "Farm Controller : Exception in InOrgnaicManureDuration() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             if (model != null && model.FieldGroup != null && model.FieldGroup.Equals(Resource.lblSelectSpecificFields))
             {
-                TempData["FieldError"] = ex.Message;
-                ClearTempErrors("InOrgnaicManureDurationError");
+                TempData[_fieldErrorTempDataKey] = ex.Message;
+                ClearTempErrors(_inOrgnaicManureDurationErrorTempDataKey);
                 return RedirectToAction(_fieldsActionName);
             }
             else
             {
-                TempData["FieldGroupError"] = ex.Message;
-                ClearTempErrors("InOrgnaicManureDurationError");
+                TempData[_fieldGroupErrorTempDataKey] = ex.Message;
+                ClearTempErrors(_inOrgnaicManureDurationErrorTempDataKey);
                 return RedirectToAction(_fieldGroupActionName);
             }
         }
@@ -1030,7 +1034,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Farm Controller : Exception in InOrgnaicManureDuration() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["InOrgnaicManureDurationError"] = ex.Message;
+            TempData[_inOrgnaicManureDurationErrorTempDataKey] = ex.Message;
             return View(model);
         }
 
@@ -1069,7 +1073,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 catch (Exception ex)
                 {
                     _logger.LogTrace(ex, "Farm Controller : Exception in NutrientValues() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                    TempData["InOrgnaicManureDurationError"] = ex.Message;
+                    TempData[_inOrgnaicManureDurationErrorTempDataKey] = ex.Message;
                     return RedirectToAction("InOrgnaicManureDuration", model);
                 }
             }
@@ -2965,7 +2969,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     _logger.LogError("Fertiliser Manure Controller : Session not found in RemoveFertiliser() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                if (model != null && model.FieldList != null && model.FieldList.Count > 0)
+                if (model.FieldList != null && model.FieldList.Count > 0)
                 {
                     (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
                     if (error == null && fieldList.Count > 0)
@@ -3325,7 +3329,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 TempData["CheckYourAnswerError"] = error.Message;
                                 return RedirectToAction(_checkAnswerActionName);
                             }
-                            TempData["FieldGroupError"] = error.Message;
+                            TempData[_fieldGroupErrorTempDataKey] = error.Message;
                             return RedirectToAction(_fieldGroupActionName);
                         }
 
@@ -3356,7 +3360,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     return RedirectToAction(_checkAnswerActionName);
                                 }
 
-                                TempData["FieldGroupError"] = error.Message;
+                                TempData[_fieldGroupErrorTempDataKey] = error.Message;
                                 return RedirectToAction(_fieldGroupActionName);
                             }
                             if (managementPeriodList.Count > 0)
@@ -3419,7 +3423,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 TempData["CheckYourAnswerError"] = ex.Message;
                 return RedirectToAction(_checkAnswerActionName);
             }
-            TempData["FieldGroupError"] = ex.Message;
+            TempData[_fieldGroupErrorTempDataKey] = ex.Message;
             return RedirectToAction(_fieldGroupActionName);
         }
     }
@@ -3986,10 +3990,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     }
                     else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
                     {
-                        TempData["FieldError"] = error.Message;
+                        TempData[_fieldErrorTempDataKey] = error.Message;
                         return RedirectToAction(_fieldsActionName);
                     }
-                    TempData["FieldGroupError"] = error.Message;
+                    TempData[_fieldGroupErrorTempDataKey] = error.Message;
                     return RedirectToAction(_fieldGroupActionName);
                 }
                 if (cropList != null && cropList.Count == 2)
@@ -4035,10 +4039,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             else if (model != null && model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
             {
-                TempData["FieldError"] = ex.Message;
+                TempData[_fieldErrorTempDataKey] = ex.Message;
                 return RedirectToAction(_fieldsActionName);
             }
-            TempData["FieldGroupError"] = ex.Message;
+            TempData[_fieldGroupErrorTempDataKey] = ex.Message;
             return RedirectToAction(_fieldGroupActionName);
         }
         return View(model);

@@ -440,16 +440,13 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> Fields()
         {
             _logger.LogTrace($"Organic Manure Controller : Fields() action called");
-            OrganicManureViewModel? model = GetOrganicManureFromSession();
+            if (!TryGetSessionModel(nameof(Fields), out var model, out var redirect))
+            {
+                return redirect!;
+            }
             Error? error = null;
             try
             {
-                if (model == null)
-                {
-                    _logger.LogTrace("Organic Manure Controller : Fields() action - OrganicManureViewModel is null in session");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
-                }
-
                 (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -703,12 +700,11 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
-                OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
-                if (organicManureViewModel == null)
+                if (!TryGetSessionModel(nameof(Fields), out var organicManureViewModel, out var redirect))
                 {
-                    _logger.LogTrace($"Organic Manure Controller : Session expired in Fields() post action");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                    return redirect!;
                 }
+
                 (List<CommonResponse> fieldList, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
                 if (error == null)
                 {
@@ -1081,11 +1077,9 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ManureGroup()
         {
             _logger.LogTrace($"Organic Manure Controller : ManureGroup() action called");
-            OrganicManureViewModel? model = GetOrganicManureFromSession();
-            if (model == null)
+            if (!TryGetSessionModel(nameof(ManureGroup), out var model, out var redirect))
             {
-                _logger.LogTrace("Organic Manure Controller : ManureGroup() action : OrganicManureViewModel is null in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return redirect!;
             }
 
             try
@@ -1268,14 +1262,12 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ManureApplyingDate()
         {
             _logger.LogTrace($"Organic Manure Controller : ManureApplyingDate() action called");
-            OrganicManureViewModel model = GetOrganicManureFromSession();
+            if (!TryGetSessionModel(nameof(ManureApplyingDate), out var model, out var redirect))
+            {
+                return redirect!;
+            }
             try
             {
-                if (model == null)
-                {
-                    _logger.LogTrace("Organic Manure Controller : ManureApplyingDate() action : OrganicManureViewModel is null in session");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
-                }
                 if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
                 {
                     return View(model);
@@ -1843,13 +1835,10 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
-                    if (organicManureViewModel == null)
+                    if (!TryGetSessionModel(nameof(ApplicationMethod), out var organicManureViewModel, out var redirect))
                     {
-                        _logger.LogTrace("Organic Manure Controller : ApplicationMethod() action : OrganicManureViewModel is null in session");
-                        return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                        return redirect!;
                     }
-
                     if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                     {
                         model.IncorporationDelay = null;
@@ -4456,11 +4445,9 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    model = GetOrganicManureFromSession();
-                    if (model == null)
+                    if (!TryGetSessionModel(nameof(CheckAnswer), out model, out var redirect))
                     {
-                        _logger.LogError("OrganicManureController - EditOrganicManure: Session expired for Organic Manure Edit");
-                        return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                        return redirect!;
                     }
                 }
 
@@ -5587,14 +5574,10 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> Windspeed()
         {
             _logger.LogTrace($"Organic Manure Controller : Windspeed() action called");
-            OrganicManureViewModel? model = GetOrganicManureFromSession();
-
-            if (model == null)
+            if (!TryGetSessionModel(nameof(Windspeed), out var model, out var redirect))
             {
-                _logger.LogError("Organic Manure Controller : Windspeed() action called - Session Expired");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return redirect!;
             }
-
             (List<WindspeedResponse> windspeeds, Error? error) = await _organicManureLogic.FetchWindspeedList();
 
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -10074,5 +10057,34 @@ managementPeriod.CropID.HasValue
             model.IsEndClosedPeriodFebruaryWarning = false;
             model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
         }
+
+        private bool TryGetSessionModel(string actionName, out OrganicManureViewModel model, out IActionResult? redirect)
+        {
+            model = GetOrganicManureFromSession();
+            if (model == null)
+            {
+                _logger.LogTrace("Organic Manure Controller : {Action}() action - Session expired",
+                    actionName);
+
+                redirect = Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+
+                return false;
+            }
+
+            redirect = null;
+            return true;
+        }
+        private static List<SelectListItem> ToSelectList<T>(IEnumerable<T> source, Func<T, string> value, Func<T, string> text)
+        {
+            return source
+                .Select(x => new SelectListItem
+                {
+                    Value = value(x),
+                    Text = text(x)
+                })
+                .OrderBy(x => x.Text)
+                .ToList();
+        }
     }
+
 }
