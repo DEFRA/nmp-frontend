@@ -7790,7 +7790,7 @@ managementPeriod.CropID.HasValue
                         {
                             return RedirectToAction(_checkAnswer);
                         }
-                        if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                        if (IsOtherMaterialGroup(model))
                         {
                             return RedirectToAction(_manureGroup);
                         }
@@ -8703,7 +8703,7 @@ managementPeriod.CropID.HasValue
                         {
                             return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
                         }
-                        if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                        if (IsOtherMaterialGroup(model))
                         {
                             return RedirectToAction(_manureGroup);
                         }
@@ -9105,7 +9105,7 @@ managementPeriod.CropID.HasValue
                 return RedirectToAction("DoubleCrop", new { q = model.DoubleCropEncryptedCounter });
             }
 
-            if (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+            if (IsOtherMaterialGroup(model))
             {
                 return RedirectToAction(_manureGroup);
             }
