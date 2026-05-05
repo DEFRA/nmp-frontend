@@ -327,10 +327,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FieldGroup(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : FieldGroup() post action called");
-            if (model.FieldGroup == null)
-            {
-                ModelState.AddModelError(_fieldGroup, Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.FieldGroup, _fieldGroup, Resource.MsgSelectAnOptionBeforeContinuing);
             try
             {
 
@@ -1119,10 +1116,7 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ManureGroup(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : ManureGroup() post action called");
-            if (string.IsNullOrWhiteSpace(model.FarmGroupManureId))
-            {
-                ModelState.AddModelError("FarmGroupManureId", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.FarmGroupManureId, "FarmGroupManureId", Resource.MsgSelectAnOptionBeforeContinuing);
             Error? error = null;
             try
             {
@@ -1339,10 +1333,7 @@ managementPeriod.CropID.HasValue
                 int farmId = 0;
                 FarmResponse? farm = new FarmResponse();
                 Error error = new Error();
-                if (model.ApplicationDate == null)
-                {
-                    ModelState.AddModelError("ApplicationDate", Resource.MsgEnterADateBeforeContinuing);
-                }
+                AddErrorIfNull(model.ApplicationDate, "ApplicationDate", Resource.MsgEnterADateBeforeContinuing);
                 if (model.ApplicationDate != null)
                 {
                     if (model.ApplicationDate.Value.Date.Year > model.HarvestYear + 2 || model.ApplicationDate.Value.Date.Year < model.HarvestYear - 2)
@@ -1691,10 +1682,7 @@ managementPeriod.CropID.HasValue
         {
             _logger.LogTrace($"Organic Manure Controller : ApplicationMethod() post action called");
             Error? error = null;
-            if (model.ApplicationMethod == null)
-            {
-                ModelState.AddModelError("ApplicationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.ApplicationMethod, "ApplicationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
@@ -1952,10 +1940,7 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> DefaultNutrientValues(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : DefaultNutrientValues() post action called");
-            if (model.DefaultNutrientValue == null)
-            {
-                ModelState.AddModelError("DefaultNutrientValue", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.DefaultNutrientValue, "DefaultNutrientValue", Resource.MsgSelectAnOptionBeforeContinuing);
             try
             {
                 if (!ModelState.IsValid)
@@ -2316,42 +2301,24 @@ managementPeriod.CropID.HasValue
                         ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
                     }
                 }
-                if (model.DryMatterPercent == null)
-                {
-                    ModelState.AddModelError("DryMatterPercent", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
-                }
-                if (model.N == null)
-                {
-                    ModelState.AddModelError("N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
-                }
-                if (model.NH4N == null)
-                {
-                    ModelState.AddModelError("NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
-                }
-                if (model.UricAcid == null)
-                {
-                    ModelState.AddModelError("UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
-                }
-                if (model.NO3N == null)
-                {
-                    ModelState.AddModelError("NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
-                }
-                if (model.P2O5 == null)
-                {
-                    ModelState.AddModelError("P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
-                }
-                if (model.K2O == null)
-                {
-                    ModelState.AddModelError("K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
-                }
-                if (model.SO3 == null)
-                {
-                    ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
-                }
-                if (model.MgO == null)
-                {
-                    ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
-                }
+                AddErrorIfNull(model.DryMatterPercent, "DryMatterPercent", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
+
+                AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
+
+                AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
+
+                AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+
+                AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
+
+                AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
+
+                AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
+
+                AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
+
+                AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
+
 
                 if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
                 {
@@ -2520,10 +2487,7 @@ managementPeriod.CropID.HasValue
         public IActionResult NutrientValuesStoreForFuture(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : NutrientValuesStoreForFuture() post action called");
-            if (model.IsAnyNeedToStoreNutrientValueForFuture == null)
-            {
-                ModelState.AddModelError("IsAnyNeedToStoreNutrientValueForFuture", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.IsAnyNeedToStoreNutrientValueForFuture, "IsAnyNeedToStoreNutrientValueForFuture", Resource.MsgSelectAnOptionBeforeContinuing);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -2600,10 +2564,7 @@ managementPeriod.CropID.HasValue
             try
             {
                 Error? error = null;
-                if (model.ApplicationRateMethod == null)
-                {
-                    ModelState.AddModelError("ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
-                }
+                AddErrorIfNull(model.ApplicationRateMethod, "ApplicationRateMethod", Resource.MsgSelectAnOptionBeforeContinuing);
                 List<ManureType> manureTypeList = new List<ManureType>();
                 if (model != null && model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
                 {
@@ -2835,20 +2796,8 @@ managementPeriod.CropID.HasValue
                         ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgApplicationRate));
                     }
                 }
-
-                if (model.ApplicationRate == null)
-                {
-                    ModelState.AddModelError("ApplicationRate", Resource.MsgEnterAnapplicationRateBeforeContinuing);
-                }
-                if (model.ApplicationRate != null && model.ApplicationRate < 0)
-                {
-                    ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-                }
-                if (model.ApplicationRate != null && model.ApplicationRate > 250)
-                {
-                    ModelState.AddModelError("ApplicationRate", Resource.MsgForApplicationRate);
-                }
-
+                ValidateApplicationRate(model);
+                
                 if (!ModelState.IsValid)
                 {
                     return View("ManualApplicationRate", model);
@@ -3043,38 +2992,7 @@ managementPeriod.CropID.HasValue
                     ModelState["Quantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
                 }
             }
-
-            if (model.Area == null)
-            {
-                ModelState.AddModelError("Area", Resource.MsgEnterAValidArea);
-            }
-            if (model.Quantity == null)
-            {
-                ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
-            }
-            if (model.Area != null && model.Area == 0)
-            {
-                ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
-            }
-            if (model.Area != null && model.Area < 0)
-            {
-                ModelState.AddModelError("Area", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
-            if (model.Quantity != null && model.Quantity < 0)
-            {
-                ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
-
-            if (model.Quantity != null && model.Area != null && model.Area > 0 && model.Quantity > 0)
-            {
-                model.ApplicationRate = model.Quantity.Value / model.Area.Value;
-
-                if (model.ApplicationRate != null && model.ApplicationRate > 250)
-                {
-                    ModelState.AddModelError("Quantity", Resource.MsgForApplicationRate);
-                }
-            }
-
+            ValidateAreaQuantity(model);
             if (!ModelState.IsValid)
             {
                 return View("AreaQuantity", model);
@@ -3272,10 +3190,7 @@ managementPeriod.CropID.HasValue
         {
             _logger.LogTrace($"Organic Manure Controller : IncorporationMethod() post action called");
             Error? error = null;
-            if (model.IncorporationMethod == null)
-            {
-                ModelState.AddModelError("IncorporationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.IncorporationMethod, "IncorporationMethod", Resource.MsgSelectAnOptionBeforeContinuing);
             try
             {
                 List<ManureType> manureTypeList = new List<ManureType>();
@@ -3494,10 +3409,7 @@ managementPeriod.CropID.HasValue
             Error? error = null;
             try
             {
-                if (model.IncorporationDelay == null)
-                {
-                    ModelState.AddModelError("IncorporationDelay", Resource.MsgSelectAnOptionBeforeContinuing);
-                }
+                AddErrorIfNull(model.IncorporationDelay, "IncorporationDelay", Resource.MsgSelectAnOptionBeforeContinuing);
                 if (!ModelState.IsValid)
                 {
                     string applicableFor = string.Empty;
@@ -4709,10 +4621,7 @@ managementPeriod.CropID.HasValue
             Error? error = null;
             try
             {
-                if (model.ManureTypeId == null)
-                {
-                    ModelState.AddModelError("ManureTypeId", Resource.MsgManureTypeNotSet);
-                }
+                AddErrorIfNull(model.ManureTypeId, "ManureTypeId", Resource.MsgManureTypeNotSet);
                 if (model.DoubleCrop == null && model.IsDoubleCropAvailable)
                 {
                     int index = 0;
@@ -4762,69 +4671,7 @@ managementPeriod.CropID.HasValue
 
                     }
                 }
-
-
-                if (model.ApplicationMethod == null)
-                {
-                    ModelState.AddModelError("ApplicationMethod", string.Format(Resource.MsgApplicationMethodNotSet, model.ManureTypeName));
-                }
-                if (model.ApplicationDate == null)
-                {
-                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgApplyingDateNotSet, model.ManureTypeName));
-                }
-                if (model.DefaultNutrientValue == null)
-                {
-                    ModelState.AddModelError("DefaultNutrientValue", string.Format(Resource.MsgDefaultNutrientValuesNotSet, model.ManureTypeName));
-                }
-                if (model.ApplicationRateMethod == null)
-                {
-                    ModelState.AddModelError("ApplicationRateMethod", string.Format(Resource.MsgApplicationRateMethodNotSet, model.ManureTypeName));
-                }
-                if (model.ApplicationRate == null)
-                {
-                    ModelState.AddModelError("ApplicationRate", Resource.MsgApplicationRateNotSet);
-                }
-                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-                {
-                    if (model.Area == null)
-                    {
-                        ModelState.AddModelError("Area", Resource.MsgAreaNotSet);
-                    }
-                    if (model.Quantity == null)
-                    {
-                        ModelState.AddModelError("Quantity", Resource.MsgQuantityNotSet);
-                    }
-                }
-                if (model.IncorporationMethod == null)
-                {
-                    ModelState.AddModelError("IncorporationMethod", string.Format(Resource.MsgIncorporationMethodNotSet, model.ManureTypeName));
-                }
-                if (model.IncorporationDelay == null)
-                {
-                    ModelState.AddModelError("IncorporationDelay", string.Format(Resource.MsgIncorporationDelayNotSet, model.ManureTypeName));
-                }
-
-                if (model.SoilDrainageEndDate == null)
-                {
-                    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEndOfSoilDrainageNotSet);
-                }
-                if (model.RainfallWithinSixHoursID == null)
-                {
-                    ModelState.AddModelError("RainfallWithinSixHoursID", Resource.MsgRainfallWithinSixHoursOfApplicationNotSet);
-                }
-                if (model.TotalRainfall == null)
-                {
-                    ModelState.AddModelError("TotalRainfall", Resource.MsgTotalRainfallSinceApplicationNotSet);
-                }
-                if (model.WindspeedID == null)
-                {
-                    ModelState.AddModelError("WindspeedID", Resource.MsgWindspeedAtApplicationNotSet);
-                }
-                if (model.MoistureTypeId == null)
-                {
-                    ModelState.AddModelError("MoistureTypeId", Resource.MsgTopsoilMoistureNotSet);
-                }
-
+                ValidateManureModel(model);
                 if (!ModelState.IsValid)
                 {
                     (List<CommonResponse> fieldList, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
@@ -5324,16 +5171,9 @@ managementPeriod.CropID.HasValue
 
             }
 
-            if (model.SoilDrainageEndDate == null)
-            {
-                ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEnterADateBeforeContinuing);
-            }
+            AddErrorIfNull(model.SoilDrainageEndDate, "SoilDrainageEndDate", Resource.MsgEnterADateBeforeContinuing);
             if (model.SoilDrainageEndDate != null)
             {
-                //if (model.SoilDrainageEndDate.Value.Date.Year > model.HarvestYear + 1)
-                //{
-                //    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgDateCannotBeLaterThanHarvestYear);
-                //}
                 if (DateTime.TryParseExact(model.SoilDrainageEndDate.Value.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
                 {
                     ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEnterValidDate);
@@ -5382,11 +5222,7 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> RainfallWithinSixHour(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : RainfallWithinSixHour() post action called");
-            if (model.RainfallWithinSixHoursID == null)
-            {
-                ModelState.AddModelError("RainfallWithinSixHoursID", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-
+            AddErrorIfNull(model.RainfallWithinSixHoursID, "RainfallWithinSixHoursID", Resource.MsgSelectAnOptionBeforeContinuing);
             if (!ModelState.IsValid)
             {
                 return View("RainfallWithinSixHour", model);
@@ -5462,10 +5298,8 @@ managementPeriod.CropID.HasValue
                 }
             }
 
-            if (model.TotalRainfall == null)
-            {
-                ModelState.AddModelError("TotalRainfall", Resource.MsgEnterRainfallAmountBeforeContinuing);
-            }
+            AddErrorIfNull(model.TotalRainfall, "TotalRainfall", Resource.MsgEnterRainfallAmountBeforeContinuing);
+
             if (model.TotalRainfall != null && model.TotalRainfall < 0)
             {
                 ModelState.AddModelError("TotalRainfall", Resource.MsgEnterANumberWhichIsGreaterThanZero);
@@ -5508,10 +5342,7 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> Windspeed(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : Windspeed() post action called");
-            if (model.WindspeedID == null)
-            {
-                ModelState.AddModelError("WindspeedID", Resource.MsgSelectAWindConditionBeforeContinuing);
-            }
+            AddErrorIfNull(model.WindspeedID, "WindspeedID", Resource.MsgSelectAWindConditionBeforeContinuing);
 
             if (!ModelState.IsValid)
             {
@@ -5551,10 +5382,7 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> TopsoilMoisture(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : TopsoilMoisture() post action called");
-            if (model.MoistureTypeId == null)
-            {
-                ModelState.AddModelError("MoistureTypeId", Resource.MsgSelectATopsoilWetnessConditionBeforeContinuing);
-            }
+            AddErrorIfNull(model.MoistureTypeId, "MoistureTypeId", Resource.MsgSelectATopsoilWetnessConditionBeforeContinuing);
 
             if (!ModelState.IsValid)
             {
@@ -7427,10 +7255,7 @@ managementPeriod.CropID.HasValue
         {
             _logger.LogTrace($"Organic Manure Controller : RemoveOrganicManure() post action called");
             Error? error = null;
-            if (model.IsDeleteOrganic == null)
-            {
-                ModelState.AddModelError("IsDeleteOrganic", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.IsDeleteOrganic, "IsDeleteOrganic", Resource.MsgSelectAnOptionBeforeContinuing);
             if (!ModelState.IsValid)
             {
                 if (model.FieldList != null && model.FieldList.Count > 0)
@@ -7594,10 +7419,7 @@ managementPeriod.CropID.HasValue
         public IActionResult Cancel(OrganicManureViewModel model)
         {
             _logger.LogTrace("Organic Manure Controller : Cancel() post action called");
-            if (model.IsCancel == null)
-            {
-                ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.IsCancel, "IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             if (!ModelState.IsValid)
             {
                 return View("Cancel", model);
@@ -7637,70 +7459,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace("Organic Manure Controller : OrganicManureUpdate() post action called");
             try
             {
-                if (model.ManureTypeId == null)
-                {
-                    ModelState.AddModelError("ManureTypeId", Resource.MsgManureTypeNotSet);
-                }
-                if (model.ApplicationMethod == null)
-                {
-                    ModelState.AddModelError("ApplicationMethod", string.Format(Resource.MsgApplicationMethodNotSet, model.ManureTypeName));
-                }
-                if (model.ApplicationDate == null)
-                {
-                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgApplyingDateNotSet, model.ManureTypeName));
-                }
-                if (model.DefaultNutrientValue == null)
-                {
-                    ModelState.AddModelError("DefaultNutrientValue", string.Format(Resource.MsgDefaultNutrientValuesNotSet, model.ManureTypeName));
-                }
-                if (model.ApplicationRateMethod == null)
-                {
-                    ModelState.AddModelError("ApplicationRateMethod", string.Format(Resource.MsgApplicationRateMethodNotSet, model.ManureTypeName));
-                }
-                if (model.ApplicationRate == null)
-                {
-                    ModelState.AddModelError("ApplicationRate", Resource.MsgApplicationRateNotSet);
-                }
-                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-                {
-                    if (model.Area == null)
-                    {
-                        ModelState.AddModelError("Area", Resource.MsgAreaNotSet);
-                    }
-                    if (model.Quantity == null)
-                    {
-                        ModelState.AddModelError("Quantity", Resource.MsgQuantityNotSet);
-                    }
-                }
-                if (model.IncorporationMethod == null)
-                {
-                    ModelState.AddModelError("IncorporationMethod", string.Format(Resource.MsgIncorporationMethodNotSet, model.ManureTypeName));
-                }
-                if (model.IncorporationDelay == null)
-                {
-                    ModelState.AddModelError("IncorporationDelay", string.Format(Resource.MsgIncorporationDelayNotSet, model.ManureTypeName));
-                }
-
-                if (model.SoilDrainageEndDate == null)
-                {
-                    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEndOfSoilDrainageNotSet);
-                }
-                if (model.RainfallWithinSixHoursID == null)
-                {
-                    ModelState.AddModelError("RainfallWithinSixHoursID", Resource.MsgRainfallWithinSixHoursOfApplicationNotSet);
-                }
-                if (model.TotalRainfall == null)
-                {
-                    ModelState.AddModelError("TotalRainfall", Resource.MsgTotalRainfallSinceApplicationNotSet);
-                }
-                if (model.WindspeedID == null)
-                {
-                    ModelState.AddModelError("WindspeedID", Resource.MsgWindspeedAtApplicationNotSet);
-                }
-                if (model.MoistureTypeId == null)
-                {
-                    ModelState.AddModelError("MoistureTypeId", Resource.MsgTopsoilMoistureNotSet);
-                }
+                ValidateManureModel(model);
 
                 Error error = new Error();
                 if (model.DoubleCrop == null && model.IsDoubleCropAvailable)
@@ -8844,10 +8603,8 @@ managementPeriod.CropID.HasValue
         public IActionResult IsSameDefoliationForAll(OrganicManureViewModel model)
         {
             _logger.LogTrace($"OrganicManure Controller : IsSameDefoliationForAll() post action called");
-            if (model.IsSameDefoliationForAll == null)
-            {
-                ModelState.AddModelError("IsSameDefoliationForAll", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+            AddErrorIfNull(model.IsSameDefoliationForAll, "IsSameDefoliationForAll", Resource.MsgSelectAnOptionBeforeContinuing);
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -9981,7 +9738,104 @@ managementPeriod.CropID.HasValue
             target.SO3 = source.SO3;
             target.MgO = source.MgO;
         }
+        private void ValidateManureModel(OrganicManureViewModel model)
+        {
+            AddErrorIfNull(model.ManureTypeId, "ManureTypeId", Resource.MsgManureTypeNotSet);
 
+            AddErrorIfNull(model.ApplicationMethod, "ApplicationMethod",
+                string.Format(Resource.MsgApplicationMethodNotSet, model.ManureTypeName));
+
+            AddErrorIfNull(model.ApplicationDate, "ApplicationDate",
+                string.Format(Resource.MsgApplyingDateNotSet, model.ManureTypeName));
+
+            AddErrorIfNull(model.DefaultNutrientValue, "DefaultNutrientValue",
+                string.Format(Resource.MsgDefaultNutrientValuesNotSet, model.ManureTypeName));
+
+            AddErrorIfNull(model.ApplicationRateMethod, "ApplicationRateMethod",
+                string.Format(Resource.MsgApplicationRateMethodNotSet, model.ManureTypeName));
+
+            AddErrorIfNull(model.ApplicationRate, "ApplicationRate", Resource.MsgApplicationRateNotSet);
+
+            if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+            {
+                AddErrorIfNull(model.Area, "Area", Resource.MsgAreaNotSet);
+                AddErrorIfNull(model.Quantity, "Quantity", Resource.MsgQuantityNotSet);
+            }
+
+            AddErrorIfNull(model.IncorporationMethod, "IncorporationMethod",
+                string.Format(Resource.MsgIncorporationMethodNotSet, model.ManureTypeName));
+
+            AddErrorIfNull(model.IncorporationDelay, "IncorporationDelay",
+                string.Format(Resource.MsgIncorporationDelayNotSet, model.ManureTypeName));
+
+            AddErrorIfNull(model.SoilDrainageEndDate, "SoilDrainageEndDate",
+                Resource.MsgEndOfSoilDrainageNotSet);
+
+            AddErrorIfNull(model.RainfallWithinSixHoursID, "RainfallWithinSixHoursID",
+                Resource.MsgRainfallWithinSixHoursOfApplicationNotSet);
+
+            AddErrorIfNull(model.TotalRainfall, "TotalRainfall",
+                Resource.MsgTotalRainfallSinceApplicationNotSet);
+
+            AddErrorIfNull(model.WindspeedID, "WindspeedID",
+                Resource.MsgWindspeedAtApplicationNotSet);
+
+            AddErrorIfNull(model.MoistureTypeId, "MoistureTypeId",
+                Resource.MsgTopsoilMoistureNotSet);
+        }
+        private void AddErrorIfNull(object? value, string key, string errorMessage)
+        {
+            if (value == null)
+            {
+                ModelState.AddModelError(key, errorMessage);
+            }
+        }
+        private void ValidateApplicationRate(OrganicManureViewModel model)
+        {
+            if (model.ApplicationRate == null)
+                ModelState.AddModelError("ApplicationRate", Resource.MsgEnterAnapplicationRateBeforeContinuing);
+
+            if (model.ApplicationRate < 0)
+                ModelState.AddModelError("ApplicationRate", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+            if (model.ApplicationRate > 250)
+                ModelState.AddModelError("ApplicationRate", Resource.MsgForApplicationRate);
+        }
+        private void ValidateAreaQuantity(OrganicManureViewModel model)
+        {
+
+            if (model.Area == null)
+            {
+                ModelState.AddModelError("Area", Resource.MsgEnterAValidArea);
+            }
+            if (model.Quantity == null)
+            {
+                ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
+            }
+            if (model.Area != null && model.Area == 0)
+            {
+                ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
+            }
+            if (model.Area != null && model.Area < 0)
+            {
+                ModelState.AddModelError("Area", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
+            if (model.Quantity != null && model.Quantity < 0)
+            {
+                ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
+
+            if (model.Quantity != null && model.Area != null && model.Area > 0 && model.Quantity > 0)
+            {
+                model.ApplicationRate = model.Quantity.Value / model.Area.Value;
+
+                if (model.ApplicationRate != null && model.ApplicationRate > 250)
+                {
+                    ModelState.AddModelError("Quantity", Resource.MsgForApplicationRate);
+                }
+            }
+
+        }
     }
 
 }
