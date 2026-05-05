@@ -3738,43 +3738,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 List<int> yearList = new List<int>();
                 if (planSummaryResponse != null && planSummaryResponse.Count > 0)
                 {
-                    foreach (var item in planSummaryResponse)
-                    {
-                        yearList.Add(item.Year);
-                    }
-
-                    for (int j = 0; j < planSummaryResponse.Count; j++)
-                    {
-                        var harvestNewYear = new HarvestYear
-                        {
-                            Year = planSummaryResponse[j].Year,
-                            EncryptedYear = _farmDataProtector.Protect(planSummaryResponse[j].Year.ToString()),
-                            LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
-                            IsAnyPlan = true
-                        };
-                        model.HarvestYear?.Add(harvestNewYear);
-                    }
-
-                    int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear.GetValueOrDefault() : planSummaryResponse.Min(x => x.Year) - 1;
-                    int maxYear = planSummaryResponse.Max(x => x.Year) < currentHarvestYear ? currentHarvestYear : planSummaryResponse.Max(x => x.Year) + 1;
-                    for (int i = minYear; i <= maxYear; i++)
-                    {
-                        if (!yearList.Contains(i))
-                        {
-                            var harvestYear = new HarvestYear
-                            {
-                                Year = i,
-                                EncryptedYear = _farmDataProtector.Protect(i.ToString()),
-                                IsAnyPlan = false
-                            };
-
-                            if (minYear == i)
-                            {
-                                harvestYear.IsThisOldYear = true;
-                            }
-                            model.HarvestYear?.Add(harvestYear);
-                        }
-                    }
+                    model = FetchHarvestYearList(model, planSummaryResponse, topPrevCroppingYear, currentHarvestYear, yearList, true);
                 }
                 else
                 {
@@ -3807,6 +3771,50 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         return View(model);
+    }
+
+    private PlanViewModel FetchHarvestYearList(PlanViewModel model, List<PlanSummaryResponse> planSummaryResponse, int? topPrevCroppingYear, int currentHarvestYear, List<int> yearList, bool isComingFromPlanAndOverview)
+    {
+        foreach (var item in planSummaryResponse)
+        {
+            yearList.Add(item.Year);
+        }
+
+        for (int j = 0; j < planSummaryResponse.Count; j++)
+        {
+            var harvestNewYear = new HarvestYear
+            {
+                Year = planSummaryResponse[j].Year,
+                EncryptedYear = _farmDataProtector.Protect(planSummaryResponse[j].Year.ToString()),
+                LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
+                IsAnyPlan = true
+            };
+            model.HarvestYear?.Add(harvestNewYear);
+        }
+
+        int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear.GetValueOrDefault() : planSummaryResponse.Min(x => x.Year) - 1;
+        int maxYear = planSummaryResponse.Max(x => x.Year) < currentHarvestYear ? currentHarvestYear : planSummaryResponse.Max(x => x.Year) + 1;
+        for (int i = minYear; i <= maxYear; i++)
+        {
+            if (!yearList.Contains(i))
+            {
+                var harvestYear = new HarvestYear
+                {
+                    Year = i,
+                    EncryptedYear = _farmDataProtector.Protect(i.ToString()),
+                    IsAnyPlan = false
+                };
+                if (isComingFromPlanAndOverview)
+                {
+                    if (minYear == i)
+                    {
+                        harvestYear.IsThisOldYear = true;
+                    }
+                }
+                model.HarvestYear?.Add(harvestYear);
+            }
+        }
+        return model;
     }
 
     [HttpPost]
@@ -4478,7 +4486,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 r = BindSortOrder(r);
             }
-           
+
         }
 
         SetCropToSession(model);
@@ -6205,21 +6213,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
                     ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
                     ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
-                    (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                    {
-                        TempData["GrassGrowthClassError"] = error.Message;
-                        return RedirectToAction("DefoliationSequence");
-                    }
-                    else
-                    {
-                        if (yieldRangesEnglandAndWalesResponses != null && yieldRangesEnglandAndWalesResponses.Count > 0)
-                        {
-                            ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
-                            ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                            ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
-                        }
-                    }
+
+                    await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
                 }
 
                 SetCropToSession(model);
@@ -6260,18 +6255,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
                 ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
 
-                (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["GrassGrowthClassError"] = error.Message;
-                    return RedirectToAction("DefoliationSequence");
-                }
-                else
-                {
-                    ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
-                    ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                    ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
-                }
+                 await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+                
                 if (model.GrassGrowthClassQuestion != null)
                 {
                     return RedirectToAction("DefoliationSequence");
@@ -6287,6 +6272,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         SetCropToSession(model);
         return View(model);
+    }
+
+    private async Task FetchYieldRangeForEngAndWales(PlanViewModel model, int grassGrowthClassesId)
+    {
+        (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0,grassGrowthClassesId);
+        if (yieldRangesEnglandAndWalesResponses != null && yieldRangesEnglandAndWalesResponses.Count > 0)
+        {
+            ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
+            ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
+            ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
+        }
+
+        
     }
 
     [HttpPost]
@@ -6326,18 +6324,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
             ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
             ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
-            (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-            {
-                TempData["GrassGrowthClassError"] = error.Message;
-                return RedirectToAction("DefoliationSequence");
-            }
-            else
-            {
-                ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
-                ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
-            }
+            await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
             return View(model);
         }
 
@@ -6399,18 +6386,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.FieldName = model.Crops[i + 1].FieldName;
                     ViewBag.FieldName = model.Crops[i + 1].FieldName;
                     ViewBag.GrassGrowthClass = grassGrowthClasses[i + 1].GrassGrowthClassName;
-                    (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[i + 1].GrassGrowthClassId);
-                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                    {
-                        TempData["GrassGrowthClassError"] = error.Message;
-                        return RedirectToAction(_grassGrowthClassActionName);
-                    }
-                    else
-                    {
-                        ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
-                        ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                        ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
-                    }
+                    
+                    await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[i + 1].GrassGrowthClassId);
                 }
 
                 break;
@@ -6530,18 +6507,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.DryMatterYieldCounter = index;
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
 
-                (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, error) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClasses[index].GrassGrowthClassId);
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                {
-                    TempData["GrassGrowthClassError"] = error.Message;
-                    return RedirectToAction(_grassGrowthClassActionName);
-                }
-                else
-                {
-                    ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
-                    ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-                    ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
-                }
+                
+              await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[index].GrassGrowthClassId);
             }
 
             return View(model);
@@ -6841,41 +6808,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 List<int> yearList = new List<int>();
                 if (planSummaryResponse != null && planSummaryResponse.Count > 0)
                 {
-                    foreach (var item in planSummaryResponse)
-                    {
-                        yearList.Add(item.Year);
-                    }
-
-                    for (int j = 0; j < planSummaryResponse.Count; j++)
-                    {
-                        var harvestNewYear = new HarvestYear
-                        {
-                            Year = planSummaryResponse[j].Year,
-                            EncryptedYear = _farmDataProtector.Protect(planSummaryResponse[j].Year.ToString()),
-                            LastModifiedOn = planSummaryResponse[j].LastModifiedOn,
-                            IsAnyPlan = true
-                        };
-                        model.HarvestYear.Add(harvestNewYear);
-                    }
-
-                    int minYear = topPrevCroppingYear < planSummaryResponse.Min(x => x.Year) ? topPrevCroppingYear ?? 0 : planSummaryResponse.Min(x => x.Year) - 1;
-                    int maxYear = planSummaryResponse.Max(x => x.Year) < currentHarvestYear ? currentHarvestYear : planSummaryResponse.Max(x => x.Year) + 1;
-
-                    for (int i = minYear; i <= maxYear; i++)
-                    {
-                        if (!yearList.Contains(i))
-                        {
-                            var harvestYear = new HarvestYear
-                            {
-                                Year = i,
-                                EncryptedYear = _farmDataProtector.Protect(i.ToString()),
-                                IsAnyPlan = false
-                            };
-                            model.HarvestYear.Add(harvestYear);
-                        }
-                    }
-
-                    if (model.HarvestYear.Count > 0)
+                    model = FetchHarvestYearList(model, planSummaryResponse, topPrevCroppingYear, currentHarvestYear, yearList, false);
+                    if (model.HarvestYear != null && model.HarvestYear.Count > 0)
                     {
                         model.HarvestYear = model.HarvestYear.OrderByDescending(x => x.Year).ToList();
                     }
