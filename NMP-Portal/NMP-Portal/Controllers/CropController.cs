@@ -3772,7 +3772,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return View(model);
     }
-
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
+    {
+        _logger.LogTrace("Crop Controller : PlansAndRecordsOverview() post action called");
+        if (!ModelState.IsValid)
+        {
+            return await Task.FromResult(View(model));
+        }
+        return View(model);
+    }
     private PlanViewModel FetchHarvestYearList(PlanViewModel model, List<PlanSummaryResponse> planSummaryResponse, int? topPrevCroppingYear, int currentHarvestYear, List<int> yearList, bool isComingFromPlanAndOverview)
     {
         foreach (var item in planSummaryResponse)
@@ -3804,30 +3814,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     EncryptedYear = _farmDataProtector.Protect(i.ToString()),
                     IsAnyPlan = false
                 };
-                if (isComingFromPlanAndOverview)
+                if (isComingFromPlanAndOverview && minYear == i)
                 {
-                    if (minYear == i)
-                    {
-                        harvestYear.IsThisOldYear = true;
-                    }
+                    harvestYear.IsThisOldYear = true;
                 }
                 model.HarvestYear?.Add(harvestYear);
             }
         }
         return model;
     }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
-    {
-        _logger.LogTrace("Crop Controller : PlansAndRecordsOverview() post action called");
-        if (!ModelState.IsValid)
-        {
-            return await Task.FromResult(View(model));
-        }
-        return View(model);
-    }
+      
 
     [HttpGet]
     public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
@@ -6255,8 +6251,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
                 ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
 
-                 await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-                
+                await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+
                 if (model.GrassGrowthClassQuestion != null)
                 {
                     return RedirectToAction("DefoliationSequence");
@@ -6273,20 +6269,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         SetCropToSession(model);
         return View(model);
     }
-
-    private async Task FetchYieldRangeForEngAndWales(PlanViewModel model, int grassGrowthClassesId)
-    {
-        (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0,grassGrowthClassesId);
-        if (yieldRangesEnglandAndWalesResponses != null && yieldRangesEnglandAndWalesResponses.Count > 0)
-        {
-            ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
-            ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
-            ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
-        }
-
-        
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> GrassGrowthClass(PlanViewModel model)
@@ -6386,7 +6368,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.FieldName = model.Crops[i + 1].FieldName;
                     ViewBag.FieldName = model.Crops[i + 1].FieldName;
                     ViewBag.GrassGrowthClass = grassGrowthClasses[i + 1].GrassGrowthClassName;
-                    
+
                     await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[i + 1].GrassGrowthClassId);
                 }
 
@@ -6433,6 +6415,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return View(model);
         }
     }
+
+    private async Task FetchYieldRangeForEngAndWales(PlanViewModel model, int grassGrowthClassesId)
+    {
+        (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClassesId);
+        if (yieldRangesEnglandAndWalesResponses != null && yieldRangesEnglandAndWalesResponses.Count > 0)
+        {
+            ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses.First();
+            ViewBag.YieldMax = yieldRangesEnglandAndWalesResponses.Last();
+            ViewBag.YieldRanges = yieldRangesEnglandAndWalesResponses.OrderByDescending(x => x.YieldId);
+        }
+
+
+    }
+
 
     [HttpGet]
     public async Task<IActionResult> DryMatterYield(string q)
@@ -6507,8 +6503,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.DryMatterYieldCounter = index;
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
 
-                
-              await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[index].GrassGrowthClassId);
+
+                await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[index].GrassGrowthClassId);
             }
 
             return View(model);
