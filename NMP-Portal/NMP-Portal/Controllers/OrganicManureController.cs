@@ -53,6 +53,9 @@ namespace NMP.Portal.Controllers
         private const string _addOrganicManureError = "AddOrganicManureError";
         private const string _farmList = "FarmList";
         private const string _fieldErrorTempDataKey = "FieldError";
+        private const string _applicationDateKey = "ApplicationDate";
+        private const string _soilDrainageEndDateKey = "SoilDrainageEndDate";
+        private const string _totalRainfallKey = "TotalRainfall";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
             if (HttpContext.Session.Exists(_organicManureSessionKey))
@@ -1330,12 +1333,12 @@ managementPeriod.CropID.HasValue
                 int farmId = 0;
                 FarmResponse? farm = new FarmResponse();
                 Error error = new Error();
-                AddErrorIfNull(model.ApplicationDate, "ApplicationDate", Resource.MsgEnterADateBeforeContinuing);
+                AddErrorIfNull(model.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
                 if (model.ApplicationDate != null)
                 {
                     if (model.ApplicationDate.Value.Date.Year > model.HarvestYear + 2 || model.ApplicationDate.Value.Date.Year < model.HarvestYear - 2)
                     {
-                        ModelState.AddModelError("ApplicationDate", Resource.MsgEnterADateWithin2YearsOfTheHarvestYear);
+                        ModelState.AddModelError(_applicationDateKey, Resource.MsgEnterADateWithin2YearsOfTheHarvestYear);
                     }
                 }
 
@@ -1344,11 +1347,11 @@ managementPeriod.CropID.HasValue
 
                 if (model.ApplicationDate > maxDate)
                 {
-                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgManureApplicationMaxDate, model.HarvestYear.Value, maxDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError(_applicationDateKey, string.Format(Resource.MsgManureApplicationMaxDate, model.HarvestYear.Value, maxDate.Date.ToString("dd MMMM yyyy")));
                 }
                 if (model.ApplicationDate < minDate)
                 {
-                    ModelState.AddModelError("ApplicationDate", string.Format(Resource.MsgManureApplicationMinDate, model.HarvestYear.Value, minDate.Date.ToString("dd MMMM yyyy")));
+                    ModelState.AddModelError(_applicationDateKey, string.Format(Resource.MsgManureApplicationMinDate, model.HarvestYear.Value, minDate.Date.ToString("dd MMMM yyyy")));
                 }
 
                 if (!ModelState.IsValid)
@@ -1764,7 +1767,7 @@ managementPeriod.CropID.HasValue
                                 }
                                 else
                                 {
-                                    TempData["ApplicationMethodError"] = error.Message;
+                                    TempData["ApplicationMethodError"] = error?.Message;
                                     return View(model);
                                 }
 
@@ -5123,47 +5126,47 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> SoilDrainageEndDate(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : SoilDrainageEndDate() post action called");
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilDrainageEndDate"))
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilDrainageEndDateKey))
             {
-                var dateError = ModelState["SoilDrainageEndDate"].Errors.Count > 0 ?
-                                ModelState["SoilDrainageEndDate"].Errors[0].ErrorMessage.ToString() : null;
+                var dateError = ModelState[_soilDrainageEndDateKey].Errors.Count > 0 ?
+                                ModelState[_soilDrainageEndDateKey].Errors[0].ErrorMessage.ToString() : null;
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, "SoilDrainageEndDate")))
+                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, _soilDrainageEndDateKey)))
                 {
-                    ModelState["SoilDrainageEndDate"].Errors.Clear();
-                    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgEnterValidDate);
+                    ModelState[_soilDrainageEndDateKey].Errors.Clear();
+                    ModelState[_soilDrainageEndDateKey].Errors.Add(Resource.MsgEnterValidDate);
                 }
                 if (dateError != null && (
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, "SoilDrainageEndDate")) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, "SoilDrainageEndDate")) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, "SoilDrainageEndDate")) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, "SoilDrainageEndDate")) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, "SoilDrainageEndDate")) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, "SoilDrainageEndDate"))))
+                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, _soilDrainageEndDateKey)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, _soilDrainageEndDateKey)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, _soilDrainageEndDateKey)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, _soilDrainageEndDateKey)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, _soilDrainageEndDateKey)) ||
+                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, _soilDrainageEndDateKey))))
                 {
-                    ModelState["SoilDrainageEndDate"].Errors.Clear();
-                    ModelState["SoilDrainageEndDate"].Errors.Add(Resource.MsgTheDateMustInclude);
+                    ModelState[_soilDrainageEndDateKey].Errors.Clear();
+                    ModelState[_soilDrainageEndDateKey].Errors.Add(Resource.MsgTheDateMustInclude);
                 }
 
 
             }
 
-            AddErrorIfNull(model.SoilDrainageEndDate, "SoilDrainageEndDate", Resource.MsgEnterADateBeforeContinuing);
+            AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey, Resource.MsgEnterADateBeforeContinuing);
             if (model.SoilDrainageEndDate != null)
             {
                 if (DateTime.TryParseExact(model.SoilDrainageEndDate.Value.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
                 {
-                    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgEnterValidDate);
+                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgEnterValidDate);
                 }
 
                 if (!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Commons.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Commons.Enums.Month.April))
                 {
-                    ModelState.AddModelError("SoilDrainageEndDate", Resource.MsgSoilDrainageEndDate1stJan30Apr);
+                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgSoilDrainageEndDate1stJan30Apr);
                 }
             }
             if (!ModelState.IsValid)
             {
-                return View("SoilDrainageEndDate", model);
+                return View(_soilDrainageEndDateKey, model);
             }
 
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -5255,31 +5258,31 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> EffectiveRainfallManual(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : EffectiveRainfallManual() post action called");
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("TotalRainfall"))
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
             {
-                var RainfallError = ModelState["TotalRainfall"].Errors.Count > 0 ?
-                                ModelState["TotalRainfall"].Errors[0].ErrorMessage.ToString() : null;
+                var RainfallError = ModelState[_totalRainfallKey].Errors.Count > 0 ?
+                                ModelState[_totalRainfallKey].Errors[0].ErrorMessage.ToString() : null;
 
-                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["TotalRainfall"].RawValue, "TotalRainfall")))
+                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_totalRainfallKey].RawValue, _totalRainfallKey)))
                 {
-                    ModelState["TotalRainfall"].Errors.Clear();
+                    ModelState[_totalRainfallKey].Errors.Clear();
                     decimal decimalValue;
-                    if (decimal.TryParse(ModelState["TotalRainfall"].RawValue.ToString(), out decimalValue))
+                    if (decimal.TryParse(ModelState[_totalRainfallKey].RawValue.ToString(), out decimalValue))
                     {
-                        ModelState["TotalRainfall"].Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
+                        ModelState[_totalRainfallKey].Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
                     }
                     else
                     {
-                        ModelState["TotalRainfall"].Errors.Add(Resource.MsgForEffectiveRainfallManual);
+                        ModelState[_totalRainfallKey].Errors.Add(Resource.MsgForEffectiveRainfallManual);
                     }
                 }
             }
 
-            AddErrorIfNull(model.TotalRainfall, "TotalRainfall", Resource.MsgEnterRainfallAmountBeforeContinuing);
+            AddErrorIfNull(model.TotalRainfall, _totalRainfallKey, Resource.MsgEnterRainfallAmountBeforeContinuing);
 
             if (model.TotalRainfall != null && model.TotalRainfall < 0)
             {
-                ModelState.AddModelError("TotalRainfall", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                ModelState.AddModelError(_totalRainfallKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
             }
 
             if (!ModelState.IsValid)
@@ -9718,7 +9721,7 @@ managementPeriod.CropID.HasValue
             AddErrorIfNull(model.ApplicationMethod, "ApplicationMethod",
                 string.Format(Resource.MsgApplicationMethodNotSet, model.ManureTypeName));
 
-            AddErrorIfNull(model.ApplicationDate, "ApplicationDate",
+            AddErrorIfNull(model.ApplicationDate, _applicationDateKey,
                 string.Format(Resource.MsgApplyingDateNotSet, model.ManureTypeName));
 
             AddErrorIfNull(model.DefaultNutrientValue, "DefaultNutrientValue",
@@ -9741,13 +9744,13 @@ managementPeriod.CropID.HasValue
             AddErrorIfNull(model.IncorporationDelay, "IncorporationDelay",
                 string.Format(Resource.MsgIncorporationDelayNotSet, model.ManureTypeName));
 
-            AddErrorIfNull(model.SoilDrainageEndDate, "SoilDrainageEndDate",
+            AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey,
                 Resource.MsgEndOfSoilDrainageNotSet);
 
             AddErrorIfNull(model.RainfallWithinSixHoursID, "RainfallWithinSixHoursID",
                 Resource.MsgRainfallWithinSixHoursOfApplicationNotSet);
 
-            AddErrorIfNull(model.TotalRainfall, "TotalRainfall",
+            AddErrorIfNull(model.TotalRainfall, _totalRainfallKey,
                 Resource.MsgTotalRainfallSinceApplicationNotSet);
 
             AddErrorIfNull(model.WindspeedID, "WindspeedID",
