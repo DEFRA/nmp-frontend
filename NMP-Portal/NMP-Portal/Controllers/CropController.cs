@@ -2018,7 +2018,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             cropInfoOneList.OrderBy(c => c.CropInfo1Id);
     }
 
-    private PlanViewModel SetCropInfoOne(
+    private static PlanViewModel SetCropInfoOne(
         PlanViewModel model,
         List<CropInfoOneResponse> cropInfoOneList)
     {
@@ -2814,7 +2814,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_checkAnswerActionName);
         }
     }
-    private async Task<List<CropData>> BindCropDataForCheckAnswer(PlanViewModel model, int lastGroupNumber, int userId)
+    private async Task<List<CropData>> BindCropDataForCheckAnswer(PlanViewModel model, int? lastGroupNumber, int userId)
     {
         List<CropData> cropEntries = new List<CropData>();
         foreach (Crop crop in model.Crops)
@@ -2849,10 +2849,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private async Task<CropData> BindCropEntryForPost(Crop crop, PlanViewModel model, int userId)
     {
-        CropData cropEntry = new CropData();
         if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            cropEntry = new CropData
+            return new CropData
             {
                 Crop = crop,
                 ManagementPeriods = new List<ManagementPeriod>
@@ -2891,13 +2890,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-            cropEntry = new CropData
+            return new CropData
             {
                 Crop = crop,
                 ManagementPeriods = managementPeriods
             };
         }
-        return cropEntry;
     }
     private async Task<(Crop, string)> BindDataForGrass(PlanViewModel model, Crop crop)
     {
@@ -2917,7 +2915,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return (crop, defoliationSequence);
     }
-    private int BindUtilisation1(char defoliationSequence)
+    private static int BindUtilisation1(char defoliationSequence)
     {
         int utilisation1 = 0;
 
@@ -4402,61 +4400,46 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (!string.IsNullOrWhiteSpace(q) && model != null)
         {
             string decrypt = _cropDataProtector.Unprotect(q);
-            if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblField)
+            switch (decrypt)
             {
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    string decryptOrderBy = _cropDataProtector.Unprotect(r);
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblAsc);
-                    }
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblDesc);
-                    }
+                case var d when d == Resource.lblField:
                     model.SortOrganicListOrderByDate = null;
                     model.SortOrganicListOrderByCropType = null;
-                }
-            }
-            else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblDate)
-            {
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    string decryptOrderBy = _cropDataProtector.Unprotect(r);
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblAsc);
-                    }
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblDesc);
-                    }
+                    break;
+
+                case var d when d == Resource.lblDate:
                     model.SortOrganicListOrderByFieldName = null;
                     model.SortOrganicListOrderByCropType = null;
-                }
-            }
-            else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblCropType)
-            {
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    string decryptOrderBy = _cropDataProtector.Unprotect(r);
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblAsc);
-                    }
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblDesc);
-                    }
+                    break;
+
+                case var d when d == Resource.lblCropType:
                     model.SortOrganicListOrderByFieldName = null;
                     model.SortOrganicListOrderByDate = null;
-                }
+                    break;
+            }
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                r = BindSortOrder(r);
             }
         }
 
         SetCropToSession(model);
         return Redirect(Url.Action(_harvestYearOverviewActionName, new { year = year, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationsForSorting), u = r }) + Resource.lblOrganicMaterialApplicationsForSorting);
+    }
+
+    private string BindSortOrder(string r)
+    {
+        string decryptOrderBy = _cropDataProtector.Unprotect(r);
+        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
+        {
+            r = _cropDataProtector.Protect(Resource.lblAsc);
+        }
+        if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
+        {
+            r = _cropDataProtector.Protect(Resource.lblDesc);
+        }
+
+        return r;
     }
 
     [HttpGet]
@@ -4474,57 +4457,28 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (!string.IsNullOrWhiteSpace(q) && model != null)
         {
             string decrypt = _cropDataProtector.Unprotect(q);
-            if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblField)
+            switch (decrypt)
             {
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    string decryptOrderBy = _cropDataProtector.Unprotect(r);
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblAsc);
-                    }
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblDesc);
-                    }
+                case var d when d == Resource.lblField:
                     model.SortInOrganicListOrderByDate = null;
                     model.SortInOrganicListOrderByCropType = null;
-                }
-            }
-            else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblDate)
-            {
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    string decryptOrderBy = _cropDataProtector.Unprotect(r);
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblAsc);
-                    }
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblDesc);
-                    }
+                    break;
+
+                case var d when d == Resource.lblDate:
                     model.SortInOrganicListOrderByFieldName = null;
                     model.SortInOrganicListOrderByCropType = null;
-                }
-            }
-            else if (!string.IsNullOrWhiteSpace(decrypt) && decrypt == Resource.lblCropType)
-            {
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    string decryptOrderBy = _cropDataProtector.Unprotect(r);
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblDesc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblAsc);
-                    }
-                    if (!string.IsNullOrWhiteSpace(decryptOrderBy) && decryptOrderBy == Resource.lblAsc)
-                    {
-                        r = _cropDataProtector.Protect(Resource.lblDesc);
-                    }
+                    break;
+
+                case var d when d == Resource.lblCropType:
                     model.SortInOrganicListOrderByFieldName = null;
                     model.SortInOrganicListOrderByDate = null;
-                }
+                    break;
             }
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                r = BindSortOrder(r);
+            }
+           
         }
 
         SetCropToSession(model);
@@ -5129,9 +5083,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.Variety = null;
                 }
 
-                List<CropData> cropEntries = new List<CropData>();
-
-                cropEntries = await BindCropDataForUpdate(model, userId);
+                List<CropData> cropEntries = await BindCropDataForUpdate(model, userId);
                 cropEntries = await BindCropForDelete(model, cropEntries);
 
                 CropDataWrapper cropDataWrapper = new CropDataWrapper
@@ -5281,7 +5233,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return cropEntry;
 
     }
-    private async Task<(Crop, List<ManagementPeriod>)> BindGrassDataForUpdate(PlanViewModel model, int userId, Crop crop,  List<ManagementPeriod> managementPeriodList)
+    private async Task<(Crop, List<ManagementPeriod>)> BindGrassDataForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriodList)
     {
         crop.CropTypeID = model.CropTypeID;
         crop.CropInfo1 = model.CropInfo1;
@@ -5333,26 +5285,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return managementPeriods;
     }
 
-    private List<ManagementPeriod> BindNonGrassDataForUpdate(int userId)
+    private List<ManagementPeriod> BindNonGrassDataForUpdate()
     {
-        List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
-        managementPeriods.Add(new ManagementPeriod
+        return new List<ManagementPeriod>
+    {
+        new ManagementPeriod
         {
             Defoliation = 1,
             Utilisation1ID = 2
-        });
-        //if (managementPeriodList != null && managementPeriodList.Any())
-        //{
-        //    if (crop.ID != null)
-        //    {
-        //        foreach (var managementPeriod in managementPeriods)
-        //        {
-        //            managementPeriod.ModifiedOn = DateTime.Now;
-        //            managementPeriod.ModifiedByID = userId;
-        //        }
-        //    }
-        //}
-        return managementPeriods;
+        }
+    };
     }
 
     private async Task ValidateCropData(PlanViewModel model)
