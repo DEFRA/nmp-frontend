@@ -135,7 +135,7 @@ namespace NMP.Portal.Controllers
 
         private async Task<OrganicManureViewModel> InitializeModelAsync(string q, string r)
         {
-
+             
             OrganicManureViewModel? model = new OrganicManureViewModel();
             model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
@@ -526,7 +526,7 @@ namespace NMP.Portal.Controllers
                                             cropList = cropList.Where(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass).ToList();
                                         }
                                     }
-                                    if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                                    if (IsGrassAndHasDefoliation(cropList))
                                     {
                                         grassCropCounter++;
                                         (List<ManagementPeriod> ManagementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
@@ -805,7 +805,7 @@ namespace NMP.Portal.Controllers
                             {
                                 cropList = cropList.Where(x => x.CropOrder == 1).ToList();
                             }
-                            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                            if (IsGrassAndHasDefoliation(cropList))
                             {
                                 (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
 
@@ -1043,7 +1043,7 @@ managementPeriod.CropID.HasValue
                 {
                     model.DoubleCrop.RemoveAll(x => x.FieldID == fieldId);
                 }
-                if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+                if (IsGrassAndHasDefoliation(cropList))
                 {
                     model.IsAnyCropIsGrass = true;
                     model.DefoliationCurrentCounter = 0;
@@ -1640,7 +1640,7 @@ managementPeriod.CropID.HasValue
                         {
                             return RedirectToAction(_farmList, "Farm");
                         }
-                        if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
+                        if (IsDeepAndShallowInjection(organicManureViewModel))
                         {
                             model.IncorporationDelay = null;
                             model.IncorporationMethod = null;
@@ -1808,7 +1808,7 @@ managementPeriod.CropID.HasValue
                     {
                         return redirect!;
                     }
-                    if ((organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (organicManureViewModel.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
+                    if (IsDeepAndShallowInjection(organicManureViewModel))
                     {
                         model.IncorporationDelay = null;
                         model.IncorporationMethod = null;
@@ -9914,7 +9914,14 @@ managementPeriod.CropID.HasValue
         {
             return model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials;
         }
-
+        private static bool IsDeepAndShallowInjection(OrganicManureViewModel model)
+        {
+            return model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm || model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm;
+        }
+        private static bool IsGrassAndHasDefoliation(List<HarvestYearPlanResponse> cropList)
+        {
+            return cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null);
+        }
         private static void ApplyManureTypeName(OrganicManureViewModel model, ManureType manureType)
         {
             model.ManureTypeName = IsOtherMaterialGroup(model)
