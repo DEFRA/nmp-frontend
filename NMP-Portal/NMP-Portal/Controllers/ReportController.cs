@@ -1259,32 +1259,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-           
+
             if (model == null)
             {
-                model = new ReportViewModel();
-                if (!string.IsNullOrWhiteSpace(f))
-                {
-                    model.EncryptedFarmId = f;
-                    model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                    if (farm != null)
-                    {
-                        model.FarmName = farm.Name;
-                        model.Country = farm.CountryID;
-                        model.FarmRB209CountryID = farm.RB209CountryID;
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(h))
-                {
-                    model.IsComingFromPlan = true;
-                    model.EncryptedHarvestYear = h;
-                    model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-                }
-                else
-                {
-                    model.IsComingFromPlan = false;
-                }
+                model = await GetFarmByEncryptedFarmId(f, h);
             }
 
             if (model.FarmId != null && model.Country == null)
@@ -7187,6 +7165,33 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
+    private async Task<ReportViewModel> GetFarmByEncryptedFarmId(string? f, string? h)
+    {
+        ReportViewModel model = new ReportViewModel();
+        if (!string.IsNullOrWhiteSpace(f))
+        {
+            model.EncryptedFarmId = f;
+            model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+            if (farm != null)
+            {
+                model.FarmName = farm.Name;
+                model.Country = farm.CountryID;
+                model.FarmRB209CountryID = farm.RB209CountryID;
+            }
+        }
+        if (!string.IsNullOrWhiteSpace(h))
+        {
+            model.IsComingFromPlan = true;
+            model.EncryptedHarvestYear = h;
+            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+        }
+        else
+        {
+            model.IsComingFromPlan = false;
+        }
+        return model;
+    }
     private void ValidateFarmAverageVales(ReportViewModel model)
     {
         if (model.FarmAverageYields != null)
