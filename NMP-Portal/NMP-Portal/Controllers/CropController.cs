@@ -3343,7 +3343,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                             .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                             .Select(s => s.Trim())
                                             .ToList();
-                                        fieldDetail.Management = ShorthandDefoliationSequence(defoliationList);
+                                        CommonHelpers commonHelpers = new CommonHelpers();
+                                        fieldDetail.Management = commonHelpers.ShorthandDefoliationSequence(defoliationList);
                                     }
 
                                     newField.FieldData.Add(fieldDetail);
@@ -4001,7 +4002,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                     .Select(s => s.Trim())
                                     .ToList();
-                                crop.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+                                CommonHelpers commonHelpers = new CommonHelpers();
+                                crop.DefoliationSequenceName = commonHelpers.ShorthandDefoliationSequence(defoliationList);
                             }
 
                             if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
@@ -4128,61 +4130,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     model.ManagementPeriods.Add(ManagementPeriods);
 
                                     defIndex++;
-                                    var rec = new Recommendation
+                                    CommonHelpers commonHelpers = new CommonHelpers();
+                                    if (recData.Recommendation != null)
                                     {
-                                        ID = recData.Recommendation.ID,
-                                        ManagementPeriodID = recData.Recommendation.ManagementPeriodID,
-                                        CropN = recData.Recommendation.CropN,
-                                        CropP2O5 = recData.Recommendation.CropP2O5,
-                                        CropK2O = recData.Recommendation.CropK2O,
-                                        CropSO3 = recData.Recommendation.CropSO3,
-                                        CropMgO = recData.Recommendation.CropMgO,
-                                        CropNa2O = recData.Recommendation.CropNa2O,
-                                        CropLime = (recData.Recommendation.PreviousAppliedLime != null && recData.Recommendation.PreviousAppliedLime > 0) ? recData.Recommendation.PreviousAppliedLime : recData.Recommendation.CropLime,
-                                        ManureN = recData.Recommendation.ManureN,
-                                        ManureP2O5 = recData.Recommendation.ManureP2O5,
-                                        ManureK2O = recData.Recommendation.ManureK2O,
-                                        ManureSO3 = recData.Recommendation.ManureSO3,
-                                        ManureMgO = recData.Recommendation.ManureMgO,
-                                        ManureLime = recData.Recommendation.ManureLime,
-                                        ManureNa2O = recData.Recommendation.ManureNa2O,
-                                        FertilizerN = recData.Recommendation.FertilizerN,
-                                        FertilizerP2O5 = recData.Recommendation.FertilizerP2O5,
-                                        FertilizerK2O = recData.Recommendation.FertilizerK2O,
-                                        FertilizerSO3 = recData.Recommendation.FertilizerSO3,
-                                        FertilizerMgO = recData.Recommendation.FertilizerMgO,
-                                        FertilizerLime = recData.Recommendation.FertilizerLime,
-                                        FertilizerNa2O = recData.Recommendation.FertilizerNa2O,
-                                        SNSIndex = recData.Recommendation.SNSIndex,
-                                        SIndex = recData.Recommendation.SIndex,
-                                        LimeIndex = recData.Recommendation.PH,
-                                        KIndex = recData.Recommendation.KIndex != null ? (recData.Recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recData.Recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recData.Recommendation.KIndex)) : null,
-                                        MgIndex = recData.Recommendation.MgIndex,
-                                        PIndex = recData.Recommendation.PIndex,
-                                        NaIndex = recData.Recommendation.NaIndex,
-                                        NIndex = recData.Recommendation.NIndex,
-                                        CreatedOn = recData.Recommendation.CreatedOn,
-                                        ModifiedOn = recData.Recommendation.ModifiedOn,
-                                        PBalance = recData.Recommendation.PBalance,
-                                        SBalance = recData.Recommendation.SBalance,
-                                        KBalance = recData.Recommendation.KBalance,
-                                        MgBalance = recData.Recommendation.MgBalance,
-                                        LimeBalance = recData.Recommendation.LimeBalance,
-                                        NaBalance = recData.Recommendation.NaBalance,
-                                        NBalance = recData.Recommendation.NBalance,
-                                        FertiliserAppliedN = recData.Recommendation.FertiliserAppliedN,
-                                        FertiliserAppliedP2O5 = recData.Recommendation.FertiliserAppliedP2O5,
-                                        FertiliserAppliedK2O = recData.Recommendation.FertiliserAppliedK2O,
-                                        FertiliserAppliedMgO = recData.Recommendation.FertiliserAppliedMgO,
-                                        FertiliserAppliedSO3 = recData.Recommendation.FertiliserAppliedSO3,
-                                        FertiliserAppliedNa2O = recData.Recommendation.FertiliserAppliedNa2O,
-                                        FertiliserAppliedLime = recData.Recommendation.FertiliserAppliedLime,
-                                        FertiliserAppliedNH4N = recData.Recommendation.FertiliserAppliedNH4N,
-                                        FertiliserAppliedNO3N = recData.Recommendation.FertiliserAppliedNO3N,
-
-                                    };
-                                    model.Recommendations.Add(rec);
-
+                                        var rec = commonHelpers.FetchRecommendation(recData.Recommendation);
+                                        model.Recommendations.Add(rec);
+                                    }
                                     if (recData.RecommendationComments.Count > 0)
                                     {
                                         foreach (var item in recData.RecommendationComments)
@@ -5710,27 +5663,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<PlanViewModel> BindDefoliationSequenceForCurrentSward(PlanViewModel model)
     {
-        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? true : false);
+        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward);
         if (defoliationSequenceResponses != null && defoliationSequenceResponses.Count > 0)
         {
             model.DefoliationSequenceId = defoliationSequenceResponses[0].DefoliationSequenceId;
             ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
             bool isGrazedOnlyOrCutSilage = (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly);
-            if (isGrazedOnlyOrCutSilage)
+            if (isGrazedOnlyOrCutSilage && model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass && model.IsCheckAnswer)
             {
-                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass && model.IsCheckAnswer)
-                {
-                    model.GrassGrowthClassCounter = 0;
-                }
-                SetCropToSession(model);
+                model.GrassGrowthClassCounter = 0;
             }
-            else if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly)
+            else if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly && model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass && model.IsCheckAnswer)
             {
-                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
-                {
-                    model.GrassGrowthClassCounter = 0;
-                }
-                SetCropToSession(model);
+                model.GrassGrowthClassCounter = 0;
+
             }
             else
             {
@@ -5741,6 +5687,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.Yield = null;
         model.Crops.ForEach(x => x.Yield = null);
         model.GrassSeason = null;
+        SetCropToSession(model);
         return model;
     }
 
@@ -6035,7 +5982,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
 
-   
+
 
     private IActionResult RedirectGrazedOnlyOrCutForHayOrCurForSilage(PlanViewModel model, List<DefoliationSequenceResponse> defoliationSequenceResponses)
     {
@@ -7132,61 +7079,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return await Task.FromResult(RedirectToAction("CopyOrganicInorganicApplications"));
     }
 
-    private static string ShorthandDefoliationSequence(List<string> data)
-    {
-        if (data == null || data.Count == 0)
-        {
-            return "";
-        }
 
-        Dictionary<string, int> defoliationSequence = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-
-        foreach (string item in data)
-        {
-            string name = item.Trim().ToLower();
-            if (defoliationSequence.ContainsKey(name))
-            {
-                defoliationSequence[name]++;
-            }
-            else
-            {
-                defoliationSequence[name] = 1;
-            }
-        }
-
-        List<string> result = FormatDefoliationSequenceEntries(defoliationSequence);
-
-        return string.Join(", ", result);
-    }
-
-    private static List<string> FormatDefoliationSequenceEntries(Dictionary<string, int> defoliationSequence)
-    {
-        List<string> result = new List<string>();
-
-        foreach (var entry in defoliationSequence)
-        {
-            string word = entry.Key;
-
-            if (entry.Value > 1)
-            {
-                if (word.EndsWith('s') || word.EndsWith('x') || word.EndsWith('z') ||
-                    word.EndsWith("sh") || word.EndsWith("ch"))
-                {
-                    word += "es";
-                }
-                else
-                {
-                    word += "s";
-                }
-            }
-
-
-            word = char.ToUpper(word[0]) + word.Substring(1);
-            result.Add($"{entry.Value} {word}");
-        }
-
-        return result;
-    }
 
     [HttpGet]
     public async Task<IActionResult> AddOrRemoveField()
