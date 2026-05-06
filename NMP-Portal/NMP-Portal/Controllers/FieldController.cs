@@ -1003,9 +1003,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return RedirectToAction("SoilNutrientValue");
     }
-       
 
-    
+
+
     [HttpGet]
     public async Task<IActionResult> SoilNutrientValue()
     {
@@ -1286,7 +1286,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return true;
     }
-   static void SetNutrientValue(string value, FieldViewModel model, int nutrientId)
+    static void SetNutrientValue(string value, FieldViewModel model, int nutrientId)
     {
         if (model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
         {
@@ -1313,7 +1313,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-   static void SetPotashValue(string value, FieldViewModel model)
+    static void SetPotashValue(string value, FieldViewModel model)
     {
         if (model.SoilAnalyses.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
         {
@@ -1343,7 +1343,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (!string.IsNullOrWhiteSpace(indexValue))
         {
-                assignIndex(nutrientId, indexValue.Trim());
+            assignIndex(nutrientId, indexValue.Trim());
         }
 
         return true;
@@ -2572,7 +2572,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (soilTypes != null && soilTypes.Count > 0)
         {
             SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == field.SoilTypeID);
-            model.SoilType = !string.IsNullOrWhiteSpace(soilType.SoilType) ? soilType.SoilType : string.Empty;
+            model.SoilType = !string.IsNullOrWhiteSpace(soilType?.SoilType) ? soilType.SoilType : string.Empty;
             model.SoilTypeID = field.SoilTypeID;
             if (soilType != null && soilType.KReleasingClay)
             {
@@ -2594,11 +2594,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.EncryptedFarmId = farmId;
         model.FarmName = farm?.Name;
         List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldLogic.FetchSoilAnalysisByFieldId(decryptedFieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
+        
         if (soilAnalysisResponse != null && soilAnalysisResponse.Count > 0)
         {
             soilAnalysisResponse.ForEach(m => m.EncryptedSoilAnalysisId = _fieldDataProtector.Protect(m.ID.ToString()));
             ViewBag.SoilAnalysisList = soilAnalysisResponse;
         }
+
         if (!string.IsNullOrWhiteSpace(q))
         {
 
@@ -2638,12 +2640,26 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                             List<Crop> crop = (await _fieldLogic.FetchCropsByFieldId(model.ID.Value)).ToList();
                             if (crop != null && crop.Count > 0)
                             {
+
                                 if (soilAnalysisResponse.Count > 0)
                                 {
                                     bool anyPlan = crop.Any(x => x.Year >= (soilAnalysisResponse.FirstOrDefault()?.Year ?? 0));
                                     if (anyPlan)
                                     {
-                                        int cropYear = crop.FirstOrDefault(x => x.Year >= soilAnalysisResponse.FirstOrDefault().Year).Year;
+
+                                        var soil = soilAnalysisResponse.FirstOrDefault();
+                                        if (crop != null && crop.Count > 0 && soil != null)
+                                        {
+                                            var matchedCrop = crop.FirstOrDefault(x => x.Year >= soil.Year);
+
+                                            if (matchedCrop != null)
+                                            {
+                                                int cropYear = matchedCrop.Year;
+                                                ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
+
+                                            }
+                                        }
+
                                         if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                         {
                                             ViewBag.SuccessMsgAdditionalContent = Resource.lblNutrientRecommendationsWillBeBasedOnTheLatest;
@@ -2653,7 +2669,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                                             ViewBag.SuccessMsgAdditionalContent = string.Format(Resource.lblThisMayChangeYourNutrientRecommendations);
                                         }
 
-                                        ViewBag.CropYear = _farmDataProtector.Protect(cropYear.ToString());
                                         if (!string.IsNullOrWhiteSpace(s) && _soilAnalysisDataProtector.Unprotect(s) == Resource.lblAdd)
                                         {
                                             ViewBag.SuccessMsgAdditionalContentSecondForAdd = Resource.lblCheckYourCropPlans;
