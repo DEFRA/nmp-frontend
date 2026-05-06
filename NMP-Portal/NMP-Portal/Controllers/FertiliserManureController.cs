@@ -142,11 +142,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         _logger.LogTrace("Fertiliser Manure Controller : FieldGroup({Q}, {R}, {S}) action called", q, r, s);
         FertiliserManureViewModel? model = GetFertiliserManureFromSession();
-        if (model == null)
-        {
-            _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-        }
         Error? error = null;
         try
         {
