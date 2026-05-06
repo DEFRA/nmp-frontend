@@ -9,6 +9,7 @@
     @if (currentStep != (int)FertiliserWizardSteps.FieldGroup)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldGroup" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupName" />
     }
     @if (currentStep != (int)FertiliserWizardSteps.Field && (Model.FieldList != null && Model.FieldList.Count > 0))
     {
