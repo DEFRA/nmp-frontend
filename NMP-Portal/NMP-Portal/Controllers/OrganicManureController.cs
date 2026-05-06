@@ -9816,7 +9816,7 @@ managementPeriod.CropID.HasValue
             ReplaceNumericError(state, firstError, rawValue, Resource.lblAreas, Resource.lblArea);
         }
 
-        // 🔹 QUANTITY
+       
         private void ValidateQuantity(OrganicManureViewModel model)
         {
             if (!ModelState.TryGetValue(_quantityKey, out var state))
@@ -9847,7 +9847,7 @@ managementPeriod.CropID.HasValue
             ReplaceNumericError(state, firstError, rawValue, Resource.lblQuantity, Resource.MsgQuantity);
         }
 
-        // 🔹 AREA RULES
+      
         private void ValidateAreaRules(OrganicManureViewModel model)
         {
             if (!model.Area.HasValue)
@@ -9860,7 +9860,7 @@ managementPeriod.CropID.HasValue
                 ModelState.AddModelError(_areaKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
         }
 
-        // 🔹 QUANTITY RULES
+        
         private void ValidateQuantityRules(OrganicManureViewModel model)
         {
             if (!model.Quantity.HasValue)
@@ -9870,7 +9870,7 @@ managementPeriod.CropID.HasValue
                 ModelState.AddModelError(_quantityKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
         }
 
-        // 🔹 APPLICATION RATE
+        
         private void CalculateApplicationRate(OrganicManureViewModel model)
         {
             if (model.Area > 0 && model.Quantity > 0)
