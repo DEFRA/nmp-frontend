@@ -340,8 +340,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
 
             ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
-            SetFertiliserManureToSession(model);
-            return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+            if(model != null)
+            {
+                SetFertiliserManureToSession(model);
+                return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+            }
+            
         }
 
         SetFertiliserManureToSession(model);
